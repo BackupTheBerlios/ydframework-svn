@@ -36,7 +36,7 @@
 			//$recordset->dump();
 
 			// Alter the URL
-			$url = & $recordset->url;
+			$url = & $recordset->getUrl();
 			$url->setQueryVar( 'test', 'val' );
 
 			// Close the database connection

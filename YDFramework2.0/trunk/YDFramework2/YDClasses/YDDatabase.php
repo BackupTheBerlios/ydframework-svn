@@ -188,6 +188,20 @@
 		}
 
 		/**
+		 *	This function returns a reference to the URL for this databaseset object. If you want to alter this url, you
+		 *	should get a instance of it as a reference. This code shows you how to do this:
+		 *
+		 *	@code
+		 *	$url = & $dataset->getUrl();
+		 *	@endcode
+		 *
+		 *	@returns	Reference to the YDUrl object for this YDDatabaseSet object.
+		 */
+		function & getUrl() {
+			return $this->url;
+		}
+
+		/**
 		 *	This returns the URL to the previous page. If there is no previous page, it will return false.
 		 *
 		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
