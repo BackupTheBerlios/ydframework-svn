@@ -18,7 +18,7 @@
 
 	{if $formValid}
 
-		<p>Welcome to <b>{$form[name][value]}</b>!</p>
+		<p>Welcome to <b>{$form.name.value}</b>!</p>
 
 		<p>Description1: <blockquote>{$form.desc1.value}</blockquote></p>
 		<p>Description2: <blockquote>{$form.desc2.value}</blockquote></p>
@@ -26,7 +26,7 @@
 
 	{else}
 	
-		{if $form[errors]}
+		{if $form.errors}
 			<p style="color: red"><b>Errors during processing:</b>
 			{foreach from=$form.errors item="error"}
 				<br>{$error}
