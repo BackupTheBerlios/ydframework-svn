@@ -27,6 +27,9 @@
 			// Output some queries
 			YDDebugUtil::dump( $db->getRecords( 'select * from escalations' ), 'escalations' );
 			YDDebugUtil::dump( $db->getRecords( 'select * from sqlite_master' ), 'sqlite_master' );
+			YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
+			YDDebugUtil::dump( $db->getRecords( 'select * from sqlite_master' ), 'array - sqlite_master' );
+			YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
 
 			// Test string escaping
 			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );

@@ -99,7 +99,11 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return $this->_lowerKeyNames( pg_fetch_assoc( $result ) );
+			$record = $this->_lowerKeyNames( pg_fetch_assoc( $result ) );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$record = array_values( $record );
+			}
+			return $record;
 		}
 
 		/**
@@ -121,6 +125,9 @@
 				array_push( $dataset, $line );
 			}
 			pg_free_result( $result );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$dataset = array_map( 'array_values', $dataset );
+			}
 			return $dataset;
 		}
 

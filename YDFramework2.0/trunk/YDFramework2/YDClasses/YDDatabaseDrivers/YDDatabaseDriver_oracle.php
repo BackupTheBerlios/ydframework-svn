@@ -97,7 +97,11 @@
 			$result = $this->_connectAndExec( $sql );
 			ocifetchinto( $result, $record, OCI_ASSOC );
 			OCIFreeStatement( $result );
-			return $this->_lowerKeyNames( $record );
+			$record = $this->_lowerKeyNames( $record );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$record = array_values( $record );
+			}
+			return $record;
 		}
 
 		/**
@@ -119,6 +123,9 @@
 				array_push( $dataset, $this->_lowerKeyNames( $line ) );
 			}
 			OCIFreeStatement( $result );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$dataset = array_map( 'array_values', $dataset );
+			}
 			return $dataset;
 		}
 

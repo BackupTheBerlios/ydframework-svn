@@ -28,9 +28,14 @@
 	YDInclude( 'YDUrl.php' );
 	YDInclude( 'YDUtil.php' );
 
+	// Constants
+	define( 'YD_DB_FETCH_ASSOC', 1 );
+	define( 'YD_DB_FETCH_ARRAY', 2 );
+	
 	// Configure the default for this class
 	YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
-
+	YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC, false );
+	
 	/**
 	 *	This class defines a database object.
 	 */
@@ -868,6 +873,9 @@
 			$result = & $this->_connectAndExec( $sql );
 			$record = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) );
 			mysql_free_result( $result );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$record = array_values( $record );
+			}
 			return $record;
 		}
 
@@ -890,6 +898,9 @@
 				array_push( $dataset, $line );
 			}
 			mysql_free_result( $result );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$dataset = array_map( 'array_values', $dataset );
+			}
 			return $dataset;
 		}
 

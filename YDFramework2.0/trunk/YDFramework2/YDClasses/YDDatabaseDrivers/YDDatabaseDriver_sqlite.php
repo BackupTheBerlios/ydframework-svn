@@ -88,7 +88,11 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) );
+			$record = $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) );
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$record = array_values( $record );
+			}
+			return $record;
 		}
 
 		/**
@@ -108,6 +112,9 @@
 			$dataset = array();
 			while ( $line = $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) ) ) {
 				array_push( $dataset, $line );
+			}
+			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
+				$dataset = array_map( 'array_values', $dataset );
 			}
 			return $dataset;
 		}
