@@ -37,12 +37,15 @@
 			if ( $form->validate() ) {
 
 				// Move the uploaded file
-				if ( $file->isUploaded() ) { 
+				if ( $file->isUploaded() ) {
+				
+					// Move the upload
 					$file->moveUpload( '.' );
+					
+					// Mark the form as valid
+					$this->template->assign( 'formValid', true );
+					
 				}
-
-				// Mark the form as valid
-				$this->template->assign( 'formValid', true );
 
 			}
 

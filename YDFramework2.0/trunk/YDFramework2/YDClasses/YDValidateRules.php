@@ -163,7 +163,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function uploadedfile( $val, $opts ) {
-			return is_uploaded_file( $val['tmp_name'] );
+			return is_uploaded_file( $val['tmp_name'] ) && ( filesize( $val['tmp_name'] ) > 0 );
 		}
 
 		/** 

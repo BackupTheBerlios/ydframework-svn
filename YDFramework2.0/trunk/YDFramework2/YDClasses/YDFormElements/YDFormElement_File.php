@@ -39,7 +39,8 @@
 		 *	@returns	Boolean indicating if the file was uploaded or not.
 		 */
 		function isUploaded() {
-			return is_uploaded_file( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] );
+			return is_uploaded_file( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] )
+					&& ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) > 0 );
 		}
 
 		/**
@@ -50,6 +51,9 @@
 		 *	@returns	Boolean indicating if the move was succesful or not.
 		 */
 		function moveUpload( $dir='.' ) {
+			if ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) == 0 ) {
+				return false;
+			}
 			$result = move_uploaded_file(
 				$_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'],
 				realpath( $dir ) . '/' . $_FILES[ $this->_form . '_' . $this->_name ]['name']
