@@ -276,7 +276,7 @@
 			$to = $message->_encodeHeader( implode( ', ', $this->to_plain ), $message->build_params['head_charset'] );
 
 			// Send the email, try SMTP if possible
-			if ( $this->smtpParams == true ) {
+			if ( $this->smtp == true ) {
 				$result =  $this->_msg->send( $to, 'smtp' );
 			} else {
 				$result = mail( $to, $subject, $message->output, implode( CRLF, $headers ) );
