@@ -121,6 +121,7 @@
 
 			// Convert tags if needed
 			if ( $convertBr == true ) {
+				$data = trim( $data );
 				$data = nl2br( $data );
 			}
 
