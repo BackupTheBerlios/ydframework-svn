@@ -104,7 +104,7 @@
 		 */
 		function executeSql( $sql ) {
 			$result = $this->_connectAndExec( $sql );
-			return ocirowcount( $this->_conn );
+			return ocirowcount( $result );
 		}
 
 		/**
@@ -116,7 +116,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = $this->_connectAndExec( $sql );
-			return ocirowcount( $this->_conn );
+			return ocirowcount( $result );
 		}
 
 		/**

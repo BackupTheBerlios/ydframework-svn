@@ -113,7 +113,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_num_rows( $this->_conn );
+			return mysql_num_rows( $result );
 		}
 
 		/**

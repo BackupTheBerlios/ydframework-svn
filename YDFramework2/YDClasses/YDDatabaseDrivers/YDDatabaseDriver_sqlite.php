@@ -107,7 +107,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return sqlite_num_rows( $this->_conn );
+			return sqlite_num_rows( $result );
 		}
 
 		/**

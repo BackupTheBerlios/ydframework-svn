@@ -20,7 +20,7 @@
 
 			// Make the database connection
 			$this->db = new YDDatabase(
-				$GLOBALS['db']['type'], $GLOBALS['db']['name'], $GLOBALS['db']['user'], $GLOBALS['db']['pass'] 
+				$GLOBALS['db']['type'], $GLOBALS['db']['name'], $GLOBALS['db']['user'], $GLOBALS['db']['pass'], $GLOBALS['db']['host']
 			);
 
 			// Create the add form

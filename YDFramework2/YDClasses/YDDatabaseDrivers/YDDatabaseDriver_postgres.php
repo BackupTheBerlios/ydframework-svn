@@ -63,7 +63,7 @@
 					}
 				}
 				$connstr = implode( ' ', $connstr );
-				$conn = @pg_connect( $connstr );
+				$conn = pg_connect( $connstr );
 				if ( ! $conn ) { YDFatalError( pg_last_error( $conn ) ); }
 				$this->_conn = $conn;
 			}
@@ -107,7 +107,7 @@
 		 */
 		function executeSql( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return pg_affected_rows( $this->_conn );
+			return pg_affected_rows( $result );
 		}
 
 		/**
@@ -119,7 +119,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return pg_num_rows( $this->_conn );
+			return pg_num_rows( $result );
 		}
 
 		/**
@@ -155,7 +155,7 @@
 		function & _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
-			$result = pg_query( $sql, $this->_conn );
+			$result = pg_query( $this->_conn, $sql );
 			if ( ! $result ) { YDFatalError( pg_last_error( $this->_conn ) ); }
 			return $result;
 		}
