@@ -85,6 +85,13 @@
 				}
 			}
 
+			// Check if the action exists
+			$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
+			if ( ! method_exists( $this->clsInst, $action ) ) {
+				$this->clsInst->errorMissingAction( $action );
+				$this->finish();
+			}
+			
 			// Check if the current action is allowed or not
 			$result = $this->clsInst->isActionAllowed();
 

@@ -169,14 +169,7 @@
 		 *	action function is specified or not.
 		 */
 		function process() {
-			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-				$action = YD_ACTION_DEFAULT;
-			} else {
-				$action = 'action' . $_GET[ YD_ACTION_PARAM ];
-			}
-			if ( ! method_exists( $this, $action ) ) {
-				$this->errorMissingAction( $action );
-			}
+			$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
 			call_user_func( array( $this, $action ) );
 		}
 
