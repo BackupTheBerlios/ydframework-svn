@@ -206,7 +206,7 @@
 		 *	@param $where	The where statement to execute.
 		 */
 		function executeUpdate( $table, $values, $where='' ) {
-			$sql = $this->_createSqlUpdate( $table, $values );
+			$sql = $this->_createSqlUpdate( $table, $values, $where );
 			return $this->executeSql( $sql );
 		}
 
