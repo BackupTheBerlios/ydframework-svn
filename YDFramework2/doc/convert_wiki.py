@@ -49,7 +49,8 @@ def saveData( data, file ):
 def main():
 
     print 'Deleting previous directory...',
-    shutil.rmtree( outdir )
+    if os.path.exists( outdir ):
+        shutil.rmtree( outdir )
     print 'Done!'
 
     if not os.path.exists( outdir ):
