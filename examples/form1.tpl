@@ -2,57 +2,57 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
 <body>
 
-    <h3>{$title}</h3>
+    <h3><?= $title ?></h3>
 
-    {if $formValid}
+    <?php if ( $formValid ) { ?>
     
-        <p>Welcome to <b>{$form.name.value}</b>!</p>
+        <p>Welcome to <b><?= $form['name']['value'] ?></b>!</p>
 
-        <p>Description: {$form.desc.value}</p>
+        <p>Description: <?= $form['desc']['value'] ?></p>
 
-        <p>Date {$form.date.value.d.0}/{$form.date.value.M.0}/{$form.date.value.Y.0}</p>
+        <p>Date <?= $form['date']['value']['d'][0] ?>/<?= $form['date']['value']['M'][0] ?>/<?= $form['date']['value']['Y'][0] ?></p>
 
-    {else}
+    <?php } else { ?>
     
-        {if $form.errors}
+        <?php if ( $form['errors'] ) { ?>
             <p style="color: red"><b>Errors during processing:</b>
-            {foreach from=$form.errors item="error"}
-                <br>{$error}
-            {/foreach}
+            <?php foreach ( $form['errors'] as $error ) { ?>
+                <br><?= $error ?>
+            <?php } ?>
             </p>
-        {/if}
+        <?php } ?>
 
-        <form {$form.attributes}>
+        <form <?= $form['attributes'] ?>>
             <p>
-                {$form.name.label}
+                <?= $form['name']['label'] ?>
                 <br>
-                {$form.name.html}
+                <?= $form['name']['html'] ?>
             </p>
             <p>
-                {$form.desc.label}
+                <?= $form['desc']['label'] ?>
                 <br>
-                {$form.desc.html}
+                <?= $form['desc']['html'] ?>
             </p>
             <p>
-                {$form.date.label}
+                <?= $form['date']['label'] ?>
                 <br>
-                {$form.date.html}
+                <?= $form['date']['html'] ?>
             </p>
             <p>
-                {$form.cmdSubmit.html}
+                <?= $form['cmdSubmit']['html'] ?>
             </p>
         </form>
 
-    {/if}
+    <?php } ?>
 
     <p>[
-        <a href="{$YD_SELF_SCRIPT}">try again</a>
+        <a href="<?= $YD_SELF_SCRIPT ?>">try again</a>
         |
         <a href="index.php">other samples</a>
     ]</p>

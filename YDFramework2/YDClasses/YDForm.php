@@ -16,7 +16,7 @@
      *  This class implements an HTML form. This class is based on the
      *  HTML_QuickForm from the PEAR library. To instantiate the form, you need
      *  to specify the name of the form. To output the form as an array suitable
-     *  for Smarty, you can use the toArray function.
+     *  for the template engine, you can use the toArray function.
      */
     class YDForm extends HTML_QuickForm {
 
@@ -83,7 +83,7 @@
 
             // If debugging, show contents
             if ( YD_DEBUG ) {
-                YDDebugUtil::dump( $renderer->toArray() );
+                YDDebugUtil::debug( YDDebugUtil::r_dump( $renderer->toArray() ) );
             }
 
             // Return the array

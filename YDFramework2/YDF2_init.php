@@ -120,33 +120,6 @@
         define( 'YD_DIR_3RDP_PEAR', YD_DIR_3RDP . '/PEAR' );
 
         /**
-         *  @enum YD_DIR_3RDP_PTMB
-         *        phpThumb code directory of the Yellow Duck Framework. This is 
-         *        the full path to the YDFramework2/3rdparty/phpThumb directory.
-         *
-         *  @internal
-         */
-        define( 'YD_DIR_3RDP_PTMB', YD_DIR_3RDP . '/phpThumb' );
-
-        /**
-         *  @enum YD_DIR_3RDP_SMARTY
-         *        Smarty code directory of the Yellow Duck Framework. This is the
-         *        full path to the YDFramework2/3rdparty/Smarty directory.
-         *
-         *  @internal
-         */
-        define( 'YD_DIR_3RDP_SMARTY', YD_DIR_3RDP . '/Smarty' );
-
-        /**
-         *  @enum SMARTY_DIR
-         *        Smarty code directory of the Yellow Duck Framework. This is the
-         *        full path to the YDFramework2/3rdparty/Smarty directory.
-         *
-         *  @internal
-         */
-        define( 'SMARTY_DIR', YD_DIR_3RDP . '/Smarty/' );
-
-        /**
          *  @enum YD_DIR_TEMP
          *        Temporary directory of the Yellow Duck Framework. This is the
          *        full path to the YDFramework2/temp directory. This is the
@@ -182,15 +155,16 @@
          */
         define( 'YD_SELF_SCRIPT', $_SERVER['SCRIPT_NAME'] );
 
+        // Add SCRIPT_FILENAME if not defined.
+        if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
+            $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
+        }
+
         /**
          *  @enum YD_SELF_FILE
          *        Contains the physical script's path, e.g. "c:\myapp\index.php".
          */
-        if ( isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
-            define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
-        } else {
-            define( 'YD_SELF_FILE', $_SERVER['PATH_TRANSLATED'] );
-        }
+        define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
 
         /**
          *  @enum YD_SELF_DIR
@@ -251,9 +225,7 @@
         }
         $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
         $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
-        $includePath .= YD_PATHDELIM . YD_DIR_3RDP_SMARTY;
         $includePath .= YD_PATHDELIM . YD_DIR_3RDP_PEAR;
-        $includePath .= YD_PATHDELIM . YD_DIR_3RDP_PTMB;
         ini_set( 'include_path', $includePath );
 
         // Include the basis of Yellow Duck framework

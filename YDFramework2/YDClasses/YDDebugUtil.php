@@ -60,9 +60,7 @@
         function dump( $obj ) {
 
             // Display the information
-            echo( 
-                '<pre>' . htmlentities( YDDebugUtil::r_dump( $obj ) ) . '</pre>' 
-            );
+            echo( YDDebugUtil::r_dump( $obj, true ) );
 
         }
 
@@ -70,14 +68,24 @@
          *  Function to return the contents of pretty much anything. This is the 
          *  same as the var_export function in PHP.
          *
-         *  @param $obj Object you want to dump.
+         *  @param $obj  Object you want to dump.
+         *  @param $html (optional) If you want to have everything returned as 
+         *               HTML or text. The default is false, returning text.
          *
          *  @returns Text representation of the object.
          */
-        function r_dump( $obj ) {
+        function r_dump( $obj, $html=false ) {
 
             // Return the information
-            return var_export( $obj, true );
+            $data = var_export( $obj, true );
+
+            // Convert to HTML if needed
+            if ( $html == true ) {
+                $data = '<pre>' . htmlentities( $data ) . '</pre>';
+            }
+
+            // Return the data
+            return $data;
 
         }
 

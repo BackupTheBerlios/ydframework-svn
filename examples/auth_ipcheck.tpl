@@ -2,7 +2,7 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
@@ -12,7 +12,7 @@
 
     <p>Welcome!</p>
 
-    <p>Your IP number is: {$YD_SERVER.REMOTE_ADDR}</p>
+    <p>Your IP number is: <?= $YD_SERVER['REMOTE_ADDR'] ?></p>
 
     <p>Tip: try accessing this page once with your computername as the hostname,
     and see the difference if you use localhost.</p>

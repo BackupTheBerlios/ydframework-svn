@@ -2,23 +2,23 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
 <body>
 
-    {if $YD_ACTION == 'test'}
+    <?php if ( $YD_ACTION == 'test' ) { ?>
 
-        <h3>Testing {$YD_GET.id}</h3>
+        <h3>Testing <?php $YD_GET['id'] ?></h3>
 
-        {if $error}
-            <p style="color: red"><b>ERROR: {$error}</b></p>
-        {else}
+        <?php if ( $error ) { ?>
+            <p style="color: red"><b>ERROR: <?= $error ?></b></p>
+        <?php } else { ?>
 
-            <p>Connected succesfully to database alias <b>{$YD_GET.id}</b>!</p>
+            <p>Connected succesfully to database alias <b><?= $YD_GET['id'] ?></b>!</p>
 
-            {if $result}
+            <?php if ( $result ) { ?>
                 <table border="1">
                 <tr>
                     <td><b>id</b></td>
@@ -30,59 +30,59 @@
                     <td><b>state</b></td>
                     <td><b>info</b></td>
                 </tr>
-                {foreach from=$result item="row"}
+                <?php foreach ( $result as $row ) { ?>
                     <tr>
-                        <td>{$row.id}</td>
-                        <td>{$row.user}</td>
-                        <td>{$row.host}</td>
-                        <td>{$row.db}</td>
-                        <td>{$row.command}</td>
-                        <td>{$row.time}</td>
-                        <td>{$row.state}&nbsp;</td>
-                        <td>{$row.info}</td>
+                        <td><?= $row['id'] ?></td>
+                        <td><?= $row['user'] ?></td>
+                        <td><?= $row['host'] ?></td>
+                        <td><?= $row['db'] ?></td>
+                        <td><?= $row['command'] ?></td>
+                        <td><?= $row['time'] ?></td>
+                        <td><?= $row['state'] ?>&nbsp;</td>
+                        <td><?= $row['info'] ?></td>
                     </tr>
-                {/foreach}
+                <?php } ?>
                 </table>
-            {/if}
+            <?php } ?>
 
-        {/if}
+        <?php } ?>
 
         <p>[
-            <a href="{$YD_SELF_SCRIPT}">go back</a>
+            <a href="<?= $YD_SELF_SCRIPT ?>">go back</a>
             |
             <a href="index.php">other samples</a>
         ]</p>
 
-    {else}
+    <?php } else { ?>
 
         <h3>Database aliasses</h3>
 
-        {if $dbAliasses}
+        <?php if ( $dbAliasses ) { ?>
             <table border="1" width="650" cellpadding="3"  cellspacing="0">
             <tr>
                 <td width="200"><b>Alias</b></td>
                 <td width="400"><b>Database URL</b></td>
                 <td width="50"><b>Actions</b></td>
             </tr>
-            {foreach from=$dbAliasses item="dbUrl" key="dbAlias"}
+            <?php foreach ( $dbAliasses as $dbAlias => $dbUrl ) { ?>
             <tr>
-                <td>{$dbAlias}</td>
-                <td>{$dbUrl}</td>
-                <td>[ <a href="{$YD_SELF_SCRIPT}?{$YD_ACTION_PARAM}=test&id={$dbAlias}">test</a> ]</td>
+                <td><?= $dbAlias ?></td>
+                <td><?= $dbUrl ?></td>
+                <td>[ <a href="<?= $YD_SELF_SCRIPT ?>?<?= $YD_ACTION_PARAM ?>=test&id=<?= $dbAlias ?>">test</a> ]</td>
             </tr>
-            {/foreach}
+            <?php } ?>
             </table>
-        {else}
+        <?php } else { ?>
             <p>No database aliasses defined.</p>
-        {/if}
+        <?php } ?>
 
         <p>[
-            <a href="{$YD_SELF_SCRIPT}">refresh</a>
+            <a href="<?= $YD_SELF_SCRIPT ?>">refresh</a>
             |
             <a href="index.php">other samples</a>
         ]</p>
 
-    {/if}
+    <?php } ?>
 
 </body>
 

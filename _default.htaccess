@@ -19,7 +19,7 @@ php_value register_argc_argv 0
 # Disallow some security holes
 php_value allow_call_time_pass_reference 0
 php_value allow_url_fopen 1
-php_flag short_open_tag Off
+php_flag short_open_tag On
 php_flag enable_dl Off
 
 # Gzip compress the output

@@ -2,21 +2,21 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
 <body>
 
-    <h3>{$title}</h3>
+    <h3><?= $title ?></h3>
 
-    Agent: {$browser->getAgent()}
+    Agent: <?= $browser->getAgent() ?>
     <br>
-    Browser: {$browser->getBrowser()}
+    Browser: <?= $browser->getBrowser() ?>
     <br>
-    Version: {$browser->getVersion()}
+    Version: <?= $browser->getVersion() ?>
     <br>
-    Platform: {$browser->getPlatform()}
+    Platform: <?= $browser->getPlatform() ?>
 
     <p>[
         <a href="index.php">other samples</a>

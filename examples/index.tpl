@@ -2,21 +2,23 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
 <body>
 
-    {if $file}
-        <h3>source code: {$file}</h3>
-        {$source}
-        <p>[ <a href="{$YD_SELF_SCRIPT}">go back</a> ]</p>
-    {else}
-    
-        <h3>{$YD_FW_NAMEVERS}</h3>
+    <?php if ( $file ) { ?>
 
-        <p>Welcome to the {$YD_FW_NAMEVERS}!</p>
+        <h3>source code: <?= $file ?></h3>
+        <?= $source ?>
+        <p>[ <a href="<?= $YD_SELF_SCRIPT ?>">go back</a> ]</p>
+    
+    <?php } else { ?>
+    
+        <h3><?= $YD_FW_NAMEVERS ?></h3>
+
+        <p>Welcome to the <?= $YD_FW_NAMEVERS ?>!</p>
 
         <p>&nbsp;<br><b>Samples</b></p>
 
@@ -30,7 +32,7 @@
                 <a href="phpinfo.php">Showing the PHP information</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=phpinfo.php">phpinfo.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=phpinfo.php">phpinfo.php</a>
             </td>
         </tr>
         <tr>
@@ -38,9 +40,9 @@
                 <a href="browserinfo.php">Showing the browser information</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=browserinfo.php">browserinfo.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=browserinfo.php">browserinfo.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=browserinfo.tpl">browserinfo.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=browserinfo.tpl">browserinfo.tpl</a>
             </td>
         </tr>
         <tr>
@@ -48,7 +50,7 @@
                 <a href="htmlmenu1.php">Creating a HTML menu</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=htmlmenu1.php">htmlmenu1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=htmlmenu1.php">htmlmenu1.php</a>
             </td>
         </tr>
         <tr>
@@ -56,7 +58,7 @@
                 <a href="arrayutil1.php">Array utilities</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=arrayutil1.php">arrayutil1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=arrayutil1.php">arrayutil1.php</a>
             </td>
         </tr>
         <tr>
@@ -64,7 +66,7 @@
                 <a href="fsfile1.php">YDFSFile object</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=fsfile1.php">fsfile1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsfile1.php">fsfile1.php</a>
             </td>
         </tr>
         <tr>
@@ -72,7 +74,7 @@
                 <a href="fsdirectory1.php">YDFSDirectory object</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=fsdirectory1.php">fsdirectory1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsdirectory1.php">fsdirectory1.php</a>
             </td>
         </tr>
         <tr>
@@ -88,7 +90,7 @@
                 <a href="fsimage1.php?do=thumbnail4">YDFSImage object - thumbnail 4 (no caching)</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=fsimage1.php">fsimage1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsimage1.php">fsimage1.php</a>
             </td>
         </tr>
         <tr>
@@ -96,7 +98,7 @@
                 <a href="extending1.php">Extending the YDRequest base class</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=extending1.php">extending1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=extending1.php">extending1.php</a>
             </td>
         </tr>
         <tr>
@@ -104,11 +106,11 @@
                 <a href="database1.php">Database connectivity</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=config.php">config.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=config.php">config.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=database1.php">database1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.php">database1.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=database1.tpl">database1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.tpl">database1.tpl</a>
             </td>
         </tr>
         <tr>
@@ -116,9 +118,9 @@
                 <a href="form1.php">Form handling and validation</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=form1.php">form1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form1.php">form1.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=form1.tpl">form1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form1.tpl">form1.tpl</a>
             </td>
         </tr>
         <tr>
@@ -126,9 +128,9 @@
                 <a href="sample1.php">Defining and using action requests</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=sample1.php">sample1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample1.php">sample1.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=sample1.tpl">sample1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample1.tpl">sample1.tpl</a>
             </td>
         </tr>
         <tr>
@@ -136,17 +138,17 @@
                 <a href="login/index.php">Using authentication</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/includes/MyLoginRequest.php">login/includes/MyLoginRequest.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/includes/MyLoginRequest.php">login/includes/MyLoginRequest.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/index.php">login/index.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/index.php">login/index.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/index.tpl">login/index.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/index.tpl">login/index.tpl</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/login.tpl">login/login.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/login.tpl">login/login.tpl</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/userinfo.php">login/userinfo.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/userinfo.php">login/userinfo.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=login/userinfo.tpl">login/userinfo.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=login/userinfo.tpl">login/userinfo.tpl</a>
             </td>
         </tr>
         <tr>
@@ -164,7 +166,7 @@
                 <a href="ydurl1.php?do=status">YDUrl object - Status</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=ydurl1.php">ydurl1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=ydurl1.php">ydurl1.php</a>
             </td>
         </tr>
         <tr>
@@ -180,7 +182,7 @@
                 <a href="feedcreator1.php?do=atom">YDFeedCreator object - Atom output</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=feedcreator1.php">feedcreator1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=feedcreator1.php">feedcreator1.php</a>
             </td>
         </tr>
         <tr>
@@ -188,9 +190,9 @@
                 <a href="auth_ipcheck.php">Authentication based on IP numbers</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.php">auth_ipcheck.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=auth_ipcheck.php">auth_ipcheck.php</a>
                 <br>
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.tpl">auth_ipcheck.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=auth_ipcheck.tpl">auth_ipcheck.tpl</a>
             </td>
         </tr>
         <tr>
@@ -198,7 +200,7 @@
                 <a href="xmlrpcclient1.php">XML/RPC client</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=xmlrpcclient1.php">xmlrpcclient1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcclient1.php">xmlrpcclient1.php</a>
             </td>
         </tr>
         <tr>
@@ -206,7 +208,7 @@
                 <a href="language1.php">Language negotiator</a>
             </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=language1.php">language1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=language1.php">language1.php</a>
             </td>
         </tr>
         </table>
@@ -217,7 +219,7 @@
         <a href="../YDFramework2/doc/index.html">YDFramework2/docs</a> directory
         of the download.</p>
     
-    {/if}
+    <?php } ?>
 
 </body>
 

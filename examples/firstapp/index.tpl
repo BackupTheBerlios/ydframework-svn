@@ -2,63 +2,64 @@
 
 <head>
 
-    <title>{$YD_FW_NAMEVERS}</title>
+    <title><?= $YD_FW_NAMEVERS ?></title>
 
 </head>
 
 <body>
 
-    {if $YD_ACTION == 'default'}
+    <?php if ( $YD_ACTION == 'default' ) { ?>
+
         <h3>Entry list</h3>
-        <p><a href="{$YD_SELF_SCRIPT}?do=AddEntry">Add a new entry</a></p>
 
-        {if $entries}
-            {foreach from=$entries item="entry"}
+        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddEntry">Add a new entry</a></p>
+
+        <?php if ( $entries ) { ?>
+
+            <?php foreach ( $entries as $entry ) { ?>
                 <p>
-                <b>{$entry.title}</b>
-                [ <a href="{$YD_SELF_SCRIPT}?do=DeleteEntry&id={$entry.id}">delete</a> ]
+                <b><?= $entry['title'] ?></b>
+                [ <a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteEntry&id=<?= $entry['id'] ?>">delete</a> ]
                 <br>
-                {$entry.body}
+                <?= $entry['body'] ?>
                 </p>
-            {/foreach}
-        {else}
-            <p>No entries were found.</p>
-        {/if}
-    {/if}
+            <?php } ?>
 
-    {if $YD_ACTION == 'addentry'}
+        <?php } else { ?>
+            <p>No entries were found.</p>
+        <?php } ?>
+
+    <?php } ?>
+
+    <?php if ( $YD_ACTION == 'addentry' ) { ?>
+
         <h3>Add entry</h3>
 
-        {if $form.errors}
+        <?php if ( $form['errors'] ) { ?>
             <p style="color: red"><b>Errors during processing:</b>
-            {foreach from=$form.errors item="error"}
-                <br>{$error}
-            {/foreach}
+            <?php foreach ( $form['errors'] as $error ) { ?>
+                <br><?= $error ?>
+            <?php } ?>
             </p>
-        {/if}
+        <?php } ?>
 
-        <form {$form.attributes}>
+        <form <?= $form['attributes'] ?>>
             <p>
-                {$form.title.label}
+                <?= $form['title']['label'] ?>
                 <br>
-                {$form.title.html}
+                <?= $form['title']['html'] ?>
             </p>
             <p>
-                {$form.body.label}
+                <?= $form['body']['label'] ?>
                 <br>
-                {$form.body.html}
+                <?= $form['body']['html'] ?>
             </p>
             <p>
-                {$form.cmdSubmit.html}
+                <?= $form['cmdSubmit']['html'] ?>
             </p>
         </form>
 
-
-    {/if}
-
-    {if $YD_ACTION == 'deleteentry'}
-        <h3>Delete entry</h3>
-    {/if}
+    <?php } ?>
 
 </body>
 
