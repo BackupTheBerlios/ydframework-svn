@@ -1,0 +1,26 @@
+<html>
+<head>
+	<title>How to use groups :: Smarty-Light</title>
+</head>
+<body>
+<h4>Smarty-Light - the faster compiling PHP template engine</h4>
+<h1>How to use groups</h1>
+<hr>
+<p>
+	When you compile or cache a template, it is important to specify a "compile" or "cache" id. Compile and cache ids are two separate ids that are specific to a specific page. It makes it easy to associate templates in order to keep track of where they are for caching and compiling.<br><br>
+	For instance, you can put all pages for your gallery under the "gallery" group. Then when you need to clear all the pages for the gallery, you can simply call <code>$tpl->clear_cache("gallery")</code>. Or to clear the cache for all gallery pictures, you can call <code>$tpl->clear_cache("gallery|pictures")</code>.<br><br>
+	Compile and cache ids are specified like this:<br>
+	<pre>
+	PHP
+	=============================
+	$tpl->display("page.tpl","compileid");
+	$tpl->display("page.tpl","compileid","cacheid");
+	$tpl->display("page.tpl","compileid|subgroup","cacheid|subgroup");
+	</pre>
+
+	This allows you to load up <code>page.tpl</code> and assign it different names. One time you might load it and refer to it as "page1" and the next time call it "page2".<br><br>
+	Each group is offset by the pipe, |. In the above example, the base group for the compile id was "compileid" and then under page you had a compile id of "subgroup". The real power of compile and cache ids come when you want to clear templates to be recompiled or recached. For instance, you can clear the "page" group and it will remove all compiled templates with the base group "page". or you can clear the "page|one" group and remove all templates under the group "page|one".
+</p>
+<a href="index.html">Home</a>
+</body>
+</html>

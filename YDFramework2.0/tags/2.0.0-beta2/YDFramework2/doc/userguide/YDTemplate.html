@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - YDTemplate</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Using templates </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+In this chapter, we will have a closer look at how the template engine in the Yellow Duck Framework is working and how it's implemented. The template engine in the framework is based on <a href="http://sourceforge.net/projects/smarty-light">Smarty Light</a> and follows the same syntax as any normal Smarty Light template file, except that is uses curly brackets as the template delimiters instead of the standard '&lt;% %&gt;' brackets.<br />
+<br />
+<br />
+<h4> The YDTemplate class </h4>
+<br />
+For managing templates, there is a specific class class YDTemplate. If you instantiate this class, you can assign variables to it, and then, using these variables, you can output a named template.<br />
+<br />
+The following code sample gives you a small example on how this works:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#DD0000">'YDTemplate.php' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$array </font><font color="#007700">= array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'author' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Stephen King'</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'title' </font><font color="#007700">=&gt; </font><font color="#DD0000">'The Stand'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'author' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Neal Stephenson'</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'title' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Cryptonomicon'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'author' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Milton Friedman'</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'title' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Free to Choose'<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">)<br />&nbsp;&nbsp;&nbsp;&nbsp;);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$template </font><font color="#007700">= new </font><font color="#0000BB">YDTemplate</font><font color="#007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$template</font><font color="#007700">-&gt;</font><font color="#0000BB">setVar</font><font color="#007700">( </font><font color="#DD0000">'title'</font><font color="#007700">, </font><font color="#DD0000">'This is the title' </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$template</font><font color="#007700">-&gt;</font><font color="#0000BB">setVar</font><font color="#007700">( </font><font color="#DD0000">'books'</font><font color="#007700">, </font><font color="#0000BB">$array </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$template</font><font color="#007700">-&gt;</font><font color="#0000BB">getOutput</font><font color="#007700">( </font><font color="#DD0000">'mytemplate' </font><font color="#007700">) );<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+The template for this code could look as follows:<br />
+<br />
+<div class="code"><code><font color="#000000">
+&lt;html&gt;<br /><br />&lt;head&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;{$title}&lt;/title&gt;<br />&lt;/head&gt;<br /><br />&lt;body&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;{if is_array( $books )}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;table&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;Author&lt;/th&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;Title&lt;/th&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{foreach from=$books item=val}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;{$val[author]}&lt;/td&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;{$val[title]}&lt;/td&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{/foreach}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/table&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;{else}<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;There are no books to display.&lt;/p&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;{/if}<br /><br />&lt;/body&gt;<br /><br />&lt;/html&gt;</font>
+</code></div><br />
+<br />
+As you can see, we assigned two variables to our template instance. Each variable you want to use in the template engine needs to be assigned to the template instance before you can use it. Assigning a variable to a template implies that we attach a template variable name to a PHP object. These objects can be anything from an array, a simple string to even a complete object.<br />
+<br />
+Once we assigned all the variables, we can issue the "getOutput" function of the template class to get the result of the parsed template. This function takes one argument, which is the name of the template.<br />
+<br />
+The name of the template you need to specify for the "getOutput" function is the basename of the template without the "tpl" extension. In our example, you would need the following files to make the example work:<br />
+<br />
+<ul><li> <strong>mytemplate.php:</strong> the actual PHP script
+</li><li> <strong>mytemplate.tpl:</strong> the template attached to the PHP script</li></ul>
+<br />
+By convention, all templates have the extension "tpl". This is also hardcoded in the framework itself. Please, stick to this standard.<br />
+<br />
+<br />
+<h4> Template search paths </h4>
+<br />
+There are different ways on where the template engine will search for templates. By default, there are two possible ways of specifying the path for the templates:<br />
+<br />
+<ul><li> <strong>Template specified by base name:</strong> this will cause the template engine to look in the same directory as the current script.
+</li><li> <strong>Template specified by a full path:</strong> this will cause the template engine to look for the template at the specified path.</li></ul>
+<br />
+If you want, you can override the default search path for the templates. This is done by the class function "setTemplateDir" of the template class. With this function, you can add an extra path to the search path of the template class. After you added a new path, you can specify templates in that directory by their basename instead of having to specify the full path for the template.<br />
+<br />
+<br />
+<h4> Standard template variables </h4>
+<br />
+For each template, there are a number of standard variables available which you can always reference. These variables all start with "YD_" and are all uppercase. Here's the list of the standard variables:<br />
+<br />
+<ul><li> <strong>YD_FW_NAME:</strong> name of the framework
+</li><li> <strong>YD_FW_VERSION:</strong> version of the framework
+</li><li> <strong>YD_FW_NAMEVERS:</strong> the combination of the two items above
+</li><li> <strong>YD_FW_HOMEPAGE:</strong> the homepage of the Yellow Duck Framework
+</li><li> <strong>YD_SELF_SCRIPT:</strong> the current script's path, e.g. "/myapp/index.php" 
+</li><li> <strong>YD_SELF_URI:</strong> the URI which was given in order to access this page, e.g. "/myapp/index.php?do=edit"
+</li><li> <strong>YD_ACTION_PARAM:</strong> the name of the $_GET parameter that specifies which action needs to be executed. This is "do" by convention.</li></ul>
+<br />
+Please do not use the "YD_" prefix for your own variables. This prefix is uniquely reserverd for the variables automatically assigned by the Yellow Duck Framework.<br />
+<br />
+<br />
+<h4> Template syntax </h4>
+<br />
+Since the YDTemplate class is based on the <a href="http://sourceforge.net/projects/smarty-light">Smarty Light</a> template engine, the same functionality and options are provided. There is one major difference though with a standard Smarty Light. The YDTemplate engine uses curly brackets as delimiters, while Smarty normally uses '&lt;%' and '%&gt;'.<br />
+<br />
+To find more information about the Smarty Light syntax, please take a look at the <a href="http://www.paullockaby.com/projects/smarty-light/docs/">Smarty Light documentation</a>.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
+
+
+
+</body>
+
+</html>
