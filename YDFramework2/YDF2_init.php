@@ -264,7 +264,8 @@
         // Include Smarty
         require_once( YD_DIR_3RDP_SMARTY . '/Smarty.class.php' );
 
-        // Include the HTTP client
+        // Include the HTTP and XML/RPC library client
+        require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
         require_once( YD_DIR_3RDP . '/IXR_Library.inc.php' );
 
         // Include the Yellow Duck framework
@@ -279,6 +280,7 @@
         require_once( YD_DIR_CLSS . '/YDFSDirectory.php' );
         require_once( YD_DIR_CLSS . '/YDFSFile.php' );
         require_once( YD_DIR_CLSS . '/YDFSImage.php' );
+        require_once( YD_DIR_CLSS . '/YDHttpClient.php' );
         require_once( YD_DIR_CLSS . '/YDObjectUtil.php' );
         require_once( YD_DIR_CLSS . '/YDPhpUtil.php' );
         require_once( YD_DIR_CLSS . '/YDRequest.php' );

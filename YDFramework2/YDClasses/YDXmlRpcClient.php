@@ -16,13 +16,14 @@
      *  This is the actual implementation of the YDXmlRpcClient class. It
      *  extends the IXR_Client class and adds support for GZip compressed 
      *  communications based on the HttpClient class.
-     *
-     *  @todo
-     *      The HTTP Client class should correctly set the content type. If not,
-     *      it's not possible to use this class to do the requests.
      */
     class YDXmlRpcClientCore extends IXR_Client {
 
+        /**
+         *  This is the class constructor for the YDXmlRpcClientCore class.
+         *
+         *  @param $url The URL of the XML/RPC server.
+         */
         function YDXmlRpcClientCore( $url ) {
             $this->IXR_Client( $url );
         }
@@ -32,9 +33,6 @@
          *  class so that we can use the HttpClient class to do the HTTP stuff.
          */
         function query() {
-
-            // Include the HTTP client
-            require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
 
             // Get the function arguments
             $args = func_get_args();
@@ -46,11 +44,12 @@
             $request = new IXR_Request( $method, $args );
 
             // Create a new HTTP client
-            $client = new HttpClient( $this->server, $this->port );
+            $client = new YDHttpClient( $this->server, $this->port );
             $client->useGzip( true );
             $client->setDebug( YD_DEBUG );
             $client->path = $this->path;
             $client->method = 'POST';
+            $client->contenttype = 'text/xml';
             $client->postdata = str_replace( "\n", '', $request->getXml() );
 
             // Show in debugging mode
@@ -106,10 +105,6 @@
          *  This is the class constructor of the YDXmlRpcClient class.
          *
          *  @param $url The URL of the XML/RPC server.
-         *
-         *  @todo
-         *      Move to our GZip enabled XML/RPC client as soon as we have the
-         *      HttpClient class fixed.
          */
         function YDXmlRpcClient( $url ) {
 
@@ -121,8 +116,7 @@
             }
 
             // Instantiate the client
-            //$this->_client = new YDXmlRpcClientCore( $url );
-            $this->_client = new IXR_Client( $url );
+            $this->_client = new YDXmlRpcClientCore( $url );
 
             // Set the debugging mode
             if ( YD_DEBUG == 1 ) {

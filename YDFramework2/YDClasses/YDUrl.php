@@ -360,9 +360,6 @@
          */
         function _getHttpClient() {
 
-            // Include the HTTP client
-            require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
-
             // Check the URL scheme
             if ( $this->getScheme() != 'http' ) {
                 new YDFatalError( 'getContents: Only HTTP URLs are supported.' );
@@ -376,7 +373,7 @@
             }
 
             // Get the head of the file
-            $client = new HttpClient( $this->getHost(), $port );
+            $client = new YDHttpClient( $this->getHost(), $port );
             $client->useGzip( true );
             $client->setDebug( YD_DEBUG );
             $client->path = $this->getUrl();
