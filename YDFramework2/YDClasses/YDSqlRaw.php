@@ -29,8 +29,17 @@
         function YDSqlRaw( $sql ) {
     
             // Initialize the sql query
-            $this->sql = $sql;
+            $this->_sql = $sql;
 
+        }
+        
+        /**
+         *  This function will return the raw SQL statement for this query.
+         *
+         *  @returns The raw sql statement for this query.
+         */
+        function getSql() {
+            return $this->_sql;
         }
 
         /**
@@ -47,7 +56,7 @@
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeQuery( $this->sql );
+            return $db->executeQuery( $this->getSql() );
 
         }
 
@@ -65,7 +74,7 @@
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeSelect( $this->sql );
+            return $db->executeSelect( $this->getSql() );
 
         }
 
@@ -83,7 +92,7 @@
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeSelectRow( $this->sql );
+            return $db->executeSelectRow( $this->getSql() );
 
         }
 
