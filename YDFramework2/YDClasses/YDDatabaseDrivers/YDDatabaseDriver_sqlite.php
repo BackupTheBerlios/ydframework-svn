@@ -10,12 +10,12 @@
 	require_once( 'YDDatabaseDriver.php' );
 
 	/**
-	 *	This class defines a database driver for MySQL.
+	 *	This class defines a database driver for SQLite.
 	 */
-	class YDDatabaseDriver_mysql extends YDDatabaseDriver {
+	class YDDatabaseDriver_sqlite extends YDDatabaseDriver {
 
 		/**
-		 *	This is the class constructor for the YDDatabaseDriver_mysql class.
+		 *	This is the class constructor for the YDDatabaseDriver_sqlite class.
 		 *
 		 *	@param $db		Name of the database.
 		 *	@param $user	(optional) User name to use for the connection.
@@ -23,7 +23,7 @@
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
 		 */
-		function YDDatabaseDriver_mysql( $db, $user='', $pass='', $host='', $options=array() ) {
+		function YDDatabaseDriver_sqlite( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
 		}
 
@@ -33,7 +33,7 @@
 		 *	@returns	Boolean indicating if the database type is supported by the server.
 		 */
 		function isSupported() {
-			return extension_loaded( 'mysql' );
+			return extension_loaded( 'sqlite' );
 		}
 
 		/**
@@ -41,10 +41,8 @@
 		 */
 		function connect() {
 			if ( $this->_conn == null ) {
-				$conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-				if ( ! $conn ) { YDFatalError( mysql_error() ); }
-				if ( ! @mysql_select_db( $this->_db, $conn ) ) { YDFatalError( mysql_error( $conn ) ); }
-				$this->_conn = $conn;
+				$conn = @sqlite_open( $this->_db );
+				if ( ! $conn ) { YDFatalError( sqlite_error_string( sqlite_last_error() ) ); }
 			}
 		}
 
@@ -58,12 +56,11 @@
 		function getRecords( $sql ) {
 			$this->connect();
 			$dataset = array();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
-			while ( $line = mysql_fetch_assoc( $result ) ) {
+			$result = sqlite_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			while ( $line = sqlite_fetch_array ( $result, SQLITE_ASSOC  ) ) {
 				array_push( $dataset, $line );
 			}
-			mysql_free_result( $result );
 			return $dataset;
 		}
 
@@ -72,7 +69,7 @@
 		 */
 		function close() {
 			if ( $this->_conn != null ) {
-				@mysql_close( $this->_conn );
+				@sqlite_close( $this->_conn );
 			}
 		}
 

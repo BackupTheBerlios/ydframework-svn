@@ -17,6 +17,9 @@
 	 *
 	 *	@todo
 	 *		Convert all the examples to this new form object and kick out PEAR.
+	 *
+	 *	@todo
+	 *		All registering functions should use lowercase element names.
 	 */
 	class YDForm2 extends YDBase {
 
@@ -106,7 +109,7 @@
 		 *	@param $file	(optional) The file containing the class definition for this element.
 		 */
 		function registerElement( $name, $class, $file='' ) {
-			$this->_regElements[ $name ] = array( 'class' => $class, 'file' => $file );
+			$this->_regElements[ $name] = array( 'class' => $class, 'file' => $file );
 		}
 
 		/**
@@ -312,6 +315,11 @@
 		 *	@param $name	The name of the form element.
 		 *
 		 *	@returns	The value to the specified form element.
+		 *
+		 *	@todo
+		 *		Should loop over all the post variables and add all to an associative array. If the array contains only
+		 *		one item, it should be returned as a string, otherwise, the associative array should be returned. We
+		 *		need this for supporting multi-item form elements such as e.g. a date or time selector.
 		 */
 		function getValue( $name ) {
 
