@@ -250,7 +250,8 @@
 			// TODO: need to find a good way of checking multi-values
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
-				if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
+				//if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
+				if ( $var === $this->_name . '_' . $name ) {
 					$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
 				}
 			}
