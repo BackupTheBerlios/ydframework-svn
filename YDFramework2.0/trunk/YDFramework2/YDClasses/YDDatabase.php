@@ -145,11 +145,10 @@
 			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : 20;
 
 			// This original recordset
-			$this->records = $records;
 			$this->page = ( $page >= 1 ) ? $page : 1;
 			$page = ( $page >= 1 ) ? $page : -1;
 			if ( $page == -1 ) {
-				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $this->records );
+				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $records );
 			} else {
 				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : 20;
 			}
@@ -161,8 +160,8 @@
 			$this->set = array_slice( $records, $this->offset, $this->pagesize );
 
 			// Get the number of pages
-			$this->totalPages = ceil( sizeof( $this->records ) / ( float ) $this->pagesize );
-			$this->totalRows = sizeof( $this->records );
+			$this->totalPages = ceil( sizeof( $records ) / ( float ) $this->pagesize );
+			$this->totalRows = sizeof( $records );
 			$this->totalRowsOnPage = sizeof( $this->set );
 
 			// Get the previous and next page
@@ -177,7 +176,7 @@
 			$this->pages = ( $this->totalPages == 1 ) ? array() : range( 1, $this->totalPages );
 
 			// Remove the original set of records, as we don't need them anymore
-			unset( $this->records );
+			unset( $records );
 
 		}
 
