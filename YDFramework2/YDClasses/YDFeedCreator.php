@@ -97,7 +97,7 @@
 			}
 
 			if ( substr( $link, 0, 1 ) == '/' ) {
-				$url = 'http://' . $_SERVER['SERVER_NAME'];
+				$url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
 				if ( $_SERVER['SERVER_PORT'] != '80' ) {
 					$url = $url . ':' . $_SERVER['SERVER_PORT'];
 				}
