@@ -4,7 +4,7 @@
 
 	<title>{$YD_FW_NAMEVERS}</title>
 
-	<style>
+	{literal}<style>
 		body { 
 			font-family: "Georgia", "Times New Roman", "Times";
 			margin: 45px;
@@ -32,7 +32,7 @@
 			font-style: italic;
 
 		}
-	</style>
+	</style>{/literal}
 
 </head>
 
