@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.1
+ * Version:	2.2.2
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -193,13 +193,12 @@ class template {
 	}
 
 	function fetch($file, $cache_id = null, $display = false) {
-		//$name = md5($file).'.php';
-		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
 		$this->_cache_id = $cache_id;
 		$this->template_dir = $this->_get_dir($this->template_dir);
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
 		if ($this->cache)
 			$this->_cache_dir = $this->_build_dir($this->cache_dir, $this->_cache_id);
+		$name = md5($this->template_dir.$file).'.php';
 
 		// don't display any errors
 		$this->_error_level = error_reporting(error_reporting() & ~E_NOTICE);
@@ -235,17 +234,17 @@ class template {
 	}
 
 	function config_load($file, $section_name = null, $var_name = null) {
-		//$name = md5($file.$section_name.$var_name).'.php';
-		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file.$section_name.$var_name ) ) ).'.php';
+		$this->template_dir = $this->_get_dir($this->template_dir);
 		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
+		$name = md5($this->template_dir.$file.$section_name.$var_name).'.php';
 
 		if ($this->cache) {
 			array_push($this->_cache_info['config'], $file);
 		}
 
-		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->config_dir.$file))) {
-			include($this->compile_dir.$name);
+		if (!$this->force_compile && file_exists($this->compile_dir.'c_'.$name) && (filemtime($this->compile_dir.'c_'.$name) > filemtime($this->config_dir.$file))) {
+			include($this->compile_dir.'c_'.$name);
 			return true;
 		}
 
@@ -271,7 +270,7 @@ class template {
 			$output = "\$this->_confs = " . var_export($_temp, true) . ";";
 		}
 
-		$f = fopen($this->compile_dir.$name, "w");
+		$f = fopen($this->compile_dir.'c_'.$name, "w");
 		fwrite($f, '<?php ' . $output . ' ?>');
 		fclose($f);
 		eval($output);
@@ -279,22 +278,23 @@ class template {
 	}
 
 	function _is_cached($file, $cache_id) {
-		$name = md5($file).'.php';
 		$this->_cache_dir = $this->_get_dir($this->_cache_dir, $cache_id);
 		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->template_dir = $this->_get_dir($this->template_dir);
+		$name = md5($this->template_dir.$file).'.php';
+		$cache_time = filemtime($this->_cache_dir.$name);
 
-		if (file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file))) {
+		if (file_exists($this->_cache_dir.$name) && (((time() - $cache_time) < $this->cache_lifetime) || $this->cache_lifetime == -1) && ($cache_time > filemtime($this->template_dir.$file))) {
 			$fh = fopen($this->_cache_dir.$name, "r");
 			if (!feof($fh) && ($line = fgets($fh, filesize($this->_cache_dir.$name)))) {
 				$includes = unserialize($line);
 				if (isset($includes['template']))
 					foreach($includes['template'] as $value)
-						if (!file_exists($this->template_dir.$value) || (filemtime($this->_cache_dir.$name) < filemtime($this->template_dir.$file)))
+						if (!(file_exists($this->template_dir.$value) && ($cache_time > filemtime($this->template_dir.$value))))
 							return false;
 				if (isset($includes['config']))
 					foreach($includes['config'] as $value)
-						if (!file_exists($this->config_dir.$value) || (filemtime($this->_cache_dir.$name) < filemtime($this->config_dir.$file)))
+						if (!(file_exists($this->config_dir.$value) && ($cache_time > filemtime($this->config_dir.$value))))
 							return false;
 			}
 			fclose($fh);
@@ -304,16 +304,16 @@ class template {
 	}
 
 	function _fetch_compile($file) {
-		//$name = md5($file).'.php';
-		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
+		$this->template_dir = $this->_get_dir($this->template_dir);
+		$name = md5($this->template_dir.$file).'.php';
 
 		if ($this->cache) {
 			array_push($this->_cache_info['template'], $file);
 		}
 
-		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
+		if (!$this->force_compile && file_exists($this->compile_dir.'c_'.$name) && (filemtime($this->compile_dir.'c_'.$name) > filemtime($this->template_dir.$file))) {
 			ob_start();
-			include($this->compile_dir.$name);
+			include($this->compile_dir.'c_'.$name);
 			$output = ob_get_contents();
 			ob_end_clean();
 			error_reporting($this->_error_level);
@@ -349,7 +349,7 @@ class template {
 		$this->_compile_obj->_file = &$this->_file;
 		$output = $this->_compile_obj->_compile_file($file_contents);
 
-		$f = fopen($this->compile_dir.$name, "w");
+		$f = fopen($this->compile_dir.'c_'.$name, "w");
 		fwrite($f, $output);
 		fclose($f);
 
@@ -423,7 +423,8 @@ class template {
 							$this->_rm_dir($dir.$f.DIRECTORY_SEPARATOR);
 		} else {
 			if ($id == null) {
-				@unlink($dir.md5($file).'.php');
+				$this->template_dir = $this->_get_dir($this->template_dir);
+				@unlink($dir.md5($this->template_dir.$file).'.php');
 			} else {
 				$_args = "";
 				foreach(explode('|', $id) as $value)

@@ -52,13 +52,21 @@ These are things that I should have done before I released it, but that I put of
 <h2><a name="history">History</a></h2>
 <p>
 <ul>
-	<li>July 31 - Version 2.2.1
+	<li>August 3, 2004 - Version 2.2.2
+		<ul>
+			<li><font color="red">IT IS VERY IMPORTANT THAT YOU CLEAN OUT YOUR COMPILE AND CACHE DIRECTORIES AFTER THIS UPGRADE!</font></li>
+			<li>Another error in _is_cached() is now resolved. (Thanks to Ara Anjargolian.)</li>
+			<li>Compiled and cached template MD5s are now stored with the full template directory path in them to allow for storing templates in different template directories. (Thanks to Pieter Claerhout.)</li>
+			<li>Compiled files are now prefixed with a 'c_' when saved to allow compiled and cached files to be stored in the same directory. (Thanks to Pieter Claerhout.)</li>
+		</ul>
+	</li>
+	<li>July 31, 2004 - Version 2.2.1
 		<ul>
 			<li><font color="red">IT IS VERY IMPORTANT THAT YOU CLEAN OUT YOUR COMPILE AND CACHE DIRECTORIES AFTER THIS UPGRADE!</font></li>
 			<li>My attempt at making cache files check included files for changes failed previously. Now it works.</li>
 		</ul>
 	</li>
-	<li>July 31 - Version 2.2.0
+	<li>July 31, 2004 - Version 2.2.0
 		<ul>
 			<li><font color="red">IT IS VERY IMPORTANT THAT YOU CLEAN OUT YOUR COMPILE AND CACHE DIRECTORIES AFTER THIS UPGRADE!</font></li>
 			<li>If a file was cached and had <code>includes</code> and the includes changed, the cached file wouldn't change. Now if an included file changes the cache will be regenerated.</li>

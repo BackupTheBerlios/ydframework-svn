@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.1
+ * Version:	2.2.2
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -775,10 +775,11 @@ class compiler extends template {
 	}
 
 	function _get_plugin_dir() {
+		$this->plugin_dir = $this->_get_dir($this->plugin_dir);
 		if (substr($this->plugin_dir, 0, 1) == '/')
-			return $this->_get_dir($this->plugin_dir);
+			return $this->plugin_dir;
 		else
-			return dirname(__FILE__).DIRECTORY_SEPARATOR.$this->_get_dir($this->plugin_dir);
+			return dirname(__FILE__).DIRECTORY_SEPARATOR.$this->plugin_dir;
 	}
 }
 ?>
