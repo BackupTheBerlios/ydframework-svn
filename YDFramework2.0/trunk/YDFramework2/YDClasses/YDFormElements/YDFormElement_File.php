@@ -34,6 +34,8 @@
      */
     class YDFormElement_File extends YDFormElement {
 
+        var $fileo;
+
         /**
          *	This is the class constructor for the YDFormElement_File class.
          *
@@ -50,7 +52,6 @@
 
             // Set the type
             $this->_type = 'file';
-
         }
 
         /**
@@ -67,31 +68,77 @@
          *	This function will move the uploaded file to the specified directory.
          *
          *	@param $dir	(optional) The directory to move the file to. Defaults to the current directory.
-         *
+         *  @param $fname (optional) File name to use. Prevents e.g. the file hits the FS with unwanted chars in it
+         *  @param $retainExt (optional) Retain file name extension or not
          *	@returns	Boolean indicating if the move was succesful or not.
          */
-        function moveUpload( $dir='.' ) {
+        function moveUpload( $dir='.', $fname='', $retainExt=false ) {
             if ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) == 0 ) {
                 return false;
             }
+            
+            // Fetch extension if it is to be retained, set empty if otherwise
+            $retainExt AND $ext = YDPath::getExtension( $_FILES[ $this->_form . '_' . $this->_name ]['name'] ) OR $ext='';
+            
+            // Create (new) file name
+            $fname = ($fname=='' ? $_FILES[ $this->_form . '_' . $this->_name ]['name'] : $fname . '.' . $ext );
+            
+            // Compile path
+            $path = realpath( $dir ) . '/' . $fname;
+  
+            // Move file to temp location
+            // plz point out in the docs this dir is _temporary_, as it is automatically made 0777!          
             $result = move_uploaded_file(
                 $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'],
-                realpath( $dir ) . '/' . $_FILES[ $this->_form . '_' . $this->_name ]['name']
+                $path
             );
+            
             @chmod( realpath( $dir ), 0777 );
-            @chmod( realpath( $dir ) . '/' . $_FILES[ $this->_form . '_' . $this->_name ]['name'], 0666 );
+            @chmod( $path, 0666 );
+                        
+            // Provide an interface to some more useful information on the file
+            $this->fileo = new YDFSFile( $path );
+            
             return $result;
         }
-
+        
+        /**
+         *  This function will return the actual size of the uploaded file.
+         *
+         *  @returns  Size of the uploaded file in Bytes
+         */
+        function getSize() {
+            return is_object($this->fileo) ? $this->fileo->getSize() : '';
+        }
+        
+        /**
+         *  This function will return the actual path of the uploaded file.
+         *
+         *  @returns  Path of the uploaded file.
+         */
+        function getPath() {
+            return is_object($this->fileo) ? $this->fileo->getPath() : '';
+        }
+        
         /**
          *	This function will return the actual name of the uploaded file.
+         *  In case there is no fileo object, fetch the name from $_FILES
          *
          *	@returns	Name of the uploaded file.
          */
-        function getName() {
-            return basename( $_FILES[ $this->_form . '_' . $this->_name ]['name'] );
+        function getBasename() {
+            return is_object($this->fileo) ? $this->fileo->getBasename() : $_FILES[ $this->_form . '_' . $this->_name ]['name'];
         }
-
+        
+        /**
+         *  This function will return the actual extension of the uploaded file.
+         *
+         *  @returns  Extension of the uploaded file.
+         */
+        function getExtension() {
+          return is_object($this->fileo) ? $this->fileo->getExtension() : '';
+        }
+        
         /**
          *	This function will return the element as HTML.
          *

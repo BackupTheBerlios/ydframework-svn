@@ -12,9 +12,11 @@
 
     {if $formValid}
 
-        <p>The file <b>{$form.file1.value.name}</b>
-        ({$form.file1.value.size|fmtfilesize})
+        <p>The file <b>{$filename} in {$path}</b>
+        ({$filesize|fmtfilesize})
         was uploaded successfully!</p>
+        
+        <p>Extension is '{$ext}'</p>
 
     {else}
 

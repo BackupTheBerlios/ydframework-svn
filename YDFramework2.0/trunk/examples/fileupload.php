@@ -1,7 +1,7 @@
 <?php
 
     // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    require_once( 'YDF2_init.php' );
 
     // Includes
     YDInclude( 'YDForm.php' );
@@ -33,7 +33,7 @@
             // Add a rule
             $form->addRule( 'file1', 'uploadedfile', 'You need to select a valid file' );
             //$form->addRule( 'file1', 'maxlength', 'Path can only be 8 characters', 8 );
-            $form->addRule( 'file1', 'maxfilesize', 'Maximum filesize of 10 KB is exceeded!', 10*1024 );
+            $form->addRule( 'file1', 'maxfilesize', 'Maximum filesize of 1000 KB is exceeded!', 1000*1024 );
             //$form->addRule( 'file1', 'extension', 'File extension should be txt!', 'txt' );
 
             // Process the form
@@ -42,12 +42,23 @@
                 // Move the uploaded file
                 if ( $file->isUploaded() ) {
                 
+                    // You may fetch the name before the file hits the FS
+                    $temp_filename = $file->getBaseName();
+                
                     // Move the upload
-                    $file->moveUpload( '.' );
-                    
+                    $file->moveUpload( './tmp' );
+                    //$file->moveUpload( './tmp', 'TEST_' . $temp_filename );
+                    //$file->moveUpload( './tmp', md5(time()) );
+                    //$file->moveUpload( './tmp', md5(time()), true );
+
                     // Mark the form as valid
                     $this->template->assign( 'formValid', true );
                     
+                    // Display file information
+                    $this->template->assign( 'filename', $file->getBaseName() );
+                    $this->template->assign( 'filesize', $file->getSize() );
+                    $this->template->assign( 'ext', $file->getExtension() );
+                    $this->template->assign( 'path', $file->getPath() );
                 }
 
             }
