@@ -25,10 +25,11 @@
 			// Set the default template directory
 			$this->template_dir = YD_SELF_DIR;
 
-			$this->compile_dir = YD_DIR_TEMP . '/';
+			$this->compile_dir = YD_DIR_TEMP;
 			$this->left_tag = '{';
 			$this->right_tag = '}';
 			$this->cache_lifetime = 3600;
+			$this->cache_dir = YD_DIR_TEMP;
 
 			// Register the custom modifiers
 			$this->register_modifier( 'sizeof', 'sizeof' );
