@@ -10,6 +10,9 @@
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
 
+    // Define our version
+    define( 'FEEDCREATOR_VERSION', YD_FW_NAMEVERS . ' - YDFeedCreator' );
+
     // Includes
     require_once( 'YDBase.php' );
     require_once( 'YDError.php' );
@@ -45,9 +48,6 @@
             // Instantiate the feed creator
             $this->_ufc = new UniversalFeedCreator();
 
-            // Set the generator version
-            $this->_ufc->generatorVersion = YD_FW_NAMEVERS . ' - YDFeedCreator';
-
         }
 
         /**
@@ -75,41 +75,6 @@
          */
         function setLink( $link ) {
             $this->_ufc->link = $link;
-        }
-
-        /**
-         *  This function will set the image properties for the feed. It
-         *  requires you to specify a title, url and link for the image. The
-         *  description is an optional element.
-         *
-         *  @remark
-         *      Feed images are only supported for RSS feeds. ATOM feeds do not
-         *      support a feed image. If you decide to output the feed to ATOM,
-         *      the information set with this function will be discarded.
-         *
-         *  @param $title The title of the feed image.
-         *  @param $link  The link to the feed image.
-         *  @param $url   The URL of the feed image.
-         *  @param $descr (optional) The description for the feed image.
-         */
-        function setImage( $title, $link, $url, $desc=null ) {
-
-            // Instantiate the FeedImage object
-            $img = new FeedImage();
-
-            // Add the required properties
-            $img->title = YDStringUtil::encodeString( $title );
-            $img->link = $link;
-            $img->url = $url;
-
-            // Add the optional properties
-            if ( $desc != null ) {
-                $img->desc = $desc;
-            }
-
-            // Add the image to the feed
-            $this->_ufc->image = $img;
-
         }
 
         /**
@@ -143,7 +108,8 @@
             } else {
 
                 // Create the checksum parts
-                $checkSum = $item->title . $item->link;
+                $checkSum = $this->_ufc->link;
+                $checkSum .= $item->title . $item->link;
 
                 // Add the description if any
                 if ( $desc != null ) {
@@ -197,11 +163,36 @@
 
             // The Universal Feed Creator has a different name for ATOM feeds
             if ( $format == 'ATOM' ) {
-                $format = 'PIE0.1';
+                $format = 'ATOM0.3';
             }
 
             // Create the feed and return it
-            return $this->_ufc->createFeed( strtoupper( $format ) );
+            $result = $this->_ufc->createFeed( strtoupper( $format ) );
+
+            // The Universal Feed Creator has a different name for ATOM feeds
+            if ( $format == 'RSS1.0' ) {
+
+                // Strip the stylesheet from RSS 1.0
+                $result = str_replace(
+                    "\n" . '<?xml-stylesheet href="http://www.w3.org/2000/08/w3c-synd/style.css" type="text/css"?>',
+                    '',
+                    $result
+                );
+
+                // Fix a small display issue
+                $result = str_replace( '<dc:date>', ' <dc:date>', $result );
+
+            }
+
+            // Strip the generator comment
+            $result = str_replace(
+                "\n" . '<!-- generator="' . YD_FW_NAMEVERS . ' - YDFeedCreator" -->',
+                '',
+                $result
+            );
+
+            // Return the result
+            return $result;
 
         }
 

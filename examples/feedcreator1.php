@@ -26,11 +26,6 @@
             $this->fc->setTitle( 'Yellow Duck Framework & Co.' );
             $this->fc->setDescription( 'News about the Yellow Duck Framework & Co.' );
             $this->fc->setLink( $this->getCurrentUrl() );
-            $this->fc->setImage(
-                'Pieter & Fiona',
-                $this->getCurrentUrl(),
-                'http://www.yellowduck.be/images/site_images/YellowDuckEendje.gif'
-            );
             $this->fc->addItem(
                 'Title 1 & Co.',
                 $this->getCurrentUrl() . '#1',
