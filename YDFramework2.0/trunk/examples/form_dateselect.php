@@ -20,12 +20,31 @@
 
 			// Create the form
 			$form = new YDForm( 'form1' );
+
+			// Add a first set of elements
 			$elementDate = $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
-			$elementDate = $form->addElement( 'dateselect', 'dateSelect2', 'Enter data:' );
 			$elementTime = $form->addElement( 'timeselect', 'timeSelect1', 'Enter data:' );
 			$elementDateTime = $form->addElement( 'datetimeselect', 'datetimeSelect1', 'Enter data:' );
+
+			// Add a second set of elements
+			$form->addElement( 'dateselect', 'dateSelect2', 'Enter data:' );
+			$form->addElement( 'timeselect', 'timeSelect2', 'Enter data:' );
+			$form->addElement( 'datetimeselect', 'datetimeSelect2', 'Enter data:' );
+
+			// Add the send button
 			$form->addElement( 'submit', 'cmd1', 'Send' );
-			$form->setDefaults( array( 'dateSelect1' => array( 'month'=>4, 'day'=>4, 'year'=>2002 ) ) );
+
+			// Set the defaults
+			$form->setDefaults(
+				array(
+					'dateSelect1' => array( 'month'=>4, 'day'=>4, 'year'=>2002 ),
+					'dateSelect2' => 1017871200,
+					'timeSelect2' => 1017871200,
+					'datetimeSelect2' => 1017871200,
+				)
+			);
+
+			// Show the contents of the form
 			if ( YD_DEBUG == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
@@ -50,6 +69,8 @@
 				YDDebugUtil::dump( $elementDateTime->getTimeStamp(), '$elementDateTime->getTimeStamp()' );
 				YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%H:%M" )' );
 			}
+			
+			// Display the form
 			$form->display();
 
 		}

@@ -56,6 +56,17 @@
 			// Set the type
 			$this->_type = 'dateselect';
 
+			// Convert the numeric value if needed
+			if ( is_numeric( $this->_value ) ) {
+				if ( ! is_int( $this->_value ) ) {
+					$this->_value = intval( $this->_value );
+				}
+				$now = getdate( $this->_value );
+				$this->_value['day'] = $now['mday'];
+				$this->_value['month'] = $now['mon'];
+				$this->_value['year'] = $now['year'];
+			}
+
 			// Fill in the default date
 			if ( $this->_value == array() ) {
 				$now = getdate();
@@ -125,7 +136,7 @@
 				if ( is_int( $this->_value ) ) {
 					$value = getdate( $this->_value );
 				} else {
-					$value = getdate( strtotime( $this->_value, time() ) );
+					$value = getdate( strtotime( $this->_value ) );
 				}
 				$this->_value = array();
 				$this->_value['day'] = $value['mday'];
