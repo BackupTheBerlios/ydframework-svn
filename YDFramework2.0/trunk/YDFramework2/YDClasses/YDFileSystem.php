@@ -867,7 +867,7 @@
             $this->_path = realpath( $path );
 
         }
-        
+
         /**
          *	Function to get the basename of the directory. This does not include the path information.
          *
@@ -1191,6 +1191,26 @@
                 $this->_path = realpath( $path );
             }
             return $result;
+        }
+
+        /**
+         *  This function will check if the specified file/or directory exists in the current path.
+         *
+         *  @param $obj     The file or directory you are looking for.
+         *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
+         *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
+         *					string. 
+         *
+         *	@returns	Array of YDFile objects for the files that match the pattern.
+         */
+        function has( $obj, $classes=array( 'YDFSFile', 'YDFSImage', 'YDFSDirectory' ) ) {
+
+            // Get the contents
+            $contents = $this->getContents( $obj, '', $classes );
+
+            // Return the result
+            return ( sizeof( $contents ) == 0 ) ? false : true;
+
         }
 
         /**
