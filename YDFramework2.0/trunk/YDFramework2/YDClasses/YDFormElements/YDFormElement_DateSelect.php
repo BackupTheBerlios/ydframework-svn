@@ -67,10 +67,28 @@
                 $months[$i] = strtolower( strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) ) );
             }
 
-            // Get the names of the years
+            // Get the starting year and the ending year
             $now = getdate();
+            if ( isset( $options['yearstart'] ) && is_numeric( $options['yearstart'] ) ) {
+                if ( ! is_int( $options['yearstart'] ) ) {
+                    $options['yearstart'] = intval( $options['yearstart'] );
+                }
+                $startyear = $options['yearstart'];
+            } else {
+                $startyear = $now['year'] - 5;
+            }
+            if ( isset( $options['yearend'] ) && is_numeric( $options['yearend'] ) ) {
+                if ( ! is_int( $options['yearend'] ) ) {
+                    $options['yearend'] = intval( $options['yearend'] );
+                }
+                $endyear = $options['yearend'];
+            } else {
+                $endyear = $now['year'] + 5;
+            }
+
+            // Get the names of the years
             $years = array();
-            for ( $i = $now['year'] - 5 ; $i <= $now['year'] + 5; $i++ ) {
+            for ( $i = $startyear; $i <= $endyear; $i++ ) {
                 $years[$i] = $i;
             }
 
