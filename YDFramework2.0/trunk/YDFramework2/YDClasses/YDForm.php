@@ -1017,6 +1017,42 @@
 
         }
 
+        /** 
+         *      This function will set raw default values for the form. 
+         * 
+         *      @param $array   Associative array containing the default values. 
+         */ 
+        function setRawDefaults( $array ) { 
+
+            // Will be used for new elements 
+            $this->_defaults = $array; 
+
+            // Update the values for the existing elements 
+            if ( ! $this->isSubmitted() ) { 
+                foreach ( $this->_elements as $name=>$element ) { 
+                    if ( isset( $this->_defaults[ $element->_name ] ) ) { 
+                        $element->setRawValue( $this->_defaults[ $element->_name ] ); 
+                        unset( $this->_defaults[ $element->_name ] ); 
+                        $this->_elements[ $name ] = $element; 
+                    } 
+                } 
+            } 
+            
+        } 
+
+        /** 
+         *      This function will return all raw values for the form as an associative array. 
+         * 
+         *      @returns        The values for the form as an associative array. 
+         */ 
+        function getRawValues() { 
+            $vars = array(); 
+            foreach ( $this->_elements as $name => $element ) { 
+                $vars[ $name ] = $element->getRawValue(); 
+            } 
+            return $vars; 
+        } 
+
     }
 
     /**
@@ -1116,6 +1152,24 @@
          */
         function toHtml() {
         }
+
+        /** 
+         *      This function sets raw value for the date element. 
+         * 
+         *      @param  $val    (optional) The value for this object. 
+         */ 
+        function setRawValue( $val='' ) { 
+            $this->_value = $val; 
+        } 
+
+        /** 
+         *      This function will return raw value of the date element. 
+         * 
+         *      @returns        Raw value of this object. 
+         */ 
+        function getRawValue() { 
+            return $this->_value; 
+        } 
 
     }
 
