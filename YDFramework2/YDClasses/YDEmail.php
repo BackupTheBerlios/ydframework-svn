@@ -56,7 +56,7 @@
 		 *	@param $name	Name to use as the relpy to
 		 */
 		function setReplyTo( $email, $name='' ) {
-			$this->_msg->setReturnPath( $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->setHeader( 'Reply-To', $this->_mergeEmailName( $email, $name ) );
 		}
 
 		/**
@@ -78,7 +78,6 @@
 		 */
 		function addCc( $email, $name='' ) {
 			array_push( $this->cc, $this->_mergeEmailName( $email, $name ) );
-			array_push( $this->to_plain, $email );
 		}
 
 		/**
@@ -89,7 +88,6 @@
 		 */
 		function addBcc( $email, $name='' ) {
 			array_push( $this->bcc, $this->_mergeEmailName( $email, $name ) );
-			array_push( $this->to_plain, $email );
 		}
 
 		/**
@@ -179,7 +177,7 @@
 			}
 
 			// Get the original the message
-			$message = $this->_msg;
+			$message = & $this->_msg;
 
 			// Add the CC info
 			if ( sizeof( $this->cc ) > 0 ) {
@@ -191,16 +189,43 @@
 				$message->setBCC( implode( '; ', $this->bcc ) );
 			}
 
-			// Set the header
-			//$message->setHeader( 'To', implode( ', ', $this->to ) );
+			// Set the headers
+			$message->setHeader( 'To', implode( ', ', $this->to ) );
 			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
+			// Build the message
+			if ( ! defined( 'CRLF' ) ) { $message->setCrlf( "\n" ); }
+			if ( ! $message->is_built ) { $message->buildMessage(); }
+
+			// Add the subject
+			$subject = '';
+			if ( ! empty( $message->headers['Subject'] ) ) {
+				$subject = $message->_encodeHeader(
+					$message->headers['Subject'], $message->build_params['head_charset']
+				);
+				unset( $message->headers['Subject'] );
+			}
+
+			// Get flat representation of headers
+			foreach ( $message->headers as $name => $value ) {
+				$headers[] = $name . ': ' . $message->_encodeHeader( $value, $message->build_params['head_charset'] );
+			}
+
+			// Get the to addresses
+			$to = $message->_encodeHeader( implode( ', ', $this->to_plain ), $message->build_params['head_charset'] );
+
 			// Send the email
-			//$result = $message->send( $this->to_plain );
-			$result = $message->send( $this->to );
+			$result = mail( $to, $subject, $message->output, implode( CRLF, $headers ) );
+				
+			// Reset the subject in case mail is resent
+			if ( $subject !== '' ) {
+				$message->headers['Subject'] = $subject;
+			}
 
 			// Return the result
 			return $result;
+
+
 
 		}
 
