@@ -18,6 +18,7 @@
 		{else}
 			next
 		{/if}
+		</p>
 	{/if}
 {/capture}
 
@@ -39,11 +40,11 @@
 			({$recordset->totalRowsOnPage} row(s))
 		</p>
 		{$browsebar}
-		<table border="1">
+		<table border="1" width="400">
 		{foreach from=$recordset->set item="record"}
 			<tr>
 				{foreach from=$record item="val"}
-					<td>{$val}</td>
+					<td width="200">{$val}</td>
 				{/foreach}
 			</tr>
 		{/foreach}
