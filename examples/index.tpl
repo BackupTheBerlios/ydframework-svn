@@ -181,6 +181,16 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=feedcreator1.php">feedcreator1.php</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="auth_ipcheck.php">Authentication based on IP numbers</a>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.php">auth_ipcheck.php</a>
+                <br>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.tpl">auth_ipcheck.tpl</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>

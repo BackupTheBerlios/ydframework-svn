@@ -195,6 +195,7 @@
             $this->setVar( 'YD_REQUEST', $_REQUEST );
             $this->setVar( 'YD_SESSION', $_SESSION );
             $this->setVar( 'YD_GLOBALS', $GLOBALS );
+            $this->setVar( 'YD_SERVER', $_SERVER );
 
             // Get the output from the template
             return $this->fetch( $name . YD_TPL_EXT );
