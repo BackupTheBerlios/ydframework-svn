@@ -78,7 +78,7 @@
             );
 
             // The list of popup windows elements
-            //$this->_windowpops = array();
+            $this->_popupWindows = array();
 
             // The YDBBCode parser to use
             $this->_parser = 'YDBBCode';
@@ -187,7 +187,9 @@
          *  @param $default  (optional) The default text for in the popup window.
          *  @param $text  (optional) The initial text for the modifier.
          */
-        function addSimplePopup( $name, $label, $question, $default='', $text='' ) {
+        function addSimplePopup(
+            $name, $label, $question, $default='', $text='' 
+        ) {
 
             // Create a simple array for this
             $attrib = array();
@@ -199,6 +201,37 @@
 
             // Add it to the list
             array_push( $this->_simplepops, $attrib );
+
+        }
+
+        /**
+         *  This function will add a popup window. This is a popup window that
+         *  will point to a URL. This window can do whatever it wants and can
+         *  change values in the main window.
+         *
+         *  @param $url      The url for the popup window.
+         *  @param $label    The label of the popup window.
+         *  @param $name     (optional) The JavaScript name of the popup window.
+         *  @param $params   (optional) The JavaScript parameters for the popup
+         *                   window.
+         */
+        function addPopupWindow( 
+            $url, $label, $name='', $params='' 
+        ) {
+
+            // Create a simple array for this
+            $attrib = array();
+            $attrib['url'] = $url;
+            $attrib['label'] = $label;
+            $attrib['name'] = $name;
+            if ( empty( $params ) ) {
+                $attrib['params'] = 'width=500,height=320,location=0,menubar=0,resizable=1,scrollbars=1,status=1,titlebar=1';
+            } else {
+                $attrib['params'] = $params;
+            }
+
+            // Add it to the list
+            array_push( $this->_popupWindows, $attrib );
 
         }
 
@@ -256,6 +289,9 @@
                         $out .= '            objElement.value += startTag + defaultText + endTag;';
                         $out .= '        }';
                         $out .= '    }';
+                        $out .= '    function openWin( url, name, opts ) {';
+                        $out .= '        window.open( url, name, opts );';
+                        $out .= '    }';
                         $out .= '</script>';
 
                         // Define that we added it
@@ -290,6 +326,9 @@
                     }
                     foreach ( $this->_simplepops as $pop ) {
                         $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $pop['name'] ) . '\') );">[ ' . $pop['label'] . ' ]</a> ';
+                    }
+                    foreach ( $this->_popupWindows as $pop ) {
+                        $out .= '<a href="javascript:void( openWin( \'' . addslashes( $pop['url'] ) . '\', \'' . addslashes( $pop['name'] ) . '\', \'' . addslashes( $pop['params'] ) . '\' ) );">[ ' . $pop['label'] . ' ]</a> ';
                     }
                     $out .= '</td>';
                     $out .= '</tr>';

@@ -12,8 +12,9 @@
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
     // Includes
-    require_once( 'YDRequest.php' );
     require_once( 'YDForm.php' );
+    require_once( 'YDRequest.php' );
+    require_once( 'YDFSDirectory.php' );
 
     // Class definition
     class form1Request extends YDRequest {
@@ -65,6 +66,15 @@
             $element->clearModifiers();
             $element->clearSimplePopups();
 
+            // Add a popup window to the third description
+            $element = & $form->getElement( 'desc3' );
+            $element->addPopupWindow(
+                'form1.php?do=selector&field=desc3&tag=img', 'select image'
+            );
+            $element->addPopupWindow(
+                'form1.php?do=selector&field=desc3&tag=url', 'select url'
+            );
+
             // Apply a filter
             $form->applyFilter( 'name', 'trim' );
 
@@ -84,6 +94,29 @@
 
             // Output the template
             $this->outputTemplate();
+
+        }
+
+        function actionSelector() {
+
+            // Redirect to the main if no field in the url
+            if ( empty( $_GET['field'] ) ) {
+                $this->forward( 'default' );
+            }
+
+            // Get the list of images in the current directory
+            $dir = new YDFSDirectory();
+
+            // Add the list of images to the template
+            if ( $_GET['tag'] == 'img' ) {
+                $this->setVar( 'items', $dir->getContents( '*.jpg' ) );
+            }
+            if ( $_GET['tag'] == 'url' ) {
+                $this->setVar( 'items', $dir->getContents( '*.php' ) );
+            }
+
+            // Output the template
+            $this->outputTemplate( 'form1_selector' );
 
         }
 

@@ -29,8 +29,9 @@
 
         <p>Welcome to <b><?= $form['name']['value'] ?></b>!</p>
 
-        <p>Description: <?= $form['desc']['value_html'] ?></p>
-        <p>Description2: <?= $form['desc2']['value_html'] ?></p>
+        <p>Description: <blockquote><?= $form['desc']['value_html'] ?></blockquote></p>
+        <p>Description2: <blockquote><?= $form['desc2']['value_html'] ?></blockquote></p>
+        <p>Description3: <blockquote><?= $form['desc3']['value_html'] ?></blockquote></p>
 
         <p>Date <?= $form['date']['value']['d'] ?>/<?= $form['date']['value']['M'] ?>/<?= $form['date']['value']['Y'] ?></p>
 

@@ -23,9 +23,10 @@
         /**
          *  This is the class constructor of the YDDirectory class.
          *
-         *  @param $path Path of the directory.
+         *  @param $path (optional) Path of the directory. Default is the
+         *               current directory.
          */
-        function YDFSDirectory( $path ) {
+        function YDFSDirectory( $path='.' ) {
 
             // Initialize YDBase
             $this->YDBase();
