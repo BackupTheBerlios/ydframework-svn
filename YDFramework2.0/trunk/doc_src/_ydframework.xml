@@ -19,6 +19,7 @@
     <!ENTITY ydfeedcreator SYSTEM "ydfeedcreator.xml">
     <!ENTITY yderror SYSTEM "yderror.xml">
     <!ENTITY ydtimer SYSTEM "ydtimer.xml">
+    <!ENTITY ydcart SYSTEM "ydcart.xml">
     <!ENTITY ydother SYSTEM "ydother.xml">
     <!ENTITY ydbestpractices SYSTEM "ydbestpractices.xml">
     <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
@@ -60,6 +61,7 @@
     &ydfeedcreator;
     &yderror;
     &ydtimer;
+    &ydcart;
     &ydother;
     &ydbestpractices;
     &ydchangelog;
