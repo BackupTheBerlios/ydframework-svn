@@ -16,25 +16,8 @@
         successfully!</p>
 
     <?php } else { ?>
-    
-        <?php if ( $form['errors'] ) { ?>
-            <p style="color: red"><b>Errors during processing:</b>
-            <?php foreach ( $form['errors'] as $error ) { ?>
-                <br><?= $error ?>
-            <?php } ?>
-            </p>
-        <?php } ?>
 
-        <form <?= $form['attributes'] ?>>
-            <p>
-                <?= $form['email']['label'] ?>
-                <br>
-                <?= $form['email']['html'] ?>
-            </p>
-            <p>
-                <?= $form['cmdSubmit']['html'] ?>
-            </p>
-        </form>
+        <?= $form ?>
 
     <?php } ?>
 

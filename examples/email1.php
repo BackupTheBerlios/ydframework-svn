@@ -73,7 +73,8 @@
             }
 
             // Add the form to the template
-            $this->addForm( 'form', $form );
+            //$this->addForm( 'form', $form );
+            $this->setVar( 'form', $form->toHtml() );
 
             // Output the template
             $this->outputTemplate();
