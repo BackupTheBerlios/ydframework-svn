@@ -61,10 +61,13 @@
 
         <programlisting><![CDATA[<?php
 
+    // Include the YDFormElement_BBTextArea class
     require_once( 'YDFormElement_BBTextArea.php' );
 
+    // Create new class that extends YDFormElement_BBTextArea
     class YDFormElement_MyBBTextArea extends YDFormElement_BBTextArea {
 
+        // Class constructor
         function YDFormElement_MyBBTextArea( 
             $form, $name, $label='', $attributes=array(), $options=array()
         ) {
@@ -99,10 +102,13 @@
 
         <programlisting><![CDATA[<?php
 
+    // Include the YDForm class
     require_once( 'YDForm.php' );
 
+    // Derive a new class from YDForm
     class MyCustomForm extends YDForm {
 
+        // Class constructor
         function MyCustomForm(
             $name, $method='post', $action='', $target='_self', $attributes=null
         ) {
