@@ -19,6 +19,19 @@
 		// Default action
 		function actionDefault() {
 
+			// Convert to nested
+			$array = array(
+				array( 'id' => 1, 'name' => 'Pieter', 'group' => 'admin' ),
+				array( 'id' => 2, 'name' => 'Fiona', 'group' => 'admin' ),
+				array( 'id' => 3, 'name' => 'Bert', 'group' => 'user' ),
+				array( 'id' => 3, 'name' => 'Jan', 'group' => 'guest' ),
+			);
+
+			// Convert to nested array
+			YDDebugUtil::dump(
+				YDArrayUtil::convertToNested( $array, 'group' ), 'YDArrayUtil::convertToNested( $array, \'group\' )'
+			);
+
 			// The original array
 			$array = array( 1, 2, 3, 4, 5, 6, 7 );
 			YDDebugUtil::dump( $array, 'Original array' );

@@ -54,6 +54,33 @@
 
 		}
 
+		/**
+		 *	This function will create a new array which is a nested using the given column name.
+		 *
+		 *	@param $array	The array to convert.
+		 *	@param $key		The column to use as the key name.
+		 *
+		 *	@returns	A new array which is a nested using the given column name.
+		 */
+		function convertToNested( $array, $key ) {
+
+			// Start with the a new array
+			$new = array();
+
+			// Loop over the original array
+			foreach ( $array as $item ) {
+				if ( ! array_key_exists( $key, $item ) ) {
+					YDFatalError( 'YDArrayUtil::convertToNested: key "' . $key . '" not found' );
+				}
+				if ( ! isset( $new[ $item[ $key ] ] ) ) { $new[ $item[ $key ] ] = array(); }
+				array_push( $new[ $item[ $key ] ], $item );
+			}
+
+			// Return the new array
+			return $new;
+
+		}
+
 	}
 
 ?>
