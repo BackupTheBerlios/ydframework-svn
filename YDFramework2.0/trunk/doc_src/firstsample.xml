@@ -9,29 +9,51 @@
 
     <programlisting><![CDATA[<?php
 
+// Include the Yellow Duck Framework initialization file
 require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-YDInclude( 'YDRequest.php' );
-YDInclude( 'YDTemplateSmarty.php' );
 
+// Include the YDRequest and YDTemplate classes
+YDInclude( 'YDRequest.php' );
+YDInclude( 'YDTemplate.php' );
+
+// Create a new class that derives from YDRequest
 class sample1 extends YDRequest {
 
+    // This is the class constructor
     function sample1() {
+
+        // Initialize the parent class
         $this->YDRequest();
+
+        // Initialize a new template object
         $this->template = new YDTemplate();
     }
 
+    // This is the default action
     function actionDefault() {
+
+        // Assign a new variable called title to the template
         $this->template->assign( 'title', 'sample1Request::actionDefault' );
+
+        // Display the template
         $this->template->display();
+
     }
 
+    // This is the edit action
     function actionEdit() {
+
+        // Assign a new variable called title to the template
         $this->template->assign( 'title', 'sample1Request::actionEdit' );
+
+        // Display the template
         $this->template->display();
+
     }
 
 }
 
+// Include the YDF2_process.php file that processes the request
 YDInclude( 'YDF2_process.php' );
 
 ?> ]]></programlisting>
