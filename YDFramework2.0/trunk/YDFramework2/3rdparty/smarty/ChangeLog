@@ -1,3 +1,46 @@
+2005-03-30  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/function.math.php:
+      re-enabled hex-constant. i hope in a sane way this time.
+
+2005-03-30  Monte Ohrt  <monte@ohrt.com>
+
+    * libs/plugins/function.math.php:
+      fix function testing logic
+
+    * libs/Smarty_Compiler.class.php:
+      disable variable func calls completely
+
+    * libs/Smarty_Compiler.class.php:
+      disallow variable func calls when security is enabled
+
+2005-03-22  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      bumped version-number to 2.6.9-dev
+      added headline of 2.6.6 release to NEWS file
+
+2005-03-21  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * (Smarty_2_6_8)
+      NEWS:
+      maybe even better this way. thanks monte :)
+
+    * NEWS:
+      little more clear news-entry
+
+2005-03-21  Monte Ohrt  <monte@ohrt.com>
+
+    * NEWS:
+      update NEWS with e-modifier removal
+
+    * (Smarty_2_6_8)
+      libs/plugins/modifier.regex_replace.php:
+      remove e-modifier
+
 2005-03-19  Messju Mohr  <messju@lammfellpuschen.de>
 
     * NEWS
@@ -3270,7 +3313,7 @@
 
     * libs/Smarty.class.php
       libs/Smarty_Compiler.class.php:
-      added CVS $Id: ChangeLog,v 1.369 2005/03/20 01:36:07 changelog Exp $
+      added CVS $Id: ChangeLog,v 1.372 2005/03/31 01:32:22 changelog Exp $
 
 2003-03-31  Messju Mohr  <messju@lammfellpuschen.de>
 

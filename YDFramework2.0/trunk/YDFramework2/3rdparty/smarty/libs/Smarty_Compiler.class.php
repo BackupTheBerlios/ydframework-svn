@@ -21,12 +21,12 @@
  * @link http://smarty.php.net/
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
- * @version 2.6.8
+ * @version 2.6.9
  * @copyright 2001-2005 New Digital Group, Inc.
  * @package Smarty
  */
 
-/* $Id: Smarty_Compiler.class.php,v 1.364 2005/03/19 18:28:46 messju Exp $ */
+/* $Id: Smarty_Compiler.class.php,v 1.367 2005/03/30 16:48:41 mohrt Exp $ */
 
 /**
  * Template compiling class
@@ -1372,6 +1372,9 @@ class Smarty_Compiler extends Smarty {
                                !in_array($token, $this->security_settings['IF_FUNCS'])) {
                                 $this->_syntax_error("(secure mode) '$token' not allowed in if statement", E_USER_ERROR, __FILE__, __LINE__);
                             }
+                    } elseif(preg_match('~^' . $this->_var_regexp . '$~', $token) && isset($tokens[$i+1]) && $tokens[$i+1] == '(') {
+                        // variable function call
+                        $this->_syntax_error("variable function call '$token' not allowed in if statement", E_USER_ERROR, __FILE__, __LINE__);                      
                     } elseif(preg_match('~^' . $this->_obj_call_regexp . '|' . $this->_var_regexp . '(?:' . $this->_mod_regexp . '*)$~', $token)) {
                         // object or variable
                         $token = $this->_parse_var_props($token);
