@@ -56,10 +56,6 @@
 		 */
 		function encodeString( $string, $htmlent=false ) {
 			$encoded = '';
-			$trans_table = array_flip( get_html_translation_table( HTML_SPECIALCHARS ) );
-			$trans_table[ '&#39;' ] = "'";
-			$string = strtr( $string, $trans_table );
-			$string = str_replace( '&', '&#38;', $string );
 			for ( $i=0; $i < strlen( $string ); $i++ )  {
 				if ( ord( substr( $string, $i, 1 ) ) > 128 ) {
 					$encoded .= '&#' . ord( substr( $string, $i, 1 ) ) . ';';

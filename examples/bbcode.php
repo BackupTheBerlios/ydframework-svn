@@ -29,7 +29,7 @@
 			// Show the converted data
 			echo( '<pre>' . htmlentities( $data ) . '</pre>' );
 			echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
-			echo( '<p>' . $conv->toHtml( $data ) . '</p>' );
+			echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
 
 		}
 

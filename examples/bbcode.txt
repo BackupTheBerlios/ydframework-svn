@@ -14,3 +14,7 @@
 [u]underline[/u]
 [code]value="123";[/code]
 [quote]a quote[/quote]
+
+<h1>The quick brown fox, called "Foxy", jumps over the lazy dog...
+Also test ``backticks'' and 'single quotes'.
+Also -- dashes and --- dashes should work just fine.</h1>

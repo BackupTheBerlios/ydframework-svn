@@ -94,11 +94,13 @@
 		 *							on by default.
 		 *	@param $convertLinks	(optional) Boolean to indicate if links should be automatically highlighted or not.
 		 *							This is turned on by default.
+		 *	@param $typographic		(optional) Translates plain ASCII punctuation characters into smart typographic
+		 *							punctuation HTML entities. This is turned on by default.
 		 *
 		 *	@returns	The HTML equivalent of the string with all the BBCode's converted according to the conversion table
 		 *				of this class.
 		 */
-		function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true ) {
+		function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true, $typographic=true ) {
 
 			// Convert the links to BBcode
 			if ( $convertLinks = true ) {
@@ -124,6 +126,17 @@
 
 			// Encode the references
 			$data = YDStringUtil::encodeString( $data );
+
+			// Convert to typographic quotes etc.
+			if ( $typographic == true ) {
+
+				// Include smartypants
+				require_once( 'smartypants.php' );
+
+				// Convert the data
+				$data = SmartyPants( $data, 2 );
+
+			}
 
 			// Return the data
 			return $data;
