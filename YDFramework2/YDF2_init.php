@@ -31,9 +31,7 @@
 	define( 'YD_DIR_HOME', dirname( __FILE__ ) );
 	define( 'YD_DIR_CLSS', YD_DIR_HOME . '/YDClasses' );
 	define( 'YD_DIR_3RDP', YD_DIR_HOME . '/3rdparty' );
-	if ( ! defined( 'YD_DIR_TEMP' ) ) {
-		define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
-	}
+	if ( ! defined( 'YD_DIR_TEMP' ) ) { define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' ); }
 
 	// Action paths
 	define( 'YD_ACTION_PARAM', 'do' );
@@ -41,9 +39,7 @@
 
 	// File and URL constants
 	define( 'YD_SELF_SCRIPT', $_SERVER['SCRIPT_NAME'] );
-	if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
-		$_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
-	}
+	if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) { $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED']; }
 	define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
 	define( 'YD_SELF_DIR', dirname( YD_SELF_FILE ) );
 	define( 'YD_SELF_URI', $_SERVER['REQUEST_URI'] );
@@ -54,20 +50,13 @@
 	define( 'YD_TMP_PRE', 'YDF_' );
 
 	// Classes and handlers
-	if ( ! defined( 'YD_EXECUTOR' ) ) {
-		define( 'YD_EXECUTOR', 'YDExecutor' );
-	}
-	if ( ! defined( 'YD_ERR_HANDLER' ) ) {
-		define( 'YD_ERR_HANDLER', 'YDErrorHandler' );
-	}
+	if ( ! defined( 'YD_EXECUTOR' ) ) { define( 'YD_EXECUTOR', 'YDExecutor' ); }
+	if ( ! defined( 'YD_ERR_HANDLER' ) ) { define( 'YD_ERR_HANDLER', 'YDErrorHandler' ); }
 
 	// HTTP constants
-	if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) {
-		define( 'YD_HTTP_USES_GZIP', 1 );
-	}
-	if ( ! defined( 'YD_HTTP_CACHETIMEOUT' ) ) {
-		define( 'YD_HTTP_CACHETIMEOUT', 3600 );
-	}
+	if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) { define( 'YD_HTTP_USES_GZIP', 1 ); }
+	if ( ! defined( 'YD_HTTP_CACHE_TIMEOUT' ) ) { define( 'YD_HTTP_CACHE_TIMEOUT', 3600 ); }
+	if ( ! defined( 'YD_HTTP_CACHE_USEHEAD' ) ) { define( 'YD_HTTP_CACHE_USEHEAD', 0 ); }
 
 	// Debug constants
 	if ( ! defined( 'YD_DEBUG' ) ) {

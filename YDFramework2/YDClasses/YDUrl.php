@@ -167,6 +167,10 @@
 		 *	are stored in the temp directory of the Yellow Duck framework and have the extension "wch". You can delete 
 		 *	these automatically as they will be recreated on the fly if needed.
 		 *
+		 *	For configuring the cache, there are two constants you can redefine if needed:
+		 *	YD_HTTP_CACHE_TIMEOUT: the lifetime of the cache in seconds (default: 3600).
+		 *	YD_HTTP_CACHE_USEHEAD: if a HEAD HTTP request should be used to verify the cache validity (default: 1).
+		 *
 		 *	@param $cache	(optional) Indicate if the web content should be cached or not. By default, caching is 
 		 *					turned on.
 		 *
@@ -176,26 +180,36 @@
 
 			// Check if caching is enabled
 			$cacheFName = null;
+
+			// Check the cache
 			if ( $cache == true ) {
 
-				// Get the headers
-				$headers = $this->getHeaders();
+				// Check if we need to use the HTTP HEAD function
+				if ( YD_HTTP_CACHE_USEHEAD == 1 ) {
 
-				// Check if we have etag or last modified
-				if ( isset( $headers['etag'] ) || isset( $headers['last-modified'] ) ) {
-					$cacheFName = $this->getUrl();
-					if ( isset( $headers['etag'] ) ) {
-						$cacheFName .= $headers['etag'];
+					// Get the headers
+					$headers = $this->getHeaders();
+
+					// Check if we have etag or last modified
+					if ( isset( $headers['etag'] ) || isset( $headers['last-modified'] ) ) {
+						$cacheFName = $this->getUrl();
+						if ( isset( $headers['etag'] ) ) {
+							$cacheFName .= $headers['etag'];
+						}
+						if ( isset( $headers['last-modified'] ) ) {
+							$cacheFName .= $headers['last-modified'];
+						}
+						if ( isset( $headers['content-length'] ) ) {
+							$cacheFName .= $headers['content-length'];
+						}
+						$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
+						$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
 					}
-					if ( isset( $headers['last-modified'] ) ) {
-						$cacheFName .= $headers['last-modified'];
-					}
-					if ( isset( $headers['content-length'] ) ) {
-						$cacheFName .= $headers['content-length'];
-					}
-					$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
-					$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
-				} else {
+
+				}
+
+				// If the cache filename is null, use the default one
+				if ( $cacheFName == null ) {
 					$cacheFName = YD_DIR_TEMP . '/' . YD_TMP_PRE . md5( $this->getUrl() ) . '.wch';
 				}
 
@@ -203,7 +217,7 @@
 				if ( is_file( $cacheFName ) ) {
 					require_once( 'YDFSFile.php' );
 					$file = new YDFSFile( $cacheFName );
-					$cacheValidTime = $file->getLastModified() + YD_HTTP_CACHETIMEOUT;
+					$cacheValidTime = $file->getLastModified() + YD_HTTP_CACHE_TIMEOUT;
 					if ( time() < $cacheValidTime ) {
 						return gzuncompress( $file->getContents() );
 					}
