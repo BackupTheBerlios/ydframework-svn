@@ -229,7 +229,9 @@
         define( 'YD_TMP_PRE', 'YDF_' );
 
         // Get debugging mode
-        $_GET['YD_DEBUG'] == 1 ? define( 'YD_DEBUG', 1 ) : define( 'YD_DEBUG', 0 );
+        if ( ! defined( 'YD_DEBUG' ) ) {
+            $_GET['YD_DEBUG'] == 1 ? define( 'YD_DEBUG', 1 ) : define( 'YD_DEBUG', 0 );
+        );
 
         // Get the path delimiter
         if (
