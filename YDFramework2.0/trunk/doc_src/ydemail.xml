@@ -89,7 +89,7 @@
 
     // Parse the template for the email
     $emlTpl = new YDTemplate();
-    $emlTpl->assign( 'email', $form->exportValue( 'email' ) );
+    $emlTpl->assign( 'email', $form->getValue( 'email' ) );
     $body = $emlTpl->fetch( 'email1_template' );
 
     // Send the email

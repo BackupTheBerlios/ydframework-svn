@@ -47,7 +47,7 @@
 
         <title>Subclassing YDRequest</title>
 
-        <para>For most web applications, you will probably start with subclassing the YDRequest class. This subclass can then house all the standard funtionality all requests will need. You can e.g. implement authentication in this subclass or use the YDBrowserInfo and YDLanguage objects to automatically have some standard information determined by for each request.</para>
+        <para>For most web applications, you will probably start with subclassing the YDRequest class. This subclass can then house all the standard funtionality all requests will need. You can e.g. implement authentication in this subclass or use the YDBrowserInfo and YDLocale objects to automatically have some standard information determined by for each request.</para>
 
     </sect1>
 

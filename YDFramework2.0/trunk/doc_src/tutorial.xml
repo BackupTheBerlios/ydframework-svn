@@ -173,7 +173,7 @@
 
         <programlisting><![CDATA[foreach ( $this->dataDir->getContents( '*.dat' ) as $entry )]]></programlisting>
 
-        <para>This line line will query the data directory and get a <literal>YDFSFile</literal> object for each file that ends with the extension <literal>dat</literal>. The <literal>getContents</literal> function always returns <literal>YDFSFile</literal> or <literal>YDFSImage</literal> objects.</para>
+        <para>This line will query the data directory and get a <literal>YDFSFile</literal> object for each file that ends with the extension <literal>dat</literal>. The <literal>getContents</literal> function always returns <literal>YDFSFile</literal> or <literal>YDFSImage</literal> objects.</para>
 
         <programlisting><![CDATA[$entry = $entry->getContents();]]></programlisting>
 

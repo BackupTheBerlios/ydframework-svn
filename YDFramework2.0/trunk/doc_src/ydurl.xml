@@ -9,7 +9,7 @@
 
         <title>Raw HTTP connections</title>
 
-        <para>For making HTTP connections, you can use the YDHttpConnection class. This class is based on the HttpClient class from Simon Willison. This class has the following features:</para>
+        <para>For making HTTP connections, you can use the YDHttpClient class. This class is based on the HttpClient class from Simon Willison. This class has the following features:</para>
 
         <itemizedlist spacing="compact">
             <listitem>Implements a useful subset of the HTTP 1.0 and 1.1 protocols.</listitem>

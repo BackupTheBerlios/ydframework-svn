@@ -31,7 +31,7 @@
 
         <title>Who wrote the Yellow Duck Framework?</title>
 
-        <para>Pieter Claerhout (<ulink url="http://www.yellowduck.be/">www.yellowduck.be</ulink>) wrote the initial Yellow Duck Framework and is still maintaining it. Certain parts are written by David [db] (YDCart).</para>
+        <para>Pieter Claerhout (<ulink url="http://www.yellowduck.be/">www.yellowduck.be</ulink>) wrote the initial Yellow Duck Framework and is still maintaining it.</para>
 
     </sect1>
 
@@ -62,7 +62,7 @@
                 <listitem>All class names should start with the characters "YD".</listitem>
                 <listitem>All constants should start with the characters "YD_".</listitem>
                 <listitem>Provide an example (preferable a lot of examples) on how to use the class.</listitem>
-                <listitem>Provide documentation about the class so that it.</listitem>
+                <listitem>Provide documentation about the class you wrote so that this can be included in the standard documentation.</listitem>
             </itemizedlist>
 
     </sect1>
