@@ -48,8 +48,8 @@
     $template = new YDTemplate();
 
     // Assign the variables
-    $template->setVar( 'title', 'This is the title' );
-    $template->setVar( 'books', $array );
+    $template->assign( 'title', 'This is the title' );
+    $template->assign( 'books', $array );
 
     // Output the template
     $template->display();
