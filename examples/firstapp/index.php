@@ -24,7 +24,7 @@
 
             // Check if the data directory is writeable
             if ( ! $this->dataDir->isWriteable() ) {
-                new YDFatalError( 'Data directory must be writable!' );
+                YDFatalError( 'Data directory must be writable!' );
             }
 
         }
