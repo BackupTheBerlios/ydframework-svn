@@ -282,7 +282,9 @@ if ( ! $this->dataDir->isWriteable() ) {
     needs this).</p>
 
     <p>We also check if the directory is writeable by the webserver process to
-    ensure that we will be able to save the notes in that directory.</p>
+    ensure that we will be able to save the notes in that directory. If the
+    directory is not writable, we will raise a fatal error which stops the
+    execution and displays the error message.</p>
 
     <p>Later on, we will see that we can use this object to get a directory
     listing, but we will also  use it to delete and create new files.</p>

@@ -43,7 +43,135 @@
 
     <p><b>Description</b></p>
 
-    <p>Not written yet...</p>
+    <p>In this chapter, we will see how requests are processed. When you load a
+    request from the browser, a lot of things are performed before the actual
+    action is processed and the contents is displayed to the end user.</p>
+
+
+    <p>&nbsp;<br><b>Graphical overview</b></p>
+
+    <p>The following diagram gives you a graphical overview of how requests are
+    processed in the Yellow Duck Framework.</p>
+
+    <p><img src="RequestProcessing.gif" width="667" height="759" border="0"></p>
+    
+    <p>This whole process of handling a request is automatically done by the
+    framework. There is no need to code this yourself. Of course, if you want,
+    there are a number of things you can override in this workflow to make the
+    framework do what you want it to do.</p>
+
+    <p>&nbsp;<br><b>Step 0 - Where is this processing happening?</b></p>
+
+    <p>When you load a file that includes the Yellow Duck Framework using the
+    following code, the file will be able to use the functionality of the 
+    framework. Including the framework goes as follows:</p>
+
+    <pre class="fragment">require_once( 'YDFramework2/YDF2_init.php' );</pre>
+
+    <p>To process the actual file using the framework, we need to add another
+    include file, but we need to include this at the end of the script. The last
+    line of every script processed with the Yellow Duck Framework should look
+    as follows:</p>
+
+    <pre class="fragment">require_once( 'YDFramework2/YDF2_process.php' );</pre>
+
+    <p>The process script is the one that does what is displayed in the image
+    above. Without including this file, nothing will be executed from the
+    script and you will probably end up with an empty page as the result.</p>
+
+    <p>Let's go over each step in the process to see how it works and what
+    influence it has on the processing of the request.</p>
+
+
+    <p>&nbsp;<br><b>Step 1 - Check for a request class</b></p>
+
+    <p>When you load a script, the first thing the framework will do is to check
+    for a class which is named after the script file. The class name always has
+    the same structure. It's basically the basename of the script file with the
+    text "Request" appended to it. Let's take a look at some examples:</p>
+
+    <p><table width="100%" border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="50%"><b>Script name</b></td>
+            <td width="50%"><b>Class name</b></td>
+        </tr>
+        <tr>
+            <td>index.php</td>
+            <td>indexRequest</td>
+        </tr>
+        <tr>
+            <td>processing.php</td>
+            <td>processingRequest</td>
+        </tr>
+        <tr>
+            <td>MyOwnScriptForProcessing.php</td>
+            <td>MyOwnScriptForProcessingRequest</td>
+        </tr>
+    </table></p>
+
+    <p>If no class with the given name is declared, the execution will stop with
+    a fatal error indicating this. The fatal error will also stop the execution
+    of the script.</p>
+
+    <p><b>Note:</b> Class names are case insensitive in the Yellow Duck
+    Framework. However, we strongly suggest you to maintain the same case as in 
+    the filename.</p>
+
+    <p><b>Note:</b> Also note that some characters are not allowed as a class
+    name, and as such are not allowed in the filename. Especially characters
+    like "-" (a dash), "$" (a dollar sign), "@" (ad sign) and "&" (an ampersand)
+    are not allowed.</p> 
+
+
+    <p>&nbsp;<br><b>Step 2 - Is the request class derived from YDRequest?</b></p>
+
+    <p>The Yellow Duck Framework always expects that the request class has the
+    YDRequest class as one of it's parent classes. This is needed because there
+    are a number of standard functions from the YDRequest class that are always
+    expected to be there.</p>
+
+    <p>You don't have to inherit from the YDRequest class directly. It's allowed
+    to define your own request class based on the YDRequest class, and inherit
+    from that class instead. You can do this to provide basic functionality to
+    your request classes which is not available in the standard YDRequest class.
+    You can also use this to change the way requests are processed so that you
+    can tailor the framework to suit your needs.</p>
+
+    <p>If the YDRequest is not one of the parent classes from the request class,
+    a fatal error is raised and the execution of the script will be stopped.</p>
+
+
+    <p>&nbsp;<br><b>Step 3 - Is the request class properly initialized?</b></p>
+
+    <p>Inheriting from the YDRequest class is one thing, but it also needs to be
+    initialized properly. In the class constructor, you need to make sure you
+    call the function with the same name as the class name of the parent class
+    to make sure the parent class is initialized properly. If you inherit from
+    the YDRequest directly, you code will look as follows:<p>
+
+    <p><pre class="fragment"><span class="comment">// Inherit from the YDRequest class</span>
+class indexRequest extends YDRequest {
+
+    <span class="comment">// This is the class constructor for our class. It is</span>
+    <span class="comment">// automatically executed by the framework when this class</span>
+    <span class="comment">// is instantiated.</span>
+    function indexRequest() {
+
+        <span class="comment">// Initialize the parent class, which is the YDRequest</span>
+        <span class="comment">// class in this example.</span>
+        $this->YDRequest();
+    
+    }
+
+}</pre></p>
+
+    <p>If you would leave out the function call to YDRequest in the above class,
+    a fatal error will be raised indicating that the YDRequest class was not
+    properly initialized. The execution will stop at that moment.</p>
+
+    <p>If the YDRequest class was properly initialized, the framework will now
+    create an instance of the request class. When instantiating, no parameters
+    are passed to the class constructor of the request class.</p>
 
     <hr size="1" noshade>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -59,7 +187,7 @@
         <td align="right" width="40%">
             [ <a href="tutorial_04.html">next</a> ]
             <br>
-            <font size="-1"><i>Using Smarty templates</i></font>
+            <font size="-1"><i>Using templates</i></font>
         </td>
     </tr>
     </table>

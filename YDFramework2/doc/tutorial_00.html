@@ -79,7 +79,7 @@
     <p>Let's take a look at an example script to understand how this works:</p>
 
     <b>Source: sample1.php</b><br>
-<pre class="fragment"><span class="comment">// Initialize the Yellow Duck Framework.</span>
+<p><pre class="fragment"><span class="comment">// Initialize the Yellow Duck Framework.</span>
 require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
 
 <span class="comment">// Includes.</span>
@@ -111,19 +111,19 @@ class sample1Request extends YDRequest {
 }
 
 <span class="comment">// Process the request</span>
-require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );</pre>
+require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );</pre></p>
 
     <p>The template file that goes along with this script looks as follows:</p>
 
     <b>Source: sample1.tpl</b><br>
-<pre class="fragment">&lt;html&gt;
+<p><pre class="fragment">&lt;html&gt;
 &lt;head&gt;
     &lt;title&gt;&lt?= $title ?&gt;&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt?= $title ?&gt;
 &lt;/body&gt;
-&lt;/html&gt;</pre>
+&lt;/html&gt;</pre></p>
 
     <p>When you request the following URL, a number of things happen:</p>
 

@@ -59,7 +59,7 @@
     (unix/linux). After decompressing, you will have the following directory
     structure:</p>
 
-    <pre class="fragment">+- YDFramework-2.0.0
+    <p><pre class="fragment">+- YDFramework-2.0.0
    +- index.php
    +- index.tpl
    +- ...
@@ -67,7 +67,7 @@
       +- 3rdparty
       +- docs
       +- temp
-      +- YDClasses</pre>
+      +- YDClasses</pre></p>
 
     <p>The main directory of the framework, called "YDFramework-2.0.0" in this
     example, contains a number of sample files. In this directory, there is also
@@ -144,9 +144,9 @@
     <p>In the Apache configuration file, you need to change the following for
     the web directory of your web application:</p>
 
-    <pre class="fragment">&lt;Directory "C:/Program Files/Apache/htdocs"&gt;
+    <p><pre class="fragment">&lt;Directory "C:/Program Files/Apache/htdocs"&gt;
     AllowOverride All
-&lt;/Directory&gt;</pre>
+&lt;/Directory&gt;</pre></p>
 
     <p>With configuring the directory like this in Apache, you indicate that
     .htaccess files can be used to override the settings.</p>
@@ -161,7 +161,7 @@
     <p>I've added the following configuration values for PHP to the .htaccess
     file on my system:</p>
 
-    <pre class="fragment"><span class="comment"># Disable magic quotes</span>
+    <p><pre class="fragment"><span class="comment"># Disable magic quotes</span>
 php_value magic_quotes_gpc 0
 php_value magic_quotes_runtime 0
 php_value magic_quotes_sybase 0
@@ -178,7 +178,7 @@ php_flag enable_dl Off
 
 <span class="comment"># Gzip compress the output</span>
 php_flag output_buffering Off
-php_flag zlib.output_compression On</pre>
+php_flag zlib.output_compression On</pre></p>
 
     <p>With these options turned on, you will have Gzip compressed output from 
     the PHP scripts which helps you save bandwith. Registering of global
@@ -200,11 +200,11 @@ php_flag zlib.output_compression On</pre>
     need to tell Apache to deny access to these files. This can be done by
     adding the following code to the .htaccess file:</p>
 
-    <pre class="fragment"><span class="comment"># Denying direct access to the templates</span>
+    <p><pre class="fragment"><span class="comment"># Denying direct access to the templates</span>
 &lt;FilesMatch "(.tpl|config.php|includes)$"&gt;
     Order allow,deny
     Deny from all
-&lt;/FilesMatch&gt;</pre>
+&lt;/FilesMatch&gt;</pre></p>
 
     <p>In the example above, I also denied access to the config.php file, as I
     do not want people to access this file directly. Access to the YDFramework2
@@ -218,9 +218,9 @@ php_flag zlib.output_compression On</pre>
 
     <p>To enable this feature, add the following lines to the .htaccess file:</p>
 
-    <pre class="fragment"><span class="comment"># Auto include the Framework files</span>
+    <p><pre class="fragment"><span class="comment"># Auto include the Framework files</span>
 php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
-php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
+php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre></p>
 
     <p>On Windows, please use forward slashes instead of backslashes. Also make
     sure you use the complete path to the files.</p>
@@ -234,19 +234,17 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
     <p>Open the file called "config.php" which is found in the main directory of
     the download, and edit the database settings:</p>
 
-    <pre class="fragment">&lt;?php
+    <p><pre class="fragment">&lt;?php
 
     <span class="comment">/*
-
-        Very simple configuration file
-
-    */</span>
+     * Very simple configuration file
+     */</span>
 
     $<a class="code">dbAliasses</a> = <a class="code">array</a>(
-        'localhost_mysql' => 'mysql://pieter:kermit@localhost/test',
+        'localhost_mysql' => 'mysql://root:@localhost/test'
     );
 
-?&gt;</pre>
+?&gt;</pre></p>
     
     <p>Once that is done, open each PHP script in the main directory of the
     download, and change the include settings at the top and the bottom of the 
@@ -261,7 +259,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
     <p>To test the installation, run the sample scripts provided with the
     downloads. To run the samples, surf to the following URL:</p>
 
-    <pre class="fragment"><a href="../../index.php" target="_blank">http://localhost/YDFramework2-2.0.0/index.php</a></pre>
+    <p><pre class="fragment"><a href="../../index.php" target="_blank">http://localhost/YDFramework2-2.0.0/index.php</a></pre></p>
 
     <hr size="1" noshade>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
