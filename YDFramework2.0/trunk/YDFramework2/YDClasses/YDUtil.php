@@ -349,4 +349,133 @@
 
 	}
 
+	/**
+	 *	This class uses the HTTP_USER_AGENT varaible to get information about the browser the visitor used to perform
+	 *	the request. We determine the browser name, the version and the platform it's running on.
+	 */
+	class YDBrowserInfo extends YDBase {
+
+		/**
+		 *	The class constructor analyzes for the YDBrowserInfo class. The constructor takes no arguments and uses the
+		 *	$_SERVER['HTTP_USER_AGENT'] variable to parse the browser info.
+		 */
+		function YDBrowserInfo() {
+
+			// Initialize YDBase
+			$this->YDBase();
+
+			// Check if the user agent was specified
+			if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+
+				// Mark everything as unknown
+				$this->agent = 'unknown';
+				$this->browser = 'unknown';
+				$this->version = 'unknown';
+				$this->platform = 'unknown';
+				$this->dotnet = 'unknown';
+
+			} else {
+
+				// Get the user agent
+				$this->agent = $_SERVER['HTTP_USER_AGENT'];
+
+				// Determine the browser name
+				if ( preg_match( '/MSIE ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
+					$this->version = $ver[1];
+					$this->browser = 'ie';
+				} elseif ( preg_match( '/Safari\/([0-9]+)/', $this->agent, $ver ) ) {
+					$this->version = '1.0b' . $ver[1];
+					$this->browser = 'safari';
+				} elseif ( preg_match( '/Opera ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
+					$this->version = $ver[1];
+					$this->browser = 'opera';
+				} elseif ( preg_match( '/Mozilla\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
+					$this->version = $ver[1];
+					$this->browser = 'mozilla';
+				} else {
+					$this->version = 0;
+					$this->browser = 'other';
+				}
+
+				// Determine the platform
+				if ( stristr( $this->agent,'Win' ) ) {
+					$this->platform = 'win';
+				} elseif ( stristr( $this->agent,'Mac' ) ) {
+					$this->platform = 'mac';
+				} elseif ( stristr( $this->agent,'Linux' ) ) {
+					$this->platform = 'linux';
+				} elseif ( stristr( $this->agent,'Unix' ) ) {
+					$this->platform = 'unix';
+				} else {
+					$this->platform = 'other';
+				}
+
+				// Get the .NET runtime version
+				preg_match_all( '/.NET CLR ([0-9][.][0-9])/i', $this->agent, $ver );
+				$this->dotnet = $ver[1];
+
+			}
+
+		}
+
+		/**
+		 *	This function returns an array with the languages that are supported by the browser. This is done by using
+		 *	the HTTP_ACCEPT_LANGUAGE server variable that gets send with the HTTP headers.
+		 *
+		 *	@return Array containing the list of supported languages
+		 */
+		function getBrowserLanguages() {
+
+			// We parse the language headers sent by the browser
+			if ( ! isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+				return array();
+			}
+			$browserLanguages = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+
+			// Normalize the browser language headers
+			for ( $i = 0; $i < sizeof( $browserLanguages ); $i++ ) {
+				$browserLanguage = explode( ';', $browserLanguages[$i] );
+				$browserLanguages[$i] = substr( $browserLanguage[0], 0, 2 );
+			}
+
+			// Remove the duplicates
+			$browserLanguages = array_unique( $browserLanguages );
+
+			// Return the browser languages
+			return array_values( $browserLanguages );
+
+		}
+
+		/**
+		 *	This function will get the most appropriate language for the browser, considering the list of supported
+		 *	languages by both the browser and the web application.
+		 *
+		 *	@param $supported	(optional) An array with the list of supported languages. By default, only english is
+		 *						supported.
+		 */
+		function getLanguage( $supported=array( 'en' ) ) {
+
+			// Start with the default language
+			$language = $supported[0];
+
+			// Get the list of languages supported by the browser
+			$browserLanguages = $this->getBrowserLanguages();
+
+			// Now, we look if the browser specified one
+			if ( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+				foreach ( $browserLanguages as $browserLanguage ) {
+					if ( in_array( $browserLanguage, $supported ) ) {
+						$language = $browserLanguage;
+						break;
+					}
+				}
+			}
+
+			// Return the language
+			return $language;
+
+		}
+
+	}
+
 ?>

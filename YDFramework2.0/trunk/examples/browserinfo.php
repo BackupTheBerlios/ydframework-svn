@@ -5,7 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDBrowserInfo.php' );
+	require_once( 'YDUtil.php' );
 
 	// Class definition
 	class browserinfo extends YDRequest {
@@ -15,14 +15,15 @@
 			$this->YDRequest();
 		}
 
+
 		// Default action
 		function actionDefault() {
 			$browser = new YDBrowserInfo();
-			YDDebugUtil::dump( $browser->getAgent(), 'Agent' );
-			YDDebugUtil::dump( $browser->getBrowser(), 'Browser name' );
-			YDDebugUtil::dump( $browser->getVersion(), 'Version' );
-			YDDebugUtil::dump( $browser->getPlatform(), 'Platform' );
-			YDDebugUtil::dump( $browser->getDotNetRuntimes(), 'Installed .NET runtimes' );
+			YDDebugUtil::dump( $browser->agent, 'Agent' );
+			YDDebugUtil::dump( $browser->browser, 'Browser name' );
+			YDDebugUtil::dump( $browser->version, 'Version' );
+			YDDebugUtil::dump( $browser->platform, 'Platform' );
+			YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
 			YDDebugUtil::dump( $browser->getBrowserLanguages(), 'Languages supported by the browser' );
 			YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
 		}
