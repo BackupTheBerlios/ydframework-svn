@@ -11,6 +11,10 @@
 
 <body>
 
+	<div class="header">
+		<h2>Yellow Duck Framework 2.0</h2>
+	</div>
+
 	<div class="page">
 
 	{if $file}

@@ -46,6 +46,10 @@ template = """<html>
 
 <body>
 
+    <div class="header">
+        <h2>Yellow Duck Framework 2.0</h2>
+    </div>
+
     {body}
 
     <div class="copyright">
