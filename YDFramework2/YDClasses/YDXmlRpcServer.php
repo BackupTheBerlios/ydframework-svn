@@ -16,11 +16,22 @@
     require_once( 'IXR_Library.inc.php' );
 
     /**
-     *  This class defines an XML/RPC server.
+     *  This class defines an XML/RPC server. This XML/RPC server supports
+     *  introspection and is also able to handle HTTP GET requests. In case of a
+     *  HTTP GET request, it will display a page describing the service. This
+     *  page will list methods with their parameters and help message. It will
+     *  also list the capabilities of the XML/RPC server.
      *
-     *  @todo
-     *      Make sure that all the relevant functions from the YDRequest server
-     *      return XML/RPC errors instead of YDFatalErrors.
+     *  This class supports the same actions as a normal YDRequest, so you can
+     *  use all the normal functions to restrict access etc. Make sure you do
+     *  not override the process function, or no XML/RPC requests will be served
+     *  anymore (unless you know what you are doing).
+     *
+     *  @remark
+     *      When raising errors in this class, make sure you raise the right
+     *      kind or error. If you have an XML/RPC request that needs to return
+     *      an error, you need to return an IXR_Error. If you are not serving an
+     *      XML/RPC request, you need to return a YDError or YDFatalError.
      */
     class YDXmlRpcServer extends YDRequest {
 
@@ -39,14 +50,32 @@
         }
 
         /**
+         *  This function will return true if the request served by the URL was
+         *  a genuine XML/RPC call (by checking if there was POST data or if it
+         *  was a normal HTTP GET function.
+         *
+         *  @returns This function returns true if HTTP POST data was found.
+         */
+        function isXmlRpcRequest() {
+
+            // Check for the HTTP RAW POST DATA
+            if ( $GLOBALS['HTTP_RAW_POST_DATA'] ) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        /**
          *  We override the process function because this is where we need to
          *  check if we need to process the post data or not.
          */
         function process() {
 
             // Check for post data
-            if ( ! $GLOBALS['HTTP_RAW_POST_DATA'] ) {
-                $this->postdataMissing();
+            if ( ! $this->isXmlRpcRequest() ) {
+                $this->requestNotXmlRpc();
                 return;
             }
 
@@ -72,7 +101,7 @@
          *  This function will be executed if there is no post data found. This
          *  is happening when there is no XML/RPC request found.
          */
-        function postdataMissing() {
+        function requestNotXmlRpc() {
             
             // Create a new list of the supported methods
             $methods = array();
@@ -121,6 +150,71 @@
             echo( $template->getOutput(
                 dirname( __FILE__ ) . '/YDXmlRpcServer' 
             ) );
+
+        }
+
+        /**
+         *  This function gets called by the process function if the specified
+         *  action was not implemented in the class. By default, it raises a
+         *  fatal error indicating this.
+         *
+         *  Another option might be to redirect to the default function.
+         *
+         *  @param $action The name of the action that is missing.
+         */
+        function errorMissingAction( $action ) {
+
+            // Construct the error message
+            $err = 'Class ' . get_class( $this ) . ' does not contain an action '
+                 . 'called "' . strtolower( $action ) . '" (function name).';
+
+            // Raise the right error
+            if ( ! $this->isXmlRpcRequest() ) {
+                return new IXR_Error( -100001, $err );
+            } else {
+                new YDFatalError( $err );
+            }
+
+        }
+
+        /**
+         *  If the authentication was unsuccesful, this function is execute just
+         *  before the actual processing of the request. You will need to
+         *  override this function in the classes that implement the YDRequest
+         *  class.
+         */
+        function authenticationFailed() {
+
+            // Construct the error message
+            $err = 'Authentication failed.';
+
+            // Raise the right error
+            if ( ! $this->isXmlRpcRequest() ) {
+                return new IXR_Error( -100002, $err );
+            } else {
+                new YDFatalError( $err );
+            }
+
+        }
+
+        /**
+         *  If the current request is not allowed to execute the specified
+         *  action, the code in this function gets executed. You will need to
+         *  override this function in the classes that implement the YDRequest
+         *  class.
+         */
+        function actionNotAllowed() {
+
+            // Construct the error message
+            $err = 'You are not allow to access the action "' 
+                 . $this->getActionName() . '"';
+
+            // Raise the right error
+            if ( ! $this->isXmlRpcRequest() ) {
+                return new IXR_Error( -100002, $err );
+            } else {
+                new YDFatalError( $err );
+            }
 
         }
 
