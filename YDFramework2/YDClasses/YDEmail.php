@@ -31,7 +31,7 @@
         /** 
          *  This is the class constructor for the YDEmail class.
          */
-        function YDEmail( $crlf="\r\n" ) {
+        function YDEmail( $crlf="\n" ) {
 
             // Initialize YDBase
             $this->YDBase();
@@ -153,9 +153,6 @@
          *                   file data. Defaults is "base64". For text based 
          *                   files (eg. scripts/html etc.) this could be given 
          *                   as "quoted-printable".
-         *
-         *  @todo
-         *      Use the YDFSFile object to specify the file.
          */
         function addAttachment(
             $file, $c_type='application/octet-stream', $name='', 
@@ -175,9 +172,6 @@
          *  @param $name     (optional) The filename of the image. Only used, if 
          *                   $file contains the image data. 
          *  @param $isfile   (optional) Whether $file is a file name or not.
-         *
-         *  @todo
-         *      Use the YDFSImage object to specify the file.
          */
         function addHTMLImage(
             $file, $c_type='application/octet-stream', $name='', $isfile=true
