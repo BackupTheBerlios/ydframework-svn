@@ -10,7 +10,7 @@
 	class databaseRequest extends YDRequest {
 
 		// Class constructor
-		function database1Request() {
+		function databaseRequest() {
 			$this->YDRequest();
 		}
 
