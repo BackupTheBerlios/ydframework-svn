@@ -1,5 +1,9 @@
 @echo off
 
+rem Delete the previous directories
+rmdir /Q /S html
+rmdir /Q /S pdf
+
 rem Create the directories
 mkdir html
 mkdir pdf
