@@ -623,9 +623,6 @@
 		 *	This function will return the form as HTML.
 		 *
 		 *	@returns	The form as HTML text.
-		 *
-		 *	@todo
-		 *		Error should be placed between element label and element itself.
 		 */
 		function toHtml() {
 
@@ -674,10 +671,10 @@
 						if ( ! empty( $element['label'] ) ) { $html .= $element['label']; }
 						if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
 						if ( ! empty( $element['label'] ) ) { $html .= '<br>'; }
-						$html .= $element['html'];
 						if ( ! empty( $element['error'] ) ) {
-							$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+							$html .= $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd . '<br>';
 						}
+						$html .= $element['html'];
 					}
 					$html .= '</p>';
 				}
