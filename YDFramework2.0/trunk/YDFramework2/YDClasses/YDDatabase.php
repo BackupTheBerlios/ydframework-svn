@@ -396,6 +396,11 @@
 				if ( substr( $key, 0, 1 ) != '_' ) {
 					array_push( $ifields, $key );
 					array_push( $ivalues, $this->sqlString( $value ) );
+					if ( is_null( $value ) ) {
+						array_push( $ivalues, 'NULL' );
+					} else {
+						array_push( $ivalues, $this->sqlString( $value ) );
+					}
 				}
 			}
 
@@ -438,7 +443,11 @@
 			$uvalues = array();
 			foreach ( $values as $key=>$value ) {
 				if ( substr( $key, 0, 1 ) != '_' ) {
-					array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
+					if ( is_null( $value ) ) {
+						array_push( $uvalues, $key . "=" . 'NULL' );
+					} else {
+						array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
+					}
 				}
 			}
 
