@@ -864,6 +864,7 @@
 
             // Add the errors
             $form['errors'] = $this->_errors;
+            $form['errors_unique_messages' ] = array_unique( array_values( $this->_errors ) );
 
             // Loop over the list of elements
             foreach ( $this->_elements as $name => $element ) {
