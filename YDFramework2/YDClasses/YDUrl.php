@@ -14,6 +14,9 @@
 
     /**
      *  This class defines a url.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDUrl extends YDBase {
 

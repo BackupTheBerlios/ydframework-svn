@@ -70,6 +70,9 @@
      *  function will check the value of the "do" parameter specified in the URL
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDRequest extends YDBase {
 

@@ -16,6 +16,9 @@
      *  This class houses all the TCP/IP related utility functions. All the 
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
+     *
+     *  @todo
+     *      Get rid of this class as we don't really need it.
      */
     class YDIpUtil extends YDBase {
 

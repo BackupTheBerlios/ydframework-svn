@@ -14,6 +14,10 @@
 
     /**
      *  This is the base class for all other YD classes.
+     *
+     *  @todo
+     *      Implement the error handling mechanism from PEAR so that we have a
+     *      straightforward way of working with errors and handling them.
      */
     class YDBase extends PEAR {
 

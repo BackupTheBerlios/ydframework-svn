@@ -11,6 +11,9 @@
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDError extends YDBase {
 
@@ -69,6 +72,9 @@
      *
      *  By default, error messages are shown in a light yellow box with red text
      *  displaying the error message.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDFatalError extends YDError {
 

@@ -16,6 +16,12 @@
      *  This class defines a SQL query. There a a number of standard functions 
      *  this object has to get the data from this query given a database URL
      *  to retrieve the data from.
+     *
+     *  @todo
+     *      Implement new error mechanism.
+     *
+     *  @todo
+     *      Test if the parametrized queries actually work.
      */
     class YDSqlQuery extends YDBase {
 

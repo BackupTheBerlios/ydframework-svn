@@ -17,6 +17,9 @@
      *  and Atom feeds in a very easy and straightforward way. If you set up
      *  your class instance, you can automatically output to the different
      *  versions of RSS and ATOM with the same source data.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDFeedCreator extends YDBase {
 

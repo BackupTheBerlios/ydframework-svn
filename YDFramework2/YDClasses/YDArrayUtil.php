@@ -36,6 +36,9 @@
          *  @returns A multi-dimension array with the contents of the original
          *           array converted to a table with the indicated number of
          *           colums.
+         *
+         *  @todo
+         *      Implement new error mechanism.
          */
         function convertToTable( $array, $columns, $fillLastRow=false ) {
 

@@ -16,6 +16,13 @@
      *  This class uses the HTTP_USER_AGENT varaible to get information about 
      *  the browser the visitor used to perform the request. We determine the 
      *  browser name, the version and the platform it's running on.
+     *  
+     *  @todo
+     *      Raise error if the HTTP_USER_AGENT variable doesn't exist.
+     *
+     *  @todo
+     *      Refine this class to output pretty much the same information as the
+     *      phpSniff class. Maybe it's easier to use that class instead.
      */
     class YDBrowserInfo extends YDBase {
 

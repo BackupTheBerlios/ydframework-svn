@@ -16,6 +16,9 @@
      *  This class houses all the string related utility functions. All the methods
      *  are implemented as static methods and do not require you to create a
      *  class instance in order to use them.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDStringUtil extends YDBase {
 
@@ -65,6 +68,9 @@
          *  @param $email Email address to encode.
          *
          *  @returns Encoded email address.
+         *
+         *  @todo
+         *      Add comments to this function.
          */
         function encodeEmail( $email ) {
             if ( $email != '' ) {
@@ -93,6 +99,9 @@
          *  @param $email Email address to decode.
          *
          *  @returns Decoded email address.
+         *
+         *  @todo
+         *      Add comments to this function.
          */
         function decodeEmail( $email ) {
             if (
@@ -127,6 +136,9 @@
          *  @param $dateFormat Date format to use.
          *
          *  @return Formatted date.
+         *
+         *  @todo
+         *      Add comments to this function.
          */
         function formatDate( $text, $dateFormat ) {
             if ( is_integer( $text ) ) {
@@ -149,6 +161,9 @@
          *
          *  @returns String with all the characters with an ordinal bigger than
          *           128 converted to numeric HTML entities.
+         *
+         *  @todo
+         *      Add comments to this function.
          */
         function encodeString( $string ) {
 

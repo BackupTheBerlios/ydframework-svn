@@ -16,6 +16,16 @@
      *  This class houses all the debug related utility functions. All the 
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
+     *
+     *  @todo
+     *      Implement new error mechanism.
+     *
+     *  @todo
+     *      Have a look at the PEAR logging classes to see if there is a better
+     *      way of working with debugging information. We might be better off
+     *      outputting the debugging information to a logfile in the temp
+     *      directory instead of cluttering the output. We can also add comments
+     *      in the HTML instead.
      */
     class YDDebugUtil extends YDBase {
 

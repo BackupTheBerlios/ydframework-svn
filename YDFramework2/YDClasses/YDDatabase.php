@@ -47,6 +47,12 @@
      *      Interbase and Informix, this is the case. Please refer to the full
      *      PHP documentation to find out which extensions are needed for which
      *      database types. More information can be found on http://www.php.net/
+     *
+     *  @todo
+     *      Implement new error mechanism.
+     *
+     *  @todo
+     *      Test if the parametrized queries actually work.
      */
     class YDDatabase extends YDBase {
 

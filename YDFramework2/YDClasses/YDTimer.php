@@ -19,6 +19,9 @@
      *  @todo
      *      Needs to be replaced with the PEAR::Bench package. More info on:
      *      http://www.pearfr.org/index.php/en/article/bench
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDTimer extends YDBase {
 

@@ -35,6 +35,9 @@
      *      upgrade Smarty to a new version if needed. If there is a folder
      *      called "includes" in the current script's directory, this will also
      *      be searched in for plugins.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDTemplate extends YDBase {
 

@@ -16,6 +16,9 @@
      *  This class houses all the object and class related utility functions.
      *  All the methods are implemented as static methods and do not require you
      *  to create a class instance in order to use them.
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDObjectUtil extends YDBase {
 
@@ -88,6 +91,12 @@
          *  @param $val Value to check.
          *
          *  @return Boolean indicating if the value is true or false.
+         *
+         *  @todo
+         *      Check if all the different instances work as expected.
+         *
+         *  @todo
+         *      Double check if this function is really needed or not.
          */
         function isTrue( $val ) {
 

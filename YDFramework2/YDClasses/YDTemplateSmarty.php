@@ -39,6 +39,9 @@
      *      be searched in for plugins.
      *
      *  @internal
+     *
+     *  @todo
+     *      Implement new error mechanism.
      */
     class YDTemplateSmarty extends Smarty {
 
