@@ -51,3 +51,6 @@ call fop -q pdf\YDFramework2.fo pdf\YDFramework2.pdf
 rem Cleanup
 if exist pdf\YDFramework2.fo del pdf\YDFramework2.fo
 del pdf\*.gif > NUL
+
+rem Open the result
+start pdf\YDFramework2.pdf

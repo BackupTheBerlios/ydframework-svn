@@ -41,3 +41,6 @@ copy style.css html > NUL
 
 rem Create outputs
 xsltproc --output html\index.html xsl_html.xsl _ydframework.xml
+
+rem Open the result
+start html\index.html
