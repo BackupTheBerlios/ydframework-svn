@@ -5,7 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDFSFile.php' );
+	require_once( 'YDFileSystem.php' );
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
