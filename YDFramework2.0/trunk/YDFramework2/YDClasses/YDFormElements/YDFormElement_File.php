@@ -60,6 +60,15 @@
 		}
 
 		/**
+		 *	This function will return the actual name of the uploaded file.
+		 *
+		 *	@returns	Name of the uploaded file.
+		 */
+		function getName() {
+			return basename( $_FILES[ $this->_form . '_' . $this->_name ]['name'] );
+		}
+
+		/**
 		 *	This function will return the element as HTML.
 		 *
 		 *	@returns	The form element as HTML text.
