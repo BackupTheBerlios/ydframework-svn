@@ -97,8 +97,7 @@
                 <link href="#ch06_06">Displaying the form</link>
                 <link href="#ch06_07">Validating forms</link>
                 <link href="#ch06_08">Processing forms</link>
-                <link href="#ch06_09">Tips and tricks</link>
-                <link href="#ch06_10">More information</link>
+                <link href="#ch06_09">More information</link>
             </link>
             <link href="#ch07">Accessing database contents</link>
             <link href="#ch08">How to handle authentication</link>
@@ -121,7 +120,7 @@
 
                 <br/><br/>
 
-                he Yellow Duck Framework takes care of all the difficult work
+                The Yellow Duck Framework takes care of all the difficult work
                 you normally have to perform manually when developing a web
                 application. It is based on the idea of requests that can 
                 perform actions. By encapsulating all the programming in an
@@ -145,6 +144,14 @@
                     the PEAR library can be found on 
                     <a target="_blank" href="http://pear.php.net/">http://pear.php.net/</a>.</li>
                 </ul></div>
+
+                The Yellow Duck Framework tries to be as flexible as possible so
+                that you can tailor it in such a way that it works according to 
+                the way you want it to work. It's definitely not the framework
+                that will solve all your needs, but for most web application
+                related functions, you will find the Yellow Duck Framework a
+                very handig tool to get your work done faster and more
+                reliably.
 
             </section>
 
@@ -280,6 +287,12 @@
                     Information Server</li>
                 </ul></div>
               
+                The Yellow Duck Framework was primarily tested on the Windows
+                platform and also has undergone extensive testing on Linux based
+                systems. Currently, the Yellow Duck Framework is only supported
+                with PHP version 4. Support for PHP version 5 will be added in 
+                the future.
+
             </section>
 
             <section name="ch02_02" label="Examining the Yellow Duck Framework files">
@@ -308,20 +321,37 @@
                 subdirectories in the YDFramework2 directory which each have a
                 specific function:
 
-                <div><ul>
-                    <li>3rdparty: This directory contains the third party 
-                    libraries that are needed for the Yellow Duck Framework to 
-                    work properly. You will find a local copy of the PEAR 
-                    libraries and the other third party libraries in here.</li>
-                    <li>docs: This directory contains the documentation at which
-                    you are currently looking. It also contains the complete API
-                    documentation.</li>
-                    <li>temp: This directory contains the temporary files
-                    created by the framework. In here, the compiled versions of 
-                    the templates are saved.</li>
-                    <li>YDClasses: In here, you will find all the classes that
-                    make up the framework.</li>
-                </ul></div>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Directory</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">3rdparty</td>
+                        <td>This directory contains the third party libraries 
+                        that are needed for the Yellow Duck Framework to work 
+                        properly. You will find a local copy of the PEAR 
+                        libraries and the other third party libraries in
+                        here.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">docs</td>
+                        <td>This directory contains the documentation at which
+                        you are currently looking. It also contains the complete
+                        API documentation.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">temp</td>
+                        <td>This directory contains the temporary files created 
+                        by the framework. In here, the cache files for the 
+                        thumbnails and web downloads will be saved.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YDClasses</td>
+                        <td>In here, you will find all the classes that make up 
+                        the framework.</td>
+                    </tr>
+                </table></p>
 
                 This directory structure is not really important for using the
                 Yellow Duck Framework. The only thing you might need to do from
@@ -554,12 +584,6 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 the download, and change the include settings at the top and the
                 bottom of the file if needed.
 
-                <br/><br/>
-
-                For testing purposes, it's easier to leave the YDFramework2 
-                directory in the same directory as the sample files, as you 
-                don't need to alter any paths if you do so.
-
             </section>
 
             <section name="ch02_11" label="Testing the installation">
@@ -639,19 +663,30 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 create to make your application work. In our case, we are going 
                 to make 3 different actions:
 
-                <div><ul>
-                    <li><b>default</b>: this is the default action and will show 
-                    the list of notes. If no notes are found, it should tell us 
-                    so.</li>
-                    <li><b>addnote</b>: this action will take care of adding a 
-                    new note. It will render the form you need to fill in, but 
-                    it will also take care of handling the form correctly and
-                    saving the result to disk.</li>
-                    <li><b>deletenote</b>: this function will delete a note 
-                    based on it's unique ID. In this example, it will not ask 
-                    you for confirmation, but it will simply delete the 
-                    note.</li>
-                </ul></div>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Action</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">default</td>
+                        <td>This is the default action and will show the list of 
+                        notes. If no notes are found, it should tell us so.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">addnote</td>
+                        <td>This action will take care of adding a new note. It
+                        will render the form you need to fill in, but it will 
+                        also take care of handling the form correctly and saving 
+                        the result to disk.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">deletenote</td>
+                        <td>This function will delete a note based on it's 
+                        unique ID. In this example, it will not ask you for
+                        confirmation, but it will simply delete the note.</td>
+                    </tr>
+                </table></p>
 
                 Now that we know what actions the application will be able to 
                 perform, we now need to think about how we can store the notes 
@@ -783,7 +818,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 There are a number of rules to follow to get the basis of the 
                 class implemented. Let's go over each one of them:
 
-                <div><ul>
+                <div><ol>
                     <li><b>Include the init file</b>: each script that wants to 
                     use the Yellow Duck Framework needs to include the 
                     "YDF2_init.php" file which initializes the framework. Make 
@@ -815,7 +850,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                     Each function for an action has the name of the action 
                     prepended by "action" as it's function name. By default, 
                     these function do not require any arguments.</li>
-                </ul></div>
+                </ol></div>
                 
                 With this implemented, you can already surf to the index.php
                 page, but nothing will be shown. You can try the following URLs:
@@ -1029,11 +1064,25 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 automatically added to the template by the framework. We use 
                 the following ones:
 
-                <div><ul>
-                    <li><b>$YD_FW_NAMEVERS</b>: the name and the version of the framework</li>
-                    <li><b>$YD_ACTION</b>: the name of the current action (always in lowercase)</li>
-                    <li><b>$YD_SELF_SCRIPT</b>: the url of the script itself without parameters</li>
-                </ul></div>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Variable</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$YD_FW_NAMEVERS</td>
+                        <td>the name and the version of the framework</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$YD_ACTION</td>
+                        <td>the name of the current action (always in lowercase)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$YD_SELF_SCRIPT</td>
+                        <td>the url of the script itself without parameters</td>
+                    </tr>
+                </table></p>
 
                 If you run the script now, it should tell you that no notes were
                 found, as we didn't create any yet. There should also be a link
@@ -2013,15 +2062,34 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 required, the rest is optional. Here's the list of parameters
                 that you can pass when instantiating the form object.
 
-                <div><ul>
-                    <li><b>$name</b>: the name of the form.</li>
-                    <li><b>$method (optional)</b>:  Method used for submitting the form. 
-                    Most of the times, this is either POST or GET.</li>
-                    <li><b>$action (optional)</b>: Action used for submitting the form. 
-                    If not specified, it will default to the current URI.</li> 
-                    <li><b>$target (optional)</b>: HTML target for the form.</li>
-                    <li><b>$attributes (optional)</b>: Attributes for the form.</li>
-                </ul></div>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Argument</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$name</td>
+                        <td>The name of the form.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$method (optional)</td>
+                        <td>Method used for submitting the form. Most of the 
+                        times, this is either POST or GET.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$action (optional)</td>
+                        <td>Action used for submitting the form.  If not
+                        specified, it will default to the current URI.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$target (optional)</td>
+                        <td>HTML target for the form.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$attributes (optional)</td>
+                        <td>Attributes for the form.</td>
+                    </tr>
+                </table></p>
 
                 Make sure that all the different form instances you want to use
                 all have separate names. If not, the results might not be as you
@@ -2088,131 +2156,151 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 First, let's have a look at the standard HTML elements.
 
-                <br/><br/>
-
-                <b>button</b>: Class for &lt;input type="button" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-button.php">more information</a>)
-
-                <br/><br/>
-
-                <b>checkbox</b>: Class for &lt;input type="checkbox" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-checkbox.php">more information</a>)
-
-                <br/><br/>
-
-                <b>file</b>: Class for &lt;input type="file" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-file.php">more information</a>)
-
-                <br/><br/>
-
-                <b>hidden</b>: Class for &lt;input type="hidden" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hidden.php">more information</a>)
-
-                <br/><br/>
-
-                <b>image</b>: Class for &lt;input type="image" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-image.php">more information</a>)
-
-                <br/><br/>
-
-                <b>password</b>: Class for &lt;input type="password" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-password.php">more information</a>)
-
-                <br/><br/>
-
-                <b>radio</b>: Class for &lt;input type="radio" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-radio.php">more information</a>)
-
-                <br/><br/>
-
-                <b>reset</b>: Class for &lt;input type="reset" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-reset.php">more information</a>)
-
-                <br/><br/>
-
-                <b>select</b>: Class for &lt;input type="select" /&gt; elements.
-                The class allows loading of &lt;option&gt; elements from array 
-                or database.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-select.php">more information</a>)
-
-                <br/><br/>
-
-                <b>submit</b>: Class for &lt;input type="submit" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-submit.php">more information</a>)
-
-                <br/><br/>
-
-                <b>text</b>: Class for &lt;input type="text" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-text.php">more information</a>)
-
-                <br/><br/>
-
-                <b>textarea</b>: Class for &lt;input type="textarea" /&gt; elements. 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-textarea.php">more information</a>)
-
-                <br/><br/>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="20%"><b>Element</b></td>
+                        <td width="60%"><b>Description</b></td>
+                        <td width="20%"><b>Docs</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">button</td>
+                        <td>Class for &lt;input type="button" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-button.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">checkbox</td>
+                        <td>Class for &lt;input type="checkbox" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-checkbox.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">file</td>
+                        <td>Class for &lt;input type="file" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-file.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">hidden</td>
+                        <td>Class for &lt;input type="hidden" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hidden.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">image</td>
+                        <td>Class for &lt;input type="image" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-image.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">password</td>
+                        <td>Class for &lt;input type="password" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-password.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">radio</td>
+                        <td>Class for &lt;input type="radio" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-radio.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">reset</td>
+                        <td>Class for &lt;input type="reset" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-reset.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">select</td>
+                        <td>Class for &lt;select /&gt; elements.
+                        The class allows loading of &lt;option&gt; elements from
+                        array or database.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-select.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">submit</td>
+                        <td>Class for &lt;input type="submit" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-submit.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">text</td>
+                        <td>Class for &lt;input type="text" /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-text.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">textarea</td>
+                        <td>Class for &lt;textarea /&gt; elements.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-textarea.php">docs</a></td>
+                    </tr>
+                </table></p>
 
                 There are also some custom element types. These are generally a
                 bit more complex but are able to do things which would otherwise
                 require a lot of manual work.
 
-                <br/><br/>
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="20%"><b>Element</b></td>
+                        <td width="60%"><b>Description</b></td>
+                        <td width="20%"><b>Docs</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">advcheckbox</td>
+                        <td>Class for an advanced checkbox type field. 
+                        Basically this fixes a problem that HTML has had where 
+                        checkboxes can only pass a single value (the value of
+                        the checkbox when checked).</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-advcheckbox.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">autocomplete</td>
+                        <td>Class for a text field with autocompletion 
+                        feature. The element looks like a normal HTML input text
+                        element that at every keypressed javascript event, 
+                        searches the array of options for a match and 
+                        autocompletes the text in case of match.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-autocomplete.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">date</td>
+                        <td>Class for a group of elements used to input dates 
+                        (and times).</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-date.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">group</td>
+                        <td>Class for a form element group. QuickForm (and 
+                        also YDForm)  allows grouping of several elements into
+                        one entity and using this entity as a new element.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-group.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">header</td>
+                        <td>Class for adding headers to the form.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-header.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">hiddenselect</td>
+                        <td>This class behaves as a select element, but instead 
+                        of creating a &lt;select&gt; it creates hidden elements 
+                        for all values already selected with setDefaults() or 
+                        setConstants().</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hiddenselect.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">hierselect</td>
+                        <td>Class to dynamically create two HTML  &lt;select&gt; 
+                        elements. The first select changes the content of the 
+                        second select.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hierselect.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">link</td>
+                        <td>Class for a link type field.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-link.php">docs</a></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">static</td>
+                        <td>Class for static data.</td>
+                        <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-static.php">docs</a></td>
+                    </tr>
+                </table></p>
 
-                <b>advcheckbox</b>: Class for an advanced checkbox type field. 
-                Basically this fixes a problem that HTML has had where 
-                checkboxes can only pass a single value (the value of the 
-                checkbox when checked).
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-advcheckbox.php">more information</a>)
-
-                <br/><br/>
-
-                <b>autocomplete</b>: Class for a text field with autocompletion 
-                feature. The element looks like a normal HTML input text element
-                that at every keypressed javascript event, searches the array of
-                options for a match and autocompletes the text in case of match.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-autocomplete.php">more information</a>)
-
-                <br/><br/>
-
-                <b>date</b>: Class for a group of elements used to input dates 
-                (and times).
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-date.php">more information</a>)
-
-                <br/><br/>
-
-                <b>group</b>: Class for a form element group. QuickForm (and 
-                also YDForm)  allows grouping of several elements into one 
-                entity and using this entity as a new element.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-group.php">more information</a>)
-
-                <br/><br/>
-
-                <b>header</b>: Class for adding headers to the form.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-header.php">more information</a>)
-
-                <br/><br/>
-
-                <b>hiddenselect</b>: This class behaves as a select element, but 
-                instead of creating a &lt;select&gt; it creates hidden elements for 
-                all values already selected with setDefaults() or setConstants(). 
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hiddenselect.php">more information</a>)
-
-                <br/><br/>
-
-                <b>hierselect</b>: Class to dynamically create two HTML 
-                &lt;select&gt; elements. The first select changes the content of 
-                the second select.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hierselect.php">more information</a>)
-
-                <br/><br/>
-
-                <b>link</b>: Class for a link type field.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-link.php">more information</a>)
-
-                <br/><br/>
-
-                <b>static</b>: Class for static data.
-                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-static.php">more information</a>)
+                <i><b>Note</b>: it is possible to make your own widgets as well.
+                Please refer to the documentation of the
+                <a target="_blank" href="http://pear.php.net/">PEAR</a> project.</i>
 
             </section>
 
@@ -2220,11 +2308,363 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/>
 
+                For displaying the form, there are several options. The way you
+                display the form is largely influenced by how much control you
+                want to have over the form rendering and whether you want to use
+                the YDTemplate class for templates or not.
+
+                <br/><br/>
+
+                The easiest way of displaying your form is by calling it's
+                class function called <code>display</code>. This will render the
+                form and display the resulting HTML. This is definitely the
+                easiest way of working, but you have very little to almost no
+                control on how the form will be displayed.
+
+                <br/><br/>
+
+                If you want to use a template engine, there are two different
+                ways of rendering the form. If you still want to stick with the
+                default layout, you can use the <code>toHtml</code> class 
+                function of the YDForm class to get the HTML representation of
+                your form. You can then assign this as a normal template
+                variable to the template class. This again is a very quick way
+                of working but only gives you limited possibilities to determine
+                the exact look and feel of the rendered form.
+
+                <br/><br/>
+
+                If you want full control and you will be using templates (which
+                is the advised way of working), you can use the class function
+                <code>toArray</code> to get an array representation of your form
+                which is very easy to use in your code. Let's take a look at how
+                the following form code is converted to an array:
+
+                <pre><font color="#0000FF">&lt;?php</font>
+
+<font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'firstForm'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">setDefaults</font><font color="#000000">(</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'name'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Joe User'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font>
+<font color="#000033">    </font><font color="#009F00">'text'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'name'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Enter your name:'</font><font color="#000000">,</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'size'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#CC9900">50</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font>
+<font color="#000033">    </font><font color="#009F00">'textarea'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'desc'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Enter the description:'</font>
+<font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'submit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'cmdSubmit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Send'</font><font color="#000033"> </font><font color="#000000">);</font><font color="#CC9900">0</font>
+
+<font color="#0000FF">?&gt;</font></pre>
+
+                The code above results in the following array structure:
+
+                <pre>array (
+  'frozen' =&gt; false,
+  'javascript' =&gt; '',
+  'attributes' =&gt; 'action="/form.php" method="post" name="firstForm" id="firstForm"',
+  'requirednote' =&gt; '* denotes required field',
+  'errors' =&gt; 
+  array (
+  ),
+  'hidden' =&gt; '',
+  'name' =&gt; 
+  array (
+    'name' =&gt; 'name',
+    'value' =&gt; 'Joe User',
+    'type' =&gt; 'text',
+    'frozen' =&gt; false,
+    'label' =&gt; 'Enter your name:',
+    'required' =&gt; true,
+    'error' =&gt; NULL,
+    'html' =&gt; '&lt;input size="50" name="name" type="text" value="Joe User" /&gt;',
+  ),
+  'desc' =&gt; 
+  array (
+    'name' =&gt; 'desc',
+    'value' =&gt; NULL,
+    'type' =&gt; 'textarea',
+    'frozen' =&gt; false,
+    'label' =&gt; 'Enter the description:',
+    'required' =&gt; false,
+    'error' =&gt; NULL,
+    'html' =&gt; '&lt;textarea name="desc"&gt;&lt;/textarea&gt;',
+  ),
+  'cmdSubmit' =&gt; 
+  array (
+    'name' =&gt; 'cmdSubmit',
+    'value' =&gt; 'Send',
+    'type' =&gt; 'submit',
+    'frozen' =&gt; false,
+    'label' =&gt; '',
+    'required' =&gt; false,
+    'error' =&gt; NULL,
+    'html' =&gt; '&lt;input name="cmdSubmit" value="Send" type="submit" /&gt;',
+  ),
+)</pre>
+
+                The structure of this array is really easy. Every form array
+                always contains a number of standard elements of which only a
+                few are important for us right now. Let's go over them:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Element</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">attributes</td>
+                        <td>This variable contains the attributes for the actual
+                        form HTML tag. It contains parameters such as the 
+                        action, method, name and ID of the form.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">javascript</td>
+                        <td>The javascript for the form in case you are using
+                        client-side validation (see later on).</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">errors</td>
+                        <td>The errors collection is an array which contains a 
+                        list of all the errors that were encountered during the
+                        validation of the form. We will discuss this in depth 
+                        later on.</td>
+                    </tr>
+                </table></p>
+
+                Then it contains a subarray for each element in the form. Each
+                of these subforms have the same structure. Let's have a look at
+                the different parameters for each form element:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Element</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">name</td>
+                        <td>The name of the form element.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">value</td>
+                        <td>The value of the form element (which is generally 
+                        the contents of the form element).</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">type</td>
+                        <td>The type of the element.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">label</td>
+                        <td>The label specified for the form element.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">required</td>
+                        <td>Indicating if this is a required form element or
+                        or not. This is always a boolean value.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">error</td>
+                        <td>The error message for this form element after
+                        validating the form. If not error is attached to the
+                        form, this will contain a NULL value.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">html</td>
+                        <td>The HTML representation of the form element.</td>
+                    </tr>
+                </table></p>
+
+                Instead of first having to convert the form object to an array
+                for assigning it to the template, there is a shortcut function
+                called <code>addForm</code> in the YDTemplate class which
+                automatically converts the form object to an array and assigns
+                it to the template object.
+
+                <br/><br/>
+
+                By using the elements of this array in the template, you can
+                pretty much layout the field exactly as you wish. It looks like
+                a lot of work, but it's a lot easier than handcoding every
+                single part of the form.
+
             </section>
 
             <section name="ch06_07" label="Validating forms">
 
                 <br/>
+
+                The concept of validating forms is to evaluate the input of the
+                form and checking to see if it matches the specified rules. A
+                form is considered to be validated when the URI called to
+                display it has one or more parameters (either GET or POST
+                according to the method used by the form), and all the rules
+                (which we will discuss in a second) have been satisfied.
+
+                <br/><br/>
+
+                For validating forms, we will use three specific functions of 
+                the YDForm class. We are going to use:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Function</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">applyFilter</td>
+                        <td>We will use this function to massage the data of the
+                        form before validating it. We can use this function to 
+                        e.g. convert a field value to uppercase or we can use it 
+                        to remove leading and trailing spaces from the actual 
+                        value.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">addRule</td>
+                        <td>This function attaches a rule to a specific form 
+                        element and also defines the error message that needs to 
+                        be shown if this rule is not honoured.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">validate</td>
+                        <td>This function will check the input of the form 
+                        against all rules after applying the specified filters, 
+                        and will return either true or false to indicate if the
+                        form was valid or not.</td>
+                    </tr>
+                </table></p>
+
+                The <code>applyFilter</code> function takes two arguments. The
+                first argument is either the name of an element or the string
+                "__ALL__", meaning that this filter applies to all elements on
+                the form. The second argument is either a function, 
+                user-defined or built-in function.
+
+                <br/><br/>
+
+                There are two ways of having the rules checked an applied. You
+                can choose between server side and client side evaluation of the
+                rules. By default, the rule are server side evaluated. By
+                changing the way you call the addRule function, you can change
+                the rule to client side evaluation. The following code sample
+                illustrates adding a client side rule:
+
+                <pre><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addRule</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'txt1'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'name required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">''</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'client'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                If you omit the parameter called <code><font color="#009F00">'client'</font></code>,
+                the rule will be a server side evaluated rule again. Be aware
+                that client side evaluation is not as clear as server side
+                evaluation and is less secure. Since the client side evaluation
+                is based on JavaScript, it's easy to get around the validation
+                by disabling JavaScript in your browser. The only advantage the
+                client side evaluation has is that it saves you the roundtrip to
+                the server.
+
+                <br/><br/>
+
+                Up till now, we only discussed one specific rule, namely the
+                <code>required</code> rule. There are of course a lot more
+                rules which you can use. Here's a list:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Rule</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">required</td>
+                        <td>value is not empty</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">maxlength</td>
+                        <td>value must not exceed n characters</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">minlength</td>
+                        <td>value must have more than n characters</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">rangelength</td>
+                        <td>value must have between m and n characters</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">regex</td>
+                        <td>value must pass the regular expression</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">email</td>
+                        <td>value is a correctly formatted email</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">lettersonly</td>
+                        <td>value must contain only letters</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">alphanumeric</td>
+                        <td>value must contain only letters and numbers</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">numeric</td>
+                        <td>value must be a number</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">nopunctuation</td>
+                        <td>value must not contain punctuation characters</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">nonzero</td>
+                        <td>value must be a number not starting with 0</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">callback</td>
+                        <td>This rule allows to use an external function/method 
+                        for validation, either by registering it or by passing 
+                        a callback as a format parameter.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">compare</td>
+                        <td>The rule allows to compare the values of two form 
+                        fields. This can be used for e.g. 'Password repeat must 
+                        match password' kind of rule.</td>
+                    </tr>
+                </table></p>
+
+                There are also some rules that apply specifically to file
+                uploads:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Rule</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">uploadedfile</td>
+                        <td>Required file upload</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">maxfilesize</td>
+                        <td>The file size must not exceed the given number of
+                        bytes</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">mimetype</td>
+                        <td>The file must have a correct mimetype</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">filename</td>
+                        <td>The filename must match the given regex</td>
+                    </tr>
+                </table></p>
+
+                <i><b>Note</b>: Some rules (for example the rangelength rule)
+                take an additional argument indicating the length. Please refer
+                to the <a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.intro-validation.php">PEAR</a> documentation for an explanation of each rule.</i>
+
+                <br/><br/>
+
+                Now that we assigned all the rules and filters to the form, we 
+                can use the <code>validate</code> function to check if the
+                input from our form was validated succesfully. Only if this
+                condition is met, we will do something with the data of the
+                form. This is also called "processing the form" which is
+                discussed in the next section.
 
             </section>
 
@@ -2232,15 +2672,31 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/>
 
+                For the actual processing of the forms, there are only two
+                functions you will really use a lot. This is the class function
+                <code>exportValue</code> from the YDForm class and it's
+                companion function called <code>exportValues</code>.
+
+                <br/><br/>
+
+                The <code>exportValue</code> function will export the value of a
+                named form element. Remember that this function will export the
+                cleaned-up value of the form element. This means that the return
+                value of this function will also have all the possible form
+                filters applied before it's returned.
+
+                <br/><br/>
+                
+                The <code>exportValues</code> will do the same as the
+                <code>exportValue</code> function but will return the values for
+                all the elements in the form. Unfortunately, this function does
+                not work with file uploads. Again, the values returned by this 
+                function will also have all the necessary filters applied to 
+                them.
+
             </section>
 
-            <section name="ch06_09" label="Tips and tricks">
-
-                <br/>
-
-            </section>
-
-            <section name="ch06_10" label="More information">
+            <section name="ch06_09" label="More information">
 
                 <br/>
 
