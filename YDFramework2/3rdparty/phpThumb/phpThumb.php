@@ -9,15 +9,22 @@
 //                                                         ///
 //////////////////////////////////////////////////////////////
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 // this script relies on the superglobal arrays, fake it here for old PHP versions
 if (phpversion() < '4.1.0') {
 	$_SERVER  = $HTTP_SERVER_VARS;
 	$_REQUEST = $HTTP_GET_VARS;
 }
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
+if (!function_exists('ImageJPEG') && !function_exists('ImagePNG') && !function_exists('ImageGIF')) {
+	// base64-encoded error image in GIF format
+	$ERROR_NOGD = 'R0lGODlhIAAgALMAAAAAABQUFCQkJDY2NkZGRldXV2ZmZnJycoaGhpSUlKWlpbe3t8XFxdXV1eTk5P7+/iwAAAAAIAAgAAAE/vDJSau9WILtTAACUinDNijZtAHfCojS4W5H+qxD8xibIDE9h0OwWaRWDIljJSkUJYsN4bihMB8th3IToAKs1VtYM75cyV8sZ8vygtOE5yMKmGbO4jRdICQCjHdlZzwzNW4qZSQmKDaNjhUMBX4BBAlmMywFSRWEmAI6b5gAlhNxokGhooAIK5o/pi9vEw4Lfj4OLTAUpj6IabMtCwlSFw0DCKBoFqwAB04AjI54PyZ+yY3TD0ss2YcVmN/gvpcu4TOyFivWqYJlbAHPpOntvxNAACcmGHjZzAZqzSzcq5fNjxFmAFw9iFRunD1epU6tsIPmFCAJnWYE0FURk7wJDA0MTKpEzoWAAskiAAA7';
+	header('Content-type: image/gif');
+	echo base64_decode($ERROR_NOGD);
+	exit;
+}
 
 // returned the fixed string if the evil "magic_quotes_gpc" setting is on
 if (get_magic_quotes_gpc()) {
@@ -30,10 +37,14 @@ if (get_magic_quotes_gpc()) {
 }
 
 // instantiate a new phpThumb() object
-require_once('phpthumb.class.php');
+if (!include_once('phpthumb.class.php')) {
+	die('failed to include_once("'.realpath('phpthumb.class.php').'")');
+}
 $phpThumb = new phpThumb();
 
-require_once('phpthumb.config.php');
+if (!include_once('phpthumb.config.php')) {
+	die('failed to include_once("'.realpath('phpthumb.config.php').'")');
+}
 foreach ($PHPTHUMB_CONFIG as $key => $value) {
 	$keyname = 'config_'.$key;
 	$phpThumb->$keyname = $value;
@@ -50,11 +61,31 @@ if (@$_REQUEST['phpThumbDebug'] == '1') {
 ////////////////////////////////////////////////////////////////
 
 
+// check to see if file can be output from source with no processing or caching
+$CanPassThroughDirectly = true;
+$FilenameParameters = array('h', 'w', 'sx', 'sy', 'sw', 'sh', 'bw', 'brx', 'bry', 'bg', 'bgt', 'bc', 'usa', 'usr', 'ust', 'wmf', 'wmp', 'wmm', 'wma', 'xto', 'ra', 'ar', 'iar', 'maxb');
+foreach ($FilenameParameters as $key) {
+	if (isset($_REQUEST[$key])) {
+		$CanPassThroughDirectly = false;
+		break;
+	}
+}
+if ($CanPassThroughDirectly) {
+	// no parameters set, passthru
+	$SourceFilename = phpthumb_functions::ResolveFilenameToAbsolute($_REQUEST['src']);
+	if ($getimagesize = @GetImageSize($SourceFilename)) {
+		header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+		@readfile($SourceFilename);
+		exit;
+	}
+}
+
+
 // check to see if file already exists in cache, and output it with no processing if it does
-if (!empty($this->config['cache_directory']) && empty($_REQUEST['phpThumbDebug'])) {
+if (!empty($phpThumb->config_cache_directory) && empty($_REQUEST['phpThumbDebug'])) {
 	$cache_filename = $phpThumb->GenerateCachedFilename();
 	if (is_file($cache_filename)) {
-		header('Content-type: image/'.$thumbnailFormat);
+		header('Content-type: image/'.$phpThumb->thumbnailFormat);
 		@readfile($cache_filename);
 		exit;
 	}
@@ -101,10 +132,10 @@ if (!empty($SQLquery)) {
 
 	$phpThumb->ErrorImage('Usage: '.$_SERVER['PHP_SELF'].'?src=/path/and/filename.jpg'."\n".'read Usage comments for details');
 
-} elseif (substr(@$this->src, 0, strlen(strtolower('http://'))) == 'http://') {
+} elseif (substr(@$phpThumb->src, 0, strlen(strtolower('http://'))) == 'http://') {
 
 	ob_start();
-	if ($fp = fopen($this->src, 'rb')) {
+	if ($fp = fopen($phpThumb->src, 'rb')) {
 
 		$phpThumb->rawImageData = '';
 		do {
@@ -121,7 +152,7 @@ if (!empty($SQLquery)) {
 		$fopen_error = ob_get_contents();
 		ob_end_clean();
 		if (ini_get('allow_url_fopen')) {
-			$phpThumb->ErrorImage('cannot open "'.$this->src.'" - fopen() said: "'.$fopen_error.'"');
+			$phpThumb->ErrorImage('cannot open "'.$phpThumb->src.'" - fopen() said: "'.$fopen_error.'"');
 		} else {
 			$phpThumb->ErrorImage('"allow_url_fopen" disabled');
 		}
@@ -157,7 +188,7 @@ if (!empty($_REQUEST['file'])) {
 		exit;
 	}
 
-} elseif (!empty($this->config['cache_directory']) && empty($this->phpThumbDebug) && is_writable($this->config['cache_directory'])) {
+} elseif (empty($phpThumb->phpThumbDebug) && !empty($phpThumb->config_cache_directory) && is_writable($phpThumb->config_cache_directory)) {
 
 	$phpThumb->RenderToFile($cache_filename);
 

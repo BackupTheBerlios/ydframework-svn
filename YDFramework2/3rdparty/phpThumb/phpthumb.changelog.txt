@@ -3,6 +3,57 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.3 - May 25, 2004
+  * Added new configuration variable 'config_temp_directory'
+    to allow you to specify a writable directory name for
+    temp files if you do not have access to the system temp
+    directory on your server (Safe Mode restrictions etc)
+    (thanks nickÿregenmag*com)
+  * Added new configuration variable
+    'config_error_die_on_error' which can be set to false if
+    you want to retrieve the error message without having it
+    dumped as an image - the error message is now available
+    in $phpThumb->error
+  * Images are passed through directly with no processing
+    and no caching if no parameters are passed to alter the
+    image (resize, crop, sharpening, etc)
+    (thanks nchmuraÿusers*sourceforge*net)
+  * Added new configuration variable 'config_disable_debug'
+    which disabled phpThumbDebug from working if you have
+    security concerns about the displayed information
+  * Bugfix: Added detection at the top of phpThumb.php for
+    no-GD errors to avoid parse errors later in the code
+    (thanks nickÿregenmag*com)
+  * Bugfix: RoundedImageCorners() had some off-by-1 errors
+    (thanks ola*thunbergÿhome*se)
+
+v1.4.2 - May 10, 2004
+  * Added IE-compatability mode for transparent corners
+    (set 'bct=256')
+  * Bugfix: version_compare_replacement() was broken in PHP
+    older than 4.1.0 (thanks nickÿregenmag*com)
+
+v1.4.1.1 - May 9, 2004
+ * Bugfix: Removed ImageTrueColorToPalette hack.
+   See http://bugs.php.net/bug.php?id=28341
+ * Bugfix: 'maxb' option for PNG/GIF output incorrect
+   bit depth under some circumstances
+
+v1.4.1 - May 9, 2004
+ * Added 'maxb' (MAXimum Bytes) option to auto-set the
+   output image quality (JPEG) or bit depth (PNG/GIF) so
+   that the output thumbnail is less than 'maxb' bytes
+   (thanks e_belleÿhotmail*com)
+ * Added 'bgt' parameter to make rounded corners from
+   'brx'/'bry' option transparent when used with PNG
+   output. Note: PHP/GD appears buggy at this time, so this
+   option must force output to 256-color mode for this
+   to work. The feature will be updated when a non-broken
+   version of PHP/GD is released.
+   (thanks javierÿircorion*net)
+ * Bugfix: Caching was broken
+   (thanks mikeÿgdaymate*nl, jurewiczÿgo3*pl)
+
 v1.4.0 - April 30, 2004
  * Rewritten as a PHP class. Split into several files:
    - phpthumb.class.php        = most processing code

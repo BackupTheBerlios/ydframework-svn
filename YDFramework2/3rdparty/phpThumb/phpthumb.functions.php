@@ -110,7 +110,7 @@ class phpthumb_functions {
 		$parts2 = explode('.', $version1);
 		$parts_count = max(count($parts1), count($parts2));
 		for ($i = 0; $i < $parts_count; $i++) {
-			$comparison = version_compare_replacement_sub($version1, $version2, $operator);
+			$comparison = phpthumb_functions::version_compare_replacement_sub($version1, $version2, $operator);
 			if ($comparison != 0) {
 				return $comparison;
 			}
@@ -182,7 +182,7 @@ class phpthumb_functions {
 				}
 				// to determine capability of GIF creation, try to use ImageCreateFromGIF on a 1px GIF
 				if (function_exists('ImageCreateFromGIF')) {
-					if ($tempfilename = tempnam(null, '')) {
+					if ($tempfilename = tempnam(null, 'pThumb')) {
 						if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
 							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw==')); // very simple 1px GIF file base64-encoded as string
 							fclose($fp_tempfile);
@@ -291,84 +291,6 @@ class phpthumb_functions {
 			die('Invalid hex color string: "'.$HexColorString.'"');
 		}
 		return ImageColorAllocate($gdimg_hexcolorallocate, 0, 0, 0);
-	}
-
-	function ImageCreateFromStringReplacement(&$RawImageData, $DieOnErrors=false) {
-		// there are serious bugs in the non-bundled versions of GD which may cause
-		// PHP to segfault when calling ImageCreateFromString() - avoid if at all possible
-		// when not using a bundled version of GD2
-		$gd_info = phpthumb_functions::gd_info();
-		if (strpos($gd_info['GD Version'], 'bundled') !== false) {
-			return @ImageCreateFromString($RawImageData);
-		}
-
-		switch (substr($RawImageData, 0, 3)) {
-			case 'GIF':
-				$ImageCreateFromStringReplacementFunction = 'ImageCreateFromGIF';
-				break;
-			case "\xFF\xD8\xFF":
-				$ImageCreateFromStringReplacementFunction = 'ImageCreateFromJPEG';
-				break;
-			case "\x89".'PN':
-				$ImageCreateFromStringReplacementFunction = 'ImageCreateFromPNG';
-				break;
-			default:
-				die('Unknown image type identified by "'.substr($RawImageData, 0, 3).'" ('.HexCharDisplay(substr($RawImageData, 0, 3)).')');
-				break;
-		}
-		if ($tempnam = tempnam(null, '')) {
-			if ($fp_tempnam = @fopen($tempnam, 'wb')) {
-				fwrite($fp_tempnam, $RawImageData);
-				fclose($fp_tempnam);
-				if (($ImageCreateFromStringReplacementFunction == 'ImageCreateFromGIF') && !function_exists($ImageCreateFromStringReplacementFunction)) {
-
-					// Need to create from GIF file, but ImageCreateFromGIF does not exist
-					if (@include_once('phpthumb.gif.php')) {
-						// gif_loadFileToGDimageResource() cannot read from raw data, write to file first
-						if ($tempfilename = tempnam(null, '')) {
-							if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
-								fwrite($fp_tempfile, $RawImageData);
-								fclose($fp_tempfile);
-								$gdimg_source = gif_loadFileToGDimageResource($tempfilename);
-								unlink($tempfilename);
-								return $gdimg_source;
-								break;
-							} else {
-								$ErrorMessage = 'Failed to open tempfile in '.__FILE__.' on line '.__LINE__;
-							}
-						} else {
-							$ErrorMessage = 'Failed to open generate tempfile name in '.__FILE__.' on line '.__LINE__;
-						}
-					} else {
-						$ErrorMessage = 'Failed to include required file "phpthumb.gif.php" in '.__FILE__.' on line '.__LINE__;
-					}
-
-				} elseif (function_exists($ImageCreateFromStringReplacementFunction) && ($gdimg_source = $ImageCreateFromStringReplacementFunction($tempnam))) {
-
-					// great
-					unlink($tempnam);
-					return $gdimg_source;
-
-				} else { // GD functions not available
-
-					// base64-encoded error images in GIF format
-					$ERROR_NOGD = 'R0lGODlhIAAgALMAAAAAABQUFCQkJDY2NkZGRldXV2ZmZnJycoaGhpSUlKWlpbe3t8XFxdXV1eTk5P7+/iwAAAAAIAAgAAAE/vDJSau9WILtTAACUinDNijZtAHfCojS4W5H+qxD8xibIDE9h0OwWaRWDIljJSkUJYsN4bihMB8th3IToAKs1VtYM75cyV8sZ8vygtOE5yMKmGbO4jRdICQCjHdlZzwzNW4qZSQmKDaNjhUMBX4BBAlmMywFSRWEmAI6b5gAlhNxokGhooAIK5o/pi9vEw4Lfj4OLTAUpj6IabMtCwlSFw0DCKBoFqwAB04AjI54PyZ+yY3TD0ss2YcVmN/gvpcu4TOyFivWqYJlbAHPpOntvxNAACcmGHjZzAZqzSzcq5fNjxFmAFw9iFRunD1epU6tsIPmFCAJnWYE0FURk7wJDA0MTKpEzoWAAskiAAA7';
-					header('Content-type: image/gif');
-					echo base64_decode($ERROR_NOGD);
-					exit;
-
-				}
-			} else {
-				$ErrorMessage = 'Failed to fopen('.$tempnam.', "wb") in '.__FILE__.' on line '.__LINE__;
-			}
-			unlink($tempnam);
-		} else {
-			$ErrorMessage = 'Failed to generate tempnam() in '.__FILE__.' on line '.__LINE__;
-		}
-		if ($DieOnErrors && !empty($ErrorMessage)) {
-			die($ErrorMessage);
-		}
-		return false;
 	}
 
 	function ResolveFilenameToAbsolute($filename) {

@@ -13,9 +13,16 @@
 
 // * Caching Configuration (choose only one of these - leave the other lines commented-out):
 // Note: this directory must be writable (usually chmod 777 is neccesary) for caching to work - if the directory is not writable no error will be generated but caching will not be enabled.
-$PHPTHUMB_CONFIG['cache_directory'] = '';                                      // disable thumbnail caching
-//$PHPTHUMB_CONFIG['cache_directory'] = './cache/';                            // set the cache directory relative to the source image - must start with '.' (will not work to cache URL- or database-sourced images, use the absolute directory name below)
+$PHPTHUMB_CONFIG['cache_directory'] = '';                                               // disable thumbnail caching
+//$PHPTHUMB_CONFIG['cache_directory'] = './cache/';                                     // set the cache directory relative to the source image - must start with '.' (will not work to cache URL- or database-sourced images, use the absolute directory name below)
 //$PHPTHUMB_CONFIG['cache_directory'] = $_SERVER['DOCUMENT_ROOT'].'/cache/';   // set the cache directory to an absolute directory for all source images (must be used to cache URL- or database-sourced images)
+
+
+// * Directory Configuration
+// phpThumb() may need to create temp files. Usually the system temp dir is writable and can be used.
+// Leave this value as NULL in most cases. If you get errors about "failed to open <filename> for writing"
+// you should change this to a full pathname to a directory you do have write access to.
+$PHPTHUMB_CONFIG['temp_directory'] = null;
 
 
 // maximum number of pixels in source image to attempt to process entire image.
@@ -62,13 +69,13 @@ $PHPTHUMB_CONFIG['error_textcolor']             = 'FF0000'; // color of text in 
 $PHPTHUMB_CONFIG['error_fontsize']              = 1;        // size of text in error messages, from 1 (smallest) to 5 (largest)
 
 // * Anti-Hotlink Configuration:
-$PHPTHUMB_CONFIG['nohotlink_enabled']       = true;                          // If false will allow thumbnailing from any source domain
+$PHPTHUMB_CONFIG['nohotlink_enabled']       = true;                                   // If false will allow thumbnailing from any source domain
 $PHPTHUMB_CONFIG['nohotlink_valid_domains'] = array(@$_SERVER['HTTP_HOST']); // This is the list of domains for which thumbnails are allowed to be created. The default value of the current domain should be fine in most cases, but if neccesary you can add more domains in here, in the format 'www.example.com'
-$PHPTHUMB_CONFIG['nohotlink_erase_image']   = true;                          // if true, thumbnail is covered up with $PHPTHUMB_CONFIG['nohotlink_fill_color'] before text is applied
-$PHPTHUMB_CONFIG['nohotlink_fill_hexcolor'] = 'CCCCCC';                      // background color - usual HTML-style hex color notation
-$PHPTHUMB_CONFIG['nohotlink_text_hexcolor'] = 'FF0000';                      // text color       - usual HTML-style hex color notation
-$PHPTHUMB_CONFIG['nohotlink_text_message']  = 'Hotlinking is not allowed!';  // Say whatever you want here
-$PHPTHUMB_CONFIG['nohotlink_text_fontsize'] = 3;                             // 1 is smallest, 5 is largest
+$PHPTHUMB_CONFIG['nohotlink_erase_image']   = true;                                   // if true, thumbnail is covered up with $PHPTHUMB_CONFIG['nohotlink_fill_color'] before text is applied
+$PHPTHUMB_CONFIG['nohotlink_fill_hexcolor'] = 'CCCCCC';                               // background color - usual HTML-style hex color notation
+$PHPTHUMB_CONFIG['nohotlink_text_hexcolor'] = 'FF0000';                               // text color       - usual HTML-style hex color notation
+$PHPTHUMB_CONFIG['nohotlink_text_message']  = 'Hotlinking is not allowed!';           // Say whatever you want here
+$PHPTHUMB_CONFIG['nohotlink_text_fontsize'] = 3;                                      // 1 is smallest, 5 is largest
 
 // * Border & Background default colors
 $PHPTHUMB_CONFIG['border_hexcolor']     = '000000'; // Default border color - usual HTML-style hex color notation (overidden with 'bc' parameter)
@@ -80,6 +87,8 @@ $PHPTHUMB_CONFIG['use_exif_thumbnail_for_speed'] = true; // If true, and EXIF th
 // if true, and source image is smaller than 'w' & 'h' parameters or $PHPTHUMB_CONFIG['output_maxheight'] / $PHPTHUMB_CONFIG['output_maxwidth']
 // will be enlarged to that size. If false then small images will not be enlarged beyond their original dimensions
 $PHPTHUMB_CONFIG['output_allow_enlarging'] = (isset($_REQUEST['aoe']) ? (bool) $_REQUEST['aoe'] : false);
+
+$PHPTHUMB_CONFIG['disable_debug'] = false; // Prevent phpThumbDebug for displaying any information about your system. Should be safe to leave at false, but if you're concerned you can set this to true
 
 // END USER CONFIGURATION SECTION
 

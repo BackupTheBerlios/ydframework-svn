@@ -50,6 +50,12 @@ Examples:
 (see the "demo" link on http://phpthumb.sourceforge.net
 for more usage examples)
 
+NOTE: It's recommended you use the local image filename
+wherever possible (rather than http://) because performance
+is much better, less (or no) use of temp files, and the
+last-modified check for cached files doesn't work for
+remote files.
+
 There are some configuration options you may (but are
 not required to) change. Most configuration options can
 be set when you call phpThumb() - see list below), but
@@ -83,16 +89,30 @@ phpThumb() object as follows:
   $phpThumb->src = $sourceFilename;
   // or $phpThumb->rawImageData = $binary_image_data;
 
+  // Set error handling (optional)
+  $phpThumb->config_error_die_on_error = false;
+
   // generate & output thumbnail
-  $phpThumb->GenerateThumbnail();
-  $phpThumb->RenderToFile($filename);
-  // or $phpThumb->OutputThumbnail();
+  if ($phpThumb->GenerateThumbnail()) {
+    $phpThumb->RenderToFile($filename);
+    // or $phpThumb->OutputThumbnail();
+  } else {
+    // do something with error message
+    echo 'Failed: '.$phpThumb->error;
+  }
   
 If you want to change any of the configuration parameters
 you can change them like this:
     $phpThumb->config_<variable_name> = <value>
 for example:
     $phpThumb->config_output_format = 'jpeg';
+
+
+Note: If you want to loop through and create multiple
+  thumbnails from different image sources, you should
+  create and dispose an instance of phpThumb() each time
+  through the loop and not reuse the object.
+
 
 
 
@@ -108,6 +128,9 @@ URL Parameters:
   bw = border width in pixels (set to enable fixed-size
        thumbnails with background filled with 'bg' color
   bg = background hex color (default = FFFFFF)
+ bgt = background color is transparent (default = 0)
+       use with brx/bry, set to 1 for transparency,
+       set to 256 for IE-compatible 256-color mode
   bc = border hex color (default = 000000)
  usr = unsharp mask radius (default = 0.5, range 0.5-1)
  usa = unsharp mask amount (default = 80, range 50-200)
@@ -152,6 +175,9 @@ goto = URL to redirect to after rendering image to file
        a margin of background color. If 'bw' is zero, the
        corners of the image will be cut off and filled
        with background color.
+maxb = MAXimum Byte size - auto-set compression (JPEG) or
+       bit depth (GIF & PNG) to fit thumbnail into 'maxb'
+       bytes of output image.
 
 
 Additional Object-only configuration variables:
@@ -178,6 +204,14 @@ Notes:
   EXIF thumbnail extraction requires PHP v4.2.0+
   Image rotation requires PHP v4.3.0+. There have been
     reports of problems with PHP older than v4.3.3
+* phpThumb() may have tempfile access issues on servers
+  where Safe Mode is enabled, specificly when accessing
+  a file over HTTP, or when a non-bundled version of GD
+  is in use. Specifying 'config_temp_directory' may help
+* Transparent PNG output is buggy with true-color images
+  and some software (Internet Explorer, Photoshop). Output
+  can be forced to 256-color mode for compatability by
+  setting the 'bgt' parameter to '256'
 * phpThumb() works fine with GD v1.x, but works better
    with GD v2.0+ because of the true-color image support
    and ImageCopyResampled(). Also, there appears to be a
