@@ -22,6 +22,7 @@ pages = [
     'BestPractices',
     'YDDatabase',
     'YDOther',
+    'ReleaseHistory',
 ]
 
 images = [
@@ -37,7 +38,7 @@ outdir = 'userguide'
 template = """<html>
 
 <head>
-    <title>Yellow Duck Framework 2.0 - {page}</title>
+    <title>Yellow Duck Framework 2.0 beta 3- {page}</title>
     <link rel="stylesheet" type="text/css" href="ydf2.css" />
 </head>
 
