@@ -59,7 +59,7 @@
 
         <programlisting><![CDATA[C:\>cd YDFramework2.0-bld700
 C:\YDFramework2.0-bld700>cd doc
-C:\YDFramework2.0-bld700\doc>make_docs.bat
+C:\YDFramework2.0-bld700\doc>build_api.bat
 ]]></programlisting>
 
     </sect1>
