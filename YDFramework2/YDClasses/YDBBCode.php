@@ -20,7 +20,7 @@
      *
      *  - [img]http://elouai.com/images/star.gif[/img]
      *  - [url="http://elouai.com"]eLouai[/url]
-     *  - [mail="webmaster@elouai.com"]Webmaster[/mail]
+     *  - [mail="webmaster\@elouai.com"]Webmaster[/mail]
      *  - [size="25"]HUGE[/size]
      *  - [color="red"]RED[/color]
      *  - [b]bold[/b]
