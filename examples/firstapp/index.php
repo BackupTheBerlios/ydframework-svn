@@ -8,7 +8,6 @@
 	require_once( 'YDFSDirectory.php' );
 	require_once( 'YDObjectUtil.php' );
 	require_once( 'YDForm.php' );
-	require_once( 'YDError.php' );
 
 	// Class definition for the index request
 	class indexRequest extends YDRequest {

@@ -8,7 +8,6 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'YDError.php' );
 
 	/**
 	 *	This class houses all the object and class related utility functions. All the methods are implemented as static

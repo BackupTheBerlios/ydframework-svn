@@ -13,18 +13,11 @@
 	 *	Webpage: http://www.yellowduck.be/ydf2/
 	 *
 	 *	Author: Pieter Claerhout, pieter@yellowduck.be
-	 *
-	 *	@todo
-	 *		We need to re_evaluate the way we use constants. If you use the auto prepend, you are not able to override
-	 *		them anymore (which is bad). I think the easiest is to make them global variables instead.
 	 */
 
 	// Set the error reporting correctly.
 	//error_reporting( E_ALL ^ E_NOTICE );
 	error_reporting( E_ALL );
-
-	// Start the session
-	@session_start();
 
 	// Global framework constants
 	define( 'YD_FW_NAME', 'Yellow Duck Framework' );
@@ -54,9 +47,8 @@
 	define( 'YD_SCR_EXT', '.php' );
 	define( 'YD_TMP_PRE', 'YDF_' );
 
-	// Classes and handlers
+	// Class executor
 	if ( ! defined( 'YD_EXECUTOR' ) ) { define( 'YD_EXECUTOR', 'YDExecutor' ); }
-	if ( ! defined( 'YD_ERR_HANDLER' ) ) { define( 'YD_ERR_HANDLER', 'YDErrorHandler' ); }
 
 	// HTTP constants
 	if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) { define( 'YD_HTTP_USES_GZIP', 1 ); }
@@ -79,6 +71,30 @@
 		define( 'YD_PATHDELIM', ':' );
 	}
 
+	// Start the session
+	@session_start();
+
+	/**
+	 *	This function defines a fatal error.
+	 *
+	 *	@param $error Error message.
+	 */
+	function YDFatalError( $error ) { trigger_error( $error, E_USER_ERROR ); }
+
+	/**
+	 *	This function defines a warning.
+	 *
+	 *	@param $error Error message.
+	 */
+	function YDWarning( $error ) { trigger_error( $error, E_USER_WARNING ); }
+
+	/**
+	 *	This function defines a notice.
+	 *
+	 *	@param $error Error message.
+	 */
+	function YDNotice( $error ) { trigger_error( $error, E_USER_NOTICE ); }
+
 	// Update the include path
 	$includePath = YD_SELF_DIR;
 	if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
@@ -93,10 +109,6 @@
 
 	// Include the basis of Yellow Duck framework
 	require_once( 'YDBase.php' );
-	require_once( 'YDError.php' );
-
-	// Register the error handler
-	set_error_handler( YD_ERR_HANDLER );
 
 	// Check if we have the right PHP version
 	if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {

@@ -8,7 +8,6 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'YDError.php' );
 
 	/**
 	 *	This class implements an template object. Unless changed manually, the template engine will look in the same
