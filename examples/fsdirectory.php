@@ -23,16 +23,18 @@
 			$dir = new YDFSDirectory( dirname( __FILE__ ) );
 
 			// Dump the object
-			echo( dirname( __FILE__ ) );
-			YDDebugUtil::dump( $dir );
+			YDDebugUtil::dump( $dir, dirname( __FILE__ ) );
 
 			// All files in the directory
-			echo( 'Full file list' );
-			YDDebugUtil::dump( $dir->getContents() );
+			YDDebugUtil::dump( $dir->getContents(), '$dir->getContents()' );
 
 			// PHP files in the directory
-			echo( 'List of PHP files' );
-			YDDebugUtil::dump( $dir->getContents( '*.php' ) );
+			YDDebugUtil::dump( $dir->getContents( '*.tpl' ), '$dir->getContents( \'*.tpl\' )' );
+
+			// PHP files in the directory
+			YDDebugUtil::dump(
+				$dir->getContents( array( '*.jpg', '*.txt' ) ), '$dir->getContents( array( \'*.jpg\', \'*.txt\' ) )'
+			);
 
 		}
 

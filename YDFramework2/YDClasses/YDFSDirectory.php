@@ -43,7 +43,8 @@
 		 *	@remarks
 		 *		This will not work recursively on the subdirectories.
 		 *
-		 *	@param $pattern	(optional) Pattern to which the files should match.
+		 *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
+		 *					pass them as an array.
 		 *
 		 *	@returns	Array of YDFile objects for the files that match the pattern.
 		 */
@@ -58,12 +59,24 @@
 			// Loop over the directory contents
 			while ( false !== ( $file = readdir( $dirHandle ) ) ) {
 				if ( $file != '.' && $file != '..' ) {
-					if ( $pattern != '' ) {
-						if ( YDFSDirectory::_match( $pattern, $file ) ) {
-							array_push( $fileList, $file );
+					if ( is_array( $pattern ) ) {
+						foreach ( $pattern as $patternitem ) {
+							if ( ! empty( $patternitem ) ) {
+								if ( YDFSDirectory::_match( $patternitem, $file ) ) {
+									array_push( $fileList, $file );
+								}
+							} else {
+								array_push( $fileList, $file );
+							}
 						}
 					} else {
-						array_push( $fileList, $file );
+						if ( ! empty( $pattern ) ) {
+							if ( YDFSDirectory::_match( $pattern, $file ) ) {
+								array_push( $fileList, $file );
+							}
+						} else {
+							array_push( $fileList, $file );
+						}
 					}
 				}
 			}

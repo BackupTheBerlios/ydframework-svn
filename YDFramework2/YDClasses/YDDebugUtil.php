@@ -57,7 +57,7 @@
 			if ( $html == true ) {
 				$data = stripslashes( htmlentities( $data ) );
 				if ( ! empty( $label ) ) {
-					$data = '<pre><b>' . $label . '</b><br>' . $data . '</pre>';
+					$data = '<pre><b style="color: navy">' . $label . '</b><br>' . $data . '</pre>';
 				} else {
 					$data = '<pre>' . $data . '</pre>';
 				}
