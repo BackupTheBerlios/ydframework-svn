@@ -100,6 +100,20 @@
 
         }
 
+        /**
+         *  Function to get the full path of the directory.
+         *
+         *  @returns String containing the full path of the directory.
+         */
+        function getPath() {
+            return realpath( $this->_path );
+        }
+
+        // should return file object
+        function createFile() {
+
+        }
+
     }
 
 ?>

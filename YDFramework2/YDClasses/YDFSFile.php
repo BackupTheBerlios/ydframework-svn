@@ -214,6 +214,11 @@
 
         }
 
+        // function to append data to a file
+        function appendContents() {
+
+        }
+
     }
 
 ?>
