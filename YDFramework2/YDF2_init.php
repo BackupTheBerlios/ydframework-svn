@@ -225,10 +225,34 @@
         require_once( 'YDBase.php' );
         require_once( 'YDError.php' );
         require_once( 'YDObjectUtil.php' );
-        require_once( 'YDPhpUtil.php' );
+
+        /**
+         *  This function will return true if the current version is lower than 
+         *  the indicated version. Internally, this uses the phpversion()
+         *  function to get the current version number.
+         *
+         *  @param $vercheck Minimum version required.
+         *
+         *  @return Boolean indicating if the current version number is higher
+         *          or lower than the indicated PHP version.
+         */
+        function YDVersionCheck( $vercheck ) {
+            $minver = explode( '.', $vercheck );
+            $curver = explode( '.', phpversion() );
+            if (
+                ( $curver[0] <= $minver[0] ) && ( $curver[1] <= $minver[1] )
+                && 
+                ( $curver[1] <= $minver[1] ) && ( $curver[2][0] < $minver[2][0] )
+            ) {
+                return true;
+            } else { 
+                return false;
+            }
+        }
+
 
         // Check if we have the right PHP version
-        if ( YDPhpUtil::versionCheck( '4.2.0' ) ) {
+        if ( YDVersionCheck( '4.2.0' ) ) {
             new YDFatalError( 'PHP version 4.2.0 or greater is required.' );
         }
 
