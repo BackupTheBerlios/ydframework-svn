@@ -123,12 +123,17 @@
 		 *
 		 *	@param $action	(optional) Name of the action to redirect to. If no action is specified, it will redirect to
 		 *					the default action.
+		 *	@param $params	(optional) The $_GET parameters as an associative array that need to be added to the URL
+		 *					before redirecting. They will automatically get URL encoded.
 		 */
-		function redirectToAction( $action='default' ) {
+		function redirectToAction( $action='default', $params=array() ) {
 			if ( strpos( $action, 'action' ) === 0 ) {
 				$action = substr( $action, strlen( 'action' ) );
 			}
 			$url = YD_SELF_SCRIPT . '?' . YD_ACTION_PARAM . '=' . $action;
+			foreach ( $params as $key=>$val ) {
+				$url .= '&' . urlencode( $key ) . '=' . urlencode( $val );
+			}
 			$this->redirect( $url );
 		}
 		
