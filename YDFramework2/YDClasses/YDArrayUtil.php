@@ -36,7 +36,8 @@
 			if ( $columns == 1 ) { return $array; }
 
 			// Use the array_chunk function to convert to a table
-			$newArray = array_chunk( $array, $columns );
+			$newArray = @array_chunk( $array, $columns );
+			if ( $newArray == null ) { YDFatalError( 'Failed to split the array in chunks.' ); }
 
 			// Pad the last row
 			if ( $fillLastRow ) {
