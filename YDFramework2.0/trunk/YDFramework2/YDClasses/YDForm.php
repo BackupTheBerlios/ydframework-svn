@@ -1072,7 +1072,9 @@
          *	@returns	The form element as an array.
          */
         function toArray() {
-            if ( $this->_labelPlace != 'after' ) { $this->_labelPlace != 'before'; }
+            if ( $this->_labelPlace != 'after' ) {
+                $this->_labelPlace = 'before';
+            }
             return array(
                 'name'	=> $this->_name,
                 'value'	=> $this->_value,
