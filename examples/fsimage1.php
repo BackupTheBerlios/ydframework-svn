@@ -29,7 +29,7 @@
 
             // Get the file object for the current file
             $img = new YDFSImage( 
-                dirname( __FILE__ ) . '/../YDFramework2/doc/RequestProcessing.gif'
+                dirname( __FILE__ ) . '/fsimage1.jpg'
             );
 
             // Dump the object
@@ -65,7 +65,7 @@
         // Action to create and show thumbnail
         function actionThumbnail2() {
             $img = new YDFSImage( 
-                dirname( __FILE__ ) . '/../YDFramework2/doc/RequestProcessing.gif'
+                dirname( __FILE__ ) . '/../YDFramework2/doc/userguide/RequestProcessing.gif'
             );
             $img->outputThumbnail( 100, 100 );
         }

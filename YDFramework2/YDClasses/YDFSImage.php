@@ -54,7 +54,7 @@
 
             // Check if the GD library is loaded.
             if ( ! extension_loaded( 'gd' ) ) {
-                  $this->_error( 'YD_gd_not_installed.gif' );
+                  $this->_error( 'YD_gd_not_installed' );
             }
 
             // Include phpThumb
