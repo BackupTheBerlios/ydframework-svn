@@ -93,6 +93,9 @@
 		 */
 		function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true ) {
 
+			// Encode the references
+			$data = YDStringUtil::encodeString( $data );
+
 			// Convert the links to BBcode
 			if ( $convertLinks === true ) {
 				$data = $this->convertLinks( $data );
@@ -114,9 +117,6 @@
 			if ( $convertBr === true ) {
 				$data = nl2br( trim( $data ) );
 			}
-
-			// Encode the references
-			$data = YDStringUtil::encodeString( $data );
 
 			// Return the data
 			return $data;
