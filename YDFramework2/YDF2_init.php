@@ -22,8 +22,6 @@
      *  - Templates for outputting HTML easily
      *  - Automatic action dispatching using URL parameters
      *  - Object oriented form construction and validation
-     *  - PEAR based database connectivity which supports all major database
-     *    engines such as MySQL, PostgreSQL, Oracle, Microsoft SQL Server, ...
      *  - Object oriented handling of authentication
      *
      *  To implement the base functionality, a lot of standard libraries were

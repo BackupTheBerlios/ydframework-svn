@@ -39,15 +39,6 @@
                     // Show the timings
                     YDDebugUtil::debug( 'Processing time:', $elapsed, 'ms' );
 
-                    // Get database statistics
-                    if ( isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
-                        $dbStats .= $GLOBALS['YD_DB_SQLQ_CNT'];
-                        $dbStats .= ' database querie(s) executed.';
-                    } else {
-                        $dbStats .= "\n" . 'No database queries executed.';
-                    }
-                    YDDebugUtil::debug( $dbStats );
-
                     // Total size of include files
                     $includeFiles = get_included_files();
                     $includeFilesSize = 0;
