@@ -123,10 +123,10 @@
 				$debug .= 'Included files: ' . "\n\n\t" . implode( "\n\t", $includeFiles ) . "\n\n";
 
 				// If there is a database instance
-				$debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_COUNT'] ) . "\n\n";
+				$debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . "\n\n";
 
 				// Add the queries if any
-				if ( sizeof( $GLOBALS['YD_SQL_COUNT'] ) > 0 ) {
+				if ( sizeof( $GLOBALS['YD_SQL_QUERY'] ) > 0 ) {
 					$debug .= 'Executed SQL queries: ' . "\n\n";
 					foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
 						$debug .= "\t" . ($key+1) . ': ' . trim( $query ) . "\n\n";
