@@ -3,9 +3,28 @@
 <head>
 
 	<title>{$YD_FW_NAMEVERS}</title>
-	<link rel="stylesheet" type="text/css" href="../doc/userguide/ydf2.css" />
 	{literal}<style>
 		td { border-bottom: 1px solid #FFCC00; }
+		P,TD,LI,INPUT,SELECT,TEXTAREA{background-color:#FFE9A6;font:13px/1.3 Verdana}
+		BODY{color:#000000;background-color:#FFCC00;font:13px/1.3 Verdana}
+		A{color:#993333}
+		UL,OL{margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px}
+		FORM,H1,H2,H3,H4,H5{margin:0px;padding:0px}
+		.indent{margin-left:40px}
+		.additions{color:#008800}
+		.deletions{color:#880000}
+		.error{color:#CC3333;font-weight:bold}
+		.header{padding:10px;padding-top:0px}
+		.comment{background-color:#EEEEEE;padding:10px}
+		.commentinfo{color:#AAAAAA}
+		.code{background:#FFE9A6;border:solid #888888 2px;color:black;width:99%;height:300px;overflow:scroll;padding:3px;font:10pt "Courier New"}
+		.notes{color:darkred}
+		.revisioninfo{color:#AAAAAA;padding-bottom:20px}
+		.copyright{padding-top:8px;font-size:11px;color:#444444;text-align:right}
+		.copyright A{color:#444444}
+		.page,.commentform{background-color:#FFE9A6;padding:10px}
+		.footer,.commentsheader{background-color:#444444;padding:5px 10px;color:#FFCC00}
+		.footer A,.commentsheader A{color:#FFCC00}
 	</style>{/literal}
 </head>
 
