@@ -55,6 +55,18 @@
 		}
 
 		/**
+		 *	This function will check if the argument is one of the directories specified in the URL path. It will
+		 *	basically check if the argument is in the array resulting from the getPathDirectories function.
+		 *
+		 *	@param	$arg	Directory to check.
+		 *
+		 *	@returns	Boolean indicating if the argument is one of the directories in the URL path or not.
+		 */
+		function isDirectory( $arg ) {
+			return in_array( $arg, $this->getPathDirectories() );
+		}
+
+		/**
 		 *	This function will return the original URL.
 		 *
 		 *	@returns	The original URL.

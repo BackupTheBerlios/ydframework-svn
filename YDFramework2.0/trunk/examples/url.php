@@ -31,6 +31,8 @@
 			echo( '<br>Path: ' . $url->getPath() );
 			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
 			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
+			echo( '<br>isDirectory( test ): ' . var_export( $url->isDirectory( 'test' ), 1 ) );
+			echo( '<br>isDirectory( xx ): ' . var_export( $url->isDirectory( 'xx' ), 1 ) );
 			echo( '<br>Query: ' . $url->getQuery() );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
