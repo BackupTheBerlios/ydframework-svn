@@ -295,6 +295,26 @@
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=pbase.tpl">pbase.tpl</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="firstapp/index.php">Tutorial application</a>
+			</td>
+			<td valign="top">
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=firstapp/index.php">firstapp/index.php</a>
+				<br/>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=firstapp/index.tpl">firstapp/index.tpl</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
+				<a href="database/index.php">Tutorial application using a database</a>
+			</td>
+			<td valign="top">
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database/index.php">database/index.php</a>
+				<br/>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database/index.tpl">database/index.tpl</a>
+			</td>
+		</tr>
 		</table>
 
 		<p>&nbsp;<br><b>Documentation</b></p>
