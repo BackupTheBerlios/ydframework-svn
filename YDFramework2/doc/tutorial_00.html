@@ -69,10 +69,6 @@
         <a href="http://pear.php.net/">http://pear.php.net/</a>.</li>
     </ul>
 
-    <p>The template engine that is used is Smarty, also provided by the PHP 
-    project. More information and documentation on the Smarty template engine 
-    can found on <a href="http://smarty.php.net/">http://smarty.php.net/</a>.</p>
-
     <p>&nbsp;<br><b>Analyzing the workflow</b></p>
 
     <p>In the object oriented nature of the Yellow Duck Framework, each script
@@ -123,10 +119,10 @@
     <b>Source: sample1.tpl</b><br>
 <pre class="fragment">&lt;html&gt;
 &lt;head&gt;
-    &lt;title&gt;{$title}&lt;/title&gt;
+    &lt;title&gt;&lt?= $title ?&gt;&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;{$title}&gt;
+    &lt?= $title ?&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
 

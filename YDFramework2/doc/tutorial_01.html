@@ -67,8 +67,7 @@
       +- 3rdparty
       +- docs
       +- temp
-      +- YDClasses
-      +- YDSmartyPlugins</pre>
+      +- YDClasses</pre>
 
     <p>The main directory of the framework, called "YDFramework-2.0.0" in this
     example, contains a number of sample files. In this directory, there is also
@@ -79,7 +78,8 @@
     <ul>
         <li><b>3rdparty:</b> This directory contains the third party libraries
         that are needed for the Yellow Duck Framework to work properly. You will
-        find a local copy of the PEAR libraries and the Smarty library in here.</li>
+        find a local copy of the PEAR libraries and the other third party
+        libraries in here.</li>
         <li><b>docs:</b> This directory contains the documentation at which you
         are currently looking. It also contains the complete API documentation.</li>
         <li><b>temp:</b> This directory contains the temporary files created by
@@ -87,8 +87,6 @@
         saved.</li>
         <li><b>YDClasses:</b> In here, you will find all the classes that make
         up the framework.</li>
-        <li><b>YDSmartyPlugins:</b> This directory contains the custom Smarty
-        template plugins which were created for the Yellow Duck Framework.</li>
     </ul>
 
     <p><b>Note:</b> You will never have to add or alter files in the YDFramework2 directory.
@@ -189,6 +187,12 @@ php_flag zlib.output_compression On</pre>
     <p>In the installation download, there is a sample .htaccess file included
     which is called "_default.htaccess". Copy it to the root of your web
     directory and rename it to ".htaccess".</p>
+
+    <p><b>Note:</b> In order to have the examples working, you need to allow
+    short open tags. this can be done by add the following to the .htaccess
+    file:</p>
+
+    <pre class="fragment">php_flag short_open_tag On</pre>
 
     <p>&nbsp;<br><b>Denying direct access to the templates (advised)</b></p>
 
