@@ -8,15 +8,11 @@
     // Includes
     require_once( 'YDBase.php' );
     require_once( 'YDObjectUtil.php' );
-    require_once( 'DB.php' );
 
     /**
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
-     *
-     *  @todo
-     *      Find a way to get rid of the DB.php dependency.
      */
     class YDError extends YDBase {
 
@@ -32,7 +28,7 @@
             $this->YDBase();
 
             // Check if it's a database error
-            if ( DB::isError( $errorMessage ) ) {
+            if ( YDObjectUtil::isSubClass( $errorMessage, 'db_error' ) ) {
 
                 // Start with the first part of the error message
                 $this->_errorMessage = $errorMessage->getMessage();
