@@ -260,7 +260,7 @@
     /**
      *	@internal
      */
-    function YDTemplate_modifier_date_format( $string, $format='%b %e, %Y', $default_date=null ) {
+    function YDTemplate_modifier_date_format( $string, $format='%b %d, %Y', $default_date=null ) {
         if( $string != '' ) {
             return strftime( $format, YDTemplate_make_timestamp( $string ) );
         } elseif ( isset( $default_date ) && $default_date != '' ) {
