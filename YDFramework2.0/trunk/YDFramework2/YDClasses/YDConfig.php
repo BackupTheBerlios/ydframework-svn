@@ -52,9 +52,11 @@
 		function set( $name, $value, $override=true ) {
 
 			// Set the new variable
-			if ( YDConfig::exists( $name ) && $override ) {
-				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
-			} else { 
+			if ( YDConfig::exists( $name ) ) {
+         			if ( $override ) {
+					$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+				}
+			} else {
 				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
 			}
 
