@@ -22,6 +22,7 @@
     <!ENTITY ydcart SYSTEM "ydcart.xml">
     <!ENTITY ydother SYSTEM "ydother.xml">
     <!ENTITY ydbestpractices SYSTEM "ydbestpractices.xml">
+    <!ENTITY ydfaq SYSTEM "ydfaq.xml">
     <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
     <!ENTITY appendixA SYSTEM "appendixA.xml">
     <!ENTITY appendixB SYSTEM "appendixB.xml">
@@ -64,6 +65,7 @@
     &ydcart;
     &ydother;
     &ydbestpractices;
+    &ydfaq;
     &ydchangelog;
     &appendixA;
     &appendixB;
