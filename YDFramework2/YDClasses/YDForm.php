@@ -58,6 +58,7 @@
 			$this->_htmlRequiredEnd = '</b></font>';
 			$this->_htmlErrorStart = '<font color="red">Error: ';
 			$this->_htmlErrorEnd = '</font>';
+			$this->_requiredNote = 'Items in bold are required';
 
 			// The list of default values
 			$this->_defaults = array();
@@ -106,6 +107,40 @@
 			$this->registerFilter( 'lower', 'strtolower' );
 			$this->registerFilter( 'upper', 'strtoupper' );
 
+		}
+
+		/**
+		 *	This function will set the HTML that is added before and after the element label to indicate that the 
+		 *	element is required. This only has affect if you use the default toHtml function.
+		 *
+		 *	@param $start	The HTML that should be added before the label.
+		 *	@param $end		The HTML that should be added after the label.
+		 */
+		function setHtmlRequired( $start, $end ) {
+			$this->_htmlRequiredStart = $start;
+			$this->_htmlRequiredEnd = $end;
+		}
+
+		/**
+		 *	This function will set the HTML that is added before and after the element label to indicate that the 
+		 *	element has an errir. This only has affect if you use the default toHtml function.
+		 *
+		 *	@param $start	The HTML that should be added before the label.
+		 *	@param $end		The HTML that should be added after the label.
+		 */
+		function setHtmlError( $start, $end ) {
+			$this->_htmlErrorStart = $start;
+			$this->_htmlErrorEnd = $end;
+		}
+
+		/**
+		 *	This function will set the text that will be added at the top of the form to indicate that there are
+		 *	required items.
+		 *
+		 *	@param $text	The text to show.
+		 */
+		function setRequiredNote( $text ) {
+			$this->_requiredNote = 'text';
 		}
 
 		/**
@@ -517,11 +552,12 @@
 			// Add the list of attributes
 			$attribs = array(
 				'name'		=> $this->_name, 'id'		=> $this->_name, 'method' => strtoupper( $this->_method ),
-				'action'	=> $this->_action, 'target'	=> $this->_target,
+				'action'	=> $this->_action, 'target'	=> $this->_target
 			);
 			$attribs = array_merge( $this->_attributes, $attribs );
 			$form['attribs'] = $this->_convertToHtmlAttrib( $attribs );
 			$form['tag'] = '<form' . $form['attribs'] . '>';
+			$form['requirednote'] = $this->_requiredNote;
 
 			// Add the errors
 			$form['errors'] = $this->_errors;
@@ -583,6 +619,18 @@
 			unset( $form['attribs'] );
 			unset( $form['tag'] );
 			unset( $form['errors'] );
+			unset( $form['requirednote'] );
+
+			// Add the required note if there are required items
+			if ( ! empty( $this->_requiredNote ) ) {
+				$reqCount = 0;
+				foreach ( $form as $name=>$element ) {
+					if ( $element['required'] ) { $reqCount++; };
+				}
+				if ( $reqCount > 0 ) {
+					$html .= '<p>' . $this->_requiredNote . '</p>';
+				}
+			}
 
 			// Add the elements
 			foreach ( $form as $name=>$element ) {

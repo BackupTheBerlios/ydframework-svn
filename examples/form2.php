@@ -67,7 +67,6 @@
 			} else {
 				$form->display();
 			}
-			YDDebugUtil::dump( $form->toArray(), '$form as array' );
 
 			// Create the form
 			$form2 = new YDForm( 'form2' );

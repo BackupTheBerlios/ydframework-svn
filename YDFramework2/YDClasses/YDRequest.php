@@ -248,6 +248,8 @@
 		 */
 		function actionDefault() {
 			echo( 'action: actionDefault' );
+			echo( "\n" );
+			echo( 'You need to override this function to have the default action do something.' );
 		}
 
 		/**

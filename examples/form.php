@@ -17,7 +17,7 @@
 		}
 
 		// Default action
-		function action() {
+		function actionDefault() {
 
 			// Set the title of the form
 			$this->setVar( 'title', 'Sample form' );
