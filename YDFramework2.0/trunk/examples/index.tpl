@@ -492,6 +492,14 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=cache/subdir/index.tpl">cache/subdir/index.tpl</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="stringutil.php">StringUtil class</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}

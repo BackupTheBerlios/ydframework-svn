@@ -163,7 +163,7 @@
         <para>The YDObjectUtil module provides you with some class and object related static functions. The following functions are available:</para>
 
         <itemizedlist spacing="compact">
-            <listitem><emphasis role="bold">isSubClass:</emphasis> This function will check if the specified object is subclassed from the specified class name or is an instance of the specified classgetAncestors.</listitem>
+            <listitem><emphasis role="bold">isSubClass:</emphasis> This function will check if the specified object is subclassed from the specified class name or is an instance of the specified class.</listitem>
             <listitem><emphasis role="bold">getAncestors:</emphasis> This function will list you the parent classes of a specific class.</listitem>
             <listitem><emphasis role="bold">failOnMissingMethod:</emphasis> This function will raise a fatal exception if the specified object doens't contain the specified function.</listitem>
             <listitem><emphasis role="bold">serialize:</emphasis> This function returns a gzipped stream containing a byte-stream representation of an object that can be stored anywhere.</listitem>
@@ -221,6 +221,90 @@
 
         <para>Additionally, as you can see, newlines are converted to <![CDATA[<br />]]> tags. The class will also converted non ascii characters to HTML entities.</para>
 
+    </sect1>
+
+    <sect1 id="ydother_ydstringutil">
+
+        <title>YDStringUtil</title>
+
+        <para>The YDStringUtil houses different functions related to string processing. The following methods are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">formatFilesize:</emphasis> This function will format a filesize to the most appropriate unit. The following units are recognized:
+                <itemizedlist spacing="compact">
+                    <listitem>bytes</listitem>
+                    <listitem>KB (kilobyte)</listitem>
+                    <listitem>MB (megabyte)</listitem>
+                    <listitem>GB (gigabyte)</listitem>
+                    <listitem>TB (terabyte)</listitem>
+                    <listitem>PB (petabyte)</listitem>
+                    <listitem>EB (exabyte)</listitem>
+                </itemizedlist>
+            </listitem>
+            <listitem><emphasis role="bold">encodeString:</emphasis> This function will encode all characters which have an ordinal bigger than 128 to numeric HTML entities, which can be safely included in e.g. XML output.</listitem>
+            <listitem><emphasis role="bold">truncate:</emphasis> This function will truncate a string. It allows you to specify the maximum number of charaters, the text to add if the item needs to be truncated and an indicating if splitting in the middle of a word is allowed or not.</listitem>
+            <listitem><emphasis role="bold">normalizeNewlines:</emphasis> This function normalizes all the newlines to the correct newline character for the current platform.</listitem>
+            <listitem><emphasis role="bold">removeWhiteSpace:</emphasis> This function will remove all newlines and all spaces at the beginning and end of each line.</listitem>
+        </itemizedlist>
+
+        <para>The following code example indicates how the different functions can be used:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+
+    // Class definition
+    class stringutil extends YDRequest {
+
+        // Class constructor
+        function stringutil() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Test the formatting of filesizes
+            $filesizes = array(
+                '1152921504606846977', '1125899906842625', '1099511627777', '75715455455', '1048577', '6543', '42'
+            );
+
+            // Format the filesizes
+            foreach ( $filesizes as $filesize ) {
+                YDDebugUtil::dump( YDStringUtil::formatFileSize( $filesize ), 'Formatting filesize: ' . $filesize );
+            }
+
+            // Test the encode string function
+            $string = 'Pieter Claerhout @ creo.com "générales obsolète"';
+            YDDebugUtil::dump( YDStringUtil::encodeString( $string ), 'Encoding: ' . $string );
+
+            // Test the truncate function
+            YDDebugUtil::dump( YDStringUtil::truncate( $string ), 'Truncate (default): ' . $string );
+            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20 ), 'Truncate (20): ' . $string );
+            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20, ' [more]' ), 'Truncate (20/more): ' . $string );
+            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20, ' [more]', true ), 'Truncate (20/more/true): ' . $string );
+
+            // Test the normalizing of newlines
+            $string = "line1\nline2\rline3\r\nline4";
+            YDDebugUtil::dump( explode( "\n", $string ), 'Original string' );
+            YDDebugUtil::dump( explode( YD_CRLF, YDStringUtil::normalizeNewlines( $string ) ), 'normalizeNewlines' );
+
+            // Test the normalizing of newlines
+            $string = "  line1  \n  line2  \r  line3  \r\n  line4  ";
+            YDDebugUtil::dump( YDStringUtil::removeWhiteSpace( $string ), 'removeWhiteSpace' );
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
     </sect1>
 
 </chapter>

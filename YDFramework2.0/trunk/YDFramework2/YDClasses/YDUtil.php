@@ -415,21 +415,28 @@
 		 */
 		function formatFilesize( $bytes, $decimals=1 ) {
 
-			$bytes = intval( $bytes );
+			// Convert the bytes to a string
+			$bytes = strval( $bytes );
 
 			// The different units
 			$units = array(
-			  '1152921504606846976' => 'EB', '1125899906842624' => 'PB', '1099511627776' => 'TB', '1073741824' => 'GB',
-			  '1048576' => 'MB', '1024' => 'KB'
+				'1152921504606846976'	=> 'EB',
+				'1125899906842624'		=> 'PB',
+				'1099511627776'			=> 'TB',
+				'1073741824'			=> 'GB',
+				'1048576'				=> 'MB',
+				'1024'					=> 'KB'
 			);
 
-			// Smaller than 1 KB, so return bytes
-			if ( $bytes <= 1024 ) { return number_format( $bytes / 1024, $decimals, '.', '' ) . ' KB'; }
+			// If smaller than 1024, return it as bytes
+			if ( $bytes <= 1024 ) {
+				return $bytes . ' bytes';
+			}
 
-			// Loop over the remaining possibilities
-			foreach ( $units as $base => $title ) {
+			// Check the right format
+			foreach ( $units as $base=>$title ) {
 				if ( floor( $bytes / $base ) != 0 ) {
-					return number_format( $bytes / $base, $decimals, '.', '' ) . ' ' . $title;
+					return number_format( $bytes / $base, $decimals, '.', "'" ) . ' ' . $title;
 				}
 			}
 
@@ -447,19 +454,6 @@
 		 *	@static
 		 */
 		function encodeString( $string, $htmlent=false ) {
-			/*
-			$encoded = '';
-			for ( $i=0; $i < strlen( $string ); $i++ ) {
-				$j = substr( $string, $i, 1 );
-				$jOrd = ord( $j );
-				if ( $jOrd > 128 ) {
-					$encoded .= '&#' . $jOrd . ';';
-				} elseif ( $jOrd == 0 ) {
-					$encoded .= ' ';
-				} else {
-					$encoded .= $j;
-				}
-			}*/
 			$trans = get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES );
 			foreach ( $trans as $key => $value ) {
 				if ( ord( $key ) == 60 || ord( $key ) == 62 ) {
@@ -497,6 +491,51 @@
 			} else {
 				return $string;
 			}
+		}
+
+		/**
+		 *	This function normalizes all the newlines to the correct newline character for the current platform.
+		 *
+		 *	@param $string		String to normalize the newlines from.
+		 *
+		 *	@returns	The original string with normalized newlines.
+		 *
+		 *	@static
+		 */
+		function normalizeNewlines( $string ) {
+
+			// First, change all to \n
+			$string = str_replace( "\r\n", "\n",    $string );
+			$string = str_replace( "\r",   "\n",    $string );
+
+			// Now, change everything to the correct one
+			$string = str_replace( "\n",   YD_CRLF, $string );
+
+			// Return the changed string
+			return $string;
+
+		}
+
+		/**
+		 *	This function will remove all newlines and all spaces at the beginning and end of each line.
+		 *
+		 *	@param $string		String to remove the whitespace from.
+		 *
+		 *	@returns	The original string without the newlines and spaces at the beginning and end of each line.
+		 *
+		 *	@static
+		 */
+		function removeWhiteSpace( $string ) {
+
+			// First, normalize the newlines
+			$string = YDStringUtil::normalizeNewLines( $string );
+
+			// Now, remove the whitespace
+			$string = implode( ' ', array_map( 'trim', explode( YD_CRLF, $string ) ) );
+
+			// Return the changed string
+			return $string;
+
 		}
 
 	}

@@ -36,6 +36,10 @@
             <listitem>Added the delete and setContents functions to the YDFSFile and YDFSDirectory classes</listitem>
             <listitem>Removed the deprecated YDTemplate::assignObject function. You should use YDTemplate::assign instead.</listitem>
             <listitem>Renamed the constants in the YDEmail class so that they start with "YD_" instead of with "YD".</listitem>
+            <listitem>Fixed a number of bugs in the YDStringUtil::formatFilesize function</listitem>
+            <listitem>Added: YDStringUtil::normalizeNewlines</listitem>
+            <listitem>Added: YDStringUtil::removeWhiteSpace</listitem>
+            <listitem>Documented the YDStringUtil class</listitem>
             <listitem>TODO: Remove the YDFileSystem::toArray functions.</listitem>
             <listitem>TODO: Remove the YDBase::toArray functions.</listitem>
             <listitem>TODO: Add the date rule to check dates.</listitem>
