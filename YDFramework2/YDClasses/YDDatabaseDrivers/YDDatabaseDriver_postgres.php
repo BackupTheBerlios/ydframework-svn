@@ -22,7 +22,7 @@
 		 *	@param $pass	(optional) Password to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
-		 *	@param $options	(optional) Options to pass to the driver.
+		 *	@param $options	(optional) Options to pass to the driver (associative array).
 		 */
 		function YDDatabaseDriver_postgres( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
@@ -42,9 +42,15 @@
 		 */
 		function connect() {
 			if ( $this->_conn == null ) {
-				//$attribs = $this->_options;
-				//$attribs[
-				$conn = @sqlite_open( $this->_db, 0666, $error );
+				$attribs = $this->_options;
+				$attribs['dbname'] = $this->_db;
+				$attribs['user'] = $this->_user;
+				$attribs['password'] = $this->_password;
+				$attribs['host'] = $this->_host;
+				$connstr = array();
+				foreach ( $attribs as $key=>$value ) { array_push( $connstr, $key . '=' . $value ); }
+				$connstr = implode( ' ', $connstr );
+				$conn = @pg_open( $connstr );
 				if ( ! $conn ) { YDFatalError( $error ); }
 				$this->_conn = $conn;
 			}
