@@ -50,7 +50,7 @@
 				} elseif ( preg_match( '/Opera ([0-9].[0-9]{1,2})/', $this->_agent, $ver ) ) {
 					$this->_version = $ver[1];
 					$this->_browser = 'opera';
-				} elseif ( preg_match( '/Mozilla/([0-9].[0-9]{1,2})/', $this->_agent, $ver ) ) {
+				} elseif ( preg_match( '/Mozilla\/([0-9].[0-9]{1,2})/', $this->_agent, $ver ) ) {
 					$this->_version = $ver[1];
 					$this->_browser = 'mozilla';
 				} else {
