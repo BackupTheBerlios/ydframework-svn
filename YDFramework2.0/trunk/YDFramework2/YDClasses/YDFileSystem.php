@@ -9,6 +9,9 @@
 
 	/**
 	 *  This class defines a filesystem file.
+	 *
+	 *	@todo
+	 *		Override the toArray function.
 	 */
 	class YDFSFile extends YDBase {
 
@@ -207,6 +210,9 @@
 
 	/**
 	 *	This class defines an image file.
+	 *
+	 *	@todo
+	 *		Override the toArray function.
 	 */
 	class YDFSImage extends YDFSFile {
 
@@ -519,10 +525,6 @@
 				}
 			}
 
-			// Sort the list of files
-			ksort( $fileList );
-			$fileList = array_values( $fileList );
-
 			// Return a simple list if needed
 			if ( $class === '' ) {
 				return $fileList;
@@ -544,8 +546,12 @@
 						}
 					}
 				}
-				array_push( $fileList2, $fileObj );
+				$fileList2[ strtolower( $file ) ] = $fileObj;
 			}
+
+			// Sort the list of files
+			ksort( $fileList2 );
+			$fileList2 = array_values( $fileList2 );
 
 			// Remove the unsupported classes
 			if ( sizeof( $classes ) == 0 ) {
