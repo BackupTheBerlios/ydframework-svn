@@ -35,6 +35,7 @@ class phpthumb {
 	var $config_error_textcolor              = 'FF0000';
 	var $config_error_fontsize               = 1;
 	var $config_error_die_on_error           = true;
+	var $config_error_silent_die_on_error    = false;
 
 	// * Anti-Hotlink Configuration:
 	var $config_nohotlink_enabled            = true;
@@ -136,7 +137,7 @@ class phpthumb {
 	var $cache_filename         = null;
 	var $RemoveFileOnCompletion = false;
 
-	var $phpthumb_version = '1.4.10-200408221403';
+	var $phpthumb_version = '1.4.11-200410111029';
 	var $iswindows = null;
 	var $osslash   = null;
 
@@ -529,13 +530,14 @@ class phpthumb {
 
 
 	function ImageMagickVersion() {
+		$which_convert = phpthumb_functions::SafeBackTick('which convert');
 		if (file_exists($this->config_imagemagick_path)) {
 			if ($this->iswindows) {
 				$commandline = substr($this->config_imagemagick_path, 0, 2).' && cd "'.substr(dirname($this->config_imagemagick_path), 2).'" && '.basename($this->config_imagemagick_path);
 			} else {
 				$commandline = '"'.$this->config_imagemagick_path.'"';
 			}
-		} elseif (phpthumb_functions::SafeBackTick('which convert')) {
+		} elseif ($which_convert && !eregi('^sh: convert: not found', $which_convert)) {
 			$commandline = 'convert';
 		} else {
 			$this->DebugMessage('Cannot find "convert'.(($this->iswindows) ? '.exe' : '').'" '.(($this->iswindows) ? '' : 'in path or ').'as specified in config_imagemagick_path ('.$this->config_imagemagick_path.')', __FILE__, __LINE__);
@@ -561,14 +563,23 @@ class phpthumb {
 			// ImageMagickThumbnailToGD() depends on ImageCreateFromPNG()
 			return false;
 		}
+
+		$which_convert = phpthumb_functions::SafeBackTick('which convert');
 		if (file_exists($this->config_imagemagick_path)) {
+
 			if ($this->iswindows) {
 				$commandline = substr($this->config_imagemagick_path, 0, 2).' && cd "'.substr(dirname($this->config_imagemagick_path), 2).'" && '.basename($this->config_imagemagick_path);
 			} else {
 				$commandline = '"'.$this->config_imagemagick_path.'"';
 			}
-		} elseif (phpthumb_functions::SafeBackTick('which convert')) {
+
+		} elseif ($which_convert && file_exists($which_convert)) {
+
+			// `which convert` *should* return the path if "convert" exist, or nothing if it doesn't
+			// other things *may* get returned, like "sh: config: not found" or "no convert in /usr/local/bin /usr/sbin /usr/bin /usr/ccs/bin"
+			// so only do this if the value returned exists as a file
 			$commandline = 'convert';
+
 		}
 		if (!empty($commandline)) {
 			if ($IMtempfilename = $this->phpThumb_tempnam()) {
@@ -580,7 +591,8 @@ class phpthumb {
 					$IMwidth  = min($IMwidth,  $getimagesize[0]);
 					$IMheight = min($IMheight, $getimagesize[1]);
 				}
-				$commandline .= ' -resize '.$IMwidth.'x'.$IMheight;
+				//$commandline .= ' -resize '.$IMwidth.'x'.$IMheight; // behaves badly with IM v5.3.x
+				$commandline .= ' -geometry '.$IMwidth.'x'.$IMheight;
 				if (!empty($this->iar) && (intval($this->w) > 0) && (intval($this->h) > 0)) {
 					$commandline .= '!';
 				}
@@ -592,7 +604,7 @@ class phpthumb {
 				if (!empty($IMresult)) {
 					return $this->ErrorImage('ImageMagick was called as:'."\n".$commandline."\n\n".'but failed with message:'."\n".$IMresult);
 				} else {
-					if ($this->gdimg_source = ImageCreateFromPNG($IMtempfilename)) {
+					if ($this->gdimg_source = @ImageCreateFromPNG($IMtempfilename)) {
 						unlink($IMtempfilename);
 						$this->source_width  = ImageSX($this->gdimg_source);
 						$this->source_height = ImageSY($this->gdimg_source);
@@ -1075,14 +1087,16 @@ class phpthumb {
 
 	function CalculateThumbnailDimensions() {
 
-		$this->thumbnailCropX = (!empty($this->sx) ? $this->sx : 0);
-		$this->thumbnailCropY = (!empty($this->sy) ? $this->sy : 0);
-		$this->thumbnailCropW = (!empty($this->sw) ? $this->sw : $this->source_width);
-		$this->thumbnailCropH = (!empty($this->sh) ? $this->sh : $this->source_height);
+		$this->thumbnailCropX = (!empty($this->sx) ? (($this->sx >= 1) ? $this->sx : round($this->sx * $this->source_width))  : 0);
+		$this->thumbnailCropY = (!empty($this->sy) ? (($this->sy >= 1) ? $this->sy : round($this->sy * $this->source_height)) : 0);
+		$this->thumbnailCropW = (!empty($this->sw) ? (($this->sw >= 1) ? $this->sw : round($this->sw * $this->source_width))  : $this->source_width);
+		$this->thumbnailCropH = (!empty($this->sh) ? (($this->sh >= 1) ? $this->sh : round($this->sh * $this->source_height)) : $this->source_height);
 
 		// limit source area to original image area
-		$this->thumbnailCropW = min($this->thumbnailCropW, $this->source_width  - $this->thumbnailCropX);
-		$this->thumbnailCropH = min($this->thumbnailCropH, $this->source_height - $this->thumbnailCropY);
+		$this->thumbnailCropW = max(1, min($this->thumbnailCropW, $this->source_width  - $this->thumbnailCropX));
+		$this->thumbnailCropH = max(1, min($this->thumbnailCropH, $this->source_height - $this->thumbnailCropY));
+
+		$this->DebugMessage('CalculateThumbnailDimensions() [x,y,w,h] initially set to ['.$this->thumbnailCropX.','.$this->thumbnailCropY.','.$this->thumbnailCropW.','.$this->thumbnailCropH.']', __FILE__, __LINE__);
 
 		if (!empty($this->iar) && !empty($this->w) && !empty($this->h)) {
 
@@ -1218,7 +1232,7 @@ class phpthumb {
 
 			} elseif (!function_exists('exif_thumbnail')) {
 
-				$this->DebugMessage('exif_thumbnail() does not exis, cannot extract EXIF thumbnail', __FILE__, __LINE__);
+				$this->DebugMessage('exif_thumbnail() does not exist, cannot extract EXIF thumbnail', __FILE__, __LINE__);
 
 			} else {
 
@@ -1398,26 +1412,38 @@ class phpthumb {
 				}
 			}
 
-			if ((@$this->getimagesizeinfo[2] == 1) && function_exists('ImageCreateFromGIF')) {
-				$ImageCreateWasAttempted = true;
-				$this->gdimg_source = @ImageCreateFromGIF($this->sourceFilename);
-			} elseif ((@$this->getimagesizeinfo[2] == 2) && function_exists('ImageCreateFromJPEG')) {
-				$ImageCreateWasAttempted = true;
-				$this->gdimg_source = @ImageCreateFromJPEG($this->sourceFilename);
-			} elseif ((@$this->getimagesizeinfo[2] == 3) && function_exists('ImageCreateFromPNG')) {
-				$ImageCreateWasAttempted = true;
-				$this->gdimg_source = @ImageCreateFromPNG($this->sourceFilename);
-			} elseif ((@$this->getimagesizeinfo[2] == 15) && function_exists('ImageCreateFromWBMP')) {
-				$ImageCreateWasAttempted = true;
-				$this->gdimg_source = @ImageCreateFromWBMP($this->sourceFilename);
-			}
+			$ImageCreateFromFunction = array(
+				1  => 'ImageCreateFromGIF',
+				2  => 'ImageCreateFromJPEG',
+				3  => 'ImageCreateFromPNG',
+				15 => 'ImageCreateFromWBMP',
+			);
+			switch (@$this->getimagesizeinfo[2]) {
+				case 1:  // GIF
+				case 2:  // JPEG
+				case 3:  // PNG
+				case 15: // WBMP
+					$ImageCreateFromFunctionName = $ImageCreateFromFunction[$this->getimagesizeinfo[2]];
+					if (function_exists($ImageCreateFromFunctionName)) {
+						$this->DebugMessage('Calling '.$ImageCreateFromFunctionName.'('.$this->sourceFilename.')', __FILE__, __LINE__);
+						$ImageCreateWasAttempted = true;
+						$this->gdimg_source = @$ImageCreateFromFunctionName($this->sourceFilename);
+					} else {
+						$this->DebugMessage('NOT calling '.$ImageCreateFromFunctionName.'('.$this->sourceFilename.') because !function_exists('.$ImageCreateFromFunctionName.')', __FILE__, __LINE__);
+					}
+					break;
 
+				default:
+					$this->DebugMessage('Unknown value for $this->getimagesizeinfo[2]: "'.@$this->getimagesizeinfo[2].'"', __FILE__, __LINE__);
+					break;
+			}
 			if (empty($this->gdimg_source)) {
-				if ($ImageCreateWasAttempted) {
-					$this->DebugMessage('ImageCreateFrom***() was attempted (format = '.$this->getimagesizeinfo[2].' but FAILED', __FILE__, __LINE__);
-				}
 				// cannot create from filename, attempt to create source image with ImageCreateFromString, if possible
+				if ($ImageCreateWasAttempted) {
+					$this->DebugMessage(@$ImageCreateFromFunctionName.'() was attempted but FAILED', __FILE__, __LINE__);
+				}
 				if (empty($this->rawImageData)) {
+					$this->DebugMessage('Populating $this->rawImageData and attempting ImageCreateFromStringReplacement()', __FILE__, __LINE__);
 					if ($fp = @fopen($this->sourceFilename, 'rb')) {
 
 						$this->rawImageData = '';
@@ -1438,6 +1464,8 @@ class phpthumb {
 			}
 
 			if (empty($this->gdimg_source)) {
+				$this->DebugMessage('$this->gdimg_source is still empty', __FILE__, __LINE__);
+
 				if ($this->ImageMagickThumbnailToGD()) {
 
 					// excellent, we have a thumbnailed source image
@@ -1447,6 +1475,7 @@ class phpthumb {
 
 					// cannot create image for whatever reason (maybe ImageCreateFromJPEG et al are not available?)
 					// and ImageMagick is not available either, no choice but to output original (not resized/modified) data and exit
+
 					$imageHeader = '';
 					switch (substr($this->rawImageData, 0, 3)) {
 						case 'GIF':
@@ -1459,7 +1488,9 @@ class phpthumb {
 							$imageHeader = 'Content-type: image/png';
 							break;
 					}
-					if (!empty($imageHeader)) {
+					if ($imageHeader) {
+						$this->DebugMessage('All attempts to create GD image source failed, outputing raw image', __FILE__, __LINE__);
+
 						header($imageHeader);
 						echo $this->rawImageData;
 						exit;
@@ -1659,6 +1690,9 @@ class phpthumb {
 		$this->DebugMessage($text);
 		if (!$this->config_error_die_on_error) {
 			return false;
+		}
+		if ($this->config_error_silent_die_on_error) {
+			exit;
 		}
 		if (!empty($this->err) || !empty($this->config_error_message_image_default)) {
 			// Show generic custom error image instead of error message

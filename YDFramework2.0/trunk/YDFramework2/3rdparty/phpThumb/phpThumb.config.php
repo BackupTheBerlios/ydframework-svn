@@ -70,7 +70,7 @@ if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=')
 // attempt to detect ImageMagick's presence with `which`
 if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 	// Windows: set absolute pathname
-	$PHPTHUMB_CONFIG['imagemagick_path'] = 'c:\\Program Files\\ImageMagick-5.5.7-Q8\\convert.exe';
+	$PHPTHUMB_CONFIG['imagemagick_path'] = 'C:\\Program Files\\ImageMagick-6.0.6-Q16\\convert.exe';
 } else {
 	// *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path
 	//$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
@@ -89,6 +89,8 @@ $PHPTHUMB_CONFIG['error_message_image_default'] = '';       // Set this to the n
 $PHPTHUMB_CONFIG['error_bgcolor']               = 'CCCCFF'; // background color of error message images
 $PHPTHUMB_CONFIG['error_textcolor']             = 'FF0000'; // color of text in error messages
 $PHPTHUMB_CONFIG['error_fontsize']              = 1;        // size of text in error messages, from 1 (smallest) to 5 (largest)
+$PHPTHUMB_CONFIG['error_die_on_error']          = true;     // die with error message on any fatal error (recommended with standalone phpThumb.php)
+$PHPTHUMB_CONFIG['error_silent_die_on_error']   = false;    // simply die with no output of any kind on fatal errors (not recommended)
 
 // * Anti-Hotlink Configuration:
 $PHPTHUMB_CONFIG['nohotlink_enabled']       = true;                                   // If false will allow thumbnailing from any source domain
@@ -116,7 +118,8 @@ $PHPTHUMB_CONFIG['disable_debug'] = false; // Prevent phpThumbDebug for displayi
 // phpThumb() depends on $_SERVER['DOCUMENT_ROOT'] to resolve path/filenames. This value is almost always correct,
 // but has been known to be broken on rare occasion. This value allows you to override the default value.
 // Do not modify from the default value of $_SERVER['DOCUMENT_ROOT'] unless you are having problems.
-$PHPTHUMB_CONFIG['document_root'] = $_SERVER['DOCUMENT_ROOT'];
+//$PHPTHUMB_CONFIG['document_root'] = '/home/httpd/httpdocs';
+$PHPTHUMB_CONFIG['document_root'] = (@$_SERVER['DOCUMENT_ROOT'] ? $_SERVER['DOCUMENT_ROOT'] : str_replace(dirname(@$_SERVER['PHP_SELF']), '', realpath('.')));
 
 // END USER CONFIGURATION SECTION
 

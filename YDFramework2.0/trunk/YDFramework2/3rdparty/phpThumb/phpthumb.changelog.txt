@@ -3,6 +3,17 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.11 - October 11, 2004
+  * Changed sx/sy/sw/sh parameters to allow decimal values
+    (>0 but <1) to represent percent of source image
+    (thanks mordorØdefault*co*yu)
+  * Added config_error_silent_die_on_error for no-output
+    die on fatal errors (thanks johannesØformformat*se)
+  * Bugfix: Check `which convert` failing with error
+    message (thanks chadØchadshome*com)
+  * Bugfix: Image cropping to invalid areas outside source
+    image caused text output (thanks mordorØdefault*co*yu)
+
 v1.4.10 - August 22, 2004
   * Bugfix: cached files not written in most cases
     (thanks kizerØcourtkizer*com, snuffØinbox*ru)
