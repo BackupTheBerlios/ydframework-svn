@@ -27,6 +27,9 @@
 			// Output the template
 			YDDebugUtil::dump( $data );
 
+			// Test string escaping
+			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
+
 		}
 
 	}

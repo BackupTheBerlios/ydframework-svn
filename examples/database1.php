@@ -32,6 +32,9 @@
 			// Output the template
 			$this->outputTemplate();
 
+			// Test string escaping
+			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
+
 		}
 
 	}

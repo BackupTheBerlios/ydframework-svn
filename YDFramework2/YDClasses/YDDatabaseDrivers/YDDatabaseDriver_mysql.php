@@ -75,8 +75,20 @@
 		 */
 		function close() {
 			if ( $this->_conn != null ) {
+				$this->_conn = null;
 				@mysql_close( $this->_conn );
 			}
+		}
+
+		/**
+		 *	This function will escape a string so that it's safe to include it in an SQL statement.
+		 *
+		 *	@param $string	The string to escape.
+		 *
+		 *	@returns	The escaped string.
+		 */
+		function string( $string ) {
+			return mysql_escape_string( $string );
 		}
 
 	}
