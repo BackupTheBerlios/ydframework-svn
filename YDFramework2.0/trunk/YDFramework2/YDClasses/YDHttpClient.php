@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'HttpClient.class.php' );
+	YDInclude( 'HttpClient.class.php' );
 
 	/**
 	 *	This is the YDHttpClient class. It extends the HttpClient class and adds support for specifying the content

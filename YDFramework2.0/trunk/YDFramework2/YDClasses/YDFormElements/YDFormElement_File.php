@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDForm.php' );
+	YDInclude( 'YDForm.php' );
 
 	/**
 	 *	This is the class that define a file upload form element.

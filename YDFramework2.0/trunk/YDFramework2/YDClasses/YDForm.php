@@ -229,7 +229,7 @@
 
 			// Include the element file
 			if ( ! empty( $this->_regElements[ $type ]['file'] ) ) {
-				require_once( $this->_regElements[ $type ]['file'] );
+				YDInclude( $this->_regElements[ $type ]['file'] );
 			}
 
 			// Check if the class exists
@@ -330,7 +330,7 @@
 
 			// Include the filter file
 			if ( ! empty( $this->_regFilters[ $filter ]['file'] ) ) {
-				require_once( $this->_regFilters[ $filter ]['file'] );
+				YDInclude( $this->_regFilters[ $filter ]['file'] );
 			}
 
 			// Initialize the element
@@ -358,7 +358,7 @@
 
 			// Include the rule file
 			if ( ! empty( $this->_regRules[ $rule ]['file'] ) ) {
-				require_once( $this->_regRules[ $rule ]['file'] );
+				YDInclude( $this->_regRules[ $rule ]['file'] );
 			}
 
 			// Initialize the element

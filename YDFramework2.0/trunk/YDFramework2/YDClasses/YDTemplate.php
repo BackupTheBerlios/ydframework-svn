@@ -7,8 +7,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDRequest.php' );
-	require_once( YD_DIR_3RDP . '/class.template/src/class.template.php' );
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'class.template/src/class.template.php' );
 
 	define( 'YD_TPL_CACHEEXT', '.phc' );
 	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );

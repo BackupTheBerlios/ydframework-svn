@@ -377,7 +377,7 @@
 			}
 
 			// Include phpThumb
-			require_once( 'phpThumb/phpthumb.class.php' );
+			YDInclude( 'phpThumb/phpthumb.class.php' );
 
 			// Create a new thumbnail object
 			$thumb = new phpThumb();

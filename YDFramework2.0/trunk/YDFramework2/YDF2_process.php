@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDExecutor.php' );
+	YDInclude( 'YDExecutor.php' );
 
 	// Get the name of the executor class
 	$clsName = YD_EXECUTOR;

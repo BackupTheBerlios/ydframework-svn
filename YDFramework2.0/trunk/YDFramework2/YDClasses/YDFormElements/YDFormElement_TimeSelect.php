@@ -7,8 +7,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDForm.php' );
-	require_once( 'YDFormElements/YDFormElement_Select.php' );
+	YDInclude( 'YDForm.php' );
+	YDInclude( 'YDFormElements/YDFormElement_Select.php' );
 
 	/**
 	 *	This is the class that define a time select form element.

@@ -62,7 +62,7 @@
 
 			// Include the driver
 			if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
-				require_once( $regDrivers[ strtolower( $driver ) ]['file'] );
+				YDInclude( $regDrivers[ strtolower( $driver ) ]['file'] );
 			}
 
 			// Check if the driver is supported

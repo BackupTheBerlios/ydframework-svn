@@ -6,9 +6,10 @@
 	if ( ! defined( 'YD_FW_NAME' ) ) {
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
-	require_once( 'YDRequest.php' );
-	require_once( 'YDHttpClient.php' );
-	require_once( 'IXR_Library.inc.php' );
+
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDHttpClient.php' );
+	YDInclude( 'IXR_Library.inc.php' );
 
 	/**
 	 *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support 
@@ -304,7 +305,7 @@
 			}
 
 			// Create a new template
-			require_once( 'YDTemplate.php' );
+			YDInclude( 'YDTemplate.php' );
 			$template = new YDTemplate();
 			$template->template_dir = dirname( __FILE__ );
 			$template->assign( 'methods', $methods );

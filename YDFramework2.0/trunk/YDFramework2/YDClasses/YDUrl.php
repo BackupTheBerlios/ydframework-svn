@@ -183,7 +183,7 @@
 			if ( $cache == true ) {
 				
 				// Include the filesystem library
-				require_once( 'YDFileSystem.php' );
+				YDInclude( 'YDFileSystem.php' );
 
 				// Check if we need to use the HTTP HEAD function
 				if ( YD_HTTP_CACHE_USEHEAD == 1 ) {
@@ -321,7 +321,7 @@
 		 *	@returns	A new HttpClient class instance.
 		 */
 		function _getHttpClient() {
-			require_once( 'YDHttpClient.php' );
+			YDInclude( 'YDHttpClient.php' );
 			if ( $this->getScheme() != 'http' ) {
 				trigger_error( 'getContents: Only HTTP URLs are supported.', YD_ERROR );
 			}

@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDForm.php' );
+	YDInclude( 'YDForm.php' );
 
 	/**
 	 *	This is the class that define a textarea form element that has support for a toolbar which can insert BBCode

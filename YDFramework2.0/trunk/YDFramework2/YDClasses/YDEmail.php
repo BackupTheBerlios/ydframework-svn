@@ -7,8 +7,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDFileSystem.php' );
-	require_once( 'htmlMimeMail/htmlMimeMail.php' );
+	YDInclude( 'YDFileSystem.php' );
+	YDInclude( 'htmlMimeMail/htmlMimeMail.php' );
 
 	/**
 	 *	This class defines an email message.
