@@ -205,17 +205,13 @@
 			if ( ! isset( $this->strings ) ) {
 
 				// Include the language file
-				require_once( 'skins/' . $this->config['site_skin'] . '/strings_' . $this->language  . '.php' );
+				@include( 'skins/' . $this->config['site_skin'] . '/strings_' . $this->language  . '.php' );
 
 				// Start with no strings
 				$this->strings = array();
-
-				// Load all the strings
-				foreach ( $GLOBALS as $key=>$val ) {
-					if ( strncmp( $key, 't_', 2 ) >= 0 ) { 
-						$this->strings[ $key ] = $val;
-						$this->setVar( $key, $val );
-					}
+				if ( isset( $GLOBALS['translations'] ) ) {
+					$this->strings = $GLOBALS['translations'];
+					$this->template->_vars = array_merge( $this->template->_vars, $GLOBALS['translations'] );
 				}
 
 			}
@@ -287,7 +283,7 @@
 			// Add the urls to the items
 			foreach ( $this->items1 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
-					$this->items1[ $key ]['itemurl'] = $this->config['site_home'] . '?id=' . $item['itemalias'];
+					$this->items1[ $key ]['itemurl'] = 'item.php?id=' . $item['itemalias'];
 				}
 			}
 
@@ -419,7 +415,7 @@
 			// Add the missing properties
 			foreach ( $this->items2 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
-					$this->items2[ $key ]['itemurl'] = $this->config['site_home'] . '?id=' . $item['itemalias'];
+					$this->items2[ $key ]['itemurl'] = 'item.php?id=' . $item['itemalias'];
 				}
 			}
 
