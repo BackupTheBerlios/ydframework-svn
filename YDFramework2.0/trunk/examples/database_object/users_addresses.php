@@ -88,7 +88,7 @@
 	YDDebugUtil::dump( $user->getRelationValues( false ) );
 		
 	echo "<p>&nbsp;</p>";
-	echo "<p>Let's do some more complex relations with Users Groups! <a href=\"users_groups.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
+	echo "<p>Let's do some more complex relations with Users Groups! <a href=\"users_groups.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

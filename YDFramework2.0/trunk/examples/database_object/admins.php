@@ -41,7 +41,7 @@
 	echo "If you want to unset a Admin you have to use the User object as it doesn't protect this field.</p>";
 	
 	echo "<p>&nbsp;</p>";
-	echo "<p>Now we are going to define users addressses! <a href=\"users_addresses.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
+	echo "<p>Now we are going to define users addressses! <a href=\"users_addresses.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

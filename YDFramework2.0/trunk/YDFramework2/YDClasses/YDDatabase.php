@@ -28,9 +28,8 @@
 	YDInclude( 'YDUrl.php' );
 	YDInclude( 'YDUtil.php' );
 
-	if ( ! defined( 'YD_DB_DEFAULTPAGESIZE' ) ) {
-		define( 'YD_DB_DEFAULTPAGESIZE', 20 );
-	}
+	// Configure the default for this class
+	YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
 
 	/**
 	 *	This class defines a database object.
@@ -128,11 +127,11 @@
 		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
 		 *						will be the same as the total number of rows in the recordset.
 		 */
-		function YDRecordSet( $records, $page=-1, $pagesize=YD_DB_DEFAULTPAGESIZE ) {
+		function YDRecordSet( $records, $page=-1, $pagesize=null ) {
 
 			// Convert the page and pagesize to integers
 			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
-			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : YD_DB_DEFAULTPAGESIZE;
+			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
 
 			// This original recordset
 			$this->page = ( $page >= 1 ) ? $page : 1;
@@ -140,7 +139,7 @@
 			if ( $page == -1 ) {
 				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $records );
 			} else {
-				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YD_DB_DEFAULTPAGESIZE;
+				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
 			}
 
 			// Get the offset

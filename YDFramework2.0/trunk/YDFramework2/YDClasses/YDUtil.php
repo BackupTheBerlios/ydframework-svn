@@ -219,10 +219,10 @@
 		 */
 		function debug() {
 			$args = func_get_args();
-			if ( YD_DEBUG == 1 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
 				echo( YD_CRLF . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . YD_CRLF );
 			}
-			if ( YD_DEBUG == 2 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 				echo( '<table border="0" cellspacing="0" cellpadding="4"><tr>' );
 				echo( '<td bgcolor="#FFCC00">' );
 				echo( '<b>' . YD_FW_NAME . ' Debug Information</b> ' );
@@ -277,7 +277,7 @@
 		 *	@static
 		 */
 		function stackTrace() {
-			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 				$err = '';
 				$err .= 'URI: ' . YD_SELF_URI . YD_CRLF;
 				$err .= 'Debug backtrace:' . YD_CRLF;

@@ -81,7 +81,7 @@
 	$user->update();
 	
 	echo "<p>&nbsp;</p>";
-	echo "<p>Let's control the Admins now! <a href=\"admins.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
+	echo "<p>Let's control the Admins now! <a href=\"admins.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

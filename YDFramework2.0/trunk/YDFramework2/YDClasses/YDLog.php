@@ -33,38 +33,15 @@
 	@define( 'YD_LOG_WARNING', 2 );
 	@define( 'YD_LOG_ERROR', 1 );
 
-	// Define the log level
-	if ( ! defined( 'YD_LOG_LEVEL' ) ) {
-		define( 'YD_LOG_LEVEL', YD_LOG_INFO );
-	}
-
-	// Define the log file
-	if ( ! defined( 'YD_LOG_FILE' ) ) {
-		define( 'YD_LOG_FILE', YDPath::join( YD_DIR_TEMP, 'YDFramework2_log.xml' ) );
-	}
-
-	// Define the log format (TEXT/XML)
-	if ( ! defined( 'YD_LOG_FORMAT' ) ) {
-		define( 'YD_LOG_FORMAT', 'XML' );
-	}
-
-	// Define the format
-	if ( ! defined( 'YD_LOG_TEXTFORMAT' ) ) {
-		define( 
-			'YD_LOG_TEXTFORMAT',
-			"%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%"
-		);
-	}
-
-	// Define if long lines need to be wrapped or not
-	if ( ! defined( 'YD_LOG_WRAPLINES' ) ) {
-		define( 'YD_LOG_WRAPLINES', false );
-	}
-
-	// Define the maximum line width for a log entry
-	if ( ! defined( 'YD_LOG_MAX_LINESIZE' ) ) {
-		define( 'YD_LOG_MAX_LINESIZE', 100 );
-	}
+	// Configure the default for this class
+	YDConfig::set( 'YD_LOG_LEVEL', YD_LOG_INFO, false );
+	YDConfig::set( 'YD_LOG_FILE', YDPath::join( YD_DIR_TEMP, 'YDFramework2_log.xml' ), false );
+	YDConfig::set( 'YD_LOG_FORMAT', 'XML', false );
+	YDConfig::set(
+		'YD_LOG_TEXTFORMAT', "%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%", false
+	);
+	YDConfig::set( 'YD_LOG_WRAPLINES', false, false );
+	YDConfig::set( 'YD_LOG_MAX_LINESIZE', 100, false );
 
 	/**
 	 *  This class defines the logging static functions.
@@ -79,7 +56,7 @@
 		 *	@static
 		 */
 		function debug( $text ) {
-			if ( YD_LOG_DEBUG <= YD_LOG_LEVEL ) {
+			if ( YD_LOG_DEBUG <= YDConfig::get( 'YD_LOG_LEVEL' ) ) {
 				@YDLog::_log( 'debug', $text );
 			}
 		}
@@ -92,7 +69,7 @@
 		 *	@static
 		 */
 		function info( $text ) {
-			if ( YD_LOG_INFO <= YD_LOG_LEVEL ) {
+			if ( YD_LOG_INFO <= YDConfig::get( 'YD_LOG_LEVEL' ) ) {
 				@YDLog::_log( 'info', $text );
 			}
 		}
@@ -105,7 +82,7 @@
 		 *	@static
 		 */
 		function warning( $text ) {
-			if ( YD_LOG_WARNING <= YD_LOG_LEVEL ) {
+			if ( YD_LOG_WARNING <= YDConfig::get( 'YD_LOG_LEVEL' ) ) {
 				@YDLog::_log( 'warning', $text );
 			}
 		}
@@ -118,7 +95,7 @@
 		 *	@static
 		 */
 		function error( $text ) {
-			if ( YD_LOG_ERROR <= YD_LOG_LEVEL ) {
+			if ( YD_LOG_ERROR <= YDConfig::get( 'YD_LOG_LEVEL' ) ) {
 				@YDLog::_log( 'error', $text );
 			}
 		}
@@ -129,11 +106,8 @@
 		 *	@static
 		 */
 		function clear() {
-
-			// Clear the contents of the logfle
-			$f = fopen( YD_LOG_FILE, 'w' );
+			$f = fopen( YDConfig::get( 'YD_LOG_FILE' ), 'w' );
 			fclose( $f );
-
 		}
 
 		/**
@@ -147,8 +121,8 @@
 		function _log( $level, $text ) {
 
 			// Get the maximum linesize
-			$maxlinesize = ( is_numeric( YD_LOG_MAX_LINESIZE ) ) ? intval( YD_LOG_MAX_LINESIZE ) : 80;
-			$wraplines = ( is_bool( YD_LOG_WRAPLINES ) ) ? YD_LOG_WRAPLINES : false;
+			$maxlinesize = ( is_numeric( YDConfig::get( 'YD_LOG_MAX_LINESIZE' ) ) ) ? intval( YDConfig::get( 'YD_LOG_MAX_LINESIZE' ) ) : 80;
+			$wraplines = ( is_bool( YDConfig::get( 'YD_LOG_WRAPLINES' ) ) ) ? YDConfig::get( 'YD_LOG_WRAPLINES' ) : false;
 
 			// Split the text up in parts if longer than the maximum linesize
 			if ( strlen( $text ) > $maxlinesize && $wraplines ) {
@@ -165,10 +139,10 @@
 			$stack = debug_backtrace();
 
 			// Plain text logfile
-			if ( strtoupper( YD_LOG_FORMAT ) == 'TEXT' ) {
+			if ( strtoupper( YDConfig::get( 'YD_LOG_FORMAT' ) ) == 'TEXT' ) {
 
 				// Get the template
-				$msg = YD_LOG_TEXTFORMAT;
+				$msg = YDConfig::get( 'YD_LOG_TEXTFORMAT' );
 
 				// Fill in the variables
 				$msg = str_replace( '%date%', strftime( '%Y-%m-%d %H:%M:%S' ), $msg );
@@ -182,14 +156,14 @@
 				$msg = $msg . YD_CRLF;
 
 				// Write to the file
-				$f = fopen( YD_LOG_FILE, 'a' );
+				$f = fopen( YDConfig::get( 'YD_LOG_FILE' ), 'a' );
 				fwrite( $f, $msg );
 				fclose( $f );
 
 			}
 
 			// XML logfile
-			if ( strtoupper( YD_LOG_FORMAT ) == 'XML' ) {
+			if ( strtoupper( YDConfig::get( 'YD_LOG_FORMAT' ) ) == 'XML' ) {
 
 				// Create the log entry
 				$msg = '<entry>';
@@ -205,11 +179,11 @@
 				$msg .= '</log>';
 
 				// Write to the file
-				$f = fopen( YD_LOG_FILE, 'a' );
+				$f = fopen( YDConfig::get( 'YD_LOG_FILE' ), 'a' );
 				fclose( $f );
-				$f = fopen( YD_LOG_FILE, 'r+' );
+				$f = fopen( YDConfig::get( 'YD_LOG_FILE' ), 'r+' );
 				clearstatcache();
-				if ( filesize( YD_LOG_FILE ) == 0 ) {
+				if ( filesize( YDConfig::get( 'YD_LOG_FILE' ) ) == 0 ) {
 					fwrite( $f, '<?xml version=\'1.0\'?>' . YD_CRLF . '<log creator="' . htmlentities( YD_FW_NAMEVERS ) . '"></log>' );
 				}
 				fseek( $f, -6, SEEK_END );

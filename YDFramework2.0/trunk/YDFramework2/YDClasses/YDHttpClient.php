@@ -60,7 +60,7 @@
 			} else {
 				$this->useGzip( false );
 			}
-			$this->setDebug( YD_DEBUG );
+			$this->setDebug( YDConfig::get( 'YD_DEBUG' ) );
 
 		}
 

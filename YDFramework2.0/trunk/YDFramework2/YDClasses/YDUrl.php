@@ -25,6 +25,11 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	// Configure the default for this class
+	YDConfig::set( 'YD_HTTP_USES_GZIP', 1, false );
+	YDConfig::set( 'YD_HTTP_CACHE_TIMEOUT', 3600, false );
+	YDConfig::set( 'YD_HTTP_CACHE_USEHEAD', 1, false );
+
 	/**
 	 *  This class defines a url.
 	 */
@@ -407,7 +412,7 @@
 		 *	are stored in the temp directory of the Yellow Duck framework and have the extension "wch". You can delete 
 		 *	these automatically as they will be recreated on the fly if needed.
 		 *
-		 *	For configuring the cache, there are two constants you can redefine if needed:
+		 *	For configuring the cache, there are two configuration variables you can redefine if needed:
 		 *	YD_HTTP_CACHE_TIMEOUT: the lifetime of the cache in seconds (default: 3600).
 		 *	YD_HTTP_CACHE_USEHEAD: if a HEAD HTTP request should be used to verify the cache validity (default: 1).
 		 *
@@ -428,7 +433,7 @@
 				YDInclude( 'YDFileSystem.php' );
 
 				// Check if we need to use the HTTP HEAD function
-				if ( YD_HTTP_CACHE_USEHEAD == 1 ) {
+				if ( YDConfig::get( 'YD_HTTP_CACHE_USEHEAD' ) == 1 ) {
 
 					// Get the headers
 					$headers = $this->getHeaders();
@@ -459,7 +464,7 @@
 				// Use the cache file if any
 				if ( is_file( $cacheFName ) ) {
 					$file = new YDFSFile( $cacheFName );
-					$cacheValidTime = $file->getLastModified() + YD_HTTP_CACHE_TIMEOUT;
+					$cacheValidTime = $file->getLastModified() + YDConfig::get( 'YD_HTTP_CACHE_TIMEOUT' );
 					if ( time() < $cacheValidTime ) {
 						return $file->getContents();
 					}

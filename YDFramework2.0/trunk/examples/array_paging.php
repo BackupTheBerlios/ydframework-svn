@@ -3,14 +3,14 @@
 	// Standard include
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-	// Define the default pagesize
-	define( 'YD_DB_DEFAULTPAGESIZE', 15 );
-
 	// Includes
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDDatabase.php' );
 	YDInclude( 'YDFileSystem.php' );
 	YDInclude( 'YDTemplate.php' );
+
+	// Define the default pagesize
+	YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 15 );
 
 	// Class definition
 	class array_paging extends YDRequest {

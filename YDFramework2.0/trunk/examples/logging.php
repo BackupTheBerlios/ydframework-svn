@@ -3,14 +3,14 @@
 	// Standard include
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-	// Include all log messages
-	define( 'YD_LOG_LEVEL', 4 );
-	define( 'YD_LOG_WRAPLINES', true );
-
 	// Includes
 	YDInclude( 'YDLog.php' );
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDFileSystem.php' );
+
+	// Include all log messages
+	YDConfig::set( 'YD_LOG_LEVEL', 4 );
+	YDConfig::set( 'YD_LOG_WRAPLINES', true );
 
 	// Plain function
 	function PlainFunction() {
@@ -29,7 +29,7 @@
 		function actionDefault() {
 
 			echo( 'Log level: ' );
-			switch ( YD_LOG_LEVEL ) {
+			switch ( YDConfig::get( 'YD_LOG_LEVEL' ) ) {
 				case YD_LOG_DEBUG:
 					echo( 'YD_LOG_DEBUG' );
 					break;
@@ -72,7 +72,7 @@
 
 		// Function to show the logfile
 		function actionShowLog() {
-			$file = new YDFSFile( YD_LOG_FILE );
+			$file = new YDFSFile( YDConfig::get( 'YD_LOG_FILE' ) );
 			$data = $file->getContents();
 
 			if ( substr( $data, 0, 5 ) == '<?xml' ) {

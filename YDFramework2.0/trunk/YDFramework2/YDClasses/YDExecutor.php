@@ -142,7 +142,7 @@
 			$GLOBALS['timer']->finish();
 
 			// Show debugging info if needed
-			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 
 				// Create the debug messages
 				$debug = YD_CRLF . YD_CRLF;

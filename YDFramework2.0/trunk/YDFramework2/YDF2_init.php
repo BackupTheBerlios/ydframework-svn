@@ -156,15 +156,17 @@
 	// Class executor
 	YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
 
-	// Debug constants
-	if ( ! defined( 'YD_DEBUG' ) ) {
-		if ( @ $_GET['YD_DEBUG'] == 2 ) {
-			define( 'YD_DEBUG', 2 );
-		} elseif ( @ $_GET['YD_DEBUG'] == 1 ) {
-			define( 'YD_DEBUG', 1 );
-		} else {
-			define( 'YD_DEBUG', 0 );
-		}
+	// Set the debugging level
+	switch ( @ $_GET['YD_DEBUG'] ) {
+		case 2:
+			YDConfig::set( 'YD_DEBUG', 2, false );
+			break;
+		case 1:
+			YDConfig::set( 'YD_DEBUG', 1, false );
+			break;
+		default:
+			YDConfig::set( 'YD_DEBUG', 0, false );
+			break;
 	}
 
 	// Include the base classes

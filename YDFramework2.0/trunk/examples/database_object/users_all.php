@@ -39,7 +39,7 @@
 	}
 	
 	echo "<p>That's it! Enjoy! =)</p>";
-	echo "<p><a href=\"index.php?YD_DEBUG=" . YD_DEBUG . "\">Click here to return</a></p>";
+	echo "<p><a href=\"index.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here to return</a></p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

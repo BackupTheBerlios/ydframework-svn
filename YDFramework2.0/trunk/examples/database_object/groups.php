@@ -94,7 +94,7 @@
 	}
 	
 	echo "<p>&nbsp;</p>";
-	echo "<p>Let's add some Users! <a href=\"users.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
+	echo "<p>Let's add some Users! <a href=\"users.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

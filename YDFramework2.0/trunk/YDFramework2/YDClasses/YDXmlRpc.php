@@ -60,7 +60,7 @@
 			// Create a new HTTP client
 			$client = new YDHttpClient( $this->server, $this->port );
 			$client->useGzip( true );
-			$client->setDebug( YD_DEBUG );
+			$client->setDebug( YDConfig::get( 'YD_DEBUG' ) );
 			$client->path = $this->path;
 			$client->method = 'POST';
 			$client->contenttype = 'text/xml';
@@ -123,7 +123,7 @@
 		 */
 		function YDXmlRpcClient( $url ) {
 			$this->_client = new YDXmlRpcClientCore( $url );
-			if ( YD_DEBUG == 1 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
 				$this->_client->debug = true;
 			} else {
 				$this->_client->debug = false;

@@ -74,7 +74,7 @@
 
 			// Raise an error if an invalid configuration setting
 			if ( ! YDConfig::exists( $name ) ) {
-				trigger_error( 'Configuration variable "' . $name . '" is not defined.' );
+				trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
 			}
 
 			// Return the value
