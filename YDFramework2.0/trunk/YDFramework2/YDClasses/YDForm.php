@@ -953,7 +953,9 @@
             if ( ! is_array( $array ) ) { return ''; }
             if ( sizeof( $array ) == 0 ) { return ''; }
             $out = '';
-            foreach ( $array as $key=>$value ) { $out .= ' ' . strval( $key ) . '="' . strval( $value ) . '"'; }
+            foreach ( $array as $key=>$value ) {
+                $out .= ' ' . strval( $key ) . '="' . htmlspecialchars( strval( $value ) ) . '"';
+            }
             return $out;
         }
 
