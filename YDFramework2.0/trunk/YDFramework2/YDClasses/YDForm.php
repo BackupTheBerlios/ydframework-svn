@@ -720,6 +720,7 @@
 						// Get the values for each element
 						$values = array();
 						foreach ( $rule['elements'] as $element ) {
+							$obj = & $this->getElement( $element );
 							if ( method_exists( $obj, 'getTimeStamp' ) ) {
 								array_push( $values, $obj->getTimeStamp() );
 							} else {
