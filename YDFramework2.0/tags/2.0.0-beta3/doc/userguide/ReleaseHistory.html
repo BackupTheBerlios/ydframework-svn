@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 beta 3 - ReleaseHistory</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+
+    <div class="header">
+        <a href="http://www.redcarpethost.com/index.php?c=9&s30" target="_blank"><img src="../../YDFramework2/images/sponsored_by_rch.gif"
+         align="right" border="0" alt="Proudly sponsered by Red Carpet Host" width="170" height="69" /></a>
+        <h2>Yellow Duck Framework 2.0</h2>
+    </div>
+
+    <div class="page">
+<h3> Release History </h3>
+<br />
+This is the overview of the different releases.<br />
+<br />
+<br />
+<h4> 31 july 2004 - Yellow Duck Framework 2.0 beta 3 (build 483) </h4>
+<br />
+<ul><li> We are now sponsered by <a href="http://www.redcarpethost.com/index.php?c=9&s30">Red Carpet Host</a>
+</li><li> The documentation is now completed.
+</li><li> Added options to log debugging info and log messages to a file.
+</li><li> Much nicer layout for some of the internal index pages and the index page of the examples.
+</li><li> Release history instead of the build logs.
+</li><li> Updated phpThumb to version 1.4.6.
+</li><li> YDFSDirectory::getContents is able to return custom objects now.
+</li><li> Removed the build directory as it was not needed anymore.
+</li><li> YDDatabaseDriver_mysql is no longer a separate include file, which increases performance (as most people tend to use <span class="missingpage">MySQL</span><a href="http://www.yellowduck.be/ydf2/wiki/MySQL/edit">?</a> anyway).
+</li><li> The API of YDBrowserInfo was updated and it's now part of the YDUtil.php include file.
+</li><li> The function enableCache and disableCache were added to the YDTemplate class.
+</li><li> The template class is refactored and is no longer automatically instantiated with each request. Also caching is working fine now. An example for caching was added as well.
+</li><li> The Smarty Light libraries are updated to 2.2.0.
+</li><li> Added conditional HTTP using etags to the YDFeedCreator module (<a href="http://alexandre.alapetite.net/doc-alex/php-http-304/">description</a>)
+</li><li> Caching needs to be done with only a cache ID and not a filename (but both should be possible).</li></ul>
+<br />
+<br />
+<h4> 18 july 2004 - Yellow Duck Framework 2.0 beta 2 (build 450) </h4>
+<br />
+<ul><li> Switch from <a href="http://smarty.php.net/">Smarty</a> to <a href="http://sourceforge.net/projects/smarty-light/">Smarty Light</a> for the template engine.
+</li><li> PHP 5 compatible, but doesn't yet take advantage of the new features.
+</li><li> All features from the underlying template engine are now available in the YDTemplate class.
+</li><li> Added constant YD_CRLF which contains the end of line appropriate for the current platform. 	</li></ul>
+<br />
+<br />
+<h4> 15 july 2004 - Yellow Duck Framework 2.0 beta 1 (build 343) </h4>
+<br />
+<ul><li> First public beta version</li></ul></div>
+
+
+
+
+    <div class="copyright">
+        (c) Copyright 2003-2004 by <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>. All rights reserved.
+    </div>
+
+</body>
+
+</html>
