@@ -29,9 +29,9 @@
 	YDInclude( 'phpmailer/class.phpmailer.php' );
 
 	// General constants
-	define( 'YDEMAIL_PRIORITY_HIGH', '1' );
-	define( 'YDEMAIL_PRIORITY_NORMAL', '3' );
-	define( 'YDEMAIL_PRIORITY_LOW', '5' );
+	define( 'YD_EMAIL_PRIORITY_HIGH', '1' );
+	define( 'YD_EMAIL_PRIORITY_NORMAL', '3' );
+	define( 'YD_EMAIL_PRIORITY_LOW', '5' );
 
 	/**
 	 *	This class defines an email message.
@@ -94,13 +94,13 @@
 
 		/**
 		 *	Function to set the priority of the email. This can be one of the following constants:
-		 *	YDEMAIL_PRIORITY_HIGH, YDEMAIL_PRIORITY_NORMAL, YDEMAIL_PRIORITY_LOW.
+		 *	YD_EMAIL_PRIORITY_HIGH, YD_EMAIL_PRIORITY_NORMAL, YD_EMAIL_PRIORITY_LOW.
 		 *
-		 *	@param $priority	(optional) The priority of the email. Default is YDEMAIL_PRIORITY_NORMAL.
+		 *	@param $priority	(optional) The priority of the email. Default is YD_EMAIL_PRIORITY_NORMAL.
 		 */
-		function setPriority( $priority=YDEMAIL_PRIORITY_NORMAL ) { 
+		function setPriority( $priority=YD_EMAIL_PRIORITY_NORMAL ) { 
 			if ( ! in_array( $priority, array( 1, 3, 5 ) ) ) {
-				$priority = YDEMAIL_PRIORITY_NORMAL;
+				$priority = YD_EMAIL_PRIORITY_NORMAL;
 			}
 			$this->_msg->Priority = $priority;
 		}
