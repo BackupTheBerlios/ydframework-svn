@@ -98,15 +98,17 @@
 		 *	@returns	Array with the elapsed times, differences and marker names.
 		 */
 		function getReport() {
-			$report = array( array( 0, 0, '-- Start' ) );
+			//$report = array( array( 0, 0, '-- Start' ) );
+			$report = array( '-- Start' => array( 0, 0, '-- Start' ) );
 			$previous = 0;
 			foreach ( $this->markers as $marker ) {
 				foreach ( $marker as $key=>$val ) {
 					$diff = $val - $previous;
 					$previous = $val;
-					array_push( $report, array( $val, $diff, $key ) );
+					//array_push( $report, array( $val, $diff, $key ) );
+					$report[ $key ] = array( $val, $diff, $key );
 				}
-			}			
+			}
 			foreach ( $report as $key=>$val ) {
 				if ( isset( $report[ $key + 1 ] ) ) {
 					$report[$key][1] = $report[$key+1][1];
@@ -115,7 +117,7 @@
 					$report[$key][1] = '-';
 				}
 			}
-			//YDDebugUtil::dump( $report );
+			YDDebugUtil::dump( $report );
 			return $report;
 		}
 
