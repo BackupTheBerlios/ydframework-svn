@@ -7,7 +7,7 @@
 	<script language="JavaScript">
 
 		function addItem( item ) {ldelim}
-			window.opener.AddText( '{$_TPL[GET][field]}', '[{$_TPL[GET][tag]}]', item, '[/{$_TPL[GET][tag]}]' );
+			window.opener.AddText( '{$smarty.get.field}', '[{$smarty.get.tag}]', item, '[/{$smarty.get.tag}]' );
 			window.close()
 			return false;
 		{rdelim}
