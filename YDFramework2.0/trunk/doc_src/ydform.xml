@@ -355,7 +355,11 @@
             <listitem><emphasis role="bold">exact:</emphasis> value must be exactly the same as the rule option</listitem>
             <listitem><emphasis role="bold">in_array:</emphasis> value must be part of the array specified as the rule option</listitem>
             <listitem><emphasis role="bold">not_in_array:</emphasis> value must not be part of the array specified as the rule option</listitem>
-            <listitem><emphasis role="bold">callback:</emphasis> This rule allows to use an external function/method for validation, either by registering it or by passing a callback as a format parameter.</listitem>
+            <listitem><emphasis role="bold">i_in_array:</emphasis> value must be part of the array specified as the rule option (case insensitive)</listitem>
+            <listitem><emphasis role="bold">i_not_in_array:</emphasis> value must not be part of the array specified as the rule option (case insensitive)</listitem>
+            <listitem><emphasis role="bold">maxwords:</emphasis> this rule checks if a string contains the maximum specified words or not.</listitem>
+            <listitem><emphasis role="bold">minwords:</emphasis> this rule checks if a string contains the minimum specified words or not.</listitem>
+            <listitem><emphasis role="bold">callback:</emphasis> this rule allows to use an external function/method for validation, either by registering it or by passing a callback as a format parameter.</listitem>
         </itemizedlist>
 
         <para>There are also some rules that apply specifically to file uploads:</para>
