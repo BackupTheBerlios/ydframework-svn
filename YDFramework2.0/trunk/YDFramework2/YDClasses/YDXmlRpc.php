@@ -46,6 +46,7 @@
 			$client->method = 'POST';
 			$client->contenttype = 'text/xml';
 			$client->postdata = str_replace( "\n", '', $request->getXml() );
+			$client->handle_redirects = false;
 
 			// Show in debugging mode
 			if ( $this->debug ) {
@@ -122,9 +123,26 @@
 			array_unshift( $args, $method );
 			$result = call_user_func_array( array( & $this->_client, 'query' ), $args );
 			if ( $result == false ) {
-				trigger_error( $this->_client->getErrorMessage(), YD_ERROR );
+				//trigger_error( $this->_client->getErrorMessage(), YD_ERROR );
+				return false;
 			}
 			return $this->_client->getResponse();
+		}
+
+		/**
+		 *	This function returns the last error that occured.
+		 *
+		 *	@returns	Array with the error code and error message.
+		 */
+		function getErrorMsg() {
+			//YDDebugUtil::dump( $this->_client->error );
+			/*
+			return array(
+				'code' => $this->_client->error->code,
+				'message' => $this->_client->error->message,
+			);
+			*/
+			return $this->_client->error->code . '  ' . $this->_client->error->message;
 		}
 
 	}
