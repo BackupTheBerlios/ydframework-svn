@@ -599,6 +599,21 @@
 			return false;
 		}
 
+		/**
+		 *	This function will move the file to the specified path and update the object accordingly.
+		 *
+		 *	@param	$target	Target path.
+		 *
+		 *	@returns	False on a failure, true on success.
+		 */
+		function move( $path ) {
+			$result = rename( $this->getAbsolutePath(), $path );
+			if ( $result ) {
+				$this->_path = realpath( $path );
+			}
+			return $result;
+		}
+
 	}
 
 	/**
@@ -1160,6 +1175,21 @@
 		 */
 		function isImage() {
 			return false;
+		}
+
+		/**
+		 *	This function will move the directory to the specified path and update the object accordingly.
+		 *
+		 *	@param	$target	Target path.
+		 *
+		 *	@returns	False on a failure, true on success.
+		 */
+		function moveDirectory( $path ) {
+			$result = rename( $this->getAbsolutePath(), $path );
+			if ( $result ) {
+				$this->_path = realpath( $path );
+			}
+			return $result;
 		}
 
 		/**

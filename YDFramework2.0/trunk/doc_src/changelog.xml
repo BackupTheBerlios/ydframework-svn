@@ -60,6 +60,7 @@
             <listitem>The defaults for date/time elements can now be strings, integers, numeric values or integers</listitem>
             <listitem>The setDefaults function can now be called before, during or after adding the elements</listitem>
             <listitem>Added the YDLocale module which is a compatibility layer on top of the set_locale function</listitem>
+            <listitem>The YDFileSystem classes now have a move option to move the file/directory to a different place</listitem>
         </itemizedlist>
 
     </sect1>

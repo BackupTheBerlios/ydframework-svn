@@ -26,6 +26,7 @@
             <listitem><emphasis role="bold">getContents:</emphasis> reads the contents of the file</listitem>
             <listitem><emphasis role="bold">setContents:</emphasis> sets the contents of the file (can also be used to append data to the file)</listitem>
             <listitem><emphasis role="bold">delete:</emphasis> removes the file from disk</listitem>
+            <listitem><emphasis role="bold">move:</emphasis> moves the file to a different path</listitem>
         </itemizedlist>
 
         <para>To get the contents of the file, you can use the getContents function. This function is able to read in both textual and binary data. Optionally, you can define at which byte it should start reading, and you can also define how many bytes should be read. If no options are specified, the complete file will be read.</para>
@@ -213,8 +214,18 @@
         <para>Directories are also a special kind of object, the YDFSDirectory object. This class is not based on the YDFSFile classes, but will use them internally. The YDFSDirectory class can return a number of properties from the directory it's pointing to:</para>
 
         <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getBaseName:</emphasis> returns the actual name of the directory</listitem>
+            <listitem><emphasis role="bold">getAbsolutePath:</emphasis> returns the complete path to the directory</listitem>
+            <listitem><emphasis role="bold">getContents:</emphasis> returns the contents of the directory</listitem>
             <listitem><emphasis role="bold">getPath:</emphasis> returns the complete path to the directory</listitem>
             <listitem><emphasis role="bold">isWriteable:</emphasis> boolean indicating if the directory is writeable or not (this is not working properly on Windows)</listitem>
+            <listitem><emphasis role="bold">createFile:</emphasis> creates a new file in the directory</listitem>
+            <listitem><emphasis role="bold">deleteFile:</emphasis> deletes a file from the directory</listitem>
+            <listitem><emphasis role="bold">createDirectory:</emphasis> create a new subdirectory in the directory</listitem>
+            <listitem><emphasis role="bold">deleteDirectory:</emphasis> deletes a subdirectory from the directory</listitem>
+            <listitem><emphasis role="bold">isDirectory:</emphasis> boolean indicating if the directory is acutally a directory</listitem>
+            <listitem><emphasis role="bold">isImage:</emphasis> oolean indicating if the directory is acutally an image</listitem>
+            <listitem><emphasis role="bold">moveDirectory:</emphasis> moves the directory to a different location</listitem>
         </itemizedlist>
 
         <para>In addition, there is a function called getContents that is able to return the contents of a directory as YDFS* objects. As it's argument, it takes a file pattern which is the same type of pattern you use in the shell (such as bash, terminal or the command prompt). Depending on the file type of each individual file, it will return a YDFSFile, YDFSImage or YDFSDirectory object. Here's an example illustrating this:</para>
