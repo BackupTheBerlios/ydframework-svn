@@ -16,10 +16,6 @@
      *  This class uses the HTTP_USER_AGENT varaible to get information about 
      *  the browser the visitor used to perform the request. We determine the 
      *  browser name, the version and the platform it's running on.
-     *
-     *  @todo
-     *      Use the phpSniff class instead of our custom one.
-     *      http://phpsniff.sourceforge.net/
      */
     class YDBrowserInfo {
 
