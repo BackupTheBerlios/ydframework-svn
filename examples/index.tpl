@@ -78,6 +78,8 @@
 				<a href="fsimage.php?do=thumbnail2">YDFSImage object - thumbnail 2</a>
 				<br>
 				<a href="fsimage.php?do=thumbnail3">YDFSImage object - thumbnail 3 (no caching)</a>
+				<br>
+				<a href="fsimage.php?do=thumbnailsave">YDFSImage object - thumbnail saving</a>
 			</td>
 			<td valign="top">
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsimage.php">fsimage.php</a>

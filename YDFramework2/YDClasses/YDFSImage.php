@@ -39,66 +39,28 @@
 		 */
 		function outputThumbnail( $width, $height, $cache=true ) {
 
-			// Check if the GD library is loaded.
-			if ( ! extension_loaded( 'gd' ) ) {
-				  $this->_error( 'YD_gd_not_installed' );
-			}
-
-			// Include phpThumb
-			require_once( 'phpThumb/phpthumb.class.php' );
-
-			// Create a new thumbnail object
-			$thumb = new phpThumb();
-			$thumb->src = $this->getAbsolutePath();
-
-			// Set the options for the creation of thumbnails
-			$thumb->config_nohotlink_enabled = false;
-			$thumb->config_cache_directory = YD_DIR_TEMP;
-
-			// Set the width and the height
-			$thumb->w = $width;
-			$thumb->h = $height;
-
-			// Create the cached thumbnail
-			$cacheFName = $thumb->GenerateCachedFilename();
-			$cacheFName .= $this->getLastModified();
-			$cacheFName .= $this->getAbsolutePath();
-			$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.tmn';
-			$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
-
-			// Check if caching is enabled
-			if ( $cache == true ) {
-
-				// Output the cached version if any
-				if ( is_file( $cacheFName ) ) {
-					$img = new YDFSImage( $cacheFName );
-					header( 'Content-type: ' . $img->getMimeType() );
-					echo( $img->getContents() );
-					die();
-				}
-
-			}
-
-			// Width should be positive integer
-			if ( $width < 1 ) {
-				  $this->_error();
-			}
-
-			// Height should be positive integer
-			if ( $width < 1 ) {
-				  $this->_error();
-			}
-
-			// Generate the thumbnail
-			$thumb->GenerateThumbnail();
-
-			// Check if caching is enabled
-			if ( $cache == true ) {
-				$thumb->RenderToFile( $cacheFName );
-			}
+			// Create the thumbnail
+			$thumb = & $this->_createThumbnail( $width, $height, $cache );
 
 			// Output the thumbnail
 			$thumb->OutputThumbnail();
+
+		}
+
+		/**
+		 *	This function will create a thumbnail and save the thumbnail to disk.
+		 *
+		 *	@param $width	The maximum width of the thumbnail.
+		 *	@param $height	The maximum height of the thumbnail.
+		 *	@param $file	The filename to save the thumbnail to.
+		 */
+		function saveThumbnail( $width, $height, $filename ) {
+
+			// Create the thumbnail
+			$thumb = & $this->_createThumbnail( $width, $height, false );
+
+			// Save the thumbnail
+			$thumb->RenderToFile( $filename );
 
 		}
 
@@ -199,6 +161,80 @@
 			header( 'Content-type: ' . $img->getMimeType() );
 			echo( $img->getContents() );
 			die();
+		}
+
+		/**
+		 *	This function will do the actual work of creating a thumbnail image.
+		 *
+		 *	@param $width	The maximum width of the thumbnail.
+		 *	@param $height	The maximum height of the thumbnail.
+		 *	@param $cache	(optional) Indicate if the thumbnails should be cached. By default, caching is turned off.
+		 *
+		 *	@internal
+		 */
+		function & _createThumbnail( $width, $height, $cache=true ) {
+
+			// Check if the GD library is loaded.
+			if ( ! extension_loaded( 'gd' ) ) {
+				  $this->_error( 'YD_gd_not_installed' );
+			}
+
+			// Include phpThumb
+			require_once( 'phpThumb/phpthumb.class.php' );
+
+			// Create a new thumbnail object
+			$thumb = new phpThumb();
+			$thumb->src = $this->getAbsolutePath();
+
+			// Set the options for the creation of thumbnails
+			$thumb->config_nohotlink_enabled = false;
+			$thumb->config_cache_directory = YD_DIR_TEMP;
+
+			// Set the width and the height
+			$thumb->w = $width;
+			$thumb->h = $height;
+
+			// Create the cached thumbnail
+			$cacheFName = $thumb->GenerateCachedFilename();
+			$cacheFName .= $this->getLastModified();
+			$cacheFName .= $this->getAbsolutePath();
+			$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.tmn';
+			$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
+
+			// Check if caching is enabled
+			if ( $cache == true ) {
+
+				// Output the cached version if any
+				if ( is_file( $cacheFName ) ) {
+					$img = new YDFSImage( $cacheFName );
+					header( 'Content-type: ' . $img->getMimeType() );
+					echo( $img->getContents() );
+					die();
+				}
+
+			}
+
+			// Width should be positive integer
+			if ( $width < 1 ) {
+				  $this->_error();
+			}
+
+			// Height should be positive integer
+			if ( $width < 1 ) {
+				  $this->_error();
+			}
+
+			// Generate the thumbnail
+			$thumb->GenerateThumbnail();
+
+			// Check if caching is enabled
+			if ( $cache == true ) {
+				$thumb->RenderToFile( $cacheFName );
+			}
+
+			// Return the thumbnail object
+			return $thumb;
+
 		}
 
 	}
