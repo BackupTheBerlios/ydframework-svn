@@ -28,6 +28,9 @@
 			// Output some queries
 			YDDebugUtil::dump( $db->getRecords( 'select * from RPT_Customer_V' ), 'RPT_Customer_V' );
 
+			// Output some queries
+			YDDebugUtil::dump( $db->getValue( 'select sysdate from dual' ), 'sysdate' );
+
 			// Test string escaping
 			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
 
