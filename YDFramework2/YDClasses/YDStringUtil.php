@@ -68,15 +68,23 @@
          *  @param $email Email address to encode.
          *
          *  @returns Encoded email address.
-         *
-         *  @todo
-         *      Add comments to this function.
          */
         function encodeEmail( $email ) {
-            if ( $email != '' ) {
+
+            // Check if we have an empty
+            if ( empty( $email ) ) {
+
+                // Return an empty string
+                return '';
+
+            } else {
+
+                // Start with the empty variables
                 $ent = '';
                 $userName = '';
                 $domainName = '';
+
+                // Loop over the characters
                 for ( $i = 0; $i < strlen( $email ); $i++ ) {
                     $c = substr( $email, $i, 1 );
                     if ( $c == '@' ) {
@@ -87,10 +95,11 @@
                     }
                 }
                 $domainName = $ent;
+
+                // Return the encoded email address
                 return $userName . '&#64;' . $domainName;
-            } else {
-                return '';
             }
+
         }
 
         /**
@@ -99,25 +108,33 @@
          *  @param $email Email address to decode.
          *
          *  @returns Decoded email address.
-         *
-         *  @todo
-         *      Add comments to this function.
          */
         function decodeEmail( $email ) {
+
+            // Check if the email is encoded correctly
             if (
                 ( substr( $email, 0, 2 ) == '&#' )
                 &&
                 ( substr( $email, -1 ) == ';' ) )
             {
+
+                // Decode the email
                 $decodedEmail = '';
                 $charList = explode( ';&#', substr( $email, 2, -1 ) );
                 foreach( $charList as $char ) {
                     $decodedEmail = $decodedEmail . chr( $char );
                 }
+                
+                // Return the decode email
                 return $decodedEmail;
+
             } else {
+
+                // Return the original
                 return $email;
+
             }
+
         }
 
         /**
@@ -136,20 +153,31 @@
          *  @param $dateFormat Date format to use.
          *
          *  @return Formatted date.
-         *
-         *  @todo
-         *      Add comments to this function.
          */
         function formatDate( $text, $dateFormat ) {
+
+            // Check if the text is an integer
             if ( is_integer( $text ) ) {
+
+                // Return the formatted time
                 return strftime( $dateFormat, $text );
             } else {
-                if ( $text != '' ) {
+
+                // Check if there is text
+                if ( ! empty( $text ) ) {
+
+                    // Return the formatted text
                     return strftime( $dateFormat, strtotime( $text ) );
+
                 } else {
+
+                    // Return the original
                     return $text;
+
                 }
+
             }
+
         }
 
         /**
@@ -161,15 +189,16 @@
          *
          *  @returns String with all the characters with an ordinal bigger than
          *           128 converted to numeric HTML entities.
-         *
-         *  @todo
-         *      Add comments to this function.
          */
         function encodeString( $string ) {
 
+            // Start with an empty string
             $encoded = '';
 
+            // Loop over all the characters
             for ( $i=0; $i < strlen( $string ); $i++ )  {
+
+                // Encode it to a HTML entity
                 if ( ord( substr( $string, $i, 1 ) ) > 128 ) {
                     $encoded .= '&#' . ord( substr( $string, $i, 1 ) ) . ';';
                 } elseif ( ord( substr( $string, $i, 1 ) ) == 0 ) {
@@ -177,12 +206,13 @@
                 } else {
                     $encoded .= substr( $string, $i, 1 );    
                 }
+
             }
 
+            // Return the encoded string
             return $encoded;
 
         }
-
 
     }
 
