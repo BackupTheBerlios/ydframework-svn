@@ -61,7 +61,7 @@
 
             // Add form errors if any
             if ( isset( $form['errors']['__ALL__'] ) ) {
-                $html .= '<p>' . $this->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_htmlErrorEnd . '</p>';
+                $html .= '<p>' . $this->_form->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_form->_htmlErrorEnd . '</p>';
             }
 
             // Remove some things from the array
@@ -71,13 +71,13 @@
             unset( $form['requirednote'] );
 
             // Add the required note if there are required items
-            if ( ! empty( $this->_requiredNote ) ) {
+            if ( ! empty( $this->_form->_requiredNote ) ) {
                 $reqCount = 0;
                 foreach ( $form as $name=>$element ) {
                     if ( $element['required'] ) { $reqCount++; };
                 }
                 if ( $reqCount > 0 ) {
-                    $html .= '<p>' . $this->_requiredNote . '</p>';
+                    $html .= '<p>' . $this->_form->_requiredNote . '</p>';
                 }
             }
 
