@@ -72,8 +72,22 @@
             <link href="#ch04">How requests are processed
                 <link href="#ch04_01">Description</link>
                 <link href="#ch04_02">Graphical overview</link>
+                <link href="#ch04_03">Where is this processing happening?</link>
+                <link href="#ch04_04">Step 1 - Check for a request class</link>
+                <link href="#ch04_05">Step 2 - Is the request class derived from YDRequest?</link>
+                <link href="#ch04_06">Step 3 - Is the request class properly initialized?</link>
+                <link href="#ch04_07">Step 4 - Does this request requires authentication?</link>
+                <link href="#ch04_08">Step 5 - Is the specified action allowed?</link>
+                <link href="#ch04_09">Step 6 - Process the actual request</link>
+                <link href="#ch04_10">What if?</link>
             </link>
-            <link href="#ch05">Using templates</link>
+            <link href="#ch05">Using templates
+                <link href="#ch05_01">Introduction</link>
+                <link href="#ch05_02">The YDTemplate class</link>
+                <link href="#ch05_03">Template search paths</link>
+                <link href="#ch05_04">Standard template variables</link>
+                <link href="#ch05_05">PHP configuration for short open tags</link>
+            </link>
             <link href="#ch06">Using and validating forms</link>
             <link href="#ch07">Accessing database contents</link>
             <link href="#ch08">How to handle authentication</link>
@@ -1410,11 +1424,543 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
             </section>
 
+            <section name="ch04_03" label="Where is this processing happening">
+                
+                <br/>
 
-        <section name="ch05" label="Using templates">
-            <br/>
-            Not written yet
-        </section>
+                When you load a file that includes the Yellow Duck Framework 
+                using the following code, the file will be able to use the 
+                functionality of the framework. Including the framework goes 
+                as follows:
+
+                <pre><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDFramework2/YDF2_init.php'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                To process the actual file using the framework, we need to add 
+                another include file, but we need to include this at the end of 
+                the script. The last line of every script processed with the 
+                Yellow Duck Framework should look as follows:
+
+                <pre><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDFramework2/YDF2_process.php'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                The process script is the one that does what is displayed in the
+                image above. Without including this file, nothing will be
+                executed from the script and you will probably end up with an 
+                empty page as the result.
+
+                <br/><br/>
+
+                Let's go over each step in the process to see how it works and
+                what influence it has on the processing of the request.
+
+            </section>
+
+            <section name="ch04_04" label="Step 1 - Check for a request class">
+                
+                <br/>
+
+                When you load a script, the first thing the framework will do is
+                to check for a class which is named after the script file. The
+                class name always has the same structure. It's basically the 
+                basename of the script file with the text "Request" appended to 
+                it. Let's take a look at some examples:
+
+                <br/><br/>
+
+                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="50%"><b>Script name</b></td>
+                        <td width="50%"><b>Class name</b></td>
+                    </tr>
+                    <tr>
+                        <td>index.php</td>
+                        <td>indexRequest</td>
+                    </tr>
+                    <tr>
+                        <td>processing.php</td>
+                        <td>processingRequest</td>
+                    </tr>
+                    <tr>
+                        <td>MyOwnScriptForProcessing.php</td>
+                        <td>MyOwnScriptForProcessingRequest</td>
+                    </tr>
+                </table>
+
+                <br/>
+
+                If no class with the given name is declared, the execution will 
+                stop with a fatal error indicating this. The fatal error will 
+                also stop the execution of the script.
+
+                <br/>
+
+                <div class="note">
+                <b>Note</b><br/>Class names are case insensitive in the Yellow 
+                Duck Framework. However, we strongly suggest you to maintain the
+                same case as in the filename.
+                </div>
+
+                <br/>
+
+                <div class="note">
+                <b>Note</b><br/>Also note that some characters are not allowed
+                as a class name, and as such are not allowed in the filename.
+                Especially characters like a dash, a dollar sign,
+                ad sign and an ampersand are not allowed.
+                </div>
+
+            </section>
+
+            <section name="ch04_05" label="Step 2 - Is the request class derived from YDRequest?">
+                
+                <br/>
+
+                The Yellow Duck Framework always expects that the request class 
+                has the YDRequest class as one of it's parent classes. This is 
+                needed because there are a number of standard functions from the
+                YDRequest class that are always expected to be there.
+
+                <br/><br/>
+
+                You don't have to inherit from the YDRequest class directly.
+                It's allowed to define your own request class based on the 
+                YDRequest class, and inherit from that class instead. You can do
+                this to provide basic functionality to your request classes 
+                which is not available in the standard YDRequest class. You can
+                also use this to change the way requests are processed so that 
+                you can tailor the framework to suit your needs.
+
+                <br/><br/>
+
+                If the YDRequest is not one of the parent classes from the 
+                request class, a fatal error is raised and the execution of 
+                the script will be stopped.
+
+            </section>
+
+            <section name="ch04_06" label="Step 3 - Is the request class properly initialized?">
+                
+                <br/>
+
+                Inheriting from the YDRequest class is one thing, but it also 
+                needs to be initialized properly. In the class constructor, you 
+                need to make sure you call the function with the same name as 
+                the class name of the parent class to make sure the parent class
+                is initialized properly. If you inherit from the YDRequest 
+                directly, you code will look as follows:
+
+                <pre><font color="#666666">// Inherit from the YDRequest class</font>
+<font color="#7F007F">class</font><font color="#000033"> indexRequest </font><font color="#7F007F">extends</font><font color="#000033"> YDRequest </font><font color="#000000">{</font>
+
+<font color="#000033">    </font><font color="#666666">// This is the class constructor for our class. It is</font>
+<font color="#000033">    </font><font color="#666666">// automatically executed by the framework when this class</font>
+<font color="#000033">    </font><font color="#666666">// is instantiated.</font>
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> indexRequest</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">        </font><font color="#666666">// Initialize the parent class, which is the YDRequest</font>
+<font color="#000033">        </font><font color="#666666">// class in this example.</font>
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">YDRequest</font><font color="#000000">();</font>
+<font color="#000033">    </font>
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000000">}</font></pre>
+
+                If you would leave out the function call to YDRequest in the 
+                above class, a fatal error will be raised indicating that the 
+                YDRequest class was not properly initialized. The execution will
+                stop at that moment.
+
+                <br/><br/>
+
+                If the YDRequest class was properly initialized, the framework
+                will now create an instance of the request class. When 
+                instantiating, no parameters are passed to the class constructor
+                of the request class.
+
+            </section>
+
+            <section name="ch04_07" label="Step 4 - Does this request requires authentication?">
+                
+                <br/>
+
+                In every request class, you can enable authentication. If you 
+                enable authentication for a request class, the framework will 
+                execute certain functions to check if the authentication before
+                the request is processed.
+
+                <br/><br/>
+
+                You can enable authentication in a request class by using the 
+                following code:
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">setRequiresAuthentication</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">true</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                It will then use the function "isAuthenticated" from the request 
+                class to find out if the user is already authenticated. If not, 
+                the function "authenticationFailed" is executed which can e.g. 
+                redirect to the login. page which takes care of the rest. After
+                executing the "authenticationFailed" function, the execution of
+                the script is stopped.
+
+                <br/><br/>
+
+                If the "isAuthenticated" function returns true, the class 
+                function "authenticationSucceeded" is executed, after which the
+                execution of the request continues. This function can for 
+                example set a session variable indicating that we are logged in
+                or can add an entry to the database.
+
+                <br/><br/>
+
+                Note: for an in depth look at how authentication is handled in 
+                the framework, please go through the chapter 
+                <section-link href="#ch08">How to handle authentication</section-link>.
+
+            </section>
+
+            <section name="ch04_08" label="Step 5 - Is the specified action allowed?">
+                
+                <br/>
+
+                After the authentication tokens are checked, the framework will 
+                check if the specified action is allowed by calling the 
+                "isActionAllowed" function which returns a boolean indicating 
+                this. This function can for example limit certain actions to 
+                specific conditions such as the username.
+
+                <br/><br/>
+
+                If the "isActionAllowed" function returns false, the function 
+                called "actionNotAllowed" will be executed. By default, this 
+                function returns a fatal error indicating that the action is not 
+                allowed. You can override this function to make this work the 
+                way you want. After this function is executed, the processing of 
+                the request will stop.
+
+                <br/><br/>
+
+                In the "isActionAllowed" function, you can use the class 
+                function "getActionName" to get the name of the current action
+                in lowercase. The action name is the same as what is specified 
+                with the do function in the URL. If no action is specified, the
+                text "default" will be returned which always points to the 
+                default action.
+
+            </section>
+
+            <section name="ch04_09" label="Step 6 - Process the actual request">
+                
+                <br/>
+
+                Now that all the different checks are performed, the process 
+                function of the request class is executed. This will figure out
+                the right function name for the function for the specified
+                action, and it will execute this function.
+
+            </section>
+
+            <section name="ch04_10" label="What if?">
+                
+                <br/>
+
+                <i>What if I want a different way to specify the actions?</i>
+
+                <br/>
+
+                If you want to specify a different way for the framework to 
+                determine the actions, you will need to override the 
+                "getActionName" function to make it determine the correct 
+                action name
+
+                <br/><br/>
+
+                <i>What if I want a different way of processing the actions?</i>
+
+                <br/>
+
+                You will have to override the "process" function of the request 
+                class for this. This will not change the way the different 
+                checks are happening though (which is not advised by any means).
+
+            </section>
+
+        <section name="ch05" label="Using templates" />
+
+            <section name="ch05_01" label="Introduction">
+
+                <br/>
+
+                In this chapter, we will have a closer look at how the template 
+                engine in the Yellow Duck Framework is working and how it's 
+                implemented. The template engine in the framework is based on 
+                PHP and follows the same syntax as any normal PHP file.
+
+            </section>
+            
+            <section name="ch05_02" label="The YDTemplate class">
+
+                <br/>
+
+                For managing templates, there is a specific class class 
+                YDTemplate. If you instantiate this class, you can assign 
+                variables to it, and then, using these variables, you can output 
+                a named template.
+
+                <br/><br/>
+
+                The following code sample gives you a small example on how this 
+                works: 
+
+                <pre><font color="#00007F">$array</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font>
+<font color="#000033">    array</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'author'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Stephen King'</font><font color="#000000">,</font>
+<font color="#000033">        </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'The Stand'</font>
+<font color="#000033">    </font><font color="#000000">),</font>
+<font color="#000033">    array</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'author'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Neal Stephenson'</font><font color="#000000">,</font>
+<font color="#000033">        </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Cryptonomicon'</font>
+<font color="#000033">    </font><font color="#000000">),</font>
+<font color="#000033">    array</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'author'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Milton Friedman'</font><font color="#000000">,</font>
+<font color="#000033">        </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'Free to Choose'</font>
+<font color="#000033">    </font><font color="#000000">)</font>
+<font color="#000000">);</font>
+
+<font color="#00007F">$template</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDTemplate</font><font color="#000000">();</font>
+<font color="#00007F">$template</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'This is the title'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$template</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'array'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$array</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$template</font><font color="#000000">-&gt;</font><font color="#000033">getOutput</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'mytemplate'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                The template for this code could look as follows:
+
+                <pre><font color="#000080">&lt;html&gt;</font>
+
+<font color="#000080">&lt;head&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000080">&lt;/head&gt;</font>
+
+<font color="#000080">&lt;body&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> is_array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$book</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">):</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;table&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;tr&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;th&gt;</font><font color="#000000">Author</font><font color="#000080">&lt;/th&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;th&gt;</font><font color="#000000">Title</font><font color="#000080">&lt;/th&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;/tr&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">foreach</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$book</font><font color="#000033"> </font><font color="#7F007F">as</font><font color="#000033"> </font><font color="#00007F">$key</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#00007F">$val</font><font color="#000033"> </font><font color="#000000">):</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;tr&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;td&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$val</font><font color="#000000">[</font><font color="#009F00">'author'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/td&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;td&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$val</font><font color="#000000">[</font><font color="#009F00">'title'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/td&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;/tr&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">endforeach</font><font color="#000000">;</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/table&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">else</font><font color="#000000">:</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;p&gt;</font><font color="#000000">There are no books to display.</font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">endif</font><font color="#000000">;</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000080">&lt;/body&gt;</font>
+
+<font color="#000080">&lt;/html&gt;</font></pre>
+
+                As you can see, we assigned two variables to our template 
+                instance. Each variable you want to use in the template engine 
+                needs to be assigned to the template instance before you can use 
+                it. Assigning a variable to a template implies that we attach a 
+                template variable name to a PHP object. These objects can be
+                anything from an array, a simple string to even a complete 
+                object.
+
+                <br/><br/>
+
+                Once we assigned all the variables, we can issue the "getOutput"
+                function of the template class to get the result of the parsed 
+                template. This function takes one argument, which is the name of 
+                the template.
+
+                <br/><br/>
+
+                The name of the template you need to specify for the "getOutput"
+                function is the basename of the template without the "tpl"
+                extension. In our example, you would need the following files to
+                make the example work:
+
+                <br/>
+
+                <ul>
+                    <li><b>mytemplate.php</b>: the actual PHP script</li>
+                    <li><b>mytemplate.tpl</b>: the template attached to the PHP script</li> 
+                </ul>
+
+                By convention, all templates have the extension "tpl". This is 
+                also hardcoded in the framework itself. Please, stick to this 
+                standard.
+
+            </section>
+            
+            <section name="ch05_03" label="Template search paths">
+
+                <br/>
+
+                There are different ways on where the template engine will
+                search for templates. By default, there are two possible ways of
+                specifying the path for the templates:
+
+                <br/>
+
+                <ul>
+                    <li><b>Template specified by base name</b>: this will cause 
+                    the template engine to look in the same directory as the 
+                    current script.</li>
+                    <li><b>Template specified by a full path</b>: this will 
+                    cause the template engine to look for the template at the 
+                    specified path.</li> 
+                </ul>
+                
+                If you want, you can override the default search path for the 
+                templates. This is done by the class function "setTemplateDir" 
+                of the template class. With this function, you can add an extra 
+                path to the search path of the template class. After you added a
+                new path, you can specify templates in that directory by their 
+                basename instead of having to specify the full path for the 
+                template.
+
+            </section>
+            
+            <section name="ch05_04" label="Standard template variables">
+
+                <br/>
+
+                For each template, there are a number of standard variables 
+                available which you can always reference. These variables all 
+                start with "YD_" and are all uppercase. Here's the list of the 
+                standard variables:
+
+                <br/><br/>
+
+                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="30%"><b>Variable</b></td>
+                        <td width="70%"><b>Explanantion</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_FW_NAME</td>
+                        <td>name of the framework</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_FW_VERSION</td>
+                        <td>version of the framework</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_FW_NAMEVERS</td>
+                        <td>the combination of the two items above</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_FW_HOMEPAGE</td>
+                        <td>the homepage of the Yellow Duck Framework</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_SELF_SCRIPT</td>
+                        <td>the current script's path, e.g. "/myapp/index.php"</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_SELF_URI</td>
+                        <td>the URI which was given in order to access this page, e.g. 
+                        "/myapp/index.php?do=edit"</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_ACTION_PARAM</td>
+                        <td>the name of the $_GET parameter that specifies which action needs to 
+                        be executed. This is "do" by convention.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_ENV</td>
+                        <td>These variables are imported into PHP's global namespace from the 
+                        environment under which the PHP parser is running.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_COOKIE</td>
+                        <td>An associative array of variables passed to the current script via 
+                        HTTP cookies.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_GET</td>
+                        <td>An associative array of variables passed to the current script via 
+                        the HTTP GET method.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_POST</td>
+                        <td>An associative array of variables passed to the current script via 
+                        the HTTP POST method.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_FILES</td>
+                        <td>An associative array of items uploaded to the current script via the
+                        HTTP POST method.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_REQUEST</td>
+                        <td>An associative array consisting of the contents of YD_GET, YD_POST 
+                        and YD_COOKIE.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_SESSION</td>
+                        <td>An associative array containing session variables available to the 
+                        current script.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_GLOBALS</td>
+                        <td>An associative array containing references to all variables which 
+                        are currently defined in the global scope of the script.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_DB_CONN_CNT</td>
+                        <td>Number of database connections that were made.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">YD_DB_SQLQ_CNT</td>
+                        <td>Number of database queries that were performed.</td>
+                    </tr>
+                </table>
+
+                <br/>
+    
+                Please do not use the "YD_" prefix for your own variables.
+                This prefix is uniquely reserverd for the variables 
+                automatically assigned by the Yellow Duck Framework.
+
+            </section>
+
+            <section name="ch05_05" label="PHP configuration for short open tags">
+
+                <br/>
+
+                Depending on how you want to write the PHP constructs, you might 
+                need to enable the short open tags function in PHP. This is done
+                by changing the PHP configuration in php.ini or using a
+                .htaccess file. You will need to add the following line to 
+                enable short open tags:
+
+                <br/><br/>
+
+                Using a .htaccess file
+                <br/>
+                <pre>php_flag short_open_tag On</pre>
+
+                Using the php.ini file
+                <br/>
+                <pre>short_open_tag = On</pre>
+
+                If you enable the short open tags, you will be able to shorten
+                the following constructs in the templates:
+
+                <pre><font color="#000000">Using the long notation:</font>
+<font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$myVar</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">Using short open tags</font>
+<font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$myVar</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font></pre>
+
+                All the examples for the Yellow Duck Framework have been written 
+                using short open tags. Make sure you have them enabled before 
+                running the examples.
+
+            </section>
 
         <section name="ch06" label="Using and validating forms">
             <br/>
