@@ -56,29 +56,6 @@
 			// Set the type
 			$this->_type = 'datetimeselect';
 
-			// Convert the numeric value if needed
-			if ( is_numeric( $this->_value ) ) {
-				if ( ! is_int( $this->_value ) ) {
-					$this->_value = intval( $this->_value );
-				}
-				$now = getdate( $this->_value );
-				$this->_value['day'] = $now['mday'];
-				$this->_value['month'] = $now['mon'];
-				$this->_value['year'] = $now['year'];
-				$this->_value['hours'] = $now['hours'];
-				$this->_value['minutes'] = $now['minutes'];
-			}
-
-			// Fill in the default date
-			if ( $this->_value == array() ) {
-				$now = getdate();
-				$this->_value['day'] = $now['mday'];
-				$this->_value['month'] = $now['mon'];
-				$this->_value['year'] = $now['year'];
-				$this->_value['hours'] = $now['hours'];
-				$this->_value['minutes'] = $now['minutes'];
-			}
-
 			// Get the names of the days
 			$days = array();
 			for ( $i = 1; $i <= 31; $i++ ) {
@@ -130,6 +107,33 @@
 		}
 
 		/**
+		 *	This function sets the value for the date element.
+		 *
+		 *	@param	$val	(optional) The value for this object.
+		 */		
+		function setValue( $val=array() ) {
+			if ( is_numeric( $val ) ) {
+				if ( ! is_int( $val ) ) {
+					$val = intval( $val );
+				}
+				$now = getdate( $val );
+				$this->_value['day'] = $now['mday'];
+				$this->_value['month'] = $now['mon'];
+				$this->_value['year'] = $now['year'];
+				$this->_value['hours'] = $now['hours'];
+				$this->_value['minutes'] = $now['minutes'];
+			}
+			if ( $val == array() ) {
+				$now = getdate();
+				$this->_value['day'] = $now['mday'];
+				$this->_value['month'] = $now['mon'];
+				$this->_value['year'] = $now['year'];
+				$this->_value['hours'] = $now['hours'];
+				$this->_value['minutes'] = $now['minutes'];
+			}
+		}
+
+		/**
 		 *	This will return a unix timestamp of the selected time.
 		 *
 		 *	@param $format	(optional) The format if you want to get a formatted date/time. If null, an integer is
@@ -138,6 +142,7 @@
 		 *	@returns	An integer with the current date/time stamp.
 		 */
 		function getTimeStamp( $format=null ) {
+			$this->_value = $this->setValue( $this->_value );
 			$tstamp = mktime(
 				$this->_value['hours'], $this->_value['minutes'], 0,
 				$this->_value['month'], $this->_value['day'], $this->_value['year']

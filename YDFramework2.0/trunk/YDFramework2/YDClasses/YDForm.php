@@ -262,7 +262,20 @@
 		 *	@param $array	Associative array containing the default values.
 		 */
 		function setDefaults( $array ) {
+
+			// Will be used for new elements
 			$this->_defaults = $array;
+			
+			// Update the values for the existing elements
+			if ( ! $this->isSubmitted() ) {
+				foreach ( $this->_elements as $name=>$element ) {
+					if ( isset( $this->_defaults[ $element->_name ] ) ) {
+						$element->setValue( $this->_defaults[ $element->_name ] );
+						$this->_elements[ $name ] = $element;
+					}
+				}
+			}
+			
 		}
 
 		/**
@@ -304,7 +317,6 @@
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
 				if ( $var === $this->_name . '_' . $name ) {
-					//$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
 					$elementVars[ preg_replace( '/^' . $this->_name . '_/', '', $var ) ] = $value;
 				}
 			}
@@ -313,13 +325,14 @@
 			if ( sizeof( $elementVars ) == 0 )  {
 				if ( ! $this->isSubmitted() ) {
 					if ( isset( $this->_defaults[ $name ] ) ) {
-						$instance->_value = $this->_defaults[ $name ];
+						//$instance->_value = $this->_defaults[ $name ];
+						$instance->setValue( $this->_defaults[ $name ] );
 					}
 				}
 			} elseif ( sizeof( $elementVars ) == 1 ) {
-				$instance->_value = $elementVars[ $name ];
+				$instance->setValue( $elementVars[ $name ] );
 			} else {
-				$instance->_value = $elementVars;
+				$instance->setValue( $elementVars );
 			}
 
 			// Register the element in the class.
@@ -511,7 +524,7 @@
 		function getValue( $name ) {
 
 			// Get the actual element value
-			$element = $this->getElement( $name );
+			$element = & $this->getElement( $name );
 			$type = $element->_type;
 			$value = $element->_value;
 			$applyFilters = $element->_applyFilters;
@@ -538,6 +551,7 @@
 			// Add the timestamp if needed
 			if ( method_exists( $element, 'getTimeStamp' ) ) {
 				if ( ! is_array( $value ) ) {
+					$element->setValue( $value );
 					$value = $element->_value;
 				}
 				@ $value['timestamp'] = $element->getTimeStamp();
@@ -582,7 +596,6 @@
 			foreach ( $vars as $key=>$value ) {
 
 				// Remove the form name from the element name
-				//$key = str_replace( $this->_name . '_', '', $key );
 				$key = preg_replace( '/^' . $this->_name . '_/', '', $key );
 
 				// Check if the key is a form element
@@ -1025,6 +1038,14 @@
 
 		}
 
+		/**
+		 *	This function sets the value for the date element.
+		 *
+		 *	@param	$val	(optional) The value for this object.
+		 */		
+		function setValue( $val='' ) {
+			$this->_value = $val;
+		}
 		/**
 		 *	Indicates if the element is a button or not.
 		 *

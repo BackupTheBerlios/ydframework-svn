@@ -38,14 +38,14 @@
 			$form->setDefaults(
 				array(
 					'dateSelect1' => array( 'month'=>4, 'day'=>4, 'year'=>2002 ),
-					'dateSelect2' => 1017871200,
-					'timeSelect2' => 1017871200,
-					'datetimeSelect2' => 1017871200,
+					'dateSelect2' => strval( time() ),
+					'timeSelect2' => strval( time() ),
+					'datetimeSelect2' => time() + 3600 * 24,
 				)
 			);
 
 			// Show the contents of the form
-			if ( YD_DEBUG == 1 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
 				YDDebugUtil::dump( $form->_regFilters, 'Registered filters' );
