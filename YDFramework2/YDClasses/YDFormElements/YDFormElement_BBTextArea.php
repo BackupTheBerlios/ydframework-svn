@@ -191,7 +191,7 @@
 				$out .= '</tr>';
 				$out .= '</table>';
 			} else {
-				$out .= '<textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_name . '</textarea>';
+				$out .= '<textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea>';
 			}
 			return $out;
 
