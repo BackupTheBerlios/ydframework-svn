@@ -39,16 +39,21 @@
                     // Show the timings
                     YDDebugUtil::debug( 'Processing time:', $elapsed, 'ms' );
 
-                    /*
-                    // Number of database connections made
+                    // Get database statistics
+                    $dbStats = '';
                     if ( isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
-                        YDDebugUtil::debug(
-                            $GLOBALS['YD_DB_CONN_CNT'] . 'database connections made'
-                        );
+                        $dbStats .= $GLOBALS['YD_DB_CONN_CNT'];
+                        $dbStats .= ' database connection(s) made.';
                     } else {
-                        YDDebugUtil::debug( 'No database connections made' );
+                        $dbStats .= 'No database connections made.';
                     }
-                    */
+                    if ( isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
+                        $dbStats .= "\n" . $GLOBALS['YD_DB_SQLQ_CNT'];
+                        $dbStats .= ' database querie(s) executes.';
+                    } else {
+                        $dbStats .= "\n" . 'No database queries executed.';
+                    }
+                    YDDebugUtil::debug( $dbStats );
 
                     // Total size of include files
                     $includeFiles = get_included_files();
@@ -130,10 +135,14 @@
 
             // Execute authentication fails/succeeds
             if ( $result ) {
-                YDObjectUtil::failOnMissingMethod( $clsInst, 'authenticationSucceeded' );
+                YDObjectUtil::failOnMissingMethod( 
+                    $clsInst, 'authenticationSucceeded'
+                );
                 $clsInst->authenticationSucceeded();
             } else {
-                YDObjectUtil::failOnMissingMethod( $clsInst, 'authenticationFailed' );
+                YDObjectUtil::failOnMissingMethod( 
+                    $clsInst, 'authenticationFailed' 
+                );
                 $clsInst->authenticationFailed();
                 YDFinishRequest();
             }

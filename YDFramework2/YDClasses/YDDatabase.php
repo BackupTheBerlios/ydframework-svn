@@ -72,6 +72,9 @@
             // Initialize the database URL
             $this->_url = $url;
 
+            // Placeholder for the connection object
+            $this->_conn = null;
+
         }
 
         /**
@@ -114,8 +117,16 @@
          */
         function getConnection( $dieOnError=true, $persistent=false ) {
 
+            // Check if there is already a connection
+            if ( $this->_conn ) {
+                return $this->_conn;
+            }
+
             // Make the connection
             $conn = DB::connect( $this->getUrl(), $persistent );
+
+            // Update counter
+            $this->_incrementConnCounter();
 
             // Check for errors
             if ( DB::isError( $conn ) ) {
@@ -135,12 +146,8 @@
             // Set the options
             $conn->setOption( 'portability', DB_PORTABILITY_LOWERCASE );
 
-            // Keep counter
-            if ( ! isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
-                $GLOBALS['YD_DB_CONN_CNT'] = 1;
-            } else {
-                $GLOBALS['YD_DB_CONN_CNT'] = $GLOBALS['YD_DB_CONN_CNT'] + 1;
-            }
+            // Save the connection
+            $this->_conn = $conn;
 
             // Return the connection
             return $conn;
@@ -167,6 +174,9 @@
 
             // Execute the query
             $result = $conn->query( $sql, $params );
+
+            // Update counter
+            $this->_incrementSqlCounter();
 
             // Check for errors
             if ( DB::isError( $result ) ) {
@@ -199,6 +209,9 @@
             // Execute the query
             $result = $conn->getAll( $query, $params );
 
+            // Update counter
+            $this->_incrementSqlCounter();
+
             // Check for errors
             if ( DB::isError( $result ) ) {
                 return new YDFatalError( $result );
@@ -230,6 +243,9 @@
             // Execute the query
             $result = $conn->query( $query, $params );
 
+            // Update counter
+            $this->_incrementSqlCounter();
+
             // Check for errors
             if ( DB::isError( $result ) ) {
                 return new YDFatalError( $result );
@@ -256,6 +272,40 @@
 
             // Return the quoted string
             return $conn->quote( $string );
+
+        }
+
+        /**
+         *  This function will add 1 to the counter of the number of database 
+         *  connections that were made.
+         *
+         *  @internal
+         */
+        function _incrementConnCounter() {
+
+            // Update or create new counter
+            if ( ! isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
+                $GLOBALS['YD_DB_CONN_CNT'] = 1;
+            } else {
+                $GLOBALS['YD_DB_CONN_CNT'] = $GLOBALS['YD_DB_CONN_CNT'] + 1;
+            }
+
+        }
+
+        /**
+         *  This function will add 1 to the counter of the number of SQL queries
+         *  that were executed.
+         *
+         *  @internal
+         */
+        function _incrementSqlCounter() {
+
+            // Update or create new counter
+            if ( ! isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
+                $GLOBALS['YD_DB_SQLQ_CNT'] = 1;
+            } else {
+                $GLOBALS['YD_DB_SQLQ_CNT'] = $GLOBALS['YD_DB_SQLQ_CNT'] + 1;
+            }
 
         }
 

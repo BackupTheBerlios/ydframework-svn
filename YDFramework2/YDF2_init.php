@@ -37,9 +37,6 @@
      *  Webpage: http://www.yellowduck.be/
      *  
      *  Author: Pieter Claerhout, pieter@yellowduck.be
-     *
-     *  @todo
-     *      Keep track of the number of SQL queries that were executed.
      */
 
     // Only execute this once

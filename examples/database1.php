@@ -72,12 +72,17 @@
 
                 } else {
 
-                    // Perform a database query
-                    $sql = new YDSqlQuery( 'show processlist' );
-                    $result = $sql->executeSelect( $dbAliasses[ $_GET['id'] ] );
+                    // Get the process list
+                    $result = $db->executeSelect( 'show processlist' );
+                    $this->setVar( 'processList', $result );
 
-                    // Assign the database result
-                    $this->setVar( 'result', $result );
+                    // Get the database status
+                    $result = $db->executeSelect( 'show status' );
+                    $this->setVar( 'status', $result );
+
+                    // Get the variables
+                    $result = $db->executeSelect( 'show variables' );
+                    $this->setVar( 'variables', $result );
 
                 }
 
