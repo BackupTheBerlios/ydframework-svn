@@ -112,12 +112,9 @@
             
             // Add another one
             array_push( $locales, substr( $locale, 0, 2 ) . '_' . strtoupper( substr( $locale, 0, 2 ) ) );
-            
+
             // Set the locale
-            $result = call_user_func_array( 'setlocale', array_unique( $locales ) );
-            
-            // Trigger an error if failed
-            if ( ! $result ) {
+            if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) { 
                 trigger_error( 'Your platform does not support the locale "' . strtolower( $locale ) . '"', YD_ERROR );
             }
             
