@@ -51,21 +51,11 @@
             <para>The Yellow Duck Framework is proudly sponsered by <ulink url="http://www.redcarpethost.com/">Red Carpet Host</ulink>.</para>
             <para><mediaobject>
                 <imageobject>
-                    <imagedata fileref="sponsored_by_rch.gif"/>
+                    <imagedata fileref="sponsored_by_rch.gif" />
                 </imageobject>
             </mediaobject></para>
         </abstract>
     </bookinfo>
-
-    <!--preface>
-        <title>A word about our sponser</title>
-        <para>The Yellow Duck Framework is proudly sponsered by <ulink url="http://www.redcarpethost.com/">Red Carpet Host</ulink>.</para>
-        <para><mediaobject>
-            <imageobject>
-                <imagedata fileref="sponsored_by_rch.gif"/>
-            </imageobject>
-        </mediaobject></para>
-    </preface-->
 
     &introduction;
     &firstsample;

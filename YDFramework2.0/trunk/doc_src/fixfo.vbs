@@ -33,7 +33,7 @@ if WScript.Arguments.length > 0 then
 	data = Replace( data, "font-size=""24.8832pt""", "font-size=""16pt""" )
 	data = Replace( data, "font-size=""20.736pt""",  "font-size=""16pt""" )
 	data = Replace( data, "font-size=""18.6624pt""", "font-size=""12pt""" )
-	data = Replace( data, "font-family=""LucidaSans,Symbol,ZapfDingbats""", "font-family=""LucidaSans,Symbol""" )
+	data = Replace( data, "font-family=""serif""", "font-family=""LucidaSans""" )
 	data = Replace( _
 		data, _
 		"<fo:inline font-family=""LucidaTypewriter""><fo:inline keep-together.within-line=""always"" hyphenate=""false"">&lt;pieter@yellowduck.be&gt;</fo:inline></fo:inline>", _
