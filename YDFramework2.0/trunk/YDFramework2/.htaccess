@@ -7,6 +7,9 @@
 # Set the default documents
 DirectoryIndex index.php index.html
 
+# Disallow directory browsing
+Options -Indexes
+
 # Disable magic quotes
 php_value magic_quotes_gpc 0
 php_value magic_quotes_runtime 0
