@@ -183,6 +183,56 @@
 
         <para>When specifying the method signature array, use an array containing strings from the following list: 'date', 'base64', 'string', 'int', 'float', 'boolean', 'array', 'struct'.</para>
 
+        <para>The following screenshot shows you the default output of this demo script shown earlier. If the request is not a HTTP POST request, this is the screen the user will see:</para>
+
+        <para><mediaobject>
+            <imageobject>
+                <imagedata fileref="xmlrpcserver.gif"/>
+            </imageobject>
+        </mediaobject></para>
+
+        <para>You can change this by overriding the requestNotXmlRpc function in your XML/RPC server class. The following code sample illustrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDXmlRpc.php' );
+
+    // Class definition
+    class xmlrpcserver extends YDXmlRpcServer {
+
+        // Class constructor
+        function xmlrpcserver() {
+
+            // Initialize the parent class
+            $this->YDXmlRpcServer();
+            
+            // Register the methods
+            $this->registerMethod(
+                'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' )
+            );
+
+        }
+
+        // The method which just echoes a string
+        function xmlrpcEcho( $var ) {
+            return $var;
+        }
+
+        // Override the HTTP GET requests
+        function requestNotXmlRpc() {
+            echo( 'This is not a HTTP POST request.' );
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
     </sect1>
 
     <sect1 id="ydxmlrpc_more_info">
