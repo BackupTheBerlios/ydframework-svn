@@ -28,6 +28,11 @@
 	YDInclude( 'YDFileSystem.php' );
 	YDInclude( 'htmlMimeMail/htmlMimeMail.php' );
 
+	// General constants
+	define( 'YDEMAIL_PRIORITY_HIGH', '1' );
+	define( 'YDEMAIL_PRIORITY_NORMAL', '3' );
+	define( 'YDEMAIL_PRIORITY_LOW', '5' );
+
 	/**
 	 *	This class defines an email message.
 	 */
@@ -72,6 +77,16 @@
 		 */
 		function setReplyTo( $email, $name='' ) {
 			$this->_msg->setHeader( 'Reply-To', $this->_mergeEmailName( $email, $name ) );
+		}
+
+		/**
+		 *	Function to set the priority of the email. This can be one of the following constants:
+		 *	YDEMAIL_PRIORITY_HIGH, YDEMAIL_PRIORITY_NORMAL, YDEMAIL_PRIORITY_LOW.
+		 *
+		 *	@param $priority	(optional) The priority of the email. Default is YDEMAIL_PRIORITY_NORMAL.
+		 */
+		function setPriority( $priority=YDEMAIL_PRIORITY_HIGH ) { 
+			$this->_msg->setHeader( 'X-Priority', $priority ); 
 		}
 
 		/**
