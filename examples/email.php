@@ -55,7 +55,10 @@
 				$eml->setHtmlBody( $body );
 				$eml->addAttachment( 'email.tpl' );
 				$eml->addHtmlImage( 'fsimage.jpg', 'image/jpeg' );
-				$eml->send();
+				$result = $eml->send();
+
+				// Add the result
+				$this->setVar( 'result', $result );
 
 			}
 

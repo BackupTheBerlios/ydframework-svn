@@ -12,8 +12,11 @@
 
 	<?php if ( $formValid ) { ?>
 
-		<p>The email to <b><?= $form['email']['value'] ?></b> was sent
-		successfully!</p>
+		<?php if ( $result ) { ?>
+			<p>The email to <b><?= $form['email']['value'] ?></b> was sent successfully!</p>
+		<?php } else { ?>
+			<p style="color: red">The email to <b><?= $form['email']['value'] ?></b> was NOT sent successfully!</p>
+	<?php } ?>
 
 	<?php } else { ?>
 

@@ -163,6 +163,8 @@
 		/**
 		 *	This function will send the actual email. It accepts a list of recipients which should be defined as an 
 		 *	array. If no recipients are defined, it will use the one setup in the email message using addTo.
+		 *
+		 *	@returns	Boolean indicating if the message was send succesfully or not.
 		 */
 		function send() {
 
@@ -194,7 +196,10 @@
 			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
 			// Send the email
-			$message->send( $this->to_plain );
+			$result = @ $message->send( $this->to_plain );
+
+			// Return the result
+			return $result;
 
 		}
 
