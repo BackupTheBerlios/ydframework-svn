@@ -111,12 +111,51 @@
                 <link href="#ch07_05">Specifying variables in SQL queries</link>
                 <link href="#ch07_06">Getting and sending data to a data source</link>
             </link>
-            <link href="#ch08">How to handle authentication</link>
-            <link href="#ch09">Using files, directories and images</link>
-            <link href="#ch10">Using URLs and downloading data</link>
-            <link href="#ch11">Using XML/RPC clients and servers</link>
-            <link href="#ch12">Sending emails</link>
-            <link href="#ch13">Other classes and modules</link>
+            <link href="#ch08">How to handle authentication
+                <link href="#ch08_01">Overview</link>
+                <link href="#ch08_02">Example 1 - IP based authentication</link>
+                <link href="#ch08_03">Example 2 - Basic HTTP authentication</link>
+                <link href="#ch08_04">Example 3 - Form based authentication</link>
+            </link>
+            <link href="#ch09">Using files, images and directories
+                <link href="#ch09_01">Introduction</link>
+                <link href="#ch09_02">Why this abstraction?</link>
+                <link href="#ch09_03">Using files</link>
+                <link href="#ch09_04">Using images</link>
+                <link href="#ch09_05">Using directories</link>
+            </link>
+            <link href="#ch10">Using URLs and downloading data
+                <link href="#ch10_01">Introduction</link>
+                <link href="#ch10_02">Raw HTTP connections</link>
+                <link href="#ch10_03">The YDUrl class</link>
+                <link href="#ch10_04">Caching of downloaded data</link>
+            </link>
+            <link href="#ch11">Using XML/RPC clients and servers
+                <link href="#ch11_01">What is XML/RPC?</link>
+                <link href="#ch11_02">Using YDXmlRpcClient</link>
+                <link href="#ch11_03">Using YDXmlRpcServer</link>
+            </link>
+            <link href="#ch12">Sending emails
+                <link href="#ch12_01">Introduction</link>
+                <link href="#ch12_02">The YDEmail class</link>
+                <link href="#ch12_03">An example</link>
+                <link href="#ch12_04">Combining YDTemplate and YDEmail</link>
+            </link>
+            <link href="#ch13">Creating RSS and ATOM feeds
+                <link href="#ch13_01">What is RSS and ATOM?</link>
+                <link href="#ch13_02">Setting up the feed</link>
+                <link href="#ch13_03">Adding items</link>
+                <link href="#ch13_04">Outputting the feed</link>
+            </link>
+            <link href="#ch14">Other classes and modules
+                <link href="#ch14_01">YDArrayUtil</link>
+                <link href="#ch14_02">YDBrowserInfo</link>
+                <link href="#ch14_03">YDDebugUtil</link>
+                <link href="#ch14_04">YDError</link>
+                <link href="#ch14_05">YDLanguage</link>
+                <link href="#ch14_06">YDObjectUtil</link>
+                <link href="#ch14_07">YDTimer</link>
+            </link>
         </table-of-content>
     
         <section name="ch01" label="Introducing the Yellow Duck Framework" />
@@ -3225,41 +3264,338 @@ phptype</pre>
 
             </section>
 
-        <section name="ch08" label="How to handle authentication">
-                <br/>
-                Not written yet
-                <page-break />
-        </section>
+        <section name="ch08" label="How to handle authentication" />
 
-        <section name="ch09" label="Using files, directories and images">
+            <section name="ch08_01" label="Overview">
                 <br/>
                 Not written yet
-                <page-break />
-        </section>
+            </section>
 
-        <section name="ch10" label="Using URLs and downloading data">
+            <section name="ch08_02" label="Example 1 - IP based authentication">
                 <br/>
                 Not written yet
-                <page-break />
-        </section>
+            </section>
 
-        <section name="ch11" label="Using XML/RPC clients and servers">
+            <section name="ch08_03" label="Example 2 - Basic HTTP authentication">
                 <br/>
                 Not written yet
-                <page-break />
-        </section>
+            </section>
 
-        <section name="ch12" label="Sending emails">
+            <section name="ch08_04" label="Example 3 - Form based authentication">
                 <br/>
                 Not written yet
                 <page-break />
-        </section>
+            </section>
 
-        <section name="ch13" label="Other classes and modules">
+        <section name="ch09" label="Using files, images and directories" />
+
+            <section name="ch09_01" label="Introduction?">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch09_02" label="Why this abstraction?">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch09_03" label="Using files">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch09_04" label="Using images">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch09_05" label="Using directories">
                 <br/>
                 Not written yet
                 <page-break />
-        </section>
+            </section>
+
+        <section name="ch10" label="Using URLs and downloading data" />
+
+            <section name="ch10_01" label="Introduction">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch10_02" label="Raw HTTP connections">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch10_03" label="The YDUrl class">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch10_04" label="Caching of downloaded data">
+                <br/>
+                Not written yet
+                <page-break />
+            </section>
+
+        <section name="ch11" label="Using XML/RPC clients and servers" />
+
+            <section name="ch11_01" label="What is XML/RPC?">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch11_02" label="Using YDXmlRpcClient">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch11_03" label="Using YDXmlRpcServer">
+                <br/>
+                Not written yet
+                <page-break />
+            </section>
+
+        <section name="ch12" label="Sending emails" />
+
+            <section name="ch12_01" label="Introduction">
+
+                <br/>
+                
+                In the Yellow Duck Framework, we provided a special class to
+                easily send emails with all the possible options. It is possible
+                with the framework to create emails that have both text and
+                HTML contents, inline images are supported for HTML emails and
+                also file attachments are fully supported.
+
+                <br/><br/>
+
+                The Yellow Duck Framework supports the following options for
+                sending emails:
+
+                <div><ul>
+                    <li>Specifying the from address</li>    
+                    <li>Specifying the reply-to address</li>    
+                    <li>Specifying one or more to addresses</li>    
+                    <li>Specifying one or more cc addresses</li>    
+                    <li>Specifying one or more bcc addresses</li>    
+                    <li>Specifying the plain text version of the email</li>    
+                    <li>Specifying the HTML version of the email</li>    
+                    <li>File attachments</li>    
+                    <li>Inline HTML images</li>    
+                </ul></div>
+                
+                <i><b>Note</b>: The emails outputted with the Yellow Duck 
+                Framework have been tested with a variety of email clients and 
+                servers to make sure they were all correctly supported.</i>
+
+            </section>
+
+            <section name="ch12_02" label="The YDEmail class">
+
+                <br/>
+
+                The class YDEmail in the Yellow Duck Framework is the class that
+                defines an email. You can use the different class methods to set
+                the recipients, subject, contents and so on for your email.
+
+                <br/><br/>
+
+                Once the email object is set up, you can use the function
+                <code>send</code> to send the actual email to the correct
+                recipients. This function takes no arguments and is smart enough
+                to figure out the list of recipients to send the email to.
+
+                <br/><br/>
+
+                Before sending the email, a number of conditions is checked 
+                which would prevent the email from being send properly. An error
+                will be raised if you forgot to specify at least one recipient
+                for your email. You will also be forced to specify the sender
+                from the email.
+
+                <br/><br/>
+
+                <i><b>Note</b>: For the sending of the emails, the internal 
+                <code>mail</code> function is used to do the hard work. 
+                Depending on your computer platform, this might requires some 
+                setup. Please refer to the <a target="_blank" 
+                href="http://www.php.net/mail/">PHP Online Documentation</a> for
+                instructions on how to set this up.</i>
+
+                <br/><br/>
+
+                <i><b>Note</b>: If you specify HTML text as the text only 
+                contents of your email, all HTML tags will be stripped from the
+                text. We cannot guarantee that the layout of the text will be
+                properly preserved.</i>
+
+            </section>
+
+            <section name="ch12_03" label="An example">
+
+                <br/>
+                
+                The following sample demonstrates you how you can setup a
+                YDEmail object, fill it and send it to the specified recipients.
+
+                <pre><font color="#666666">// Send the email</font>
+<font color="#00007F">$eml</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDEmail</font><font color="#000000">();</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setFrom</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'pieter@yellowduck.be'</font><font color="#000000">,</font><font color="#000033"> YD_FW_NAME </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addTo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setSubject</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'Hello from Pieter &amp; Fiona!'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setTxtBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setHtmlBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addAttachment</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email1.tpl'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addHtmlImage</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'fsimage1.jpg'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'image/jpeg'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">send</font><font color="#000000">();</font></pre>
+
+                <i><b>Note</b>: as with every class in the Yellow Duck Framework
+                you want to use, make sure you included the class definition
+                file.</i>
+
+            </section>
+
+            <section name="ch12_04" label="Combining YDTemplate and YDEmail">
+
+                <br/>
+                
+                To make it easier to construct the contents of your email, you
+                can combine the YDTemplate class with the YDEmail class to 
+                create email messages based on templates.
+
+                <br/><br/>
+
+                The way this works is by first creating a YDTemplate instance
+                which will be used to create the body of your email. After you
+                setup the YDTemplate instance, you can use the 
+                <code>getOutput</code> function to get the parsed result of your
+                template object. You will probably have to specify the name of a
+                template as you will probably use a different template than the
+                one from your script.
+
+                <br/><br/>
+
+                After you got the body of your email, you can assign this to the
+                YDEmail class using the functions <code>setTxtBody</code> and 
+                <code>setHtmlBody</code>. The following example demonstrates
+                this concept:
+
+                <pre><font color="#666666">// Parse the template for the email</font>
+<font color="#00007F">$emlTpl</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDTemplate</font><font color="#000000">();</font>
+<font color="#00007F">$emlTpl</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$emlTpl</font><font color="#000000">-&gt;</font><font color="#000033">getOutput</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email1_template'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#666666">// Send the email</font>
+<font color="#00007F">$eml</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDEmail</font><font color="#000000">();</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setFrom</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'pieter@yellowduck.be'</font><font color="#000000">,</font><font color="#000033"> YD_FW_NAME </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addTo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setSubject</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'Hello from Pieter &amp; Fiona!'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setTxtBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setHtmlBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addAttachment</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email1.tpl'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addHtmlImage</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'fsimage1.jpg'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'image/jpeg'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">send</font><font color="#000000">();</font></pre>
+
+                The template for this email will look like:
+
+                <pre><font color="#000080">&lt;html&gt;</font>
+
+<font color="#000080">&lt;head&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$YD_FW_NAMEVERS</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000080">&lt;/head&gt;</font>
+
+<font color="#000080">&lt;body&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;p&gt;</font><font color="#000000">Hello from Pieter </font><font color="#FF0000">&amp; </font><font color="#000000">Fiona</font><font color="#000080">&lt;/p&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;p&gt;&lt;img</font><font color="#800080"> </font><font color="#008080">src</font><font color="#800080">=</font><font color="#7F007F">"fsimage1.jpg"</font><font color="#800080"> </font><font color="#008080">border</font><font color="#800080">=</font><font color="#7F007F">"1"</font><font color="#800080"> </font><font color="#008080">alt</font><font color="#800080">=</font><font color="#7F007F">"Pieter &amp; Fiona"</font>
+<font color="#800080">    </font><font color="#008080">width</font><font color="#800080">=</font><font color="#7F007F">"320"</font><font color="#800080"> </font><font color="#008080">height</font><font color="#800080">=</font><font color="#7F007F">"213"</font><font color="#000080">&gt;&lt;/p&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;p&gt;</font><font color="#000000">This email was sent to </font>
+<font color="#000000">    </font><font color="#000080">&lt;a</font><font color="#800080"> </font><font color="#008080">href</font><font color="#800080">=</font><font color="#7F007F">"mailto:</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$email</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#7F007F">"</font><font color="#000080">&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$email</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/a&gt;</font><font color="#000000">.</font><font color="#000080">&lt;/p&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;p&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$YD_FW_NAMEVERS</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/p&gt;</font>
+
+<font color="#000080">&lt;/body&gt;</font>
+
+<font color="#000080">&lt;/html&gt;</font>
+<font color="#000000"></font></pre>
+
+                <i><b>Note</b>: if you look carefully at the example above, you
+                will see that we referenced the image in the template by it's
+                name given when you added the file to the YDEmail object. This
+                src attribute should only contain the name of the image, and not
+                a local path. An internet url is supported as well.</i>
+
+                <page-break />
+
+            </section>
+
+        <section name="ch13" label="Creating RSS and ATOM feeds" />
+
+            <section name="ch13_01" label="What is RSS and ATOM?">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch13_02" label="Setting up the feed">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch13_03" label="Adding items">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch13_04" label="Outputting the feed">
+                <br/>
+                Not written yet
+                <page-break />
+            </section>
+
+        <section name="ch14" label="Other classes and modules" />
+
+            <section name="ch14_01" label="What is discussed in this chapter?">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_02" label="YDArrayUtil">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_03" label="YDBrowserInfo">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_04" label="YDDebugUtil">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_05" label="YDError">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_06" label="YDLanguage">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_07" label="YDObjectUtil">
+                <br/>
+                Not written yet
+            </section>
+
+            <section name="ch14_08" label="YDTimer">
+                <br/>
+                Not written yet
+            </section>
 
     </document-body>
 

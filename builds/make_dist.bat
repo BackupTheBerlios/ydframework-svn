@@ -36,6 +36,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
 del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 del /Q "%BLDDIR%\YDFramework2\doc\ydf2.xml"
+del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
 xcopy /I /Q /Y "%BLDDIR%\YDFramework2\doc\changelog.html" "changelog.html"
 copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf"
 
