@@ -525,6 +525,9 @@
 				}
 			}
 
+			// Get the values
+			$fileList = array_values( $fileList );
+
 			// Return a simple list if needed
 			if ( $class === '' ) {
 				return $fileList;
