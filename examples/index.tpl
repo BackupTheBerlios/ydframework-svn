@@ -243,14 +243,6 @@
 		</tr>
 		<tr>
 			<td valign="top">
-				<a href="language.php">Language negotiator</a>
-			</td>
-			<td valign="top">
-				<a href="[$YD_SELF_SCRIPT]?do=source&id=language1.php">language.php</a>
-			</td>
-		</tr>
-		<tr>
-			<td valign="top">
 				<a href="email.php">Sending emails</a>
 			</td>
 			<td valign="top">

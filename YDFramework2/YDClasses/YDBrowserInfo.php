@@ -8,7 +8,7 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'YDLanguage.php' );
+	//require_once( 'YDLanguage.php' );
 
 	/**
 	 *	This class uses the HTTP_USER_AGENT varaible to get information about the browser the visitor used to perform
@@ -131,8 +131,25 @@
 		 *	@return Array containing the list of supported languages
 		 */
 		function getBrowserLanguages() {
-			$lang = new YDLanguage();
-			return $lang->getBrowserLanguages();
+
+			// We parse the language headers sent by the browser
+			if ( ! isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+				return array();
+			}
+			$browserLanguages = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+
+			// Normalize the browser language headers
+			for ( $i = 0; $i < sizeof( $browserLanguages ); $i++ ) {
+				$browserLanguage = explode( ';', $browserLanguages[$i] );
+				$browserLanguages[$i] = substr( $browserLanguage[0], 0, 2 );
+			}
+
+			// Remove the duplicates
+			$browserLanguages = array_unique( $browserLanguages );
+
+			// Return the browser languages
+			return array_values( $browserLanguages );
+
 		}
 
 		/**
@@ -143,8 +160,26 @@
 		 *						supported.
 		 */
 		function getLanguage( $supported=array( 'en' ) ) {
-			$lang = new YDLanguage( $supported );
-			return $lang->getLanguage();
+
+			// Start with the default language
+			$language = $supported[0];
+
+			// Get the list of languages supported by the browser
+			$browserLanguages = $this->getBrowserLanguages();
+
+			// Now, we look if the browser specified one
+			if ( isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+				foreach ( $browserLanguages as $browserLanguage ) {
+					if ( in_array( $browserLanguage, $supported ) ) {
+						$language = $browserLanguage;
+						break;
+					}
+				}
+			}
+
+			// Return the language
+			return $language;
+
 		}
 
 	}
