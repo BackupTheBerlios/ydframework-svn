@@ -8,7 +8,6 @@
     // Includes
     require_once( 'YDBase.php' );
     require_once( 'YDError.php' );
-    require_once( 'Savant.php' );
 
     /**
      *  This class implements an template object.
@@ -32,11 +31,8 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Instantiate the template object
-            $this->_tpl = & new Savant();
-
-            // Add the default template directory
-            $this->setTemplateDir( YD_SELF_DIR );
+            // Keep a list of the variables
+            $this->_vars = array();
 
         }
 
@@ -49,33 +45,7 @@
          *  @param $value The value of the variable you want to add.
          */
         function setVar( $name, $value ) {
-            $this->_tpl->assign( $name, $value );
-        }
-
-        /**
-         *  This function is used to change the directory in which to look for
-         *  the template files. Make sure the directory exists and is writeable.
-         *
-         *  If the directory cannot be found, a fatal error is raised and the
-         *  execution is stopped.
-         *
-         *  @param $dir Directory you want to use as the template directory.
-         *              This can be a relative or absolute path. An absolute
-         *              path is the preferred way of working.
-         */
-        function setTemplateDir( $dir ) {
-
-            // Check if the directory exists
-            if ( ! is_dir( $dir ) ) {
-                new YDFatalError(
-                    'Cannot use the directory "' . $dir . '" as the template '
-                    . 'directory because the directory could not be found'
-                );
-            }
-
-            // Set the template directory
-            $this->_tpl->addPath( 'template', $dir );
-
+            $this->_vars[ $name ] = $value;
         }
 
         /**
@@ -168,8 +138,24 @@
                 $this->setVar( 'YD_DB_SQLQ_CNT', 0 );
             }
 
-            // Get the output from the template
-            return $this->_tpl->fetch( $name . YD_TPL_EXT );
+            // Get the path to the template
+            $tplPath = realpath( YD_SELF_DIR ) . '/' . $name . YD_TPL_EXT;
+
+            // Check if the file exists
+            if ( ! is_file( $tplPath ) ) {
+                new YDFatalError( 'Template not found: ' . $tplPath );
+            }
+
+            // Extract the variables
+            extract( $this->_vars );
+
+            // Process the template
+            include( $tplPath );
+            $contents = ob_get_contents();
+            ob_end_clean();
+
+            // Returns the contents
+            return $contents; 
 
         }
 
