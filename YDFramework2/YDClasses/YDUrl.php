@@ -173,11 +173,6 @@
          *  "wch". You can delete these automatically as they will be recreated
          *  on the fly if needed.
          *
-         *  @todo
-         *      Add support for proxy servers which should be defined using a
-         *      function parameter. You should also be able to define a global
-         *      proxy server and have a list of servers that do not need proxy.
-         *
          *  @remark
          *      This function only works for HTTP connections.
          *
