@@ -222,13 +222,18 @@ class phpthumb_functions {
 	}
 
 	function ApacheLookupURIarray($filename) {
-		$apacheLookupURIarray = array();
-		$keys = array('status', 'the_request', 'status_line', 'method', 'content_type', 'handler', 'uri', 'filename', 'path_info', 'args', 'boundary', 'no_cache', 'no_local_copy', 'allowed', 'send_bodyct', 'bytes_sent', 'byterange', 'clength', 'unparsed_uri', 'mtime', 'request_time');
-		$apacheLookupURIobject = @apache_lookup_uri($filename);
-		foreach ($keys as $key) {
-			$apacheLookupURIarray[$key] = @$apacheLookupURIobject->$key;
+		// apache_lookup_uri() only works when PHP is installed as an Apache module.
+		if (php_sapi_name() == 'apache') {
+			$keys = array('status', 'the_request', 'status_line', 'method', 'content_type', 'handler', 'uri', 'filename', 'path_info', 'args', 'boundary', 'no_cache', 'no_local_copy', 'allowed', 'send_bodyct', 'bytes_sent', 'byterange', 'clength', 'unparsed_uri', 'mtime', 'request_time');
+			if ($apacheLookupURIobject = @apache_lookup_uri($filename)) {
+				$apacheLookupURIarray = array();
+				foreach ($keys as $key) {
+					$apacheLookupURIarray[$key] = @$apacheLookupURIobject->$key;
+				}
+				return $apacheLookupURIarray;
+			}
 		}
-		return $apacheLookupURIarray;
+		return false;
 	}
 
 }

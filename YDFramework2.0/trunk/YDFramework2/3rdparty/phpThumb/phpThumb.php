@@ -55,6 +55,14 @@ if (!include_once('phpthumb.class.php')) {
 }
 $phpThumb = new phpThumb();
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_REQUEST['phpThumbDebug'] == '1') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+
 if (!file_exists('phpThumb.config.php') || !include_once('phpThumb.config.php')) {
 	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('phpThumb.config.php').'"');
 }
@@ -75,7 +83,7 @@ if (!empty($PHPTHUMB_DEFAULTS)) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '1') {
+if (@$_REQUEST['phpThumbDebug'] == '2') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -94,7 +102,7 @@ foreach ($FilenameParameters as $key) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '2') {
+if (@$_REQUEST['phpThumbDebug'] == '3') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -118,7 +126,7 @@ if ($CanPassThroughDirectly && !empty($_REQUEST['src'])) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '3') {
+if (@$_REQUEST['phpThumbDebug'] == '4') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -140,7 +148,7 @@ if (is_file($phpThumb->cache_filename)) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '4') {
+if (@$_REQUEST['phpThumbDebug'] == '5') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -152,7 +160,7 @@ if (@$_REQUEST['phpThumbDebug'] == '4') {
 // see http://www.billy-corgan.com/blog/archive/000143.php for a brief tutorial on this section
 
 //$SQLquery = 'SELECT `Picture` FROM `products` WHERE (`ProductID` = \''.mysql_escape_string($_REQUEST['id']).'\')';
-if (!empty($SQLquery)) {
+if (empty($_REQUEST['src']) && !empty($SQLquery)) {
 
 	// change this information to match your server
 	$server   = 'localhost';
@@ -218,7 +226,7 @@ if (!empty($SQLquery)) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '5') {
+if (@$_REQUEST['phpThumbDebug'] == '6') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -227,7 +235,7 @@ $phpThumb->GenerateThumbnail();
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '6') {
+if (@$_REQUEST['phpThumbDebug'] == '7') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -258,7 +266,7 @@ if (!empty($_REQUEST['file'])) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '7') {
+if (@$_REQUEST['phpThumbDebug'] == '8') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////

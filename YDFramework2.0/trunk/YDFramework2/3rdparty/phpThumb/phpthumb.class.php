@@ -136,7 +136,7 @@ class phpthumb {
 	var $cache_filename         = null;
 	var $RemoveFileOnCompletion = false;
 
-	var $phpthumb_version = '1.4.9-200408090946';
+	var $phpthumb_version = '1.4.10-200408221403';
 	var $iswindows = null;
 	var $osslash   = null;
 
@@ -222,8 +222,11 @@ class phpthumb {
 		// render thumbnail to this file only, do not cache, do not output to browser
 		$ImageOutFunction = 'image'.$this->thumbnailFormat;
 		//$renderfilename = $this->ResolveFilenameToAbsolute(dirname($filename)).'/'.basename($filename);
-		$renderfilename = $this->ResolveFilenameToAbsolute($filename);
-		$this->DebugMessage('RenderToFile() attempting to render to file "'.$renderfilename.'"', __FILE__, __LINE__);
+		$renderfilename = $filename;
+		if (($filename{0} != '/') && ($filename{0} != '\\') && ($filename{1} != ':')) {
+			$renderfilename = $this->ResolveFilenameToAbsolute($filename);
+		}
+		$this->DebugMessage('RenderToFile('.$filename.') attempting to render to file "'.$renderfilename.'"', __FILE__, __LINE__);
 		ob_start();
 		switch ($this->thumbnailFormat) {
 			case 'jpeg':
@@ -483,19 +486,19 @@ class phpthumb {
 
 		} elseif (substr($filename, 0, 1) == '/') {
 
-			if (!is_readable($this->config_document_root.$filename) && is_readable($filename)) {
+			if (is_readable($filename) && !is_readable($this->config_document_root.$filename)) {
 				// absolute filename (*nix)
 				$AbsoluteFilename = $filename;
 			} elseif (substr($filename, 1, 1) == '~') {
 				// /~user/path
-				if ($apache_lookup_uri_object = @apache_lookup_uri($filename)) {
-					$AbsoluteFilename = $apache_lookup_uri_object->filename;
+				if ($ApacheLookupURIarray = phpthumb_functions::ApacheLookupURIarray($filename)) {
+					$AbsoluteFilename = $ApacheLookupURIarray['filename'];
 				} else {
 					$AbsoluteFilename = realpath($filename);
 					if (is_readable($AbsoluteFilename)) {
-						$this->DebugMessage('apache_lookup_uri() failed for "'.$filename.'", but the correct filename ('.$AbsoluteFilename.') seems to have been resolved with realpath($filename)', __FILE__, __LINE__);
+						$this->DebugMessage('phpthumb_functions::ApacheLookupURIarray() failed for "'.$filename.'", but the correct filename ('.$AbsoluteFilename.') seems to have been resolved with realpath($filename)', __FILE__, __LINE__);
 					} else {
-						return $this->ErrorImage('apache_lookup_uri() failed for "'.$filename.'". This has been known to fail on Apache2 - try using the absolute filename for the source image');
+						return $this->ErrorImage('phpthumb_functions::ApacheLookupURIarray() failed for "'.$filename.'". This has been known to fail on Apache2 - try using the absolute filename for the source image');
 					}
 				}
 			} else {
@@ -508,14 +511,14 @@ class phpthumb {
 			// relative to current directory (any OS)
 			$AbsoluteFilename = $this->config_document_root.dirname(@$_SERVER['PHP_SELF']).'/'.$filename;
 			if (substr(dirname(@$_SERVER['PHP_SELF']), 0, 2) == '/~') {
-				if ($apache_lookup_uri_object = @apache_lookup_uri(dirname(@$_SERVER['PHP_SELF']))) {
-					$AbsoluteFilename = $apache_lookup_uri_object->filename.'/'.$filename;
+				if ($ApacheLookupURIarray = phpthumb_functions::ApacheLookupURIarray(dirname(@$_SERVER['PHP_SELF']))) {
+					$AbsoluteFilename = $ApacheLookupURIarray['filename'].'/'.$filename;
 				} else {
 					$AbsoluteFilename = realpath('.').'/'.$filename;
 					if (is_readable($AbsoluteFilename)) {
-						$this->DebugMessage('apache_lookup_uri() failed for "'.dirname(@$_SERVER['PHP_SELF']).'", but the correct filename ('.$AbsoluteFilename.') seems to have been resolved with realpath(.)/$filename', __FILE__, __LINE__);
+						$this->DebugMessage('phpthumb_functions::ApacheLookupURIarray() failed for "'.dirname(@$_SERVER['PHP_SELF']).'", but the correct filename ('.$AbsoluteFilename.') seems to have been resolved with realpath(.)/$filename', __FILE__, __LINE__);
 					} else {
-						return $this->ErrorImage('apache_lookup_uri() failed for "'.dirname(@$_SERVER['PHP_SELF']).'". This has been known to fail on Apache2 - try using the absolute filename for the source image');
+						return $this->ErrorImage('phpthumb_functions::ApacheLookupURIarray() failed for "'.dirname(@$_SERVER['PHP_SELF']).'". This has been known to fail on Apache2 - try using the absolute filename for the source image');
 					}
 				}
 			}
@@ -1619,9 +1622,12 @@ class phpthumb {
 		}
 		$DebugOutput[] = '';
 
-		$ApacheLookupURIarray = phpthumb_functions::ApacheLookupURIarray(dirname(@$_SERVER['PHP_SELF']));
-		foreach ($ApacheLookupURIarray as $key => $value) {
-			$DebugOutput[] = 'ApacheLookupURIarray.'.str_pad($key, 15, ' ', STR_PAD_RIGHT).' = '.$this->phpThumbDebugVarDump($value);
+		if ($ApacheLookupURIarray = phpthumb_functions::ApacheLookupURIarray(dirname(@$_SERVER['PHP_SELF']))) {
+			foreach ($ApacheLookupURIarray as $key => $value) {
+				$DebugOutput[] = 'ApacheLookupURIarray.'.str_pad($key, 15, ' ', STR_PAD_RIGHT).' = '.$this->phpThumbDebugVarDump($value);
+			}
+		} else {
+				$DebugOutput[] = 'ApacheLookupURIarray() -- FAILED';
 		}
 		$DebugOutput[] = '';
 

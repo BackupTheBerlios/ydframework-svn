@@ -34,9 +34,9 @@ class phpthumb_bmp {
 
 	function phpthumb_bmpfile2gd($filename, $truecolor=true) {
 		if ($fp = @fopen($filename, 'rb')) {
-			$BMPdata = fread($filename, filesize($filename));
+			$BMPdata = fread($fp, filesize($filename));
 			fclose($fp);
-			return phpthumb_bmp2gd($BMPdata, $truecolor);
+			return $this->phpthumb_bmp2gd($BMPdata, $truecolor);
 		}
 		return false;
 	}

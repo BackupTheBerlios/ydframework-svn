@@ -3,6 +3,14 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.10 - August 22, 2004
+  * Bugfix: cached files not written in most cases
+    (thanks kizerÿcourtkizer*com, snuffÿinbox*ru)
+  * Bugfix: ApacheLookupURIarray() crashes in CGI mode
+    (thanks hanskrentelÿyahoo*de)
+  * Bugfix: phpthumb_bmpfile2gd() was broken
+    (thanks iÿmindlace*net)
+
 v1.4.9 - August 9, 2004
   * Bugfix: changed destination filename in RenderToFile()
     (thanks alextkÿwalla*com)
