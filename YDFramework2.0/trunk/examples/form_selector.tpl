@@ -2,15 +2,15 @@
 
 <head>
 
-	<title>[$YD_FW_NAMEVERS]</title>
+	<title>{$YD_FW_NAMEVERS}</title>
 
 	<script language="JavaScript">
 
-		function addItem( item ) {
-			window.opener.AddText( '[$smarty.get.field]', '[ldelim][$smarty.get.tag][rdelim]', item, '[ldelim]/[$smarty.get.tag][rdelim]' );
+		function addItem( item ) {ldelim}
+			window.opener.AddText( '{$_TPL[GET][field]}', '[{$_TPL[GET][tag]}]', item, '[/{$_TPL[GET][tag]}]' );
 			window.close()
 			return false;
-		}
+		{rdelim}
 
 	</script>
 
@@ -18,23 +18,17 @@
 
 <body>
 
-	<h3>Select [$YD_GET.tag] for [$YD_GET.field]</h3>
+	<h3>Select {$YD_GET.tag} for {$YD_GET.field}</h3>
 	
-	<p>Tag: [$YD_GET.tag]</p>
+	<p>Tag: {$YD_GET.tag}</p>
 
-	[if sizeof( $items ) > 0]
-	
-		[foreach from=$items item=item]
-
-			<a href="javascript:void( addItem( '[$item->getBasename()|@addslashes]' ) )">[$item->getBasename()]</a><br>
-
-		[/foreach]
-
-	[else]
-
+	{if sizeof( $items ) > 0}
+		{foreach from=$items item=item}
+			<a href="javascript:void( addItem( '{$item|addslashes}' ) )">{$item}</a><br>
+		{/foreach}
+	{else}
 		<p>No item(s) available yet.</p>
-
-	[/if]
+	{/if}
 
 </body>
 

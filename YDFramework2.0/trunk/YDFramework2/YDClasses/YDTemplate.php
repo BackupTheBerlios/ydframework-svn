@@ -24,26 +24,15 @@
 			// Initialize YDBase
 			$this->YDBase();
 
-			// The template directory
-			$this->_templateDir = YD_SELF_DIR;
+			// Include the template class
+			require_once( YD_DIR_3RDP . '/class.template/src/class.template.php' );
 
-			// Keep a list of the variables
-			$this->_vars = array();
+			// Instantiate our template class
+			$this->_tpl = new template();
 
-			// Keep track of custom modifiers
-			$this->_modifiers = array();
-			$this->_functions = array();
+			// Set the default template directory
+			$this->_tpl->template_dir = YD_SELF_DIR;
 
-		}
-
-		/**
-		 *	This function adds a variable to the template and gives it the specified name.
-		 *
-		 *	@param $name	Name you want to use for this variable for referencing it in the template.
-		 *	@param $value	The value of the variable you want to add.
-		 */
-		function setVar( $name, $value ) {
-			$this->_vars[ $name ] = $value;
 		}
 
 		/**
@@ -52,27 +41,171 @@
 		 *	@param $dir	The directory to look in for finding template files.
 		 */
 		function setTemplateDir( $dir ) {
-			$this->_templateDir = realpath( $dir );
+			$this->_tpl->template_dir = realpath( $dir );
 		}
 
 		/**
-		 *	This function registers a new modifier with the specified name pointing to the specified function.
+		 *	This is used to assign values to the templates. You can pass a key/value pair, or an associative array of
+		 *	key/value pairs.
+		 *
+		 *	@param $name	Name you want to use for this variable for referencing it in the template.
+		 *	@param $value	(optional) The value of the variable you want to add.
+		 */
+		function setVar( $name, $value=null ) {
+			$this->_tpl->assign( $name, $value );
+		}
+
+		/**
+		 *	This is used to assign a constant or "config" value. These constant values are referenced in the same way as
+		 *	values loaded from config files. Usage is the same as with setVar.
+		 *
+		 *	@param $name	Name you want to use for this variable for referencing it in the template.
+		 *	@param $value	(optional) The value of the variable you want to add.
+		 */
+		function setConfigVar( $name, $value = null ) {
+			$this->_tpl->assign_config( $value, $value );
+		}
+
+		/**
+		 *	This will effectively erase an assigned variable.
+		 *
+		 *	@param $name	(optional) Name of the variable you want to clear.
+		 */
+		function clear( $name = null ) {
+			$this->_tpl->clear( $name );
+		}
+
+		/**
+		 *	This will effectively erase a config value, whether assigned manually or loaded from a config file.
+		 *
+		 *	@param $name	(optional) Name of the variable you want to clear.
+		 */
+		function clear_config( $name = null ) {
+			$this->_tpl->clear_config( $name );
+		}
+
+		/**
+		 *	Will return all variables in an associative array, or a single variable named $name. This will not return
+		 *	variables assigned inside the template, unless the template has already been processed.
+		 *
+		 *	@param $name	(optional) Name of the variable you want to clear.
+		 *
+		 *	@returns	All variables in an associative array, or a single variable named $name.
+		 */
+		function & get_vars( $name = null ) {
+			return $this->_tpl_get_vars( $name );
+		}
+
+		/**
+		 *	Will return all config values in an associative array, or a single config value named $name. This will not
+		 *	return values loaded by config_load calls embedded in a template, unless the template has already been 
+		 *	processed. 
+		 *
+		 *	@param $name	(optional) Name of the variable you want to clear.
+		 *
+		 *	@returns	All config variables in an associative array, or a single variable named $name.
+		 */
+		function & get_config_vars( $name = null ) {
+			return $this->get_config_vars( $name );
+		}
+
+		/**
+		 *	This will clear out the compiled template folder, or if a file and/or a compile id is supplied, it will
+		 *	clear that specific template. If you have utilized compile groups, then it is possible to delete a specific
+		 *	group by specifying a compile id. If no file or compile id is specified, all compiled files will be deleted.
+		 *
+		 *	@param $file		(optional) File for which you want to clear the cache.
+		 *	@param $compile_id	(optional) Compile ID you want to clear the cache for.
+		 */
+		function clear_compiled( $file = null, $compile_id = null ) {
+			$this->_tpl->clear_compiled( $file, $compile_id );
+		}
+
+		/**
+		 *	This will clear out the cache, or if a file and/or a cache id is supplied, it will clear that specific
+		 *	template. If you have utilized cache groups, then it is possible to delete a specific group by specifying a
+		 *	cache id. If no file or cache id is specified, all cached files will be deleted.
+		 *
+		 *	@param $file		(optional) File for which you want to clear the cache.
+		 *	@param $cache_id	(optional) Cache ID you want to clear the cache for.
+		 */
+		function clear_cached( $file = null, $cache_id = null ) {
+			$this->clear_cached( $file, $cache_id );
+		}
+
+		/**
+		 *	Returns true if there is a valid cache for this template. This only works if caching is to true.
+		 *
+		 *	@param $file		(optional) File for which you want to clear the cache.
+		 *	@param $cache_id	(optional) Cache ID you want to clear the cache for.
+		 *
+		 *	@returns	Boolean indicating if the cache for the file and cache ID is still valid.
+		 */
+		function is_cached( $file, $cache_id = null ) {
+			return $this->is_cached( $file, $cache_id );
+		}
+
+		/**
+		 *	Use this to dynamically register a modifiery plugin. Pass the template modifier name, followed by the PHP
+		 *	function that implements it.
+		 *
+		 *	The php-function callback $implementation can either be a string containing the function name, or an array
+		 *	of the form array(&$object, $method) with &$object being a reference to an object and $method being a string
+		 *	that contains the method name, or an array of the form array(&$class, $method) with &$class being a
+		 *	reference to a class and $method being a method of that class.
 		 *
 		 *	@param $name		Name of the modifier.
 		 *	@param $function	Function implementing the modifier.
 		 */
 		function registerModifier( $name, $function ) {
-			$this->_modifiers[ $name ] = $function;
+			$this->_tpl->register_modifier( $name, $function );
 		}
 
 		/**
-		 *	This function registers a new function with the specified name pointing to the specified function.
+		 *	Use this dynamically register a template function. Pass in the template function name, followed by the PHP
+		 *	function name that implements it.
+		 *
+		 *	The php-function callback $implementation can either be a string containing the function name, or an array 
+		 *	of the form array(&$object, $method) with &$object being a reference to an object and $method being a string
+		 *	that contains the method name, or an array of the form array(&$class, $method) with &$class being a
+		 *	reference to a class and $method being a method of that class.
 		 *
 		 *	@param $name		Name of the function.
 		 *	@param $function	Function implementing the function.
 		 */
 		function registerFunction( $name, $function ) {
-			$this->_functions[ $name ] = $function;
+			$this->_tpl->register_function( $name, $function );
+		}
+
+		/**
+		 *	Use this to dynamically register a compiler function. Pass in the compiler function name, followed by the
+		 *	PHP function that implements it. The php-function callback $implementation can either be a string containing
+		 *	the function name, or an array of the form array(&$object, $method) with &$object being a reference to an 
+		 *	object and $method being a string that contains the method name, or an array of the form
+		 *	array(&$class, $method) with &$class being a reference to a class and $method being a method of that class.
+		 *
+		 *	Template compiler functions will directly insert code to the template when the template is compiled,
+		 *	allowing for greater customizability to the template.
+		 *
+		 *	@param $function		Name of the compiler.
+		 *	@param $implementation	Function implementing the compiler.
+		 */
+		function registerCompiler( $function, $implementation ) {
+			$this->_tpl->registerCompiler( $function, $implementation );
+		}
+
+		/**
+		 *	Use this to dynamically register a block function. Pass in the block function name, followed by the PHP
+		 *	function that implements it. The php-function callback $implementation can either be a string containing the
+		 *	function name, or an array of the form array(&$object, $method) with &$object being a reference to an object 
+		 *	and $method being a string that contains the method name, or an array of the form array(&$class, $method) 
+		 *	with &$class being a reference to a class and $method being a method of that class.
+		 *
+		 *	@param $function		Name of the block.
+		 *	@param $implementation	Function implementing the block.
+		 */
+		function registerBlock( $function, $implementation ) {
+			$this->_tpl->registerBlock( $function, $implementation );
 		}
 
 		/**
@@ -83,13 +216,14 @@
 		 *	YD_POST, YD_FILES, YD_REQUEST, YD_SESSION, YD_GLOBALS.
 		 *
 		 *	@param $name	The name of the template you want to parse and output.
+			@param $cacheID	ID for the cache of the template (must be unique).
 		 *
 		 *	@returns	This function returns the output of the parsed template.
 		 *
 		 *	@todo
 		 *		We should add options here to cache the output.
 		 */
-		function getOutput( $name ) {
+		function getOutput( $name, $cacheID=null ) {
 
 			// Add some default variables
 			$this->setVar( 'YD_FW_NAME', YD_FW_NAME );
@@ -101,10 +235,10 @@
 			$this->setVar( 'YD_ACTION_PARAM', YD_ACTION_PARAM );
 
 			// Get the path to the template
-			if ( is_file( $this->_templateDir . '/' . $name . YD_TPL_EXT ) ) {
-				$tplPath = realpath( $this->_templateDir . '/' . $name . YD_TPL_EXT );
-			} elseif ( is_file( $this->_templateDir . '/' . $name ) ) {
-				$tplPath = realpath( $this->_templateDir . '/' . $name );
+			if ( is_file( $this->_tpl->template_dir . '/' . $name . YD_TPL_EXT ) ) {
+				$tplPath = realpath( $this->_tpl->template_dir . '/' . $name . YD_TPL_EXT );
+			} elseif ( is_file( $this->_tpl->template_dir . '/' . $name ) ) {
+				$tplPath = realpath( $this->_tpl->template_dir . '/' . $name );
 			} else {
 				$tplPath = realpath( $name );
 			}
@@ -114,48 +248,48 @@
 				trigger_error( 'Template not found: ' . $tplPath, YD_ERROR );
 			}
 
-			// Include smarty
-			require_once( YD_DIR_3RDP . '/smarty/Smarty.class.php' );
-
-			// Instantiate smarty
-			$tpl = new Smarty();
-	
-			// Configure smarty
-			$tpl->template_dir = dirname( $tplPath );
-			$tpl->compile_dir = YD_DIR_TEMP;
-			$tpl->left_delimiter = '[';
-			$tpl->right_delimiter = ']';
-
-			// Trim whitespace
-			$tpl->register_outputfilter( 'YDTemplate_outputfilter_trimwhitespace' );
+			// Configure the template object
+			$this->_tpl->template_dir = dirname( $tplPath );
+			$this->_tpl->compile_dir = YD_DIR_TEMP;
+			$this->_tpl->left_tag = '{';
+			$this->_tpl->right_tag = '}';
 
 			// Register the custom modifiers
-			$tpl->register_modifier( 'addslashes', 'addslashes' );
-			$tpl->register_modifier( 'lower', 'strtolower' );
-			$tpl->register_modifier( 'implode', 'YDTemplate_modifier_implode' );
-			$tpl->register_modifier( 'fmtfilesize', 'YDTemplate_modifier_fmtfileize' );
-			$tpl->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
-			$tpl->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
+			$this->_tpl->register_modifier( 'sizeof', 'sizeof' );
+			$this->_tpl->register_modifier( 'addslashes', 'addslashes' );
+			$this->_tpl->register_modifier( 'implode', 'YDTemplate_modifier_implode' );
+			$this->_tpl->register_modifier( 'fmtfilesize', 'YDTemplate_modifier_fmtfileize' );
+			$this->_tpl->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
+			$this->_tpl->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
 
-			// Add the other modifiers
-			foreach ( $this->_modifiers as $name=>$function ) {
-				$tpl->register_modifier( $name, $function );
+			// Get the cache ID
+			if ( ! empty( $cacheID ) ) {
+				$cacheID = YD_TMP_PRE . 'C_' . md5( $cacheID );
 			}
-
-			// Add the functions
-			foreach ( $this->_functions as $name=>$function ) {
-				$tpl->register_function( $name, $function );
-			}
-
-			// Assign the variables
-			$tpl->assign( $this->_vars );
 
 			// Output the template
-			$contents = $tpl->fetch( basename( $tplPath ), null, md5( dirname( $tplPath ) ) );
+			$contents = $this->_tpl->fetch(
+				 basename( $tplPath ), YD_TMP_PRE . 'T_' . md5( dirname( $tplPath ) ), $cacheID
+			);
 
 			// Returns the contents
-			return $contents; 
+			return $contents;
 
+		}
+
+		/**
+		 *	This function will load the specified config file into the template. You can specify a specific section or
+		 *	even a specific key to load, but otherwise, all config vars from the specified template will be loaded. Will
+		 *	return true if the config file was successfully loaded and false otherwise.
+		 *
+		 *	@param $file			Name of the config file.
+		 *	@param $section_name	(optional) Section to load.
+		 *	@param $var_name		(optional) Variable to load.
+		 *
+		 *	@returns	True if the config file was successfully loaded and false otherwise.
+		 */
+		function config_load( $file, $section_name = null, $var_name = null ) {
+			$this->_tpl->config_load( $file, $section_name, $var_name );
 		}
 
 	}
@@ -219,48 +353,6 @@
 	function YDTemplate_modifier_dump( $obj ) {
 		var_dump( $obj );
 		return;
-	}
-
-	/**
-	 *	@internal
-	 */
-	function YDTemplate_outputfilter_trimwhitespace( $source, &$smarty ) {
-
-		// Pull out the script blocks
-		preg_match_all( "!<script[^>]+>.*?</script>!is", $source, $match );
-		$_script_blocks = $match[0];
-		$source = preg_replace( "!<script[^>]+>.*?</script>!is", '@@@SMARTY:TRIM:SCRIPT@@@', $source );
-
-		// Pull out the pre blocks
-		preg_match_all( "!<pre>.*?</pre>!is", $source, $match );
-		$_pre_blocks = $match[0];
-		$source = preg_replace( "!<pre>.*?</pre>!is", '@@@SMARTY:TRIM:PRE@@@', $source );
-
-		// Pull out the textarea blocks
-		preg_match_all( "!<textarea[^>]+>.*?</textarea>!is", $source, $match );
-		$_textarea_blocks = $match[0];
-		$source = preg_replace( "!<textarea[^>]+>.*?</textarea>!is", '@@@SMARTY:TRIM:TEXTAREA@@@', $source );
-
-		// remove all leading spaces, tabs and carriage returns NOT preceeded by a php close tag.
-		$source = preg_replace( '/((?<!\?>)\n)[\s]+/m', '\1', $source );
-
-		// replace script blocks
-		foreach ( $_script_blocks as $curr_block ) {
-			$source = preg_replace( "!@@@SMARTY:TRIM:SCRIPT@@@!", $curr_block, $source, 1 );
-		}
-
-		// replace pre blocks
-		foreach ( $_pre_blocks as $curr_block ) {
-			$source = preg_replace( "!@@@SMARTY:TRIM:PRE@@@!", $curr_block, $source, 1 );
-		}
-
-		// replace textarea blocks
-		foreach ( $_textarea_blocks as $curr_block ) {
-			$source = preg_replace( "!@@@SMARTY:TRIM:TEXTAREA@@@!", $curr_block, $source, 1 );
-		}
-
-		return $source;
-
 	}
 
 ?>

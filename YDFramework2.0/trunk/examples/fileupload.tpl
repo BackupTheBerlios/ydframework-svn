@@ -2,7 +2,7 @@
 
 <head>
 
-	<title>[$YD_FW_NAMEVERS]</title>
+	<title>{$YD_FW_NAMEVERS}</title>
 
 </head>
 
@@ -10,20 +10,20 @@
 
 	<h3>Upload test page</h3>
 
-	[if $formValid]
+	{if $formValid}
 
-		<p>The file <b>[$form.file1.value.name]</b>
-		([$form.file1.value.size|fmtfilesize])
+		<p>The file <b>{$form[file1][value][name]}</b>
+		({$form[file1][value][size]|fmtfilesize})
 		was uploaded successfully!</p>		
 
-	[else]
+	{else}
 
-		[$form_html]
+		{$form_html}
 
-	[/if]
+	{/if}
 
 	<p>
-		<a href="[$YD_SELF_SCRIPT]">try again</a>
+		<a href="{$YD_SELF_SCRIPT}">try again</a>
 		|
 		<a href="index.php">other samples</a>
 	</p>

@@ -79,13 +79,24 @@
 			// Get the list of images in the current directory
 			$dir = new YDFSDirectory();
 
+			// Start with no items
+			$items = array();
+
 			// Add the list of images to the template
 			if ( $_GET['tag'] == 'img' ) {
-				$this->setVar( 'items', $dir->getContents( '*.jpg' ) );
+				$pattern = '*.jpg';
 			}
 			if ( $_GET['tag'] == 'url' ) {
-				$this->setVar( 'items', $dir->getContents( '*.php' ) );
+				$pattern = '*.php';
 			}
+
+			// Get the item list
+			foreach( $dir->getContents( $pattern ) as $item ) {
+				array_push( $items, $item->getBaseName() );
+			}
+
+			// Add the items to the template
+			$this->setVar( 'items', $items );
 
 			// Output the template
 			$this->outputTemplate( 'form_selector' );

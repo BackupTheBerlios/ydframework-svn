@@ -2,64 +2,64 @@
 
 <head>
 
-	<title>[$YD_FW_NAMEVERS]</title>
+	<title>{$YD_FW_NAMEVERS}</title>
 
 </head>
 
 <body>
 
-	[if $YD_ACTION == 'default']
+	{if $YD_ACTION == 'default'}
 
 		<h3>Notes</h3>
 
-		<p><a href="[$YD_SELF_SCRIPT]?do=AddNote">Add a new note</a></p>
+		<p><a href="{$YD_SELF_SCRIPT}?do=AddNote">Add a new note</a></p>
 
-		[if $entries]
+		{if $entries}
 
-			[foreach from=$entries item=entry]
+			{foreach from=$entries item=entry}
 				<p>
-				<b>[$entry.title]</b>
-				<a href="[$YD_SELF_SCRIPT]?do=DeleteNote&id=[$entry.id]">delete</a>
+				<b>{$entry[title]}</b>
+				<a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry[id]}">delete</a>
 				<br>
-				[$entry.body]
+				{$entry[body]}
 				</p>
-			[/foreach]
+			{/foreach}
 
-		[else]
+		{else}
 			<p>No notes were found.</p>
-		[/if]
+		{/if}
 
-	[/if]
+	{/if}
 
-	[if $YD_ACTION == 'addnote']
+	{if $YD_ACTION == 'addnote'}
 
 		<h3>Add a new note</h3>
 
-		[if $form.errors]
+		{if $form[errors]}
 			<p style="color: red"><b>Errors during processing:</b>
-				[foreach from=$form.errors item=error]
-					<br>[$error]
-				[/foreach]
+				{foreach from=$form[errors] item=error}
+					<br>{$error}
+				{/foreach}
 			</p>
-		[/if]
+		{/if}
 
-		<form [$form.attribs]>
+		<form {$form[attribs]}>
 			<p>
-				[$form.title.label]
+				{$form[title][label]}
 				<br>
-				[$form.title.html]
+				{$form[title][html]}
 			</p>
 			<p>
-				[$form.body.label]
+				{$form[body][label]}
 				<br>
-				[$form.body.html]
+				{$form[body][html]}
 			</p>
 			<p>
-				[$form.cmdSubmit.html]
+				{$form[cmdSubmit][html]}
 			</p>
 		</form>
 
-	[/if]
+	{/if}
 
 </body>
 

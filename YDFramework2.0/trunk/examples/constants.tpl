@@ -2,7 +2,7 @@
 
 <head>
 
-    <title>[$YD_FW_NAMEVERS]</title>
+    <title>{$YD_FW_NAMEVERS}</title>
 
 </head>
 
@@ -17,31 +17,31 @@
     </tr>
     <tr>
         <td valign="top">YD_FW_NAME</td>
-        <td>[$YD_FW_NAME]</td>
+        <td>{$YD_FW_NAME}</td>
     </tr>
     <tr>
         <td valign="top">YD_FW_VERSION</td>
-        <td>[$YD_FW_VERSION]</td>
+        <td>{$YD_FW_VERSION}</td>
     </tr>
     <tr>
         <td valign="top">YD_FW_NAMEVERS</td>
-        <td>[$YD_FW_NAMEVERS]</td>
+        <td>{$YD_FW_NAMEVERS}</td>
     </tr>
     <tr>
         <td valign="top">YD_FW_HOMEPAGE</td>
-        <td>[$YD_FW_HOMEPAGE]</td>
+        <td>{$YD_FW_HOMEPAGE}</td>
     </tr>
     <tr>
         <td valign="top">YD_SELF_SCRIPT</td>
-        <td>[$YD_SELF_SCRIPT]</td>
+        <td>{$YD_SELF_SCRIPT}</td>
     </tr>
     <tr>
         <td valign="top">YD_SELF_URI</td>
-        <td>[$YD_SELF_URI]</td>
+        <td>{$YD_SELF_URI}</td>
     </tr>
     <tr>
         <td valign="top">YD_ACTION_PARAM</td>
-        <td>[$YD_ACTION_PARAM]</td>
+        <td>{$YD_ACTION_PARAM}</td>
     </tr>
     </table>
 
