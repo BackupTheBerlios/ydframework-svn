@@ -59,7 +59,7 @@
         <p>View the <a href="../license.txt">License information</a>.</p>
 
         <p>For more information, please visit:<br>
-        <a href="http://www.yellowduck.be/ydf/">http://www.yellowduck.be/ydf/</a></p>
+        <a href="{$YD_FW_HOMEPAGE}">{$YD_FW_HOMEPAGE}</a></p>
 
         <table border="0" width="650" cellpadding="3"  cellspacing="0">
         <tr>
