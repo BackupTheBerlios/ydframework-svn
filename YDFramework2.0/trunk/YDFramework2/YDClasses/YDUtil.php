@@ -72,7 +72,7 @@
 		 *	Finish the timer.
 		 */
 		function finish() {
-			$this->addMarker( 'Finish' );
+			$this->addMarker( '-- Finish' );
 		}
 
 		/**
