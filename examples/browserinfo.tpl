@@ -13,7 +13,8 @@
 	Version: [$browser->getVersion()]<br>
 	Platform: [$browser->getPlatform()]<br>
 	.NET runtimes: [$browser->getDotNetRuntimes()|@implode]<br>
-	Languages: [$browser->getBrowserLanguages()|@implode]
+	Languages: [$browser->getBrowserLanguages()|@implode]<br>
+	Language negotiation: [$browser->getLanguage()]
 
 	<p><a href="index.php">other samples</a></p>
 
