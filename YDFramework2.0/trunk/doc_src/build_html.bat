@@ -41,7 +41,7 @@ rem Copy the stylesheet
 copy style.css html > NUL
 
 rem Create outputs
-xsltproc --output html\index.html xsl_html.xsl _ydframework.xml
+xsltproc --xinclude --output html\index.html xsl_html.xsl _ydframework.xml
 
 rem Open the result
 if exist html\index.html start html\index.html

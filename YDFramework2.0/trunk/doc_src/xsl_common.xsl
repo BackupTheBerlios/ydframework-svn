@@ -4,8 +4,4 @@
     <xsl:param name="section.autolabel">1</xsl:param>
     <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
-    <!--xsl:param name="admon.graphics">1</xsl:param>
-    <xsl:param name="admon.graphics.path">./</xsl:param>
-    <xsl:param name="admon.graphics.extension">.gif</xsl:param-->
-
 </xsl:stylesheet>

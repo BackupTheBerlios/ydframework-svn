@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Output: base.php</title>
+    <programlisting><![CDATA[Class Name $this
+'base'
+
+Class Name $objA
+'subclassa'
+
+Class Name $objB
+'subclassb'
+
+Check $objA->MyMethod
+true
+
+Check $objA->xx
+false
+
+Is $objA subclass of YDBase?
+true
+
+Is $objB subclass of YDBase?
+true
+
+Is $objB subclass of SubClassA?
+true
+
+Is $objB subclass of YDRequest?
+false
+
+Ancestors of $this
+array (
+  0 => 'ydrequest',
+  1 => 'ydbase',
+)
+
+Ancestors of $objA
+array (
+  0 => 'ydbase',
+)
+
+Ancestors of $objB
+array (
+  0 => 'subclassa',
+  1 => 'ydbase',
+)]]></programlisting>
+</example>

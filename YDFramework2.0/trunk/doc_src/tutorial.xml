@@ -3,7 +3,7 @@
 
     <title>Writing your first application</title>
 
-    <para>You can consider this chapter as a small tutorial for the Yellow Duck Framework. In this chapter, we will go over some of the very basic concepts of the framework and apply these in a sample application.</para>
+    <para>This chapter is a small tutorial for the Yellow Duck Framework. In this chapter, we will go over some of the very basic concepts of the framework and apply these in a sample application.</para>
 
     <sect1 id="tutorial_description">
 
@@ -20,8 +20,11 @@
         <para>We will also use form validation to make sure that the data entered in the add note form is valid. This will prevent people from adding notes without a title or body.</para>
 
         <para><mediaobject>
-            <imageobject>
-                <imagedata fileref="tutorial_app_default.gif"/>
+            <imageobject role="html">
+                <imagedata fileref="tutorial_app_default.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="tutorial_app_default.gif" width="117.5mm" height="94.2mm" scalefit="0" />
             </imageobject>
         </mediaobject></para>
 
@@ -30,14 +33,17 @@
         <para>The interface for adding a new note will look as follows:</para>
 
         <para><mediaobject>
-            <imageobject>
-                <imagedata fileref="tutorial_app_add.gif"/>
+            <imageobject role="html">
+                <imagedata fileref="tutorial_app_add.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="tutorial_app_add.gif" width="117.5mm" height="94.2mm" scalefit="0" />
             </imageobject>
         </mediaobject></para>
 
         <para>The delete screen doesn't really have a user interface. It will remove the item from the list and reload the list once that is done.</para>
 
-        <note>In order no to over complicate this example, we will store the notes as files on the disk instead of using a database. If you want to have the same example with a database backend, take a look at the database example which can be found in the examples folder.</note>
+        <note>In order no to over complicate this example, we will store the notes as files on the disk instead of using a database. If you want to have the same example with a database backend, take a look at the <literal>database</literal> example which can be found in the <literal>examples</literal> folder.</note>
 
     </sect1>
 
@@ -45,35 +51,36 @@
 
         <title>Structuring the application</title>
 
-        <para>Before you start writing the actual code, you need to do a little bit of planning and determine which actions you will create to make your application work. In our ase, we are going to make 3 different actions:</para>
+        <para>Before you start writing the actual code, you need to do a little bit of planning and determine which actions you will create to make your application work.</para>
+
+        <para>In our case, we are going to make 3 different actions that each perform one specific task in our application:</para>
 
         <itemizedlist spacing="compact">
-            <listitem><emphasis role="bold">default:</emphasis> This is the default action and will show the list of notes. If no notes are found, it should tell us so.</listitem>
-            <listitem><emphasis role="bold">addnote:</emphasis> This action will take care of adding a new note. It will render the form you need to fill in, but it will also take care of handling the form correctly and saving the result to disk.</listitem>
-            <listitem><emphasis role="bold">deletenote:</emphasis> This function will delete a note based on it's unique ID. In this example, it will not ask you for confirmation, but it will simply delete the note.</listitem>
+            <listitem><emphasis role="bold"><literal>default</literal>:</emphasis> This is the default action and will show the list of notes. If no notes are found, it should tell us so instead of raising an error.</listitem>
+            <listitem><emphasis role="bold"><literal>addnote</literal>:</emphasis> This action will take care of adding a new note. It will render the form you need to fill in, but it will also take care of handling the form correctly and saving the result to disk.</listitem>
+            <listitem><emphasis role="bold"><literal>deletenote</literal>:</emphasis> This function will delete a note based on it's unique ID. In this example, it will not ask you for confirmation, but it will simply delete the note.</listitem>
         </itemizedlist>
 
         <para>Now that we know what actions the application will be able to perform, we now need to think about how we can store the notes on disk. We will create an associative array for each note which will contain the title, body and the unique ID for the entry.</para>
 
-        <para>The unique ID for an entry will be created by calculating the md5 checksum of the combination of the title and the body. This will ensure that each note is unique.</para>
+        <para>The unique ID for an entry will be created by calculating the <ulink url="http://www.php.net/md5/">md5 checksum</ulink> of the combination of the title and the body. This will ensure that the ID for each note is unique.</para>
 
         <warning>The example will not warn about the fact that a duplicate entry was entered. It will just overwrite the existing one. I'll leave it up to you to implement that yourself after finishing this chapter. There is a sample included which rewrites this application using a database and adds editing of the notes.</warning>
 
         <para>We will use the functions provided by the Yellow Duck Framework to load the notes from disk and save the notes to disk. In the framework, there are different objects and functions that take care of this.</para>
 
-        <para>After going through this example, you will have used and explored the following classes and modules in the Yellow Duck Framework:</para>
+        <para>After going through this example, you will have used and explored the following classes and modules:</para>
 
         <itemizedlist spacing="compact">
-            <listitem>YDRequest (class)</listitem>
-            <listitem>YDFSDirectory (class)</listitem>
-            <listitem>YDFSFile (class)</listitem>
-            <listitem>YDForm (class)</listitem>
-            <listitem>YDTemplate (class)</listitem>
-            <listitem>YDError and YDFatalError (functions)</listitem>
-            <listitem>YDObjectUtil (module)</listitem>
+            <listitem><link linkend="ydrequest">YDRequest</link> (class)</listitem>
+            <listitem><link linkend="ydfilesystem_using_directories">YDFSDirectory</link> (class)</listitem>
+            <listitem><link linkend="ydfilesystem_using_files">YDFSFile</link> (class)</listitem>
+            <listitem><link linkend="ydform">YDForm</link> (class)</listitem>
+            <listitem><link linkend="ydtemplate">YDTemplate</link> (class)</listitem>
+            <listitem><link linkend="other_ydobjectutil">YDObjectUtil</link> (module)</listitem>
         </itemizedlist>
 
-        <para>For more detailed information of the functions and variables exposed by these classes, consult the API documentation.</para>
+        <para>For more detailed information of the functions and variables exposed by these classes, consult the <ulink url="http://svn.yellowduck.be/api/">API documentation</ulink>. The different classes that we are going to use will be explained in much more detail further in this user guide.</para>
 
     </sect1>
 
@@ -81,74 +88,39 @@
 
         <title>Creating the directory and the files</title>
 
-        <para>To start, create a new folder in your webroot called "firstapp". We will store all the files related to this tutorial in that folder. Make sure that this folder is visible by your webserver.</para>
+        <para>To start, create a new folder in your webroot called <literal>firstapp</literal>. We will store all the files related to this tutorial in that folder. Make sure that this folder is visible by your webserver.</para>
 
-        <para>In this folder, we will need to create two files for our application. We need 1 file called "index.php", which will contain the actual script that drives the application (the logic). We will also need a file which is called "index.tpl" which contains the template for this application. The template will define how the application will be presented in the browser (the presentation).</para>
+        <para>In this folder, we will need to create two files for our application. We need one file called <literal>index.php</literal>, which will contain the actual script that drives the application (the logic).</para>
+
+        <para>We will also need a file which is called <literal>index.tpl</literal> which contains the template for this application. The template will define how the application will be presented in the browser (the presentation).</para>
 
         <para>By separating the actual script from the presentation, we will make the application a lot easier to maintain and understand. By using this structured way, it will be a lot easier to track down problems because you know immediately where to look.</para>
+
+        <para>Also make a copy of the <literal>YDFramework2</literal> directory in this directory. This is needed so that our application has access to the core libraries of the framework.</para>
 
     </sect1>
 
     <sect1 id="tutorial_basis_index">
 
-        <title>Implementing the basis of the index.php file</title>
+        <title>Implementing the basis of the <literal>index.php</literal> file</title>
 
-        <para>The first thing we will do is to implement the basic stuff of the index.php script. As you could read in the first chapter, the name of the file determines how the class should be named. Open the index.php file in a text editor and enter the following text in the file:</para>
+        <para>The first thing we will do is to implement the basic stuff of the <literal>index.php</literal> script. You will see that each of the request files use the same structure.</para>
+        
+        <para>As you could read in the first chapter, the name of the file determines how the class should be named. Open the <literal>index.php</literal> file in a text editor and enter the following text in the file. We will then explain what each part is used for.</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_001.xml" />
 
-    // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplateSmarty.php'  );
-
-    // Class definition for the index request
-    class index extends YDRequest {
-
-        // Class constructor
-        function index() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-            // Initialize the template object
-            $this->template = new YDTemplate();
-
-        }
-
-        // Default action
-        function actionDefault() {
-        }
-
-        // Add Note action
-        function actionAddNote() {
-        }
-
-        // Delete note action
-        function actionDeleteNote() {
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
-
-        <para>There are a number of rules to follow to get the basis of the class implemented. Let's go over each one of them:</para>
-
+        <para>There are a number of rules to follow to get the basis of the class implemented. Let's go over each part of the <literal>index.php</literal> file :</para>
+            
         <procedure>
-            <step>Include the init file: each script that wants to use the Yellow Duck Framework needs to include the "YDF2_init.php" file which initializes the framework. Make sure the path to this file is correct, otherwise, the script will not work.</step>
+            <step>Include the init file: each script that wants to use the Yellow Duck Framework needs to include the <literal>YDF2_init.php</literal> file which initializes the framework. Make sure the path to this file is correct, otherwise, the script will not work.</step>
             <step>Include the needed classes: The next step is to include all the different classes from the framework you are going to use. I used the YDInclude function to make sure the script doesn't continue without having included these files. You don't need to specify the complete path to these files as the framework will take care of finding the right files.</step>
-            <step>Define the main class: each script that wants to use the Yellow Duck Framework needs to have a class which is named after the name of the file. In our example, the file is named index.php, which means the framework will search for a class called indexRequest. This class needs to extends the YDRequest class to allow the framework to process the request.</step>
-            <step>Define the class constructor: When the instance of our class is created, it will execute the function which has the same name as the class automatically (this function is called the class constructor). In the class constructor,we simply call the YDRequest function (which is the class constructor from the YDRequest class) to make sure the parent class is initialized as well.</step>
+            <step>Define the main class: each script that wants to use the Yellow Duck Framework needs to have a class which is named after the name of the file. In our example, the file is named <literal>index.php</literal>, which means the framework will search for a class called <literal>indexRequest</literal>. This class needs to extends the <literal>YDRequest</literal> class to allow the framework to process the request.</step>
+            <step>Define the class constructor: When the instance of our class is created, it will execute the function which has the same name as the class automatically (this function is called the class constructor). In the class constructor,we simply call the <literal>YDRequest</literal> function (which is the class constructor from the <literal>YDRequest</literal> class) to make sure the parent class is initialized as well.</step>
             <step>Define the functions for the actions: For each action,we need to create a separate function in the class. Each function for an action has the name of the action prepended by action as it's function name. These functions do not require any arguments.</step>
         </procedure>
 
-        <para>With this implemented, you can already surf to the index.php page, but nothing will be shown. You can try the following URLs:</para>
+        <para>With this implemented, you can already surf to the <literal>index.php</literal> page, but nothing will be shown. You can try the following URLs:</para>
 
         <itemizedlist spacing="compact">
             <listitem><ulink url="http://localhost/firstapp/index.php" /></listitem>
@@ -157,7 +129,7 @@
             <listitem><ulink url="http://localhost/firstapp/index.php?do=oops" /></listitem>
         </itemizedlist>
 
-        <para>If you typed in everything correctly, only the last URL should return an error because it's pointing to an undefined action in our class.</para>
+        <para>If you typed in everything correctly, only the last URL should return an error because it's pointing to an undefined action in our class (there is no <literal>actionOops</literal> function defintion in our class).</para>
 
     </sect1>
 
@@ -165,86 +137,21 @@
 
         <title>Improving the class constructor</title>
 
-        <para>We will add one thing to the class constructor, which is a reference to the data directory. Before you add the code, make a new folder called "data" in the "firstapp" folder. Also make sure that the webserver process can write into that directory. On unix or linux based systems, you can do this with the following shell command:</para>
+        <para>We will add one thing to the class constructor, which is a reference to the data directory. Before you add the code, make a new folder called <literal>data</literal> in the <literal>firstapp</literal> folder. Also make sure that the webserver process can write into that directory. On unix or linux based systems, you can do this with the following shell command:</para>
 
-        <programlisting><![CDATA[/home/pieter # chmod 777 data]]></programlisting>
+        <programlisting>/home/pieter # <emphasis role="bold">chmod 777 data</emphasis></programlisting>
 
-        <para>Once you did that, add the following code to the class constructor:</para>
+        <para>The following code sample shows in bold what you need to add to the class constructor:</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_002.xml" />
 
-    // Set the path to the data directory
-    $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
-
-    // Check if the data directory is writeable
-    if ( ! $this->dataDir->isWriteable() ) {
-        YDFatalError( 'Data directory must be writable!' );
-    }
-
-?>]]></programlisting>
-
-        <para>The index.php will now look as follows:</para>
-
-        <programlisting><![CDATA[<?php
-
-    // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDtUtil.php' );
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplateSmarty.php' );
-
-    // Class definition for the index request
-    class index extends YDRequest {
-
-        // Class constructor
-        function index() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-            // Initialize the template object
-            $this->template = new YDTemplate();
-
-            // Set the path to the data directory
-            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
-
-            // Check if the data directory is writeable
-            if ( ! $this->dataDir->isWriteable() ) {
-                YDFatalError( 'Data directory must be writable!' );
-            }
-
-        }
-
-        // Default action
-        function actionDefault() {
-        }
-
-        // Add Note action
-        function actionAddNote() {
-        }
-
-        // Delete note action
-        function actionDeleteNote() {
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
-
-        <para>With this code, we create a new YDFSDirectory class which represents a folder on disk. We define it specifically create it in the class constructor to ensure that all the actions are able to use this object (each action needs this).</para>
+        <para>With this code, we create a new <literal>YDFSDirectory</literal> class which represents a folder on disk. We define it specifically create it in the class constructor to ensure that all the actions are able to use this object (each action needs this).</para>
 
         <para>We also check if the directory is writeable by the webserver process to ensure that we will be able to save the notes in that directory. If the directory is not writable, we will raise a fatal error which stops the execution and displays the error message.</para>
 
         <para>Later on, we will see that we can use this object to get a directory listing, but we will also use it to delete and create new files.</para>
 
-        <para>We also instantiated a template object as we are going to use templates for the presentation layer. The YDTemplate class doesn't need any extra configuration as it's smart enough to configure itself.</para>
+        <para>We also instantiated a template object as we are going to use templates for the presentation layer. The <literal>YDTemplate</literal> class doesn't need any extra configuration as it's smart enough to configure itself.</para>
 
     </sect1>
 
@@ -252,120 +159,11 @@
 
         <title>Implementing the default action</title>
 
-        <para>We will now implement the default action. This is the function that is responsible for showing the list of entries.</para>
+        <para>We will now implement the default action. This is the function that is responsible for showing the list of entries. It will get the list of files in the <literal>data</literal> directory, convert them back to PHP objects and keep a list of them.</para>
 
-        <para>Add the following code to the function actionDefault:</para>
+        <para>The following code sample shows in bold what we added to the <literal>actionDefault</literal> function:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Default action
-    function actionDefault() {
-
-        // Start with an empty list of entries
-        $entries = array();
-
-        // Loop over the data directory contents
-        foreach( $this->dataDir->getContents( '*.dat' ) as $entry ) {
-
-            // Get the contents
-            $entry = $entry->getContents();
-
-            // Unserialize
-            $entry = YDObjectUtil::unserialize( $entry );
-
-            // Add it to the list of entries
-            array_push( $entries, $entry );
-
-        }
-
-        // Add the entries to the template
-        $this->template->assign( 'entries', $entries );
-
-        // Output the template
-        $this->template->display();
-
-    }
-
-?>]]></programlisting>
-
-        <para>The index.php file will now look as follows:</para>
-
-        <programlisting><![CDATA[<?php
-
-    // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplateSmarty.php' );
-
-    // Class definition for the index request
-    class index extends YDRequest {
-
-        // Class constructor
-        function index() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-            // Initialize the template object
-            $this->template = new YDTemplate();
-
-            // Set the path to the data directory
-            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
-
-            // Check if the data directory is writeable
-            if ( ! $this->dataDir->isWriteable() ) {
-                YDFatalError( 'Data directory must be writable!' );
-            }
-
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Start with an empty list of entries
-            $entries = array();
-
-            // Loop over the data directory contents
-            foreach( $this->dataDir->getContents( '*.dat' ) as $entry ) {
-
-                // Get the contents
-                $entry = $entry->getContents();
-
-                // Unserialize
-                $entry = YDObjectUtil::unserialize( $entry );
-
-                // Add it to the list of entries
-                array_push( $entries, $entry );
-
-            }
-
-            // Add the entries to the template
-            $this->template->assign( 'entries', $entries );
-
-            // Output the template
-            $this->template->display();
-
-        }
-
-        // Add Note action
-        function actionAddNote() {
-        }
-
-        // Delete note action
-        function actionDeleteNote() {
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_003.xml" />
 
         <para>The code of this function is pretty self explanatory. Let's go over each line to see what it does:</para>
 
@@ -375,15 +173,15 @@
 
         <programlisting><![CDATA[foreach ( $this->dataDir->getContents( '*.dat' ) as $entry )]]></programlisting>
 
-        <para>This line line will query the data directory and get a YDFSFile object for each file that ends with the extension "dat". The getContents function always returns YDFSFile or YDFSImage objects.</para>
+        <para>This line line will query the data directory and get a <literal>YDFSFile</literal> object for each file that ends with the extension <literal>dat</literal>. The <literal>getContents</literal> function always returns <literal>YDFSFile</literal> or <literal>YDFSImage</literal> objects.</para>
 
         <programlisting><![CDATA[$entry = $entry->getContents();]]></programlisting>
 
-        <para>This line line will replace the variable $entry with the contents of our YDFSFile object.</para>
+        <para>This line line will replace the variable <literal>$entry</literal> with the contents of our <literal>YDFSFile</literal> object.</para>
 
         <programlisting><![CDATA[$entry = YDObjectUtil::unserialize( $entry );]]></programlisting>
 
-        <para>Since the entries are serialized, we need to unserialize them to get the original object back. The YDObjectUtil::unserialize function will take care of this.</para>
+        <para>Since the entries are serialized, we need to unserialize them to get the original object back. The <literal>YDObjectUtil::unserialize</literal> function will take care of this.</para>
 
         <programlisting><![CDATA[array_push( $entries, $entry );]]></programlisting>
 
@@ -391,11 +189,11 @@
 
         <programlisting><![CDATA[$this->template->assign( 'entries', $entries );]]></programlisting>
 
-        <para>When a new YDRequest class is instantiated, automatically a new template object is created. You can then use the setVar function from the YDRequest class to assign variables to the template. We add a new template variable called "entries" which holds the list of entries.</para>
+        <para>When a our <literal>indexRequest</literal> class is instantiated, we automatically create a new template object. You can then use the <literal>assign</literal> function from the <literal>YDTemplate</literal> class to assign variables to the template. We add a new template variable called <literal>entries</literal> which holds the list of entries.</para>
 
         <programlisting><![CDATA[$this->template->display();]]></programlisting>
 
-        <para>The last step is to parse the template and output it to the browser. Since we didn't specify the name of the template, it will look for a file with the same name as the script, but which has the extension "tpl" instead of "php". It will parse the template and send the result to the browser.</para>
+        <para>The last step is to parse the template and output it to the browser. Since we didn't specify the name of the template, it will look for a file with the same name as the script, but which has the extension <literal>tpl</literal> instead of <literal>php</literal>. It will parse the template and send the result to the browser.</para>
 
         <para>If you run the script now in the browser, you will see an empty screen, and no errors should be shown. You don't see anything yet since the template is still an empty file.</para>
 
@@ -407,57 +205,21 @@
 
         <para>Now that we have the default action implemented, we will change the template so that it shows the list of notes which it should do. Here's is how the template looks like to show the list of entries:</para>
 
-        <programlisting><![CDATA[<html>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_004.xml" />
 
-<head>
+        <para>The first thing we do in the template is to check if we are running the default action. Since we are going to combine the templates for all the different actions, we need to make sure we only show the parts relevant for the current action.</para>
 
-    <title>{$YD_FW_NAMEVERS}</title>
-
-</head>
-
-<body>
-
-    {if $YD_ACTION == 'default'}
-
-        <h3>Notes</h3>
-
-        <p><a href="{$YD_SELF_SCRIPT}?do=AddNote">Add a new note</a></p>
-
-        {if $entries}
-
-            {foreach from=$entries item=entry}
-                <p>
-                <b>{$entry.title}</b>
-                <a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry.id}">delete</a>
-                <br>
-                {$entry.body}
-                </p>
-            {/foreach}
-
-        {else}
-            <p>No notes were found.</p>
-        {/if}
-
-    {/if}
-
-</body>
-
-</html>]]></programlisting>
-
-        <para>The first thing we do in the template is to check if we are running the default action. Since we are going to combine the templates for all the different actions,we need to make sure we only show the parts relevant for the current action.</para>
-
-        <para>As you can see, this is a plain PHP script which only contains the code needed to display the list. As you can see, we can reference the variables as normal PHP variables and show their contents.</para>
+        <para>The template is using the <ulink url="http://smarty.php.net/">Smarty</ulink> template engine and syntax.</para>
 
         <para>We also use some special variables in the script that are automatically added to the template by the framework. We use the following ones:</para>
 
-
         <itemizedlist spacing="compact">
-            <listitem><emphasis role="strong">$YD_FW_NAMEVERS:</emphasis> the name and the version of the framework</listitem>
-            <listitem><emphasis role="strong">$YD_ACTION:</emphasis> the name of the current action (always in lowercase)</listitem>
-            <listitem><emphasis role="strong">$YD_SELF_SCRIPT:</emphasis> the url of the script itself without parameters</listitem>
+            <listitem><emphasis role="strong"><literal>$YD_FW_NAMEVERS</literal>:</emphasis> the name and the version of the framework</listitem>
+            <listitem><emphasis role="strong"><literal>$YD_ACTION</literal>:</emphasis> the name of the current action (always in lowercase)</listitem>
+            <listitem><emphasis role="strong"><literal>$YD_SELF_SCRIPT</literal>:</emphasis> the url of the script itself without parameters</listitem>
         </itemizedlist>
 
-        <para>If you run the script now, it should tell you that no notes were found, as we didn't create any yet. There should also be a link that you can use to add a new entry. The next step is to create the form to add a new entry.</para>
+        <para>If you run the script now, it should tell you that no notes were found, as we didn't create any yet. There should also be a link that you can use to add a new entry. The next step is to create the form which allows us to add a new entry.</para>
 
     </sect1>
 
@@ -465,336 +227,57 @@
 
         <title>Implementing the addnote action</title>
 
-        <para>The next step is to implement the action that will take care of adding new items. Add the following code to the actionAddEntry function to do this:</para>
+        <para>The next step is to implement the action that will take care of adding new items. Add the following code to the actionAddEntry function to do this (added contents shown in bold):</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Add Note action
-    function actionAddNote() {
-
-        // Create the add form
-        $form = new YDForm( 'addEntryForm' );
-
-        // Add the elements
-        $form->addElement( 'text', 'title', 'Title:' );
-        $form->addElement( 'textarea', 'body', 'Contents:' );
-        $form->addElement( 'submit', 'cmdSubmit', 'Save' );
-
-        // Apply filters
-        $form->addFilter( 'title', 'trim' );
-        $form->addFilter( 'body', 'trim' );
-
-        // Add a rule
-        $form->addRule( 'title', 'required', 'Title is required' );
-        $form->addRule( 'body', 'required', 'Contents is required' );
-
-        // Process the form
-        if ( $form->validate() ) {
-
-            // Save the entries in an array
-            $entry = array(
-                'id' => md5(
-                    $form->getValue( 'title' ) . $form->getValue( 'body' )
-                ),
-                'title' => $form->getValue( 'title' ),
-                'body' => $form->getValue( 'body' )
-            );
-
-            // Save the serialized entry to a file
-            $this->dataDir->createFile(
-                $entry['id'] . '.dat', YDObjectUtil::serialize( $entry )
-            );
-
-            // Forward to the list view
-            $this->forward( 'default' );
-
-            // Return
-            return;
-
-        }
-
-        // Add the form to the template
-        $this->template->assignForm( 'form', $form );
-
-
-        // Output the template
-        $this->template->display();
-
-    }
-
-?>]]></programlisting>
-
-        <para>The index.php will now look as follows:</para>
-
-        <programlisting><![CDATA[<?php
-
-    // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplateSmarty.php' );
-
-    // Class definition for the index request
-    class index extends YDRequest {
-
-        // Class constructor
-        function index() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-            // Initialize the template object
-            $this->template = new YDTemplate();
-
-            // Set the path to the data directory
-            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
-
-            // Check if the data directory is writeable
-            if ( ! $this->dataDir->isWriteable() ) {
-                YDFatalError( 'Data directory must be writable!' );
-            }
-
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Start with an empty list of entries
-            $entries = array();
-
-            // Loop over the data directory contents
-            foreach( $this->dataDir->getContents( '*.dat' ) as $entry ) {
-
-                // Get the contents
-                $entry = $entry->getContents();
-
-                // Unserialize
-                $entry = YDObjectUtil::unserialize( $entry );
-
-                // Add it to the list of entries
-                array_push( $entries, $entry );
-
-            }
-
-            // Add the entries to the template
-            $this->template->assign( 'entries', $entries );
-
-            // Output the template
-            $this->template->display();
-
-        }
-
-        // Add Note action
-        function actionAddNote() {
-
-            // Create the add form
-            $form = new YDForm( 'addEntryForm' );
-
-            // Add the elements
-            $form->addElement( 'text', 'title', 'Title:' );
-            $form->addElement( 'textarea', 'body', 'Contents:' );
-            $form->addElement( 'submit', 'cmdSubmit', 'Save' );
-
-            // Apply filters
-            $form->addFilter( 'title', 'trim' );
-            $form->addFilter( 'body', 'trim' );
-
-            // Add a rule
-            $form->addRule( 'title', 'required', 'Title is required' );
-            $form->addRule( 'body', 'required', 'Contents is required' );
-
-            // Process the form
-            if ( $form->validate() ) {
-
-                // Save the entries in an array
-                $entry = array(
-                    'id' => md5(
-                        $form->getValue( 'title' ) . $form->getValue( 'body' )
-                     ),
-                    'title' => $form->getValue( 'title' ),
-                    'body' => $form->getValue( 'body' )
-                );
-
-                // Save the serialized entry to a file
-                $this->dataDir->createFile(
-                    $entry['id'] . '.dat', YDObjectUtil::serialize( $entry )
-                );
-
-                // Forward to the list view
-                $this->forward( 'default' );
-
-                // Return
-                return;
-
-            }
-
-            // Add the form to the template
-            $this->template->assignForm( 'form', $form );
-
-            // Output the template
-            $this->template->display();
-
-        }
-
-        // Delete note action
-        function actionDeleteNote() {
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_005.xml" />
 
         <para>This action does two separate things. It knows how to show the form which is used to add a new note, and it also knows how to save a note to a file on disk which can be retrieved later on. Let's evaluate this action step by step:</para>
 
         <programlisting><![CDATA[$form = new YDForm( 'addEntryForm' );]]></programlisting>
 
-        <para>This will create a new formobject called "addEntryForm". We will assign elements to this object to construct the whole form.</para>
+        <para>This will create a new form object called <literal>addEntryForm</literal>. We will assign elements to this object to construct the whole form.</para>
 
         <programlisting><![CDATA[$form->addElement( 'text', 'title', 'Title:' );
 $form->addElement( 'textarea', 'body', 'Contents:' );
 $form->addElement( 'submit', 'cmdSubmit', 'Save' );]]></programlisting>
 
-        <para>Now we add three elements to the form.We add a text element called "title", a textarea called "body" and a submit button called "cmdSubmit". For each of these elements, we also specify a label.</para>
+        <para>Now we add three elements to the form. We add a text element called <literal>title</literal>, a textarea called <literal>body</literal> and a submit button called <literal>cmdSubmit</literal>. For each of these elements, we also specify a label.</para>
 
         <programlisting><![CDATA[$form->applyFilter( 'title', 'trim' );
 $form->applyFilter( 'body', 'trim' );]]></programlisting>
 
-        <para>To the title and body field, we also add a filter called "trim". The trim filter will remove all spaces at the beginning and the end of the form values before validating the form. We do this to make sure that e.g. if the title would be just a space, it wouldn't be considered as being valid.</para>
+        <para>To the title and body field, we also add a filter called <literal>trim</literal>. The trim filter will remove all spaces at the beginning and the end of the form values before validating the form. We do this to make sure that e.g. if the title would be just a space, it wouldn't be considered as being valid.</para>
 
         <programlisting><![CDATA[$form->addRule( 'title', 'required', 'Title is required' );
 $form->addRule( 'body', 'required', 'Contents is required' );]]></programlisting>
 
-        <para>For the validation, we add two rules. With these two rules,we mark the elements title and body as required elements. We also specify the error message in case the validation fails.</para>
+        <para>For the validation, we add two rules. With these two rules, we mark the elements <literal>title</literal> and <literal>body</literal> as required elements. We also specify the error message in case the validation fails.</para>
 
         <programlisting><![CDATA[$this->template->assignForm( 'form', $form );]]></programlisting>
 
-        <para>This function will assign the form object to the template. Please note that we didn't use the setVar function, but used the addForm function instead. We need to use this function because the form object needs some special treatment before it can be used in the template. Never use the setVar function to assing a form object to the template.</para>
+        <para>This function will assign the form object to the template. Please note that we didn't use the <literal>assign</literal> function, but used the <literal>assignForm</literal> function instead. We need to use this function because the form object needs some special treatment before it can be used in the template. Never use the <literal>assign</literal> function to assing a form object to the template.</para>
 
         <programlisting><![CDATA[$this->template->display();]]></programlisting>
 
-        <para>The last step is to parse and output the template which is done by executing the outputTemplate function.</para>
+        <para>The last step is to parse and output the template which is done by executing the <literal>display</literal> function.</para>
 
         <note>I specifically didn't explain the part which saves the note to a file, as it's not important yet. You first need to understand how this works before we can add the code for saving the note to disk.</note>
 
-        <para>Before you can run the form, we need to add the code for the form to the template. Add the following stuff just before the <![CDATA[</body>]]> tag in the template:</para>
+        <para>Before you can run the form, we need to add the code for the form to the template. Add the stuff shown in bold to the template:</para>
 
-        <programlisting><![CDATA[{if $YD_ACTION == 'addnote'}
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_006.xml" />
 
-    <h3>Add a new note</h3>
+        <para>If we a look at that code, we see that it will only be shown if the current action is called <literal>addnote</literal> (always use lowercase actionnames in the templates. The first part will take care of showing the errors if there are any.</para>
 
-    {if $form[errors]}
-        <p style="color: red"><b>Errors during processing:</b>
-            {foreach from=$form.errors item=error}
-                <br>{$error}
-            {/foreach}
-        </p>
-    {/if}
+        <para>The errors are always found in the <literal>$form.error</literal> array. this array is just a list of all the different error messages. In this example, we use a little bit of stylesheets to make them appear in red.</para>
 
-    <form {$form.attribs}>
-        <p>
-            {$form.title.label}
-            <br>
-            {$form.title.html}
-        </p>
-        <p>
-            {$form.body.label}
-            <br>
-            {$form.body.html}
-        </p>
-        <p>
-            {$form.cmdSubmit.html}
-        </p>
-    </form>
+        <para>Then, the code for the form itself is added. We first define the form tag, and use the <literal>$form.attributes</literal> variable to automatically add all the parameters of the form such as the action and method. The framework is smart enough to take care of that automatically.</para>
 
-{/if}]]></programlisting>
-
-        <para>The index.tpl file will now look as follows:</para>
-
-        <programlisting><![CDATA[<html>
-
-<head>
-
-    <title>{$YD_FW_NAMEVERS}</title>
-
-</head>
-
-<body>
-
-    {if $YD_ACTION == 'default'}
-
-        <h3>Notes</h3>
-
-        <p><a href="{$YD_SELF_SCRIPT}?do=AddNote">Add a new note</a></p>
-
-        {if $entries}
-
-            {foreach from=$entries item=entry}
-                <p>
-                <b>{$entry.title}</b>
-                <a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry.id}">delete</a>
-                <br>
-                {$entry.body}
-                </p>
-            {/foreach}
-
-        {else}
-            <p>No notes were found.</p>
-        {/if}
-
-    {/if}
-
-    {if $YD_ACTION == 'addnote'}
-
-        <h3>Add a new note</h3>
-
-        {if $form.errorss}
-            <p style="color: red"><b>Errors during processing:</b>
-                {foreach from=$form.errors item=error}
-                    <br>{$error}
-                {/foreach}
-            </p>
-        {/if}
-
-        <form {$form.attribs}>
-            <p>
-                {$form.title.label}
-                <br>
-                {$form.title.html}
-            </p>
-            <p>
-                {$form.body.label}
-                <br>
-                {$form.body.html}
-            </p>
-            <p>
-                {$form.cmdSubmit.html}
-            </p>
-        </form>
-
-    {/if}
-
-</body>
-
-</html>]]></programlisting>
-
-        <para>If we a look at that code, we see that it will only be shown if the current action is called addnote (always in lowercase!). The first part will take care of showing the errors if there are any.</para>
-
-        <para>The errors are always found in the $form['error'] array. this array is just a list of all the different error messages. In this example, we use a little but of stylesheets to make them appear in red.</para>
-
-        <para>Then, the code for the form itself is added. We first define the form tag, and use the $form['attributes'] variable to automatically add all the parameters of the form such as the action and method. The framework is smart enough to take care of that automatically.</para>
-
-        <para>Then we will add the different elements. Each element can be referenced as $form[elementname]. In this example,we use the label and html properties of each element. The label property contains the label as specified when you created the form object. The html property contains the HTML version of the element.</para>
+        <para>Then we will add the different elements. Each element can be referenced as <literal>$form.elementname</literal>. In this example, we use the label and html properties of each element. The label property contains the label as specified when you created the form object. The html property contains the HTML version of the element.</para>
 
         <para>This is the only code we need to add for the form. The framework will take care of remembering what was entered in each field and displays it when needed. It will also take care of the error messages.</para>
 
-        <para>Now that we have the basis of the form, you can surf to the index.php page and see what happens. If you submit the form, you will see that the values are remembered accross submits, and that the right errors are raised if the input was not valid. Let's examine the code that saves the entry to disk. We'll go over it step by step.</para>
+        <para>Now that we have the basis of the form, you can surf to the <literal>index.php</literal> page and see what happens. If you submit the form, you will see that the values are remembered accross submits, and that the right errors are raised if the input was not valid. Let's examine the code that saves the entry to disk. We'll go over it step by step.</para>
 
         <programlisting><![CDATA[$entry = array(
     'id' => md5( $form->getValue( 'title' ) . $form->getValue( 'body' ) ),
@@ -802,21 +285,21 @@ $form->addRule( 'body', 'required', 'Contents is required' );]]></programlisting
     'body' => $form->getValue( 'body' )
 );]]></programlisting>
 
-        <para>This code will create a new associative array with the information of the entry. We can use the form's exportValue function to get the value of a specific field of the form.We used the md5 function to create the unique ID for the entry.</para>
+        <para>This code will create a new associative array with the information of the entry. We can use the form's <literal>getValue</literal> function to get the value of a specific field of the form. We used the <ulink url="http://www.php.net/md5">md5</ulink> function to create the unique ID for the entry.</para>
 
         <programlisting><![CDATA[$this->dataDir->createFile(
     $entry['id'] . '.dat', YDObjectUtil::serialize( $entry )
 );]]></programlisting>
 
-        <para>The next line does two things. First, it will serialize the array of the object. This means it's converted into code which can be saved to a file, and which can be read later on again to get the original array back. This function is part of the YDObjectUtil module. After we have the array as a serialized item, we can use the createFile function from the YDFSDirectory object to dump it to a file. The file name will be the id of the entry with the extension "dat".</para>
+        <para>The next line does two things. First, it will serialize the array of the object. This means it's converted into code which can be saved to a file, and which can be read later on again to get the original array back. This function is part of the <literal>YDObjectUtil</literal> module. After we have the array as a serialized item, we can use the <literal>createFile</literal> function from the <literal>YDFSDirectory</literal> object to dump it to a file. The file name will be the id of the entry with the extension <literal>dat</literal>.</para>
 
         <programlisting><![CDATA[$this->forward( 'default' );]]></programlisting>
 
-        <para>Now that the note is saved to disk, we need to show the list of notes again. We have two options here. Either you do a redirect, which will redirect you to the url of the default action, but this requires two HTTP interactions. A lot faster is to forward the execution to a different action. The difference is that forwarding appens in the same request.</para>
+        <para>Now that the note is saved to disk, we need to show the list of notes again. We have two options here. Either you do a <literal>redirect</literal>, which will redirect you to the url of the default action, but this requires two HTTP interactions. A lot faster is to <literal>forward</literal> the execution to a different action. The difference is that forwarding happens in the same request.</para>
 
         <programlisting><![CDATA[return;]]></programlisting>
 
-        <para>It's very important to add the return statement, since otherwise, the form will be displayed again.</para>
+        <para>It's very important to add the <literal>return</literal> statement, since otherwise, the form will be displayed again.</para>
 
         <note>One could say that instead of forwarding the request to a different action, you could just call the function for that action. Unfortunately, that doesn't work, since the framework will not know that the current action has been changed.</note>
 
@@ -828,166 +311,19 @@ $form->addRule( 'body', 'required', 'Contents is required' );]]></programlisting
 
         <title>Implementing the deletenote action</title>
 
-        <para>To finish off, we will create the action that can delete a note. This action will take 1 parameter from the URL, which is called ID. This entry will contain the unique ID of the entry. To implement this action, add the following code to the actiondeletenote function:</para>
+        <para>To finish off, we will create the action that can delete a note. This action will take 1 parameter from the URL, which is called ID. This entry will contain the unique ID of the entry. To implement this action, add the code shown in bold to the <literal>actiondeletenote</literal> function:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Delete note action
-    function actionDeleteNote() {
-
-        // Delete the file related to the entry
-        $this->dataDir->deleteFile( $_GET['id'] . '.dat' );
-
-        // Forward to the list view
-        $this->forward( 'default' );
-
-    }
-
-?>]]></programlisting>
-
-        <para>The complete index.php page will now look as follows:</para>
-
-        <programlisting><![CDATA[<?php
-
-    // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplateSmartys.php' );
-
-    // Class definition for the index request
-    class index extends YDRequest {
-
-        // Class constructor
-        function index() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-            // Initialize the template object
-            $this->template = new YDTemplate();
-
-            // Set the path to the data directory
-            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
-
-            // Check if the data directory is writeable
-            if ( ! $this->dataDir->isWriteable() ) {
-                YDFatalError( 'Data directory must be writable!' );
-            }
-
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Start with an empty list of entries
-            $entries = array();
-
-            // Loop over the data directory contents
-            foreach( $this->dataDir->getContents( '*.dat' ) as $entry ) {
-
-                // Get the contents
-                $entry = $entry->getContents();
-
-                // Unserialize
-                $entry = YDObjectUtil::unserialize( $entry );
-
-                // Add it to the list of entries
-                array_push( $entries, $entry );
-
-            }
-
-            // Add the entries to the template
-            $this->template->assign( 'entries', $entries );
-
-            // Output the template
-            $this->template->display();
-
-        }
-
-        // Add Note action
-        function actionAddNote() {
-
-            // Create the add form
-            $form = new YDForm( 'addEntryForm' );
-
-            // Add the elements
-            $form->addElement( 'text', 'title', 'Title:' );
-            $form->addElement( 'textarea', 'body', 'Contents:' );
-            $form->addElement( 'submit', 'cmdSubmit', 'Save' );
-
-            // Apply filters
-            $form->addFilter( 'title', 'trim' );
-            $form->addFilter( 'body', 'trim' );
-
-            // Add a rule
-            $form->addRule( 'title', 'required', 'Title is required' );
-            $form->addRule( 'body', 'required', 'Contents is required' );
-
-            // Process the form
-            if ( $form->validate() ) {
-
-                // Save the entries in an array
-                $entry = array(
-                    'id' => md5(
-                        $form->getValue( 'title' ) . $form->getValue( 'body' )
-                    ),
-                    'title' => $form->getValue( 'title' ),
-                    'body' => $form->getValue( 'body' )
-                );
-
-                // Save the serialized entry to a file
-                $this->dataDir->createFile(
-                    $entry['id'] . '.dat', YDObjectUtil::serialize( $entry )
-                );
-
-                // Forward to the list view
-                $this->forward( 'default' );
-
-                // Return
-                return;
-
-            }
-
-            // Add the form to the template
-            $this->template->assignForm( 'form', $form );
-
-            // Output the template
-            $this->template->display();
-
-        }
-
-        // Delete note action
-        function actionDeleteNote() {
-
-            // Delete the file related to the entry
-            $this->dataDir->deleteFile( $_GET['id'] . '.dat' );
-
-            // Forward to the list view
-            $this->forward( 'default' );
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial_007.xml" />
 
         <para>Let's go over this action to see how it works:</para>
 
         <programlisting><![CDATA[$this->dataDir->deleteFile( $_GET['id'] . '.dat' );]]></programlisting>
 
-        <para>With the deleteFile function from the YDFSDirectory object, we can delete the file for this specific note. We find the id of the note in the $_GET['id'] variable, which was passed with the URL.</para>
+        <para>With the <literal>deleteFile</literal> function from the <literal>YDFSDirectory</literal> object, we can delete the file for this specific note. We find the id of the note in the <literal>$_GET['id']</literal> variable, which was passed with the URL.</para>
 
         <programlisting><![CDATA[$this->forward( 'default' );]]></programlisting>
 
-        <para>After the deletion of the file, we just forward the request to the default action again to show the list of the notes. After adding this code,you can run the sample again and try to delete a note. If you delete the note, it should disappear from the list and the file should also be removed from the data directory.</para>
+        <para>After the deletion of the file, we just forward the request to the default action again to show the list of the notes. After adding this code, you can run the sample again and try to delete a note. If you delete the note, it should disappear from the list and the file should also be removed from the data directory.</para>
 
         <note>There are some functions that could be added to this action. First, it could check if there was an ID given or not. If not, you could forward the request to the default action, or you could show an error message. You could also add some checking to see if the entry exists or not before deleting it. Another option is to add a confirmation screen to prevent that someone accidently deletes a note.</note>
 

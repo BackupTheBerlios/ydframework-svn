@@ -6,7 +6,9 @@
     <xsl:import href="docbook/fo/docbook.xsl" />
     <xsl:import href="xsl_common.xsl" />
 
-    <xsl:param name="shade.verbatim" select="1"/>
+    <xsl:param name="role">fo</xsl:param>
+
+    <xsl:param name="shade.verbatim">1</xsl:param>
 
     <xsl:param name="paper.type">A4</xsl:param>
     <xsl:param name="page.margin.inner">2cm</xsl:param>
@@ -37,7 +39,29 @@
         <xsl:attribute name="color">darkred</xsl:attribute>
     </xsl:attribute-set>
 
-    <fo:simple-page-master master-name="titlepage-first">
-    </fo:simple-page-master>
+    <xsl:template name="nongraphical.admonition">
+      <xsl:variable name="id">
+        <xsl:call-template name="object.id"/>
+      </xsl:variable>
+    
+      <fo:block space-before.minimum="0.8em"
+                space-before.optimum="1em"
+                space-before.maximum="1.2em"
+                start-indent="0.25in"
+                end-indent="0.25in"
+                id="{$id}"
+                background-color="#E0E0E0" color="darkred">
+        <xsl:if test="$admon.textlabel != 0 or title">
+          <fo:block keep-with-next='always'
+                    xsl:use-attribute-sets="admonition.title.properties">
+             <xsl:apply-templates select="." mode="object.title.markup"/>
+          </fo:block>
+        </xsl:if>
+    
+        <fo:block xsl:use-attribute-sets="admonition.properties">
+          <xsl:apply-templates/>
+        </fo:block>
+      </fo:block>
+    </xsl:template>
 
 </xsl:stylesheet>

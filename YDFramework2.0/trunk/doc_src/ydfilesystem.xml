@@ -123,17 +123,6 @@
 
         <para>The following code sample gives you an example of getting the properties of an image:</para>
 
-        <itemizedlist spacing="compact">
-            <listitem><emphasis role="bold">$driver:</emphasis> Name of the database driver.</listitem>
-            <listitem><emphasis role="bold">$db:</emphasis> Database name to use for the connection.</listitem>
-            <listitem><emphasis role="bold">$user (optional):</emphasis> User name to use for the connection.</listitem>
-            <listitem><emphasis role="bold">$pass (optional):</emphasis> Password to use for the connection.</listitem>
-            <listitem><emphasis role="bold">$host (optional):</emphasis> Host name to use for the connection.</listitem>
-            <listitem><emphasis role="bold">$options (optional):</emphasis> Options to pass to the driver.</listitem>
-        </itemizedlist>
-
-        <para>The following database drivers can be specified:</para>
-
         <programlisting><![CDATA[<?php
 
     YDInclude( 'YDFileSystem.php' );

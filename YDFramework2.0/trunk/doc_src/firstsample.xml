@@ -7,76 +7,11 @@
 
     <para>Let's take a look at an example script (named <literal>sample1.php</literal>) to understand how this works:</para>
 
-    <example>
-        <title>Code listing: sample1.php</title>
-        <programlisting><![CDATA[<?php
-
-// Include the Yellow Duck Framework initialization file
-require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-// Include the YDRequest and YDTemplate classes
-YDInclude( 'YDRequest.php' );
-YDInclude( 'YDTemplate.php' );
-
-// Create a new class that derives from YDRequest
-class sample1 extends YDRequest {
-
-    // This is the class constructor
-    function sample1() {
-
-        // Initialize the parent class
-        $this->YDRequest();
-
-        // Initialize a new template object
-        $this->template = new YDTemplate();
-    }
-
-    // This is the default action
-    function actionDefault() {
-
-        // Assign a new variable called title to the template
-        $this->template->assign( 'title', 'sample1Request::actionDefault' );
-
-        // Display the template
-        $this->template->display();
-
-    }
-
-    // This is the edit action
-    function actionEdit() {
-
-        // Assign a new variable called title to the template
-        $this->template->assign( 'title', 'sample1Request::actionEdit' );
-
-        // Display the template
-        $this->template->display();
-
-    }
-
-}
-
-// Include the YDF2_process.php file that processes the request
-YDInclude( 'YDF2_process.php' );
-
-?> ]]></programlisting>
-    </example>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_001.xml" />
 
     <para>The template file that goes along with this script looks as follows (<literal>sample1.tpl</literal>):</para>
 
-    <example>
-        <title>Code listing: sample1.tpl</title>
-        <programlisting><![CDATA[<html>
-
-    <head>
-        <title>{$title}</title>
-    </head>
-
-    <body>
-        {$title}
-    </body>
-
-</html> ]]></programlisting>
-    </example>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_002.xml" />
 
     <para>When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can be changed to work exactly the way you want it to work.</para>
 

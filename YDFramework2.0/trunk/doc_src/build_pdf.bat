@@ -33,13 +33,14 @@ if exist pdf\YDFramework2.pdf del /Q pdf\YDFramework2.pdf
 
 rem Copy the images
 copy images\*.gif pdf > NUL
+copy images\*.svg pdf > NUL
 copy docbook\images\note.gif pdf > NUL
 copy docbook\images\warning.gif pdf > NUL
 copy ..\YDFramework2\images\sponsored_by_rch.gif pdf > NUL
 
 rem Create outputs
 echo Creating YDFramework2.fo
-xsltproc --output pdf\YDFramework2.fo xsl_fo.xsl _ydframework.xml
+xsltproc --xinclude --output pdf\YDFramework2.fo xsl_fo.xsl _ydframework.xml
 
 rem Fix the FO document
 echo Fixing fontsizes
@@ -53,6 +54,7 @@ call fop -q -c fop_config.xml pdf\YDFramework2.fo pdf\YDFramework2.pdf
 rem Cleanup
 if exist pdf\YDFramework2.fo del pdf\YDFramework2.fo
 del pdf\*.gif > NUL
+del pdf\*.svg > NUL
 
 rem Open the result
 if exist pdf\YDFramework2.pdf start pdf\YDFramework2.pdf

@@ -53,8 +53,11 @@
             <para>The Yellow Duck Framework is an object oriented framework written in <ulink url="http://www.php.net/">PHP</ulink> which makes it a lot easier and faster to create websites and web applications.</para>
             <para>The Yellow Duck Framework is proudly sponsered by <ulink url="http://www.redcarpethost.com/">Red Carpet Host</ulink>.</para>
             <para><mediaobject>
-                <imageobject>
+                <imageobject role="html">
                     <imagedata fileref="sponsored_by_rch.gif" />
+                </imageobject>
+                <imageobject role="fo">
+                    <imagedata fileref="sponsored_by_rch.gif" width="30mm" height="12.2mm" scalefit="0" />
                 </imageobject>
             </mediaobject></para>
         </abstract>
