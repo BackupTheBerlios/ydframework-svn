@@ -148,17 +148,22 @@
          *  This function will execute the query and return the number of
          *  affected rows.
          *
-         *  @param $query The SQL query to execute.
+         *  @param $query  The SQL query or the statement to execute.
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The number of affected rows by the SQL query.
          */
-        function executeQuery( $query ) {
+        function executeQuery( $query, $params=array() ) {
 
             // Get a connection
             $conn = $this->getConnection();
 
             // Execute the query
-            $result = $conn->query( $sql );
+            $result = $conn->query( $sql, $params );
 
             // Check for errors
             if ( DB::isError( $result ) ) {
@@ -174,17 +179,22 @@
          *  This function will execute the query and return the result of
          *  the query.
          *
-         *  @param $query The SQL query to execute.
+         *  @param $query  The SQL query or the statement to execute.
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The result of the SQL query.
          */
-        function executeSelect( $query ) {
+        function executeSelect( $query, $params=array() ) {
 
             // Get a connection
             $conn = $this->getConnection();
 
             // Execute the query
-            $result = $conn->getAll( $query );
+            $result = $conn->getAll( $query, $params );
 
             // Check for errors
             if ( DB::isError( $result ) ) {
@@ -200,17 +210,22 @@
          *  This function will execute the query and return the first row from 
          *  the result of the query.
          *
-         *  @param $query The SQL query to execute.
+         *  @param $query The SQL query or the statement to execute..
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The first row of the result of the SQL query.
          */
-        function executeSelectRow( $query ) {
+        function executeSelectRow( $query, $params=array() ) {
 
             // Get a connection
             $conn = $this->getConnection();
 
             // Execute the query
-            $result = $conn->query( $query );
+            $result = $conn->query( $query, $params );
 
             // Check for errors
             if ( DB::isError( $result ) ) {

@@ -47,16 +47,21 @@
          *  affected rows.
          *
          *  @param $url The database url for this query.
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The number of affected row by the SQL query.
          */
-        function executeQuery( $url ) {
+        function executeQuery( $url, $params=array() ) {
 
             // Instantiate the database object
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeQuery( $this->getSql() );
+            return $db->executeQuery( $this->getSql(), $params );
 
         }
 
@@ -65,16 +70,21 @@
          *  the query.
          *
          *  @param $url The database url for this query.
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The result of the SQL query.
          */
-        function executeSelect( $url ) {
+        function executeSelect( $url, $params=array() ) {
 
             // Instantiate the database object
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeSelect( $this->getSql() );
+            return $db->executeSelect( $this->getSql(), $params );
 
         }
 
@@ -83,16 +93,21 @@
          *  the result of the query.
          *
          *  @param $url The database url for this query.
+         *  @param $params Array, string or numeric data to be added to the 
+         *                 prepared statement. Quantity of items passed must 
+         *                 match quantity of placeholders in the prepared 
+         *                 statement: meaning 1 placeholder for non-array 
+         *                 parameters or 1 placeholder per array element. 
          *
          *  @returns The first row of the result of the SQL query.
          */
-        function executeSelectRow( $url ) {
+        function executeSelectRow( $url, $params=array() ) {
 
             // Instantiate the database object
             $db = new YDDatabase( $url );
 
             // Execute the query
-            return $db->executeSelectRow( $this->getSql() );
+            return $db->executeSelectRow( $this->getSql(), $params );
 
         }
 
