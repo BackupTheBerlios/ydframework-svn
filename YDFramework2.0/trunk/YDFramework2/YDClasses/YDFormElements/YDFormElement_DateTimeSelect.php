@@ -150,6 +150,32 @@
             } else {
                 $this->_value = $val;
             }
+            if ( strlen( $this->_value['day'] ) == 1 ) {
+                $this->_value['day_with_zero'] = '0' . $this->_value['day'];
+            } else {
+                $this->_value['day_with_zero'] = $this->_value['day'];
+            }
+            if ( strlen( $this->_value['month'] ) == 1 ) {
+                $this->_value['month_with_zero'] = '0' . $this->_value['month'];
+            } else {
+                $this->_value['month_with_zero'] = $this->_value['month'];
+            }
+            if ( strlen( $this->_value['hours'] ) == 1 ) {
+                $this->_value['hours_with_zero'] = '0' . $this->_value['hours'];
+            } else {
+                $this->_value['hours_with_zero'] = $this->_value['hours'];
+            }
+            if ( strlen( $this->_value['minutes'] ) == 1 ) {
+                $this->_value['minutes_with_zero'] = '0' . $this->_value['minutes'];
+            } else {
+                $this->_value['minutes_with_zero'] = $this->_value['minutes'];
+            }
+            $this->_value['timestamp_string'] = $this->_value['year']
+                                              . $this->_value['month_with_zero']
+                                              . $this->_value['day_with_zero']
+                                              . $this->_value['hours_with_zero']
+                                              . $this->_value['minutes_with_zero']
+                                              . '00';
         }
 
         /**

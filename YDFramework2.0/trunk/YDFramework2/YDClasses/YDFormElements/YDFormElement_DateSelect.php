@@ -128,6 +128,19 @@
             } else {
                 $this->_value = $val;
             }
+            if ( strlen( $this->_value['day'] ) == 1 ) {
+                $this->_value['day_with_zero'] = '0' . $this->_value['day'];
+            } else {
+                $this->_value['day_with_zero'] = $this->_value['day'];
+            }
+            if ( strlen( $this->_value['month'] ) == 1 ) {
+                $this->_value['month_with_zero'] = '0' . $this->_value['month'];
+            } else {
+                $this->_value['month_with_zero'] = $this->_value['month'];
+            }
+            $this->_value['timestamp_string'] = $this->_value['year']
+                                              . $this->_value['month_with_zero']
+                                              . $this->_value['day_with_zero'];
         }
         
         /**

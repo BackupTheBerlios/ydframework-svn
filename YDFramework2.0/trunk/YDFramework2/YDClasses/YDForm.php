@@ -551,20 +551,6 @@
                     $value = $element->_value;
                 }
                 @ $value['timestamp'] = $element->getTimeStamp();
-                if ( isset( $value['day'] ) ) {
-                    if ( strlen( $value['day'] ) == 1 ) {
-                        $value['day_with_zero'] = '0' . $value['day'];
-                    } else {
-                        $value['day_with_zero'] = $value['day'];
-                    }
-                }
-                if ( isset( $value['month'] ) ) {
-                    if ( strlen( $value['month'] ) == 1 ) {
-                        $value['month_with_zero'] = '0' . $value['month'];
-                    } else {
-                        $value['month_with_zero'] = $value['month'];
-                    }
-                }
             }
 
             // Unset the element
