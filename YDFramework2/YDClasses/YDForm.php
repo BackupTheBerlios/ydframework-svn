@@ -353,6 +353,10 @@
 					$value = $this->_applyFilter( '__ALL__', $value );
 					$value = $this->_applyFilter( $name, $value );
 				}
+			} else {
+				if ( isset( $this->_defaults[ $name ] ) ) {
+					$value = $this->_defaults[ $name ];
+				}
 			}
 
 			// Special treatment for uploads
