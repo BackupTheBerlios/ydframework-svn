@@ -43,6 +43,30 @@
 				$this->_value['y'] = $now['year'];
 			}
 
+			// Get the names of the days
+			$days = array();
+			for ( $i = 1; $i <= 31; $i++ ) {
+				$days[$i] = $i;
+			}
+
+			// Get the names of the months
+			$months = array();
+			for ( $i = 1; $i <= 12; $i++ ) {
+				$months[$i] = strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) );
+			}
+
+			// Get the names of the years
+			$now = getdate();
+			$years = array();
+			for ( $i = $now['year'] - 5 ; $i <= $now['year'] + 5; $i++ ) {
+				$years[$i] = $i;
+			}
+
+			// Add the different elements
+			$this->d = new YDFormElement_Select( $this->_form, $this->_name . '[d]', '', $this->_attributes, $days );
+			$this->m = new YDFormElement_Select( $this->_form, $this->_name . '[m]', '', $this->_attributes, $months );
+			$this->y = new YDFormElement_Select( $this->_form, $this->_name . '[y]', '', $this->_attributes, $years );
+
 		}
 
 		/**
@@ -68,47 +92,10 @@
 		 *	@returns	The form element as HTML text.
 		 */
 		function toHtml() {
-
-			// Start with an empty out variable
-			$out = '';
-
-			// Get the names of the days
-			$days = array();
-			for ( $i = 1; $i <= 31; $i++ ) {
-				$days[$i] = $i;
-			}
-
-			// Add the list of days
-			$item = new YDFormElement_Select( $this->_form, $this->_name . '[d]', '', $this->_attributes, $days );
-			$item->_value = isset( $this->_value['d'] ) ? $this->_value['d'] : '';
-			$out .= $item->toHtml() . ' ';
-
-			// Get the names of the months
-			$months = array();
-			for ( $i = 1; $i <= 12; $i++ ) {
-				$months[$i] = strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) );
-			}
-
-			// Add the list of months
-			$item = new YDFormElement_Select( $this->_form, $this->_name . '[m]', '', $this->_attributes, $months );
-			$item->_value = isset( $this->_value['m'] ) ? $this->_value['m'] : '';
-			$out .= $item->toHtml() . ' ';
-
-			// Get the names of the years
-			$now = getdate();
-			$years = array();
-			for ( $i = $now['year'] - 5 ; $i <= $now['year'] + 5; $i++ ) {
-				$years[$i] = $i;
-			}
-
-			// Add the list of days
-			$item = new YDFormElement_Select( $this->_form, $this->_name . '[y]', '', $this->_attributes, $years );
-			$item->_value = isset( $this->_value['y'] ) ? $this->_value['y'] : '';
-			$out .= $item->toHtml() . ' ';
-
-			// Get the HTML
-			return $out;
-
+			$this->d->_value = isset( $this->_value['d'] ) ? $this->_value['d'] : '';
+			$this->m->_value = isset( $this->_value['m'] ) ? $this->_value['m'] : '';
+			$this->y->_value = isset( $this->_value['y'] ) ? $this->_value['y'] : '';
+			return $this->d->toHtml() . ' ' . $this->m->toHtml() . ' ' . $this->y->toHtml();
 		}
 
 	}

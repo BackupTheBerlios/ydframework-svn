@@ -9,6 +9,10 @@
 
 	/**
 	 *	This class defines an object oriented HTML form.
+	 *
+	 *	@todo
+	 *		We need to change the way default values are assigned so that you can execute the setDefaults function after
+	 *		adding the elements. Maybe better to move it to a separate function.
 	 */
 	class YDForm extends YDBase {
 
@@ -69,6 +73,7 @@
 			$this->registerElement( 'bbtextarea', 'YDFormElement_BBTextArea', 'YDFormElement_BBTextArea.php' );
 			$this->registerElement( 'button', 'YDFormElement_Button', 'YDFormElement_Button.php' );
 			$this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
+			$this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
 			$this->registerElement( 'file', 'YDFormElement_File', 'YDFormElement_File.php' );
 			$this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
 			$this->registerElement( 'image', 'YDFormElement_Image', 'YDFormElement_Image.php' );
@@ -79,8 +84,6 @@
 			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
 			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
-
-			$this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
 
 			// Add the rules
 			$this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
@@ -218,9 +221,6 @@
 		 *	@param $label		(optional) The label for the form element.
 		 *	@param $attributes	(optional) The attributes for the form element.
 		 *	@param $options		(optional) The options for the elment.
-		 *
-		 *	@todo
-		 *		Multi value items sometimes get mixed up, e.g. with desc, desc1 and desc2 as the element names.
 		 */
 		function & addElement( $type, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -249,10 +249,8 @@
 			$instance = new $class( $this->_name, $name, $label, $attributes, $options );
 
 			// Loop over the form variable
-			// TODO: need to find a good way of checking multi-values
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
-				//if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
 				if ( $var === $this->_name . '_' . $name ) {
 					$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
 				}

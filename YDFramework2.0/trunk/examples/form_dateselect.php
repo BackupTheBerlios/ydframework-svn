@@ -22,8 +22,8 @@
 			$form = new YDForm( 'form1' );
 			$element = $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
 			$form->addRule( 'dateSelect1', 'required', 'dateSelect1 required' );
-			$form->addElement( 'submit', 'cmd1', 'Send' );
 			$form->setDefaults( array( 'dateSelect1' => array( 'm'=>4, 'd'=>4, 'y'=>2002 ) ) );
+			$form->addElement( 'submit', 'cmd1', 'Send' );
 			if ( YD_DEBUG == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
