@@ -68,6 +68,7 @@
             unset( $form['attribs'] );
             unset( $form['tag'] );
             unset( $form['errors'] );
+            unset( $form['errors_unique_messages'] );
             unset( $form['requirednote'] );
 
             // Add the required note if there are required items
