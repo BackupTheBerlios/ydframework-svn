@@ -20,6 +20,7 @@ pages = [
     'YDEmail',
     'YDFeedCreator',
     'BestPractices',
+    'YDDatabase',
 ]
 
 images = [
