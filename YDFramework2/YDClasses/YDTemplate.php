@@ -30,6 +30,9 @@
 			// Keep a list of the variables
 			$this->_vars = array();
 
+			// Keep track of custom modifiers
+			$this->_modifiers = array();
+
 		}
 
 		/**
@@ -120,6 +123,11 @@
 			$tpl->register_modifier( 'fmtfilesize', 'YDTemplate_modifier_fmtfileize' );
 			$tpl->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
 			$tpl->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
+
+			// Add the other modifiers
+			foreach ( $this->_modifiers as $name=>$function ) {
+				$tpl->register_modifier( $name, $function );
+			}
 
 			// Assign the variables
 			$tpl->assign( $this->_vars );
