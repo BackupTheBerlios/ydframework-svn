@@ -8,6 +8,7 @@
 	}
 
 	require_once( 'YDBase.php' );
+	require_once( 'YDStringUtil.php' );
 
 	/**
 	 *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be 
@@ -86,6 +87,9 @@
 			if ( $convertBr == true ) {
 				$data = nl2br( $data );
 			}
+
+			// Encode the references
+			$data = YDStringUtil::encodeString( $data );
 
 			// Return the data
 			return $data;
