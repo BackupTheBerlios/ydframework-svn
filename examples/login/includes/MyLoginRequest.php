@@ -1,18 +1,5 @@
 <?php
 
-    // Function to check the login
-    function checkLogin( $fields ) {
-        if (
-            $fields['loginName'] == 'pieter'
-            &&
-            $fields['loginPass'] == 'kermit'
-        ) {
-            return true;
-        } else {
-            return array( 'loginName' => 'Username and/or password incorrect' );
-        }
-    }
-
     // Class definition
     class MyLoginRequest extends YDRequest {
 
@@ -49,7 +36,7 @@
             $form->addElement( 'submit', 'cmdSubmit', 'Login' );
 
             // Add the rules
-            $form->addFormRule( 'checkLogin' );
+            $form->addFormRule( array( & $this, 'checkLogin' ) );
 
             // Process the form
             if ( $form->validate() ) {
@@ -99,6 +86,19 @@
         function authenticationFailed() {
             $this->forward( 'login' );
             return;
+        }
+
+        // Function to check the login
+        function checkLogin( $fields ) {
+            if (
+                $fields['loginName'] == 'pieter'
+                &&
+                $fields['loginPass'] == 'kermit'
+            ) {
+                return true;
+            } else {
+                return array( 'loginName' => 'Username and/or password incorrect' );
+            }
         }
 
     }

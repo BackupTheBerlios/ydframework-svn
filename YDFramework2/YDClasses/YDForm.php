@@ -68,10 +68,6 @@
      *      </form>
      *  {/if}
      *  @endcode
-     *
-     *  @todo
-     *      Check if the addFormRule function supports class methods as well on
-     *      top of plain functions.
      */
     class YDForm extends HTML_QuickForm {
 
