@@ -130,8 +130,8 @@
         /**
          *  This function will execute the specified XML/RPC call on the server.
          *
-         *  @params $method Name of the XML/RPC method.
-         *  @params $params The parameters for this method.
+         *  @param $method Name of the XML/RPC method.
+         *  @param $params The parameters for this method.
          *
          *  @returns Returns the result of the query. If something went wrong, a
          *           YDFatalError is raised.
