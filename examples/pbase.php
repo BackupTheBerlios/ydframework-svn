@@ -22,90 +22,52 @@
 			// Initialize the parent
 			$this->YDRequest();
 
-			// The regex pattern to match the images
-			$this->pattern = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+			// Set the home url
+			$this->homeUrl = 'http://www.pbase.com/beachshop/';
+			$this->setVar( 'homeUrl', $this->homeUrl );
 
-			// The list of galleries
-			$this->galleries = array(
-				array(
-					'id' => 1, 'title' => 'SYCOD Race II 2004',
-					'url' => 'http://www.pbase.com/bba/odk2_2004&page=all',
-				),
-				array(
-					'id' => 2, 'title' => 'Krab Rally 2004',
-					'url' => 'http://www.pbase.com/bba/krab04&page=all',
-				),
-				array(
-					'id' => 3, 'title' => 'Belgian Championship 2003',
-					'url' => 'http://www.pbase.com/bba/bc&page=all',
-				),
-				array(
-					'id' => 4, 'title' => 'Krab Rally 2003',
-					'url' => 'http://www.pbase.com/bba/krab_zaterdag&page=all',
-				),
-				array(
-					'id' => 5, 'title' => 'Beachshop Testdag 02/05/2004',
-					'url' => 'http://www.pbase.com/beachshop/testdag_mei_2004&page=all',
-				),
-				array(
-					'id' => 6, 'title' => 'Les Hemmes 27280304',
-					'url' => 'http://www.pbase.com/beachshop/les_hemmes__27280304&page=all',
-					
-				),
-				array(
-					'id' => 7, 'title' => 'Libre 4 Wheels Buggy',
-					'url' => 'http://www.pbase.com/beachshop/4w_buggy&page=all',
-				),
-				array(
-					'id' => 8, 'title' => 'Closing Race 2004',
-					'url' => 'http://www.pbase.com/bba/closingrace&page=all',
-				),
-				array(
-					'id' => 9, 'title' => 'Turning an old Beachshop to a new one',
-					'url' => 'http://www.pbase.com/beachshop/turning_an_old_beachshop_to_a_new_one&page=all',
-				),
-			);
+			// Title for the image gallery
+			$this->setVar( 'galTitle', 'Beachshop Pictures' );
 
-			// Download the gallery data
-			foreach ( $this->galleries as $key=>$gallery ) {
-				$objUrl = new YDUrl( $gallery['url'] );
-				$contents = $objUrl->getContentsWithRegex( $this->pattern );
-				$this->galleries[ $key ]['images'] = $contents[1];
-				$this->galleries[ $key ]['thumbnail'] = $contents[1][ rand( 0, sizeof( $contents[1] ) ) ];
+			// Start with no galleries and no selected gallery
+			$this->galleries = array();
+			$this->gallery = null;
+
+			// Download the gallery index
+			$pIndex = '/HREF="http:\/\/www.pbase.com\/beachshop\/(.*?)" class="thumbnail".*? src="http:\/\/.*?.image.pbase.com\/.*?\/.*?\/small\/([0-9]+).*?alt="(.*?)">/ism';
+			$objUrl = new YDUrl( $this->homeUrl );
+			$contents = $objUrl->getContentsWithRegex( $pIndex );
+
+			// Loop over the matching patterns to construct the galleries list
+			for ( $i=0; $i < sizeof( $contents[1] ); $i++ ) {
+
+				// Initialize the array if needed
+				if ( ! isset( $this->galleries[ $i ] ) ) { $this->galleries[ $i ] = array(); }
+
+				// Fill in the details
+				$this->galleries[ $i ]['title'] = $contents[3][$i];
+				$this->galleries[ $i ]['url'] = $this->homeUrl . $contents[1][$i] . '&page=all';
+				$this->galleries[ $i ]['thumbnail'] = $this->homeUrl . 'image/' . $contents[2][$i] . '/small.jpg';
+				$this->galleries[ $i ]['id'] = md5( $this->galleries[ $i ]['url'] );
+
+				// Get the contents of the URL
+				$pGallery = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+				$objUrl = new YDUrl( $this->galleries[ $i ]['url'] );
+				$pcontents = $objUrl->getContentsWithRegex( $pGallery );
+
+				// Add the list of images
+				$this->galleries[ $i ]['images'] = $pcontents[1];
+
 			}
 
-			// If a gallery is selected, get the data
+			// If a gallery is selected, assign it to the gallery variable
 			if ( isset( $_GET['gal'] ) ) {
-
-				// Get the ID of the gallery
-				$this->gallery = null;
-
-				// Check if the specified gallery exists
 				foreach ( $this->galleries as $gallery ) {
-
-					// Check if the ID matches
 					if ( $gallery['id'] == $_GET['gal'] ) {
-
-						// Save the gallery ID
 						$this->gallery = $gallery;
-
-						// Add it to the template
 						$this->setVar( 'gallery', $gallery );
-
 					}
-
 				}
-
-				// Get the gallery contents if it exists
-				if ( $this->gallery ) {
-
-					// The fixed url of our gallery
-					$this->url = $this->gallery['url'];
-					$this->images = $this->gallery['images'];
-					$this->setVar( 'url', $this->url );
-
-				}
-
 			}
 
 		}
@@ -114,9 +76,9 @@
 		function actionDefault() {
 
 			// Add the list of galleries
-			$this->setVar( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 2, true ) );
+			$this->setVar( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 4, true ) );
 
-			// Show the template
+			// Output the template
 			$this->outputTemplate();
 
 		}
@@ -125,12 +87,10 @@
 		function actionGallery() {
 
 			// Redirect to default if no gallery
-			if ( ! $this->gallery ) { 
-				$this->redirectToAction();
-			}
+			if ( ! $this->gallery ) { $this->redirectToAction(); }
 
 			// Add the template variables
-			$this->setVar( 'images', YDArrayUtil::convertToTable( $this->images, 4, true ) );
+			$this->setVar( 'images', YDArrayUtil::convertToTable( $this->gallery['images'], 4, true ) );
 
 			// Output the template
 			$this->outputTemplate();
@@ -141,13 +101,12 @@
 		function actionImage() {
 
 			// Redirect to the gallery if no matching image
-			// TODO: make it redirect correctly!
-			if ( ! in_array( $_GET['img'], $this->images ) ) { 
+			if ( ! in_array( $_GET['img'], $this->gallery['images'] ) ) {
 				$this->redirectToAction();
 			}
 
 			// Get current image number
-			$imageCurrent = array_search( $_GET['img'], $this->images );
+			$imageCurrent = array_search( $_GET['img'], $this->gallery['images'] );
 
 			// Start with no previous and next image
 			$imagePrevious = null;
@@ -155,12 +114,12 @@
 
 			// Get the index of the previous image
 			if ( $imageCurrent != 0 ) {
-				$imagePrevious = $this->images[ $imageCurrent - 1 ];
+				$imagePrevious = $this->gallery['images'][ $imageCurrent - 1 ];
 			}
 
 			// Get the index if the next image
-			if ( $imageCurrent < sizeof( $this->images ) ) {
-				$imageNext = $this->images[ $imageCurrent + 1 ];
+			if ( $imageCurrent < sizeof( $this->gallery['images'] ) ) {
+				$imageNext = $this->gallery['images'][ $imageCurrent + 1 ];
 			}
 
 			// Add them to the template

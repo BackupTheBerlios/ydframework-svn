@@ -10,18 +10,25 @@
 
 	<?php if ( $YD_ACTION == 'default' ) { ?>
 
-		<h3>PBase image galleries</h3>
+		<h3><?= $galTitle ?></h3>
 
-		<table cellpadding="16" cellspacing="0" border="0">
+		<p>PBase URL: <a href="<?= $homeUrl ?>" target="_blank"><?= $homeUrl ?></a></p>
+
+		<table cellpadding="4" cellspacing="0" border="0">
 		<?php foreach ( $galleries as $galleryrow ) { ?>
+			<tr><td colspan="20">&nbsp;</td></tr>
 			<tr>
 				<?php foreach ( $galleryrow as $gallery ) { ?>
-					<td width="400" align="left">
+					<td width="240" align="center">
 					<?php if ( $gallery ) { ?>
-						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="http://www.pbase.com/image/<?= $gallery['thumbnail'] ?>/small.jpg" border="1" align="left"></a>
-						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a>
+						<p>
+						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="<?= $gallery['thumbnail'] ?>" border="1"></a>
+						</p>
+						<p>
+						<b><a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a></b>
 						<br>
 						(<?= sizeof( $gallery['images'] ) ?> images in this gallery)
+						</p>
 					<?php } ?>
 					</td>
 				<?php } ?>
@@ -33,18 +40,24 @@
 
 	<?php if ( $YD_ACTION == 'gallery' ) { ?>
 
-		<h3><?= $gallery['title'] ?></h3>
+		<h3>
+			<a href="<?= $YD_SELF_SCRIPT ?>"><?= $galTitle ?></a> &raquo; 
+			<?= $gallery['title'] ?>
+		</h3>
 
 		<p>PBase URL: <a href="<?= $gallery['url'] ?>" target="_blank"><?= $gallery['url'] ?></a></p>
 
-		<table cellpadding="16" cellspacing="0" border="0">
+		<table cellpadding="4" cellspacing="0" border="0">
 		<?php foreach ( $images as $imagerow ) { ?>
+			<tr><td colspan="20">&nbsp;</td></tr>
 			<tr>
 				<?php foreach ( $imagerow as $image ) { ?>
-					<td width="160" align="center">
+					<td width="240" align="center">
 					<?php if ( $image ) { ?>
 						<a href="<?= $YD_SELF_SCRIPT ?>?do=image&gal=<?= $gallery['id'] ?>&img=<?= $image ?>"><img src="http://www.pbase.com/image/<?= $image ?>/small.jpg" border="1"></a>
-						<a href="<?= $YD_SELF_SCRIPT ?>?do=image&gal=<?= $gallery['id'] ?>&img=<?= $image ?>"><?= $image ?>.jpg</a>
+						<p>
+						<b><a href="<?= $YD_SELF_SCRIPT ?>?do=image&gal=<?= $gallery['id'] ?>&img=<?= $image ?>"><?= $image ?>.jpg</a></b>
+						</p>
 					<?php } ?>
 					</td>
 				<?php } ?>
@@ -55,9 +68,13 @@
 
 	<?php if ( $YD_ACTION == 'image' ) { ?>
 
-		<h3><?= $gallery['title'] ?> - <?= $imageCurrent ?>.jpg</h3>
+		<h3>
+			<a href="<?= $YD_SELF_SCRIPT ?>"><?= $galTitle ?></a> &raquo;
+			<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a> &raquo;
+			<?= $imageCurrent ?>.jpg
+		</h3>
 
-		<table cellpadding="16" cellspacing="0" border="0">
+		<table cellpadding="4" cellspacing="0" border="0">
 		<tr>
 			<td>
 				<?php if ( $imagePrevious ) { ?>
@@ -81,11 +98,6 @@
 		<tr>
 			<td colspan="2" align="center">
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="http://www.pbase.com/image/<?= $imageCurrent ?>.jpg" border="1"></a>
-			<td>
-		<tr>
-		<tr>
-			<td colspan="2" align="center">
-				<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>">back to the gallery overview</a>
 			<td>
 		<tr>
 		</table>
