@@ -7,7 +7,8 @@ A:Hover {font-size : 10pt; text-decoration:underline;}
 td {font-size : 10pt; font-family : Lucida Sans Unicode,Tahoma,arial,Helvetica;}  
 th {background-color:#F0F0F0;font-size : 10pt; font-family : Lucida Sans Unicode,Tahoma,arial,Helvetica;}  
 p {font-size : 10pt; font-family : Lucida Sans Unicode,Tahoma,arial,Helvetica;}  
-pre { background-color: #F0F0F0; padding: 4px; }
+pre { font-family: Courier New,Courier; background-color: #F0F0F0; padding: 4px; }
+code { font-family: Courier New,Courier; }
 span { font-family: Courier New,Courier; color: #000000; font-size: 10pt; }
 .note { background-color: lightyellow; padding: 4px; }
 .section-heading-1 { font-size: 14pt; color:#C00000; }

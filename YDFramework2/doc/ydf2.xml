@@ -147,14 +147,20 @@
                 <link href="#ch13_03">Adding items</link>
                 <link href="#ch13_04">Outputting the feed</link>
             </link>
-            <link href="#ch14">Other classes and modules
-                <link href="#ch14_01">YDArrayUtil</link>
-                <link href="#ch14_02">YDBrowserInfo</link>
-                <link href="#ch14_03">YDDebugUtil</link>
-                <link href="#ch14_04">YDError</link>
-                <link href="#ch14_05">YDLanguage</link>
-                <link href="#ch14_06">YDObjectUtil</link>
-                <link href="#ch14_07">YDTimer</link>
+            <link href="#ch14">Debugging tools
+                <link href="#ch14_01">Overview</link>
+                <link href="#ch14_02">Showing debug information</link>
+                <link href="#ch14_03">Adding debugging information</link>
+                <link href="#ch14_04">Automatically showing debug information</link>
+            </link>
+            <link href="#ch15">Other classes and modules
+                <link href="#ch15_01">What is discussed in this chapter?</link>
+                <link href="#ch15_02">YDArrayUtil</link>
+                <link href="#ch15_03">YDBrowserInfo</link>
+                <link href="#ch15_04">YDError</link>
+                <link href="#ch15_05">YDLanguage</link>
+                <link href="#ch15_06">YDObjectUtil</link>
+                <link href="#ch15_07">YDTimer</link>
             </link>
         </table-of-content>
     
@@ -3555,58 +3561,300 @@ phptype</pre>
                 <page-break />
             </section>
 
-        <section name="ch14" label="Other classes and modules" />
+        <section name="ch14" label="Debugging tools" />
 
-            <section name="ch14_01" label="What is discussed in this chapter?">
+            <section name="ch14_01" label="Overview">
                 <br/>
                 Not written yet
             </section>
 
-            <section name="ch14_02" label="YDArrayUtil">
+            <section name="ch14_02" label="Showing debug information">
                 <br/>
                 Not written yet
             </section>
 
-            <section name="ch14_03" label="YDBrowserInfo">
+            <section name="ch14_03" label="Adding debugging information">
                 <br/>
                 Not written yet
             </section>
 
-            <section name="ch14_04" label="YDDebugUtil">
+            <section name="ch14_04" label="Automatically showing debug information">
                 <br/>
                 Not written yet
+                <page-break />
             </section>
 
-            <section name="ch14_05" label="YDError">
+        <section name="ch15" label="Other classes and modules" />
+
+            <section name="ch15_01" label="What is discussed in this chapter?">
+
                 <br/>
-                Not written yet
+
+                In this chapter, we will discuss some of the smaller classes and
+                modules. There are a whole bunch of small extra things in the
+                Yellow Duck Framework that take care of some very specific
+                functions. Most of these classes are not rocket science, but
+                they make that you don't have to reinvent the wheel every time
+                you need them.
+
             </section>
 
-            <section name="ch14_06" label="YDLanguage">
+            <section name="ch15_02" label="YDArrayUtil">
+
                 <br/>
-                Not written yet
+
+                The YDArrayUtil module houses all the different function related
+                to handling of arrays. Currently, there is only one function in
+                this module which converts a single-dimension array to a
+                two-dimension array (table). Let's take a look at an example.
+
+                <br/><br/>
+
+                The original array looked as follows:
+
+                <pre>array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+  4 => 5,
+  5 => 6,
+  6 => 7,
+)</pre>
+
+                Let's say we want to convert it to a table with 3 columns, we
+                can do the following:
+
+                <pre><font color="#000033">YDArrayUtil</font><font color="#000000">::</font><font color="#000033">convertToTable</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$array</font><font color="#000000">,</font><font color="#000033"> </font><font color="#CC9900">3</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                The new array will look as follows:
+
+                <pre>array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 2,
+    2 => 3,
+  ),
+  1 => 
+  array (
+    0 => 4,
+    1 => 5,
+    2 => 6,
+  ),
+  2 => 
+  array (
+    0 => 7,
+  ),
+)</pre>
+
+                There is a switch for the <code>convertToTable</code> that can
+                fill the last row with null values so that it matches the
+                correct number of columns.
+
+                <br/><br/>
+
+                This function was primarly made for use in things such as 
+                image galleries that need to display their contents in columns.
+                It can of course be used for a lot more than just image 
+                galleries.
+
             </section>
 
-            <section name="ch14_07" label="YDObjectUtil">
+            <section name="ch15_03" label="YDBrowserInfo">
+                
                 <br/>
-                Not written yet
+
+                The YDBrowserInfo object returns information about the browser
+                that performed the request. The YDBrowserInfo will check the
+                headers and extract information such as the version of the
+                browser, the name of the browser and the platform on which the
+                browser is running.
+
+                <br/><br/>
+
+                The following code sample demonstrates how to use this class:
+
+                <pre><font color="#00007F">$browser</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDBrowserInfo</font><font color="#000000">()</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$browser</font><font color="#000000">-&gt;</font><font color="#000033">getAgent</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$browser</font><font color="#000000">-&gt;</font><font color="#000033">getBrowser</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$browser</font><font color="#000000">-&gt;</font><font color="#000033">getVersion</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> browser</font><font color="#000000">-&gt;</font><font color="#000033">getPlatform</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                The <code>getBrowser</code> function will return one of the
+                following values: ie, safari, opera, mozilla or other. The
+                <code>getPlatform</code> function will return one of the
+                following values: win, mac, linux, unix or other.
+
+                <br/><br/>
+
+                The <code>getAgent</code> function will return the full HTTP
+                user agent string as provided by the browser.
+
+                <br/><br/>
+
+                This class is very handy to display specific contents based on
+                the browser of the user. You might e.g. specify a different
+                stylesheet for Macintosh users compared to the stylesheet used
+                for Windows users.
+
             </section>
 
-            <section name="ch14_08" label="YDTimer">
+            <section name="ch15_04" label="YDError">
+
                 <br/>
-                Not written yet
+
+                The YDError module provides two classes that are part of the
+                error handling in the Yellow Duck Framework. Each YDError object
+                has an error message attached to it which can be retrieved using
+                the <code>getError</code> function. If not error message was
+                specified when creating an instance, the text "Unknown error"
+                will be returned.
+
+                <br/><br/>
+
+                If your function returns a YDError object, you can use the
+                static function <code>isError</code> from the YDError class
+                to find out if the object is a YDError object or not. You can
+                only class this function statically.
+
+                <br/><br/>
+
+                There is a special subclass of the YDError class, which is
+                called YDFatalError. The difference with the normal error class
+                is that the YDFatalError will stop the execution of the current
+                script and will display the error message. To raise a fatal
+                error, you just need to create an instance of it. An example:
+
+                <pre><font color="#7F007F">new</font><font color="#000033"> YDFatalError</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'My error message'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                If you run this code, the only thing the script will do it to
+                show you the error message and the execution of the script will
+                be stopped.
+
+            </section>
+
+            <section name="ch15_05" label="YDLanguage">
+
+                <br/>
+
+                The YDLanguage class helps you to choose a language from a list
+                of supported languages based on the supported languages from the
+                browser.
+
+                <br/><br/>
+
+                This function will check the HTTP_ACCEPT_LANGUAGE header to find
+                out which languages the browser supports. It will then check
+                that against a list of languages that the class supports and
+                will return the name of the most appropriate langauage.
+
+                <br/><br/>
+
+                This class will also take into consideration the right priority
+                of the languages specified by the browser. Let's take a look at
+                a small example illustrating this. In this example, the browser
+                supports the following languages in this specific order: nl
+                (dutch), fr (french) and en (english). The code sample looks as
+                follows:
+
+                <pre><font color="#00007F">$lang</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDLanguage</font><font color="#000000">(</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'en'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'nl'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'fr'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$lang</font><font color="#000000">-&gt;</font><font color="#000033">getLanguage</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                If you run this example, the output of the
+                <code>getLanguage</code> function will be "fr". French is the
+                first language specified by the browser and is supported by the
+                server. If not matching language was found, the first language
+                specified by the server will be used. 
+                
+                <br/><br/>
+                
+                If no list of supported languages was specified when 
+                instantiating this class, the class will assume that only 
+                English is supported.
+
+            </section>
+
+            <section name="ch15_06" label="YDObjectUtil">
+
+                <br/>
+
+                The YDObjectUtil module provides you with some class and
+                object related static functions. The following functions are 
+                available:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Function</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">isSubClass</td>
+                        <td>This function will check if the specified object is 
+                        subclassed from the specified class name or is an 
+                        instance of the specified classgetAncestors.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">getAncestors</td>
+                        <td>This function will list you the parent classes of a
+                        specific class.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">failOnMissingMethod</td>
+                        <td>This function will raise a fatal exception if the
+                        specified object doens't contain the specified
+                        function.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">serialize</td>
+                        <td>This function returns a gzipped stream containing a 
+                        byte-stream representation of an object that can be
+                        stored anywhere.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">unserialize</td>
+                        <td>This function takes a single gzipped serialized 
+                        variable (the output from the 
+                        <code>YDObjectUtil::serialize()</code> function) and 
+                        converts it back into a PHP value.</td>
+                    </tr>
+                </table></p>
+
+                <i><b>Note</b>: all these functions have to be called 
+                statically and thus do not require an instance of the 
+                YDObjectUtil class.</i>
+
+            </section>
+
+            <section name="ch15_07" label="YDTimer">
+
+                <br/>
+
+                The YDTimer class offers you with a very easy timer class. It
+                will time the execution of whatever you want. The class starts
+                counting when you instantiate it, will return you the elapsed
+                time when you call it's <code>getElapsed</code> function. The
+                result is returned in seconds.
+
+                <br/><br/>
+
+                Let's have a look at a code example:
+
+                <pre><font color="#00007F">$timer</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDTimer</font><font color="#000000">();</font>
+<font color="#00007F">$elapsed</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$timer</font><font color="#000000">-&gt;</font><font color="#000033">getElapsed</font><font color="#000000">();</font></pre>
+
+                This $elapsed variable will now contain the time it took from
+                the instantiation of YDTimer class till the function call to the
+                <code>getElapsed</code> function.
+
+                <br/><br/>
+
+                This class is very handing for timing certains parts of your
+                application. You can create multiple instances of the YDTimer
+                class which takes care of timing once specific part.
+
             </section>
 
     </document-body>
-
-    <!--document-header>
-        <hr size="1" color="red" noshade="true" />
-        <table width="100%">
-            <tr>
-                <td align="left"><b>Yellow Duck Framework version 2.0.0 - User Guide</b></td>
-                <td align="right"><page-number /></td>
-            </tr>
-        </table>
-    </document-footer-->
 
 </document>

@@ -46,8 +46,8 @@
         }
 
         /**
-         *  This function will return the number of milliseconds elapsed since
-         *  the timer was instantiated.
+         *  This function will return the number of seconds elapsed since the
+         *  timer was instantiated.
          *
          *  @returns The total elapsed time
          */
