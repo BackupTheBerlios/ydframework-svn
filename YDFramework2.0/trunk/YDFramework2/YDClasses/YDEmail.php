@@ -36,7 +36,7 @@
 		/**
 		 *	This is the class constructor for the YDEmail class.
 		 */
-		function YDEmail( $crlf="\n" ) {
+		function YDEmail() {
 
 			// Initialize YDBase
 			$this->YDBase();
