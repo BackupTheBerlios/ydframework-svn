@@ -46,6 +46,8 @@
 				if ( ! $conn ) { YDFatalError( mysql_error() ); }
 				if ( ! @mysql_select_db( $this->_db, $conn ) ) { YDFatalError( mysql_error( $conn ) ); }
 				$this->_conn = $conn;
+			} else {
+				@mysql_ping( $this->_conn );
 			}
 		}
 
