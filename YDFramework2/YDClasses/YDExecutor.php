@@ -96,22 +96,38 @@
 			// Show debugging info if needed
 			if ( YD_DEBUG == 1 ) {
 
+				// Include the string utilities
+				require_once( 'YDStringUtil.php' );
+
 				// Stop the timer
 				$elapsed = $GLOBALS['timer']->getElapsed();
 
 				// Total size of include files
 				$includeFiles = get_included_files();
-				$includeFilesSize = 0;
 
 				// Calculate the total size
-				foreach( $includeFiles as $includeFile ) {
+				$includeFilesSize = 0;
+				$includeFilesWithSize = array();
+				foreach ( $includeFiles as $key=>$includeFile ) {
 					$includeFilesSize += filesize( $includeFile );
+					$includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
+				}
+				$includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
+
+				// Sort the list of include files by file size
+				krsort( $includeFilesWithSize );
+
+				// Convert to a string
+				$includeFiles = array();
+				foreach ( $includeFilesWithSize as $size=>$file ) {
+					array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
 				}
 
 				// Create the debug messages
+				$debug = '';
 				$debug .= 'Processing time: ' . $elapsed . ' ms' . "\n\n";
-				$debug .= 'Total size include files: ' . intval( $includeFilesSize / 1024 ) . ' KB' . "\n\n";
-				$debug .= 'Included files: ' . "\n  " . implode( "\n  ", $includeFiles );
+				$debug .= 'Total size include files: ' . $includeFilesSize . "\n\n";
+				$debug .= 'Included files: ' . "\n\t" . implode( "\n\t", $includeFiles );
 
 				// Output the debug message
 				YDDebugUtil::debug( $debug );

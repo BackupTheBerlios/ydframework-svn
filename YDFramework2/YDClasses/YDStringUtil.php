@@ -25,6 +25,8 @@
 		 */
 		function formatFilesize( $bytes, $decimals=1 ) {
 
+			$bytes = intval( $bytes );
+
 			// The different units
 			$units = array(
 			  '1152921504606846976' => 'EB', '1125899906842624' => 'PB', '1099511627776' => 'TB', '1073741824' => 'GB',
@@ -32,11 +34,11 @@
 			);
 
 			// Smaller than 1 KB, so return bytes
-			if ( $bytes <= 1024 ) { return $bytes . " Bytes"; }
+			if ( $bytes <= 1024 ) { return number_format( $bytes / 1024, $decimals, '.', '' ) . ' KB'; }
 
 			// Loop over the remaining possibilities
-			foreach( $units as $base => $title ) {
-				if( floor( $bytes / $base ) != 0 ) {
+			foreach ( $units as $base => $title ) {
+				if ( floor( $bytes / $base ) != 0 ) {
 					return number_format( $bytes / $base, $decimals, '.', '' ) . ' ' . $title;
 				}
 			}
