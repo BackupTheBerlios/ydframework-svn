@@ -150,6 +150,7 @@
             extract( $this->_vars );
 
             // Process the template
+            ob_start();
             include( $tplPath );
             $contents = ob_get_contents();
             ob_end_clean();
