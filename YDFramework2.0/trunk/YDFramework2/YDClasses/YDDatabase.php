@@ -239,24 +239,12 @@
 				$page = 1;
 			}
 
-			// Get the current query string
+			// Get the URL
 			$url = new YDUrl( YD_SELF_URI );
-			$query = $url->getQuery();
 
-			// Parse the query
-			parse_str( $query, $query );
-
-			// Change page and size
-			$query['page'] = $page;
-			$query['size'] = $this->pagesize;
-
-			// Update the URL object
-			$querystr = '';
-			foreach ( $query as $key => $value ) {
-				$querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
-				$querystr .= $key . '=' . rawurlencode( $value );
-			}
-			$url->setNamedPart( 'query', $querystr );
+			// Set the query variables
+			$url->setQueryVar( 'page', $page );
+			$url->setQueryVar( 'size', $this->pagesize );
 
 			// Return the url
 			return $url->getUri();
