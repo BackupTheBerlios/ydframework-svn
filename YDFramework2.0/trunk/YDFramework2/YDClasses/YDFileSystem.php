@@ -476,7 +476,8 @@
 		 *					items in the directory as the indicated class. If an empty string is given, it will return
 		 *					the list of filenames instead of objects.
 		 *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
-		 *					and YDFSDirectory classes.
+		 *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
+		 *					string. 
 		 *
 		 *	@returns	Array of YDFile objects for the files that match the pattern.
 		 */
@@ -529,16 +530,11 @@
 			// Get the values
 			$fileList = array_values( $fileList );
 
-			// Return a simple list if needed
-			if ( $class === '' ) {
-				return $fileList;
-			}
-
 			// Convert the list of a list of YDFile objects
 			$fileList2 = array();
 			foreach ( $fileList as $file ) {
 				$file = $this->getPath() . '/' . $file;
-				if ( ! is_null( $class ) ) {
+				if ( ! is_null( $class ) && $class != '' ) {
 					$fileObj = new $class( $file );
 				} else {
 					if ( is_dir( $file ) ) {
@@ -558,6 +554,9 @@
 			$fileList2 = array_values( $fileList2 );
 
 			// Remove the unsupported classes
+			if ( ! is_array( $classes ) ) {
+				$classes = array( $classes );
+			}
 			if ( sizeof( $classes ) == 0 ) {
 				return array();
 			}
@@ -568,6 +567,22 @@
 				if ( ! in_array( get_class( $val ), $classes ) ) {
 					unset( $fileList2[ $key ] );
 				}
+			}
+
+			// Return a simple list if needed
+			if ( $class === '' ) {
+			
+				// Initialize a list for the files only
+				$fileOnlyList = array();
+				
+				// Add the files
+				foreach ( $fileList2 as $file ) {
+					array_push( $fileOnlyList, basename( $file->_path ) );
+				}
+			
+				// Return the fileOnlyList array
+				return $fileOnlyList;
+
 			}
 
 			// Return the file list

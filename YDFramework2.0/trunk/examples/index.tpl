@@ -86,6 +86,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="fsdirectory2.php">More examples for the YDFSDirectory object</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=fsdirectory2.php">fsdirectory2.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="fsimage.php">YDFSImage object</a>
 				<br>
 				<a href="fsimage.php?do=thumbnail1">YDFSImage object - thumbnail 1</a>
