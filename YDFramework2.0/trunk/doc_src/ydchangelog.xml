@@ -42,6 +42,7 @@
             <listitem>Documented the YDStringUtil class</listitem>
             <listitem>Removed the YDFSFile::toArray, YDFSImage::toArray and YDFSDirectory::toArray functions.</listitem>
             <listitem>Removed the YDBase::toArray functions.</listitem>
+            <listitem>Removed the YDDatabase class constructor.</listitem>
             <listitem>TODO: Add the date rule to check dates.</listitem>
             <listitem>TODO: Add the YDDate class to make it easier to work with dates.</listitem>
             <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
