@@ -20,7 +20,7 @@
         /**
          *  This is the class constructor of the YDDirectory class.
          *
-         *  @param $path Path of the directory
+         *  @param $path Path of the directory.
          */
         function YDFSDirectory( $path ) {
 
@@ -52,9 +52,10 @@
          *  @remarks
          *      This will not work recursively on the subdirectories.
          *
-         *  @param $pattern Pattern to which the files should match
+         *  @param $pattern (optional) Pattern to which the files should match.
          *  
-         *  @returns Array of YDFile objects for the files that match the pattern
+         *  @returns Array of YDFile objects for the files that match the 
+         *           pattern.
          */
         function getContents( $pattern='') {
 
@@ -160,8 +161,8 @@
          *  This function will delete a file from the current directory.
          *
          *  @param $filename    The file you want to delete.
-         *  @param $failOnError Indicate if a YDFatalError needs to be raised if
-         *                      deleting the file failed.
+         *  @param $failOnError (optional) Indicate if a YDFatalError needs to 
+         *                      be raised if deleting the file failed.
          */
         function deleteFile( $filename, $failOnError=false ) {
 

@@ -22,7 +22,7 @@
          *  file as it's only argument. It will then provide you with a number
          *  of functions to get the properties of the file.
          *
-         *  @param $path Path of the file
+         *  @param $path Path of the file.
          */
         function YDFSFile( $path ) {
 
@@ -59,7 +59,7 @@
         /**
          *  Function to get the extension of the file.
          *
-         *  @returns String containing the extension of the file
+         *  @returns String containing the extension of the file.
          */
         function getExtension() {
             ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->_path, $regs );
@@ -96,7 +96,7 @@
         /**
          *  Function to get the size of the file.
          *
-         *  @returns Double containing the length of the file
+         *  @returns Double containing the length of the file.
          */
         function getSize() {
             return filesize( $this->_path );
@@ -112,10 +112,10 @@
          *  If the length is not given, it will read the rest of  the file
          *  starting from the start byte.
          *
-         *  @param $start  Byte to start reading from
-         *  @param $length Number of bytes to read
+         *  @param $start  (optional) Byte to start reading from.
+         *  @param $length (optional) Number of bytes to read.
          *
-         *  @returns String containing the contents of the file
+         *  @returns String containing the contents of the file.
          */
         function getContents( $start=null, $length=null ) {
 
@@ -134,7 +134,7 @@
 
             }
 
-            // No legnth given
+            // No length given
             if ( $length == null ) {
 
                 // Take the length of the file starting from the start byte
@@ -211,11 +211,6 @@
 
             // Check if it's a supported image
             return in_array( $params[2], array( 1, 2, 3 ) );
-
-        }
-
-        // function to append data to a file
-        function appendContents() {
 
         }
 

@@ -27,8 +27,8 @@
          *      This function is a reformatted version of the function found on:
          *      http://www.php.net/manual/en/function.fnmatch.php#31353
          *
-         *  @param $pattern Pattern to match the file against
-         *  @param $file    File name that needs to be checked
+         *  @param $pattern Pattern to match the file against.
+         *  @param $file    File name that needs to be checked.
          *
          *  @return Boolean indicating if the file matched the pattern or not.
          */

@@ -211,13 +211,13 @@
          *  the current directory. To shorten the names of the files, we perform
          *  an md5 checksum on them so that they are fixed in length.
          *
+         *  @internal
+         *
          *  @param $auto_base
          *  @param $auto_source
          *  @param $auto_id
          *
          *  @return string
-         *
-         *  @internal
          */
         function _get_auto_filename(
             $auto_base, $auto_source = null, $auto_id = null

@@ -20,7 +20,9 @@
     class YDBrowserInfo {
 
         /** 
-         *  The class constructor analyzes for the YDBrowserInfo class.
+         *  The class constructor analyzes for the YDBrowserInfo class. The
+         *  constructor takes no arguments and uses the 
+         *  $_SERVER['HTTP_USER_AGENT'] variable to parse the browser info.
          */
         function YDBrowserInfo() {
 

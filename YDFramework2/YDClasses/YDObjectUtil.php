@@ -27,10 +27,10 @@
          *  This function uses the is_a function from PHP if it's available, and if
          *  not, it falls back on either the get_class or is_subclass_of functions.
          *
-         *  @param $obj The object instance to check
-         *  @param $class The object type you want to check against
+         *  @param $obj The object instance to check.
+         *  @param $class The object type you want to check against.
          *
-         *  @return Boolean indicating if the object is of the specified class
+         *  @return Boolean indicating if the object is of the specified class.
          */
         function isSubClass( $obj, $class ) {
 
@@ -81,9 +81,9 @@
          *
          *  All other values are considered to represent false.
          *
-         *  @param $val Value to check
+         *  @param $val Value to check.
          *
-         *  @return Boolean indicating if the value is true or false
+         *  @return Boolean indicating if the value is true or false.
          */
         function isTrue( $val ) {
 
@@ -139,9 +139,9 @@
          *  } 
          *  @endcode
          *
-         *  @param $classname Name of the class or object
+         *  @param $classname Name of the class or object.
          *
-         *  @return Array with all the ancestors
+         *  @return Array with all the ancestors.
          */
         function getAncestors( $classname ) {
             
@@ -172,8 +172,8 @@
          *  specified, and will raise a fatal error if not. This function does not
          *  return any value.
          *
-         *  @param $obj Object you want to check
-         *  @param $method Method you are looking for
+         *  @param $obj Object you want to check.
+         *  @param $method Method you are looking for.
          */
         function failOnMissingMethod( $obj, $method ) {
             if ( ! method_exists( $obj, 'authenticationSucceeded' ) ) {

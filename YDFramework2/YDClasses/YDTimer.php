@@ -18,10 +18,6 @@
      */
     class YDTimer {
 
-        // Class variables
-        var $startTime;             /**< @private */
-        var $endTime;             /**< @private */
-
         /**
          *  This is the class constructor of the YDTimer class.
          */
@@ -32,7 +28,7 @@
         /**
          *  Stops the timer and returns the elapsed time.
          *
-         *  @return The total elapsed time
+         *  @return The total elapsed time.
          */
         function finish() {
             $this->endTime = $this->getTime();

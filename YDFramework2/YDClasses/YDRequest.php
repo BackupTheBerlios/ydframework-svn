@@ -78,7 +78,8 @@
          *  default action to 'actionDefault' (but can be overridden later on),
          *  and also initializes an YDTemplate object.
          *
-         *  By default, classes are set to no require authentication.
+         *  @remark
+         *      By default, classes are set to no require authentication.
          */
         function YDRequest() {
 
@@ -294,7 +295,8 @@
          *  template is specified, the basename of the current script will be
          *  used as the template name.
          *
-         *  @param $templateName Name of the template to use.
+         *  @param $templateName (optional) Name of the template to use.
+         *
          *  @return Returns the contents of the parsed template.
          */
         function getTemplateOutput( $templateName='' ) {

@@ -23,7 +23,7 @@
          *  of functions to get the properties of the image and also provides
          *  some actions like generating thumbnails.
          *
-         *  @param $path Path of the file
+         *  @param $path Path of the image.
          */
         function YDImage( $path ) {
 
@@ -45,8 +45,8 @@
          *
          *  @param $width  The maximum width of the thumbnail.
          *  @param $height The maximum height of the thumbnail.
-         *  @param $cache  Indicate if the thumbnails should be cached or not.
-         *                 By default, caching is turned on.
+         *  @param $cache  (optional) Indicate if the thumbnails should be 
+         *                 cached or not. By default, caching is turned on.
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 

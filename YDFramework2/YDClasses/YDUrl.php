@@ -21,7 +21,7 @@
          *  This is the class constructor for the YDUrl class. You need to
          *  specify the URL as it's only argument.
          *
-         *  @param $url The url you want to have as a YDUrl object
+         *  @param $url The url you want to have as a YDUrl object.
          */
         function YDUrl( $url ) {
             
@@ -48,7 +48,7 @@
         /**
          *  This function will return the original URL.
          *
-         *  @returns The original URL
+         *  @returns The original URL.
          */
         function getUrl() {
             return $this->_url;
@@ -62,11 +62,11 @@
          *  This function will return an empty string if the part doesn't exist
          *  or if an invalid part has been specified.
          *
-         *  @param $name The name of the part
-         *
-         *  @returns The textual contents of the indicated part
-         *
          *  @internal
+         *
+         *  @param $name The name of the part.
+         *
+         *  @returns The textual contents of the indicated part.
          */
         function getNamedPart( $name ) {
             if ( isset( $this->_url_parsed[$name] ) ) {
@@ -79,7 +79,7 @@
         /**
          *  This function will return the scheme of the URL.
          *
-         *  @returns The scheme of the URL (http, ftp, ...)
+         *  @returns The scheme of the URL (http, ftp, ...).
          */
         function getScheme() {
             return strtolower( $this->getNamedPart( 'scheme' ) );
@@ -88,7 +88,7 @@
         /**
          *  This function will return the host part of the URL.
          *
-         *  @returns The host part of the URL
+         *  @returns The host part of the URL.
          */
         function getHost() {
             return strtolower( $this->getNamedPart( 'host' ) );
@@ -97,7 +97,7 @@
         /**
          *  This function will return the port part of the URL.
          *
-         *  @returns The port part of the URL
+         *  @returns The port part of the URL.
          */
         function getPort() {
             $port = $this->getNamedPart( 'port' );
@@ -111,7 +111,7 @@
         /**
          *  This function will return the user part of the URL.
          *
-         *  @returns The user part of the URL
+         *  @returns The user part of the URL.
          */
         function getUser() {
             return $this->getNamedPart( 'user' );
@@ -120,7 +120,7 @@
         /**
          *  This function will return the password part of the URL.
          *
-         *  @returns The password part of the URL
+         *  @returns The password part of the URL.
          */
         function getPassword() {
             return $this->getNamedPart( 'password' );
@@ -129,7 +129,7 @@
         /**
          *  This function will return the path part of the URL.
          *
-         *  @returns The path part of the URL
+         *  @returns The path part of the URL.
          */
         function getPath() {
             return $this->getNamedPart( 'path' );
@@ -139,7 +139,7 @@
          *  This function will return the query part of the URL. This is
          *  everything after the ? mark.
          *
-         *  @returns The query part of the URL
+         *  @returns The query part of the URL.
          */
         function getQuery() {
             return $this->getNamedPart( 'query' );
@@ -149,7 +149,7 @@
          *  This function will return the fragment part of the URL. This is
          *  everything after the # mark.
          *
-         *  @returns The fragment part of the URL
+         *  @returns The fragment part of the URL.
          */
         function getFragment() {
             return $this->getNamedPart( 'fragment' );
@@ -176,8 +176,8 @@
          *  @remark
          *      This function only works for HTTP connections.
          *
-         *  @param $cache Indicate if the web content should be cached or not.
-         *                By default, caching is turned on.
+         *  @param $cache (optional) Indicate if the web content should be 
+         *                cached or not. By default, caching is turned on.
          *
          *  @returns Returns the contents of the URL.
          */
@@ -274,11 +274,11 @@
          *
          *  If not port was specified in the URL, it will revert to port 80.
          *
-         *  @remark
-         *      This function only works for HTTP connections.
-         *
          *  More information about the HTTP client class can be found on:
          *  http://scripts.incutio.com/httpclient/
+         *
+         *  @remark
+         *      This function only works for HTTP connections.
          *
          *  @param $regex The regular expression you want to apply to the
          *                the contents of the URL.
@@ -301,7 +301,7 @@
         /**
          *  This function retrieves the header information for the specified URL.
          *
-         *  @return Array containing the headers fors the URL
+         *  @return Array containing the headers fors the URL.
          */
         function getHeaders() {
 
@@ -326,7 +326,7 @@
         /**
          *  This function retrieves the header information for the specified URL.
          *
-         *  @return Array containing the headers fors the URL
+         *  @return Array containing the headers fors the URL.
          */
         function getStatus() {
 

@@ -39,7 +39,7 @@
          *
          *  @param $url The database url for this query.
          *
-         *  @returns The number of affected row by the SQL query
+         *  @returns The number of affected row by the SQL query.
          */
         function executeQuery( $url ) {
 
@@ -57,7 +57,7 @@
          *
          *  @param $url The database url for this query.
          *
-         *  @returns The result of the SQL query
+         *  @returns The result of the SQL query.
          */
         function executeSelect( $url ) {
 
@@ -75,7 +75,7 @@
          *
          *  @param $url The database url for this query.
          *
-         *  @returns The first row of the result of the SQL query
+         *  @returns The first row of the result of the SQL query.
          */
         function executeSelectRow( $url ) {
 

@@ -85,9 +85,10 @@
          *
          *  @param $dieOnError This paramater (true by default) will stop the
          *                     execution if it fails to connect to the database.
-         *  @param $persistent Indicates if a persistent database connection is
-         *                     made or not. Not all database drivers support
-         *                     this option so be careful in using this option.
+         *  @param $persistent (optional) Indicates if a persistent database
+         *                     connection is made or not. Not all database 
+         *                     drivers support this option so be careful in 
+         *                     using this option.
          *
          *  @return Returns a connection object if the database connection was 
          *          successfully established. If something went wrong, a YDError 
@@ -140,7 +141,7 @@
          *
          *  @param $query The SQL query to execute.
          *
-         *  @returns The number of affected row by the SQL query
+         *  @returns The number of affected rows by the SQL query.
          */
         function executeQuery( $query ) {
 
@@ -166,7 +167,7 @@
          *
          *  @param $query The SQL query to execute.
          *
-         *  @returns The result of the SQL query
+         *  @returns The result of the SQL query.
          */
         function executeSelect( $query ) {
 
@@ -192,7 +193,7 @@
          *
          *  @param $query The SQL query to execute.
          *
-         *  @returns The first row of the result of the SQL query
+         *  @returns The first row of the result of the SQL query.
          */
         function executeSelectRow( $query ) {
 

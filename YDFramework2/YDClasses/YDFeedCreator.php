@@ -14,11 +14,9 @@
 
     /**
      *  This class defines a RSS/ATOM feed. You can use this class to create RSS
-     *  and Atom feeds in a very easy and straightforward way.
-     *
-     *  @todo
-     *      Make sure all the different RSS formats and items are supported. If
-     *      there are possible variations, make sure we support these as well.
+     *  and Atom feeds in a very easy and straightforward way. If you set up
+     *  your class instance, you can automatically output to the different
+     *  versions of RSS and ATOM with the same source data.
      */
     class YDFeedCreator {
 
@@ -78,7 +76,7 @@
          *  @param $title The title of the feed image.
          *  @param $link  The link to the feed image.
          *  @param $url   The URL of the feed image.
-         *  @param $descr The description for the feed image (optional).
+         *  @param $descr (optional) The description for the feed image.
          */
         function setImage( $title, $link, $url, $desc=null ) {
 
@@ -108,8 +106,8 @@
          *
          *  @param $title The title of the feed item.
          *  @param $link  The link to the feed item.
-         *  @param $desc  The description for the feed item (optional).
-         *  @param $guid  The guid for the feed item (optional).
+         *  @param $desc  (optional) The description for the feed item.
+         *  @param $guid  (optional) The guid for the feed item.
          */
         function addItem( $title, $link, $desc=null, $guid=null ) {
 
@@ -157,9 +155,13 @@
          *  - RSS2.0
          *  - ATOM
          *
-         *  The default format is RSS2.0.
+         *  @remark
+         *      The default format is "RSS2.0". If you specify no argument
+         *      indicating the requested format, the "RSS2.0" format will be
+         *      used.
          *
-         *  @param $format The format in which the items should be converted.
+         *  @param $format (optional) The format in which the items should be 
+         *                 converted.
          *
          *  @returns String with the data in the requested format.
          */
@@ -199,9 +201,13 @@
          *  - RSS2.0
          *  - ATOM
          *
-         *  The default format is RSS2.0.
+         *  @remark
+         *      The default format is "RSS2.0". If you specify no argument
+         *      indicating the requested format, the "RSS2.0" format will be
+         *      used.
          *
-         *  @param $format The format in which the items should be outputted.
+         *  @param $format (optional) The format in which the items should be 
+         *                 converted.
          */
         function outputXml( $format='RSS2.0' ) {
 

@@ -29,8 +29,9 @@
          *
          *  @param $array       The single dimension array you want to convert.
          *  @param $columns     The number of columns the table should have.
-         *  @param $fillLastRow If true, the last row will be filled with null
-         *                      values so that it matches the number of columns.
+         *  @param $fillLastRow (optional) If true, the last row will be filled
+         *                      with null values so that it matches the number 
+         *                      of columns.
          *
          *  @returns A multi-dimension array with the contents of the original
          *           array converted to a table with the indicated number of
