@@ -136,8 +136,7 @@
             $this->_type = '';
             $this->_value = '';
             $this->_isButton = false;
-            $this->_autoRules = array();
-
+			
             // Indicate where the label should be
             $this->_labelPlace = 'before';
 
