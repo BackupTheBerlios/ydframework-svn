@@ -35,6 +35,10 @@
 			$recordset = $db->getRecordsAsSet( 'show status', $page, $size );
 			//$recordset->dump();
 
+			// Alter the URL
+			$url = & $recordset->url;
+			$url->setQueryVar( 'test', 'val' );
+
 			// Close the database connection
 			$db->close();
 

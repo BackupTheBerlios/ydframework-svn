@@ -182,6 +182,9 @@
 			// Remove the original set of records, as we don't need them anymore
 			unset( $records );
 
+			// Publish the URL as an object
+			$this->url = new YDUrl( YD_SELF_URI );
+
 		}
 
 		/**
@@ -261,7 +264,7 @@
 			}
 
 			// Get the URL
-			$url = new YDUrl( YD_SELF_URI );
+			$url = $this->url;
 
 			// Set the query variables
 			$url->setQueryVar( $pagevar, $page );
