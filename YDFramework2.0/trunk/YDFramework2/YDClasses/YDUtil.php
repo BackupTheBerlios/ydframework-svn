@@ -207,7 +207,7 @@
 				return is_a( $obj, $class );
 			} else {
 				if ( is_object( $obj ) ) {
-					if ( get_class( $obj ) == $class ) return true;
+					if ( strtolower( get_class( $obj ) ) == strtolower( $class ) ) return true;
 					if ( is_subclass_of( $obj, $class ) ) return true;
 				}
 			}
@@ -224,7 +224,7 @@
 		 */
 		function getAncestors( $classname ) {
 			if ( is_object( $classname ) ) {
-				$classname = get_class( $classname );
+				$classname = strtolower( get_class( $classname ) );
 			}
 			$ancestors = array();
 			$father = get_parent_class( $classname );

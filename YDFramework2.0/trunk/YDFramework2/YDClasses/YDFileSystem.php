@@ -564,7 +564,7 @@
 				$classes[ $key ] = strtolower( $val );
 			}
 			foreach ( $fileList2 as $key=>$val ) {
-				if ( ! in_array( get_class( $val ), $classes ) ) {
+				if ( ! in_array( strtolower( get_class( $val ) ), $classes ) ) {
 					unset( $fileList2[ $key ] );
 				}
 			}
