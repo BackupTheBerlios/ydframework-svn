@@ -27,6 +27,17 @@
 
         }
 
+        /**
+         *  This function will serialize the current object. The serialized 
+         *  output is GZip compressed to save space.
+         */
+        function serialize() {
+
+            // We first serialize and then compress
+            return gzcompress( serialize( $this ) );
+
+        }
+
     }
 
 ?>
