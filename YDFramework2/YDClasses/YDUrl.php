@@ -160,6 +160,18 @@
         }
 
         /**
+         *
+         *  This function will return the URI part of the request.
+         *
+         */
+        function getUri() {
+            $uri .= $this->_url_parsed['path'] ? $this->_url_parsed['path'] : '';
+            $uri .= $this->_url_parsed['query'] ? '?'.$this->_url_parsed['query'] : '';
+            $uri .= $this->_url_parsed['fragment'] ? '#'.$this->_url_parsed['fragment'] : '';
+            return $uri; 
+        }
+
+        /**
          *  Function to get the contents of the URL. It will get the contents
          *  using Gzip compression if possible in order to save bandwidth. It
          *  uses the HTTP Client class from Simon Willison to do the dirty work.
@@ -184,6 +196,11 @@
          *                cached or not. By default, caching is turned on.
          *
          *  @returns Returns the contents of the URL.
+         *
+         *  @todo
+         *      If no etag of last modified, we should cache the data for a
+         *      predefined time and refetch afterwards (pbase). We can use the
+         *      checksum of the URL to construct the filename?
          */
         function getContents( $cache=true ) {
 
@@ -215,21 +232,28 @@
                     $cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
                     $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
 
-                    // Use the cache file if any
-                    if ( is_file( $cacheFName ) ) {
+                } else {
 
-                        // Includes
-                        require_once( 'YDFSFile.php' );
+                    // Create the cache filename
+                    $cacheFName = YD_DIR_TEMP . '/' . YD_TMP_PRE . md5( $this->getUrl() ) . '.wch';
 
-                        // Create a file object for the cache file
-                        $file = new YDFSFile( $cacheFName );
-
-                        // Output the contents
-                        return gzuncompress( $file->getContents() );
-
-                    };
+                    // Check if it is still valid
 
                 }
+
+                // Use the cache file if any
+                if ( is_file( $cacheFName ) ) {
+
+                    // Includes
+                    require_once( 'YDFSFile.php' );
+
+                    // Create a file object for the cache file
+                    $file = new YDFSFile( $cacheFName );
+
+                    // Output the contents
+                    return gzuncompress( $file->getContents() );
+
+                };
 
             }
 
@@ -294,6 +318,9 @@
          *                the contents of the URL.
          *
          *  @returns Array with the regex matches from the URL contents.
+         *
+         *  @todo
+         *      Add optional parameter indicating if we want to cache or not.
          */
         function getContentsWithRegex( $regex ) {
 
@@ -366,6 +393,10 @@
          *  @internal
          *
          *  @returns A new HttpClient class instance.
+         *
+         *  @todo
+         *      We need to have a global constant that indicates if we want to
+         *      use GZip compressed streams or not.
          */
         function _getHttpClient() {
 
@@ -390,7 +421,8 @@
             $client = new YDHttpClient( $this->getHost(), $port );
             $client->useGzip( true );
             $client->setDebug( YD_DEBUG );
-            $client->path = $this->getUrl();
+            //$client->path = $this->getUrl();
+            $client->path = $this->getUri();
             $client->referer = $this->getUrl();
             $client->method = 'GET';
 

@@ -28,7 +28,11 @@
         function YDHttpClient( $host, $port=80 ) {
 
             // Initialize the HTTP client
-            $this->HttpClient( $host, $port=80 );
+            $this->HttpClient( $host, $port );
+
+            // Update the user agent
+            $this->user_agent = YD_FW_NAMEVERS . ' - YDHttpClient';
+            $this->user_agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1';
 
             // Set the content type
             $this->contenttype = '';
@@ -45,7 +49,7 @@
 
             // Start with default headers
             $headers = array();
-            $headers[] = "{$this->method} {$this->path} HTTP/1.0";
+            $headers[] = "{$this->method} {$this->path} HTTP/1.1";
             $headers[] = "Host: {$this->host}";
             $headers[] = "User-Agent: {$this->user_agent}";
             $headers[] = "Accept: {$this->accept}";
