@@ -32,10 +32,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
 del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
-del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
-del /Q "%BLDDIR%\YDFramework2\doc\*.doc"
 del /Q "%BLDDIR%\YDFramework2\doc\api\doxygen.png"
-del /Q "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf"
 del /Q "%BLDDIR%\YDFramework2\doc\*.py"
 copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
 move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc" > NUL
