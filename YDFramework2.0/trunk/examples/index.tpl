@@ -205,7 +205,7 @@
 		</tr>
 		<tr>
 			<td valign="top">
-				<a href="database_paging.php">Paged arrays</a>
+				<a href="array_paging.php">Paged arrays</a>
 			</td>
 			<td valign="top">
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging.php">array_paging.php</a>
