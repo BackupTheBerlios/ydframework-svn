@@ -21,6 +21,10 @@
      *  @todo
      *      Add options to get the text and HTML contents for an email from a
      *      YDTemplate object.
+     *
+     *  @todo
+     *      If you send an email with an embedded image, the email sometimes
+     *      shows up with the body in an attachment.
      */
     class YDEmail extends YDBase {
 
@@ -36,9 +40,11 @@
             $this->_msg = new Mail_mime( $crlf );
 
             // Start with empty variables
+            $this->sender = '';
             $this->replyto = '';
             $this->from = '';
             $this->to = array();
+            $this->to_plain = array();
             $this->subject = '';
             $this->cc = array();
             $this->bcc = array();
@@ -53,6 +59,7 @@
          */
         function setFrom( $email, $name='' ) {
             $this->from = $this->_mergeEmailName( $email, $name );
+            $this->sender = $email;
         }
 
         /** 
@@ -61,7 +68,7 @@
          *  @param $email Email address to use as reply to
          *  @param $name  Name to use as the relpy to
          */
-        function doSetReplyTo( $email, $name='' ) {
+        function setReplyTo( $email, $name='' ) {
             $this->replyto = $this->_mergeEmailName( $email, $name );
         }
 
@@ -75,15 +82,7 @@
             array_push(
                 $this->to, $this->_mergeEmailName( $email, $name )
             );
-        }
-
-        /** 
-         *  Function to set the subject of the email
-         *
-         *  @param $subject Subject of the email
-         */
-        function setSubject( $subject ) {
-            $this->subject = $subject;
+            array_push( $this->to_plain, $email );
         }
 
         /**
@@ -96,6 +95,7 @@
             array_push(
                 $this->cc, $this->_mergeEmailName( $email, $name )
             );
+            array_push( $this->to_plain, $email );
         }
 
         /**
@@ -108,6 +108,16 @@
             array_push(
                 $this->bcc, $this->_mergeEmailName( $email, $name )
             );
+            array_push( $this->to_plain, $email );
+        }
+
+        /** 
+         *  Function to set the subject of the email
+         *
+         *  @param $subject Subject of the email
+         */
+        function setSubject( $subject ) {
+            $this->subject = $subject;
         }
 
         /**
@@ -185,7 +195,7 @@
         function send() {
 
             // Check if there is a to address
-            if ( sizeof( $this->to ) == 0 ) {
+            if ( sizeof( $this->to_plain ) == 0 ) {
                 new YDFatalError(
                     'You need to specify at least one recipient in the YDEmail '
                     . 'class'
@@ -193,7 +203,7 @@
             }
 
             // Check if there is a to address
-            if ( empty( $this->from ) ) {
+            if ( empty( $this->sender ) ) {
                 new YDFatalError(
                     'You need to specify who this email message coming from.'
                 );
@@ -238,7 +248,7 @@
 
             // Send the actual message
             $mail = & Mail::factory( 'mail' );
-            $mail->send( $this->from, $headers, $body );
+            $mail->send( $this->sender, $headers, $body );
 
         }
 

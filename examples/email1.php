@@ -72,21 +72,6 @@
             // Output the template
             $this->outputTemplate();
 
-            /*
-            $eml = new YDEmail();
-            $eml->setFrom( 'pieter.claerhout@creo.com', 'Pieter - CREO' );
-            $eml->addTo( 'pieter.claerhout@creo.com', 'Pieter - CREO' );
-            $eml->addCC( 'pieter.claerhout@pandora.be' );
-            $eml->setSubject( 'Hello from Pieter & Fiona!' );
-            $eml->setTxtBody( 'Hello from Pieter & Fiona!' );
-            $eml->setHtmlBody( '<h1>Hello from Pieter & Fiona!</h1><img src="fsimage1.jpg">' );
-            $eml->addAttachment( 'config.php' );
-            $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
-            $eml->send();
-
-            echo( 'Email was send successfully!' );
-            */
-
         }
 
     }
