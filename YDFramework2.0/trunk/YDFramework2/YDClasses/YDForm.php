@@ -80,6 +80,8 @@
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
 			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
 
+			$this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
+
 			// Add the rules
 			$this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
 			$this->registerRule( 'maxlength', array( 'YDValidateRules', 'maxlength' ), 'YDValidateRules.php' );
