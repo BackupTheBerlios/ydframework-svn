@@ -442,8 +442,15 @@
 		 */
 		function isSubmitted() {
 
+			// Get the right variables
+			if ( $this->_method == 'get' ) {
+				$vars = $_GET;
+			} else {
+				$vars = $_POST;
+			}
+
 			// Loop over the post variables
-			foreach ( $_POST as $key=>$value ) {
+			foreach ( $vars as $key=>$value ) {
 
 				// Remove the form name from the element name
 				//$key = str_replace( $this->_name . '_', '', $key );
