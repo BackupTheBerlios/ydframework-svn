@@ -142,10 +142,14 @@
 
 				// Create the timings report
 				$debug .= "Processing time:\n\n";
-				$debug .= "\t0 ms\tStart\n";
+				$debug .= "\tElapsed\tDiff\tMarker\n";
+				$debug .= "\t0 ms\t0 ms\tStart\n";
+				$previous = 0;
 				foreach ( $GLOBALS['timer']->markers as $marker ) {
 					foreach ( $marker as $key=>$val ) {
-						$debug .= "\t" . $val . ' ms' . "\t" .$key . "\n";
+						$diff = $val - $previous;
+						$previous = $val;
+						$debug .= "\t" . $val . ' ms' . "\t" . $diff . ' ms' . "\t" .$key . "\n";
 					}
 				}
 				$debug .= "\n";
