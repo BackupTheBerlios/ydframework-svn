@@ -183,6 +183,51 @@
 
         }
 
+        /**
+         *  This function will execute the query and return the first row from 
+         *  the result of the query.
+         *
+         *  @param $query The SQL query to execute.
+         *
+         *  @returns The first row of the result of the SQL query
+         */
+        function executeSelectRow( $query ) {
+
+            // Get a connection
+            $conn = $this->getConnection();
+
+            // Execute the query
+            $result = $conn->query( $query );
+
+            // Check for errors
+            if ( DB::isError( $result ) ) {
+                return new YDFatalError( $result->getMessage() );
+            }
+
+            // Return the result
+            return $result->fetchRow();
+
+        }
+
+        /**
+         *  This function will quote a variable so that it is suitable for
+         *  inclusion in an SQL statement. The returned string is dependant on
+         *  the database type.
+         *
+         *  @param $string The string to quote.
+         *
+         *  @returns The string properly quoted for the selected database.
+         */
+        function quote( $string ) {
+
+            // Get a connection
+            $conn = $this->getConnection();
+
+            // Return the quoted string
+            return $conn->quote( $string );
+
+        }
+
     }
 
 ?>
