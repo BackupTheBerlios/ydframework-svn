@@ -158,6 +158,169 @@
         <note>This function doesn't return any extra information about what is returned, and this should be calculated manually.</note>
 
     </sect1>
+ 
+    <sect1 id="yddatabase_paged">
+
+        <title>Using paged recordsets</title>
+
+        <para>A lot of times, a table or query contains too many rows to be useful in a webpage. A common technique to get around this is to use "paged recordsets". These recordsets split up the result in pages and only show a part of the recordset with previous and next buttons. The following screenshot illustrates this technique:</para>
+
+        <para><mediaobject>
+            <imageobject>
+                <imagedata fileref="paged_recordset.gif"/>
+            </imageobject>
+        </mediaobject></para>
+
+        <para>In this screenshot, you can see that we only show part of the records and we also provide some navigational aids to make it easier to browse through the recordset.</para>
+
+        <para>The basic idea is that we split up the recordset in a number of pages each containing a maximum number of results.</para>
+
+        <para>To make this easier to use, you can use the function getRecordAsSet from the YDDatabaseDriver class. This function takes two (optional) arguments where you can specify the page and the page size:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>$sql: the SQL statement to execute</listitem>
+            <listitem>$page: the page to retrieve from the recordset</listitem>
+            <listitem>$pagesize: the maximum number of records allowed for each page</listitem>
+        </itemizedlist>
+
+        <para>This function returns a YDDatabaseSet object, which contains the records themselves, as well as a whole bunch of extra information about the recordset. Here's a lit of the extra items the YDDatabaseSet class contains</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">page:</emphasis> current page number</listitem>
+            <listitem><emphasis role="bold">pagesize:</emphasis> total size of each page</listitem>
+            <listitem><emphasis role="bold">pagePrevious:</emphasis> the number of the previous page</listitem>
+            <listitem><emphasis role="bold">pageNext:</emphasis> the number of the next page</listitem>
+            <listitem><emphasis role="bold">offset:</emphasis> the first record we started reading from</listitem>
+            <listitem><emphasis role="bold">totalPages:</emphasis> the total number of pages</listitem>
+            <listitem><emphasis role="bold">totalRows:</emphasis> the total number of rows in the unpaged recordset</listitem>
+            <listitem><emphasis role="bold">totalRowsOnPages:</emphasis> the total number of rows on the current page</listitem>
+            <listitem><emphasis role="bold">isFirstPage:</emphasis> boolean indicating if we are on the first page or not</listitem>
+            <listitem><emphasis role="bold">isLastPage:</emphasis> boolean indicating if we are on the last page or not</listitem>
+            <listitem><emphasis role="bold">pages:</emphasis> all the page numbers as a single-dimension array</listitem>
+        </itemizedlist>
+
+        <para>All these items are available as class variables from the YDDatabaseSet class.</para>
+
+        <para>The following example shows how this can be implemented in a real life example:</para>
+
+        <para>This is the code for the request class:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition
+    class database_paging extends YDRequest {
+
+        // Class constructor
+        function database_paging() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Get the pagesize and current page from the URL
+            // We use the @ mark to supress any error messsages
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
+
+            // Get the database connection
+            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
+
+            // Get the records
+            $recordset = $db->getRecordsAsSet( 'show status', $page, $size );
+            //$recordset->dump();
+
+            // Close the database connection
+            $db->close();
+
+            // Setup the template
+            $this->template->assign( 'recordset', $recordset );
+
+            // Display the template
+            $this->template->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>The template that goes along with this request class looks as follows:</para>
+
+        <programlisting><![CDATA[{capture assign="browsebar"}
+    {if $recordset->pages}
+        <p>
+        {if ! $recordset->isFirstPage}
+            <a href="{$recordset->getPreviousUrl()}">previous</a>
+        {else}
+            previous
+        {/if}
+        {foreach from=$recordset->pages item="page"}
+            {if $page == $recordset->page}
+                {$page}
+            {else}
+                <a href="{$recordset->getCurrentUrl()}">{$page}</a>
+            {/if}
+        {/foreach}
+        {if ! $recordset->isLastPage}
+            <a href="{$recordset->getNextUrl()}">next</a>
+        {else}
+            next
+        {/if}
+    {/if}
+{/capture}
+
+<html>
+
+<head>
+
+    <title>{$YD_FW_NAMEVERS}</title>
+
+</head>
+
+<body>
+
+    <h3>Database paging example</h3>
+
+    {if $recordset->set}
+        <p>
+            Showing page {$recordset->page} of {$recordset->totalPages} pages
+            ({$recordset->totalRowsOnPage} row(s))
+        </p>
+        {$browsebar}
+        <table border="1">
+        {foreach from=$recordset->set item="record"}
+            <tr>
+                {foreach from=$record item="val"}
+                    <td>{$val}</td>
+                {/foreach}
+            </tr>
+        {/foreach}
+        </table>
+        {$browsebar}
+    {else}
+        <p>No records were found.</p>
+    {/if}
+
+</body>
+
+</html>]]></programlisting>
+
+        <note>Be careful with using very large recordsets with this method. With recordsets containing millions of rows, this way of working can be quite slow.</note>
+
+    </sect1>
 
     <sect1 id="yddatabase_insert">
 

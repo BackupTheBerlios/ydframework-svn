@@ -25,6 +25,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	YDInclude( 'YDUrl.php' );
+
 	/**
 	 *	This class defines a database object.
 	 */
@@ -92,6 +94,197 @@
 			$className = $regDrivers[ strtolower( $driver ) ]['class'];
 			return new $className( $db, $user, $pass, $host );
 
+		}
+
+	}
+
+	/**
+	 *	This class implements a (paged) database recordset. It contains a lot of extra information about the recordset
+	 *	which is not available if you return the database results as an array. This object is really handy if you want
+	 *	to work with paged recordsets.
+	 *
+	 *	Here's the extra information that is available:
+	 *
+	 *	- page: current page number
+	 *	- pagesize: total size of each page
+	 *	- pagePrevious: the number of the previous page
+	 *	- pageNext: the number of the next page
+	 *	- offset: the first record we started reading from
+	 *	- totalPages: the total number of pages
+	 *	- totalRows: the total number of rows in the unpaged recordset
+	 *	- totalRowsOnPages: the total number of rows on the current page
+	 *	- isFirstPage: boolean indicating if we are on the first page or not
+	 *	- isLastPage: boolean indicating if we are on the last page or not
+	 *	- pages: all the page numbers as a single-dimension array
+	 *
+	 *	All these options are available as class variables.
+	 *
+	 *	@todo
+	 *		Improve performance with very large recordsets (millions of rows).
+	 */
+	class YDDatabaseSet extends YDBase {
+
+		/**
+		 * This is the class constructor for the YDDatabaseSet class. 
+		 *
+		 *	@param	$records	The list of records as an array (as returned by the YDDatabaseDriver::getRecords
+		 *						function.
+		 *	@param	$page		(optional) The page you want to retrieve. If omitted all records will be returned.
+		 *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
+		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
+		 *						will be the same as the total number of rows in the recordset.
+		 */
+		function YDDatabaseSet( $records, $page=-1, $pagesize=20 ) {
+
+			// Convert the page and pagesize to integers
+			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
+			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : 20;
+
+			// This original recordset
+			$this->records = $records;
+			$this->page = ( $page >= 1 ) ? $page : 1;
+			$page = ( $page >= 1 ) ? $page : -1;
+			if ( $page == -1 ) {
+				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $this->records );
+			} else {
+				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : 20;
+			}
+
+			// Get the offset
+			$this->offset = $this->pagesize * ( $this->page - 1 );
+
+			// Get the subset of the records we need
+			$this->set = array_slice( $records, $this->offset, $this->pagesize );
+
+			// Get the number of pages
+			$this->totalPages = ceil( sizeof( $this->records ) / ( float ) $this->pagesize );
+			$this->totalRows = sizeof( $this->records );
+			$this->totalRowsOnPage = sizeof( $this->set );
+
+			// Get the previous and next page
+			$this->pagePrevious = ( $this->page == 1 ) ? false : $this->page - 1;
+			$this->pageNext = ( $this->page >= $this->totalPages ) ? false : $this->page + 1;
+
+			// Indicate if we are on the last or first page
+			$this->isFirstPage = ( $this->pagePrevious == false ) ? true : false;
+			$this->isLastPage = ( $this->pageNext == false ) ? true : false;
+
+			// Add the list of pages as an array
+			$this->pages = ( $this->totalPages == 1 ) ? array() : range( 1, $this->totalPages );
+
+		}
+
+		/**
+		 *	This returns the URL to the previous page. If there is no previous page, it will return false.
+		 *
+		 *	@returns	The URL to the previous page or false if no previous page.
+		 */
+		function getPreviousUrl() {
+
+			// Return false if no previous page
+			if ( $this->isFirstPage ) {
+				return false;
+			}
+
+			// Return the updated URL
+			return $this->getPageUrl( $this->pagePrevious );
+
+		}
+
+		/**
+		 *	This returns the URL to the current page.
+		 *
+		 *	@returns	The URL to the current page.
+		 */
+		function getCurrentUrl() {
+
+			// Return the updated URL
+			return $this->getPageUrl( $this->page );
+
+		}
+
+		/**
+		 *	This returns the URL to the next page. If there is no next page, it will return false.
+		 *
+		 *	@returns	The URL to the next page or false if no next page.
+		 */
+		function getNextUrl() {
+
+			// Return false if no next page
+			if ( $this->isLastPage ) {
+				return false;
+			}
+
+			// Return the updated URL
+			return $this->getPageUrl( $this->pageNext );
+
+		}
+
+		/**
+		 *	This function will update the query string to set the page size and page number.
+		 *
+		 *	@param	$page	The page number.
+		 *
+		 *	@returns	The updated URL.
+		 */
+		function getPageUrl( $page ) {
+
+			// Doublecheck the pagenumber
+			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
+			if ( ! in_array( $page, $this->pages ) ) {
+				$page = 1;
+			}
+
+			// Get the current query string
+			$url = new YDUrl( YD_SELF_URI );
+			$query = $url->getQuery();
+
+			// Parse the query
+			parse_str( $query, $query );
+
+			// Change page and size
+			$query['page'] = $page;
+			$query['size'] = $this->pagesize;
+
+			// Update the URL object
+			$querystr = '';
+			foreach ( $query as $key => $value ) {
+				$querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
+				$querystr .= $key . '=' . rawurlencode( $value );
+			}
+			$url->setNamedPart( 'query', $querystr );
+
+			// Return the url
+			return $url->getUri();
+
+		}
+
+		/**
+		 *	This function dumps the parameters for the YDDatabaseSet class.
+		 */
+		function dump() {
+			YDDebugUtil::dump( $this->page, 'page' );
+			YDDebugUtil::dump( $this->pagesize, 'pagesize' );
+			YDDebugUtil::dump( $this->pagePrevious, 'pagePrevious' );
+			YDDebugUtil::dump( $this->pageNext, 'pageNext' );
+			YDDebugUtil::dump( $this->offset, 'offset' );
+			YDDebugUtil::dump( $this->totalPages, 'totalPages' );
+			YDDebugUtil::dump( $this->totalRows, 'totalRows' );
+			YDDebugUtil::dump( $this->totalRowsOnPage, 'totalRowsOnPage' );
+			YDDebugUtil::dump( $this->isFirstPage, 'isFirstPage' );
+			YDDebugUtil::dump( $this->isLastPage, 'isLastPage' );
+			YDDebugUtil::dump( $this->pages, 'pages' );
+			YDDebugUtil::dump( $this->getPreviousUrl(), 'getPreviousUrl' );
+			YDDebugUtil::dump( $this->getCurrentUrl(), 'getCurrentUrl' );
+			YDDebugUtil::dump( $this->getNextUrl(), 'getNextUrl()' );
+		}
+
+		/**
+		 *	Converts the YDDatabase set to an array containing the records of the recordset. The meta information about
+		 *	the dataset is not kept.
+		 */
+		function toArray() {
+			return $this->set;
 		}
 
 	}
@@ -264,6 +457,34 @@
 		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
 		function getRecords( $sql, $limit=-1, $offset=-1 ) {
+		}
+
+		/**
+		 *	This function executes the SQL statement and returns the records as a YDDatabaseSet object, which contains
+		 *	meta information about the recordset as well as the recordset itself. Optionally, you can limit the number
+		 *	of records that are returned. Optionally, you can also specify which record to start from. This is the
+		 *	preferred way when you are using paged resultsets.
+		 *
+		 *	@param	$sql		The list of records as an array (as returned by the YDDatabaseDriver::getRecords
+		 *						function.
+		 *	@param	$page		(optional) The page you want to retrieve. If omitted all records will be returned.
+		 *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
+		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
+		 *						will be the same as the total number of rows in the recordset.
+		 *
+		 *	@returns	The records matching the SQL statement as a YDDatabaseSet object.
+		 *
+		 *	@todo
+		 *		Performance needs to be improved. This is a quick and dirty solution right now.
+		 */
+		function getRecordsAsSet( $sql, $page=-1, $pagesize=-1 ) {
+
+			// Get all records
+			$records = $this->getRecords( $sql );
+
+			// Return the YDDatabaseSet
+			return new YDDatabaseSet( $records, $page, $pagesize );
+
 		}
 
 		/**
