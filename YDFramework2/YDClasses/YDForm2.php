@@ -62,6 +62,7 @@
 			// Add the standard elements
 			$this->registerElement( 'text', 'YDFormElement_Text' );
 			$this->registerElement( 'submit', 'YDFormElement_Submit' );
+			$this->registerElement( 'radio', 'YDFormElement_Radio' );
 
 		}
 
@@ -97,7 +98,7 @@
 		 *	@param $label	The label for the element.
 		 *	@param $attribs	The attributes for the element.
 		 */
-		function addElement( $type, $name, $label, $attribs=array() ) {
+		function addElement( $type, $name, $label, $attribs=array(), $options=array() ) {
 
 			// Check if the element type is known
 			if ( ! array_key_exists( $type, $this->_regElements ) ) {
@@ -114,7 +115,7 @@
 			}
 
 			// Create the instance
-			$instance = new $class( $this->_name, $name, $label, $attribs );
+			$instance = new $class( $this->_name, $name, $label, $attribs, $options );
 
 			// Fill in the value if any
 			if ( isset( $this->_formVars[ $this->_name . '_' . $name ] ) ) {
@@ -156,7 +157,34 @@
 		function addRule() {
 		}
 
+		/**
+		 *	This function will return true if the form is valid. If not, it will return false.
+		 *
+		 *	If no rules for the form, the form is considered to be valid.
+		 *	If no values for this form where submitted, the form is considered to be valid.
+		 *
+		 *	It will iterate over all the rules and apply them to each field after having applies the filters.
+		 *	Errors will be put on the error stack. In the end, it returns false or true.
+		 *
+		 *	@returns	Boolean indicating if the form is valid or not.
+		 */
 		function validate() {
+
+			// PEAR way of working			
+			// If no rules and number of submitValues and submitFiles is 0, form is valid.
+			// Check if both number of submit values and submit files are 0, form is invalid
+
+			// Check if there are any rules, if not, form is valid and return true
+			
+			// Check if we have any submit values or submitted files
+			// --> No, form valid, return true
+			
+			// Apply all rules, and add errors if needed
+			// Use te $this->getValue function to get the values for each field.
+			
+			// If errors, return false
+			// If no errors, return true
+			
 		}
 
 		/**
@@ -279,7 +307,7 @@
 		function _convertToHtmlAttrib( $array ) {
 			if ( ! is_array( $array ) ) { return ''; }
 			if ( sizeof( $array ) == 0 ) { return ''; }
-			foreach ( $array as $key=>$value ) { $out .= ' ' . $key . '="' . $value . '"'; }
+			foreach ( $array as $key=>$value ) { $out .= ' ' . strval( $key ) . '="' . strval( $value ) . '"'; }
 			return $out;
 		}
 

@@ -23,7 +23,7 @@
 		 *	@param $label		The label for the form element.
 		 *	@param $attributes	(optional) The attributes for the form element.
 		 */
-		function YDFormElement( $form, $name, $label, $attributes=array() ) {
+		function YDFormElement( $form, $name, $label, $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
 			$this->YDBase();
@@ -33,6 +33,7 @@
 			$this->_name = $name;
 			$this->_label = $label;
 			$this->_attributes = $attributes;
+			$this->_options = $options;
 			$this->_type = '';
 			$this->_value = '';
 
@@ -49,6 +50,7 @@
 				'value'	=> $this->_value,
 				'type'	=> $this->_type,
 				'label'	=> $this->_label,
+				'options' => $this->_options,
 				'html'	=> $this->toHtml(),
 			);
 		}

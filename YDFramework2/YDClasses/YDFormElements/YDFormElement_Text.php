@@ -13,10 +13,10 @@
 
 	class YDFormElement_Text extends YDFormElement {
 
-		function YDFormElement_Text( $form, $name, $label, $attributes=array() ) {
+		function YDFormElement_Text( $form, $name, $label, $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
-			$this->YDFormElement( $form, $name, $label, $attributes );
+			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
 			// Set the type
 			$this->_type = 'text';

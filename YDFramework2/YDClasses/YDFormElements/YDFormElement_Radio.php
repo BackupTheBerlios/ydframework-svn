@@ -11,19 +11,15 @@
 	require_once( 'YDForm2.php' );
 	require_once( 'YDFormElement.php' );
 
-	class YDFormElement_Submit extends YDFormElement {
+	class YDFormElement_Radio extends YDFormElement {
 
-		function YDFormElement_Submit( $form, $name, $label, $attributes=array(), $options=array() ) {
+		function YDFormElement_Radio( $form, $name, $label, $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
 			// Set the type
-			$this->_type = 'submit';
-
-			// Set the value correctly
-			$this->_value = $label;
-			$this->_label = '';
+			$this->_type = 'radio';
 
 		}
 
@@ -35,8 +31,23 @@
 			);
 			$attribs = array_merge( $this->_attributes, $attribs );
 
-			// Get the HTML
-			return '<input' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>';
+			// Create the HTML
+			if ( sizeof( $this->_options ) > 0 ) {
+				foreach ( $this->_options as $key=>$val ) {
+					$attribsElement = $attribs;
+					$attribsElement['value'] = $key;
+					if ( $this->_value == strval( $key ) ) {
+						$attribsElement['checked'] = '';
+					}
+					$out .= '<input' . YDForm2::_convertToHtmlAttrib( $attribsElement ) . '>' . $val;
+
+				}
+			} else {
+				$out .= '<input' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value;
+			}
+
+			// Return the HTML
+			return $out;
 
 		}
 
