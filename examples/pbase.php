@@ -110,7 +110,6 @@
             }
 
             // Add the template variables
-            //$this->setVar( 'gallery', $this->gallery );
             $this->setVar( 
                 'images', YDArrayUtil::convertToTable( $this->images, 4, true )
             );
