@@ -17,8 +17,8 @@
                 <?php foreach( $imagerow as $image ) { ?>
                     <td width="160" align="center">
                     <?php if ( $image ) { ?>
-                        <a href="<?= $YD_SELF_SCRIPT ?>?do=ShowImage&id=<?= $image ?>" target="_blank"><img src="http://www.pbase.com/image/<?= $image ?>/small.jpg" border="1"></a>
-                        <a href="<?= $YD_SELF_SCRIPT ?>?do=ShowImage&id=<?= $image ?>" target="_blank"><?= $image ?>.jpg</a>
+                        <a href="<?= $YD_SELF_SCRIPT ?>?do=ShowImage&id=<?= $image ?>"><img src="http://www.pbase.com/image/<?= $image ?>/small.jpg" border="1"></a>
+                        <a href="<?= $YD_SELF_SCRIPT ?>?do=ShowImage&id=<?= $image ?>"><?= $image ?>.jpg</a>
                     <?php } ?>
                     </td>
                 <?php } ?>
