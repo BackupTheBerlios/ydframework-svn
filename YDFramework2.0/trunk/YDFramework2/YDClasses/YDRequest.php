@@ -66,6 +66,30 @@
 		}
 
 		/**
+		 *	This function will return a normalized URI. This is the URI without the debug information and will all keys
+		 *	sorted alphabetically.
+		 *
+		 *	@returns	Normalized request URI.
+		 */
+		function getNormalizedUri() {
+			$url = parse_url( $this->getCurrentUrl() );
+			$params = $_GET;
+			ksort( $params );
+			if ( isset( $params['YD_DEBUG'] ) ) {
+				unset( $params['YD_DEBUG'] );
+			}
+			$query = array();
+			foreach( $params as $key=>$val ) {
+				array_push( $query, urlencode( $key ) . '=' . urlencode( $val ) );
+			}
+			$url['query'] = implode( '&', $query );
+			if ( ! empty( $url['query'] ) ) {
+				$url['query'] = '?' . $url['query'];
+			}
+			return $url['path'] . $url['query'];
+		}
+
+		/**
 		 *	This function will forward the current request to a different action. By using this function, you make sure
 		 *	the action names and so on are also update to reflect this.
 		 *
