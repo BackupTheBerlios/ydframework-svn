@@ -18,25 +18,30 @@
 		// Default action
 		function actionDefault() {
 
-			// Get the file object for the current file
-			$img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+			// We want to test the different image types
+			foreach ( array( 'jpg', 'gif', 'png' ) as $imgType ) {
 
-			// Dump the object
-			YDDebugUtil::dump( $img, __FILE__ );
+				// Get the file object for the current file
+				$img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.' . $imgType );
 
-			// Dump the object
-			echo( '<br>Basename: ' . $img->getBasename() );
-			echo( '<br>Extension: ' . $img->getExtension() );
-			echo( '<br>Path: ' . $img->getPath() );
-			echo( '<br>LastModified: ' . $img->getLastModified() );
-			echo( '<br>File size: ' . $img->getSize() );
-			echo( '<br>Width: ' . $img->getWidth() );
-			echo( '<br>Height: ' . $img->getHeight() );
-			echo( '<br>Image type: ' . $img->getImageType() );
-			echo( '<br>MIME type: ' . $img->getMimeType() );
+				// Dump the object
+				YDDebugUtil::dump( $img, __FILE__ );
 
-			// Image size
-			YDDebugUtil::dump( $img->getImageSize(), 'Imagesize' );
+				// Dump the object
+				echo( '<br>Basename: ' . $img->getBasename() );
+				echo( '<br>Extension: ' . $img->getExtension() );
+				echo( '<br>Path: ' . $img->getPath() );
+				echo( '<br>LastModified: ' . $img->getLastModified() );
+				echo( '<br>File size: ' . $img->getSize() );
+				echo( '<br>Width: ' . $img->getWidth() );
+				echo( '<br>Height: ' . $img->getHeight() );
+				echo( '<br>Image type: ' . $img->getImageType() );
+				echo( '<br>MIME type: ' . $img->getMimeType() );
+
+				// Image size
+				YDDebugUtil::dump( $img->getImageSize(), 'Imagesize' );
+
+			}
 
 			// Get the file object for the current file
 			$file = new YDFSFile( 'nofile.php' );

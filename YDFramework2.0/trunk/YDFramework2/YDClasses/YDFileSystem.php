@@ -160,16 +160,15 @@
 				);
 			}
 
-			// Get the parameters
-			$params = getimagesize( $this->getAbsolutePath() );
+			// Get the image type
+			$type = $this->_getImageType();
 
 			// Return false if not an image
-			if ( $params == false ) {
+			if ( $type == false ) {
 				return false;
+			} else {
+				return true;
 			}
-
-			// Check if it's a supported image
-			return in_array( $params[2], array( 1, 2, 3 ) );
 
 		}
 
@@ -183,6 +182,25 @@
 		 */
 		function isWriteable() {
 			return is_writable( $this->getAbsolutePath() );
+		}
+
+		/**
+		 *	@internal
+		 */
+		function _getImageType() {
+			$fp = fopen( $this->getAbsolutePath(), 'rb' );
+			$header = fread( $fp, 32 );
+			fclose( $fp );
+			if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
+				return 'gif';
+			}
+			if ( substr( $header, 6, 4 ) == 'JFIF' ) {
+				return 'jpeg';
+			}
+			if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
+				return 'png';
+			}
+			return false;
 		}
 
 	}
@@ -296,24 +314,18 @@
 		 */
 		function getImageType() {
 
-			// Get the parameters
-			$params = getimagesize( $this->getAbsolutePath() );
-
-			// Return the right image type
-			switch( $params[2] ) {
-				case 1:
-					return 'gif';
-				case 2:
-					return 'jpeg';
-				case 3:
-					return 'png';
-			}
+			// Get the image type
+			$type = $this->_getImageType();
 
 			// Raise error about unsupported image type
-			trigger_error(
-				'The getImageType function does not support the file format of the file "'
-				. $this->getAbsolutePath() . '".', YD_ERROR
-			);
+			if ( $type === false ) {
+				trigger_error(
+					'The getImageType function does not support the file format of the file "'
+					. $this->getAbsolutePath() . '".', YD_ERROR
+				);
+			} else {
+				return $type;
+			}
 
 		 }
 
@@ -456,6 +468,12 @@
 		 *					items in the directory as the indicated class.
 		 *
 		 *	@returns	Array of YDFile objects for the files that match the pattern.
+		 *
+		 *	@todo
+		 *		Add option to get everything as a simple list.
+		 *
+		 *	@todo
+		 *		Add option to define an ignore pattern
 		 */
 		function getContents( $pattern='', $class=null ) {
 
@@ -473,22 +491,18 @@
 							if ( ! empty( $patternitem ) ) {
 								if ( YDFSDirectory::_match( $patternitem, $file ) ) {
 									$fileList[ strtolower( $file ) ] = $file;
-									//array_push( $fileList, $file );
 								}
 							} else {
 								$fileList[ strtolower( $file ) ] = $file;
-								//array_push( $fileList, $file );
 							}
 						}
 					} else {
 						if ( ! empty( $pattern ) ) {
 							if ( YDFSDirectory::_match( $pattern, $file ) ) {
 								$fileList[ strtolower( $file ) ] = $file;
-								//array_push( $fileList, $file );
 							}
 						} else {
 							$fileList[ strtolower( $file ) ] = $file;
-							//array_push( $fileList, $file );
 						}
 					}
 				}
