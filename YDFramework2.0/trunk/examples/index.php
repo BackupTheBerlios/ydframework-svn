@@ -6,14 +6,19 @@
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDTemplate.php' );
-
+    
     // Class definition
     class index extends YDRequest {
 
         // Class constructor
         function index() {
+        
+            // Initialize the parent
             $this->YDRequest();
+            
+            // Initialize the template object
             $this->template = new YDTemplate();
+            
         }
 
         // Default action
