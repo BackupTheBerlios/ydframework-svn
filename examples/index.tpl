@@ -47,82 +47,112 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="arrayutil1.php">Array utilities</a>
+                <a href="arrayutil.php">Array utilities</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=arrayutil1.php">arrayutil1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="fsfile1.php">YDFSFile object</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsfile1.php">fsfile1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=arrayutil.php">arrayutil.php</a>
             </td>
         </tr>
         <tr>
             <td valign="top">
-                <a href="fsdirectory1.php">YDFSDirectory object</a>
+                <a href="fsfile.php">YDFSFile object</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsdirectory1.php">fsdirectory1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="fsimage1.php">YDFSImage object</a>
-                <br>
-                <a href="fsimage1.php?do=thumbnail1">YDFSImage object - thumbnail 1</a>
-                <br>
-                <a href="fsimage1.php?do=thumbnail2">YDFSImage object - thumbnail 2</a>
-                <br>
-                <a href="fsimage1.php?do=thumbnail3">YDFSImage object - thumbnail 3</a>
-                <br>
-                <a href="fsimage1.php?do=thumbnail4">YDFSImage object - thumbnail 4 (no caching)</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsimage1.php">fsimage1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsfile.php">fsfile.php</a>
             </td>
         </tr>
         <tr>
             <td valign="top">
-                <a href="extending1.php">Extending the YDRequest base class</a>
+                <a href="fsdirectory.php">YDFSDirectory object</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=extending1.php">extending1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="database1.php">Database connectivity</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=config.php">config.php</a>
-                <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.php">database1.php</a>
-                <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.tpl">database1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsdirectory.php">fsdirectory.php</a>
             </td>
         </tr>
         <tr>
             <td valign="top">
-                <a href="form1.php">Form handling and validation</a>
+                <a href="fsimage.php">YDFSImage object</a>
+                <br>
+                <a href="fsimage.php?do=thumbnail1">YDFSImage object - thumbnail 1</a>
+                <br>
+                <a href="fsimage.php?do=thumbnail2">YDFSImage object - thumbnail 2</a>
+                <br>
+                <a href="fsimage.php?do=thumbnail3">YDFSImage object - thumbnail 3 (no caching)</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form1.php">form1.php</a>
-                <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form1.tpl">form1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fsimage.php">fsimage.php</a>
             </td>
         </tr>
         <tr>
             <td valign="top">
-                <a href="sample1.php">Defining and using action requests</a>
+                <a href="extending.php">Extending the YDRequest base class</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample1.php">sample1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=extending.php">extending.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="database.php">Database connectivity</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.php">database1.php</a>
                 <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample1.tpl">sample1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.tpl">database1.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="form.php">Form handling and validation</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form.php">form.php</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form.tpl">form.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="sample.php">Defining and using action requests</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample.php">sample.php</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=sample.tpl">sample.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="url.php">YDUrl object</a>
+                <br>
+                <a href="url.php?do=image1">YDUrl object - Image 1</a>
+                <br>
+                <a href="url.php?do=image2">YDUrl object - Image 2</a>
+                <br>
+                <a href="url.php?do=image3">YDUrl object - Image 3</a>
+                <br>
+                <a href="url.php?do=headers">YDUrl object - Headers</a>
+                <br>
+                <a href="url.php?do=status">YDUrl object - Status</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=url.php">url.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="feedcreator.php">YDFeedCreator object</a>
+                <br>
+                <a href="feedcreator.php?do=rss091">YDFeedCreator object - RSS 0.91 output</a>
+                <br>
+                <a href="feedcreator.php?do=rss10">YDFeedCreator object - RSS 1.0 output</a>
+                <br>
+                <a href="feedcreator.php?do=rss20">YDFeedCreator object - RSS 2.0 output</a>
+                <br>
+                <a href="feedcreator.php?do=atom">YDFeedCreator object - Atom output</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=feedcreator.php">feedcreator.php</a>
             </td>
         </tr>
         <tr>
@@ -145,40 +175,6 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="ydurl1.php">YDUrl object</a>
-                <br>
-                <a href="ydurl1.php?do=image1">YDUrl object - Image 1</a>
-                <br>
-                <a href="ydurl1.php?do=image2">YDUrl object - Image 2</a>
-                <br>
-                <a href="ydurl1.php?do=image3">YDUrl object - Image 3</a>
-                <br>
-                <a href="ydurl1.php?do=headers">YDUrl object - Headers</a>
-                <br>
-                <a href="ydurl1.php?do=status">YDUrl object - Status</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=ydurl1.php">ydurl1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="feedcreator1.php">YDFeedCreator object</a>
-                <br>
-                <a href="feedcreator1.php?do=rss091">YDFeedCreator object - RSS 0.91 output</a>
-                <br>
-                <a href="feedcreator1.php?do=rss10">YDFeedCreator object - RSS 1.0 output</a>
-                <br>
-                <a href="feedcreator1.php?do=rss20">YDFeedCreator object - RSS 2.0 output</a>
-                <br>
-                <a href="feedcreator1.php?do=atom">YDFeedCreator object - Atom output</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=feedcreator1.php">feedcreator1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
                 <a href="auth_ipcheck.php">Authentication based on IP numbers</a>
             </td>
             <td valign="top">
@@ -189,38 +185,54 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="xmlrpcclient1.php">XML/RPC client</a>
+                <a href="http_auth/index.php">Basic HTTP Authentication</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcclient1.php">xmlrpcclient1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="xmlrpcserver1.php">XML/RPC server</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcserver1.php">xmlrpcserver1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="language1.php">Language negotiator</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=language1.php">language1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
-                <a href="email1.php">Sending emails</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.php">email1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/index.php">http_auth/index.php</a>
                 <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.tpl">email1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/index.tpl">http_auth/index.tpl</a>
                 <br>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1_template.tpl">email1_template.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/login.tpl">http_auth/login.tpl</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/userinfo.php">http_auth/userinfo.php</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/userinfo.tpl">http_auth/userinfo.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="xmlrpcclient.php">XML/RPC client</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcclient.php">xmlrpcclient.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="xmlrpcserver.php">XML/RPC server</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcserver.php">xmlrpcserver.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="language.php">Language negotiator</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=language1.php">language.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="email.php">Sending emails</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email.php">email.php</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email.tpl">email.tpl</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email_template.tpl">email_template.tpl</a>
             </td>
         </tr>
         <tr>
@@ -235,12 +247,12 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="fileupload1.php">Handling file uploads</a>
+                <a href="fileupload.php">Handling file uploads</a>
             </td>
             <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload1.php">fileupload1.php</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload.php">fileupload.php</a>
                 <br/>
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload1.tpl">fileupload1.tpl</a>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload.tpl">fileupload.tpl</a>
             </td>
         </tr>
         <tr>

@@ -23,14 +23,11 @@
     require_once( 'YDRequest.php' );
 
     // Class definition
-    class sample1Request extends YDRequest {
+    class sampleRequest extends YDRequest {
 
         // Class constructor
-        function sample1Request() {
-
-            // Initialize the parent class
+        function sampleRequest() {
             $this->YDRequest();
-
         }
 
         // Default action

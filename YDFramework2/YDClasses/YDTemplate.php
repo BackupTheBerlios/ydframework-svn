@@ -134,7 +134,13 @@
             $this->setVar( 'YD_SERVER', $_SERVER );
 
             // Get the path to the template
-            $tplPath = realpath( YD_SELF_DIR ) . '/' . $name . YD_TPL_EXT;
+            if ( is_file( $name ) ) {
+                $tplPath = realpath( $name );
+            } elseif ( is_file( $name . YD_TPL_EXT ) ) {
+                $tplPath = realpath( $name . YD_TPL_EXT );
+            } else {
+                $tplPath = realpath( YD_SELF_DIR ) . '/' . $name . YD_TPL_EXT;
+            }
 
             // Check if the file exists
             if ( ! is_file( $tplPath ) ) {

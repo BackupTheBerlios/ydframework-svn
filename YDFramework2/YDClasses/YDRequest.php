@@ -152,12 +152,33 @@
          *  action. By using this function, you make sure the action names and
          *  so on are also update to reflect this.
          *
-         *  @remark
-         *      This function does a HTTP redirect in the background.
-         *
          *  @param $action Name of the action to forward to.
          */
         function forward( $action ) {
+
+            // Remove the action prefix
+            if ( strpos( $action, 'action' ) === 0 ) {
+                $action = substr( $action, strlen( 'action' ) );
+            }
+
+            // Update the action
+            $_GET[ YD_ACTION_PARAM ] = $action;
+
+            // Execute the request
+            call_user_func( array( $this, 'action' . $action ) );
+
+        }
+
+        /**
+         *  This function will to a HTTP redirect to the specified action.
+         *
+         *  @remark
+         *      If you execute this function, it will do the redirect right away
+         *      and will stop the processing of the current request.
+         *
+         *  @param $action Name of the action to redirect to.
+         */
+        function redirectToAction( $action ) {
 
             // Remove the action prefix
             if ( strpos( $action, 'action' ) === 0 ) {
@@ -171,7 +192,7 @@
             $this->redirect( $url );
 
         }
-
+        
         /**
          *  This function will redirect the current request to a new URL. This
          *  does an HTTP redirect. If you want to forward to a different action

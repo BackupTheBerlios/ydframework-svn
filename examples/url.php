@@ -13,14 +13,11 @@
     require_once( 'YDDebugUtil.php' );
 
     // Class definition
-    class ydurl1Request extends YDRequest {
+    class urlRequest extends YDRequest {
 
         // Class constructor
-        function ydurl1Request() {
-
-            // Initialize the parent class
+        function urlRequest() {
             $this->YDRequest();
-
         }
 
         // Default action

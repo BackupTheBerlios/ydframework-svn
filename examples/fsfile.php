@@ -13,14 +13,11 @@
     require_once( 'YDDebugUtil.php' );
 
     // Class definition
-    class fsfile1Request extends YDRequest {
+    class fsfileRequest extends YDRequest {
 
         // Class constructor
-        function fsfile1Request() {
-
-            // Initialize the parent class
+        function fsfileRequest() {
             $this->YDRequest();
-
         }
 
         // Default action

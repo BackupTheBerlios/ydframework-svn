@@ -14,14 +14,11 @@
     require_once( 'YDDebugUtil.php' );
 
     // Class definition
-    class fsimage1Request extends YDRequest {
+    class fsimageRequest extends YDRequest {
 
         // Class constructor
-        function fsimage1Request() {
-
-            // Initialize the parent class
+        function fsimageRequest() {
             $this->YDRequest();
-
         }
 
         // Default action
@@ -29,7 +26,7 @@
 
             // Get the file object for the current file
             $img = new YDFSImage( 
-                dirname( __FILE__ ) . '/fsimage1.jpg'
+                dirname( __FILE__ ) . '/fsimage.jpg'
             );
 
             // Dump the object
@@ -58,27 +55,19 @@
 
         // Action to create and show thumbnail
         function actionThumbnail1() {
-            $img = new YDFSImage( 'fsimage1.jpg' );
+            $img = new YDFSImage( 'fsimage.jpg' );
             $img->outputThumbnail( 150, 110 );
         }
 
         // Action to create and show thumbnail
         function actionThumbnail2() {
-            $img = new YDFSImage( 
-                dirname( __FILE__ ) . '/../YDFramework2/doc/userguide/RequestProcessing.gif'
-            );
-            $img->outputThumbnail( 100, 100 );
-        }
-
-        // Action to create and show thumbnail
-        function actionThumbnail3() {
-            $img = new YDFSImage( 'fsimage1.jpg' );
+            $img = new YDFSImage( 'fsimage.jpg' );
             $img->outputThumbnail( 1000, 1000 );
         }
 
         // Action to create and show thumbnail
-        function actionThumbnail4() {
-            $img = new YDFSImage( 'fsimage1.jpg' );
+        function actionThumbnail3() {
+            $img = new YDFSImage( 'fsimage.jpg' );
             $img->outputThumbnail( 150, 110, false );
         }
 

@@ -13,14 +13,11 @@
     require_once( 'YDDebugUtil.php' );
 
     // Class definition
-    class language1Request extends YDRequest {
+    class languageRequest extends YDRequest {
 
         // Class constructor
-        function language1Request() {
-
-            // Initialize the parent class
+        function languageRequest() {
             $this->YDRequest();
-
         }
 
         // Default action

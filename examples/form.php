@@ -17,14 +17,11 @@
     require_once( 'YDFSDirectory.php' );
 
     // Class definition
-    class form1Request extends YDRequest {
+    class formRequest extends YDRequest {
 
         // Class constructor
-        function form1Request() {
-
-            // Initialize the parent class
+        function formRequest() {
             $this->YDRequest();
-
         }
 
         // Default action
@@ -69,10 +66,10 @@
             // Add a popup window to the third description
             $element = & $form->getElement( 'desc3' );
             $element->addPopupWindow(
-                'form1.php?do=selector&field=desc3&tag=img', 'select image'
+                'form.php?do=selector&field=desc3&tag=img', 'select image'
             );
             $element->addPopupWindow(
-                'form1.php?do=selector&field=desc3&tag=url', 'select url'
+                'form.php?do=selector&field=desc3&tag=url', 'select url'
             );
 
             // Apply a filter
@@ -116,7 +113,7 @@
             }
 
             // Output the template
-            $this->outputTemplate( 'form1_selector' );
+            $this->outputTemplate( 'form_selector' );
 
         }
 

@@ -7,14 +7,11 @@
     require_once( 'YDRequest.php' );
 
     // Class definition
-    class database1Request extends YDRequest {
+    class databaseRequest extends YDRequest {
 
         // Class constructor
         function database1Request() {
-
-            // Initialize the parent class
             $this->YDRequest();
-
         }
 
         // Default action
