@@ -316,6 +316,14 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=database/index.tpl">database/index.tpl</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="stacktrace.php">Using the YDStacktrace function</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=stacktrace.php">stacktrace.php</a>
+			</td>
+		</tr>
 		</table>
 
 		<p>&nbsp;<br><b>Documentation</b></p>

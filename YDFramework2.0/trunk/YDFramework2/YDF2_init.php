@@ -103,26 +103,32 @@
 	if ( ! function_exists( 'YDStackTrace' ) ) {
 		function YDStackTrace() {
 			if ( YD_DEBUG == 1 ) {
-				echo( "\r\n" . '<pre>' . "\r\n" );
-				echo( 'Debug backtrace:' . "\r\n" );
+				$err = '';
+				$err .= 'URI: ' . YD_SELF_URI . "\n";
+				$err .= 'Debug backtrace:' . "\n";
 				foreach( debug_backtrace() as $t ) {
-					echo( '    @ ' ); 
+					$err .= '    @ '; 
 					if ( isset( $t['file'] ) ) {
-						echo( basename( $t['file'] ) . ':' . $t['line'] ); 
+						$err .= basename( $t['file'] ) . ':' . $t['line']; 
 					} else {
-						echo( '<PHP inner-code>' ); 
+						$err .= basename( YD_SELF_FILE );
 					} 
-					echo( ' -- ' ); 
-					if ( isset( $t['class'] ) ) { echo( $t['class'] . $t['type'] ); }
-					echo( $t['function'] );
-					if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
-						echo( '(...)' );
-					} else {
-						echo( '()' );
+					$err .= ' -- '; 
+					if ( isset( $t['class'] ) ) {
+						$err .= $t['class'] . $t['type'];
 					}
-					echo( "\r\n" ); 
-				} 
-				echo( '</pre>' );
+					$err .= $t['function'];
+					if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
+						$err .= '(...)';
+					} else {
+						$err .= '()';
+					}
+					$err .= "\n"; 
+				}
+				if ( ini_get( 'display_errors' ) == 1 ) {
+					echo( '<pre>' . "\n" . htmlentities( $err ) . '</pre>' );
+				}
+				error_log( $err, 0 );
 			}
 		}
 	}
