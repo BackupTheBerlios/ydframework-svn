@@ -129,19 +129,13 @@
                     $includeFilesSize += filesize( $includeFile );
                 }
 
-                // Show the timings
-                YDDebugUtil::debug( 'Processing time:', $elapsed, 'ms' );
+                // Create the debug messages
+                $debug .= 'Processing time: ' . $elapsed . ' ms' . "\n\n";
+                $debug .= 'Total size include files: ' . intval( $includeFilesSize / 1024 ) . ' KB' . "\n\n";
+                $debug .= 'Included files: ' . "\n  " . implode( "\n  ", $includeFiles );
 
-                // Show the total size of the include files
-                YDDebugUtil::debug(
-                    'Total size include files:', 
-                    intval( $includeFilesSize / 1024 ), 'KB'
-                );
-
-                // List of include files
-                YDDebugUtil::debug(
-                    'Included files:' . "\n" . implode( "\n", $includeFiles )
-                );
+                // Output the debug message
+                YDDebugUtil::debug( $debug );
 
             }
 
