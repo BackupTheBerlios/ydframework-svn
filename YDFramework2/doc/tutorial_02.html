@@ -43,7 +43,87 @@
 
     <p><b>Description of the application</b></p>
 
-    <p>Not written yet...</p>
+    <p>After you finished this part, the finished example application will look
+    like this:</p>
+
+    <p><img src="tutorial_02_001.gif" border="0"></p>
+
+    <p>The sample application we are going to use is a simple notebook that has
+    only three options. The following options are supported by our notebook:</p>
+
+    <ul>
+        <li>Showing the list of notes</li>
+        <li>Adding a note</li>
+        <li>Deleting a note</li>
+    </ul>
+
+    <p><b>Note:</b> In order no to over complicate this example, we will store 
+    the notes as files on the disk instead of using a database.</p>
+
+    <p>&nbsp;<br><b>Structuring the application</b></p>
+
+    <p>Before you start writing the actual code, you need to do a little bit of
+    planning and determine which actions you will create to make your 
+    application work. In our case, we are going to make 3 different actions:</p>
+
+    <ul>
+        <li><b>actionDefault:</b> this is the default action and will show the
+        list of notes. If no notes are found, it should tell so.</li>
+        <li><b>actionAddEntry:</b> this action will take care of adding a new 
+        note. It will render the form you need to fill in, but it will also take
+        care of handling the form correctly and saving the result to disk.</li>
+        <li><b>actionDeleteEntry:</b> this function will delete a note based on
+        it's unique ID. In this example, it will not ask you for confirmation, 
+        but it will simply delete the note.</li>
+    </ul>
+
+    <p>Now that we know what actions the application will be able to perform, we
+    now need to think about how we can store the notes on disk. We will create
+    an array for each note which will contain the title, body and the unique ID
+    for the entry.</p>
+
+    <p>The unique ID for an entry will be created by calculating the md5
+    checksum of the combination of the title and the body. This will ensure that
+    each note is unique.</p>
+    
+    <p>We will use the functions provided by the Yellow Duck Framework to get 
+    and save the notes to disk. In the framework, there are different objects
+    and functions that take care of this.</p>
+
+    <p>After going through this example, you will have used and explored the
+    following classes and modules in the Yellow Duck Framework:</p>
+
+    <ul>
+        <li>YDRequest (class)</li>
+        <li>YDFSDirectory (class)</li>
+        <li>YDForm (class)</li>
+        <li>YDObjectUtil (module)</li>
+    </ul>
+
+    <p>&nbsp;<br><b>Before we continue</b></p>
+
+    <p>Before we continue, you need to make sure the Yellow Duck Framework is
+    properly installed and working correctly. Installation instructions can be
+    found in <a href="tutorial_01.html"><i>2. Installing the Yellow Duck 
+    Framework</i></a>.</p>
+
+    <p>&nbsp;<br><b>Building the basis of our application</b></p>
+
+    <p>To start, create a new folder in your webroot called "firstapp". We will
+    store all the files related to this tutorial in that folder.</p>
+
+    <p>In this folder, we will need to create two files for our application. We
+    need 1 file called "index.php", which will contain the actual script that
+    drives the application. We will also need a file which is called "index.tpl"
+    which contains the template for this application. The template will define
+    how the application will be presented in the browser.</p>
+
+    <p>By separating the actual script from the presentation, we will make the
+    application a lot easier to maintain and understand. By using this
+    structured way, it will be a lot easier to track down problems because you
+    know immediately where to look.</p>
+
+    <p>To be continued...</p>
 
     <hr size="1" noshade>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">

@@ -10,9 +10,9 @@
 
     <?php if ( $YD_ACTION == 'default' ) { ?>
 
-        <h3>Entry list</h3>
+        <h3>Notes</h3>
 
-        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddEntry">Add a new entry</a></p>
+        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddEntry">Add a new note</a></p>
 
         <?php if ( $entries ) { ?>
 
@@ -26,14 +26,14 @@
             <?php } ?>
 
         <?php } else { ?>
-            <p>No entries were found.</p>
+            <p>No notes were found.</p>
         <?php } ?>
 
     <?php } ?>
 
     <?php if ( $YD_ACTION == 'addentry' ) { ?>
 
-        <h3>Add entry</h3>
+        <h3>Add a new note</h3>
 
         <?php if ( $form['errors'] ) { ?>
             <p style="color: red"><b>Errors during processing:</b>
