@@ -19,7 +19,7 @@
 			$this->YDRequest();
 
 			// Make the database connection
-			$this->db = new YDDatabase(
+			$this->db = YDDatabase::getInstance(
 				$GLOBALS['db']['type'], $GLOBALS['db']['name'], $GLOBALS['db']['user'], $GLOBALS['db']['pass'], $GLOBALS['db']['host']
 			);
 
