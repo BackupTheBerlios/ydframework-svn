@@ -44,7 +44,7 @@
             $this->fc->addItem(
                 '<h3>Title 4 & Co.</h3>',
                 $this->getCurrentUrl() . '#4',
-                '<img src="fsimage1.jpg" />'
+                '<img src="fsimage.jpg" />'
             );
 
         }
