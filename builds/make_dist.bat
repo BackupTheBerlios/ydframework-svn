@@ -28,11 +28,17 @@ cd "..\..\.."
 echo Creating changelog files
 svn log -v -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 svn log -v --xml -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
+call xsltproc --output "%BLDDIR%\YDFramework2\doc\changelog.html" "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl" "%BLDDIR%\YDFramework2\doc\changelog.xml"
+del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
+del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
+del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
+del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
+del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
 
 rem Zip up the build to an archive
-echo Zipping up the build: %BLDDIR%.zip
 del /Q /S %BLDDIR%\builds
-zip -9qrm "%BLDDIR%.zip" "%BLDDIR%"
+echo Zipping up the build: %BLDDIR%.zip
+zip -9qr "%BLDDIR%.zip" "%BLDDIR%"
 
 rem Remove the rest of the temp files
 echo Removing temporary build directory: %BLDDIR%
