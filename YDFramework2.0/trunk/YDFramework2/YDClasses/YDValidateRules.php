@@ -19,7 +19,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function required( $val, $opts='' ) {
-			if ( empty( $val ) ) {
+			if ( is_null( $val ) || strlen( $val ) == 0 ) {
 				return false;
 			} else {
 				return true;
