@@ -84,9 +84,14 @@
 			// If the template is cached, return the cache
 			if ( $this->is_cached( $cache_id ) ) {
 				$fp = fopen( $cacheFile, 'rb' );
-				$data = fread( $fp, filesize( $cacheFile ) );
+				$result = fread( $fp, filesize( $cacheFile ) );
 				fclose( $fp );
-				return $data;
+				if ( $display == true ) {
+					echo( $result );
+					return;
+				} else {
+					return $result;
+				};
 			}
 
 			// Add some default variables
