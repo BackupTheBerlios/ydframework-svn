@@ -7,7 +7,7 @@
 	<script language="JavaScript">
 
 		function addItem( item ) {
-			window.opener.AddText( '[$YD_GET.field]', '[$YD_GET.tag]', item, '[$YD_GET.tag]' );
+			window.opener.AddText( '[$YD_GET.field]', '[ldelim][$YD_GET.tag][rdelim]', item, '[ldelim]/[$YD_GET.tag][rdelim]' );
 			window.close()
 			return false;
 		}

@@ -19,7 +19,7 @@
 			[foreach from=$entries item=entry]
 				<p>
 				<b>[$entry.title]</b>
-				[ <a href="[$YD_SELF_SCRIPT]?do=DeleteNote&id=[$entry.id]">delete</a> ]
+				<a href="[$YD_SELF_SCRIPT]?do=DeleteNote&id=[$entry.id]">delete</a>
 				<br>
 				[$entry.body]
 				</p>

@@ -5,7 +5,7 @@
 	$db['name'] = 'index.db';
 	$db['user'] = '';
 	$db['pass'] = '';
-	$db['pass'] = '';
+	$db['host'] = '';
 
 	// Using MySQL
 	//$db['type'] = 'mysql';

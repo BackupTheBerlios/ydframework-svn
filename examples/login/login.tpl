@@ -15,10 +15,10 @@
 	[if $form.errors]
 		<p style="color: red">
 			[foreach from=$form.errors item=error]
-				[$error ?><br>
+				[$error]<br>
 			[/foreach]
 		</p>
-	[/if]s
+	[/if]
 
 	<form [$form.attribs]>
 		<p>

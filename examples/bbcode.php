@@ -6,7 +6,7 @@
 	// Includes
 	require_once( 'YDRequest.php' );
 	require_once( 'YDBBCode.php' );
-	require_once( 'YDFSFile.php' );
+	require_once( 'YDFileSystem.php' );
 
 	// Class definition
 	class bbcode extends YDRequest {

@@ -1,8 +1,8 @@
 <?php
 
 	// Includes
-	require_once( 'YDRequest.php' );
 	require_once( 'YDForm.php' );
+	require_once( 'YDRequest.php' );
 
 	// Class definition
 	class MyLoginRequest extends YDRequest {
@@ -75,7 +75,7 @@
 			if ( isset( $_SESSION['usrName'] ) ) {
 
 				// Check if we are marked as being logged in
-				if ( $_SESSION['isLoggedIn'] == true ) {
+				if ( isset( $_SESSION['isLoggedIn'] ) && $_SESSION['isLoggedIn'] == true ) {
 					return true;
 				}
 

@@ -6,7 +6,6 @@
 	// Includes
 	require_once( 'YDRequest.php' );
 	require_once( 'YDXmlRpc.php' );
-	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
 	class xmlrpcclient extends YDRequest {

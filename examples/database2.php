@@ -6,7 +6,6 @@
 	// Includes
 	require_once( 'YDRequest.php' );
 	require_once( 'YDDatabase.php' );
-	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
 	class database2 extends YDRequest {

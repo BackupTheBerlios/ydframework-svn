@@ -23,7 +23,7 @@
 		<p><a href="[$YD_SELF_SCRIPT]?do=test">test action</a></p>
 	[/if]
 
-	<p>[ <a href="index.php">other samples</a> ]</p>
+	<p><a href="index.php">other samples</a></p>
 
 </body>
 

@@ -7,10 +7,8 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDRequest.php' );
 	require_once( 'YDUrl.php' );
-	require_once( 'YDDebugUtil.php' );
-	require_once( 'YDArrayUtil.php' );
+	require_once( 'YDRequest.php' );
 	require_once( 'YDFeedCreator.php' );
 
 	// Class definition

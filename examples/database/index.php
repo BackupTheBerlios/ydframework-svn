@@ -5,8 +5,8 @@
 	require_once( dirname( __FILE__ ) . '/config.php' );
 
 	// Includes
-	require_once( 'YDRequest.php' );
 	require_once( 'YDForm.php' );
+	require_once( 'YDRequest.php' );
 	require_once( 'YDDatabase.php' );
 
 	// Class definition for the index request

@@ -90,7 +90,7 @@
 			} elseif ( is_file( $this->_templateDir . '/' . $name ) ) {
 				$tplPath = realpath( $this->_templateDir . '/' . $name );
 			} else {
-				YDFatalError( 'The template "' . $name . '" was not found.' );
+				$tplPath = realpath( $name );
 			}
 
 			// Check if the file exists
@@ -117,11 +117,9 @@
 			$tpl->register_modifier( 'addslashes', 'addslashes' );
 			$tpl->register_modifier( 'lower', 'strtolower' );
 			$tpl->register_modifier( 'implode', 'YDTemplate_modifier_implode' );
-			$tpl->register_modifier( 'fmtfileize', 'YDTemplate_modifier_fmtfileize' );
+			$tpl->register_modifier( 'fmtfilesize', 'YDTemplate_modifier_fmtfileize' );
 			$tpl->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
-
-			// Add a custom plugins dir
-			//array_push( $tpl->plugins_dir, YD_DIR_CLSS . '/YDTemplatePlugins' );
+			$tpl->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
 
 			// Assign the variables
 			$tpl->assign( $this->_vars );
@@ -187,6 +185,14 @@
 		} else {
 			return;
 		}
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_modifier_dump( $obj ) {
+		var_dump( $obj );
+		return;
 	}
 
 	/**
