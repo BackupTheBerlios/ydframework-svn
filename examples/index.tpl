@@ -211,6 +211,16 @@
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=language1.php">language1.php</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="email1.php">Sending emails</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.php">email1.php</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.tpl">email1.tpl</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>
