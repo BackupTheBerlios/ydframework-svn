@@ -164,6 +164,10 @@
 
 	/**
 	 *	This is the base class for all other YD classes.
+	 *
+	 *	@todo
+	 *		Add toArray function that gives the class properties as an array (but only string, numeric, array types, not
+	 *		objects as this might screw up thing. Mainly for template purposes.
 	 */
 	class YDBase {
 
@@ -171,6 +175,15 @@
 		 *	Class constructor for the YDBase class.
 		 */
 		function YDBase() {
+		}
+
+		/**
+		 *	Converts the properties of the object to an associative array.
+		 *
+		 *	@returns	Associative array with the object properties.
+		 */
+		function toArray() {
+			return get_object_vars( $this );
 		}
 
 	}
