@@ -112,6 +112,9 @@
 			$tpl->left_delimiter = '[';
 			$tpl->right_delimiter = ']';
 
+			// Trim whitespace
+			$tpl->load_filter( 'output', 'trimwhitespace' );
+
 			// Add a custom plugins dir
 			array_push( $tpl->plugins_dir, YD_DIR_CLSS . '/YDTemplatePlugins' );
 
@@ -119,7 +122,7 @@
 			$tpl->assign( $this->_vars );
 
 			// Output the template
-			$contents = $tpl->fetch( basename( $tplPath ), null, md5( $tplPath ) );
+			$contents = $tpl->fetch( basename( $tplPath ), null, md5( dirname( $tplPath ) ) );
 
 			// Returns the contents
 			return $contents; 
