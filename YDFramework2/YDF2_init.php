@@ -91,6 +91,7 @@
 		$includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
 	}
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS;
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
 	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
 	$includePath .= YD_PATHDELIM . YD_DIR_3RDP . '/PEAR';
 	ini_set( 'include_path', $includePath );
