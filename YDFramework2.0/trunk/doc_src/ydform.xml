@@ -519,4 +519,63 @@
 
     </sect1>
 
+    <sect1 id="ydform_renderes">
+
+        <title>Using form renderers</title>
+
+        <para>Formatting forms in templates can be a huge task if you need to do it with a lot of forms. Since most of the forms in a website have teh same layout, you can use a form renderer to automate the process.</para>
+
+        <para>A form renderer is instantiated with a reference to the form object, and only exposes one function, which is called render. This function reads in the form object, renders it and returns the rendered form.</para>
+
+        <para>You can easily create your own form renderer by implementing the following API:</para>
+
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDForm.php' );
+
+    /**
+     *	This is the class that is able to render a form object to HTML.
+     */
+    class YDFormRenderer_html extends YDFormRenderer {
+
+        /**
+         *	This is the class constructor for the YDFormRenderer_html class.
+         *
+         *	@param $form		The form that needs to be rendered.
+         */
+        function YDFormRenderer_html( $form ) {
+
+            // Initialize the parent
+            $this->YDFormRenderer( $form );
+
+        }
+
+        /**
+         *	This function will render the form.
+         *
+         *	@returns	The rendered form.
+         */
+        function render() {
+
+            // Return the form as an array
+            return $this->_form->toArray();
+
+        }
+
+    }
+
+?>]]></programlisting>
+
+        <para>Before you can use the form renderer, you need to register it with the form class. This is done with the following function call:</para>
+
+        <programlisting><![CDATA[YDForm::registerRenderer( $name, $class, $file );]]></programlisting>
+
+        <para>To get the rendered output of a form with a named renderer, you can use the render function from the YDForm object:</para>
+
+        <programlisting><![CDATA[YDForm::render( 'html' );]]></programlisting>
+
+        <para>Form renderers are an excellent tool to automate the layout of your forms, and it makes sure that all the forms in your web application have a consistent look.</para>
+
+    </sect1>
+
 </chapter>

@@ -149,6 +149,7 @@
 	}
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS;
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormRenderers';
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
 	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
 	$includePath .= YD_PATHDELIM . dirname( __FILE__ );

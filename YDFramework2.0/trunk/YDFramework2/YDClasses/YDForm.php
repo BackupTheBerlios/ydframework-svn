@@ -58,6 +58,7 @@
 			$this->_regRules = array();
 			$this->_regFilters = array();
 			$this->_regValidators = array();
+			$tihs->_regRenderers = array();
 
 			// The list of elements, rules and filters
 			$this->_elements = array();
@@ -136,6 +137,9 @@
 			$this->registerFilter( 'lower', 'strtolower' );
 			$this->registerFilter( 'upper', 'strtoupper' );
 
+			// Add the renderers
+			$this->registerRenderer( 'html', 'YDFormRenderer_html', 'YDFormRenderer_html.php' );
+
 		}
 
 		/**
@@ -180,7 +184,7 @@
 		 *	@param $file	(optional) The file containing the class definition for this element.
 		 */
 		function registerElement( $name, $class, $file='' ) {
-			$this->_regElements[ $name] = array( 'class' => $class, 'file' => $file );
+			$this->_regElements[ $name ] = array( 'class' => $class, 'file' => $file );
 		}
 
 		/**
@@ -230,6 +234,26 @@
 		 */
 		function unregisterFilter( $name ) {
 			if ( array_key_exists( $name, $this->_regFilters ) ) { unset( $this->_regFilters[ $name ] ); }
+		}
+
+		/**
+		 *	This function will register a new form renderer.
+		 *
+		 *	@param $name	Name of the render.
+		 *	@param $class	The class name of the renderer definition.
+		 *	@param $file	(optional) The file containing the class definition for this renderer.
+		 */
+		function registerRenderer( $name, $class, $file='' ) {
+			$this->_regRenderers[ $name ] = array( 'class' => $class, 'file' => $file );
+		}
+
+		/**
+		 *	This function will unregister the renderer.
+		 *
+		 *	@param $name	Name of the renderer.
+		 */
+		function unregisterRenderer( $name ) {
+			if ( array_key_exists( $name, $this->_regRenderers ) ) { unset( $this->_regRenderers[ $name ] ); }
 		}
 
 		/**
@@ -872,79 +896,7 @@
 		 *	@returns	The form as HTML text.
 		 */
 		function toHtml() {
-
-			// Get the form as an array
-			$form = $this->toArray();
-
-			// Start with the form element
-			$html = $form['tag'];
-
-			// Add form errors if any
-			if ( isset( $form['errors']['__ALL__'] ) ) {
-				$html .= '<p>' . $this->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_htmlErrorEnd . '</p>';
-			}
-
-			// Remove some things from the array
-			unset( $form['attribs'] );
-			unset( $form['tag'] );
-			unset( $form['errors'] );
-			unset( $form['requirednote'] );
-
-			// Add the required note if there are required items
-			if ( ! empty( $this->_requiredNote ) ) {
-				$reqCount = 0;
-				foreach ( $form as $name=>$element ) {
-					if ( $element['required'] ) { $reqCount++; };
-				}
-				if ( $reqCount > 0 ) {
-					$html .= '<p>' . $this->_requiredNote . '</p>';
-				}
-			}
-
-			// Add the elements
-			foreach ( $form as $name=>$element ) {
-				if ( $element['isButton'] === false ) {
-					if ( $element['type'] != 'hidden' ) {
-						$html .= '<p>';
-						if ( $element['placeLabel'] == 'after' ) {
-							$html .= $element['html'] . $element['label_html'];
-							if ( ! empty( $element['error'] ) ) {
-								$html .= '<br>' . $element['error_html'];
-							}
-						} else {
-							$html .= $element['label_html'];
-							if ( ! empty( $element['label'] ) ) {
-								$html .= '<br>';
-							}
-							if ( ! empty( $element['error'] ) ) {
-								$html .= $element['error_html'] . '<br>';
-							}
-							$html .= $element['html'];
-						}
-						$html .= '</p>';
-					} else {
-						$html .= $element['html'];
-					}
-				}
-			}
-
-			// Add the buttons
-			$buttons = array();
-			foreach ( $form as $name=>$element ) {
-				if ( $element['isButton'] === true ) {
-					array_push( $buttons, $element['html'] );
-				}
-			}
-			if ( sizeof( $buttons ) > 0 ) {
-				$html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>';
-			}
-
-			// Close the form tag
-			$html .= '</form>';
-
-			// Return the HTML
-			return $html;
-
+			return $this->render( 'html' );
 		}
 
 		/**
@@ -998,6 +950,36 @@
 				}
 			}
 			return $value;
+		}
+
+		/**
+		 *	This function will render a form and return the rendered contents.
+		 *
+		 *	@param	$type	The renderer to use.
+		 *
+		 *	@returns	The rendered form.
+		 */
+		function render( $type ) {
+
+			// Check if the renderer is known
+			if ( ! array_key_exists( $type, $this->_regRenderers ) ) {
+				trigger_error( 'Unknown for renderer type "' . $type . '".', YD_ERROR );
+			}
+
+			// Include the renderer file
+			if ( ! empty( $this->_regRenderers[ $type ]['file'] ) ) {
+				YDInclude( $this->_regRenderers[ $type ]['file'] );
+			}
+
+			// Check if the class exists
+			$class = $this->_regRenderers[ $type ]['class'];
+
+			// Create the instance
+			$instance = new $class( $this );
+
+			// Return the rendered form
+			return $instance->render();
+
 		}
 
 	}
@@ -1078,6 +1060,31 @@
 		 *	@returns	The form element as HTML text.
 		 */
 		function toHtml() {
+		}
+
+	}
+
+	/**
+	 *	This is the class that is able to render a form object to whatever.
+	 */
+	class YDFormRenderer extends YDBase {
+
+		/**
+		 *	This is the class constructor for the YDFormRenderer_html class.
+		 *
+		 *	@param $form		The form that needs to be rendered.
+		 */
+		function YDFormRenderer( $form ) {
+			$this->_form = & $form;
+		}
+
+		/**
+		 *	This function will render the form.
+		 *
+		 *	@returns	The rendered form.
+		 */
+		function render() {
+			return '';
 		}
 
 	}
