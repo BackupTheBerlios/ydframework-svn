@@ -27,7 +27,9 @@
     }
 
     // Constants
-    define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
+    if ( ! defined( 'SMARTY_DIR' ) ) {
+        define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
+    }
 
     // Includes
     YDInclude( 'YDRequest.php' );
