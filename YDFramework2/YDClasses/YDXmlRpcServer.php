@@ -51,7 +51,7 @@
 		 *	@returns	This function returns true if HTTP POST data was found.
 		 */
 		function isXmlRpcRequest() {
-			if ( $GLOBALS['HTTP_RAW_POST_DATA'] ) {
+			if ( @ $GLOBALS['HTTP_RAW_POST_DATA'] ) {
 				return true;
 			} else {
 				return false;
@@ -94,7 +94,7 @@
 
 			// Loop over the methods
 			foreach( $methodNames as $method ) {
-				if ( $this->signatures[ $method ] ) {
+				if ( isset( $this->signatures[ $method ] ) ) {
 					if ( sizeof( $this->signatures[ $method ] ) == 1 ) {
 						$paramsIn = null;
 						$paramsOut = $this->signatures[ $method ];
@@ -107,10 +107,10 @@
 					$paramsOut = null;
 				}
 				$methodInfo = array();
-				$methodInfo['signature'] = $this->signatures[ $method ];
+				$methodInfo['signature'] = @ $this->signatures[ $method ];
 				$methodInfo['paramsIn'] = $paramsIn;
 				$methodInfo['paramsOut'] = $paramsOut;
-				$methodInfo['help'] = $this->help[ $method ];
+				$methodInfo['help'] = @ $this->help[ $method ];
 				$methods[ $method ] = $methodInfo;
 			}
 

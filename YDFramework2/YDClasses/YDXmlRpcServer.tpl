@@ -42,7 +42,7 @@
 				<td align="right" class="cell">
 					returns:
 					<?php if ( $methodInfo['paramsOut'] ) { ?>
-						<?= strtolower( $methodInfo['paramsOut'] ) ?>
+						<?= @ strtolower( $methodInfo['paramsOut'] ) ?>
 					<?php } else { ?>
 						none
 					<?php } ?>

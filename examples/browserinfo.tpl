@@ -8,8 +8,6 @@
 
 <body>
 
-	<h3><?= $title ?></h3>
-
 	Agent: <?= $browser->getAgent() ?><br>
 	Browser: <?= $browser->getBrowser() ?><br>
 	Version: <?= $browser->getVersion() ?><br>

@@ -259,7 +259,7 @@
 			}
 
 			// Initialize the element
-			if ( ! is_array( $this->_filters[ $element ] ) ) {
+			if ( ! @ is_array( $this->_filters[ $element ] ) ) {
 				$this->_filters[ $element ] = array();
 			}
 
@@ -289,7 +289,7 @@
 			}
 
 			// Initialize the element
-			if ( ! is_array( $this->_rules[ $element ] ) ) {
+			if ( ! @ is_array( $this->_rules[ $element ] ) ) {
 				$this->_rules[ $element ] = array();
 			}
 
@@ -533,7 +533,7 @@
 			$form = $this->toArray();
 
 			// Start with the form element
-			$html .= $form['tag'];
+			$html = $form['tag'];
 
 			// Add form errors if any
 			if ( isset( $form['errors']['__ALL__'] ) ) {
@@ -589,6 +589,7 @@
 		function _convertToHtmlAttrib( $array ) {
 			if ( ! is_array( $array ) ) { return ''; }
 			if ( sizeof( $array ) == 0 ) { return ''; }
+			$out = '';
 			foreach ( $array as $key=>$value ) { $out .= ' ' . strval( $key ) . '="' . strval( $value ) . '"'; }
 			return $out;
 		}

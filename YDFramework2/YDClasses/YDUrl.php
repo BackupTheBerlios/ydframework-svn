@@ -149,7 +149,7 @@
 		 *	@returns The URI parts of the URL.
 		 */
 		function getUri() {
-			$uri .= $this->_url_parsed['path'] ? $this->_url_parsed['path'] : '';
+			$uri = $this->_url_parsed['path'] ? $this->_url_parsed['path'] : '';
 			$uri .= $this->_url_parsed['query'] ? '?'.$this->_url_parsed['query'] : '';
 			$uri .= $this->_url_parsed['fragment'] ? '#'.$this->_url_parsed['fragment'] : '';
 			return $uri; 

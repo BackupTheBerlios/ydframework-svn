@@ -8,7 +8,7 @@
 
 <body>
 
-	<?php if ( $file ) { ?>
+	<?php if ( isset( $file ) ) { ?>
 
 		<h3>source code: <?= $file ?></h3>
 		<?= $source ?>

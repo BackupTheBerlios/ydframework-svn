@@ -12,7 +12,7 @@
 	require_once( 'YDDebugUtil.php' );
 	require_once( 'YDArrayUtil.php' );
 	require_once( 'YDFeedCreator.php' );
-S
+
 	// Class definition
 	class pbaseRequest extends YDRequest {
 

@@ -10,7 +10,7 @@
 
 	<h3>Testing...</h3>
 
-	<?php if ( $error ) { ?>
+	<?php if ( isset( $error ) ) { ?>
 		<p style="color: red"><b>ERROR: <?= $error ?></b></p>
 	<?php } else { ?>
 

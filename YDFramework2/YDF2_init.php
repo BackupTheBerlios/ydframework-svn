@@ -20,10 +20,11 @@
 	 */
 
 	// Set the error reporting correctly.
-	error_reporting( E_ALL ^ E_NOTICE );
+	//error_reporting( E_ALL ^ E_NOTICE );
+	error_reporting( E_ALL );
 
 	// Start the session
-	session_start();
+	@session_start();
 
 	// Global framework constants
 	define( 'YD_FW_NAME', 'Yellow Duck Framework' );
@@ -64,7 +65,7 @@
 
 	// Debug constants
 	if ( ! defined( 'YD_DEBUG' ) ) {
-		if ( $_GET['YD_DEBUG'] == 1 ) {
+		if ( @ $_GET['YD_DEBUG'] == 1 ) {
 			define( 'YD_DEBUG', 1 );
 		} else {
 			define( 'YD_DEBUG', 0 );
