@@ -1,13 +1,17 @@
 <?php
 
     /*
-
-        This examples demonstrates the file utilities.
-
-    */
+     *  This examples demonstrates the image utilities.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDFSImage.php' );
+    require_once( 'YDFSFile.php' );
+    require_once( 'YDDebugUtil.php' );
 
     // Class definition
     class fsimage1Request extends YDRequest {

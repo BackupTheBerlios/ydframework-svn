@@ -1,14 +1,15 @@
 <?php
 
     /*
-
-        This examples demonstrates how you can use the authentication functions
-        to allow access to localhost only.
-
-    */
+     *  This examples demonstrates how you can use the authentication functions
+     *  to allow access to localhost only.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
 
     // Class definition
     class auth_ipcheckRequest extends YDRequest {
@@ -44,9 +45,10 @@
 
         // Redirect to the login if the authentication failed
         function authenticationFailed() {
-            $this->setVar( 'allowed', false );
-            echo( 'Only localhost access is allowed!' );
-            //$this->outputTemplate();
+
+            // Indicate that the access is not allowed
+            echo( '<b>ACCESS DENIED</b><br>Only localhost access is allowed.' );
+
         }
 
     }

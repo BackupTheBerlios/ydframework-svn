@@ -1,21 +1,27 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDDatabase.php' );
+
     /**
      *  This class defines a SQL query. There a a number of standard functions 
      *  this object has to get the data from this query given a database URL
      *  to retrieve the data from.
+     *
+     *  @todo
+     *      Do we need a separate class for this or can we use the YDDatabase
+     *      things instead?
      */
     class YDSqlQuery extends YDBase {
 

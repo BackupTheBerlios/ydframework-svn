@@ -1,13 +1,16 @@
 <?php
 
     /*
-
-        This examples demonstrates the XML/RPC client.
-
-    */
+     *  This examples demonstrates the XML/RPC client.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDXmlRpcClient.php' );
+    require_once( 'YDDebugUtil.php' );
 
     // Class definition
     class xmlrpcclient1Request extends YDRequest {

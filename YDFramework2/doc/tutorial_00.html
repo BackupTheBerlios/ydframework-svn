@@ -85,7 +85,10 @@
     <b>Source: sample1.php</b><br>
 <pre class="fragment"><div>  <span class="comment">// Initialize the Yellow Duck Framework.</span>
   require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-  
+
+  <span class="comment">// Includes.</span>
+  require_once( 'YDRequest.php' );
+
   <span class="comment">// Class definition for the sample request.</span>
   <span class="keyword">class </span>sample1Request <span class="keyword">extends</span> <a class="code">YDRequest</a> {
   

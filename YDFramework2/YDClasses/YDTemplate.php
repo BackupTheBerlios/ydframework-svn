@@ -1,11 +1,14 @@
 <?php
 
     /*
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDError.php' );
+    require_once( 'Smarty.class.php' );
 
     /**
      *  This class implements an template object and does this by extending the
@@ -22,12 +25,6 @@
      *  the same file extension, which is '.tpl'. By using the setTemplateDir
      *  function, you can change this and indicate which directory needs to be
      *  looked in for finding the template files.
-     *  
-     *  @remark
-     *      Try to put as much logic as possible in the code, and try to avoid
-     *      putting most logic in the templates. Keeping the templates as simple
-     *      as possible will increase performance and maintainebility of your
-     *      code.
      *
      *  @remark
      *      The YDSmartyPlugins folder which can be found under the YDFramework2
@@ -158,6 +155,10 @@
      *      upgrade Smarty to a new version if needed. If there is a folder
      *      called "includes" in the current script's directory, this will also
      *      be searched in for plugins.
+     *
+     *  @todo
+     *      Replace Smarty with phpSavant and update examples and documentation.
+     *      Also get rid of the YDSmartyPlugins folder.
      */
     class YDTemplate extends YDBase {
 

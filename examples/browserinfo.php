@@ -1,14 +1,16 @@
 <?php
 
     /*
-
-        This examples demonstrates:
-        - How you get information about the browser.
-
-    */
+     *  This examples demonstrates:
+     *  - How you get information about the browser.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDBrowserInfo.php' );
 
     // Class definition
     class browserinfoRequest extends YDRequest {

@@ -1,16 +1,18 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
+
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDError.php' );
 
     /**
      *  This class defines a url.
@@ -217,6 +219,9 @@
                     // Use the cache file if any
                     if ( is_file( $cacheFName ) ) {
 
+                        // Includes
+                        require_once( 'YDFSFile.php' );
+
                         // Create a file object for the cache file
                         $file = new YDFSFile( $cacheFName );
 
@@ -250,6 +255,9 @@
 
                 // Save the cached data
                 if ( $cacheFName != null ) {
+
+                    // Includes
+                    require_once( 'YDFSDirectory.php' );
 
                     // Save the cache data
                     $dir = new YDFSDirectory( YD_DIR_TEMP );
@@ -359,6 +367,9 @@
          *  @returns A new HttpClient class instance.
          */
         function _getHttpClient() {
+
+            // Includes
+            require_once( 'YDHttpClient.php' );
 
             // Check the URL scheme
             if ( $this->getScheme() != 'http' ) {

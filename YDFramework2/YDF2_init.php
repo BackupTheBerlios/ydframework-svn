@@ -1,11 +1,9 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     /*! \mainpage Yellow Duck Framework
      *
@@ -252,61 +250,35 @@
             $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
         }
         $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
+        $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
         $includePath .= YD_PATHDELIM . YD_DIR_3RDP_SMARTY;
         $includePath .= YD_PATHDELIM . YD_DIR_3RDP_PEAR;
         $includePath .= YD_PATHDELIM . YD_DIR_3RDP_PTMB;
         ini_set( 'include_path', $includePath );
 
-        // Include the PEAR modules
-        require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
-        require_once( YD_DIR_3RDP_PEAR . '/Var_Dump.php' );
-        require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm.php' );
-        require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm/Renderer/ArraySmarty.php' );
-        require_once( YD_DIR_3RDP_PEAR . '/Benchmark/Timer.php' );
-
-        // Include Smarty
-        require_once( YD_DIR_3RDP_SMARTY . '/Smarty.class.php' );
-
-        // Include the HTTP and XML/RPC library client
-        require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
-        require_once( YD_DIR_3RDP . '/IXR_Library.inc.php' );
-
-        // Include the feedcreator library
-        require_once( YD_DIR_3RDP . '/feedcreator/feedcreator.class.php' );
-
-        // Include the Yellow Duck framework
-        require_once( YD_DIR_CLSS . '/YDBase.php' );
-        require_once( YD_DIR_CLSS . '/YDArrayUtil.php' );
-        require_once( YD_DIR_CLSS . '/YDBrowserInfo.php' );
-        require_once( YD_DIR_CLSS . '/YDDatabase.php' );
-        require_once( YD_DIR_CLSS . '/YDDebugUtil.php' );
-        require_once( YD_DIR_CLSS . '/YDError.php' );
-        require_once( YD_DIR_CLSS . '/YDFeedCreator.php' );
-        require_once( YD_DIR_CLSS . '/YDForm.php' );
-        require_once( YD_DIR_CLSS . '/YDFSDirectory.php' );
-        require_once( YD_DIR_CLSS . '/YDFSFile.php' );
-        require_once( YD_DIR_CLSS . '/YDFSImage.php' );
-        require_once( YD_DIR_CLSS . '/YDHttpClient.php' );
-        require_once( YD_DIR_CLSS . '/YDLanguage.php' );
-        require_once( YD_DIR_CLSS . '/YDObjectUtil.php' );
-        require_once( YD_DIR_CLSS . '/YDPhpUtil.php' );
-        require_once( YD_DIR_CLSS . '/YDRequest.php' );
-        require_once( YD_DIR_CLSS . '/YDSqlQuery.php' );
-        require_once( YD_DIR_CLSS . '/YDStringUtil.php' );
-        require_once( YD_DIR_CLSS . '/YDTemplate.php' );
-        require_once( YD_DIR_CLSS . '/YDTimer.php' );
-        require_once( YD_DIR_CLSS . '/YDUrl.php' );
-        require_once( YD_DIR_CLSS . '/YDXmlRpcClient.php' );
+        // Include the basis of Yellow Duck framework
+        require_once( 'YDBase.php' );
+        require_once( 'YDError.php' );
+        require_once( 'YDObjectUtil.php' );
+        require_once( 'YDPhpUtil.php' );
 
         // Check if we have the right PHP version
         if ( YDPhpUtil::versionCheck( '4.2.0' ) ) {
             new YDFatalError( 'PHP version 4.2.0 or greater is required.' );
         }
 
-        // Instantiate the timer
-        $timer = new YDTimer();
-        $timer->start();
+        // Check if running in debugging mode
+        if ( YD_DEBUG == 1 ) {
+
+            // Include the timer class
+            require_once( 'YDTimer.php' );
+
+            // Instantiate the timer
+            $timer = new YDTimer();
+            $timer->start();
     
+        }
+
     }
 
 ?>

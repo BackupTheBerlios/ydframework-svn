@@ -1,13 +1,16 @@
 <?php
 
     /*
-
-        This examples demonstrates the array utilities.
-
-    */
+     *  This examples demonstrates the array utilities.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDUrl.php' );
+    require_once( 'YDDebugUtil.php' );
 
     // Class definition
     class ydurl1Request extends YDRequest {

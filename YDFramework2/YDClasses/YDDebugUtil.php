@@ -1,16 +1,17 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
+
+    // Includes
+    require_once( 'YDBase.php' );
 
     /**
      *  This class houses all the debug related utility functions. All the 
@@ -54,47 +55,29 @@
          *  sames as the var_dump function in PHP, but has a much nicer and more 
          *  readable output.
          *
-         *  The following happens depending on the object type:
-         *  - If given a simple variable (string, integer, double, ressource), 
-         *    the value itself is printed.
-         *  - If given an array, it is explored recursively and values are 
-         *    presented in a format that shows keys and elements.
-         *  - If given an object, informations about the object and the class
-         *    are printed.
-         *
          *  @param $obj Object you want to dump.
          */
         function dump( $obj ) {
 
             // Display the information
-            echo( YDDebugUtil::r_dump( $obj ) );
+            echo( 
+                '<pre>' . htmlentities( YDDebugUtil::r_dump( $obj ) ) . '</pre>' 
+            );
 
         }
 
         /**
          *  Function to return the contents of pretty much anything. This is the 
-         *  same as the var_export function in PHP, but has a much nicer and 
-         *  more readable output.
-         *
-         *  The following happens depending on the object type:
-         *  - If given a simple variable (string, integer, double, ressource), 
-         *    the value itself is returned.
-         *  - If given an array, it is explored recursively and values are 
-         *    presented in a format that shows keys and elements.
-         *  - If given an object, informations about the object and the class
-         *    are returned.
+         *  same as the var_export function in PHP.
          *
          *  @param $obj Object you want to dump.
          *
-         *  @returns HTML representation of the object.
+         *  @returns Text representation of the object.
          */
         function r_dump( $obj ) {
 
-            // We want to have HTML4 text returned
-            Var_Dump::displayInit( array( 'display_mode' => 'HTML4_Text' ) );
-
             // Return the information
-            return Var_Dump::display( $obj, true );
+            return var_export( $obj, true );
 
         }
 

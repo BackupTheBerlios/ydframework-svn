@@ -1,17 +1,19 @@
 <?php
 
     /*
-
-        This examples demonstrates:
-        - How you can use forms in YDF
-        - How form validation is handled
-        - How the default values of a form can be set
-        - How a filter can be applied to a form element (trim of the name field)
-
-    */
+     *  This examples demonstrates:
+     *  - How you can use forms in YDF
+     *  - How form validation is handled
+     *  - How the default values of a form can be set
+     *  - How a filter can be applied to a form element (trim of the name field)
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDForm.php' );
 
     // Class definition
     class form1Request extends YDRequest {

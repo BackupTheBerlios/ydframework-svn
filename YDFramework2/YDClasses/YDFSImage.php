@@ -1,16 +1,18 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
+
+    // Includes
+    require_once( 'YDError.php' );
+    require_once( 'YDFSFile.php' );
 
     /**
      *  This class defines an image file.
@@ -50,11 +52,14 @@
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 
+            // Includes
+            require_once( 'YDPhpUtil.php' );
+
             // Check for the GD library
             YDPhpUtil::requiresGD();
 
             // Include phpThumb
-            require_once( YD_DIR_3RDP_PTMB . '/phpthumb.class.php' );
+            require_once( 'phpThumb/phpthumb.class.php' );
 
             // Create a new thumbnail object
             $thumb = new phpThumb();

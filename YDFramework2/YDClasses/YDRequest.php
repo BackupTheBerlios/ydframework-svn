@@ -1,58 +1,26 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDError.php' );
+    require_once( 'YDTemplate.php' );
+    require_once( 'YDObjectUtil.php' );
+
     /**
      *  This class implements a request. The request is the base class you can
      *  use to base your scripts on. The request class is the one taking care of
      *  the action dispatching when a script is executed. Also the
      *  authentication framework is implemented in this class.
-     *
-     *  The following code implements a very simple request class (needs to be
-     *  saved in a file called "sample1.php"):
-     *
-     *  @code
-     *  // Initialize the Yellow Duck Framework.
-     *  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-     *  
-     *  // Class definition for the sample request.
-     *  class sample1Request extends YDRequest {
-     *  
-     *      // Class constructor
-     *      function sample1Request() {
-     *  
-     *          // Initialize the parent class
-     *          $this->YDRequest();
-     *  
-     *      }
-     *  
-     *      // Default action
-     *      function actionDefault() {
-     *          $this->setVar( 'title', 'sample1Request::actionDefault' );
-     *          $this->outputTemplate();
-     *      }
-     *  
-     *      // Edit action
-     *      function actionEdit() {
-     *          $this->setVar( 'title', 'sample1Request::actionEdit' );
-     *          $this->outputTemplate();
-     *      }
-     *  
-     *  }
-     *  
-     *  // Process the request
-     *  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );
-     *  @endcode
      *
      *  The request class works as follows. When you request the url
      *  "http://localhost/sample1.php", the YDF2_Process include file will try
@@ -70,6 +38,10 @@
      *  function will check the value of the "do" parameter specified in the URL
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
+     *
+     *  @todo
+     *      Add function getTemplate to get an instance of a template instead of
+     *      creating one by default.
      */
     class YDRequest extends YDBase {
 

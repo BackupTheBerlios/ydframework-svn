@@ -1,24 +1,26 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'Benchmark/Timer.php' );
+
     /**
      *  This is a general timer class that starts counting when it's instantiated,
      *  and which returns the elapsed time as soon as the finish method is called.
      *
      *  @todo
-     *      We need to add a function getOutput which should return the results
-     *      as a nice text table.
+     *      Revert back to a more simple YDTimer class that doesn't depend on
+     *      the PEAR libraries to do it's work.
      */
     class YDTimer extends YDBase {
 

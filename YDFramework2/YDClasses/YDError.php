@@ -1,16 +1,22 @@
 <?php
 
     /*
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDObjectUtil.php' );
+    require_once( 'DB.php' );
 
     /**
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
+     *
+     *  @todo
+     *      Find a way to get rid of the DB.php dependency.
      */
     class YDError extends YDBase {
 

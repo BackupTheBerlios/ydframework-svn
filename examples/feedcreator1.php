@@ -1,7 +1,16 @@
 <?php
 
+    /*
+     *  This examples demonstrates:
+     *  - How to create XML feeds using YDFeedCreator
+     */
+
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDFeedCreator.php' );
 
     // Class definition
     class feedcreator1Request extends YDRequest {

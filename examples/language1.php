@@ -1,13 +1,16 @@
 <?php
 
     /*
-
-        This examples demonstrates the array utilities.
-
-    */
+     *  This examples demonstrates the language utilities.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDLanguage.php' );
+    require_once( 'YDDebugUtil.php' );
 
     // Class definition
     class language1Request extends YDRequest {

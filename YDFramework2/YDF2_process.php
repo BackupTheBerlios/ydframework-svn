@@ -1,11 +1,9 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
@@ -32,6 +30,9 @@
                 // Show debugging info if needed
                 if ( YD_DEBUG == 1 ) {
 
+                    // Includes
+                    require_once( 'YDDebugUtil.php' );
+
                     // Stop the timer
                     $GLOBALS['timer']->stop();
 
@@ -55,14 +56,12 @@
 
                     // Calculate the total size
                     foreach( $includeFiles as $includeFile ) {
-                        $includeFile = new YDFSFile( $includeFile );
-                        $includeFilesSize += $includeFile->getSize();
+                        $includeFilesSize += filesize( $includeFile );
                     }
 
                     // Show the total size of the include files
                     YDDebugUtil::debug(
-                        'Total size include files: ',
-                        YDStringUtil::formatFileSize( $includeFilesSize )
+                        'Total size include files: ', $includeFilesSize, ' bytes'
                     );
 
                     // List of include files

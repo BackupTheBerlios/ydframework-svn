@@ -1,16 +1,17 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
+
+    // Includes
+    require_once( 'YDBase.php' );
 
     /**
      *  This class houses all the string related utility functions. All the methods
@@ -21,9 +22,6 @@
 
         /**
          *  Function to format a file size to a meaningful value.
-         *
-         *  @remarks
-         *      This function recognizes EB, PB, TB, GB, MB and KB.
          *  
          *  @param $bytes    The file size to format.
          *  @param $decimals (optional) The number of decimals that should be 
@@ -114,7 +112,10 @@
          *  @param $text       Date that needs be formatted.
          *  @param $dateFormat Date format to use.
          *
-         *  @return Formatted date.
+         *  @return Formatted date
+         *
+         *  @todo
+         *      Do we really need this function or can we take it out?.
          */
         function formatDate( $text, $dateFormat ) {
 

@@ -1,73 +1,22 @@
 <?php
 
     /*
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDError.php' );
+    require_once( 'YDDebugUtil.php' );
+    require_once( 'HTML/QuickForm.php' );
+    require_once( 'HTML/QuickForm/Renderer/ArraySmarty.php' );
 
     /**
      *  This class implements an HTML form. This class is based on the
      *  HTML_QuickForm from the PEAR library. To instantiate the form, you need
      *  to specify the name of the form. To output the form as an array suitable
      *  for Smarty, you can use the toArray function.
-     *
-     *  Here's an example form:
-     *
-     *  @code
-     *  // Create the form
-     *  $form = new YDForm( 'firstForm' );
-     *  
-     *  // Set the defaults
-     *  $form->setDefaults( array( 'name' => 'Joe User' ) );
-     *  
-     *  // Add the elements
-     *  $form->addElement(
-     *      'text', 'name', 'Enter your name:', array( 'size' => 50 )
-     *  );
-     *  $form->addElement( 'submit', 'cmdSubmit', 'Send' );
-     *  
-     *  // Apply a filter
-     *  $form->applyFilter( 'name', 'trim' );
-     *  
-     *  // Add a rule
-     *  $form->addRule( 'name', 'Please enter your name', 'required', null );
-     *  
-     *  // Process the form
-     *  if ( $form->validate() ) {
-     *  
-     *      // Mark the form as valid
-     *      $this->setVar( 'formValid', true );
-     *
-     *  }
-     *  @endcode
-     *
-     *  The accompanying Smarty template then can look as follows:
-     *
-     *  @code
-     *  {if $formValid}
-     *      Welcome to <b>{$form.name.value}</b>!
-     *  {else}
-     *      {if $form.errors}
-     *          <p style="color: red"><b>Errors during processing:</b>
-     *          {foreach from=$form.errors item="error"}
-     *              <br>{$error}
-     *          {/foreach}
-     *          </p>
-     *      {/if}
-     *      <form {$form.attributes}>
-     *          <p>
-     *              {$form.name.label}
-     *              <br>
-     *              {$form.name.html}
-     *          </p>
-     *          <p>
-     *              {$form.cmdSubmit.html}
-     *          </p>
-     *      </form>
-     *  {/if}
-     *  @endcode
      */
     class YDForm extends HTML_QuickForm {
 

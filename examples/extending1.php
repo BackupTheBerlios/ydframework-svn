@@ -1,15 +1,17 @@
 <?php
 
     /*
-
-        This examples demonstrates:
-        - How to you can extend the YDRequest class to create your custom
-          request handlers.
-
-    */
+     *  This examples demonstrates:
+     *  - How to you can extend the YDRequest class to create your custom
+     *    request handlers.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDDebugUtil.php' );
 
     // Class definition (custom request handler)
     class customBaseRequest extends YDRequest {

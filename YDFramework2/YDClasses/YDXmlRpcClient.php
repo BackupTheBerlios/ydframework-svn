@@ -1,16 +1,20 @@
 <?php
 
     /*
-
-       Yellow Duck Framework version 2.0
-       (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-
-    */
+     *  Yellow Duck Framework version 2.0
+     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
+     */
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
+
+    // Includes
+    require_once( 'YDBase.php' );
+    require_once( 'YDError.php' );
+    require_once( 'YDHttpClient.php' );
+    require_once( 'IXR_Library.inc.php' );
 
     /**
      *  This is the actual implementation of the YDXmlRpcClient class. It

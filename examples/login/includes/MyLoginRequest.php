@@ -1,5 +1,9 @@
 <?php
 
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDForm.php' );
+
     // Class definition
     class MyLoginRequest extends YDRequest {
 

@@ -1,16 +1,15 @@
 <?php
 
     /*
-
-        This examples demonstrates:
-        - How to use the PEAR Menu class to create a custom menu.
-
-    */
+     *  This examples demonstrates:
+     *  - How to use the PEAR Menu class to create a custom menu.
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-    // Load the PEAR HTML Menu class
+    // Includes
+    require_once( 'YDRequest.php' );
     require_once 'HTML/Menu.php';
 
     // Class definition

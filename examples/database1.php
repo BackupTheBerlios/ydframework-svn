@@ -1,21 +1,24 @@
 <?php
 
     /*
-
-        This examples demonstrates:
-        - How to include a configuration file
-        - How to check arguments passed by the url
-        - How to make a database connection
-        - How to use arrays in templates
-        - How to check if an object is an error or not
-
-    */
+     *  This examples demonstrates:
+     *  - How to include a configuration file
+     *  - How to check arguments passed by the url
+     *  - How to make a database connection
+     *  - How to use arrays in templates
+     *  - How to check if an object is an error or not
+     */
 
     // Standard include
     require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
     // Include the configuration
     require_once( dirname( __FILE__ ) . '/config.php' );
+
+    // Includes
+    require_once( 'YDRequest.php' );
+    require_once( 'YDDatabase.php' );
+    require_once( 'YDSqlQuery.php' );
 
     // Class definition
     class database1Request extends YDRequest {
