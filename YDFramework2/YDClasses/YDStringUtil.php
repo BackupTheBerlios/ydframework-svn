@@ -86,7 +86,7 @@
                     $c = substr( $email, $i, 1 );
                     if ( $c == '@' ) {
                         $userName = $ent;
-                        $ent = "";
+                        $ent = '';
                     } else {
                         $ent .= '&#' . ord($c) . ';';
                     }
