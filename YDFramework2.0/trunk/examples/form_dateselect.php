@@ -33,12 +33,15 @@
 				YDDebugUtil::dump( $form->_filters, 'Filters' );
 				YDDebugUtil::dump( $form->_rules, 'Rules' );
 				YDDebugUtil::dump( $form->_formrules, 'Form Rules' );
-				YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
-				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
+				YDDebugUtil::dump( $form->getValue( 'dateSelect1' ), 'dateSelect1' );
+				YDDebugUtil::dump( $form->getValue( 'timeSelect1' ), 'timeSelect1' );
+				YDDebugUtil::dump( $form->getValue( 'datetimeSelect1' ), 'datetimeSelect1' );
+				YDDebugUtil::dump( $form->getValues(), '$form->getValues()' );
 				YDDebugUtil::dump( $_POST, '$_POST' );
 				YDDebugUtil::dump( $_FILES, '$_FILES' );
 			}
 			if ( $form->validate() ) {
+				YDDebugUtil::dump( $form->getValues(), '$form->getValues()' );
 				YDDebugUtil::dump( $elementDate->getTimeStamp(), '$elementDate->getTimeStamp()' );
 				YDDebugUtil::dump( $elementDate->getTimeStamp( '%d/%m/%Y' ), '$elementDate->getTimeStamp( "%d/%m/%Y" )' );
 				YDDebugUtil::dump( date( 'M-d-Y', $elementDate->getTimeStamp() ), '$elementDate->gdate( getTimeStamp() )' );

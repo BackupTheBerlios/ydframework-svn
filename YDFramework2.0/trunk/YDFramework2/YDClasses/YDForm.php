@@ -535,6 +535,11 @@
 				}
 			}
 
+			// Add the timestamp if needed
+			if ( method_exists( $element, 'getTimeStamp' ) ) {
+				$value['timestamp'] = $element->getTimeStamp();
+			}
+
 			// Unset the element
 			unset( $element );
 
