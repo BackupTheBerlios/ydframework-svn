@@ -230,6 +230,38 @@
         }
 
         /**
+         *	This function returns true if the variable is in the array specified in the options. This function is
+         *  case insensitive.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The array in which the value should be.
+         */
+        function i_in_array( $val, $opts ) {
+            foreach ( $val as $i=>$j ) {
+                if ( is_string( $val ) ) {
+                    $val[$i] = strtolower( $i );
+                }
+            }
+            return in_array( $val, $opts, true );
+        }
+
+        /**
+         *	This function returns true if the variable is not in the array specified in the options. This function is
+         *  case insensitive.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The array in which the value should not be.
+         */
+        function i_not_in_array( $val, $opts ) {
+            foreach ( $val as $i=>$j ) {
+                if ( is_string( $val ) ) {
+                    $val[$i] = strtolower( $i );
+                }
+            }
+            return ! in_array( $val, $opts, true );
+        }
+
+        /**
          *	This rule checks if a string contains the maximum specified words or not.
          *
          *	@param $val		The value to test.
