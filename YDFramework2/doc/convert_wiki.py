@@ -9,7 +9,17 @@ pages = [
     'InstallingYDF2',
     'TutorialApp',
     'YDRequest',
+    'YDDebug',
+    'YDError',
     'YDTemplate',
+    'YDForm',
+    'YDAuthentication',
+    'YDFileAndDirectory',
+    'YDUrl',
+    'YDXmlRpc',
+    'YDEmail',
+    'YDFeedCreator',
+    'BestPractices',
 ]
 
 images = [
