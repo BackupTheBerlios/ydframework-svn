@@ -122,6 +122,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>
