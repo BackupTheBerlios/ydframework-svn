@@ -780,7 +780,7 @@ class PIECreator01 extends FeedCreator {
 				$feed.="        </author>\n";
 			}
 			$feed.= "        <content type=\"text/html\" xml:lang=\"en-us\">\n";
-			$feed.= "            <div xmlns=\"http://www.w3.org/1999/xhtml\">".$this->items[$i]->description."</div>\n";
+			$feed.= "            <div xmlns=\"http://www.w3.org/1999/xhtml\">".htmlspecialchars( $this->items[$i]->description )."</div>\n";
 			$feed.= "        </content>\n";
 			/*
 			// on hold
