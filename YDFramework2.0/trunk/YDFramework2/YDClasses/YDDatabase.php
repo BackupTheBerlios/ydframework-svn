@@ -395,7 +395,7 @@
         function getValueByName( $sql, $name ) {
             $record = array_values( $this->getRecords( $sql ) );
             if ( ! $record ) { return false; }
-            return $record[ strtolower( $name ) ];
+            return $record[0][ strtolower( $name ) ];
         }
 
         /**
