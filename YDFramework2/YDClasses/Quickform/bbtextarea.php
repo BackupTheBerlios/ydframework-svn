@@ -53,32 +53,14 @@
             // The short name of the element
             $this->_type = 'bbtextarea';
 
-            // The list of modifiers
-            $this->_modifiers = array(
-                array(
-                    'name' => 'b', 'label' => 'bold', 'text' => ''
-                ),
-                array(
-                    'name' => 'i', 'label' => 'italic', 'text' => ''
-                ),
-                array(
-                    'name' => 'u', 'label' => 'underline', 'text' => ''
-                ),
-                array(
-                    'name' => 'quote', 'label' => 'quote', 'text' => ''
-                ),
-            );
+            // The list of buttons
+            $this->_buttons = array();
 
-            // The list of popup text elements
-            $this->_simplepops = array(
-                array(
-                    'name' => 'url', 'question' => 'Enter the url:',
-                    'default' => 'http://', 'label' => 'url'
-                ),
-            );
-
-            // The list of popup windows elements
-            $this->_popupWindows = array();
+            // Add the default buttons
+            $this->addModifier( 'b', 'bold' );
+            $this->addModifier( 'i', 'italic' );
+            $this->addModifier( 'u', 'underline' );
+            $this->addSimplePopup( 'url', 'url', 'Enter the url:', 'http://' );
 
             // The YDBBCode parser to use
             $this->_parser = 'YDBBCode';
@@ -170,12 +152,13 @@
             // Create a simple array for this
             $attrib = array();
             $attrib['name'] = $name;
+            $attrib['type'] = 'modifier';
             $attrib['label'] = $label;
             $attrib['text'] = $text;
 
             // Add it to the list
-            array_push( $this->_modifiers, $attrib );
-
+            array_push( $this->_buttons, $attrib );
+        
         }
 
         /**
@@ -194,13 +177,14 @@
             // Create a simple array for this
             $attrib = array();
             $attrib['name'] = $name;
+            $attrib['type'] = 'simplepopup';
             $attrib['label'] = $label;
             $attrib['question'] = $question;
             $attrib['default'] = $default;
             $attrib['text'] = $text;
 
             // Add it to the list
-            array_push( $this->_simplepops, $attrib );
+            array_push( $this->_buttons, $attrib );
 
         }
 
@@ -222,6 +206,7 @@
             // Create a simple array for this
             $attrib = array();
             $attrib['url'] = $url;
+            $attrib['type'] = 'popupwindow';
             $attrib['label'] = $label;
             $attrib['name'] = $name;
             if ( empty( $params ) ) {
@@ -231,7 +216,8 @@
             }
 
             // Add it to the list
-            array_push( $this->_popupWindows, $attrib );
+            //array_push( $this->_popupWindows, $attrib );
+            array_push( $this->_buttons, $attrib );
 
         }
 
@@ -260,14 +246,11 @@
             // Return the actual element
             } else {
 
-                // Check if there are any buttons defined
-                $toolbarLength = sizeof( $this->_modifiers ) + sizeof( $this->_simplepops );
-
                 // Empty out variable
                 $out = '';
 
                 // Only if something is in there
-                if ( $toolbarLength > 0 ) {
+                if ( sizeof( $this->_buttons ) > 0 ) {
 
                     // Add the AddText function if needed
                     if ( ! defined( 'YD_BBTA_MAINSCRIPT' ) ) {
@@ -302,17 +285,19 @@
                     // Create the JavaScript
                     $out .= '<script language="JavaScript">';
                     $out .= '    function doButton( element, name ) {';
-                    foreach ( $this->_modifiers as $mod ) {
-                        $out .= 'if ( name == \'' . addslashes( $mod['name'] ) . '\' ) {';
-                        $out .= '    AddText ( element, \'[' . addslashes( $mod['name'] ) . ']\',\'' . addslashes( $mod['text'] ) . '\',\'[/' . addslashes( $mod['name'] ) . ']\');';
-                        $out .= '}';
-                    }
-                    foreach ( $this->_simplepops as $pop ) {
-                        $out .= 'if ( name == \'' . addslashes( $pop['name'] ) . '\' ) {';
-                        $out .= '    data = prompt( "' . addslashes( $pop['question'] ) . '", "' . addslashes( $pop['default'] ) . '" );';
-                        $out .= '    if ( data == null ) return;';
-                        $out .= '    AddText( element, \'[' . addslashes( $pop['name'] ) . '=\' + data + \']\',\'' . addslashes( $pop['text'] ) . '\',\'[/' . addslashes( $pop['name'] ) . ']\');';
-                        $out .= '}';
+                    foreach ( $this->_buttons as $button ) {
+                        if ( $button['type'] == 'modifier' )  {
+                            $out .= 'if ( name == \'' . addslashes( $button['name'] ) . '\' ) {';
+                            $out .= '    AddText ( element, \'[' . addslashes( $button['name'] ) . ']\',\'' . addslashes( $button['text'] ) . '\',\'[/' . addslashes( $button['name'] ) . ']\');';
+                            $out .= '}';
+                        }
+                        if ( $button['type'] == 'simplepopup' )  {
+                            $out .= 'if ( name == \'' . addslashes( $button['name'] ) . '\' ) {';
+                            $out .= '    data = prompt( "' . addslashes( $button['question'] ) . '", "' . addslashes( $button['default'] ) . '" );';
+                            $out .= '    if ( data == null ) return;';
+                            $out .= '    AddText( element, \'[' . addslashes( $button['name'] ) . '=\' + data + \']\',\'' . addslashes( $button['text'] ) . '\',\'[/' . addslashes( $button['name'] ) . ']\');';
+                            $out .= '}';
+                        }
                     }
                     $out .= '    }';
                     $out .= '</script>';
@@ -321,14 +306,16 @@
                     $out .= '<table border="0" cellpadding="0" cellspacing="0" width="' . $this->getAttribute( 'width' ) . '">';
                     $out .= '<tr>';
                     $out .= '<td class="bbtoolbar">';
-                    foreach ( $this->_modifiers as $mod ) {
-                        $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $mod['name'] ) . '\') );">[ ' . $mod['label'] . ' ]</a> ';
-                    }
-                    foreach ( $this->_simplepops as $pop ) {
-                        $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $pop['name'] ) . '\') );">[ ' . $pop['label'] . ' ]</a> ';
-                    }
-                    foreach ( $this->_popupWindows as $pop ) {
-                        $out .= '<a href="javascript:void( openWin( \'' . addslashes( $pop['url'] ) . '\', \'' . addslashes( $pop['name'] ) . '\', \'' . addslashes( $pop['params'] ) . '\' ) );">[ ' . $pop['label'] . ' ]</a> ';
+                    foreach ( $this->_buttons as $button ) {
+                        if ( $button['type'] == 'modifier' )  {
+                            $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+                        }
+                        if ( $button['type'] == 'simplepopup' )  {
+                            $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+                        }
+                        if ( $button['type'] == 'popupwindow' )  {
+                            $out .= '<a href="javascript:void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) );">[ ' . $button['label'] . ' ]</a> ';
+                        }
                     }
                     $out .= '</td>';
                     $out .= '</tr>';
@@ -337,7 +324,7 @@
                     $out .= '</tr>';
                     $out .= '</table>';
                 } else {
-                    $out .= '<textarea name="' . $this->getName() . '" class="bbtextarea" width="100%">' . $this->getValue() . '</textarea>';
+                    $out .= '<textarea name="' . $this->getName() . '" class="bbtextarea" width="' . $this->getAttribute( 'width' ) . '">' . $this->getValue() . '</textarea>';
                 }
 
                 // Return the HTML code
