@@ -89,7 +89,7 @@
 		function toHtml() {
 			$this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';
 			$this->minutes->_value = isset( $this->_value['minutes'] ) ? $this->_value['minutes'] : '';
-			return $this->hours->toHtml() . ' ' . $this->minutes->toHtml();
+			return $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
 		}
 
 	}

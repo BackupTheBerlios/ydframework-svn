@@ -126,7 +126,7 @@
 			$this->year->_value = isset( $this->_value['year'] ) ? $this->_value['year'] : '';
 			$this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';
 			$this->minutes->_value = isset( $this->_value['minutes'] ) ? $this->_value['minutes'] : '';
-			return $this->day->toHtml() . ' ' . $this->month->toHtml() . ' ' . $this->year->toHtml() . ' ' . $this->hours->toHtml() . ' ' . $this->minutes->toHtml();
+			return $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
 		}
 
 	}

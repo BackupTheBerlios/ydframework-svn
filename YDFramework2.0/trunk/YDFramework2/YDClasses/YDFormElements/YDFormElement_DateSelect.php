@@ -101,7 +101,7 @@
 			$this->day->_value = isset( $this->_value['day'] ) ? $this->_value['day'] : '';
 			$this->month->_value = isset( $this->_value['month'] ) ? $this->_value['month'] : '';
 			$this->year->_value = isset( $this->_value['year'] ) ? $this->_value['year'] : '';
-			return $this->day->toHtml() . ' ' . $this->month->toHtml() . ' ' . $this->year->toHtml();
+			return $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml();
 		}
 
 	}
