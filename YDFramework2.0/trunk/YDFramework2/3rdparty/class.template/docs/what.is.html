@@ -42,7 +42,6 @@ At the moment I know of no bugs. Usually when I find one, I squash it as soon as
 <p>
 These are things that I should have done before I released it, but that I put off to do until after I released the code.
 <ul>
-	<li>Caching of compiled config files. Additionally, config files need to be handled better when it comes to compile checking.</li>
 	<li>Comments inside of comments do not get parsed properly. (ex: <code>&lt;%* a comment &lt;%* another comment *%&gt; *%&gt;</code> will be displayed as <code>*%&gt;</code>)</li>
 	<li>Variables with weird brackets around them (i.e. <code>$title%crap%</code>) are incorrectly concatenated instead of raising a syntax error warning. (Or maybe ignoring as simply an invalid variable.)</li>
 	<li>Massively better error handling (read: there is none thus far).</li>
@@ -52,6 +51,12 @@ These are things that I should have done before I released it, but that I put of
 <h2><a name="history">History</a></h2>
 <p>
 <ul>
+	<li>September 16, 2004 - Version 2.2.3
+		<ul>
+			<li>Fixed an bug in the <tt>_is_cached</tt> function that would result in incorrect cache usage.</li>
+			<li>Added the <tt>urlencode</tt> modifier to the standard distribution.</li>
+		</ul>
+	</li>
 	<li>August 3, 2004 - Version 2.2.2
 		<ul>
 			<li><font color="red">IT IS VERY IMPORTANT THAT YOU CLEAN OUT YOUR COMPILE AND CACHE DIRECTORIES AFTER THIS UPGRADE!</font></li>

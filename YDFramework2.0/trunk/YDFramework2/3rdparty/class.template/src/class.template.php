@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.2
+ * Version:	2.2.3
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -282,25 +282,25 @@ class template {
 		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->template_dir = $this->_get_dir($this->template_dir);
 		$name = md5($this->template_dir.$file).'.php';
-		$cache_time = filemtime($this->_cache_dir.$name);
 
-		if (file_exists($this->_cache_dir.$name) && (((time() - $cache_time) < $this->cache_lifetime) || $this->cache_lifetime == -1) && ($cache_time > filemtime($this->template_dir.$file))) {
+		if (file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file))) {
 			$fh = fopen($this->_cache_dir.$name, "r");
 			if (!feof($fh) && ($line = fgets($fh, filesize($this->_cache_dir.$name)))) {
 				$includes = unserialize($line);
 				if (isset($includes['template']))
 					foreach($includes['template'] as $value)
-						if (!(file_exists($this->template_dir.$value) && ($cache_time > filemtime($this->template_dir.$value))))
+						if (!(file_exists($this->template_dir.$value) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$value))))
 							return false;
 				if (isset($includes['config']))
 					foreach($includes['config'] as $value)
-						if (!(file_exists($this->config_dir.$value) && ($cache_time > filemtime($this->config_dir.$value))))
+						if (!(file_exists($this->config_dir.$value) && (filemtime($this->_cache_dir.$name) > filemtime($this->config_dir.$value))))
 							return false;
 			}
 			fclose($fh);
 		} else {
 			return false;
 		}
+		return true;
 	}
 
 	function _fetch_compile($file) {
