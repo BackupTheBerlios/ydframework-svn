@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+
+<html>
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+    <title>YDF2 - Introducing the Yellow Duck Framework</title>
+    <link href="api/doxygen.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body>
+
+    <h1>Yellow Duck Framework </h1>
+
+    <h3 align="center">version 2.0.0 </h3>
+
+    <hr size="1" noshade>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="left" width="40%">
+            &nbsp;
+        </td>
+        <td align="center" width="20%" valign="top">
+            [ <a href="index.html">contents</a> ]
+        </td>
+        <td align="right" width="40%">
+            [ <a href="tutorial_01.html">next</a> ]
+            <br>
+            <font size="-1"><i>Installing the Yellow Duck Framework</i></font>
+        </td>
+    </tr>
+    </table>
+    <hr size="1" noshade>
+
+    <h3>1. Introducing the Yellow Duck Framework</h3>
+    
+    <hr size="1" noshade>
+
+    <p><b>Introduction</b></p>
+
+    <p>The Yellow Duck framework is web application framework created by
+    Pieter Claerhout. More information can be found on 
+    <a href="http://www.yellowduck.be/">http://www.yellowduck.be/</a>.</p>
+
+    <p>The Yellow Duck Framework takes care of all the difficult work you 
+    normally have to perform manually when developing a web application. It is 
+    based on the idea of requests that can perform actions. By encapsulating all 
+    the programming in an object-oriented environment, you get a framework that 
+    is easy to use and understand, easy to extend and doesn't limit you in any 
+    way.</p>
+
+    <p>The Yellow Duck Framework provides you with the following options:</p>
+
+    <ul>
+        <li>Clean separation of code and output</li>
+        <li>Templates for outputting HTML easily</li>
+        <li>Automatic action dispatching using URL parameters</li>
+        <li>Object oriented form construction and validation</li>
+        <li>PEAR based database connectivity which supports all major database 
+        engines such as MySQL, PostgreSQL, Oracle, Microsoft SQL Server, ...</li>
+        <li>Object oriented handling of authentication</li>
+        <li>To implement the base functionality, a lot of standard libraries 
+        were used. Included is a partial copy of the PEAR library from the PHP 
+        project, which provides things such as database connectivity. More 
+        information and documentation on the PEAR library can be found on 
+        <a href="http://pear.php.net/">http://pear.php.net/</a>.</li>
+    </ul>
+
+    <p>The template engine that is used is Smarty, also provided by the PHP 
+    project. More information and documentation on the Smarty template engine 
+    can found on <a href="http://smarty.php.net/">http://smarty.php.net/</a>.</p>
+
+    <p>&nbsp;<br><b>Analyzing the workflow</b></p>
+
+    <p>In the object oriented nature of the Yellow Duck Framework, each script
+    that gets executed is based on the YDRequest class. This class is smart
+    enough to figure out which functions needs to be called using parameters
+    given in the url.</p>
+
+    <p>Let's take a look at an example script to understand how this works:</p>
+
+    <b>Source: sample1.php</b><br>
+<pre class="fragment"><div>  <span class="comment">// Initialize the Yellow Duck Framework.</span>
+  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+  
+  <span class="comment">// Class definition for the sample request.</span>
+  <span class="keyword">class </span>sample1Request <span class="keyword">extends</span> <a class="code">YDRequest</a> {
+  
+      <span class="comment">// Class constructor</span>
+      function <a class="code">sample1Request</a>() {
+  
+          <span class="comment">// Initialize the parent class</span>
+          $this-&gt;<a class="code">YDRequest</a>();
+  
+      }
+  
+      <span class="comment">// Default action</span>
+      function <a class="code">actionDefault</a>() {
+          $this-&gt;<a class="code">setVar</a>( 'title', 'sample1Request::actionDefault' );
+          $this-&gt;<a class="code">outputTemplate</a>();
+      }
+  
+      <span class="comment">// Edit action</span>
+      function <a class="code">actionEdit</a>() {
+          $this-&gt;<a class="code">setVar</a>( 'title', 'sample1Request::actionEdit' );
+          $this-&gt;<a class="code">outputTemplate</a>();
+      }
+  
+  }
+  
+  <span class="comment">// Process the request</span>
+  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );
+</div></pre>
+
+    <p>The template file that goes along with this script looks as follows:</p>
+
+    <b>Source: sample1.tpl</b><br>
+<pre class="fragment">&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;{$title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;{$title}&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+    <p>When you request the following URL, a number of things happen:</p>
+
+    <pre class="fragment">http://localhost/sample1.php</pre>
+    
+    <p>The first line you see in the sample1.php script is the include of the
+    file called "YDF2_init.php". This file is responsible for setting up the
+    Yellow Duck Framework, and does things such as:</p>
+
+    <ul>
+        <li>Defining a number of constants with e.g. the path to specific
+        directories and URLs</li>
+        <li>Starts or restores the previous session/li>
+        <li>Reconfigures the PHP include path</li>
+        <li>Includes the different files from the rest of the framework</li>
+    </ul>
+    
+    <p>After that, we define a new class, called "sample1Request" which is based
+    on the YDRequest class. For each script, you need to have 1 class which is
+    named as the basename of the file (sample1 in this case) and is appended
+    with the string "Request". This class should have the YDRequest class as
+    one of it ancestors.</p>
+
+    <p>Since we are inheriting from the YDRequest class, we initialize the
+    parent class in the class constructor of the sample1Request class.</p>
+
+    <p>Then we see two functions that start with the text "action". All
+    functions that implement actions start with "action". We will see later on
+    how you can choose which one gets executed.</p>
+
+    <p>The last part of the script is the include of the "YDF2_process.php"
+    script, which processes the actual request. It will look for a request class
+    based on the name of the file, and will execute the process function of that
+    class. This is where the magic happens.</p>
+
+    <p>The process function checks the URL to see if there was a parameter
+    defined with the name "do". This parameter can indicate the action that
+    needs to be executed. If the url looked as follows, the function called
+    "actionEdit" will be executed.</p>
+
+    <pre class="fragment">http://localhost/sample1.php?do=edit</pre>
+
+    <p>If no action is specified in the url, the default action, called
+    "actionDefault" will be executed.</p>
+
+    <p>In both actions, the functions in this script don't do a lot. They will
+    set a template variable called "title" and they will output the template to
+    the browser. The template contains special tags that are filled in on the
+    fly with the right contents.</p>
+
+    <hr size="1" noshade>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td align="left" width="40%">
+            &nbsp;
+        </td>
+        <td align="center" width="20%" valign="top">
+            [ <a href="index.html">contents</a> ]
+        </td>
+        <td align="right" width="40%">
+            [ <a href="tutorial_01.html">next</a> ]
+            <br>
+            <font size="-1"><i>Installing the Yellow Duck Framework</i></font>
+        </td>
+    </tr>
+    </table>
+    <hr size="1" noshade>
+
+    <address><small>
+        Yellow Duck Framework 2.0.0 by Pieter Claerhout,
+        <a href="mailto:pieter@yellowduck.be">pieter@yellowduck.be</a>
+    </small></address>
+
+</body>
+
+</html>
