@@ -99,14 +99,14 @@
          *  - YD_FW_NAME:      name of the framework
          *  - YD_FW_VERSION:   version of the framework
          *  - YD_FW_NAMEVERS:  the combination of the two items above
-         *  - YD_FW_HOMEPAGE:  the homepage of the Yellow Duck Framework.
+         *  - YD_FW_HOMEPAGE:  the homepage of the Yellow Duck Framework
          *  - YD_SELF_SCRIPT:  Contains the current script's path, e.g.
          *                     "/myapp/index.php"
          *  - YD_SELF_URI:     The URI which was given in order to access this
          *                     page, e.g. "/myapp/index.php?do=edit"
          *  - YD_ACTION_PARAM: the name of the $_GET parameter that specifies
          *                     which action needs to be executed. This is "do"
-         *                     by default.
+         *                     by convention.
          *
          *  - YD_ENV:     These variables are imported into PHP's global
          *                namespace from the environment under which the PHP
@@ -114,13 +114,13 @@
          *  - YD_COOKIE:  An associative array of variables passed to the
          *                current script via HTTP cookies.
          *  - YD_GET:     An associative array of variables passed to the
-         *                current script via the HTTP GET method. .
+         *                current script via the HTTP GET method.
          *  - YD_POST:    An associative array of variables passed to the
          *                current script via the HTTP POST method.
          *  - YD_FILES:   An associative array of items uploaded to the current
          *                script via the HTTP POST method.
          *  - YD_REQUEST: An associative array consisting of the contents of
-         *                YD_GET, YD_POST, and YD_COOKIE.
+         *                YD_GET, YD_POST and YD_COOKIE.
          *  - YD_SESSION: An associative array containing session variables
          *                available to the current script.
          *  - YD_GLOBALS: An associative array containing references to all
@@ -133,6 +133,11 @@
          *  @param $name The name of the template you want to parse and output.
          *
          *  @returns This function returns the output of the parsed template.
+         *
+         *  @todo
+         *      We should only append the template extension is it's not done
+         *      yet by the user itself. Now, you always have to remember not to
+         *      specify the template extension.
          */
         function getOutput( $name ) {
 
