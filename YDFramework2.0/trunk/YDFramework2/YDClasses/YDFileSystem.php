@@ -27,9 +27,6 @@
 
 	/**
 	 *  This class defines a filesystem file.
-	 *
-	 *	@todo
-	 *		Override the toArray function.
 	 */
 	class YDFSFile extends YDBase {
 
@@ -244,6 +241,25 @@
 		}
 
 		/**
+		 *	This function returns the file properties as an associative array.
+		 *
+		 *	@returns	Associative array with the file properties
+		 */
+		function toArray() {
+			return array(
+				'basename' => $this->getBaseName(),
+				'extension' => $this->getExtension(),
+				'path' => $this->getPath(),
+				'absolutepath' => $this->getAbsolutePath(),
+				'lastmodified' => $this->getLastModified(),
+				'size' => $this->getSize(),
+				'isimage' => $this->isImage(),
+				'isdirectory' => $this->isDirectory(),
+				'iswriteable' => $this->isWriteable(),
+			);
+		}
+
+		/**
 		 *	@internal
 		 */
 		function _getImageType() {
@@ -266,9 +282,6 @@
 
 	/**
 	 *	This class defines an image file.
-	 *
-	 *	@todo
-	 *		Override the toArray function.
 	 */
 	class YDFSImage extends YDFSFile {
 
@@ -400,6 +413,30 @@
 			$type = $this->getImageType();
 			return 'image/' . strtolower( $type );
 		 }
+
+		/**
+		 *	This function returns the file properties as an associative array.
+		 *
+		 *	@returns	Associative array with the file properties
+		 */
+		function toArray() {
+			return array(
+				'basename' => $this->getBaseName(),
+				'extension' => $this->getExtension(),
+				'path' => $this->getPath(),
+				'absolutepath' => $this->getAbsolutePath(),
+				'lastmodified' => $this->getLastModified(),
+				'size' => $this->getSize(),
+				'isimage' => $this->isImage(),
+				'isdirectory' => $this->isDirectory(),
+				'iswriteable' => $this->isWriteable(),
+				'imagesize' => $this->getImageSize(),
+				'width' => $this->getWidth(),
+				'height' => $this->getHeight(),
+				'imagetype' => $this->getImageType(),
+				'mimetype' => $this->getMimeType(),
+			);
+		}
 
 		/**
 		 *	This function is used to output an error image.
@@ -826,6 +863,22 @@
 		 */
 		function isImage() {
 			return false;
+		}
+
+		/**
+		 *	This function returns the file properties as an associative array.
+		 *
+		 *	@returns	Associative array with the file properties
+		 */
+		function toArray() {
+			return array(
+				'basename' => $this->getBaseName(),
+				'path' => $this->getPath(),
+				'absolutepath' => $this->getAbsolutePath(),
+				'isimage' => $this->isImage(),
+				'isdirectory' => $this->isDirectory(),
+				'iswriteable' => $this->isWriteable(),
+			);
 		}
 
 		/**
