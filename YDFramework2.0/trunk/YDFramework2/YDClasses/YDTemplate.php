@@ -176,17 +176,7 @@
 					'The form you have tried to add to the template is not a subclass of the YDForm class.', YD_ERROR
 				);
 			}
-			$this->assignObject( $name, $form->toArray() );
-		}
-
-		/**
-		 *	This function will add an object to the template.
-		 *
-		 *	@param $name	Name you want to use for this object for referencing it in the template.
-		 *	@param $obj		The object you want to add.
-		 */
-		function assignObject( $name, $obj ) {
-			$this->assign( $name, $obj );
+			$this->assign( $name, $form->toArray() );
 		}
 
 		/**
