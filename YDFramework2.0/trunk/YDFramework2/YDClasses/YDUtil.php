@@ -62,9 +62,15 @@
 		/**
 		 *	This will add a named marker.
 		 *
+		 *	@remark
+		 *		If there is already a marker with that name, a fatal error will be raised.
+		 *
 		 *	@param $name	The name to use for the marker
 		 */
 		function addMarker( $name ) {
+			if ( isset( $this->markers[ $name ] ) ) {
+				trigger_error( 'Marker with name "' . $name . '" is already set.', YD_ERROR );
+			}
 			array_push( $this->markers, array( $name => $this->getElapsed() ) );
 		}
 

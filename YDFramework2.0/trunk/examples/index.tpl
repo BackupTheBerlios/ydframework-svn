@@ -432,6 +432,8 @@
 				<a href="timer.php?YD_DEBUG=1">Using timers/markers (debug 1)</a>
 				<br/>
 				<a href="timer.php?YD_DEBUG=2">Using timers/markers (debug 2)</a>
+				<br/>
+				<a href="timer.php?do=standaloneTimer">Using a standalone timers</a>
 			</td>
 			<td valign="top">
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=timer.php">timer.php</a>

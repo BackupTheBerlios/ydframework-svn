@@ -38,6 +38,36 @@
 
 		}
 
+		// Default action
+		function actionStandaloneTimer() {
+
+			// Instantiate the timer
+			$timer = new YDTimer();
+			
+			// The original data
+			$timer->addMarker( 'Reading file' );
+			$file = new YDFSFile( 'bbcode.txt' );
+			$data = $file->getContents();
+			$timer->addMarker( 'Finished reading file' );
+			
+			// The converter
+			$timer->addMarker( 'YDBBCode object' );
+			$conv = new YDBBCode();
+			
+			// Show the converted data
+			$timer->addMarker( 'Conversion to BBCode' );
+			echo( '<pre>' . htmlentities( $data ) . '</pre>' );
+			echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
+			echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
+			
+			// Get the report
+			$report = $timer->getReport();
+
+			// Dump the contents of the report
+			YDDebugUtil::dump( $report, 'Timing report' );
+			
+		}
+		
 	}
 
 	// Process the request

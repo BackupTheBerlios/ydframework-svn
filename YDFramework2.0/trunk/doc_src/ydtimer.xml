@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydtimer">
+
+    <title>Using timers to profile your code</title>
+
+    <para>Finding out how certain parts of your application take to check if it performs well is crucial in any appliction. Users don't like to wait for something that takes a long time before it finishes, so it's up to you, the developer to find out where there are possible bottlenecks in the code. With the use of the YDTimer class, we'll see that this is an easy thing to do.</para>
+
+    <sect1 id="ydtimer_simple">
+
+        <title>Simple use of the YDTimer class</title>
+
+        <para>The YDTimer class offers you with a very easy timer class. It will time the execution of whatever you want. The class starts counting when you instantiate it, will return you the elapsed time when you call it's getElapsed function. The result is returned in seconds.</para>
+
+        <para>Let's have a look at a code example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    $timer = new YDTimer();
+    $elapsed = $timer->getElapsed();
+
+?>]]></programlisting>
+
+        <para>This $elapsed variable will now contain the time it took from the instantiation of YDTimer class till the function call to the getElapsed function.</para>
+
+        <para>This class is very handing for timing certains parts of your application. You can create multiple instances of the YDTimer class which takes care of timing once specific part.</para>
+
+    </sect1>
+
+    <sect1 id="ydtimer_markers">
+
+        <title>Using markers to get more information</title>
+
+        <para>Sometimes, you only want to time a certain part of your code, or you want to find out how long a certain piece of code needed to perform. For this purpose, you can use markers. You can compare markers with a stopwatch where you have a button to keep track of intermediate times while te stopwatch keeps running (kind of like bookmarks).</para>
+
+        <para>The idea is as follows:</para>
+
+        <procedure>
+            <step>You start the timer by instantiating a new YDTimer object</step>
+            <step>You want to add a marker, which you can do by using the addMarker function.</step>
+            <step>You want to add a second marker, again using the addMarker funtion</step>
+            <step>You want to get the complete report with the different timings, which is done by using the getReport function</step>
+        </procedure>
+
+        <para>The following code example illustrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+// Instantiate the timer
+$timer = new YDTimer();
+
+// The original data
+$timer->addMarker( 'Reading file' );
+$file = new YDFSFile( 'bbcode.txt' );
+$data = $file->getContents();
+$timer->addMarker( 'Finished reading file' );
+
+// The converter
+$timer->addMarker( 'YDBBCode object' );
+$conv = new YDBBCode();
+
+// Show the converted data
+$timer->addMarker( 'Conversion to BBCode' );
+echo( '<pre>' . htmlentities( $data ) . '</pre>' );
+echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
+echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
+
+// Get the report
+$report = $timer->getReport();
+
+?>]]></programlisting>
+
+        <para>The report will look a bit as follows:</para>
+
+        <programlisting><![CDATA[array (
+  0 => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => '-- Start',
+  ),
+  1 => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Reading file',
+  ),
+  2 => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Finished reading file',
+  ),
+  3 => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'YDBBCode object',
+  ),
+  4 => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Conversion to BBCode',
+  ),
+)
+]]></programlisting>
+
+        <para>You can use the report variable to create a nice HTML representation of these values if you like.</para>
+
+    </sect1>
+
+    <sect1 id="ydtimer_global">
+
+        <title>Global markers</title>
+
+        <para>There are also a special kind of markers you can use, which are called "global markers". As every request by defaults initiates a timer to find out how long the total processing took, you can easily add timers to this timer as well. This is done by using the function called "YDGlobalTimerMarker".</para>
+
+        <para>The following code shows you an example:</para>
+
+        <programlisting><![CDATA[<?php
+
+// The original data
+YDGlobalTimerMarker( 'Reading file' );
+$file = new YDFSFile( 'bbcode.txt' );
+$data = $file->getContents();
+YDGlobalTimerMarker( 'Finished reading file' );
+
+// The converter
+YDGlobalTimerMarker( 'YDBBCode object' );
+$conv = new YDBBCode();
+
+// Show the converted data
+YDGlobalTimerMarker( 'Conversion to BBCode' );
+echo( '<pre>' . htmlentities( $data ) . '</pre>' );
+echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
+echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
+
+?>]]></programlisting>
+
+        <para>To view the results of this timer, you need to turn on debugging (as described in the previous chapter). The debug report will then look as follows:</para>
+
+        <programlisting><![CDATA[Yellow Duck Framework Debug Information
+
+Processing time(s):
+
+    Elapsed   Diff    Marker
+    0 m       0 ms    -- Start
+    29 ms     29 ms   Reading file
+    30 ms     1 ms    Finished reading file
+    30 ms     0 ms    YDBBCode object
+    30 ms     0 ms    Conversion to BBCode
+    41 ms     11 ms   -- Finish
+
+Total size include files: 76.3 KB
+
+Included files: 
+
+    26.5 KB   c:\ydf\YDFramework2\YDClasses\YDFileSystem.php
+    18.8 KB   c:\ydf\YDFramework2\YDClasses\YDUtil.php
+    9.5 KB    c:\ydf\YDFramework2\YDClasses\YDRequest.php
+    7.2 KB    c:\ydf\YDFramework2\YDF2_init.php
+    5.8 KB    c:\ydf\YDFramework2\YDClasses\YDExecutor.php
+    5.6 KB    c:\ydf\YDFramework2\YDClasses\YDBBCode.php
+    1.9 KB    c:\ydf\examples\timer.php
+    1.2 KB    c:\ydf\YDFramework2\YDF2_process.php
+
+Number of SQL queries: 0]]></programlisting>
+
+    </sect1>
+
+</chapter>

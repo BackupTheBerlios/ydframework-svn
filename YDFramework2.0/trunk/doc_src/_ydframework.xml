@@ -17,6 +17,7 @@
     <!ENTITY ydemail SYSTEM "ydemail.xml">
     <!ENTITY ydfeedcreator SYSTEM "ydfeedcreator.xml">
     <!ENTITY yderror SYSTEM "yderror.xml">
+    <!ENTITY ydtimer SYSTEM "ydtimer.xml">
     <!ENTITY ydother SYSTEM "ydother.xml">
     <!ENTITY ydbestpractices SYSTEM "ydbestpractices.xml">
     <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
@@ -56,6 +57,7 @@
     &ydemail;
     &ydfeedcreator;
     &yderror;
+    &ydtimer;
     &ydother;
     &ydbestpractices;
     &ydchangelog;

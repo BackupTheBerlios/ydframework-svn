@@ -174,29 +174,6 @@
 
     </sect1>
 
-    <sect1 id="ydother_ydtimer">
-
-        <title>YDTimer</title>
-
-        <para>The YDTimer class offers you with a very easy timer class. It will time the execution of whatever you want. The class starts counting when you instantiate it, will return you the elapsed time when you call it's getElapsed function. The result is returned in seconds.</para>
-
-        <para>Let's have a look at a code example:</para>
-
-        <programlisting><![CDATA[<?php
-
-    $timer = new YDTimer();
-    $elapsed = $timer->getElapsed();
-
-?>]]></programlisting>
-
-        <para>This $elapsed variable will now contain the time it took from the instantiation of YDTimer class till the function call to the getElapsed function.</para>
-
-        <para>This class is very handing for timing certains parts of your application. You can create multiple instances of the YDTimer class which takes care of timing once specific part.</para>
-
-        <note>Add information about markers...</note>
-
-    </sect1>
-
     <sect1 id="ydother_ydbbcode">
 
         <title>YDBBCode</title>
