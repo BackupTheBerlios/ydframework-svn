@@ -113,7 +113,7 @@
          *  @param $subject Subject of the email
          */
         function setSubject( $subject ) {
-            $this->subject = $subject;
+            $this->subject = strip_tags( $subject );
         }
 
         /**
