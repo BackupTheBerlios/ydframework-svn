@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 
 echo Started making of a new distribution archive.
 
@@ -26,8 +26,7 @@ cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
 echo Creating changelog files
-svn log -v --xml -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
-call xsltproc --output "%BLDDIR%\YDFramework2\doc\changelog.html" "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl" "%BLDDIR%\YDFramework2\doc\changelog.xml"
+svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
@@ -39,7 +38,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\ydf2.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
 del /Q "%BLDDIR%\YDFramework2\doc\style.css"
 rmdir /Q /S "%BLDDIR%\YDFramework2\doc\xsl"
-xcopy /I /Q /Y "%BLDDIR%\YDFramework2\doc\changelog.html" "changelog.html"
+copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt"
 copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf"
 
 rem Compressing the build archive

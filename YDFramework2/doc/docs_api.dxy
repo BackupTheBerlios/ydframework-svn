@@ -62,7 +62,7 @@ INPUT                  = "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDCla
 FILE_PATTERNS          = *.php
 RECURSIVE              = YES
 EXCLUDE                = "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses/sql" \
-                         "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses/ToEvaluate"
+                         "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses/Quickform"
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
