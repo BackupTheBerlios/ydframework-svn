@@ -71,7 +71,7 @@
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
      */
-    class YDRequest {
+    class YDRequest extends PEAR {
 
         /**
          *  This is the class constructor for the YDRequest class. This sets the
@@ -82,6 +82,9 @@
          *      By default, classes are set to no require authentication.
          */
         function YDRequest() {
+
+            // Initialize PEAR
+            $this->PEAR();
 
             // Set up the name of the default action
             $this->defaultAction = YD_ACTION_DEFAULT;

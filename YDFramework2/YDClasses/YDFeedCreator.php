@@ -18,12 +18,15 @@
      *  your class instance, you can automatically output to the different
      *  versions of RSS and ATOM with the same source data.
      */
-    class YDFeedCreator {
+    class YDFeedCreator extends PEAR {
 
         /**
          *  This is the class constructor for the YDFeedCreator class.
          */
         function YDFeedCreator() {
+
+            // Initialize PEAR
+            $this->PEAR();
 
             // Include the feedcreator library
             require_once( YD_DIR_3RDP . '/feedcreator/feedcreator.class.php' );

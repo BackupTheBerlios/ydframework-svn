@@ -37,6 +37,9 @@
      *      upgrade Smarty to a new version if needed. If there is a folder
      *      called "includes" in the current script's directory, this will also
      *      be searched in for plugins.
+     *
+     *  @todo
+     *      Needs to be integrated with PEAR.
      */
     class YDTemplate extends Smarty {
 
@@ -51,7 +54,7 @@
          *  YD_DEBUG parameter and caching is disabled.
          */
         function YDTemplate() {
-            
+
             // Initialize the Smarty class
             $this->Smarty();
 

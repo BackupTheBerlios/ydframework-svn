@@ -15,7 +15,7 @@
     /**
      *  This class defines a filesystem directory.
      */
-    class YDFSDirectory {
+    class YDFSDirectory extends PEAR {
 
         /**
          *  This is the class constructor of the YDDirectory class.
@@ -23,6 +23,9 @@
          *  @param $path Path of the directory.
          */
         function YDFSDirectory( $path ) {
+
+            // Initialize PEAR
+            $this->PEAR();
 
             // Check if the file exists
             if ( ! file_exists( $path ) ) {

@@ -17,7 +17,7 @@
      *  All the methods are implemented as static methods and do not require you
      *  to create a class instance in order to use them.
      */
-    class YDObjectUtil {
+    class YDObjectUtil extends PEAR {
 
         /**
          *  This function checks if an object instance is of a specific class

@@ -15,14 +15,24 @@
     /**
      *  This is a general timer class that starts counting when it's instantiated,
      *  and which returns the elapsed time as soon as the finish method is called.
+     *
+     *  @todo
+     *      Needs to be replaced with the PEAR::Bench package. More info on:
+     *      http://www.pearfr.org/index.php/en/article/bench
      */
-    class YDTimer {
+    class YDTimer extends PEAR {
 
         /**
          *  This is the class constructor of the YDTimer class.
          */
         function YDTimer() {
+
+            // Initialize PEAR
+            $this->PEAR();
+
+            // Start the timer
             $this->_startTime = $this->getTime();
+
         }
 
         /**

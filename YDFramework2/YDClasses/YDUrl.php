@@ -15,7 +15,7 @@
     /**
      *  This class defines a url.
      */
-    class YDUrl {
+    class YDUrl extends PEAR {
 
         /**
          *  This is the class constructor for the YDUrl class. You need to
@@ -24,6 +24,9 @@
          *  @param $url The url you want to have as a YDUrl object.
          */
         function YDUrl( $url ) {
+
+            // Initialize PEAR
+            $this->PEAR();
             
             // Save the path
             $this->_url = $url;

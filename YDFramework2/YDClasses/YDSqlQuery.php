@@ -17,7 +17,7 @@
      *  this object has to get the data from this query given a database URL
      *  to retrieve the data from.
      */
-    class YDSqlQuery {
+    class YDSqlQuery extends PEAR {
 
         /**
          *  The class constructor for the YDSqlRaw class. When you instantiate
@@ -27,6 +27,9 @@
          *  @param $sql The SQL query associated with this object.
          */
         function YDSqlQuery( $sql ) {
+
+            // Initialize PEAR
+            $this->PEAR();
     
             // Initialize the sql query
             $this->_sql = $sql;

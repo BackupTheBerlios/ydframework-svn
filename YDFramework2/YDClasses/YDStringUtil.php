@@ -17,7 +17,7 @@
      *  are implemented as static methods and do not require you to create a
      *  class instance in order to use them.
      */
-    class YDStringUtil {
+    class YDStringUtil extends PEAR {
 
         /**
          *  Function to format a file size to a meaningful value.

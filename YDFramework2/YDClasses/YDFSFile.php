@@ -15,7 +15,7 @@
     /**
      *  This class defines a filesystem file.
      */
-    class YDFSFile {
+    class YDFSFile extends PEAR {
 
         /**
          *  The class constructor of the YDFSFile class takes the path to the 
@@ -25,6 +25,9 @@
          *  @param $path Path of the file.
          */
         function YDFSFile( $path ) {
+
+            // Initialize PEAR
+            $this->PEAR();
 
             // Check if the file exists
             if ( ! file_exists( $path ) ) {
