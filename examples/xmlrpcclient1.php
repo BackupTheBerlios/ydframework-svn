@@ -40,6 +40,19 @@
 
         }
 
+        // Default action
+        function actionCurrentTime() {
+
+            // Create an XML/RPC client
+            $client = new YDXmlRpcClient( 'http://time.xmlrpc.com/RPC2' );
+
+            // currentTime.getCurrentTime
+            echo( '<p>currentTime.getCurrentTime</p>' );
+            $result = $client->execute( 'currentTime.getCurrentTime' );
+            YDDebugUtil::dump( $result );
+
+        }
+
     }
 
     // Process the request
