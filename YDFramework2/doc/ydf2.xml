@@ -47,6 +47,7 @@
             <link href="#ch01">Introducing the Yellow Duck Framework
                 <link href="#ch01_01">Introduction</link>
                 <link href="#ch01_02">Analyzing the workflow</link>
+                <link href="#ch01_03">More about this user guide</link>
             </link>
             <link href="#ch02">Installing the Yellow Duck Framework
                 <link href="#ch02_01">Prerequisites</link>
@@ -134,6 +135,7 @@
                 <link href="#ch11_01">What is XML/RPC?</link>
                 <link href="#ch11_02">Using YDXmlRpcClient</link>
                 <link href="#ch11_03">Using YDXmlRpcServer</link>
+                <link href="#ch11_04">More information</link>
             </link>
             <link href="#ch12">Sending emails
                 <link href="#ch12_01">Introduction</link>
@@ -146,6 +148,7 @@
                 <link href="#ch13_02">Setting up the feed</link>
                 <link href="#ch13_03">Adding items</link>
                 <link href="#ch13_04">Outputting the feed</link>
+                <link href="#ch13_05">More information</link>
             </link>
             <link href="#ch14">Debugging tools
                 <link href="#ch14_01">Overview</link>
@@ -193,12 +196,14 @@
                     major database engines such as MySQL, PostgreSQL, Oracle, 
                     Microsoft SQL Server, ...</li>
                     <li>Object oriented handling of authentication</li>
-                    <li>To implement the base functionality, a lot of standard 
-                    libraries were used. Included is a partial copy of the PEAR
-                    library from the PHP project, which provides things such as
-                    database connectivity. More information and documentation on 
-                    the PEAR library can be found on 
-                    <a target="_blank" href="http://pear.php.net/">http://pear.php.net/</a>.</li>
+                    <li>Classes for creating XML/RPC clients and servers.</li>
+                    <li>Classes for creating syndicated XML feeds such as RSS
+                    and Atom feeds.</li>
+                    <li>Easy handling of files, directories and images. For
+                    images, there are some very straightforward functions that
+                    can create thumbnails of those images.</li>
+                    <li>An object oriented interface for creating and sending
+                    email messages.</li>
                 </ul></div>
 
                 The Yellow Duck Framework tries to be as flexible as possible so
@@ -324,6 +329,50 @@
                 output the template to the browser. The template contains 
                 special tags that are filled in on the fly with the right 
                 contents.
+
+            </section>
+
+            <section name="ch01_03" label="More about this user guide">
+
+                <br/>
+
+                Now that we discussed the basics of the Yellow Duck Framework
+                and also explained the ideas about it, we will go over each part
+                in more detail. In the following chapters, all the different
+                parts of the Yellow Duck Framework will be discussed.
+
+                <br/><br/>
+
+                The following items will be discussed in this user guide:
+
+                <div><ul>
+                    <li>Installing the Yellow Duck Framework</li>
+                    <li>Writing your first application</li>
+                    <li>How requests are processed</li>
+                    <li>Using templates</li>
+                    <li>Using and validating forms</li>
+                    <li>Accessing database contents</li>
+                    <li>How to handle authentication</li>
+                    <li>Using files, images and directories</li>
+                    <li>Using URLs and downloading data</li>
+                    <li>Using XML/RPC clients and servers</li>
+                    <li>Sending emails</li>
+                    <li>Creating RSS and ATOM feeds</li>
+                    <li>Debugging tools</li>
+                    <li>Other classes and modules</li>
+                </ul></div>
+
+                For more information about the Yellow Duck Framework, we like to
+                guide you to the website of the framework which can be found on:
+
+                <br/><br/>
+
+                <a target="_blank" href="http://www.yellowduck.be/ydf2/">http://www.yellowduck.be/ydf2/</a>
+
+                <br/><br/>
+
+                On this website, you will find more information as well as the
+                latest downloads for the framework.
 
                 <page-break />
 
@@ -3343,19 +3392,191 @@ phptype</pre>
         <section name="ch11" label="Using XML/RPC clients and servers" />
 
             <section name="ch11_01" label="What is XML/RPC?">
+
                 <br/>
-                Not written yet
+
+                It's a spec and a set of implementations that allow software 
+                running on disparate operating systems, running in different 
+                environments to make procedure calls over the Internet.
+
+                <br/><br/>
+
+                It's remote procedure calling using HTTP as the transport and 
+                XML as the encoding. XML-RPC is designed to be as simple as
+                possible, while allowing complex data structures to be 
+                transmitted, processed and returned.
+
+                <br/><br/>
+
+                To invoke an XML/RPC call, an XML/RPC client might send the
+                following XML data to a server:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;methodCall&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;methodName&gt;</font><font color="#000000">tide.getTideForDay</font><font color="#000080">&lt;/methodName&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;params&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;param&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;string&gt;</font><font color="#000000">2004-05-11</font><font color="#000080">&lt;/string&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/param&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/params&gt;</font>
+<font color="#000080">&lt;/methodCall&gt;</font></pre>
+
+                This server will then interpret the XML, execute the right
+                function and send back the following XML data:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;methodResponse&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;params&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;param&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;struct&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;member&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;name&gt;</font><font color="#000000">tideDate</font><font color="#000080">&lt;/name&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                            </font><font color="#000080">&lt;string&gt;</font><font color="#000000">2004-05-11</font><font color="#000080">&lt;/string&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;/member&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;member&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;name&gt;</font><font color="#000000">tideDay</font><font color="#000080">&lt;/name&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                            </font><font color="#000080">&lt;string&gt;</font><font color="#000000">di</font><font color="#000080">&lt;/string&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;/member&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;member&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;name&gt;</font><font color="#000000">tideLow1</font><font color="#000080">&lt;/name&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                            </font><font color="#000080">&lt;string&gt;</font><font color="#000000">01:07:00</font><font color="#000080">&lt;/string&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;/member&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;member&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;name&gt;</font><font color="#000000">tideLow2</font><font color="#000080">&lt;/name&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;value&gt;</font>
+<font color="#000000">                            </font><font color="#000080">&lt;string&gt;</font><font color="#000000">13:39:00</font><font color="#000080">&lt;/string&gt;</font>
+<font color="#000000">                        </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">                    </font><font color="#000080">&lt;/member&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;/struct&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;/value&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/param&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/params&gt;</font>
+<font color="#000080">&lt;/methodResponse&gt;</font></pre>
+
+                The XML/RPC client will interpret this XML response and will
+                convert it back to objects and variables in the native
+                programming language.
+
+                <br/><br/>
+
+                The beauty of XML/RPC is that it's really easy to use and still
+                high performant if implemented correctly. The client and the
+                server can be speaking two totally different programming
+                languages and still are able to exchange data between the two
+                with preserving the native data types.
+
+                <br/><br/>
+
+                The Yellow Duck Framework has classes for creating both XML/RPC
+                clients and servers. Both use the very latest technology and
+                are one of the few implementations that support GZip compression
+                for the HTTP data streams, resulting in better performance.
+
+                <br/><br/>
+
+                The YDXmlRpcClient class implements an XML/RPC client while the
+                YDXmlRpcServer class implements a full XML/RPC server which
+                supports introspection so that the client can easily determine
+                what functions are supported by the server.
+
+                <br/><br/>
+
+                Let's have a look at how these classes can be used to perform
+                XML/RPC based communication.
+
             </section>
 
             <section name="ch11_02" label="Using YDXmlRpcClient">
+
                 <br/>
-                Not written yet
+
+                To create an XML/RPC client, we will use the YDXmlRpcClient
+                class which does all the work for us. When you instantiate this
+                class, you need to specify the URL of the XML/RPC server.
+
+                <br/><br/>
+
+                Once you made an instance of the XML/RPC client, you can
+                execute functions on that server by using it's
+                <code>execute</code> function. This function takes two arguments
+                which is the name of the XML/RPC method and an optional array
+                with parameters.
+
+                <br/><br/>
+
+                The request will then be executed and the result will be
+                returned as real PHP values and objects.
+
+                <br/><br/>
+
+                Let's have a look at the following code sample:
+
+                <pre><font color="#00007F">$client</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDXmlRpcClient</font><font color="#000000">(</font><font color="#000033"> </font>
+<font color="#000033">    </font><font color="#009F00">'http://www.grijzeblubber.be/bba/xmlrpc.php'</font><font color="#000033"> </font>
+<font color="#000000">);</font><font color="#000033"> </font>
+
+<font color="#00007F">$result</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$client</font><font color="#000000">-&gt;</font><font color="#000033">execute</font><font color="#000000">(</font><font color="#000033"> </font>
+<font color="#000033">    </font><font color="#009F00">'tide.getTideForDay'</font><font color="#000000">,</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'2004-05-11'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font>
+<font color="#000000">);</font><font color="#000033"> </font></pre>
+
+                In this example, we first connect to the XML/RPC server using
+                the specified URL. Then we execute the 'tide.getTideForDay'
+                function on that server which returns an array.
+                
+                <br/><br/>
+                
+                We had to specify a string with the date. After executing this,
+                the variable $result will have the following contents:
+
+                <pre>array (
+  'tideDate' => '2004-05-11',
+  'tideDay' => 'di',
+  'tideLow1' => '01:07:00',
+  'tideLow2' => '13:39:00',
+)</pre>
+
+                If something went wrong or the XML/RPC server returned an error,
+                a fatal error will be raised with the right error message. The
+                error message will be the same as the error message returned by
+                the XML/RPC server.
+                
+                <br/><br/>
+                
+                What you can not see in this example is that if the XML/RPC
+                server supports GZip compression, this will be used to do the
+                communication. This not only saves bandwidth but also improves
+                the performance of the XML/RPC calls quite a lot. Since a new
+                HTTP request has to be made for each XML/RPC call, reducing the
+                total size of information send over the network can really
+                improve the performance and scalability of your XML/RPC based
+                services.
+
             </section>
 
             <section name="ch11_03" label="Using YDXmlRpcServer">
                 <br/>
                 Not written yet
+            </section>
+
+            <section name="ch11_04" label="More information">
+
+                <br/>
+
+                More information on XML/RPC can be found on the
+                <a target="_blank" href="http://www.xmlrpc.com/">official
+                XML/RPC website</a>.
+
                 <page-break />
+
             </section>
 
         <section name="ch12" label="Sending emails" />
@@ -3444,13 +3665,65 @@ phptype</pre>
                 <pre><font color="#666666">// Send the email</font>
 <font color="#00007F">$eml</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDEmail</font><font color="#000000">();</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setFrom</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'pieter@yellowduck.be'</font><font color="#000000">,</font><font color="#000033"> YD_FW_NAME </font><font color="#000000">);</font>
-<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addTo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addTo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'pieter@yellowduck.be'</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setSubject</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'Hello from Pieter &amp; Fiona!'</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setTxtBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">setHtmlBody</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$body</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addAttachment</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'email1.tpl'</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">addHtmlImage</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'fsimage1.jpg'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'image/jpeg'</font><font color="#000033"> </font><font color="#000000">);</font>
 <font color="#00007F">$eml</font><font color="#000000">-&gt;</font><font color="#000033">send</font><font color="#000000">();</font></pre>
+
+                In this code sample, we first created a new instance of the
+                YDEmail class to represent our email message.
+
+                <br/><br/>
+                
+                After that, we set the correct from address. This is normally 
+                your own email address, and unless otherwise specified, it will
+                be used as the address to reply to. Always make this a valid and
+                existing address unless you do not want people to reply to your
+                email.
+
+                <br/><br/>
+
+                Then we added a recipient using the <code>addTo</code> function.
+                In this example, we only specified the email address. You can
+                optionally specify a name as well which will be the name shown
+                in the email client.
+
+                <br/><br/>
+
+                Then we defined the subject for the email. Remember that the
+                subject of an email is not supposed to contain HTML data. If you
+                happened to have HTML in there, the framework will automatically
+                remove the HTML tags.
+
+                <br/><br/>
+
+                The following two lines specify the plain text and HTML body of
+                our email message. You don't have to specify both. If you
+                included HTML tags in the plain text version of your email, the
+                HTML tags will be automatically removed.
+
+                <br/><br/>
+
+                Using the <code>addAttachment</code> function, we added a file
+                attachment to the email. The only argument we specified was the
+                path to the file we want to attach.
+
+                <br/><br/>
+
+                Then we used the <code>addHtmlImage</code> function to add an
+                image which we can use as an inline image in the HTML version of
+                our email. We specified both the path of the image as well as
+                the image MIME type.
+
+                <br/><br/>
+
+                Then we invoked the <code>send</code> function to actually send
+                the email to the different recipients.
+
+                <br/><br/>
 
                 <i><b>Note</b>: as with every class in the Yellow Duck Framework
                 you want to use, make sure you included the class definition
@@ -3537,24 +3810,315 @@ phptype</pre>
         <section name="ch13" label="Creating RSS and ATOM feeds" />
 
             <section name="ch13_01" label="What is RSS and ATOM?">
+                
                 <br/>
-                Not written yet
+
+                RSS and ATOM are XML-based file formats intended to allow lists 
+                of information, known as "feeds", to be synchronised between 
+                publishers and consumers. Feeds are composed of a number of 
+                items, known as "entries", each with an extensible set of 
+                attached metadata. For example, each entry has a title.
+
+                <br/><br/>
+
+                The primary use case that Atom and RSS address is for 
+                syndicating Web content such as Weblogs and news headlines to 
+                other Web sites and directly to consumers. However, nothing 
+                precludes it from being used for other purposes and types of 
+                content.
+
+                <br/><br/>
+
+                RSS is the oldest of the two, and has undergone different
+                revisisions. Currently, there are 3 major versions of RSS, which
+                is version 0.91, version 1.0 and version 2.0. RSS 1.0 is also
+                referenced as RDF Site Summary. Let's have a look at the XML 
+                contents for each one of them:
+
+                <br/><br/>
+
+                This is an example of an RSS 0.91 XML file:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080"> </font><font color="#008080">encoding</font><font color="#800080">=</font><font color="#7F007F">"ISO-8859-1"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;rss</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"0.91"</font><font color="#000080">&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;channel&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Yellow Duck Framework</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;description&gt;</font><font color="#000000">News about the Yellow Duck Framework</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss091</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;item&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 1</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss091#1</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 1</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;guid&gt;</font><font color="#000000">3a31c01d5c9023115e2433cdb1b6515e</font><font color="#000080">&lt;/guid&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;item&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 2</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss091#2</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 2</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;guid&gt;</font><font color="#000000">be3e15a372932faea5b235d1965c36bf</font><font color="#000080">&lt;/guid&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/channel&gt;</font>
+<font color="#000080">&lt;/rss&gt;</font></pre>
+
+                This code sample shows you the source of a RSS 1.0 XML file:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080"> </font><font color="#008080">encoding</font><font color="#800080">=</font><font color="#7F007F">"ISO-8859-1"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;rdf:RDF</font>
+<font color="#800080">    </font><font color="#008080">xmlns</font><font color="#800080">=</font><font color="#7F007F">"http://purl.org/rss/1.0/"</font>
+<font color="#800080">    </font><font color="#008080">xmlns:rdf</font><font color="#800080">=</font><font color="#7F007F">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</font>
+<font color="#800080">    </font><font color="#008080">xmlns:dc</font><font color="#800080">=</font><font color="#7F007F">"http://purl.org/dc/elements/1.1/"</font><font color="#000080">&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;channel</font><font color="#800080"> </font><font color="#008080">rdf:about</font><font color="#800080">=</font><font color="#7F007F">""</font><font color="#000080">&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Yellow Duck Framework</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;description&gt;</font><font color="#000000">News about the Yellow Duck Framework</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss10</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;dc:date&gt;</font><font color="#000000">2004-05-22T13:36:11+01:00</font><font color="#000080">&lt;/dc:date&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;items&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;rdf:Seq&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;rdf:li</font><font color="#800080"> </font><font color="#008080">rdf:resource</font><font color="#800080">=</font><font color="#7F007F">"http://localhost/ydf2/?do=rss10#1"</font><font color="#000080">/&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;rdf:li</font><font color="#800080"> </font><font color="#008080">rdf:resource</font><font color="#800080">=</font><font color="#7F007F">"http://localhost/ydf2/?do=rss10#2"</font><font color="#000080">/&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;/rdf:Seq&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/items&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/channel&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;item</font><font color="#800080"> </font><font color="#008080">rdf:about</font><font color="#800080">=</font><font color="#7F007F">"http://PClaerho1/ydf2/examples/?do=rss10#1"</font><font color="#000080">&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;dc:format&gt;</font><font color="#000000">text/html</font><font color="#000080">&lt;/dc:format&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 1</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/feedcreator1.php?do=rss10#1</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 1</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;item</font><font color="#800080"> </font><font color="#008080">rdf:about</font><font color="#800080">=</font><font color="#7F007F">"http://PClaerho1/ydf2/examples/?do=rss10#2"</font><font color="#000080">&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;dc:format&gt;</font><font color="#000000">text/html</font><font color="#000080">&lt;/dc:format&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 2</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/feedcreator1.php?do=rss10#2</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 2</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000080">&lt;/rdf:RDF&gt;</font></pre>
+
+                The code for an RSS 2.0 feed looks as follows:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080"> </font><font color="#008080">encoding</font><font color="#800080">=</font><font color="#7F007F">"ISO-8859-1"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;rss</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"2.0"</font><font color="#000080">&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;channel&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Yellow Duck Framework</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;description&gt;</font><font color="#000000">News about the Yellow Duck Framework</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss20</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;lastBuildDate&gt;</font><font color="#000000">Sat, 22 May 2004 13:36:15+0100</font><font color="#000080">&lt;/lastBuildDate&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;item&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 1</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss20#1</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 1</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;guid&gt;</font><font color="#000000">d1c9daf41c19e53ed46f8081d4ab99b7</font><font color="#000080">&lt;/guid&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;item&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 2</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=rss20#2</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;description&gt;</font><font color="#000000">Description 2</font><font color="#000080">&lt;/description&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;guid&gt;</font><font color="#000000">7dbd540a343ecc960efa3c1d9f715e74</font><font color="#000080">&lt;/guid&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/item&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/channel&gt;</font>
+<font color="#000080">&lt;/rss&gt;</font></pre>
+
+                Atom looks similar, but has again some very subtle differences:
+
+                <pre><font color="#800080">&lt;?</font><font color="#000080">xml</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"1.0"</font><font color="#800080"> </font><font color="#008080">encoding</font><font color="#800080">=</font><font color="#7F007F">"utf-8"</font><font color="#800080">?&gt;</font>
+<font color="#000080">&lt;feed</font><font color="#800080"> </font><font color="#008080">version</font><font color="#800080">=</font><font color="#7F007F">"0.1"</font><font color="#800080"> </font><font color="#008080">xmlns</font><font color="#800080">=</font><font color="#7F007F">"http://example.com/newformat#"</font><font color="#000080">&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Yellow Duck Framework</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;subtitle&gt;</font><font color="#000000">News about the Yellow Duck Framework</font><font color="#000080">&lt;/subtitle&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=atom</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;entry&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 1</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=atom#1</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;created&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/created&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;issued&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/issued&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;modified&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/modified&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;id&gt;</font><font color="#000000">2e3c209c100c00c83a791fdbc0c6af1b</font><font color="#000080">&lt;/id&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;content</font><font color="#800080"> </font><font color="#008080">type</font><font color="#800080">=</font><font color="#7F007F">"text/html"</font><font color="#800080"> </font><font color="#008080">xml:lang</font><font color="#800080">=</font><font color="#7F007F">"en-us"</font><font color="#000080">&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;div</font><font color="#800080"> </font><font color="#008080">xmlns</font><font color="#800080">=</font><font color="#7F007F">"http://www.w3.org/1999/xhtml"</font><font color="#000080">&gt;</font>
+<font color="#000000">                Description 1</font>
+<font color="#000000">            </font><font color="#000080">&lt;/div&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/content&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/entry&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;entry&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;title&gt;</font><font color="#000000">Title 2</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;link&gt;</font><font color="#000000">http://localhost/ydf2/?do=atom#2</font><font color="#000080">&lt;/link&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;created&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/created&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;issued&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/issued&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;modified&gt;</font><font color="#000000">2004-05-22T13:36:19+01:00</font><font color="#000080">&lt;/modified&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;id&gt;</font><font color="#000000">5d7ed2c293a6e24c9be308e81a2fb8f5</font><font color="#000080">&lt;/id&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;content</font><font color="#800080"> </font><font color="#008080">type</font><font color="#800080">=</font><font color="#7F007F">"text/html"</font><font color="#800080"> </font><font color="#008080">xml:lang</font><font color="#800080">=</font><font color="#7F007F">"en-us"</font><font color="#000080">&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;div</font><font color="#800080"> </font><font color="#008080">xmlns</font><font color="#800080">=</font><font color="#7F007F">"http://www.w3.org/1999/xhtml"</font><font color="#000080">&gt;</font>
+<font color="#000000">                Description 2</font>
+<font color="#000000">            </font><font color="#000080">&lt;/div&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/content&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/entry&gt;</font>
+<font color="#000080">&lt;/feed&gt;</font></pre>
+
+                As you can see with the different examples, the idea is always
+                the same. First, you have the properties of the feed itself, 
+                which contains a title, a link, the actual URL of the XML file
+                and so. Then you have one or more entries which again have their
+                own set of properties.
+
+                <br/><br/>
+
+                The YDFeedCreator class in the Yellow Duck Framework provides
+                you with an object oriented way of generating these XML files.
+                
+                <i><b>Note</b>: The YDFeedCreator class will try to make all the 
+                data you put in the feed XML compliant, but sometimes, this is 
+                not possible. You might end up with feed that are not 100% valid 
+                in that sense.</i>
+
+                <br/><br/>
+
+                <i><b>Note</b>: Atom feeds have the most strict specification
+                and expects you to make all the HTML contents you put in e.g.
+                the item descriptions valid XML.</i>
+
             </section>
 
             <section name="ch13_02" label="Setting up the feed">
+
                 <br/>
-                Not written yet
+
+                When we want to make a new feed, we first have to setup the feed
+                itself. The following code sample illustrates this:
+
+                <pre><font color="#00007F">$fc</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDFeedCreator</font><font color="#000000">();</font>
+<font color="#00007F">$fc</font><font color="#000000">-&gt;</font><font color="#000033">setTitle</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'Yellow Duck Framework'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$fc</font><font color="#000000">-&gt;</font><font color="#000033">setDescription</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'News about the Yellow Duck Framework'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$fc</font><font color="#000000">-&gt;</font><font color="#000033">setLink</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'http://localhost/ydf2/'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                In the above code sample, we first created a new instance of the
+                YDFeedCreator class. Please note that we didn't specify the
+                format of the feed yet, as we will do this only when the actual
+                feed get's created.
+
+                <br/><br/>
+
+                The second and third line define the title and the description
+                of the feed. The description of the feed is the only one that
+                supports embedded HTML. If you specified HTML in the title of
+                the feed, this will be removed automatically. The description is
+                an optional item for the feed and can be omitted.
+
+                <br/><br/>
+
+                The last line defines the source of the feed. This is normally a
+                a link to the website where the XML data came from. This is not
+                the same as the actual URL of the XML data.
+
             </section>
 
             <section name="ch13_03" label="Adding items">
+
                 <br/>
-                Not written yet
+
+                Now that the feed is setup correctly, we can start adding items
+                to it. When you add an item, we can use the following code to do
+                this:
+
+                <pre><font color="#00007F">$fc</font><font color="#000000">-&gt;</font><font color="#000033">addItem</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'Title 1 &amp; Co.'</font><font color="#000000">,</font><font color="#000033"> </font>
+<font color="#000033">        </font><font color="#009F00">'http://localhost/ydf2/#1'</font><font color="#000000">,</font><font color="#000033"> </font>
+<font color="#000033">        </font><font color="#009F00">'Description 1 &amp; Co.'</font>
+<font color="#000000">);</font>
+<font color="#00007F">$fc</font><font color="#000000">-&gt;</font><font color="#000033">addItem</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'Title 2 &amp; Co.'</font><font color="#000000">,</font>
+<font color="#000033">        </font><font color="#009F00">'http://localhost/ydf2/#2'</font><font color="#000000">,</font>
+<font color="#000033">        </font><font color="#009F00">'Description &lt;b&gt;2&lt;/b&gt; &amp; Co.'</font>
+<font color="#000000">);</font></pre>
+
+                By using the addItem function of the YDFeedCreator object, we
+                can add new items to the feed. Each item requires a number of
+                parameters.
+
+                <br/><br/>
+
+                For each feed item, a title and a link are required. The link is
+                the actual URL pointing to the entry itself on the original
+                website. Additionally, you can add a description as well which
+                can contain HTML data, although, it's not required.
+
+                <br/><br/>
+
+                As the last argument, you can specify a GUID (Global Unique
+                Identifier) for your item. This is the identifier that uniquely
+                identifies this item. If you omit this, the Yellow Duck
+                Framework will create one automatically for you.
+
+                <br/><br/>
+                
+                The automatic GUID is created by making the checksum of the link
+                of the original website, the link of the item and the title of
+                the item. If you don't want to use the automatic GUID creation,
+                you can create your own.
+
             </section>
 
             <section name="ch13_04" label="Outputting the feed">
+
                 <br/>
-                Not written yet
+
+                After setting up the feed, and adding the items, we can create
+                the XML version of the feed. This is done by using either the
+                <code>toXml</code> or <code>outputXml</code> class functions.
+
+                <br/><br/>
+
+                The <code>toXml</code> will convert the feed to XML and will
+                return as string representation of the feed. The
+                <code>outputXml</code> function will also convert the feed to
+                XML, but will output it directly to the browser using the
+                correct HTTP headers to indicate that the contents being send is
+                XML and not HTML.
+
+                <br/><br/>
+
+                Both functions take one argument which defines which kind of XML
+                needs to be outputted. If no format is specified, it will
+                assume that you want to output RSS 2.0. The following formats
+                are supported:
+
+                <div><ul>
+                    <li>RSS0.91</li>
+                    <li>RSS1.0</li>
+                    <li>RSS2.0</li>
+                    <li>ATOM</li>
+                </ul></div>
+
+                There is also a little helper function called
+                <code>getColoredXml</code> which will return a HTML version of
+                the XML version of the feed with colored XML tags. This is
+                mainly used for debugging purposes. This function takes the same
+                arguments as the <code>toXml</code> and <code>outputXml</code>
+                functions.
+
+            </section>
+
+            <section name="ch13_05" label="More information">
+
+                <br/>
+
+                More information about RSS, Atom and content syndication can be
+                found on the internet. Here's some sites that are really
+                handy to keep as a reference:
+
+                <div><ul>
+                    <li><a target="_blank" href="http://www.mnot.net/drafts/draft-nottingham-atom-format-02.html">The Atom Syndication Format 0.3 (PRE-DRAFT)</a></li>
+                    <li><a target="_blank" href="http://my.netscape.com/publish/formats/rss-spec-0.91.html">RSS 0.91 Specification (Netscape)</a></li>
+                    <li><a target="_blank" href="http://backend.userland.com/rss091">RSS 0.91 Specification (UserLand)</a></li>
+                    <li><a target="_blank" href="http://groups.yahoo.com/group/syndication/message/372">RSS 1.0 Specification</a></li>
+                    <li><a target="_blank" href="http://blogs.law.harvard.edu/tech/rss">RSS 2.0 Specification</a></li>
+                    <li><a target="_blank" href="http://www.mnot.net/rss/tutorial/">RSS Tutorial for Content Publishers and Webmasters</a></li>
+                </ul></div>
+
+                <i><b>Note</b>: please note that some of the RSS and Atom 
+                versions are still being actively developed and have not reached
+                their final versions yet. The Yellow Duck Framework will keep up
+                with new versions and make sure they are supported.</i>
+
                 <page-break />
+
             </section>
 
         <section name="ch14" label="Debugging tools" />
