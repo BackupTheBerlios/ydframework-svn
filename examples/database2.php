@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class database1Request extends YDRequest {
+	class database2Request extends YDRequest {
 
 		// Class constructor
-		function database1Request() {
+		function database2Request() {
 			$this->YDRequest();
 		}
 
@@ -20,17 +20,12 @@
 		function actionDefault() {
 
 			// Get the data
-			$db = new YDDatabase( 'mysql', 'test', 'root', '', 'localhost' );
-			$data = $db->getRecords( 'show processlist' );
-			$this->setVar( 'processList', $data );
-			$data = $db->getRecords( 'show status' );
-			$this->setVar( 'status', $data );
-			$data = $db->getRecords( 'show variables' );
-			$this->setVar( 'variables', $data );
+			$db = new YDDatabase( 'sqlite', 'database2.db' );
+			$data = $db->getRecords( 'select * from escalations' );
 			$db->close();
 
 			// Output the template
-			$this->outputTemplate();
+			YDDebugUtil::dump( $data );
 
 		}
 

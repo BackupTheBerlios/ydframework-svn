@@ -93,12 +93,22 @@
 		</tr>
 		<tr>
 			<td valign="top">
-				<a href="database.php">Database connectivity</a>
+				<a href="database.php">Database connectivity - Native functions</a>
+				<br>
+				<a href="database1.php">Database connectivity - YD MySQL library</a>
+				<br>
+				<a href="database2.php">Database connectivity - YD SQLite library</a>
 			</td>
 			<td valign="top">
-				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.php">database1.php</a>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.php">database.php</a>
 				<br>
-				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.tpl">database1.tpl</a>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database.tpl">database.tpl</a>
+				<br>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.php">database1.php</a>
+				<br>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database1.tpl">database1.tpl</a>
+				<br>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=database2.php">database2.php</a>
 			</td>
 		</tr>
 		<tr>
@@ -109,6 +119,8 @@
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form.php">form.php</a>
 				<br>
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form.tpl">form.tpl</a>
+				<br>
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form_selector.tpl">form_selector.tpl</a>
 			</td>
 		</tr>
 		<tr>

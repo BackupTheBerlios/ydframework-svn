@@ -43,6 +43,7 @@
 			if ( $this->_conn == null ) {
 				$conn = @sqlite_open( $this->_db );
 				if ( ! $conn ) { YDFatalError( sqlite_error_string( sqlite_last_error() ) ); }
+				$this->_conn = $conn;
 			}
 		}
 

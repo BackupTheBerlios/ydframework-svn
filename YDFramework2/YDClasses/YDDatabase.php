@@ -17,7 +17,7 @@
 		/**
 		 *	This is the class constructor for the YDDatabase class.
 		 */
-		function YDDatabase( $driver, $user, $pass, $db, $host='' ) {
+		function YDDatabase( $driver, $db, $user='', $pass='', $host='' ) {
 
 			// Initialize YDBase
 			$this->YDBase();
