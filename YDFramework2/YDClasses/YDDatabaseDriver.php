@@ -105,9 +105,25 @@
 		 *	@returns	A single value matching the SQL statement.
 		 */
 		function getValueByName( $sql, $name ) {
-			$record = array_values( $this->getRecord( $sql ) );
+			$record = array_values( $this->getRecords( $sql ) );
 			if ( ! $record ) { return false; }
-			return $record[ $name ];
+			return $record[ strtolower( $name ) ];
+		}
+
+		/**
+		 *	This function will return a single value.
+		 *
+		 *	@param $sql		The SQL statement to use.
+		 *	@param $name	The field value to return.
+		 *
+		 *	@returns	A single value matching the SQL statement.
+		 */
+		function getValuesByName( $sql, $name ) {
+			$records = $this->getRecords( $sql );
+			if ( ! $records ) { return false; }
+			$values = array();
+			foreach ( $records as $record ) { array_push( $values, $record[ strtolower( $name  ) ] ); }
+			return $values;
 		}
 
 		/**
