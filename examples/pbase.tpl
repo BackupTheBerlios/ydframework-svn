@@ -16,10 +16,12 @@
 		<?php foreach ( $galleries as $galleryrow ) { ?>
 			<tr>
 				<?php foreach ( $galleryrow as $gallery ) { ?>
-					<td width="160" align="center">
+					<td width="400" align="left">
 					<?php if ( $gallery ) { ?>
-						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="http://www.pbase.com/image/<?= $gallery['thumbnail'] ?>/small.jpg" border="1"></a>
+						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="http://www.pbase.com/image/<?= $gallery['thumbnail'] ?>/small.jpg" border="1" align="left"></a>
 						<a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a>
+						<br>
+						(<?= sizeof( $gallery['images'] ) ?> images in this gallery)
 					<?php } ?>
 					</td>
 				<?php } ?>

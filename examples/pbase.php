@@ -22,32 +22,57 @@
 			// Initialize the parent
 			$this->YDRequest();
 
+			// The regex pattern to match the images
+			$this->pattern = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+
 			// The list of galleries
 			$this->galleries = array(
 				array(
-					'id' => 1, 'title' => 'SYCOD Race II 2004', 'thumbnail' => '29526953',
+					'id' => 1, 'title' => 'SYCOD Race II 2004',
 					'url' => 'http://www.pbase.com/bba/odk2_2004&page=all',
-				), array(
-					'id' => 2, 'title' => 'Krab Rally 2004', 'thumbnail' => '27371231',
+				),
+				array(
+					'id' => 2, 'title' => 'Krab Rally 2004',
 					'url' => 'http://www.pbase.com/bba/krab04&page=all',
-				), array(
-					'id' => 3, 'title' => 'Belgian Championship 2003', 'thumbnail' => '18158440',
+				),
+				array(
+					'id' => 3, 'title' => 'Belgian Championship 2003',
 					'url' => 'http://www.pbase.com/bba/bc&page=all',
-				), array(
-					'id' => 4, 'title' => 'Krab Rally 2003', 'thumbnail' => '14133887',
+				),
+				array(
+					'id' => 4, 'title' => 'Krab Rally 2003',
 					'url' => 'http://www.pbase.com/bba/krab_zaterdag&page=all',
-				), array(
-					'id' => 5, 'title' => 'Beachshop Testdag 02/05/2004', 'thumbnail' => '28557554',
+				),
+				array(
+					'id' => 5, 'title' => 'Beachshop Testdag 02/05/2004',
 					'url' => 'http://www.pbase.com/beachshop/testdag_mei_2004&page=all',
-				), array(
-					'id' => 6, 'title' => 'Les Hemmes 27280304', 'thumbnail' => '27409483',
+				),
+				array(
+					'id' => 6, 'title' => 'Les Hemmes 27280304',
 					'url' => 'http://www.pbase.com/beachshop/les_hemmes__27280304&page=all',
 					
-				), array(
-					'id' => 7, 'title' => 'Libre 4 Wheels Buggy', 'thumbnail' => '27446851',
-					'url' => 'http://www.pbase.com/beachshop/4w_buggy',
+				),
+				array(
+					'id' => 7, 'title' => 'Libre 4 Wheels Buggy',
+					'url' => 'http://www.pbase.com/beachshop/4w_buggy&page=all',
+				),
+				array(
+					'id' => 8, 'title' => 'Closing Race 2004',
+					'url' => 'http://www.pbase.com/bba/closingrace&page=all',
+				),
+				array(
+					'id' => 9, 'title' => 'Turning an old Beachshop to a new one',
+					'url' => 'http://www.pbase.com/beachshop/turning_an_old_beachshop_to_a_new_one&page=all',
 				),
 			);
+
+			// Download the gallery data
+			foreach ( $this->galleries as $key=>$gallery ) {
+				$objUrl = new YDUrl( $gallery['url'] );
+				$contents = $objUrl->getContentsWithRegex( $this->pattern );
+				$this->galleries[ $key ]['images'] = $contents[1];
+				$this->galleries[ $key ]['thumbnail'] = $contents[1][ rand( 0, sizeof( $contents[1] ) ) ];
+			}
 
 			// If a gallery is selected, get the data
 			if ( isset( $_GET['gal'] ) ) {
@@ -76,15 +101,8 @@
 
 					// The fixed url of our gallery
 					$this->url = $this->gallery['url'];
+					$this->images = $this->gallery['images'];
 					$this->setVar( 'url', $this->url );
-					
-					// The regex pattern to match the images
-					$this->pattern = '/www\.pbase\.com\/image\/([0-9]+)/ism';
-
-					// Get the list of images
-					$objUrl = new YDUrl( $this->url );
-					$contents = $objUrl->getContentsWithRegex( $this->pattern );
-					$this->images = $contents[1];
 
 				}
 
@@ -96,7 +114,7 @@
 		function actionDefault() {
 
 			// Add the list of galleries
-			$this->setVar( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 4, true ) );
+			$this->setVar( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 2, true ) );
 
 			// Show the template
 			$this->outputTemplate();
