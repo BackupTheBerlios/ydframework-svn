@@ -12,6 +12,8 @@
 <body>
 
 	<div class="header">
+		<a href="http://www.redcarpethost.com/index.php?c=9&s30" target="_blank"><img src="../YDFramework2/images/sponsored_by_rch.gif"
+		 align="right" border="0" alt="Proudly sponsered by Red Carpet Host" width="170" height="69" /></a>
 		<h2>Yellow Duck Framework 2.0</h2>
 	</div>
 
@@ -20,7 +22,7 @@
 	{if $file}
 
 		<h3>source code: {$file}</h3>
-		{$source}
+		<p>{$source}</p>
 		<p><a href="{$YD_SELF_SCRIPT}">go back</a></p>
 
 	{else}
