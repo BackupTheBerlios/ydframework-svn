@@ -87,7 +87,7 @@
          *  @param $attributes (optional) Attributes for the form.
          */
         function YDForm( 
-            $name, $method='', $action='' $target='_self', $attributes=null
+            $name, $method='', $action='', $target='_self', $attributes=null
         ) {
 
             // Default to the post method
