@@ -463,19 +463,17 @@
 		 *		This will not work recursively on the subdirectories.
 		 *
 		 *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
-		 *					pass them as an array.
+		 *					pass them as an array. If the pattern is prefixed with an exclamation mark, the files that
+		 *					match this pattern will not be included in the result.
 		 *	@param $class	(optional) If you specify a not null value for this option, this function will return the 
-		 *					items in the directory as the indicated class.
+		 *					items in the directory as the indicated class. If an empty string is given, it will return
+		 *					the list of filenames instead of objects.
+		 *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
+		 *					and YDFSDirectory classes.
 		 *
 		 *	@returns	Array of YDFile objects for the files that match the pattern.
-		 *
-		 *	@todo
-		 *		Add option to get everything as a simple list.
-		 *
-		 *	@todo
-		 *		Add option to define an ignore pattern
 		 */
-		function getContents( $pattern='', $class=null ) {
+		function getContents( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage', 'YDFSDirectory' ) ) {
 
 			// Start with an empty list
 			$fileList = array();
@@ -483,26 +481,39 @@
 			// Get a handle to the directory
 			$dirHandle = opendir( $this->getPath() );
 
-			// Loop over the directory contents
+			// Get the list of files
 			while ( false !== ( $file = readdir( $dirHandle ) ) ) {
 				if ( $file != '.' && $file != '..' ) {
-					if ( is_array( $pattern ) ) {
-						foreach ( $pattern as $patternitem ) {
-							if ( ! empty( $patternitem ) ) {
-								if ( YDFSDirectory::_match( $patternitem, $file ) ) {
-									$fileList[ strtolower( $file ) ] = $file;
-								}
-							} else {
-								$fileList[ strtolower( $file ) ] = $file;
-							}
+					$fileList[ strtolower( $file ) ] = $file;
+				}
+			}
+
+			// Get the list of patterns
+			if ( ! is_array( $pattern ) ) {
+				$pattern = array( $pattern );
+			}
+
+			// Apply the pattern to match
+			$fileListMatch = array();
+			foreach ( $fileList as $file ) {
+				foreach ( $pattern as $patternitem ) {
+					if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
+						if ( YDFSDirectory::_match( $patternitem, $file ) ) {
+							$fileListMatch[ $file ] = $file;
 						}
 					} else {
-						if ( ! empty( $pattern ) ) {
-							if ( YDFSDirectory::_match( $pattern, $file ) ) {
-								$fileList[ strtolower( $file ) ] = $file;
-							}
-						} else {
-							$fileList[ strtolower( $file ) ] = $file;
+						$fileListMatch[ $file ] = $file;
+					}
+				}
+			}
+			$fileList = & $fileListMatch;
+
+			// Apply the patterns to not match
+			foreach ( $fileList as $file ) {
+				foreach ( $pattern as $patternitem ) {
+					if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) == '!' ) {
+						if ( YDFSDirectory::_match( substr( $patternitem, 1 ), $file ) ) {
+							unset( $fileList[ $file ] );
 						}
 					}
 				}
@@ -511,6 +522,11 @@
 			// Sort the list of files
 			ksort( $fileList );
 			$fileList = array_values( $fileList );
+
+			// Return a simple list if needed
+			if ( $class === '' ) {
+				return $fileList;
+			}
 
 			// Convert the list of a list of YDFile objects
 			$fileList2 = array();
@@ -529,6 +545,19 @@
 					}
 				}
 				array_push( $fileList2, $fileObj );
+			}
+
+			// Remove the unsupported classes
+			if ( sizeof( $classes ) == 0 ) {
+				return array();
+			}
+			foreach ( $classes as $key => $val ) {
+				$classes[ $key ] = strtolower( $val );
+			}
+			foreach ( $fileList2 as $key=>$val ) {
+				if ( ! in_array( get_class( $val ), $classes ) ) {
+					unset( $fileList2[ $key ] );
+				}
 			}
 
 			// Return the file list

@@ -35,6 +35,12 @@
 				$dir->getContents( array( '*.jpg', '*.txt' ) ), '$dir->getContents( array( \'*.jpg\', \'*.txt\' ) )'
 			);
 
+			// PHP files in the directory
+			YDDebugUtil::dump(
+				$dir->getContents(array( '*.jpg', '*.txt', '!bbcode.*' ) ),
+				'$dir->getContents( array( \'*.jpg\', \'*.txt\', \'!bbcode.*\' ) )'
+			);
+
 		}
 
 	}
