@@ -1,0 +1,163 @@
+<html>
+<head>
+	<title>Variables :: Smarty-Light</title>
+</head>
+<body>
+<h4>Smarty-Light - the faster compiling PHP template engine</h4>
+<h1>Variables</h1>
+<hr>
+
+<h2><a name="assigned">Variables assigned from PHP</a></h2>
+<p>
+	<h4><a name="basic">Basic Variables</a></h4>
+	To reference a variable in the template, the syntax is similar to a reference from PHP. All variables in the template are completely seperate from the PHP code and variables in your PHP code cannot be seen from the template. Here is are some examples of how to set various variables in PHP and refer to them in Smarty-Light. These examples all assume that you have instanitiated the template class and are referring to it as $tpl.<br>
+	<pre>
+	PHP
+	=============================
+	$tpl->assign("foo","bar");
+
+	TEMPLATE
+	=============================
+	&lt;% $foo %&gt;
+
+	OUTPUT
+	=============================
+	bar
+	</pre>
+
+	<h4><a name="arrays">Arrays</a></h4>
+	As was the case with basic variables, arrays are referenced in templates in a similar way to PHP. You have the name of the variable followed by brackets containing the key of the array value that you want to view.<br>
+	<pre>
+	PHP
+	=============================
+	$foo = array("apples", "oranges", "bananas");
+	$tpl->assign("foo", $foo);
+
+	TEMPLATE
+	=============================
+	&lt;% $foo %&gt;
+	&lt;% $foo[0] %&gt;
+
+	OUTPUT
+	=============================
+	Array
+	apples
+	</pre>
+
+	<h4><a name="associative">Associative Arrays</a></h4>
+	As was the case with basic variables, arrays are referenced in templates in a similar way to PHP. You have the name of the variable followed by brackets containing the key of the array value that you want to view.<br><br>
+	Note that the array indeces do NOT have quotes around them. If you use quotes around the index, an error will not be returned, but you will not get the results that you expected.<br>
+	<pre>
+	PHP
+	=============================
+	$foo = array("fruit" => "apples", "vegetable" => "carrot", "dairy" => "milk");
+	$tpl->assign("foo", $foo);
+
+	TEMPLATE
+	=============================
+	&lt;% $foo[fruit] %&gt;
+	&lt;% $foo[dairy] %&gt;
+
+	OUTPUT
+	=============================
+	apples
+	milk
+	</pre>
+</p>
+<hr>
+
+<h2><a name="config">Variables loaded from config files</a></h2>
+<p>
+	After you have loaded a <a href="language.config.html">config file</a>, you might want to reference the variables you have loaded from your template. Config variables are more like static constants in that they cannot be changed from the template and are thus referred to differently than normal variables. They are offset by hash or pound marks (#) on either side of the variable.<br>
+	<pre>
+	CONFIG FILE (config.ini)
+	=============================
+	foo = "bar"
+	test = "this is a string"
+
+	TEMPLATE
+	=============================
+	&lt;% config_load file="config.ini" %&gt;
+	&lt;% #foo# %&gt;
+
+	OUTPUT
+	=============================
+	bar
+	</pre>
+</p>
+<hr>
+
+<h2><a name="embedding">Embedding variables in quotes</a></h2>
+<p>
+	Variables in quotes are handled exactly the same in Smarty as they are in PHP. Here are some examples:<br>
+	<pre>
+	&lt;% "test $foo test" %&gt;		<- sees $foo
+	&lt;% "test $foo_bar test" %&gt;	<- sees $foo_bar
+	&lt;% "test $foo[0] test" %&gt;		<- sees $foo[0]
+	&lt;% "test $foo[bar] test" %&gt;	<- sees $foo[bar]
+	&lt;% "test $foo.bar test" %&gt;	<- sees $foo (not $foo.bar)
+	&lt;% "test `$foo.bar` test" %&gt;	<- sees $foo
+	&lt;% 'test $foo test' %&gt;		<- will interpret literally
+	&lt;% "test \$foo test" %&gt;		<- will escape the variable and return $foo literally
+	</pre>
+</p>
+<hr>
+
+<h2><a name="concatenation">Variable concatenation</a></h2>
+<p>
+	The are two ways to concatenate variables using Smarty-Light. The first is using the standard PHP-compliant 'dot' syntax. The other is to use a comma syntax. Here are some examples of each way.<br>
+	<pre>
+	PHP
+	=============================
+	$tpl->assign("foo","bar");
+	$tpl->assign("name","Paul");
+
+	TEMPLATE
+	=============================
+	&lt;% $foo.$name %&gt;
+	&lt;% $foo." ".$name %&gt;
+	&lt;% $foo, $name %&gt;
+	&lt;% $foo, " ", $name %&gt;
+
+	OUTPUT
+	=============================
+	barPaul
+	bar Paul
+	barPaul
+	bar Paul
+	</pre>
+	The comma concatenation technique works only as a standalone tag, i.e. <code>&lt;% $foo, $bar %&gt;</code> but not <code>&lt;% func arg=$foo, $bar %&gt;</code>, whereas the 'dot' syntax works in all cases where a variable is accepted.
+</p>
+<hr>
+
+<h2><a name="tpl">$_TPL reserved variable</a></h2>
+<p>
+	Using the $_TPL variable, you can refer to special environment variables from inside the template.<br>
+	<pre>
+	&lt;%* display value of page from URL (GET) http://www.domain.com/index.php?page=foo *%&gt;
+	&lt;% $_TPL[GET][PAGE] %&gt;
+
+	&lt;%* display the variable "page" from a form (POST) *%&gt;
+	&lt;% $_TPL[POST][PAGE] %&gt;
+
+	&lt;%* display the value of the cookie "username" *%&gt;
+	&lt;% $_TPL[COOKIE][username] %&gt;
+
+	&lt;%* display the server variable "SERVER_NAME" *%&gt;
+	&lt;% $_TPL[SERVER][SERVER_NAME] %&gt;
+
+	&lt;%* display the system environment variable "PATH" *%&gt;
+	&lt;% $_TPL[ENV][PATH] %&gt;
+
+	&lt;%* display the php session variable "id" *%&gt;
+	&lt;% $_TPL[SESSION][id] %&gt;
+
+	&lt;%* display the current time in unix epoch form *%&gt;
+	&lt;% $_TPL[NOW] %&gt;
+	</pre>
+</p>
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>

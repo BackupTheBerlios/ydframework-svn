@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - YDXmlRpc</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Using XML/RPC clients and servers </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+<h4> What is XML/RPC? </h4>
+<br />
+XML/RPC is a spec and a set of implementations that allow software running on disparate operating systems, running in different environments to make procedure calls over the Internet.<br />
+<br />
+It's remote procedure calling using HTTP as the transport and XML as the encoding. XML-RPC is designed to be as simple as possible, while allowing complex data structures to be transmitted, processed and returned.<br />
+<br />
+To invoke an XML/RPC call, an XML/RPC client might send the following XML data to a server:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?xml version</font><font color="#007700">=</font><font color="#DD0000">"1.0"</font><font color="#0000BB">?&gt;<br /></font>&lt;methodCall&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;methodName&gt;tide.getTideForDay&lt;/methodName&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;params&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;string&gt;2004-05-11&lt;/string&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/params&gt;<br />&lt;/methodCall&gt;</font>
+</code></div><br />
+This server will then interpret the XML, execute the right function and send back the following XML data:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?xml version</font><font color="#007700">=</font><font color="#DD0000">"1.0"</font><font color="#0000BB">?&gt;<br /></font>&lt;methodResponse&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;params&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;param&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;struct&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;tideDate&lt;/name&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;&lt;string&gt;2004-05-11&lt;/string&gt;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;tideDay&lt;/name&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;&lt;string&gt;di&lt;/string&gt;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;tideLow1&lt;/name&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;&lt;string&gt;01:07:00&lt;/string&gt;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;tideLow2&lt;/name&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;&lt;string&gt;13:39:00&lt;/string&gt;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/member&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/struct&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/value&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/param&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;/params&gt;<br />&lt;/methodResponse&gt;</font>
+</code></div><br />
+The XML/RPC client will interpret this XML response and will convert it back to objects and variables in the native programming language.<br />
+<br />
+The beauty of XML/RPC is that it's really easy to use and still high performant if implemented correctly. The client and the server can be speaking two totally different programming languages and still are able to exchange data between the two with preserving the native data types.<br />
+<br />
+The Yellow Duck Framework has classes for creating both XML/RPC clients and servers. Both use the very latest technology and are one of the few implementations that support GZip compression for the HTTP data streams, resulting in better performance.<br />
+<br />
+The YDXmlRpcClient class implements an XML/RPC client while the YDXmlRpcServer class implements a full XML/RPC server which supports introspection so that the client can easily determine what functions are supported by the server.<br />
+<br />
+Let's have a look at how these classes can be used to perform XML/RPC based communication.<br />
+<br />
+<br />
+<h4> Using YDXmlRpcClient </h4>
+<br />
+To create an XML/RPC client, we will use the YDXmlRpcClient class which does all the work for us. When you instantiate this class, you need to specify the URL of the XML/RPC server. <br />
+<br />
+Once you made an instance of the XML/RPC client, you can execute functions on that server by using it's execute function. This function takes two arguments which is the name of the XML/RPC method and an optional array with parameters. <br />
+<br />
+The request will then be executed and the result will be returned as real PHP values and objects. <br />
+<br />
+Let's have a look at the following code sample:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#DD0000">'YDXmlRpc.php' </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$client </font><font color="#007700">= new </font><font color="#0000BB">YDXmlRpcClient</font><font color="#007700">( </font><font color="#DD0000">'http://www.grijzeblubber.be/bba/xmlrpc.php' </font><font color="#007700">); <br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$result </font><font color="#007700">= </font><font color="#0000BB">$client</font><font color="#007700">-&gt;</font><font color="#0000BB">execute</font><font color="#007700">( </font><font color="#DD0000">'tide.getTideForDay'</font><font color="#007700">, array( </font><font color="#DD0000">'2004-05-11' </font><font color="#007700">) );<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+In this example, we first connect to the XML/RPC server using the specified URL. Then we execute the 'tide.getTideForDay' function on that server which returns an array. <br />
+<br />
+We had to specify a string with the date. After executing this, the variable $result will have the following contents:<br />
+<br />
+<div class="code"><code><font color="#000000">
+array (<br />&nbsp;&nbsp;&nbsp;&nbsp;'tideDate' =&gt; '2004-05-11',<br />&nbsp;&nbsp;&nbsp;&nbsp;'tideDay' =&gt; 'di',<br />&nbsp;&nbsp;&nbsp;&nbsp;'tideLow1' =&gt; '01:07:00',<br />&nbsp;&nbsp;&nbsp;&nbsp;'tideLow2' =&gt; '13:39:00',<br />)</font>
+</code></div><br />
+If something went wrong or the XML/RPC server returned an error, a fatal error will be raised with the right error message. The error message will be the same as the error message returned by the XML/RPC server. <br />
+<br />
+What you can not see in this example is that if the XML/RPC server supports GZip compression, this will be used to do the communication. This not only saves bandwidth but also improves the performance of the XML/RPC calls quite a lot. Since a new HTTP request has to be made for each XML/RPC call, reducing the total size of information send over the network can really improve the performance and scalability of your XML/RPC based services.<br />
+<br />
+<br />
+<h4> Using YDXmlRpcServer </h4>
+<br />
+It is also possible to write an XML/RPC server with the help of the Yellow Duck Framework. An XML/RPC server is actually a special kind of request class. The following code sample shows you how a very simple XML/RPC server can be written:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Standard include<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#0000BB">dirname</font><font color="#007700">( </font><font color="#0000BB">__FILE__ </font><font color="#007700">) . </font><font color="#DD0000">'/../YDFramework2/YDF2_init.php' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Includes<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#DD0000">'YDXmlRpc.php' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Class definition<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">class </font><font color="#0000BB">xmlrpcserver </font><font color="#007700">extends </font><font color="#0000BB">YDXmlRpcServer </font><font color="#007700">{<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Class constructor<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">function </font><font color="#0000BB">xmlrpcserver</font><font color="#007700">() {<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Initialize the parent class<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">YDXmlRpcServer</font><font color="#007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Register the methods<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">registerMethod</font><font color="#007700">( </font><font color="#DD0000">'echo'</font><font color="#007700">, </font><font color="#DD0000">'this:xmlrpcEcho'</font><font color="#007700">, array( </font><font color="#DD0000">'string'</font><font color="#007700">, </font><font color="#DD0000">'string' </font><font color="#007700">) );<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// The method which just echoes a string<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">function </font><font color="#0000BB">xmlrpcEcho</font><font color="#007700">( </font><font color="#0000BB">$var </font><font color="#007700">) {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return </font><font color="#0000BB">$var</font><font color="#007700">;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Process the request<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#0000BB">dirname</font><font color="#007700">( </font><font color="#0000BB">__FILE__ </font><font color="#007700">) . </font><font color="#DD0000">'/../YDFramework2/YDF2_process.php' </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+Every XML/RPC server you create should inherit from the YDXmlRpcServer class. This server will configure the XML/RPC server and show you an overview of the different methods understood by the server when an HTTP GET request is performed. The server that is created automatically has support for introspection.<br />
+<br />
+For publishing functions over XML/RPC, you first need to implement them as a normal function or class function. By convention, we create class functions and prepend the function names with xmlrpc to indicate that they are published over XML/RPC. Our example has one function declared, called xmlrpcEcho. This function will simply return the the value passed when calling this function.<br />
+<br />
+Now that we have the function, we need to declare it so that the XML/RPC server knows that this function should be published. This is done by using the registerMethod function of the YDXmlRpcServer class. The syntax for this function is as follows:<br />
+<br />
+<tt>function registerMethod( $method, $function, $signature, $help=&quot;&quot; ) {}</tt><br />
+<br />
+The following parameters can be specified:<br />
+<br />
+<ul><li> <strong>$method:</strong> Name of the XML/RPC method.
+</li><li> <strong>$function:</strong> Function that needs to be executed for this XML/RPC request.
+</li><li> <strong>$signature:</strong> The signature for this function.
+</li><li> <strong>$help</strong> (optional): The help text describing this method.</li></ul>
+<br />
+The $function variable can point to both a normal function or a class function. The following code sample shows how to refer to a class function (use the object name, then a colon and then the funtion name):<br />
+<br />
+<tt>function registerMethod( 'echo', 'this:xmlrpcEcho', array( 'string', 'string' ) );</tt><br />
+<br />
+The following code example shows you how to refer to a normal function:<br />
+<br />
+<tt>function registerMethod( 'echo', 'xmlrpcEcho', array( 'string', 'string' ) );</tt><br />
+<br />
+The method signature array describes both the type returned by the XML-RPC method and the types of the required arguments for that function. The first element in the array is the return type - it is compulsary. Any elements after that describe method paramaters. The IXR_IntrospectionServer will enforce these paramater types (unlike the basic IXR_Server which will pass any paramaters on to the methods without checking them) - if a method call is made to the server with an incorrect number of paramaters (or incorrect paramater types) the server will return an error message to the client.<br />
+<br />
+When specifying the method signature array, use an array containing strings from the following list: 'date', 'base64', 'string', 'int', 'float', 'boolean', 'array', 'struct'.<br />
+<br />
+<br />
+<h4> More information </h4>
+<br />
+More information on XML/RPC can be found on <a href="http://www.xmlrpc.com">the official XML/RPC website</a>.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
+
+
+
+</body>
+
+</html>
