@@ -206,6 +206,46 @@
 		}
 
 		/**
+		 *	This function will return the list of path segments that appear after the first occurence of the indicated
+		 *	directory/file in the path part of the string.
+		 *
+		 *	@code
+		 *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
+		 *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'cool.html'];
+		 *	$r = $url->getSubDirectories('forum');  // returns: ['cool.html'];
+		 *	$r = $url->getSubDirectories('test');   // returns: [];
+		 *	
+		 *	// it gets the sub-directories of the first ocurrence:
+		 *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
+		 *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum', 'cool.html'];
+		 *	$r = $url->getSubDirectories('forum');  // returns: ['ydf2', 'forum', 'cool.html'];
+		 *	$r = $url->getSubDirectories('test');   // returns: [];
+		 *	@endcode
+		 *
+		 *	@param	$item	The items to get the subsegments from.
+		 *
+		 *	@returns	Array with the subsegments that appear after the first occurence of the indicated items in
+		 *	the path part of the string
+		 */
+		function getPathSubsegments( $item ) {
+
+			// Get the list of path segments in the path string
+			$segments = $this->getPathSegments();
+
+			// Get the position of the item in the list of subsegments
+			$pos = array_search( $item, $segments );
+
+			// Return an empty array if not found
+			if ( $pos === false ) {
+				return array();
+			}
+
+			// If found, return the list of subsegments
+			return array_slice( $segments, $pos+1 );
+
+		}
+
+		/**
 		 *	This function will return the path part of the URL as an array, only including directories. If the last part
 		 *	of the URL is not a forward slash, the last part is considered to be a regular file.
 		 *

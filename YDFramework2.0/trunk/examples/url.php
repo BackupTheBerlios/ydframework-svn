@@ -103,13 +103,23 @@
 			YDDebugUtil::dump( $url->getPathSubdirectories('ydf2'), "getPathSubdirectories('ydf2')" );
 			YDDebugUtil::dump( $url->getPathSubdirectories('forum'), "getPathSubdirectories('forum')" );
 			YDDebugUtil::dump( $url->getPathSubdirectories('test'), "getPathSubdirectories('test')" );
-
-			// it gets the sub-directories of the first ocurrence: 
 			$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' ); 
 			YDDebugUtil::dump( $url->getUrl() );
 			YDDebugUtil::dump( $url->getPathSubdirectories('ydf2'), "getPathSubdirectories('ydf2')" );
 			YDDebugUtil::dump( $url->getPathSubdirectories('forum'), "getPathSubdirectories('forum')" );
 			YDDebugUtil::dump( $url->getPathSubdirectories('test'), "getPathSubdirectories('test')" );
+
+			// Test the getPathSubsegments function
+			$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
+			YDDebugUtil::dump( $url->getUrl() );
+			YDDebugUtil::dump( $url->getPathSubsegments('ydf2'), "getPathSubsegments('ydf2')" );
+			YDDebugUtil::dump( $url->getPathSubsegments('forum'), "getPathSubsegments('forum')" );
+			YDDebugUtil::dump( $url->getPathSubsegments('test'), "getPathSubsegments('test')" );
+			$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' ); 
+			YDDebugUtil::dump( $url->getUrl() );
+			YDDebugUtil::dump( $url->getPathSubsegments('ydf2'), "getPathSubsegments('ydf2')" );
+			YDDebugUtil::dump( $url->getPathSubsegments('forum'), "getPathSubsegments('forum')" );
+			YDDebugUtil::dump( $url->getPathSubsegments('test'), "getPathSubsegments('test')" );
 
 			// Get the contents
 			$url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
