@@ -26,6 +26,7 @@
 				array( 'id' => 3, 'name' => 'Bert', 'group' => 'user' ),
 				array( 'id' => 3, 'name' => 'Jan', 'group' => 'guest' ),
 			);
+			YDDebugUtil::dump( $array, 'Original array' );
 
 			// Convert to nested array
 			YDDebugUtil::dump(
