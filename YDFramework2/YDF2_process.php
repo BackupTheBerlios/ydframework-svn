@@ -4,7 +4,7 @@
 	// (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
 
 	if ( ! defined( 'YD_FW_NAME' ) ) {
-		die(  'Yellow Duck Framework is not loaded.' );
+		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
 	require_once( 'YDExecutor.php' );
