@@ -27,6 +27,11 @@
 
 	YDInclude( 'HttpClient.class.php' );
 
+	// Configure the default for this class
+	YDConfig::set( 'YD_HTTP_USES_GZIP', 1, false );
+	YDConfig::set( 'YD_HTTP_CACHE_TIMEOUT', 3600, false );
+	YDConfig::set( 'YD_HTTP_CACHE_USEHEAD', 1, false );
+
 	/**
 	 *	This is the YDHttpClient class. It extends the HttpClient class and adds support for specifying the content
 	 *	type.
@@ -50,7 +55,7 @@
 			$this->HttpClient( $host, $port );
 			$this->user_agent = 'Mozilla/4.0 (compatible; ' . YD_FW_NAMEVERS . ')';
 			$this->contenttype = '';
-			if ( YD_HTTP_USES_GZIP == 1 ) {
+			if ( YDConfig::get( 'YD_HTTP_USES_GZIP' ) == 1 ) {
 				$this->useGzip( true );
 			} else {
 				$this->useGzip( false );
