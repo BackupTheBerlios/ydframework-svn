@@ -38,12 +38,18 @@ outdir = 'userguide'
 template = """<html>
 
 <head>
-    <title>Yellow Duck Framework 2.0 beta 3- {page}</title>
+    <title>Yellow Duck Framework 2.0 beta 3 - {page}</title>
     <link rel="stylesheet" type="text/css" href="ydf2.css" />
 </head>
 
 <body>
+
     {body}
+
+    <div class="copyright">
+        (c) Copyright 2003-2004 by <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>. All rights reserved.
+    </div>
+
 </body>
 
 </html>"""

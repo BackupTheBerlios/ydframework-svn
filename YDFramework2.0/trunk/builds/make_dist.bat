@@ -22,20 +22,18 @@ svn export -q "file:///C:/_SVNRepos/YDF2/YDFramework2.0/trunk" "%BLDDIR%"
 
 rem Update the documentation
 echo Regenerating documentation
-cd "%BLDDIR%\YDFramework2\doc"
+cd "%BLDDIR%\doc"
 call make_docs.bat > NUL
-cd "..\..\.."
+cd "..\.."
 echo Creating changelog file
 svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2" > "changelog.txt"
-del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
-del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
-del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
-del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
+del /Q "%BLDDIR%\doc\docs_api.dxy"
+del /Q "%BLDDIR%\doc\docs_api_footer.html"
+del /Q "%BLDDIR%\doc\make_docs.bat"
+del /Q "%BLDDIR%\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
-del /Q "%BLDDIR%\YDFramework2\doc\api\doxygen.png"
-del /Q "%BLDDIR%\YDFramework2\doc\*.py"
-rem copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
-move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc" > NUL
+del /Q "%BLDDIR%\doc\api\doxygen.png"
+del /Q "%BLDDIR%\doc\*.py"
 
 rem Compressing the build archive
 del /Q /S %BLDDIR%\builds > NUL

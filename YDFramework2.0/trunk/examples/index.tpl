@@ -3,10 +3,15 @@
 <head>
 
 	<title>{$YD_FW_NAMEVERS}</title>
-
+	<link rel="stylesheet" type="text/css" href="../doc/userguide/ydf2.css" />
+	{literal}<style>
+		td { border-bottom: 1px solid #FFCC00; }
+	</style>{/literal}
 </head>
 
 <body>
+
+	<div class="page">
 
 	{if $file}
 
@@ -22,7 +27,7 @@
 
 		<p>&nbsp;<br><b>Samples</b></p>
 
-		<table border="1" width="650" cellpadding="3"  cellspacing="0">
+		<table border="0" width="650" cellpadding="3"  cellspacing="0">
 		<tr>
 			<td><b>Sample</b></td>
 			<td width="40%"><b>Source</b></td>
@@ -319,6 +324,8 @@
 		<a href="../doc/userguide/index.html">user guide</a>.</p>
 	
 	{/if}
+
+	</div>
 
 </body>
 
