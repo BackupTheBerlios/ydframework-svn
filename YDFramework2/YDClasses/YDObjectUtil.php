@@ -140,6 +140,7 @@
          *  @param $obj Object you want to check.
          *  @param $method Method you are looking for.
          */
+        /*
         function failOnMissingMethod( $obj, $method ) {
 
             // Check if the method exists and raise an error if needed
@@ -151,6 +152,7 @@
             }
 
         }
+        */
 
         /**
          *  This function will serialize an object. The serialized output is

@@ -18,18 +18,18 @@
     $clsName = YD_EXECUTOR;
 
     // Check if the class exists
-    if ( ! class_exists( $clsName ) ) {
-        new YDFatalError(
-            'The class definition for the executor class "' . $clsName . '"'
-            . 'is not defined. Aborting processing.'
-        );
-    }
+    //if ( ! class_exists( $clsName ) ) {
+    //    new YDFatalError(
+    //        'The class definition for the executor class "' . $clsName . '"'
+    //        . 'is not defined. Aborting processing.'
+    //    );
+    //}
 
     // Instantiate the executor class
     $clsInst = new $clsName( YD_SELF_FILE );
 
     // Check for the execute function
-    YDObjectUtil::failOnMissingMethod( $clsInst, 'execute' );
+    //YDObjectUtil::failOnMissingMethod( $clsInst, 'execute' );
 
     // Execute the execute function
     $clsInst->execute();

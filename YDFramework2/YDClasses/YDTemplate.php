@@ -97,9 +97,6 @@
          *                variables which are currently defined in the global
          *                scope of the script.
          *
-         *  - YD_DB_CONN_CNT: Number of database connections that were made.
-         *  - YD_DB_SQLQ_CNT: Number of database queries that were performed.
-         *
          *  @param $name The name of the template you want to parse and output.
          *
          *  @returns This function returns the output of the parsed template.
@@ -130,13 +127,6 @@
             $this->setVar( 'YD_SESSION', $_SESSION );
             $this->setVar( 'YD_GLOBALS', $GLOBALS );
             $this->setVar( 'YD_SERVER', $_SERVER );
-
-            // Add the database qeury count
-            if ( isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
-                $this->setVar( 'YD_DB_SQLQ_CNT', $GLOBALS['YD_DB_SQLQ_CNT'] );
-            } else {
-                $this->setVar( 'YD_DB_SQLQ_CNT', 0 );
-            }
 
             // Get the path to the template
             $tplPath = realpath( YD_SELF_DIR ) . '/' . $name . YD_TPL_EXT;

@@ -48,13 +48,6 @@
                 basename( $this->_file, YD_SCR_EXT ) . 'Request'
             );
 
-            // Check if the class exists
-            if ( ! class_exists( $clsName ) ) {
-                new YDFatalError(
-                    'No class definition found for the class "' . $clsName . '".'
-                );
-            }
-
             // Instantiate the class
             $clsInst = new $clsName();
 
@@ -81,43 +74,27 @@
                 );
             }
 
-            // Check if we have a process function
-            YDObjectUtil::failOnMissingMethod( $clsInst, 'process' );
-
             // Only if authentication is required
             if ( $clsInst->getRequiresAuthentication() ) {
-
-                // Check for an isAuthenticated function
-                YDObjectUtil::failOnMissingMethod( $clsInst, 'isAuthenticated' );
 
                 // Perform the authentication
                 $result = $clsInst->isAuthenticated();
 
                 // Execute authentication fails/succeeds
                 if ( $result ) {
-                    YDObjectUtil::failOnMissingMethod(
-                        $clsInst, 'authenticationSucceeded'
-                    );
                     $clsInst->authenticationSucceeded();
                 } else {
-                    YDObjectUtil::failOnMissingMethod(
-                        $clsInst, 'authenticationFailed'
-                    );
                     $clsInst->authenticationFailed();
                     $this->finish();
                 }
 
             }
 
-            // Check for an isActionAllowed function
-            YDObjectUtil::failOnMissingMethod( $clsInst, 'isActionAllowed' );
-
             // Check if the current action is allowed or not
             $result = $clsInst->isActionAllowed();
 
             // Execute actionNotAllowed if failed
             if ( $result == false ) {
-                YDObjectUtil::failOnMissingMethod( $clsInst, 'actionNotAllowed' );
                 $clsInst->actionNotAllowed();
                 $this->finish();
             }
