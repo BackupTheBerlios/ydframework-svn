@@ -136,6 +136,35 @@
             }
         }
 
+        /**
+         *  This function will encode all characters which have an ordinal
+         *  bigger than 128 to numeric HTML entities, which can be safely
+         *  included in e.g. XML output.
+         *
+         *  @param $string The original string to encode.
+         *
+         *  @returns String with all the characters with an ordinal bigger than
+         *           128 converted to numeric HTML entities.
+         */
+        function encodeString( $string ) {
+
+            $encoded = '';
+
+            for ( $i=0; $i < strlen( $string ); $i++ )  {
+                if ( ord( substr( $string, $i, 1 ) ) > 128 ) {
+                    $encoded .= '&#' . ord( substr( $string, $i, 1 ) ) . ';';
+                } elseif ( ord( substr( $string, $i, 1 ) ) == 0 ) {
+                    $encoded .= ' ';
+                } else {
+                    $encoded .= substr( $string, $i, 1 );    
+                }
+            }
+
+            return $encoded;
+
+        }
+
+
     }
 
 ?>
