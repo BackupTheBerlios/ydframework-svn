@@ -37,7 +37,7 @@
 
 			// Download the gallery index
 			$pIndex = '/HREF="http:\/\/www.pbase.com\/beachshop\/(.*?)" class="thumbnail".*? src="http:\/\/.*?.image.pbase.com\/.*?\/.*?\/small\/([0-9]+).*?alt="(.*?)">/ism';
-			$objUrl = new YDUrl( $this->homeUrl );
+			$objUrl = new YDUrl( $this->homeUrl . 'root&page=all' );
 			$contents = $objUrl->getContentsWithRegex( $pIndex );
 
 			// Loop over the matching patterns to construct the galleries list
