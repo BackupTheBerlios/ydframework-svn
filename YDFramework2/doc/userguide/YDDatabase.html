@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - YDDatabase</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Connecting to databases </h3>
+<br />
+The Yellow Duck Framework has a relatively simple but very effective and easy to use database connection layer. Even though there are already a lot of database connection layers available on the market, we found that there would be place for something more simple. The difference is that the library included in the Yellow Duck Framework doesn't try to support every feature available in every database, but tries to concentrate on a common set of functions that work across all major database engines.<br />
+<br />
+Currently, the following database engines are supported:<br />
+<br />
+<ul><li> <span class="missingpage">MySQL</span><a href="http://www.yellowduck.be/ydf2/wiki/MySQL/edit">?</a>: <a href="http://www.mysql.com/">http://www.mysql.com/</a>
+</li><li> Oracle: <a href="http://www.oracle.com/">http://www.oracle.com/</a>
+</li><li> SQLite: <a href="http://www.sqlite.org/">http://www.sqlite.org/</a>
+</li><li> <span class="missingpage">PostgreSQL</span><a href="http://www.yellowduck.be/ydf2/wiki/PostgreSQL/edit">?</a>: <a href="http://www.postgresql.org/">http://www.postgresql.org/</a></li></ul>
+<br />
+More database engines will be added in the future depending on the requests from the users.<br />
+<br />
+<br />
+<h4> Connecting to a database </h4>
+<br />
+For establishing a database connection, you will use the YDDatabase class. When instantiating this class, you need to specify the parameters for connecting to the database. The constructor for this class looks as follows:<br />
+<br />
+<tt>function YDDatabase( $driver, $db, $user=&quot;&quot;, $pass=&quot;&quot;, $host=&quot;&quot;) {}</tt><br />
+<br />
+The following options can be specified:<br />
+<br />
+<br />
+<ul><li> <strong>$driver:</strong> Name of the database driver.
+</li><li> <strong>$db:</strong> Database name to use for the connection.
+</li><li> <strong>$user</strong> (optional): User name to use for the connection.
+</li><li> <strong>$pass</strong> (optional): Password to use for the connection.
+</li><li> <strong>$host</strong> (optional): Host name to use for the connection.
+</li><li> <strong>$options</strong> (optional): Options to pass to the driver.</li></ul>
+<br />
+The following database drivers can be specified:<br />
+<br />
+<ul><li> <strong>mysql:</strong> <span class="missingpage">MySQL</span><a href="http://www.yellowduck.be/ydf2/wiki/MySQL/edit">?</a> (requires the mysql PHP extension)
+</li><li> <strong>oracle:</strong> Oracle (requires the oci8 PHP extension)
+</li><li> <strong>sqlite:</strong> SQLite  (requires the sqlite PHP extension)
+</li><li> <strong>posgresql:</strong> <span class="missingpage">PostgreSQL</span><a href="http://www.yellowduck.be/ydf2/wiki/PostgreSQL/edit">?</a> (requires the pgsql PHP extension)</li></ul>
+<br />
+Only the driver and database name are required, but depending on the chosen database driver, you will need to add more parameters. Please refer to the documentation of the database driver or your database software for more details.<br />
+<br />
+<br />
+<h4> Executing queries </h4>
+<br />
+Not written yet.<br />
+<br />
+<br />
+<h4> Inserting new information </h4>
+<br />
+Not written yet.<br />
+<br />
+<br />
+<h4> Updating existing information </h4>
+<br />
+Not written yet.<br />
+<br />
+<br />
+<h4> How to write your own database drivers </h4>
+<br />
+Not written yet.</div>
+
+
+
+</body>
+
+</html>

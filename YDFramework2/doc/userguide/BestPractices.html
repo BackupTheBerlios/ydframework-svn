@@ -1,0 +1,44 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - BestPractices</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Best practices </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+This chapter will give you an overview of common patterns and best practices for using the Yellow Duck Framework.<br />
+<br />
+<br />
+<h4> Subclassing YDRequest </h4>
+<br />
+For most web applications, you will probably start with subclassing the YDRequest class. This subclass can then house all the standard funtionality all requests will need. You can e.g. implement authentication in this subclass or use the YDBrowserInfo and YDLanguage objects to automatically have some standard information determined by for each request.<br />
+<br />
+<br />
+<h4> Subclassing form elements </h4>
+<br />
+Some of the standard form elements, such as the bbtextarea element, have special functions which you can use to make them work differently. You can easily subclass these elements to create custom form elements so that you don't have to do all this manually. Let's take a look at an example:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#DD0000">'YDFormElement_BBTextArea' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;class </font><font color="#0000BB">YDFormElement_PietersBBTextArea </font><font color="#007700">extends </font><font color="#0000BB">YDFormElement_BBTextArea </font><font color="#007700">{<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function </font><font color="#0000BB">YDFormElement_PietersBBTextArea</font><font color="#007700">( </font><font color="#0000BB">$form</font><font color="#007700">, </font><font color="#0000BB">$name</font><font color="#007700">, </font><font color="#0000BB">$label</font><font color="#007700">=</font><font color="#DD0000">''</font><font color="#007700">, </font><font color="#0000BB">$attributes</font><font color="#007700">=array(), </font><font color="#0000BB">$options</font><font color="#007700">=array() ) {<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Initialize the parent<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">YDFormElement_BBTextArea</font><font color="#007700">( </font><font color="#0000BB">$form</font><font color="#007700">, </font><font color="#0000BB">$name</font><font color="#007700">, </font><font color="#0000BB">$label</font><font color="#007700">, </font><font color="#0000BB">$attributes</font><font color="#007700">, </font><font color="#0000BB">$options </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Set the type<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">_type </font><font color="#007700">= </font><font color="#DD0000">'pietersbbtextarea'</font><font color="#007700">;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Add some custom popup windows<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">addPopupWindow</font><font color="#007700">( </font><font color="#DD0000">'form.php?do=selector&amp;field=firstForm_desc3&amp;tag=img'</font><font color="#007700">, </font><font color="#DD0000">'select image' </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">addPopupWindow</font><font color="#007700">( </font><font color="#DD0000">'form.php?do=selector&amp;field=firstForm_desc3&amp;tag=url'</font><font color="#007700">, </font><font color="#DD0000">'select url' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+In the example above, we created a custom form element based on the YDFormElement_BBTextArea class, which automatically adds two popup windows with their associated buttons to the toolbar. Also make sure the _type variable has a unique name. Do not forget to add this class to the PHP search path.<br />
+<br />
+Before we can use this new form element, we need to register it with our form instance (which you could again subclass and use instead of the plain YDForm class). Registering goes as follows:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#DD0000">'YDForm.php' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;class </font><font color="#0000BB">Pieters_Form </font><font color="#007700">extends </font><font color="#0000BB">YDForm </font><font color="#007700">{<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function </font><font color="#0000BB">Pieters_Form</font><font color="#007700">( </font><font color="#0000BB">$name</font><font color="#007700">, </font><font color="#0000BB">$method</font><font color="#007700">=</font><font color="#DD0000">'post'</font><font color="#007700">, </font><font color="#0000BB">$action</font><font color="#007700">=</font><font color="#DD0000">''</font><font color="#007700">, </font><font color="#0000BB">$target</font><font color="#007700">=</font><font color="#DD0000">'_self'</font><font color="#007700">, </font><font color="#0000BB">$attributes</font><font color="#007700">=</font><font color="#0000BB">null </font><font color="#007700">) {<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Initialize the parent<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">YDForm</font><font color="#007700">( </font><font color="#0000BB">$name</font><font color="#007700">, </font><font color="#0000BB">$method</font><font color="#007700">, </font><font color="#0000BB">$action</font><font color="#007700">, </font><font color="#0000BB">$target</font><font color="#007700">, </font><font color="#0000BB">$attributes </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Register our custom element<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$this</font><font color="#007700">-&gt;</font><font color="#0000BB">registerElement</font><font color="#007700">( </font><font color="#DD0000">'pietersbbtextarea'</font><font color="#007700">, </font><font color="#DD0000">'YDFormElement_PietersBBTextArea'</font><font color="#007700">, </font><font color="#DD0000">'YDFormElement_PietersBBTextArea.php' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;}<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+In the code above, we declared a new form class that subclasses the YDForm class. We used the registerElement function to add our custom form element. This function takes 3 parameters: the name of the element (same as the _type variable of the form element's class), the class name and the include file.</div>
+
+
+
+</body>
+
+</html>
