@@ -2,7 +2,7 @@
 
 	// Standard include
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class MyLoginRequest extends YDRequest {
