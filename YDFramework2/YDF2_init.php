@@ -140,8 +140,8 @@
 
     /**
      *  @enum YD_ACTION_DEFAULT
-     *        the name of the $_GET parameter that specifies which action
-     *        needs to be executed. This is "do" by default.
+     *        The name of the function for the default action, which is
+     *        "actionDefault".
      *
      *  @internal
      */

@@ -152,6 +152,9 @@
          *  action. By using this function, you make sure the action names and
          *  so on are also update to reflect this.
          *
+         *  @remark
+         *      This function does a HTTP redirect in the background.
+         *
          *  @param $action Name of the action to forward to.
          */
         function forward( $action ) {
@@ -161,11 +164,11 @@
                 $action = substr( $action, strlen( 'action' ) );
             }
 
-            // Update the action
-            $_GET[ YD_ACTION_PARAM ] = $action;
+            // Construct the new URL
+            $url = YD_SELF_SCRIPT . '?' . YD_ACTION_PARAM . '=' . $action;
 
-            // Execute the request
-            call_user_func( array( $this, 'action' . $action ) );
+            // Do a redirect to the right url
+            $this->redirect( $url );
 
         }
 
