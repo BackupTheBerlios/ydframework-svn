@@ -624,6 +624,23 @@
 					$form[ $name ]['required'] = false;
 				}
 
+				// Add the HTML labels
+				if ( $form[ $name ]['isButton'] === false && $form[ $name ]['type'] != 'hidden' ) {
+					$form[ $name ]['label_html'] = '';
+					if ( $form[ $name ]['required'] ) {
+						$form[ $name ]['label_html'] .= $this->_htmlRequiredStart;
+					}
+					if ( ! empty( $form[ $name ]['label'] ) ) {
+						$form[ $name ]['label_html'] .= $form[ $name ]['label'];
+					}
+					if ( $form[ $name ]['required'] ) {
+						$form[ $name ]['label_html'] .= $this->_htmlRequiredEnd;
+					}
+					if ( ! empty( $form[ $name ]['error'] ) ) {
+						$form[ $name ]['error_html'] = $this->_htmlErrorStart . $form[ $name ]['error'] . $this->_htmlErrorEnd;
+					}
+				}
+
 			}
 
 			// If debugging, show contents
@@ -673,24 +690,21 @@
 
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
-				if ( $element['isButton'] === false) {
+				if ( $element['isButton'] === false ) {
 					if ( $element['type'] != 'hidden' ) {
 						$html .= '<p>';
 						if ( $element['placeLabel'] == 'after' ) {
-							$html .= $element['html'];
-							if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
-							if ( ! empty( $element['label'] ) ) { $html .= $element['label'] ; }
-							if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
+							$html .= $element['html'] . $element['label_html'];
 							if ( ! empty( $element['error'] ) ) {
-								$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+								$html .= '<br>' . $element['error_html'];
 							}
 						} else {
-							if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
-							if ( ! empty( $element['label'] ) ) { $html .= $element['label']; }
-							if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
-							if ( ! empty( $element['label'] ) ) { $html .= '<br>'; }
+							$html .= $element['label_html'];
+							if ( ! empty( $element['label'] ) ) {
+								$html .= '<br>';
+							}
 							if ( ! empty( $element['error'] ) ) {
-								$html .= $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd . '<br>';
+								$html .= $element['error_html'] . '<br>';
 							}
 							$html .= $element['html'];
 						}
