@@ -105,8 +105,7 @@ strftime test
 
     <para>The list of supported locale language strings that can be using with the YDLocale::set function can be found in the following table.</para>
     
-    <table frame="all">
-        <title>Supported language strings for YDLocale::set and YDLocale::get</title>
+    <informaltable frame="all" pgwide="1">
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
             <colspec colname="Primary Language" />
             <colspec colname="Sublanguage" />
@@ -301,6 +300,6 @@ strftime test
                 </row>
             </tbody>
         </tgroup>
-    </table>
+    </informaltable>
 
 </chapter>
