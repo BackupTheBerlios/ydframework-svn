@@ -47,9 +47,9 @@
             $this->YDAddOnModule();
 
             // Setup the module
-            $this->author = 'db';
+            $this->author = 'David Bittencourt';
             $this->version = '1.0';
-            $this->copyright = '(c) 2005 db, muitocomplicado@hotmail.com';
+            $this->copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->description = 'This class defines a shopping cart object.';
 
             if ( ! isset( $_SESSION[$session_var] ) ) {
