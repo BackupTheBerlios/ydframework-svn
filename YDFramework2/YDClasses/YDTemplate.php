@@ -26,6 +26,9 @@
 			// Initialize YDBase
 			$this->YDBase();
 
+			// The template directory
+			$this->_templateDir = YD_SELF_DIR;
+
 			// Keep a list of the variables
 			$this->_vars = array();
 
@@ -39,6 +42,15 @@
 		 */
 		function setVar( $name, $value ) {
 			$this->_vars[ $name ] = $value;
+		}
+
+		/**
+		 *	Set te template directory.
+		 *
+		 *	@param $dir	The directory to look in for finding template files.
+		 */
+		function setTemplateDir( $dir ) {
+			$this->_templateDir = realpath( $dir );
 		}
 
 		/**
@@ -78,12 +90,12 @@
 			$this->setVar( 'YD_SERVER', $_SERVER );
 
 			// Get the path to the template
-			if ( is_file( $name ) ) {
-				$tplPath = realpath( $name );
-			} elseif ( is_file( $name . YD_TPL_EXT ) ) {
-				$tplPath = realpath( $name . YD_TPL_EXT );
+			if ( is_file( $this->_templateDir . '/' . $name . YD_TPL_EXT ) ) {
+				$tplPath = realpath( $this->_templateDir . '/' . $name . YD_TPL_EXT );
+			} elseif ( is_file( $this->_templateDir . '/' . $name ) ) {
+				$tplPath = realpath( $this->_templateDir . '/' . $name );
 			} else {
-				$tplPath = realpath( YD_SELF_DIR ) . '/' . $name . YD_TPL_EXT;
+				YDFatalError( 'The template "' . $name . '" was not found.' );
 			}
 
 			// Check if the file exists
