@@ -131,7 +131,7 @@
 		 */
 		function setNamedPart( $name, $val ) {
 			$name = strtolower( $name );
-			if ( in_array( $name, array_keys( $this->defaults ) ) {
+			if ( in_array( $name, array_keys( $this->defaults ) ) ) {
 				$this->_url_parsed[$name] = $val;
 			}
 		}
