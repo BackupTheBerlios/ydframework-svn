@@ -176,9 +176,11 @@
          *      If you execute this function, it will do the redirect right away
          *      and will stop the processing of the current request.
          *
-         *  @param $action Name of the action to redirect to.
+         *  @param $action (optional) Name of the action to redirect to. If
+         *                 no action is specified, it will redirect to the
+         *                 default action.
          */
-        function redirectToAction( $action ) {
+        function redirectToAction( $action='default' ) {
 
             // Remove the action prefix
             if ( strpos( $action, 'action' ) === 0 ) {
