@@ -513,13 +513,31 @@
 		<tr>
 			<td valign="top"><a href="stringutil.php">StringUtil class</a> </td>
 			<td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
-			</tr>
+		</tr>
 		<tr>
+			<td valign="top"><a href="sqlquery.php">YDSqlQuery class</a></td>
+			<td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=sqlquery.php">sqlquery.php</a></td>
+		</tr>
+		<tr>
+			<td valign="top"><a href="multi_apps/index.php">Multiple applications</a></td>
 			<td valign="top">
-				<a href="sqlquery.php">YDSqlQuery class</a>
-			</td>
-			<td valign="top">
-				<a href="{$YD_SELF_SCRIPT}?do=source&id=sqlquery.php">sqlquery.php</a>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/_includes/YDF2_include.php">multi_apps/_includes/YDF2_include.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/index.php">multi_apps/index.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/index.tpl">multi_apps/index.tpl</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/std_footer.tpl">multi_apps/std_footer.tpl</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/std_header.tpl">multi_apps/std_header.tpl</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app1/index.php">multi_apps/app1/index.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app1/index.tpl">multi_apps/app1/index.tpl</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app2/index.php">multi_apps/app2/index.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app2/index.tpl">multi_apps/app2/index.tpl</a>
 			</td>
 		</tr>
 		</table>
