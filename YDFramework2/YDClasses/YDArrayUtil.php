@@ -35,21 +35,8 @@
 			// If the number of columns is 1, return the original array
 			if ( $columns == 1 ) { return $array; }
 
-			// Use the array_chunk function if possible
-			if ( function_exists( 'array_chunk' ) ) {
-				$newArray = array_chunk( $array, $columns );
-			} else {
-				$newArray = array();
-				$rowArray = array();
-				foreach( $array as $item ) {
-					if ( sizeof( $rowArray ) == $columns ) {
-						array_push( $newArray, $rowArray );
-						$rowArray = array();
-					}
-					array_push( $rowArray, $item );
-				}
-				array_push( $newArray, $rowArray );
-			}
+			// Use the array_chunk function to convert to a table
+			$newArray = array_chunk( $array, $columns );
 
 			// Pad the last row
 			if ( $fillLastRow ) {
