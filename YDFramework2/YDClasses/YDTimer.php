@@ -22,7 +22,7 @@
          *  This is the class constructor of the YDTimer class.
          */
         function YDTimer() {
-            $this->startTime = $this->getTime();
+            $this->_startTime = $this->getTime();
         }
 
         /**
@@ -31,8 +31,8 @@
          *  @return The total elapsed time.
          */
         function finish() {
-            $this->endTime = $this->getTime();
-            return round( ( $this->endTime - $this->startTime ), 4 );
+            $this->_endTime = $this->getTime();
+            return round( ( $this->_endTime - $this->_startTime ), 4 );
 
         }
 

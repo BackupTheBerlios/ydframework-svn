@@ -23,7 +23,7 @@
         function YDError( $errorMessage ) {
 
             // Standard variables
-            $this->errorMessage = $errorMessage;
+            $this->_errorMessage = $errorMessage;
 
         }
 
@@ -34,10 +34,10 @@
          *  @returns String indicating the error message.
          */
         function getError() {
-            if ( empty( $this->errorMessage ) ) {
+            if ( empty( $this->_errorMessage ) ) {
                 return 'Unknown error';
             } else {
-                return $this->errorMessage;
+                return $this->_errorMessage;
             }
         }
 
@@ -85,7 +85,7 @@
             echo( '<font color="red" size="-1">' );
             echo( '<b>' . YD_FW_NAME . ' Fatal Error</b>' );
             echo( '<br>' );
-            echo( $this->errorMessage );
+            echo( $this->getError() );
             echo( '</font></p>' );
 
             // Die the execution

@@ -53,7 +53,7 @@
          *  @returns String containing the name of the object.
          */
         function getBasename() {
-            return basename( $this->_path );
+            return basename( $this->getAbsolutePath() );
         }
 
         /**
@@ -62,7 +62,7 @@
          *  @returns String containing the extension of the file.
          */
         function getExtension() {
-            ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->_path, $regs );
+            ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
             return( $regs[1] );
         }
 
@@ -90,7 +90,7 @@
          *  @returns String containing the last modification date of the object.
          */
         function getLastModified() {
-            return filemtime( $this->_path );
+            return filemtime( $this->getAbsolutePath() );
         }
 
         /**
@@ -99,7 +99,7 @@
          *  @returns Double containing the length of the file.
          */
         function getSize() {
-            return filesize( $this->_path );
+            return filesize( $this->getAbsolutePath() );
         }
 
         /**
@@ -138,7 +138,7 @@
             if ( $length == null ) {
 
                 // Take the length of the file starting from the start byte
-                $length = filesize( $this->_path ) - $start;
+                $length = filesize( $this->getAbsolutePath() ) - $start;
 
             }
 
@@ -156,7 +156,7 @@
             $result = '';
 
             // Open the file in read binary mode
-            $file = fopen( $this->_path, 'rb' );
+            $file = fopen( $this->getAbsolutePath(), 'rb' );
 
             // Check if we were able to open the file
             if ( $file === false ) {
@@ -169,7 +169,6 @@
             fseek( $file, $start );
 
             // Get the contents of the file
-            //$result = fread( $file, filesize( $this->_path ) );
             $result = fread( $file, $length );
 
             // Close the file handle    

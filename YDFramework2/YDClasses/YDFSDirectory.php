@@ -63,7 +63,7 @@
             $fileList = array();
            
             // Get a handle to the directory
-            $dirHandle = opendir( $this->_path );
+            $dirHandle = opendir( $this->getPath() );
 
             // Loop over the directory contents
             while ( false !== ( $file = readdir( $dirHandle ) ) ) { 
@@ -84,7 +84,7 @@
             // Convert the list of a list of YDFile objects
             $fileList2 = array();
             foreach ( $fileList as $file ) {
-                $file = $this->_path . '/' . $file;
+                $file = $this->getPath() . '/' . $file;
                 if ( is_dir( $file ) ) {
                     $fileObj = new YDFSDirectory( $file );
                 } else {

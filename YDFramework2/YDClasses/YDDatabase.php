@@ -61,8 +61,17 @@
         function YDDatabase( $url ) {
     
             // Initialize the database URL
-            $this->url = $url;
+            $this->_url = $url;
 
+        }
+
+        /**
+         *  This function will return the full URL to the database.
+         *
+         *  @param The full URL to the database.
+         */
+        function getUrl() {
+            return $this->_url;
         }
 
         /**
@@ -100,7 +109,7 @@
             require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
 
             // Make the connection
-            $conn = DB::connect( $this->url, $persistent );
+            $conn = DB::connect( $this->getUrl(), $persistent );
 
             // Check for errors
             if ( DB::isError( $conn ) ) {

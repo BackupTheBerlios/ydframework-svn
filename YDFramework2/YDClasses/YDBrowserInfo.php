@@ -27,37 +27,37 @@
         function YDBrowserInfo() {
 
             // Get the user agent
-            $this->agent = $_SERVER['HTTP_USER_AGENT'];
+            $this->_agent = $_SERVER['HTTP_USER_AGENT'];
 
             // Determine the browser name
-            if ( ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->agent, $ver ) ) {
-                $this->version = $ver[1];
-                $this->browser = 'ie';
-            } elseif ( ereg( 'Safari\/([0-9]+)', $this->agent, $ver ) ) {
-                $this->version = '1.0b' . $ver[1];
-                $this->browser = 'safari';
-            } elseif ( ereg( 'Opera ([0-9].[0-9]{1,2})', $this->agent, $ver ) ) {
-                $this->version = $ver[1];
-                $this->browser = 'opera';
-            } elseif ( ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->agent, $ver ) ) {
-                $this->version = $ver[1];
-                $this->browser = 'mozilla';
+            if ( ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                $this->_version = $ver[1];
+                $this->_browser = 'ie';
+            } elseif ( ereg( 'Safari\/([0-9]+)', $this->_agent, $ver ) ) {
+                $this->_version = '1.0b' . $ver[1];
+                $this->_browser = 'safari';
+            } elseif ( ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                $this->_version = $ver[1];
+                $this->_browser = 'opera';
+            } elseif ( ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                $this->_version = $ver[1];
+                $this->_browser = 'mozilla';
             } else {
-                $this->version = 0;
-                $this->browser = 'other';
+                $this->_version = 0;
+                $this->_browser = 'other';
             }
 
             // Determine the platform
-            if ( strstr( $this->agent,'Win' ) ) {
-                $this->platform = 'win';
-            } elseif ( strstr( $this->agent,'Mac' ) ) {
-                $this->platform = 'mac';
-            } elseif ( strstr( $this->agent,'Linux' ) ) {
-                $this->platform = 'linux';
-            } elseif ( strstr( $this->agent,'Unix' ) ) {
-                $this->platform = 'unix';
+            if ( stristr( $this->_agent,'Win' ) ) {
+                $this->_platform = 'win';
+            } elseif ( stristr( $this->_agent,'Mac' ) ) {
+                $this->_platform = 'mac';
+            } elseif ( stristr( $this->_agent,'Linux' ) ) {
+                $this->_platform = 'linux';
+            } elseif ( stristr( $this->_agent,'Unix' ) ) {
+                $this->_platform = 'unix';
             } else {
-                $this->platform = 'other';
+                $this->_platform = 'other';
             }
 
         }
@@ -67,7 +67,7 @@
          *  @returns String containing the HTTP_USER_AGENT contents.
          */
         function getAgent() {
-            return $this->agent;
+            return $this->_agent;
         }
 
         /** Function to get the name of the browser.
@@ -75,7 +75,7 @@
          * @returns String containing the name of the browser.
          */
         function getBrowser() {
-            return $this->browser;
+            return $this->_browser;
         }
 
         /** Function to get the version of the browser.
@@ -83,7 +83,7 @@
          * @returns String containing the version of the browser.
          */
         function getVersion() {
-            return $this->version;
+            return $this->_version;
         }
 
         /** Function to get the platform of the browser.
@@ -91,7 +91,7 @@
          * @returns String containing the platform of the browser.
          */
         function getPlatform() {
-            return $this->platform;
+            return $this->_platform;
         }
 
     }

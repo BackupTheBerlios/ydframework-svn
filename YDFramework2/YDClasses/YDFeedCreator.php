@@ -29,10 +29,10 @@
             require_once( YD_DIR_3RDP . '/feedcreator/feedcreator.class.php' );
 
             // Instantiate the feed creator
-            $this->ufc = new UniversalFeedCreator();
+            $this->_ufc = new UniversalFeedCreator();
 
             // Set the generator version
-            $this->ufc->generatorVersion = YD_FW_NAMEVERS . ' - YDFeedCreator';
+            $this->_ufc->generatorVersion = YD_FW_NAMEVERS . ' - YDFeedCreator';
 
         }
 
@@ -42,7 +42,7 @@
          *  @param $title The title of the feed.
          */
         function setTitle( $title ) {
-            $this->ufc->title = YDStringUtil::encodeString( $title );
+            $this->_ufc->title = YDStringUtil::encodeString( $title );
         }
 
         /**
@@ -51,7 +51,7 @@
          *  @param $desc The description of the feed.
          */
         function setDescription( $desc ) {
-            $this->ufc->description = YDStringUtil::encodeString( $desc );
+            $this->_ufc->description = YDStringUtil::encodeString( $desc );
         }
 
         /**
@@ -60,7 +60,7 @@
          *  @param $link The link of the feed.
          */
         function setLink( $link ) {
-            $this->ufc->link = $link;
+            $this->_ufc->link = $link;
         }
 
         /**
@@ -94,7 +94,7 @@
             }
 
             // Add the image to the feed
-            $this->ufc->image = $img;
+            $this->_ufc->image = $img;
 
         }
 
@@ -142,7 +142,7 @@
             }
 
             // Add the item to the feed
-            $this->ufc->addItem( $item );
+            $this->_ufc->addItem( $item );
 
         }
 
@@ -187,7 +187,7 @@
             }
 
             // Create the feed and return it
-            return $this->ufc->createFeed( strtoupper( $format ) );
+            return $this->_ufc->createFeed( strtoupper( $format ) );
 
         }
 
