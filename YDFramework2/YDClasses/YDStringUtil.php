@@ -155,6 +155,16 @@
             // Start with an empty string
             $encoded = '';
 
+            // Decode the given string
+            $trans_table = array_flip(
+                get_html_translation_table( HTML_SPECIALCHARS, $quote_style )
+            );
+            $trans_table[ '&#39;' ] = "'";
+            $string = strtr( $string, $trans_table );
+
+            // Encode the ampersands
+            $string = str_replace( '&', '&#38;', $string );
+
             // Loop over all the characters
             for ( $i=0; $i < strlen( $string ); $i++ )  {
 

@@ -27,7 +27,7 @@
             $this->fc->setDescription( 'News about the Yellow Duck Framework & Co.' );
             $this->fc->setLink( $this->getCurrentUrl() );
             $this->fc->setImage(
-                'Pieter &<> Fiona',
+                'Pieter & Fiona',
                 $this->getCurrentUrl(),
                 'http://www.yellowduck.be/images/site_images/YellowDuckEendje.gif'
             );
@@ -49,7 +49,7 @@
             $this->fc->addItem(
                 '<h3>Title 4 & Co.</h3>',
                 $this->getCurrentUrl() . '#4',
-                '<img src="fsimage1.jpg">'
+                '<img src="fsimage1.jpg" />'
             );
 
         }
