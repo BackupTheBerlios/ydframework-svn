@@ -10,11 +10,19 @@
 	require_once( 'YDFormElement.php' );
 
 	/**
-	 *	@todo
-	 *		We need a way to turn on a checkbox by default.
+	 *	This is the class that define a checkbox form element.
 	 */
 	class YDFormElement_Checkbox extends YDFormElement {
 
+		/**
+		 *	This is the class constructor for the YDFormElement_Checkbox class.
+		 *
+		 *	@param $form		The name of the form to which this element is connected.
+		 *	@param $name		The name of the form element.
+		 *	@param $label		(optional) The label for the form element.
+		 *	@param $attributes	(optional) The attributes for the form element.
+		 *	@param $options		(optional) The options for the elment.
+		 */
 		function YDFormElement_Checkbox( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
@@ -36,6 +44,11 @@
 
 		}
 
+		/**
+		 *	This function will return the element as HTML.
+		 *
+		 *	@returns	The form element as HTML text.
+		 */
 		function toHtml() {
 
 			// Create the list of attributes

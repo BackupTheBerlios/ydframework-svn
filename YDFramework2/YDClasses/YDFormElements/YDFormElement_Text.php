@@ -9,8 +9,20 @@
 
 	require_once( 'YDFormElement.php' );
 
+	/**
+	 *	This is the class that define a text form element.
+	 */
 	class YDFormElement_Text extends YDFormElement {
 
+		/**
+		 *	This is the class constructor for the YDFormElement_Text class.
+		 *
+		 *	@param $form		The name of the form to which this element is connected.
+		 *	@param $name		The name of the form element.
+		 *	@param $label		(optional) The label for the form element.
+		 *	@param $attributes	(optional) The attributes for the form element.
+		 *	@param $options		(optional) The options for the elment.
+		 */
 		function YDFormElement_Text( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
@@ -21,6 +33,11 @@
 
 		}
 
+		/**
+		 *	This function will return the element as HTML.
+		 *
+		 *	@returns	The form element as HTML text.
+		 */
 		function toHtml() {
 
 			// Create the list of attributes

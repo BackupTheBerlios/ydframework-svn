@@ -13,9 +13,6 @@
 	 *	This class defines an object oriented form.
 	 *
 	 *	@todo
-	 *		Implement the rest of the form elements.
-	 *
-	 *	@todo
 	 *		Convert all the examples to this new form object and kick out PEAR.
 	 *
 	 *	@todo
@@ -78,6 +75,7 @@
 			// Add the standard elements
 			$this->registerElement( 'bbtextarea', 'YDFormElement_BBTextArea', 'YDFormElement_BBTextArea.php' );
 			$this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
+			$this->registerElement( 'file', 'YDFormElement_File', 'YDFormElement_File.php' );
 			$this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
 			$this->registerElement( 'image', 'YDFormElement_Image', 'YDFormElement_Image.php' );
 			$this->registerElement( 'password', 'YDFormElement_Password', 'YDFormElement_Password.php' );
@@ -101,6 +99,10 @@
 			$this->registerRule( 'nopunctuation', array( 'YDValidateRules', 'nopunctuation' ), 'YDValidateRules.php' );
 			$this->registerRule( 'nonzero', array( 'YDValidateRules', 'nonzero' ), 'YDValidateRules.php' );
 			$this->registerRule( 'callback', array( 'YDValidateRules', 'callback' ), 'YDValidateRules.php' );
+			$this->registerRule( 'uploadedfile', array( 'YDValidateRules', 'uploadedfile' ), 'YDValidateRules.php' );
+			$this->registerRule( 'maxfilesize', array( 'YDValidateRules', 'maxfilesize' ), 'YDValidateRules.php' );
+			$this->registerRule( 'mimetype', array( 'YDValidateRules', 'mimetype' ), 'YDValidateRules.php' );
+			$this->registerRule( 'filename', array( 'YDValidateRules', 'filename' ), 'YDValidateRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
@@ -186,6 +188,9 @@
 		 *	@param $label		(optional) The label for the form element.
 		 *	@param $attributes	(optional) The attributes for the form element.
 		 *	@param $options		(optional) The options for the elment.
+		 *
+		 *	@todo
+		 *		Multi value items sometimes get mixed up, e.g. with desc, desc1 and desc2 as the element names.
 		 */
 		function & addElement( $type, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -201,6 +206,14 @@
 
 			// Check if the class exists
 			$class = $this->_regElements[ $type ]['class'];
+
+			// Add extra form attributes
+			if ( $type == 'file' ) {
+				if ( ! is_array( $this->_attributes ) ) {
+					$this->_attributes = array();
+				}
+				$this->_attributes[ 'enctype' ] = 'multipart/form-data';
+			}
 
 			// Create the instance
 			$instance = new $class( $this->_name, $name, $label, $attributes, $options );
@@ -241,7 +254,7 @@
 		 *
 		 *	@returns	A reference to the specified form element.
 		 */
-		function getElement( $name ) {
+		function & getElement( $name ) {
 
 			// Check if the element exists
 			if ( ! array_key_exists( $name, $this->_elements ) ) {
@@ -332,9 +345,9 @@
 
 			// Get the actual element value
 			$element = $this->getElement( $name );
+			$type = $element->_type;
 			$value = $element->_value;
 			$applyFilters = $element->_applyFilters;
-			unset( $element );
 
 			// Filters should only be applied if the form is submitted and if the element type supports it.
 			if ( $this->isSubmitted() ) {
@@ -343,6 +356,16 @@
 					$value = $this->_applyFilter( $name, $value );
 				}
 			}
+
+			// Special treatment for uploads
+			if ( $type == 'file' ) {
+				if ( array_key_exists( $this->_name . '_' . $name, $_FILES ) ) { 
+					return $_FILES[ $this->_name . '_' . $name ];
+				}
+			}
+
+			// Unset the element
+			unset( $element );
 
 			// Return the value
 			return $value;
@@ -458,8 +481,11 @@
 					YDFatalError( 'The callback specified for the form "' . $rule . '" is not valid' );
 				}
 
+				// Get the form values
+				$values = $this->getValues();
+
 				// Execute the rule
-				$result = call_user_func( $rule );
+				$result = call_user_func( $rule, $values );
 
 				// Check the result
 				if ( is_array( $result ) ) {
@@ -521,6 +547,11 @@
 					$form[ $name ]['required'] = false;
 				}
 
+			}
+
+			// If debugging, show contents
+			if ( YD_DEBUG ) {
+				YDDebugUtil::debug( YDDebugUtil::r_dump( $form ) );
 			}
 
 			// Return the form array

@@ -5,8 +5,9 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm.php' );
+	require_once( 'YDForm2.php' );
 	require_once( 'YDTemplate.php' );
+	require_once( 'YDStringUtil.php' );
 
 	// Class definition
 	class fileuploadRequest extends YDRequest {
@@ -23,25 +24,21 @@
 			$this->setVar( 'formValid', false );
 
 			// Create the form
-			$form = new YDForm( 'uploadForm' );
+			$form = new YDForm2( 'uploadForm' );
 
 			// Add the elements
-			$file = $form->addElement( 
-				'file', 'file1', 'Select a file to upload:'
-			);
+			$file = & $form->addElement(  'file', 'file1', 'Select a file to upload:' );
 			$form->addElement( 'submit', 'cmdSubmit', 'Send' );
 
 			// Add a rule
-			$form->addRule(
-				'file1', 'You need to select a valid file', 'uploadedfile'
-			);
+			$form->addRule( 'file1', 'uploadedfile', 'You need to select a valid file' );
 
 			// Process the form
 			if ( $form->validate() ) {
 
 				// Move the uploaded file
-				if ( $file->isUploadedFile() ) {
-					$file->moveUploadedFile( '.' );
+				if ( $file->isUploaded() ) { 
+					$file->moveUpload( '.' );
 				}
 
 				// Mark the form as valid

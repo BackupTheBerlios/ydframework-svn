@@ -7,7 +7,7 @@
 	require_once( 'YDRequest.php' );
 	require_once( 'YDFSDirectory.php' );
 	require_once( 'YDObjectUtil.php' );
-	require_once( 'YDForm.php' );
+	require_once( 'YDForm2.php' );
 	require_once( 'YDError.php' );
 
 	// Class definition for the index request
@@ -61,7 +61,7 @@
 		function actionAddNote() {
 
 			// Create the add form
-			$form = new YDForm( 'addEntryForm' );
+			$form = new YDForm2( 'addEntryForm' );
 
 			// Add the elements
 			$form->addElement( 'text', 'title', 'Title:' );
@@ -69,21 +69,21 @@
 			$form->addElement( 'submit', 'cmdSubmit', 'Save' );
 
 			// Apply filters
-			$form->applyFilter( 'title', 'trim' );
-			$form->applyFilter( 'body', 'trim' );
+			$form->addFilter( 'title', 'trim' );
+			$form->addFilter( 'body', 'trim' );
 
 			// Add a rule
-			$form->addRule( 'title', 'Title is required', 'required' );
-			$form->addRule( 'body', 'Contents is required', 'required' );
+			$form->addRule( 'title', 'required', 'Title is required' );
+			$form->addRule( 'body', 'required', 'Contents is required' );
 
 			// Process the form
 			if ( $form->validate() ) {
 
 				// Save the entries in an array
 				$entry = array(
-					'id' => md5( $form->exportValue( 'title' ) . $form->exportValue( 'body' ) ),
-					'title' => $form->exportValue( 'title' ),
-					'body' => $form->exportValue( 'body' )
+					'id' => md5( $form->getValue( 'title' ) . $form->getValue( 'body' ) ),
+					'title' => $form->getValue( 'title' ),
+					'body' => $form->getValue( 'body' )
 				);
 
 				// Save the serialized entry to a file

@@ -158,6 +158,46 @@
 			return call_user_func( $opts, $val );
 		}
 
+		/** 
+		 *	This rule checks if a file was uploaded.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function uploadedfile( $val, $opts ) {
+			return is_uploaded_file( $val['tmp_name'] );
+		}
+
+		/** 
+		 *	This rule checks if a file upload exceeded the file size or not.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The maximum file size in bytes.
+		 */
+		function maxfilesize( $val, $opts ) {
+			return ( $val['size'] > intval( $opts ) );
+		}
+
+		/** 
+		 *	This rule checks if a file upload had the right mime type.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The required mime type.
+		 */
+		function mimetype( $val, $opts ) {
+			return ( $val['type'] == $opts );
+		}
+
+		/** 
+		 *	This rule checks if a file upload had the right mime type.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The regex to which the filename should match.
+		 */
+		function filename( $val, $opts ) {
+			return YDValidateRules::regex( $val['name'], $opts );
+		}
+
 	}
 
 ?>

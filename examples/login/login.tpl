@@ -20,7 +20,7 @@
 		</p>
 	<?php } ?>
 
-	<form <?= $form['attributes'] ?>>
+	<form <?= $form['attribs'] ?>>
 		<p>
 			<?= $form['loginName']['label'] ?>
 			<br>

@@ -4,7 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDForm.php' );
+	require_once( 'YDForm2.php' );
 	require_once( 'YDRequest.php' );
 	require_once( 'YDFSDirectory.php' );
 
@@ -26,34 +26,32 @@
 			$this->setVar( 'formValid', false );
 
 			// Create the form
-			$form = new YDForm( 'firstForm' );
+			$form = new YDForm2( 'firstForm' );
 
 			// Set the defaults
 			$form->setDefaults( array( 'name' => 'Joe User' ) );
 
 			// Add the elements
 			$form->addElement( 'text', 'name', 'Enter your name:', array( 'size' => 50 ) );
-			$form->addElement( 'bbtextarea', 'desc', 'Enter the description:' );
+			$form->addElement( 'bbtextarea', 'desc1', 'Enter the description:' );
 			$form->addElement( 'bbtextarea', 'desc2', 'Enter the description (no toolbar):' );
-			$form->addElement( 'bbtextarea', 'desc3', 'Enter the description (no toolbar):' );
-			$form->addElement( 'date', 'date', 'Enter the date:', array( 'language'=>'en', 'format'=>'dMYHi' ) );
+			$form->addElement( 'bbtextarea', 'desc3', 'Enter the description:' );
 			$form->addElement( 'submit', 'cmdSubmit', 'Send' );
 
 			// Update the no toolbar element
 			$element = & $form->getElement( 'desc2' );
-			$element->clearModifiers();
-			$element->clearSimplePopups();
+			$element->clearButtons();
 
 			// Add a popup window to the third description
 			$element = & $form->getElement( 'desc3' );
-			$element->addPopupWindow( 'form.php?do=selector&field=desc3&tag=img', 'select image' );
-			$element->addPopupWindow( 'form.php?do=selector&field=desc3&tag=url', 'select url' );
+			$element->addPopupWindow( 'form.php?do=selector&field=firstForm_desc3&tag=img', 'select image' );
+			$element->addPopupWindow( 'form.php?do=selector&field=firstForm_desc3&tag=url', 'select url' );
 
 			// Apply a filter
-			$form->applyFilter( 'name', 'trim' );
+			$form->addFilter( 'name', 'trim' );
 
 			// Add a rule
-			$form->addRule( 'name', 'Please enter your name', 'required', null );
+			$form->addRule( 'name', 'required', 'Please enter your name' );
 
 			// Process the form
 			if ( $form->validate() ) {

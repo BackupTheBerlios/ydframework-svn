@@ -24,11 +24,7 @@
 			$form->registerFilter( 'reverse', 'strrev' );
 			$form->setDefaults( 
 				array( 
-					'txt2' => 'First text', 
-					'txt3' => "two\nlines", 
-					'hid1' => 'I am hidden',
-					'chk1' => 'x',
-					'sel1' => 2,
+					'txt2' => 'First text', 'txt3' => "2\nlines",  'hid1' => 'me hidden', 'chk1' => 'x',  'sel1' => 2
 				)
 			);
 			$text = & $form->addElement( 'text', 'txt1', 'Enter text 1:' );
@@ -44,7 +40,8 @@
 			$form->addElement( 'bbtextarea', 'bbt1', 'Enter your BBCode' );
 			$form->addElement( 'checkbox', 'chk1', 'Select me please' );
 			$form->addElement( 'checkbox', 'chk2', 'Select me please' );
-			$form->addElement( 'select', 'sel1', 'Select an option', array(), array( 1 => 'een', 2=>'twee' ) );
+			$form->addElement( 'select', 'sel1', 'Select an option:', array(), array( 1 => 'een', 2=>'twee' ) );
+			$form->addElement( 'file', 'fil1', 'Select an file:' );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
 			$form->addElement( 'reset', 'res1', 'Reset' );
 			$form->addFilter( '__ALL__', 'upper' );
@@ -63,6 +60,7 @@
 				YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
 				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
 				YDDebugUtil::dump( $_POST, '$_POST' );
+				YDDebugUtil::dump( $_FILES, '$_FILES' );
 			}
 			if ( $form->validate() ) {
 				YDDebugUtil::dump( $form->getValues(), 'Form values' );

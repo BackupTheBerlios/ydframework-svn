@@ -2,7 +2,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm.php' );
+	require_once( 'YDForm2.php' );
 
 	// Class definition
 	class MyLoginRequest extends YDRequest {
@@ -33,7 +33,7 @@
 			}
 
 			// Create the login form
-			$form = new YDForm( 'loginForm' );
+			$form = new YDForm2( 'loginForm' );
 			$form->setDefaults( array( 'name' => 'Joe User' ) );
 			$form->addElement( 'text', 'loginName', 'User name:' );
 			$form->addElement( 'password', 'loginPass', 'Password:' );
@@ -46,8 +46,8 @@
 			if ( $form->validate() ) {
 
 				// Get username and password
-				$usrName = $form->exportValue( 'loginName' );
-				$usrPass = $form->exportValue( 'loginPass' );
+				$usrName = $form->getValue( 'loginName' );
+				$usrPass = $form->getValue( 'loginPass' );
 
 				// Mark the session that we are logged in
 				$_SESSION['usrName'] = 'pieter';

@@ -20,11 +20,9 @@
 
 		<p>Welcome to <b><?= $form['name']['value'] ?></b>!</p>
 
-		<p>Description: <blockquote><?= $form['desc']['value_html'] ?></blockquote></p>
-		<p>Description2: <blockquote><?= $form['desc2']['value_html'] ?></blockquote></p>
-		<p>Description3: <blockquote><?= $form['desc3']['value_html'] ?></blockquote></p>
-
-		<p>Date <?= $form['date']['value']['d'] ?>/<?= $form['date']['value']['M'] ?>/<?= $form['date']['value']['Y'] ?></p>
+		<p>Description1: <blockquote><?= $form['desc1']['value'] ?></blockquote></p>
+		<p>Description2: <blockquote><?= $form['desc2']['value'] ?></blockquote></p>
+		<p>Description3: <blockquote><?= $form['desc3']['value'] ?></blockquote></p>
 
 	<?php } else { ?>
 	
@@ -36,16 +34,16 @@
 			</p>
 		<?php } ?>
 
-		<form <?= $form['attributes'] ?>>
+		<form <?= $form['attribs'] ?>>
 			<p>
 				<?= $form['name']['label'] ?>
 				<br>
 				<?= $form['name']['html'] ?>
 			</p>
 			<p>
-				<?= $form['desc']['label'] ?>
+				<?= $form['desc1']['label'] ?>
 				<br>
-				<?= $form['desc']['html'] ?>
+				<?= $form['desc1']['html'] ?>
 			</p>
 			<p>
 				<?= $form['desc2']['label'] ?>
@@ -56,11 +54,6 @@
 				<?= $form['desc3']['label'] ?>
 				<br>
 				<?= $form['desc3']['html'] ?>
-			</p>
-			<p>
-				<?= $form['date']['label'] ?>
-				<br>
-				<?= $form['date']['html'] ?>
 			</p>
 			<p>
 				<?= $form['cmdSubmit']['html'] ?>

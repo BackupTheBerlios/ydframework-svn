@@ -12,8 +12,9 @@
 
 	<?php if ( $formValid ) { ?>
 
-		<p>The file <b><?= $form['file1']['value']['name'] ?></b> was uploaded
-		successfully!</p>
+		<p>The file <b><?= $form['file1']['value']['name'] ?></b>
+		(<?= YDStringUtil::formatFileSize( $form['file1']['value']['size'] ) ?>)
+		was uploaded successfully!</p>		
 
 	<?php } else { ?>
 

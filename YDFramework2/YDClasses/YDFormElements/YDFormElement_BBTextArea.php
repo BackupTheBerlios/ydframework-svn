@@ -9,8 +9,21 @@
 
 	require_once( 'YDFormElement.php' );
 
+	/**
+	 *	This is the class that define a textarea form element that has support for a toolbar which can insert BBCode
+	 *	style tags to the content.
+	 */
 	class YDFormElement_BBTextArea extends YDFormElement {
 
+		/**
+		 *	This is the class constructor for the YDFormElement_BBTextArea class.
+		 *
+		 *	@param $form		The name of the form to which this element is connected.
+		 *	@param $name		The name of the form element.
+		 *	@param $label		(optional) The label for the form element.
+		 *	@param $attributes	(optional) The attributes for the form element.
+		 *	@param $options		(optional) The options for the elment.
+		 */
 		function YDFormElement_BBTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
@@ -90,6 +103,18 @@
 			array_push( $this->_buttons, $attrib );
 		}
 
+		/**
+		 *	This function will reset the toolbar and remove all the buttons.
+		 */
+		function clearButtons() {
+			$this->_buttons = array();
+		}
+
+		/**
+		 *	This function will return the element as HTML.
+		 *
+		 *	@returns	The form element as HTML text.
+		 */
 		function toHtml() {
 
 			// Create the list of attributes
