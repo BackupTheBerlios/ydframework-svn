@@ -6,24 +6,26 @@
 	// Includes
 	require_once( 'YDForm.php' );
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 	require_once( 'YDFileSystem.php' );
 
 	// Class definition
 	class form extends YDRequest {
 
 		// Class constructor
-		function formRequest() {
+		function form() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
 
 			// Set the title of the form
-			$this->setVar( 'title', 'Sample form' );
+			$this->template->assign( 'title', 'Sample form' );
 
 			// Mark the form as not valid
-			$this->setVar( 'formValid', false );
+			$this->template->assign( 'formValid', false );
 
 			// Create the form
 			$form = new YDForm( 'firstForm' );
@@ -57,15 +59,15 @@
 			if ( $form->validate() ) {
 
 				// Mark the form as valid
-				$this->setVar( 'formValid', true );
+				$this->template->assign( 'formValid', true );
 
 			}
 
 			// Add the form to the template
-			$this->addForm( 'form', $form );
+			$this->template->assignForm( 'form', $form );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -96,10 +98,10 @@
 			}
 
 			// Add the items to the template
-			$this->setVar( 'items', $items );
+			$this->template->assign( 'items', $items );
 
 			// Output the template
-			$this->outputTemplate( 'form_selector' );
+			$this->template->display( 'form_selector' );
 
 		}
 

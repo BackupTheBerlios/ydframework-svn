@@ -7,6 +7,7 @@
 	// Includes
 	require_once( 'YDForm.php' );
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 	require_once( 'YDDatabase.php' );
 
 	// Class definition for the index request
@@ -17,6 +18,9 @@
 
 			// Initialize the parent class
 			$this->YDRequest();
+
+			// Initialize the template object
+			$this->template = new YDTemplate();
 
 			// Make the database connection
 			$this->db = YDDatabase::getInstance(
@@ -45,13 +49,13 @@
 		function actionDefault() {
 
 			// Add the entries to the template
-			$this->setVar( 'entries', $this->db->getRecords( 'SELECT * FROM Notes' ) );
+			$this->template->assign( 'entries', $this->db->getRecords( 'SELECT * FROM Notes' ) );
 
 			// Add the title to the form
-			$this->setVar( 'title', 'Notes' );
+			$this->template->assign( 'title', 'Notes' );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -76,13 +80,13 @@
 			}
 
 			// Add the form to the template
-			$this->setVar( 'form', $this->form->toHtml() );
+			$this->template->assign( 'form', $this->form->toHtml() );
 
 			// Add the title to the form
-			$this->setVar( 'title', 'Add Note' );
+			$this->template->assign( 'title', 'Add Note' );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -118,13 +122,13 @@
 			}
 
 			// Add the form to the template
-			$this->setVar( 'form', $this->form->toHtml() );
+			$this->template->assign( 'form', $this->form->toHtml() );
 
 			// Add the title to the form
-			$this->setVar( 'title', 'Edit note' );
+			$this->template->assign( 'title', 'Edit note' );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

@@ -3,6 +3,7 @@
 	// Includes
 	require_once( 'YDForm.php' );
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class MyLoginRequest extends YDRequest {
@@ -15,6 +16,9 @@
 
 			// Indicate we require login
 			$this->setRequiresAuthentication( true );
+
+			// Instantiate the template object
+			$this->template = new YDTemplate();
 
 		}
 
@@ -61,10 +65,10 @@
 			}
 
 			// Add the form to the template
-			$this->addForm( 'form', $form );
+			$this->template->assignForm( 'form', $form );
 
 			// Output the template
-			$this->outputTemplate( 'login' );
+			$this->template->display( 'login' );
 
 		}
 

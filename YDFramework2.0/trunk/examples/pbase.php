@@ -9,6 +9,7 @@
 	// Includes
 	require_once( 'YDUrl.php' );
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 	require_once( 'YDFeedCreator.php' );
 
 	// Class definition
@@ -20,12 +21,15 @@
 			// Initialize the parent
 			$this->YDRequest();
 
+			// Initialize the template
+			$this->template = new YDTemplate();
+
 			// Set the home url
 			$this->homeUrl = 'http://www.pbase.com/beachshop/';
-			$this->setVar( 'homeUrl', $this->homeUrl );
+			$this->template->assign( 'homeUrl', $this->homeUrl );
 
 			// Title for the image gallery
-			$this->setVar( 'galTitle', 'Beachshop Pictures' );
+			$this->template->assign( 'galTitle', 'Beachshop Pictures' );
 
 			// Start with no galleries and no selected gallery
 			$this->galleries = array();
@@ -63,7 +67,7 @@
 				foreach ( $this->galleries as $gallery ) {
 					if ( $gallery['id'] == $_GET['gal'] ) {
 						$this->gallery = $gallery;
-						$this->setVar( 'gallery', $gallery );
+						$this->template->assign( 'gallery', $gallery );
 					}
 				}
 			}
@@ -74,10 +78,10 @@
 		function actionDefault() {
 
 			// Add the list of galleries
-			$this->setVar( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 4, true ) );
+			$this->template->assign( 'galleries', YDArrayUtil::convertToTable( $this->galleries, 4, true ) );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -85,13 +89,15 @@
 		function actionGallery() {
 
 			// Redirect to default if no gallery
-			if ( ! $this->gallery ) { $this->redirectToAction(); }
+			if ( ! $this->gallery ) {
+				$this->redirectToAction();
+			}
 
 			// Add the template variables
-			$this->setVar( 'images', YDArrayUtil::convertToTable( $this->gallery['images'], 4, true ) );
+			$this->template->assign( 'images', YDArrayUtil::convertToTable( $this->gallery['images'], 4, true ) );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -121,12 +127,12 @@
 			}
 
 			// Add them to the template
-			$this->setVar( 'imagePrevious', $imagePrevious );
-			$this->setVar( 'imageCurrent', $_GET['img'] );
-			$this->setVar( 'imageNext', $imageNext );
+			$this->template->assign( 'imagePrevious', $imagePrevious );
+			$this->template->assign( 'imageCurrent', $_GET['img'] );
+			$this->template->assign( 'imageNext', $imageNext );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

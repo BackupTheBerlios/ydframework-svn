@@ -5,6 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class database extends YDRequest {
@@ -12,6 +13,7 @@
 		// Class constructor
 		function database() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
@@ -23,22 +25,22 @@
 
 			// Check for errors
 			if ( ! $db || ! $result ) {
-				$this->setVar( 'error', mysql_error() );
-				$this->setVar( 'result', null );
+				$this->template->assign( 'error', mysql_error() );
+				$this->template->assign( 'result', null );
 			} else {
 				$data = $this->_query_db( $db, 'show processlist' );
-				$this->setVar( 'processList', $data );
+				$this->template->assign( 'processList', $data );
 				$data = $this->_query_db( $db, 'show status' );
-				$this->setVar( 'status', $data );
+				$this->template->assign( 'status', $data );
 				$data = $this->_query_db( $db, 'show variables' );
-				$this->setVar( 'variables', $data );
+				$this->template->assign( 'variables', $data );
 			}
 
 			// Close the database query
 			@mysql_close( $db );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

@@ -16,7 +16,7 @@
 
 		// Default action
 		function actionDefault() {
-			$this->outputTemplate();
+			$this->template->display();
 		}
 
 		// Function to logout

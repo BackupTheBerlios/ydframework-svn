@@ -5,6 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class index extends YDRequest {
@@ -12,6 +13,7 @@
 		// Class constructor
 		function index() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
@@ -34,11 +36,11 @@
 			);
 
 			// Set the template variables
-			$this->setVar( 'title', 'This is the title' );
-			$this->setVar( 'books', $array );
+			$this->template->assign( 'title', 'This is the title' );
+			$this->template->assign( 'books', $array );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

@@ -6,6 +6,7 @@
 	// Includes
 	require_once( 'YDForm.php' );
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 	require_once( 'YDFileSystem.php' );
 
 	// Class definition for the index request
@@ -16,6 +17,9 @@
 
 			// Initialize the parent class
 			$this->YDRequest();
+
+			// Initialize the template object
+			$this->template = new YDTemplate();
 
 			// Set the path to the data directory
 			$this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
@@ -48,10 +52,10 @@
 			}
 
 			// Add the entries to the template
-			$this->setVar( 'entries', $entries );
+			$this->template->assign( 'entries', $entries );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
@@ -96,11 +100,11 @@
 			}
 
 			// Add the form to the template
-			$this->addForm( 'form', $form );
+			$this->template->assignForm( 'form', $form );
 
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

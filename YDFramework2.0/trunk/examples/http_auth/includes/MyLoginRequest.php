@@ -1,16 +1,18 @@
 <?php
 
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	class MyLoginRequest extends YDRequest {
 
 		function MyLoginRequest() {
 			$this->YDRequest();
 			$this->setRequiresAuthentication( true );
+			$this->template = new YDTemplate();
 		}
 
 		function actionDefault() {
-			$this->outputTemplate();
+			$this->template->display();
 		}
 
 		function isAuthenticated() {

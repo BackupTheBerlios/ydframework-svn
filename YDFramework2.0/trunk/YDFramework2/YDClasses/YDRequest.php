@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDTemplate.php' );
-
 	/**
 	 *	This class implements a request. The request is the base class you can use to base your scripts on. The request
 	 *	class is the one taking care of the action dispatching when a script is executed. Also the authentication
@@ -18,7 +16,7 @@
 
 		/**
 		 *	This is the class constructor for the YDRequest class. This sets the default action to 'actionDefault' (but
-		 *	can be overridden later on), and also initializes an YDTemplate object.
+		 *	can be overridden later on).
 		 *
 		 *	@remark
 		 *		Do we really need te YD_ACTION_DEFAULT constant?
@@ -29,37 +27,9 @@
 			$this->YDBase();
 
 			// Set up the request class
-			$this->defaultAction = YD_ACTION_DEFAULT;
-			if ( ! isset( $this->template ) ) {
-				$this->template = new YDTemplate();
-			}
 			$this->__isInitialized = true;
 			$this->__requiresAuthentication = false;
 
-		}
-
-		/**
-		 *	This function defines the default action. This is the full name of the function that needs to be executed as
-		 *	the default action.
-		 *
-		 *	@param $action	The name of the function that needs to be executed as the default action.
-		 */
-		function setDefaultAction( $action ) {
-			$this->defaultAction = $action;
-		}
-
-		/**
-		 *	This function returns the full name the default action. This is the full name of the function that will be
-		 *	executed as the default action.
-		 *
-		 *	@returns	The name of the function that will to be executed as the default action.
-		 */
-		function getDefaultAction() {
-			if ( empty( $this->defaultAction ) ) {
-				return YD_ACTION_DEFAULT;
-			} else {
-				return $this->defaultAction;
-			}
 		}
 
 		/**
@@ -70,7 +40,7 @@
 		 */
 		function getActionName() {
 			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-				$action = $this->getDefaultAction();
+				$action = YD_ACTION_DEFAULT;
 			} else {
 				$action = $_GET[ YD_ACTION_PARAM ];
 			}
@@ -135,73 +105,6 @@
 		}
 
 		/**
-		 *	This is a shortcut for the $this->template->setVar function.
-		 *
-		 *	@param $name	Name you want to use for this variable for referencing it in the template.
-		 *	@param $value	The value of the variable you want to add.
-		 */
-		function setVar( $name, $value ) {
-			$this->template->setVar( $name, $value );
-		}
-
-		/**
-		 *	This function takes an associative array as it's argument, and assigns each individual key and value to the
-		 *	template.
-		 *
-		 *	@param $array	An associative array.
-		 */
-		function setVarsFromArray( $array ) {
-			foreach( $array as $key=>$val ) {
-				$this->setVar( $key, $val );
-			}
-		}
-
-		/**
-		 *	This function will add a YDForm object to the template. It will automatically convert the form to an array
-		 *	using the template object so that you don't have to do it manually.
-		 *
-		 *	If the form specified when calling this function is not a class derived from the YDForm class, a fatal error
-		 *	will be thrown.
-		 *
-		 *	@param $name	Name you want to use for this form for referencing it in the template.
-		 *	@param $form	The form you want to add.
-		 */
-		function addForm( $name, $form ) {
-			if ( ! YDObjectUtil::isSubclass( $form, 'YDForm' ) ) {
-				trigger_error(
-					'The form you have tried to add to the form is not a subclass of the YDForm class.', YD_ERROR
-				);
-			}
-			$this->setVar( $name, $form->toArray( $this->template ) );
-		}
-
-		/**
-		 *	This function will get the contents of the processed template. Optionally, the name of the template can be 
-		 *	specified. If no template is specified, the basename of the current script will be used as template name.
-		 *
-		 *	@param $templateName (optional)	Name of the template to use.
-		 *
-		 *	@returns	Returns the contents of the parsed template.
-		 */
-		function getTemplateOutput( $templateName='' ) {
-			$this->setVar( 'YD_ACTION', $this->getActionName() );
-			if ( empty( $templateName ) ) {
-				$templateName = basename( YD_SELF_FILE, YD_SCR_EXT );
-			}
-			return $this->template->getOutput( $templateName );
-		}
-
-		/**
-		 *	This function will output the contents of the processed template. Optionally, the name of the template can
-		 *	be specified. If no template is specified, the basename of the current script will be used as template name.
-		 *
-		 *	@param $templateName	Name of the template to use.
-		 */
-		function outputTemplate( $templateName='' ) {
-			echo( $this->getTemplateOutput( $templateName ) );
-		}
-
-		/**
 		 *	This function will check if the request was initialized properly.
 		 *
 		 *	@returns	Returns a boolean indicating if the request was initialized properly or not.
@@ -221,7 +124,8 @@
 		 */
 		function process() {
 			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-				$action = $this->getDefaultAction();
+				//$action = $this->getDefaultAction();
+				$action = YD_ACTION_DEFAULT;
 			} else {
 				$action = 'action' . $_GET[ YD_ACTION_PARAM ];
 			}

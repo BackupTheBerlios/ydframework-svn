@@ -5,6 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class auth_ipcheck extends YDRequest {
@@ -13,17 +14,18 @@
 		function auth_ipcheck() {
 			$this->YDRequest();
 			$this->setRequiresAuthentication( true );
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
-			$this->setVar( 'allowed', true );
-			$this->outputTemplate();
+			$this->template->assign( 'allowed', true );
+			$this->template->display();
 		}
 
 		// Default action
 		function actionTest() {
-			$this->outputTemplate();
+			$this->template->display();
 		}
 
 		// Check the authentication

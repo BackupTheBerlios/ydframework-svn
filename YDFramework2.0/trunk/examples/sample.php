@@ -5,6 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class sample extends YDRequest {
@@ -12,24 +13,25 @@
 		// Class constructor
 		function sample() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
-			$this->setVar( 'title', 'sample1Request::actionDefault' );
-			$this->outputTemplate();
+			$this->template->assign( 'title', 'sample1Request::actionDefault' );
+			$this->template->display();
 		}
 
 		// Edit action
 		function actionEdit() {
-			$this->setVar( 'title', 'sample1Request::actionEdit' );
-			$this->outputTemplate();
+			$this->template->assign( 'title', 'sample1Request::actionEdit' );
+			$this->template->display();
 		}
 
 		// Browser information
 		function actionBrowserInfo() {
-			$this->setVar( 'browser', $this->browser );
-			$this->outputTemplate();
+			$this->template->assign( 'browser', $this->browser );
+			$this->template->display();
 		}
 
 	}

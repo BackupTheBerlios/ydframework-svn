@@ -6,6 +6,7 @@
 	// Includes
 	require_once( 'YDRequest.php' );
 	require_once( 'YDDatabase.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class database1 extends YDRequest {
@@ -13,6 +14,7 @@
 		// Class constructor
 		function database1() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
@@ -20,14 +22,14 @@
 
 			// Get the data
 			$db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
-			$this->setVar( 'processList', $db->getRecords( 'show processlist' ) );
-			$this->setVar( 'status', $db->getRecords( 'show status' ) );
-			$this->setVar( 'variables', $db->getRecords( 'show variables' ) );
-			$this->setVar( 'version', $db->getServerVersion() );
-			$this->setVar( 'sqlcount', $db->getSqlCount() );
+			$this->template->assign( 'processList', $db->getRecords( 'show processlist' ) );
+			$this->template->assign( 'status', $db->getRecords( 'show status' ) );
+			$this->template->assign( 'variables', $db->getRecords( 'show variables' ) );
+			$this->template->assign( 'version', $db->getServerVersion() );
+			$this->template->assign( 'sqlcount', $db->getSqlCount() );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 			// Test string escaping
 			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );

@@ -14,13 +14,14 @@
 		// Class constructor
 		function fileupload() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
 
 			// Mark the form as not valid
-			$this->setVar( 'formValid', false );
+			$this->template->assign( 'formValid', false );
 
 			// Create the form
 			$form = new YDForm( 'uploadForm' );
@@ -41,16 +42,16 @@
 				}
 
 				// Mark the form as valid
-				$this->setVar( 'formValid', true );
+				$this->template->assign( 'formValid', true );
 
 			}
 
 			// Add the form to the template
-			$this->setVar( 'form_html', $form->toHtml() );
-			$this->addForm( 'form', $form );
+			$this->template->assign( 'form_html', $form->toHtml() );
+			$this->template->assignForm( 'form', $form );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

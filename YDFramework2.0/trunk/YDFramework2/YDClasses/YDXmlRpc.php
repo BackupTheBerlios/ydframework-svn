@@ -288,11 +288,12 @@
 			// Create a new template
 			require_once( 'YDTemplate.php' );
 			$template = new YDTemplate();
-			$template->setVar( 'methods', $methods );
-			$template->setVar( 'xmlRpcUrl', $this->getCurrentUrl() );
-			$template->setVar( 'capabilities', $this->_server->getCapabilities( null ) );
-			$template->setVar( 'rowcolor', '#EEEEEE' );
-			echo( $template->getOutput( dirname( __FILE__ ) . '/YDXmlRpcServer.tpl' ) );
+			$template->template_dir = dirname( __FILE__ );
+			$template->assign( 'methods', $methods );
+			$template->assign( 'xmlRpcUrl', $this->getCurrentUrl() );
+			$template->assign( 'capabilities', $this->_server->getCapabilities( null ) );
+			$template->assign( 'rowcolor', '#EEEEEE' );
+			$template->display( 'YDXmlRpcServer.tpl' );
 
 		}
 

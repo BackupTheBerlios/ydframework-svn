@@ -15,13 +15,14 @@
 		// Class constructor
 		function email() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
 
 			// Mark the form as not valid
-			$this->setVar( 'formValid', false );
+			$this->template->assign( 'formValid', false );
 
 			// Create the form
 			$form = new YDForm( 'emailForm' );
@@ -40,12 +41,12 @@
 			if ( $form->validate() ) {
 
 				// Mark the form as valid
-				$this->setVar( 'formValid', true );
+				$this->template->assign( 'formValid', true );
 
 				// Parse the template for the email
 				$emlTpl = new YDTemplate();
-				$emlTpl->setVar( 'email', $form->getValue( 'email' ) );
-				$body = $emlTpl->getOutput( 'email_template' );
+				$emlTpl->assign( 'email', $form->getValue( 'email' ) );
+				$body = $emlTpl->fetch( 'email_template', null );
 
 				// Send the email
 				$eml = new YDEmail();
@@ -58,16 +59,16 @@
 				$result = $eml->send();
 
 				// Add the result
-				$this->setVar( 'result', $result );
+				$this->template->assign( 'result', $result );
 
 			}
 
 			// Add the form to the template
-			$this->setVar( 'form_html', $form->toHtml() );
-			$this->addForm( 'form', $form );
+			$this->template->assign( 'form_html', $form->toHtml() );
+			$this->template->assignForm( 'form', $form );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 

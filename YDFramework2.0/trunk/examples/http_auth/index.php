@@ -11,7 +11,7 @@
 		}
 
 		function actionDefault() {
-			$this->outputTemplate();
+			$this->template->display();
 		}
 
 	}

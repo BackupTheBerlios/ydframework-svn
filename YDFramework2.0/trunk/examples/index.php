@@ -5,6 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
+	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class index extends YDRequest {
@@ -12,11 +13,12 @@
 		// Class constructor
 		function index() {
 			$this->YDRequest();
+			$this->template = new YDTemplate();
 		}
 
 		// Default action
 		function actionDefault() {
-			$this->outputTemplate();
+			$this->template->display();
 		}
 
 		// Function to show the highlighted source file
@@ -42,11 +44,11 @@
 			}
 
 			// Show the highlighted source
-			$this->setVar( 'file', $file );
-			$this->setVar( 'source', highlight_file( $file, 1 ) );
+			$this->template->assign( 'file', $file );
+			$this->template->assign( 'source', highlight_file( $file, 1 ) );
 
 			// Output the template
-			$this->outputTemplate();
+			$this->template->display();
 
 		}
 
