@@ -57,19 +57,53 @@
 		}
 
 		/**
+		 *	This function will highlight links in the given text.
+		 *
+		 *	@remarks
+		 *		This function can be called statically.
+		 *
+		 *	@param $text	The text which should have it's links highlighted.
+		 *
+		 *	@returns	The text with links highlighted as BBCode tags.
+		 */
+		function convertLinks( $text ) {
+			$text = preg_replace(
+				"#([\t\r\n ])([a-z0-9]+?){1}://([\w\-]+\.([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i",
+				'\1[url]\2://\3[/url]',
+				$text
+			);
+			$text = preg_replace(
+				"#([\t\r\n ])(www|ftp)\.(([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i", 
+				'\1[url=http://\2.\3]\2.\3[/url]',
+				$text
+			);
+			$text = preg_replace(
+				"#([\n ])([a-z0-9\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1[email]\\2@\\3[/email]", $text
+			);
+			return $text;
+		}
+
+		/**
 		 *	This function will take a piece of text and convert the BBCode tags to their HTML equivalents. You can 
 		 *	optionally convert line breaks as well as convert the remaining HTML tags to their entities.
 		 *
-		 *	@param $data		The data you want to convert.
-		 *	@param $convertBr	(optional) Boolean to indicate that new lines should be converted to <br/> tags. This is
-		 *						turned on by default.
-		 *	@param $convertTags	(optional) Boolean to indicate that tags should be converted to HTML. This is turned on
-		 *						by default.
+		 *	@param $data			The data you want to convert.
+		 *	@param $convertBr		(optional) Boolean to indicate that new lines should be converted to <br/> tags. 
+		 *							This is turned on by default.
+		 *	@param $convertTags		(optional) Boolean to indicate that tags should be converted to HTML. This is turned
+		 *							on by default.
+		 *	@param $convertLinks	(optional) Boolean to indicate if links should be automatically highlighted or not.
+		 *							This is turned on by default.
 		 *
 		 *	@returns	The HTML equivalent of the string with all the BBCode's converted according to the conversion table
 		 *				of this class.
 		 */
-		function toHtml( $data, $convertBr=true, $convertTags=true ) {
+		function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true ) {
+
+			// Convert the links to BBcode
+			if ( $convertLinks = true ) {
+				$data = $this->convertLinks( $data );
+			}
 
 			// Convert tags if needed
 			if ( $convertTags == true ) {
