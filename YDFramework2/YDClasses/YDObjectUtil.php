@@ -189,14 +189,11 @@
          *  GZip compressed to save space.
          *
          *  @param $obj Object to serialize.
-         *
-         *  @todo
-         *      Check if we are using the right gzip functions.
          */
         function serialize( $obj ) {
 
-            // We first serialize and then gzdeflate
-            return gzdeflate( serialize( $obj ) );
+            // We first serialize and then compress
+            return gzcompress( serialize( $obj ) );
 
         }
 
@@ -204,14 +201,11 @@
          *  This function will unserialize an object.
          *
          *  @param $obj Object to unserialize.
-         *
-         *  @todo
-         *      Check if we are using the right gzip functions.
          */
         function unserialize( $obj ) {
 
-            // We first gzinflate and then deserialize
-            return unserialize( gzinflate( $obj ) );
+            // We first decompress and then deserialize
+            return unserialize( gzuncompress( $obj ) );
 
         }
 
