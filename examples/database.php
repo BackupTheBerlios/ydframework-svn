@@ -18,8 +18,8 @@
 		function actionDefault() {
 
 			// Make the database connection
-			$db = mysql_connect( 'localhost', 'root', '' );
-			$result = mysql_select_db( 'test' );
+			$db = @mysql_connect( 'localhost', 'root', '' );
+			$result = @mysql_select_db( 'test' );
 
 			// Check for errors
 			if ( ! $db || ! $result ) {
@@ -35,7 +35,7 @@
 			}
 
 			// Close the database query
-			mysql_close( $db );
+			@mysql_close( $db );
 
 			// Output the template
 			$this->outputTemplate();
