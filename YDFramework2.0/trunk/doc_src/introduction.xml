@@ -13,14 +13,17 @@
 
         <itemizedlist spacing="compact">
             <listitem>Clean separation of code and output</listitem>
-            <listitem>Templates for outputting HTML easily</listitem>
+            <listitem>Templates for outputting HTML easily based on <ulink url="http://smarty.php.net/">Smarty</ulink></listitem>
             <listitem>Automatic action dispatching using URL parameters</listitem>
             <listitem>Object oriented form construction and validation</listitem>
             <listitem>Object oriented handling of authentication</listitem>
-            <listitem>Classes for creating "XML/RPC" clients and servers.</listitem>
-            <listitem>Classes for creating syndicated XML feeds such as RSS and Atom feeds.</listitem>
+            <listitem>Classes for creating <ulink url="http://www.xmlrpc.com/">XML/RPC</ulink> clients and servers.</listitem>
+            <listitem>Classes for creating syndicated XML feeds such as <ulink url="http://blogs.law.harvard.edu/tech/rss">RSS</ulink> and <ulink url="http://www.atomenabled.org/">Atom</ulink> feeds.</listitem>
             <listitem>Easy handling of files, directories and images. For images, there are some very straightforward functions that can create thumbnails of those images.</listitem>
             <listitem>An object oriented interface for creating and sending email messages.</listitem>
+            <listitem>Database abstraction layer supporting MySQL, PostgreSQL, SQLite and Oracle.</listitem>
+            <listitem>Object oriented way of creating SQL statements.</listitem>
+            <listitem>Logging infrastructure based on plain text or XML logfiles.</listitem>
         </itemizedlist>
 
     </sect1>
