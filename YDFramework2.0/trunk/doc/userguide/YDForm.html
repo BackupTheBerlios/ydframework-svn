@@ -109,7 +109,7 @@ The code above results in the following array structure:<br />
   ["attribs"]=>
   string(94) " name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self""
   ["tag"]=>
-  string(100) "<form name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self"><input type="hidden" name="PHPSESSID" value="04269a1b35c07e0b167f32a6a1241262" />"
+  string(100) "<form name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self"><input type="hidden" name="PHPSESSID" value="d596b8aaf83dfd8d105ed329a58dd8b5" />"
   ["requirednote"]=>
   string(26) "Items in bold are required"
   ["errors"]=>
@@ -241,6 +241,8 @@ There are also some rules that apply specifically to file uploads:<br />
 </li><li> <strong>extension</strong>: The filename must match the indicated extension</li></ul>
 <br />
 <span class="notes"><em><strong>Note:</strong> Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</em></span><br />
+<br />
+<span class="notes"><em><strong>Note:</strong> If you apply one of the standard rules to a file element, it will apply to the filename of the file that was entered in the file text field. It will not apply to the contents of the uploaded file.</em></span><br />
 <br />
 Now that we assigned all the rules and filters to the form, we can use the validate function to check if the input from our form was validated succesfully. Only if this condition is met, we will do something with the data of the form. This is also called "processing the form" which is discussed in the next section.<br />
 <br />
