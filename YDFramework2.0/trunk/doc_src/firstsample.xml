@@ -8,7 +8,7 @@
     <para>Let's take a look at an example script (named <literal>sample1.php</literal>) to understand how this works:</para>
 
     <example>
-        <title>sample1.php</title>
+        <title>Code listing: sample1.php</title>
         <programlisting><![CDATA[<?php
 
 // Include the Yellow Duck Framework initialization file
@@ -64,7 +64,7 @@ YDInclude( 'YDF2_process.php' );
     <para>The template file that goes along with this script looks as follows (<literal>sample1.tpl</literal>):</para>
 
     <example>
-        <title>sample1.tpl</title>
+        <title>Code listing: sample1.tpl</title>
         <programlisting><![CDATA[<html>
 
     <head>
