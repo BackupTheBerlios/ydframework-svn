@@ -70,7 +70,7 @@
 			// Show in debugging mode
 			if ( $this->debug ) {
 				$tmp = htmlspecialchars( $client->postdata );
-				echo( '<pre>' . $tmp . "\n</pre>\n\n" );
+				echo( '<pre>' . $tmp . YD_CRLF . '</pre>' . YD_CRLF . YD_CRLF );
 			}
 
 			// Now send the request
@@ -88,7 +88,7 @@
 			// Show in debugging mode
 			if ( $this->debug ) {
 				$tmp = htmlspecialchars( $contents );
-				echo( '<pre>' . $tmp . "\n</pre>\n\n" );
+				echo( '<pre>' . $tmp . YD_CRLF . '</pre>' . YD_CRLF . YD_CRLF );
 			}
 
 			// Now parse what we've got back

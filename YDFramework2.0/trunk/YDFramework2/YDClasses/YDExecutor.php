@@ -145,29 +145,29 @@
 			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 
 				// Create the debug messages
-				$debug = "\n\n";
+				$debug = YD_CRLF . YD_CRLF;
 
 				// Create the timings report
-				$debug .= "Processing time(s):\n\n";
-				$debug .= "\tElapsed\t  Diff\t  Marker\n";
+				$debug .= 'Processing time(s):' . YD_CRLF . YD_CRLF;
+				$debug .= '\tElapsed\t  Diff\t  Marker' . YD_CRLF;
 				$timings = $GLOBALS['timer']->getReport();
 				foreach ( $timings as $timing ) {
-					$debug .= "\t" . $timing[0] . ' ms' . "\t  " . $timing[1] . ' ms' . "\t  " .$timing[2] . "\n";
+					$debug .= "\t" . $timing[0] . ' ms' . "\t  " . $timing[1] . ' ms' . "\t  " .$timing[2] . YD_CRLF;
 				}
-				$debug .= "\n";
+				$debug .= YD_CRLF;
 
 				// Create the include file details
-				$debug .= 'Total size include files: ' . $includeFilesSize . "\n\n";
-				$debug .= 'Included files: ' . "\n\n\t" . implode( "\n\t", $includeFiles ) . "\n\n";
+				$debug .= 'Total size include files: ' . $includeFilesSize . YD_CRLF . YD_CRLF;
+				$debug .= 'Included files: ' . YD_CRLF . YD_CRLF . "\t" . implode( "\n\t", $includeFiles ) . YD_CRLF . YD_CRLF;
 
 				// If there is a database instance
-				$debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . "\n\n";
+				$debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . YD_CRLF . YD_CRLF;
 
 				// Add the queries if any
 				if ( sizeof( $GLOBALS['YD_SQL_QUERY'] ) > 0 ) {
-					$debug .= 'Executed SQL queries: ' . "\n\n";
+					$debug .= 'Executed SQL queries: ' . YD_CRLF . YD_CRLF;
 					foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
-						$debug .= "\t" . ($key+1) . ': ' . trim( $query ) . "\n\n";
+						$debug .= "\t" . ($key+1) . ': ' . trim( $query ) . YD_CRLF . YD_CRLF;
 					}
 				}
 
@@ -176,7 +176,7 @@
 
 			} else {
 				$elapsed = $elapsed = $GLOBALS['timer']->getElapsed();
-				echo( "\n" . '<!-- ' . $elapsed . ' ms / ' . $includeFilesSize . ' -->' );
+				echo( YD_CRLF . '<!-- ' . $elapsed . ' ms / ' . $includeFilesSize . ' -->' );
 			}
 
 			// Stop the execution of the request

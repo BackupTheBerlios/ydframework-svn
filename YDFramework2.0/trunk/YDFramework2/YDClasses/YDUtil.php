@@ -223,7 +223,7 @@
 		function debug() {
 			$args = func_get_args();
 			if ( YD_DEBUG == 1 ) {
-				echo( "\n" . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . "\n" );
+				echo( YD_CRLF . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . YD_CRLF );
 			}
 			if ( YD_DEBUG == 2 ) {
 				echo( '<table border="0" cellspacing="0" cellpadding="4"><tr>' );
@@ -269,7 +269,7 @@
 					$data = '<pre>' . $data . '</pre>';
 				}
 			} else {
-				$data = $label . "\n" . $data;
+				$data = $label . YD_CRLF . $data;
 			}
 			return $data;
 		}
@@ -282,8 +282,8 @@
 		function stackTrace() {
 			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 				$err = '';
-				$err .= 'URI: ' . YD_SELF_URI . "\n";
-				$err .= 'Debug backtrace:' . "\n";
+				$err .= 'URI: ' . YD_SELF_URI . YD_CRLF;
+				$err .= 'Debug backtrace:' . YD_CRLF;
 				foreach( debug_backtrace() as $t ) {
 					$err .= '    @ '; 
 					if ( isset( $t['file'] ) ) {
@@ -301,10 +301,10 @@
 					} else {
 						$err .= '()';
 					}
-					$err .= "\n"; 
+					$err .= YD_CRLF; 
 				}
 				if ( ini_get( 'display_errors' ) == 1 ) {
-					echo( '<pre>' . "\n" . htmlentities( $err ) . '</pre>' );
+					echo( '<pre>' . YD_CRLF . htmlentities( $err ) . '</pre>' );
 				}
 				error_log( $err, 0 );
 			}

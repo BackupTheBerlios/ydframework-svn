@@ -226,7 +226,7 @@
 		 */
 		function actionDefault() {
 			echo( 'action: actionDefault' );
-			echo( "\n" );
+			echo( YD_CRLF );
 			echo( 'You need to override this function to have the default action do something.' );
 		}
 

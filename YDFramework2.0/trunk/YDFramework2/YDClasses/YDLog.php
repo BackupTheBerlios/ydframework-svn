@@ -185,7 +185,7 @@
 				$f = fopen( YD_LOG_FILE, 'r+' );
 				clearstatcache();
 				if ( filesize( YD_LOG_FILE ) == 0 ) {
-					fwrite( $f, '<?xml version=\'1.0\'?>' . "\n" . '<log creator="' . htmlentities( YD_FW_NAMEVERS ) . '"></log>' );
+					fwrite( $f, '<?xml version=\'1.0\'?>' . YD_CRLF . '<log creator="' . htmlentities( YD_FW_NAMEVERS ) . '"></log>' );
 				}
 				fseek( $f, -6, SEEK_END );
 				fwrite( $f, $msg );

@@ -49,7 +49,7 @@
 			YDDebugUtil::dump( $file->getContents(), '$file->getContents() after update' );
 
 			// Append the contents
-			$file->setContents( '\nappended contents', true );
+			$file->setContents( YD_CRLF . 'appended contents', true );
 
 			// Get the contents
 			YDDebugUtil::dump( $file->getContents(), '$file->getContents() after append' );
