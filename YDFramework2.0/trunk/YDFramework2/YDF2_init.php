@@ -191,10 +191,10 @@
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
 		if ( get_magic_quotes_gpc() == 1 ) {
-			$_GET = array_map( 'stripslashes', $_GET );
-			$_POST = array_map( 'stripslashes', $_POST );
-			$_COOKIE = array_map( 'stripslashes', $_COOKIE );
-			$_REQUEST = array_map( 'stripslashes', $_REQUEST );
+			$_GET = @array_map( 'stripslashes', $_GET );
+			$_POST = @array_map( 'stripslashes', $_POST );
+			$_COOKIE = @array_map( 'stripslashes', $_COOKIE );
+			$_REQUEST = @array_map( 'stripslashes', $_REQUEST );
 		}
 		define( 'YD_FIXED_MAGIC_QUOTES', true );
 	}
