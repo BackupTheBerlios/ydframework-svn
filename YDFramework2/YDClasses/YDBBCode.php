@@ -19,25 +19,20 @@
      *  supported by default:
      *
      *  - [img]http://elouai.com/images/star.gif[/img]
+     *  - [img=http://www.yellowduck.be/]http://elouai.com/images/star.gif[/img]
      *  - [url="http://elouai.com"]eLouai[/url]
+     *  - [url]http://elouai.com[/url]
      *  - [mail="webmaster\@elouai.com"]Webmaster[/mail]
-     *  - [size="25"]HUGE[/size]
+     *  - [mail]webmaster\@elouai.com[/mail]
+     *  - [email="webmaster\@elouai.com"]Webmaster[/email]
+     *  - [email]webmaster\@elouai.com[/email]
      *  - [color="red"]RED[/color]
      *  - [b]bold[/b]
      *  - [i]italic[/i]
      *  - [u]underline[/u]
-     *  - [list][*]item[*]item[*]item[/list]
      *  - [code]value="123";[/code]
-     *  - [quote]John said yadda yadda yadda[/quote]
+     *  - [quote]a quote[/quote]
      *  - [p]paragraph[/p]
-     *
-     *  This class has been constructed in such a way that it's easy to add and
-     *  deleted BBCodes. You can also have the remaining HTML tags converted to
-     *  HTML entities if needed.
-     *
-     *  @todo
-     *      We will probably need the inverse of this as well (function that
-     *      converts from HTML to BBCode tags.
      */
     class YDBBCode extends YDBase {
 
@@ -46,60 +41,68 @@
          */
         function YDBBCode() {
 
-            // The variable that hold the conversions
+            // Initialize the parent class
+            $this->YDBase();
+
+            // Conversions
             $this->_conversions = array();
-            $this->addCode( '[list]', '<ul>' );
-            $this->addCode( '[*]', '<li>' );
-            $this->addCode( '[/list]', '</ul>' );
-            $this->addCode( '[img]', '<img src="' );
-            $this->addCode( '[/img]', '">' );
-            $this->addCode( '[b]', '<b>' );
-            $this->addCode( '[/b]', '</b>' );
-            $this->addCode( '[i]', '<i>' );
-            $this->addCode( '[/i]', '</i>' );
-            $this->addCode( '[u]', '<u>' );
-            $this->addCode( '[/u]', '</u>' );
-            $this->addCode( '[color="', '<span style="color:' );
-            $this->addCode( '[color=', '<span style="color:' );
-            $this->addCode( '[/color]', '</span>' );
-            $this->addCode( '[size="', '<span style="font-size:' );
-            $this->addCode( '[size=', '<span style="font-size:' );
-            $this->addCode( '[/size]', '</span>' );
-            $this->addCode( '[url="', '<a href="' );
-            $this->addCode( '[url=', '<a href="' );
-            $this->addCode( '[/url]', '</a>' );
-            $this->addCode( '[mail="', '<a href="mailto:' );
-            $this->addCode( '[mail=', '<a href="mailto:' );
-            $this->addCode( '[/mail]', '</a>' );
-            $this->addCode( '[code]', '<code>' );
-            $this->addCode( '[/code]', '</code>' );
-            $this->addCode( '[quote]', '<table bgcolor="lightgray"><tr><td bgcolor="white">' );
-            $this->addCode( '[/quote]', '</td></tr></table>' );
-            $this->addCode( '[p]', '<p>' );
-            $this->addCode( '[/p]', '</p>' );
-            $this->addCode( '"]', '">' );
-            $this->addCode( ']', '">' );
+
+            // Add the initial conversions
+            $this->addRule( "/\[[bB]\](.+?)\[\/[bB]\]/s", '<b>\\1</b>' );
+            $this->addRule( "/\[[iI]\](.+?)\[\/[iI]\]/s", '<i>\\1</i>' );
+            $this->addRule( "/\[[uU]\](.+?)\[\/[uU]\]/s", '<u>\\1</u>' );
+            $this->addRule( "/\[[pP]\](.+?)\[\/[pP]\]/s", '<p>\\1</p>' );
+            $this->addRule( "/\[code\](.+?)\[\/code\]/s", '<code>\\1</code>' );
+            $this->addRule(
+                "/\[quote\](.+?)\[\/quote\]/s", '<blockquote>\\1</blockquote>'
+            );
+            $this->addRule(
+                "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i",
+                '<a href="\\1">\\2</a>'
+            );
+            $this->addRule(
+                "/\[url\]([^<> \n]+?)\[\/url\]/i",
+                '<a href="\\1">\\1</a>'
+            );
+            $this->addRule(
+                "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i",
+                '<a href="mailto:\\1">\\2</a>'
+            );
+            $this->addRule(
+                "/\[mail\]([^<> \n]+?)\[\/mail\]/i",
+                '<a href="mailto:\\1">\\1</a>'
+            );
+            $this->addRule(
+                "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i",
+                '<a href="mailto:\\1">\\2</a>'
+            );
+            $this->addRule(
+                "/\[email\]([^<> \n]+?)\[\/email\]/i",
+                '<a href="mailto:\\1">\\1</a>'
+            );
+            $this->addRule(
+                "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i",
+                '<a href="\\1"><img border="0" src="\\2"></a>'
+            );
+            $this->addRule(
+                "/\[img\]([^<> \n]+?)\[\/img\]/i",
+                '<img border="0" src="\\1">'
+            );
+            $this->addRule(
+                "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i",
+                '<font color="\\1">\\2</font>'
+            );
 
         }
 
         /**
-         *  This function will add a new code to the list of conversions.
+         *  You can use this function to add a conversion rule to the parser.
          *
-         *  @param $tag     The tag to look for.
-         *  @param $replace The text to replace the tag with.
+         *  @param $regex   Regular expression matching the tags.
+         *  @param $replace The replacement for the tag regex.
          */
-        function addCode( $tag, $replace ) {
-            $this->_conversions[ $tag ] = $replace;
-
-        }
-
-        /**
-         *  This function will remove a code from the list of conversions.
-         *
-         *  @param $tag     The tag to remove.
-         */
-        function removeCode( $tag ) {
-            unset( $this->_conversions[ $tag ] );
+        function addRule( $regex, $replace ) {
+            $this->_conversions[ $regex ] = $replace;
         }
 
         /**
@@ -127,10 +130,15 @@
             }
 
             // Convert the tags
-            $data = str_replace( 
+            $data = preg_replace(
                 array_keys( $this->_conversions ),
                 array_values( $this->_conversions ),
                 $data 
+            );
+
+            // Open http links in a new window
+            $data = str_replace(
+                ' href="http://', ' target="_blank" href="http://', $data
             );
 
             // Convert tags if needed
