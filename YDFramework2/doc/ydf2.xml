@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!DOCTYPE merge [ 
+	<!ENTITY fo-related "pdf/postscript/rtf">
+	<!ENTITY fop-related "pdf/postscript"> 
+]>
+
+<document>
+
+    <document-meta-info>
+        <title>Yellow Duck Framework 2.0.0</title>
+        <attribute name="Author">
+            <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>
+        </attribute>
+    </document-meta-info>
+
+    <document-formatting-info>
+        <stylesheet url="style.css" />
+        <stylesheet-fo url="style.css" />
+        <left-margin>40pt</left-margin>
+        <right-margin>40pt</right-margin>
+        <top-margin>20pt</top-margin>
+        <bottom-margin>30pt</bottom-margin>
+        <generate-toc-page>yes</generate-toc-page>
+        <header-height>60pt</header-height>
+        <footer-height>30pt</footer-height>
+    </document-formatting-info>
+
+    <document-header>
+        <table width="100%">
+            <tr>
+                <td valign="middle" align="right">
+                    <b>Yellow Duck Framework 2.0.0</b>
+                </td>
+            </tr>
+        </table>
+        <hr size="1" color="red" noshade="true" />
+    </document-header>
+
+    <document-body>
+
+        <table-of-content>
+            <link href="#ch01">Introducing the Yellow Duck Framework
+                <link href="#ch01_01">Introduction</link>
+                <link href="#ch01_02">Analyzing the workflow</link>
+            </link>
+            <link href="#ch02">Installing the Yellow Duck Framework
+                <link href="#ch02_01">Prerequisites</link>
+                <link href="#ch02_02">Examining the Yellow Duck Framework files</link>
+                <link href="#ch02_03">Installation overview</link>
+                <link href="#ch02_04">Finding a place for the YDFramework2 directory</link>
+                <link href="#ch02_05">Assigning rights to the YDFramework2 directory</link>
+                <link href="#ch02_06">Configuring Apache to allow .htaccess files</link>
+                <link href="#ch02_07">Configuring the PHP options</link>
+                <link href="#ch02_08">Denying direct access to the templates</link>
+                <link href="#ch02_09">Using auto preprend and auto append</link>
+                <link href="#ch02_10">Configuring the samples (advised)</link>
+                <link href="#ch02_11">Testing the installation</link>
+            </link>
+            <link href="#ch03">Writing your first application
+                <link href="#ch03_01">Description of the application</link>
+                <link href="#ch03_02">Structuring the application</link>
+                <link href="#ch03_03">Creating the directory and the files</link>
+                <link href="#ch03_04">Implementing the basis of the index.php file</link>
+                <link href="#ch03_05">Improving the class constructor</link>
+                <link href="#ch03_06">Implementing the default action</link>
+                <link href="#ch03_07">Implementing the template</link>
+                <link href="#ch03_08">Implementing the addnote action</link>
+                <link href="#ch03_09">Implementing the deletenote action</link>
+                <link href="#ch03_10">The complete application</link>
+            </link>
+            <link href="#ch04">How requests are processed
+                <link href="#ch04_01">Description</link>
+                <link href="#ch04_02">Graphical overview</link>
+            </link>
+            <link href="#ch05">Using templates</link>
+            <link href="#ch06">Using and validating forms</link>
+            <link href="#ch07">Accessing database contents</link>
+            <link href="#ch08">How to handle authentication</link>
+            <link href="#ch09">Using files, directories and images</link>
+            <link href="#ch10">Using URLs and downloading data</link>
+            <link href="#ch11">Using XML/RPC clients and servers</link>
+            <link href="#ch12">Sending emails</link>
+            <link href="#ch13">Other classes and modules</link>
+        </table-of-content>
+    
+        <section name="ch01" label="Introducing the Yellow Duck Framework" />
+
+            <section name="ch01_01" label="Introduction">
+
+                <br/>
+
+                The Yellow Duck framework is web application framework created 
+                by Pieter Claerhout. More information can be found on 
+                <a href="http://www.yellowduck.be/">http://www.yellowduck.be/</a>.
+
+                <br/><br/>
+
+                The Yellow Duck Framework takes care of all the difficult work
+                you normally have to perform manually when developing a web
+                application. It is based on the idea of requests that can 
+                perform actions. By encapsulating all the programming in an
+                object-oriented environment, you get a framework that is easy 
+                to use and understand, easy to extend and doesn't limit you in 
+                any way.
+
+                <br/><br/>
+
+                <ul>
+                    <li>Clean separation of code and output</li>
+                    <li>Templates for outputting HTML easily</li>
+                    <li>Automatic action dispatching using URL parameters</li>
+                    <li>Object oriented form construction and validation</li>
+                    <li>PEAR based database connectivity which supports all 
+                    major database engines such as MySQL, PostgreSQL, Oracle, 
+                    Microsoft SQL Server, ...</li>
+                    <li>Object oriented handling of authentication</li>
+                    <li>To implement the base functionality, a lot of standard 
+                    libraries were used. Included is a partial copy of the PEAR
+                    library from the PHP project, which provides things such as
+                    database connectivity. More information and documentation on 
+                    the PEAR library can be found on 
+                    <a href="http://pear.php.net/">http://pear.php.net/</a>.</li>
+                </ul>
+
+            </section>
+
+            <section name="ch01_02" label="Analyzing the workflow">
+
+                <br/>
+
+                In the object oriented nature of the Yellow Duck Framework, each 
+                script that gets executed is based on the YDRequest class. This 
+                class is smart enough to figure out which functions needs to be
+                called using parameters given in the url.
+
+                Let's take a look at an example script to understand how this 
+                works:
+                
+                <pre><font color="#0000FF">&lt;?php</font>
+
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/YDFramework2/YDF2_init.php'</font><font color="#000033"> </font><font color="#000000">);</font> 
+
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDRequest.php'</font><font color="#000033"> </font><font color="#000000">);</font> 
+
+<font color="#7F007F">class</font><font color="#000033"> sample1Request </font><font color="#7F007F">extends</font><font color="#000033"> YDRequest </font><font color="#000000">{</font> 
+
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> sample1Request</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font> 
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">YDRequest</font><font color="#000000">();</font> 
+<font color="#000033">    </font><font color="#000000">}</font> 
+
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> actionDefault</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font> 
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'sample1Request::actionDefault'</font><font color="#000033"> </font><font color="#000000">);</font> 
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font> 
+<font color="#000033">    </font><font color="#000000">}</font> 
+
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> actionEdit</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font> 
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'sample1Request::actionEdit'</font><font color="#000033"> </font><font color="#000000">);</font> 
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font> 
+<font color="#000033">    </font><font color="#000000">}</font> 
+
+<font color="#000000">}</font>
+
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/YDFramework2/YDF2_process.php'</font><font color="#000033"> </font><font color="#000000">);</font> 
+
+<font color="#0000FF">?&gt;</font></pre>
+                
+                The template file that goes along with this script looks as
+                follows:
+
+                <pre><font color="#000080">&lt;html&gt;</font>
+<font color="#000080">&lt;head&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#0000FF">=</font><font color="#000033"> </font><font color="#0000FF">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000080">&lt;/head&gt;</font>
+<font color="#000080">&lt;body&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?</font><font color="#0000FF">=</font><font color="#000033"> </font><font color="#0000FF">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000080">&lt;/body&gt;</font>
+<font color="#000080">&lt;/html&gt;</font></pre>
+
+                <br/>
+
+                When you request the following URL, a number of things happen:
+
+                <pre>http://localhost/sample1.php</pre>
+
+                The first line you see in the sample1.php script is the include 
+                of the file called "YDF2_init.php". This file is responsible for 
+                setting up the Yellow  Duck Framework, and does things such as:
+
+                <br/><br/>
+
+                <ul>
+                    <li>Defining a number of constants with e.g. the path to
+                    specific directories and URLs</li>
+                    <li>Starts or restores the previous session</li> 
+                    <li>Reconfigures the PHP include path</li>
+                    <li>Includes the different files from the rest of the 
+                    framework<br/> </li>
+                </ul>
+
+                After that, we define a new class, called "sample1Request" which 
+                is based on the YDRequest class. For each script, you need to 
+                have 1 class which is named as the basename of the file (sample1 
+                in this case) and is appended with the string "Request". This 
+                class should have the YDRequest class as one of it ancestors.
+
+                <br/><br/>
+
+                Since we are inheriting from the YDRequest class, we initialize 
+                the parent class in the class constructor of the sample1Request
+                class.
+
+                <br/><br/>
+
+                Then we see two functions that start with the text "action". All
+                functions that implement actions start with "action". We will 
+                see later on how you can choose which one gets executed.
+
+                <br/><br/>
+
+                The last part of the script is the include of the
+                "YDF2_process.php" script, which processes the actual request.
+                It will look for a request class based on the name of the file,
+                and will execute the process function of that class. This is
+                where the magic happens.
+
+                <br/><br/>
+
+                The process function checks the URL to see if there was a
+                parameter defined with the name "do". This parameter can
+                indicate the action that needs to be executed. If the url looked
+                as follows, the function called "actionEdit" will be executed.
+
+                <pre>http://localhost/sample1.php?do=edit</pre>
+
+                If no action is specified in the url, the default action,
+                called "actionDefault" will be executed. In both actions, the 
+                functions in this script don't do a lot. 
+                They will set a template variable called "title" and they will 
+                output the template to the browser. The template contains 
+                special tags that are filled in on the fly with the right 
+                contents.
+
+                <page-break />
+
+            </section>
+
+        <section name="ch02" label="Installing the Yellow Duck Framework" />
+
+            <section name="ch02_01" label="Prerequisites">
+
+                <br/>
+
+                To use the Yellow Duck Framework, you need to have the following prerequisites:
+
+                <br/><br/>
+
+                <ul>
+                    <li>PHP version 4.x (tested with PHP 4.3)</li>
+                    <li>Webserver capable of running PHP script, such as Apache or Microsoft Internet
+                    Information Server</li>
+                </ul>
+              
+            </section>
+
+            <section name="ch02_02" label="Examining the Yellow Duck Framework files">
+
+                <br/>
+                
+                When you downloaded the latest release of the Yellow Duck 
+                Framework, you need to decompress it unzip e.g. winzip (Winzip) 
+                or the tar command (unix/linux). After decompressing, you will 
+                have the following directory structure:
+
+                <pre>+- YDFramework-2.0.0
+   +- index.php
+   +- index.tpl
+   +- ...
+   +- YDFramework2
+      +- 3rdparty
+      +- docs
+      +- temp
+      +- YDClasses</pre>
+
+                The main directory of the framework, called "YDFramework-2.0.0"
+                in this example, contains a number of sample files. In this
+                directory, there is also a directory called "YDFramework2",
+                which contains the actual framework files. There are a number of
+                subdirectories in the YDFramework2 directory which each have a
+                specific function:
+
+                <br/><br/>
+
+                <ul>
+                    <li>3rdparty: This directory contains the third party 
+                    libraries that are needed for the Yellow Duck Framework to 
+                    work properly. You will find a local copy of the PEAR 
+                    libraries and the other third party libraries in here.</li>
+                    <li>docs: This directory contains the documentation at which
+                    you are currently looking. It also contains the complete API
+                    documentation.</li>
+                    <li>temp: This directory contains the temporary files
+                    created by the framework. In here, the compiled versions of 
+                    the templates are saved.</li>
+                    <li>YDClasses: In here, you will find all the classes that
+                    make up the framework.<br/> </li>
+                </ul>
+
+                <div class="note">
+                <b>Note</b><br/>You will never have to add or alter files in the 
+                YDFramework2 directory. It's not even a good idea to put your 
+                own files in there as they might get overridden when you upgrade 
+                your framework to a newer version.
+                </div>
+              
+            </section>
+
+            <section name="ch02_03" label="Installation overview">
+
+                <br/>
+
+                There are a number of steps we need to do to get the framework 
+                installed properly. The install instructions here apply to the
+                Apache webserver, but similar techniques are available on other
+                servers.
+
+                <br/><br/>
+
+                These are the steps needed to install the framework:
+
+                <br/><br/>
+
+                <ol>
+                    <li>Finding a place for the YDFramework2 directory</li>
+                    <li>Assigning rights to the YDFramework2 directory</li>
+                    <li>Configuring Apache to allow .htaccess files</li> 
+                    <li>Configuring the PHP options</li> 
+                    <li>Denying direct access to the templates</li> 
+                    <li>Using auto preprend and auto append</li> 
+                    <li>Configuring the samples</li> 
+                    <li>Testing the installation</li>
+                </ol>
+
+            </section>
+
+            <section name="ch02_04" label="Finding a place for the YDFramework2 directory">
+
+                <br/>
+
+                The YDFramework2 directory can be placed anywhere in the file 
+                system. For security reasons, we suggest you to put the
+                YDFramework directory in a directory which is not viewable by
+                the webserver. It's not a good idea to put the YDFramework2
+                directory into the htdocs folders from Apache.
+
+                <br/><br/>
+
+                The YDFramework2 directory can also be shared among multiple web
+                applications. You only need 1 YDFramework2 directory on your 
+                system. You can if you want install a separate copy for each 
+                web application.
+
+            </section>
+
+            <section name="ch02_05" label="Assigning rights to the YDFramework2 directory">
+
+                <br/>
+
+                Since the framework needs to be able to write temporary data 
+                into it's temp directory, we need to change the rights for this 
+                folder. On Windows, you normally don't need to change this. On a 
+                unix or linux system, you can issue the following command to do
+                this:
+
+                <pre>/home/pieter # <b>chmod 777 YDFramework2/temp</b></pre>
+
+                If you are uploading the framework using your FTP client, please
+                check the documentation of your FTP client on how to do this.
+
+            </section>
+
+            <section name="ch02_06" label="Configuring Apache to allow .htaccess files">
+
+                <br/>
+
+                <div class="note">
+                <b>Note</b><br/>this is an optional setting and is already done 
+                on most systems. You only need to change this if you plan to use 
+                .htaccess files to change the PHP settings or if you want to 
+                deny access to the template files.
+                </div>
+
+                <br/>
+
+                In the Apache configuration file, you need to change the 
+                following for the web directory of your web application:
+
+                <pre><font color="#000080">&lt;Directory "C:/Program Files/Apache/htdocs"&gt;</font>
+    AllowOverride All
+<font color="#000080">&lt;/Directory&gt;</font></pre>
+
+                With configuring the directory like this in Apache, you indicate 
+                that .htaccess files can be used to override the settings.
+
+            </section>
+
+            <section name="ch02_07" label="Configuring the PHP options">
+
+                <br/>
+
+                Now that we configured Apache to accept .htaccess files, create 
+                a new file called ".htaccess" and save it in the root of your
+                web application. The settings done in the .htaccess file apply
+                to the directory in which the file is stored and to all the 
+                directories underneath that directory.
+
+                <br/><br/>
+
+                I've added the following configuration values for PHP to the 
+                .htaccess file on my system:
+
+                <pre><font color="#007F00"># Disable magic quotes</font>
+php_value magic_quotes_gpc 0
+php_value magic_quotes_runtime 0
+php_value magic_quotes_sybase 0
+
+<font color="#007F00"># Disabled registering of globals and arg*</font>
+php_value register_globals 0
+php_value register_argc_argv 0
+
+<font color="#007F00"># Disallow some security holes</font>
+php_value allow_call_time_pass_reference 0
+php_value allow_url_fopen 1
+php_flag short_open_tag On
+php_flag enable_dl Off
+
+<font color="#007F00"># Gzip compress the output</font>
+php_flag output_buffering Off
+php_flag zlib.output_compression On</pre>
+
+                With these options turned on, you will have Gzip compressed
+                output from the PHP scripts which helps you save bandwith. 
+                Registering of global variables and friends are also turned off,
+                and magic quotes are disabled.
+
+                <br/><br/>
+
+                In the installation download, there is a sample .htaccess file 
+                included which is called "_default.htaccess". Copy it to the 
+                root of your web directory and rename it to ".htaccess".
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>In order to have the examples working, you need 
+                to allow short open tags. this can be done by add the following 
+                to the .htaccess file:
+                    <pre>php_flag short_open_tag On</pre>
+                This will enable the use of "&lt;?" as the open tag for PHP
+                scripts instead of the standard "&lt;?php".
+                </div>
+
+            </section>
+
+            <section name="ch02_08" label="Denying direct access to the templates">
+
+                <br/>
+
+                Since we do not want people to access the template files 
+                directly, we need to tell Apache to deny access to these files. 
+                This can be done by adding the following code to the .htaccess
+                file:
+
+                <pre><font color="#007F00"># Denying direct access to the templates</font>
+<font color="#000080">&lt;FilesMatch "(.tpl|config.php|includes)$"&gt;</font>
+    Order allow,deny
+    Deny from all
+<font color="#000080">&lt;/FilesMatch&gt;</font></pre>
+
+                In the example above, I also denied access to the config.php 
+                file, as I do not want people to access this file directly. 
+                Access to the YDFramework2 and include directories are also
+                denied.
+
+            </section>
+
+            <section name="ch02_09" label="Using auto preprend and auto append">
+
+                <br/>
+
+                Instead of having to include the "YDF2_init.php" and 
+                "YDF2_process.php" files manually in each script, you can use 
+                the auto preprend and auto append options provided by the PHP
+                interpreter.
+
+                <br/><br/>
+
+                To enable this feature, add the following lines to the .htaccess 
+                file:
+                
+                <pre><font color="#007F00"># Auto include the Framework files</font>
+php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
+php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
+
+                On Windows, please use forward slashes instead of backslashes. 
+                Also make sure you use the complete path to the files.
+
+            </section>
+
+            <section name="ch02_10" label="Configuring the samples">
+
+                <br/>
+
+                In order to run the samples, we need to edit the configuration 
+                file to point to an existing database and we also need to change 
+                the paths to the framework files.
+
+                <br/><br/>
+
+                Open the file called "config.php" which is found in the main 
+                directory of the download, and edit the database settings:
+
+                <pre><font color="#0000FF">&lt;?php</font>
+
+<font color="#000033">    </font><font color="#999999">/*</font>
+<font color="#999999">     * Very simple configuration file</font>
+<font color="#999999">     */</font>
+
+<font color="#000033">    </font><font color="#00007F">$dbAliasses</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font>
+<font color="#000033">        </font><font color="#009F00">'localhost_mysql'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'mysql://root:@localhost/test'</font>
+<font color="#000033">    </font><font color="#000000">);</font>
+
+<font color="#0000FF">?&gt;</font></pre>
+
+                Once that is done, open each PHP script in the main directory of
+                the download, and change the include settings at the top and the
+                bottom of the file if needed.
+
+                <br/><br/>
+
+                For testing purposes, it's easier to leave the YDFramework2 
+                directory in the same directory as the sample files, as you 
+                don't need to alter any paths if you do so.
+
+            </section>
+
+            <section name="ch02_11" label="Testing the installation">
+
+                <br/>
+
+                To test the installation, run the sample scripts provided with 
+                the downloads. To run the samples, surf to the following URL
+
+                <pre>http://localhost/YDFramework2-2.0.0/index.php</pre>
+
+            </section>
+
+        <section name="ch03" label="Writing your first application" />
+
+            <section name="ch03_01" label="Description of the application">
+                
+                <br/>
+
+                The sample application we are going to use is a simple notebook
+                which has three options. The following options are supported by 
+                our notebook:
+
+                <br/><br/>
+
+                <ul>
+                    <li>Showing the list of notes (default)</li>
+                    <li>Adding a note</li>
+                    <li>Deleting a note<br/> </li>
+                </ul>
+
+                We will also use form validation to make sure that the data 
+                entered in the add note form is valid. This will prevent people
+                from adding notes without a title or body.
+
+                <br/><br/>
+
+                After you finished this chapter, the finished example  
+                application will look like this:
+
+                <br/><br/>
+
+                <img src="ydf2_02_001.gif" border="0" width="415" height="286" />
+
+                <br/><br/>
+
+                The screen above is used for listing and deleting notes. This
+                screen will also show you a link to the screen that is used for
+                adding new notes.
+
+                <br/><br/>
+
+                The interface for adding a new note will look as follows:
+
+                <br/><br/>
+
+                <img src="ydf2_02_002.gif" border="0" width="415" height="286" />
+
+                <br/><br/>
+
+                The delete screen doesn't really have a user interface. It will
+                remove the item from the list and reload the list once that is 
+                done.
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>In order no to over complicate this example, we 
+                will store the notes as files on the disk instead of using a 
+                database.
+                </div>
+
+            </section>
+
+            <section name="ch03_02" label="Structuring the application">
+                
+                <br/>
+
+                Before you start writing the actual code, you need to do a 
+                little bit of planning and determine which actions you will 
+                create to make your application work. In our case, we are going 
+                to make 3 different actions:
+
+                <br/><br/>
+
+                <ul>
+                    <li><b>default</b>: this is the default action and will show 
+                    the list of notes. If no notes are found, it should tell us 
+                    so.</li>
+                    <li><b>addnote</b>: this action will take care of adding a 
+                    new note. It will render the form you need to fill in, but 
+                    it will also take care of handling the form correctly and
+                    saving the result to disk.</li>
+                    <li><b>deletenote</b>: this function will delete a note 
+                    based on it's unique ID. In this example, it will not ask 
+                    you for confirmation, but it will simply delete the 
+                    note.<br/> </li>
+                </ul>
+
+                Now that we know what actions the application will be able to 
+                perform, we now need to think about how we can store the notes 
+                on disk. We will create an associative array for each note which 
+                will contain the title, body and the unique ID for the entry.
+
+                <br/><br/>
+
+                The unique ID for an entry will be created by calculating the 
+                md5 checksum of the combination of the title and the body. This 
+                will ensure that each note is unique.
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>the example will not warn about the fact that a
+                duplicate entry was entered. It will just overwrite the existing 
+                one. I'll leave it up to you to implement that yourself after
+                finishing this chapter.
+                </div>
+
+                <br/>
+
+                We will use the functions provided by the Yellow Duck Framework 
+                to load the notes from disk and save the notes to disk. In the 
+                framework, there are different objects and functions that take 
+                care of this.
+
+                <br/><br/>
+
+                After going through this example, you will have used and 
+                explored the following classes and modules in the Yellow Duck 
+                Framework:
+
+                <br/><br/>
+                
+                <ul>
+                    <li>YDRequest (class)</li>
+                    <li>YDFSDirectory (class)</li>
+                    <li>YDFSFile (class)</li>
+                    <li>YDForm (class)</li>
+                    <li>YDError and YDFatalError (classes)</li>
+                    <li>YDObjectUtil (module)<br/></li>
+                </ul>
+
+            </section>
+
+            <section name="ch03_03" label="Creating the directory and the files">
+                
+                <br/>
+
+                To start, create a new folder in your webroot called "firstapp". 
+                We will store all the files related to this tutorial in that 
+                folder.
+
+                <br/><br/>
+                
+                In this folder, we will need to create two files for our 
+                application. We need 1 file called "index.php", which will 
+                contain the actual script that drives the application. We will 
+                also need a file which is called "index.tpl" which contains the
+                template for this application. The template will define how the
+                application will be presented in the browser.
+
+                <br/><br/>
+                
+                By separating the actual script from the presentation, we will
+                make the application a lot easier to maintain and understand. By 
+                using this structured way, it will be a lot easier to track down 
+                problems because you know immediately where to look.
+
+            </section>
+
+            <section name="ch03_04" label="Implementing the basis of the index.php file">
+                
+                <br/>
+
+                The first thing we will do is to implement the basic stuff of 
+                the index.php script. As you could read in the first chapter, 
+                the name of the file determines how the class should be named.
+
+                <br/><br/>
+
+                Open the index.php file in a text editor and enter the following
+                text in the file:
+
+                <pre><font color="#0000FF">&lt;?php</font>
+
+<font color="#666666">// Initialize the Yellow Duck Framework</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/YDFramework2/YDF2_init.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#666666">// Includes</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDRequest.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDFSDirectory.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDObjectUtil.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDForm.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDError.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#666666">// Class definition for the index request</font>
+<font color="#7F007F">class</font><font color="#000033"> indexRequest </font><font color="#7F007F">extends</font><font color="#000033"> YDRequest </font><font color="#000000">{</font>
+
+<font color="#000033">    </font><font color="#666666">// Class constructor</font>
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> indexRequest</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">        </font><font color="#666666">// Initialize the parent class</font>
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">YDRequest</font><font color="#000000">();</font>
+
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#666666">// Default action</font>
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> actionDefault</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#666666">// Add Note action</font>
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> actionAddNote</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#666666">// Delete Note action</font>
+<font color="#000033">    </font><font color="#7F007F">function</font><font color="#000033"> actionDeleteNote</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000000">}</font>
+
+<font color="#666666">// Process the request</font>
+<font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/YDFramework2/YDF2_process.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#0000FF">?&gt;</font></pre>
+
+                There are a number of rules to follow to get the basis of the 
+                class implemented. Let's go over each one of them:
+
+                <br/><br/>
+
+                <ul>
+                    <li><b>Include the init file</b>: each script that wants to 
+                    use the Yellow Duck Framework needs to include the 
+                    "YDF2_init.php" file which initializes the framework. Make 
+                    sure the path to this file is correct, otherwise, the script
+                    will not work.</li>
+                    <li><b>Include the needed classes</b>: The next step is to
+                    include all the different classes from the framework you are
+                    going to use. I used the require_once to make sure the
+                    script doesn't continue without having included these files.
+                    You don't need to specify the complete path to these files
+                    as the framework will take care of finding the right files.
+                    </li>
+                    <li><b>Define the main class</b>: each script that wants to
+                    use the Yellow Duck Framework needs to have a class which 
+                    is named after the name of the file. In our example, the 
+                    file is named "index.php", which means the framework will
+                    search for a class called "indexRequest". This class needs
+                    to extends the YDRequest class to allow the framework to 
+                    process the request.</li>
+                    <li><b>Define the class constructor</b>: When the instance 
+                    of our class is created, it will execute the function which 
+                    has the same name as the class automatically (this function 
+                    is called the class constructor). In the class constructor, 
+                    we simply call the YDRequest function (which is the class 
+                    constructor from the YDRequest class) to make sure the 
+                    parent class is initialized as well.</li>
+                    <li><b>Define the functions for the actions</b>: For each 
+                    action, we need to create a separate function in the class. 
+                    Each function for an action has the name of the action 
+                    prepended by "action" as it's function name. By default, 
+                    these function do not require any arguments.<br/> </li>
+                </ul>
+                
+                With this implemented, you can already surf to the index.php
+                page, but nothing will be shown. You can try the following URLs:
+              
+                <pre>http://localhost/firstapp/index.php
+http://localhost/firstapp/index.php?do=addnote
+http://localhost/firstapp/index.php?do=deletenote
+http://localhost/firstapp/index.php?do=oops</pre>
+
+                If you typed in everything correctly, only the last URL should
+                return an error because it's pointing to an undefined action in
+                our class.
+
+            </section>
+
+        <section name="ch04" label="How requests are processed" />
+
+            <section name="ch04_01" label="Description">
+                
+                <br/>
+
+                In this chapter, we will see how requests are processed. When 
+                you load a request from the browser, a lot of things are 
+                performed before the actual action is processed and the contents 
+                is displayed to the end user.
+
+            </section>
+
+            <section name="ch04_02" label="Graphical overview">
+                
+                <br/>
+
+                The following diagram gives you a graphical overview of how 
+                requests are processed in the Yellow Duck Framework.
+
+                <br/><br/>
+
+                <img src="RequestProcessing.gif" width="667" height="759" 
+                 border="0" />
+
+                <br/><br/>
+
+                This whole process of handling a request is automatically done 
+                by the framework. There is no need to code this yourself. Of
+                course, if you want, there are a number of things you can
+                override in this workflow to make the framework do what you want
+                it to do.
+
+            </section>
+
+
+        <section name="ch05" label="Using templates">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch06" label="Using and validating forms">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch07" label="Accessing database contents">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch08" label="How to handle authentication">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch09" label="Using files, directories and images">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch10" label="Using URLs and downloading data">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch11" label="Using XML/RPC clients and servers">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch12" label="Sending emails">
+            <br/>
+            Not written yet
+        </section>
+
+        <section name="ch13" label="Other classes and modules">
+            <br/>
+            Not written yet
+        </section>
+
+    </document-body>
+
+    <document-footer>
+        <table width="100%">
+            <tr>
+                <td align="left"></td>
+                <td align="right"><page-number /></td>
+            </tr>
+        </table>
+    </document-footer>
+
+</document>
