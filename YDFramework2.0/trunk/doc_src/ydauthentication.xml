@@ -32,7 +32,7 @@
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplate.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
 
     // Class definition
     class MyLoginRequest extends YDRequest {
@@ -160,7 +160,7 @@
         <programlisting><![CDATA[<?php
 
     YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDTemplate.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
 
     class MyLoginRequest extends YDRequest {
 
@@ -216,7 +216,7 @@
 
     // Includes
     YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDTemplate.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
 
     // Class definition
     class auth_ipcheck extends YDRequest {

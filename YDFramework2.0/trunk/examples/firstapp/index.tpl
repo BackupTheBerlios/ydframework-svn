@@ -18,10 +18,10 @@
 
 			{foreach from=$entries item=entry}
 				<p>
-				<b>{$entry[title]}</b>
-				<a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry[id]}">delete</a>
+				<b>{$entry.title}</b>
+				<a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry.id}">delete</a>
 				<br>
-				{$entry[body]}
+				{$entry.body}
 				</p>
 			{/foreach}
 
@@ -35,27 +35,27 @@
 
 		<h3>Add a new note</h3>
 
-		{if $form[errors]}
+		{if $form.errors}
 			<p style="color: red"><b>Errors during processing:</b>
-				{foreach from=$form[errors] item=error}
+				{foreach from=$form.errors item=error}
 					<br>{$error}
 				{/foreach}
 			</p>
 		{/if}
 
-		<form {$form[attribs]}>
+		<form {$form.attribs}>
 			<p>
-				{$form[title][label]}
+				{$form.title.label}
 				<br>
-				{$form[title][html]}
+				{$form.title.html}
 			</p>
 			<p>
-				{$form[body][label]}
+				{$form.body.label}
 				<br>
-				{$form[body][html]}
+				{$form.body.html}
 			</p>
 			<p>
-				{$form[cmdSubmit][html]}
+				{$form.cmdSubmit.html}
 			</p>
 		</form>
 

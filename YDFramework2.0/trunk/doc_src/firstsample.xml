@@ -11,7 +11,7 @@
 
 require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
 YDInclude( 'YDRequest.php' );
-YDInclude( 'YDTemplate.php' );
+YDInclude( 'YDTemplateSmarty.php' );
 
 class sample1 extends YDRequest {
 
