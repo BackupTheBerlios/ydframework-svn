@@ -140,7 +140,7 @@
 	 */
 	if ( ! function_exists( 'YDStackTrace' ) ) {
 		function YDStackTrace() {
-			if ( YD_DEBUG == 1 ) {
+			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 				$err = '';
 				$err .= 'URI: ' . YD_SELF_URI . "\n";
 				$err .= 'Debug backtrace:' . "\n";
