@@ -97,7 +97,22 @@
 			echo( '<br>Query: ' . var_export( $url->getQuery(), 1 ) );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
+			// Test the getPathSubdirectories function
+			$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
+			YDDebugUtil::dump( $url->getUrl() );
+			YDDebugUtil::dump( $url->getPathSubdirectories('ydf2'), "getPathSubdirectories('ydf2')" );
+			YDDebugUtil::dump( $url->getPathSubdirectories('forum'), "getPathSubdirectories('forum')" );
+			YDDebugUtil::dump( $url->getPathSubdirectories('test'), "getPathSubdirectories('test')" );
+
+			// it gets the sub-directories of the first ocurrence: 
+			$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' ); 
+			YDDebugUtil::dump( $url->getUrl() );
+			YDDebugUtil::dump( $url->getPathSubdirectories('ydf2'), "getPathSubdirectories('ydf2')" );
+			YDDebugUtil::dump( $url->getPathSubdirectories('forum'), "getPathSubdirectories('forum')" );
+			YDDebugUtil::dump( $url->getPathSubdirectories('test'), "getPathSubdirectories('test')" );
+
 			// Get the contents
+			$url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
 			YDDebugUtil::dump( $url->getContents(), 'URL contents' );
 
 		}

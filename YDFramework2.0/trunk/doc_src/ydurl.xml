@@ -99,7 +99,7 @@
         function actionDefault() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://usr:pass@yellowduck.be:81/dir/test/?do=x&id=1#10' );
+            $url = new YDUrl( 'http://usr:pass@host.be:81/dir/test/?do=x&id=1#10' );
 
             // The different parts
             echo( '<br>URL: ' . $url->getUrl() );
@@ -110,13 +110,13 @@
             echo( '<br>Password: ' . $url->getPassword() );
             echo( '<br>Path: ' . $url->getPath() );
             echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
-            echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
+            echo( '<br>Path dirs: ' . implode( ', ', $url->getPathDirectories() ) );
             echo( '<br>Query: ' . $url->getQuery() );
             echo( '<br>Fragment: ' . $url->getFragment() );
-            echo( '<br>Getting query variable do: ' . $url->getQueryVar( 'do' ) );
-            echo( '<br>Setting query variable do to y: ' . $url->setQueryVar( 'do', 'y' ) );
+            echo( '<br>Getting query variable ' . $url->getQueryVar( 'do' ) );
+            echo( '<br>Setting query variable: ' . $url->setQueryVar( 'do', 'y' ) );
             echo( '<br>New URL: ' . $url->getUrl() );
-            echo( '<br>Deleting query variable do: ' . $url->deleteQueryVar( 'do' ) );
+            echo( '<br>Deleting query variable: ' . $url->deleteQueryVar( 'do' ) );
             echo( '<br>New URL: ' . $url->getUrl() );
 
             // Get the contents
@@ -152,6 +152,19 @@
     YDInclude( 'YDF2_process.php' );
 
 ?>]]></programlisting>
+
+        <para>There is also a function called getPathSubdirectories. This function will return the list of directories that appear after the first occurence of the indicated directory in the path part of the string. The following code examples show you how this can be used:</para>
+
+        <programlisting><![CDATA[$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
+$r = $url->getSubDirectories('ydf2');   // returns: ['forum'];
+$r = $url->getSubDirectories('forum');  // returns: [];
+$r = $url->getSubDirectories('test');   // returns: [];
+
+// it gets the sub-directories of the first ocurrence:
+$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
+$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
+$r = $url->getSubDirectories('forum');  // returns: ['ydf2', 'forum'];
+$r = $url->getSubDirectories('test');   // returns: [];]]></programlisting>
 
     </sect1>
 
@@ -192,7 +205,7 @@
         function actionDefault() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be:8080/directory/test/?do=x&id=1#10' );
+            $url = new YDUrl( 'http://www.yellowduck.be/directory/test/?do=x&id=1#10' );
 
             // Show the original URL
             YDDebugUtil::dump( $url->getUrl(), 'The original URL' );

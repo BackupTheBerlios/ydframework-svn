@@ -217,6 +217,46 @@
 		}
 
 		/**
+		 *	This function will return the list of directories that appear after the first occurence of the indicated
+		 *	directory in the path part of the string. The following code examples show you how this can be used:
+		 *
+		 *	@code
+		 *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
+		 *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum'];
+		 *	$r = $url->getSubDirectories('forum');  // returns: [];
+		 *	$r = $url->getSubDirectories('test');   // returns: [];
+		 *	
+		 *	// it gets the sub-directories of the first ocurrence:
+		 *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
+		 *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
+		 *	$r = $url->getSubDirectories('forum');  // returns: ['ydf2', 'forum'];
+		 *	$r = $url->getSubDirectories('test');   // returns: [];
+		 *	@endcode
+		 *
+		 *	@param	$dir	The directory to get the subdirectories from.
+		 *
+		 *	@returns	Array with the directories that appear after the first occurence of the indicated directory in
+		 *	the path part of the string
+		 */
+		function getPathSubdirectories( $dir ) {
+
+			// Get the list of directories in the path string
+			$dirs = $this->getPathDirectories();
+
+			// Get the position of the directory in the list of directories
+			$pos = array_search( $dir, $dirs );
+
+			// Return an empty array if not found
+			if ( $pos === false ) {
+				return array();
+			}
+
+			// If found, return the list of subdirectories
+			return array_slice( $dirs, $pos+1 );
+
+		}
+
+		/**
 		 *	This function will return the query part of the URL. This is everything after the ? mark.
 		 *
 		 *	@returns	The query part of the URL.
