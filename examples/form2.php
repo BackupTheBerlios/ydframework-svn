@@ -20,15 +20,22 @@
 		function actionDefault() {
 
 			// Create the form
-			$form = new YDForm2( 'firstForm' );
+			$form = new YDForm2( 'form1' );
 			$form->setDefaults( array( 'txt1' => 'First text' ) );
 			$form->addElement( 'text', 'txt1', 'Enter text:' );
 			$form->addElement( 'text', 'txt2', 'Enter text:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
-
 			YDDebugUtil::dump( $form->toArray(), '$form as array' );
-
 			$form->display();
+
+			// Create the form
+			$form2 = new YDForm2( 'form2' );
+			$form2->setDefaults( array( 'txt1' => 'First text' ) );
+			$form2->addElement( 'text', 'txt1', 'Enter text:' );
+			$form2->addElement( 'text', 'txt2', 'Enter text:' );
+			$form2->addElement( 'submit', 'cmd1', 'Send' );
+			YDDebugUtil::dump( $form2->toArray(), '$form as array' );
+			$form2->display();
 
 			// Get the values
 			YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
