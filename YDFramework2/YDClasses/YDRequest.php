@@ -167,7 +167,7 @@
 		 *	@param $form	The form you want to add.
 		 */
 		function addForm( $name, $form ) {
-			if ( ! YDObjectUtil::isSubclass( $form, 'YDForm' ) ) {
+			if ( ! ( YDObjectUtil::isSubclass( $form, 'YDForm' ) || YDObjectUtil::isSubclass( $form, 'YDForm2' ) ) ) {
 				YDFatalError( 'The form you have tried to add to the form is not a subclass of the YDForm class.' );
 			}
 			$this->setVar( $name, $form->toArray( $this->template ) );

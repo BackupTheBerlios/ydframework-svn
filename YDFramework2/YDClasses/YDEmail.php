@@ -8,8 +8,7 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'Mail.php' );
-	require_once( 'Mail/mime.php' );
+	require_once( 'htmlMimeMail/htmlMimeMail.php' );
 
 	/**
 	 *	This class defines an email message.
@@ -28,15 +27,12 @@
 			$this->YDBase();
 
 			// Intialize a new mime message
-			$this->_msg = new Mail_mime( $crlf );
+			$this->_msg = new htmlMimeMail();
 
 			// Start with empty variables
 			$this->sender = '';
-			$this->replyto = '';
-			$this->from = '';
 			$this->to = array();
 			$this->to_plain = array();
-			$this->subject = '';
 			$this->cc = array();
 			$this->bcc = array();
 
@@ -49,7 +45,7 @@
 		 *	@param $name	Name to use as the from
 		 */
 		function setFrom( $email, $name='' ) {
-			$this->from = $this->_mergeEmailName( $email, $name );
+			$this->_msg->setFrom( $this->_mergeEmailName( $email, $name ) );
 			$this->sender = $email;
 		}
 
@@ -60,7 +56,7 @@
 		 *	@param $name	Name to use as the relpy to
 		 */
 		function setReplyTo( $email, $name='' ) {
-			$this->replyto = $this->_mergeEmailName( $email, $name );
+			$this->_msg->setReturnPath( $this->_mergeEmailName( $email, $name ) );
 		}
 
 		/**
@@ -102,7 +98,7 @@
 		 *	@param $subject	Subject of the email
 		 */
 		function setSubject( $subject ) {
-			$this->subject = strip_tags( $subject );
+			$this->_msg->setSubject( strip_tags( $subject ) );
 		}
 
 		/**
@@ -111,43 +107,44 @@
 		 *	@param $text	The text to set.
 		 */
 		function setTxtBody( $text ) {
-			$this->_msg->setTxtBody( strip_tags( $text ) );
+			$this->_msg->setText( strip_tags( $text ) );
 		}
 
 		/**
 		 *	Sets the HTML part of a message.
 		 *
-		 *	@param $text	The text to set.
+		 *	@param $html	The HTML version of the message.
+		 *	@param $text	The plain text version of the message.
 		 */
-		function setHtmlBody( $text ) {
-			$this->_msg->setHtmlBody( $text );
+		function setHtmlBody( $html, $text='' ) {
+			$this->_msg->setHtml( $html, $text );
 		}
 
 		/**
 		 *	Adds an attachment to a message.
 		 *
-		 *	@param $file		The file name or the data itself.
+		 *	@param $file		The file path.
 		 *	@param $c_type		(optional) The content type of the image or file.
-		 *	@param $name		(optional) The suggested file name for the data. Only used, if $file contains data.
-		 *	@param $isfile		(optional) Whether $file is a file name or not.
-		 *	@param $encoding	(optional) Type of transfer encoding to use for the file data. Defaults is "base64". For
-		 *						text based files (eg. scripts/html etc.) this could be given as "quoted-printable".
+		 *	@param $name		(optional) The suggested file name for the data.
 		 */
-		function addAttachment( $file, $c_type='application/octet-stream', $name='', $isfile=true, $encoding='base64' ) {
-			$this->_msg->addAttachment( $file, $c_type, $name, $isfile, $encoding );
+		function addAttachment( $file, $c_type='application/octet-stream', $name='' ) {
+			$data = $this->_msg->getFile( $file );
+			if ( empty( $name ) ) { $name = basename( $file ); }
+			$this->_msg->addAttachment( $data, $name, $c_type );
 		}
 
 		/**
 		 *	If sending an HTML message with embedded images, use this function
 		 *	to add the image.
 		 *
-		 *	@param $file	The image file name or the image data itself.
+		 *	@param $file	The image file path.
 		 *	@param $c_type	(optional) The content type of the image or file.
-		 *	@param $name	(optional) The filename of the image. Only used, if $file contains the image data.
-		 *	@param $isfile	(optional) Whether $file is a file name or not.
+		 *	@param $name	(optional) The filename of the image.
 		 */
-		function addHTMLImage( $file, $c_type='application/octet-stream', $name='', $isfile=true ) {
-			$this->_msg->addHTMLImage( $file, $c_type, $name, $isfile );
+		function addHTMLImage( $file, $c_type='application/octet-stream', $name='' ) {
+			$data = $this->_msg->getFile( $file );
+			if ( empty( $name ) ) { $name = basename( $file ); }
+			$this->_msg->addHTMLImage( $data, $name, $c_type );
 		}
 
 		/**
@@ -166,42 +163,24 @@
 				YDFatalError( 'You need to specify who this email message coming from.' );
 			}
 
-			// Get the email contents
-			$body = $this->_msg->get();
+			// Get the original the message
+			$message = $this->_msg;
 
-			// Build the list of headers
-			$headers = array( 'From' => $this->from, 'To' => implode( '; ', $this->to ), 'X-Mailer' => YD_FW_NAMEVERS );
-
-			// Check for a reply to
-			if ( ! empty( $this->replyto ) ) {
-				$headers['Reply-To'] = $this->replyto;
-			} else {
-				$headers['Reply-To'] = $this->from;
-			}
-
-			// Add the CC header
+			// Add the CC info
 			if ( sizeof( $this->cc ) > 0 ) {
-				$headers['CC'] = implode( '; ', $this->cc );
+				$message->setCC( implode( '; ', $this->cc ) );
 			}
 
-			// Add the BCC header
+			// Add the BCC info
 			if ( sizeof( $this->bcc ) > 0 ) {
-				$headers['BCC'] = implode( '; ', $this->bcc );
+				$message->setBCC( implode( '; ', $this->bcc ) );
 			}
 
-			// Add the subject
-			if ( ! empty( $this->subject ) ) {
-				$headers['Subject'] = $this->subject;
-			} else {
-				$headers['Subject'] = 'Untitled message';
-			}
+			// Set the header
+			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
-			// Get the email headers
-			$headers = $this->_msg->headers( $headers );
-
-			// Send the actual message
-			$mail = & Mail::factory( 'mail' );
-			$mail->send( $this->to_plain, $headers, $body );
+			// Send the email
+			$message->send( $this->to );
 
 		}
 

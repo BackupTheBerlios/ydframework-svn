@@ -80,7 +80,7 @@
 		 *	@param $opts	The regular expression to use (PCRE syntax).
 		 */
 		function regex( $val, $opts ) {
-			if ( preg_match( $val, $opts ) ) {
+			if ( preg_match( $opts, $val ) ) {
 				return true;
 			} else {
 				return false;
@@ -94,7 +94,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function email( $val, $opts ) {
-			return YDValidateRules( $val, '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]+))$/' );
+			return YDValidateRules::regex( $val, '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]+))$/' );
 		}
 
 		/** 
@@ -104,7 +104,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function lettersonly( $val, $opts ) {
-			return YDValidateRules( $val, '/^[a-zA-Z]+$/' );
+			return YDValidateRules::regex( $val, '/^[a-zA-Z]+$/' );
 		}
 
 		/** 
@@ -114,7 +114,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function alphanumeric( $val, $opts ) {
-			return YDValidateRules( $val, '/^[a-zA-Z0-9]+$/' );
+			return YDValidateRules::regex( $val, '/^[a-zA-Z0-9]+$/' );
 		}
 
 		/** 
@@ -124,7 +124,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function numeric( $val, $opts ) {
-			return YDValidateRules( $val, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
+			return YDValidateRules::regex( $val, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
 		}
 
 		/** 
@@ -134,7 +134,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function nopunctuation( $val, $opts ) {
-			return YDValidateRules( $val, '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/' );
+			return YDValidateRules::regex( $val, '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/' );
 		}
 
 		/** 
@@ -144,7 +144,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function nonzero( $val, $opts ) {
-			return YDValidateRules( $val, '/^-?[1-9][0-9]*/' );
+			return YDValidateRules::regex( $val, '/^-?[1-9][0-9]*/' );
 		}
 
 		/** 

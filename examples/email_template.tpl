@@ -40,7 +40,7 @@
 
 	<p class="title1">Hello from Pieter & Fiona</p>
 
-	<p><img src="fsimage1.jpg" border="1" alt="Pieter & Fiona"
+	<p><img src="fsimage.jpg" border="1" alt="Pieter & Fiona"
 	width="320" height="213"></p>
 
 	<p>This email was sent to <a href="mailto:<?= $email ?>"><?= $email ?></a>.</p>
