@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 
 echo Started making of a new distribution archive.
 
@@ -32,7 +32,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
 del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
-del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
+rem del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 del /Q "%BLDDIR%\YDFramework2\doc\ydf2.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
