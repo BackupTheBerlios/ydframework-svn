@@ -69,13 +69,13 @@
 			// Check if caching is enabled
 			if ( $cache == true ) {
 
-			   // Output the cached version if any
-			   if ( is_file( $cacheFName ) ) {
-				  $img = new YDFSImage( $cacheFName );
-				  header( 'Content-type: ' . $img->getMimeType() );
-				  echo( $img->getContents() );
-				  die();
-			  }
+				// Output the cached version if any
+				if ( is_file( $cacheFName ) ) {
+					$img = new YDFSImage( $cacheFName );
+					header( 'Content-type: ' . $img->getMimeType() );
+					echo( $img->getContents() );
+					die();
+				}
 
 			}
 
@@ -94,7 +94,7 @@
 
 			// Check if caching is enabled
 			if ( $cache == true ) {
-			   $thumb->RenderToFile( $cacheFName );
+				$thumb->RenderToFile( $cacheFName );
 			}
 
 			// Output the thumbnail
@@ -114,7 +114,7 @@
 			if ( ! function_exists( 'getimagesize' ) ) {
 				YDFatalError(
 					'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
-				    . 'using the YDFSImage::getImageSize function.'
+					. 'using the YDFSImage::getImageSize function.'
 				);
 			}
 
