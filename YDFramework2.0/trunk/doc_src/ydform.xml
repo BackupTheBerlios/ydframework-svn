@@ -100,6 +100,8 @@
             <listitem><emphasis role="bold">datetime:</emphasis> is a combination of select fields that allow a user to select a datetime.</listitem>
         </itemizedlist>
 
+        <note>To influence the language of the months in the date and datetime elements, you should use the <ulink url="http://be2.php.net/manual/en/function.setlocale.php">setlocale</url> function to make sure you have the right locale set.</url>
+
         <para>You can also easily create your own form elements. Each form element needs to implement the following API:</para>
 
         <programlisting><![CDATA[<?php
