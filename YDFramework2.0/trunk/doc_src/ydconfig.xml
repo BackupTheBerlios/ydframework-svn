@@ -1,8 +1,140 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<chapter id="ydcart">
+<chapter id="ydconfig">
 
     <title>YDConfig: the global configuration</title>
 
-    <para>Not documented yet.</para>
+    <para>The YDConfig class is a way to configure things in the Yellow Duck Framework. You can compare it with setting a global variable, but it's much more versatile as it's doing some more chechking.</para>
+
+	<para>The YDConfig class has different methods, which are all implemented as static methods. This means that you don't have to make a instance of the YDConfig class to use it. The following methods are available:</para>
+
+	<itemizedlist spacing="compact">
+		<listitem><emphasis role="bold">YDConfig::get():</emphasis> gets the value for the specified configuration variable.</listitem>
+		<listitem><emphasis role="bold">YDConfig::set():</emphasis> sets the value for the specified configuration variable, optionally overriding any value that was set already.</listitem>
+		<listitem><emphasis role="bold">YDConfig::exists():</emphasis> checks if the specified configuration variable is set or not.</listitem>
+		<listitem><emphasis role="bold">YDConfig::dump():</emphasis> this functions uses the YDDebugUtil::dump function to dump the contents of the YDConfig object.</listitem>
+	</itemizedlist>
+	
+	<para>The following example shows you how you can use the YDConfig object:</para>
+	
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    
+    // Class definition
+    class config extends YDRequest {
+
+        // Class constructor
+        function config() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Set some variables
+            YDConfig::set( 'MyConfigVar1', 'value cfg1' );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2' );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3' );
+
+            // Get the values
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3' );
+
+            // Check if the variables exist or not
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar1' ), 'exists - MyConfigVar1' );
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar2' ), 'exists - MyConfigVar2' );
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar3' ), 'exists - MyConfigVar3' );
+
+            // Check an unexisting variable
+            YDDebugUtil::dump( YDConfig::exists( 'xx' ), 'exists - xx' );
+
+            // Set some variables, not overriding existing values
+            YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', false );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', false );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', false );
+
+            // Get the values (should be unchanged)
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed1' );
+
+            // Set some variables, overriding existing values
+            YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', true );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', true );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', true );
+
+            // Get the values (should be changed)
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed2' );
+            
+            // Dump the contents of YDConfig
+            YDConfig::dump();
+            
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+	<para>The output from this example should be the following:</para>
+	
+    <programlisting><![CDATA[get - MyConfigVar1
+'value cfg1'
+
+get - MyConfigVar2
+'value cfg2'
+
+get - MyConfigVar3
+'value cfg3'
+
+exists - MyConfigVar1
+true
+
+exists - MyConfigVar2
+true
+
+exists - MyConfigVar3
+true
+
+exists - xx
+false
+
+get - MyConfigVar1 - changed1
+'value cfg1'
+
+get - MyConfigVar2 - changed1
+'value cfg2'
+
+get - MyConfigVar3 - changed1
+'value cfg3'
+
+get - MyConfigVar1 - changed2
+'value cfg1 changed'
+
+get - MyConfigVar2 - changed2
+'value cfg2 changed'
+
+get - MyConfigVar3 - changed2
+'value cfg3 changed'
+
+YDConfig contents
+array (
+  'YD_EXECUTOR' => 'YDExecutor',
+  'YD_DEBUG' => 0,
+  'MyConfigVar1' => 'value cfg1 changed',
+  'MyConfigVar2' => 'value cfg2 changed',
+  'MyConfigVar3' => 'value cfg3 changed',
+)]]></programlisting>
+
+	<note>A lot of the classes in the Yellow Duck Framework use the YDConfig object to be configured. Examples of classes that use the YDConfig object to get their configuration from are the <link linkend="ydlog">YDLog</link>, <link linkend="ydurl_raw_http">YDHttpClient</link>, <link linkend="ydurl_ydurl_class">YDUrl</link> and <link linkend="yddatabase_paged">YDRecordSet</link> classes.</note> 
 
 </chapter>
