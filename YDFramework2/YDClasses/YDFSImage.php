@@ -49,14 +49,19 @@
          *  @param $height The maximum height of the thumbnail.
          *  @param $cache  (optional) Indicate if the thumbnails should be 
          *                 cached or not. By default, caching is turned on.
+         *
+         *  @todo
+         *      If somethings goes wrong with making the thumbnails, we need to
+         *      send an error image instead of displaying text. We might need to
+         *      save the binary data of the image in the source script, or in a 
+         *      different include file.
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 
-            // Includes
-            require_once( 'YDPhpUtil.php' );
-
-            // Check for the GD library
-            YDPhpUtil::requiresGD();
+            // Check if the GD library is loaded.
+            if ( ! extension_loaded( 'gd' ) ) {
+                  $this->_error( 'YD_gd_not_installed.gif' );
+            }
 
             // Include phpThumb
             require_once( 'phpThumb/phpthumb.class.php' );
@@ -102,22 +107,18 @@
 
             // Width should be positive integer
             if ( ! is_int( $width ) ) {
-                new YDFatalError( 'outputThumbnail: Width should be an integer.' );
+                  $this->_error();
             }
             if ( $width < 1 ) {
-                new YDFatalError(
-                    'outputThumbnail: Width should be a positive integer.' 
-                );
+                  $this->_error();
             }
 
             // Height should be positive integer
             if ( ! is_int( $width ) ) {
-                new YDFatalError( 'outputThumbnail: Height should be an integer.' );
+                  $this->_error();
             }
             if ( $width < 1 ) {
-                new YDFatalError(
-                    'outputThumbnail: Height should be a positive integer.' 
-                );
+                  $this->_error();
             }
 
             // Generate the thumbnail
@@ -201,7 +202,7 @@
          *
          *  @returns The type of the image, which is either jpg, png or gif.
          */
-         function getImageType() {
+        function getImageType() {
 
             // Get the parameters
             $params = getimagesize( $this->getAbsolutePath() );
@@ -237,7 +238,7 @@
          *
          *  @returns The type of the image, which is either jpg, png or gif.
          */
-         function getMimeType() {
+        function getMimeType() {
 
             // Get the image type
             $type = $this->getImageType();
@@ -246,6 +247,28 @@
             return 'image/' . strtolower( $type );
 
          }
+         
+         /**
+          *  This function is used to output an error image.
+          *
+          *  @param $name (optional) Name of the error image. Default image that
+          *               is shown is the generic "YD_ydfsimage_fatal_error".
+          *
+          *  @internal
+          */
+        function _error( $name='YD_ydfsimage_fatal_error' ) {
+
+            // Create a file object for the image
+            $img = new YDFSImage( YD_DIR_HOME . '/images/' . $name . '.gif' );
+
+            // Output the thumbnail
+            header( 'Content-type: ' . $img->getMimeType() );
+            echo( $img->getContents() );
+
+            // Stop the execution of the script
+            die();
+
+        }
 
     }
 

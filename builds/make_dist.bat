@@ -34,6 +34,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
 del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
 del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
+del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 xcopy /I /Q /Y "%BLDDIR%\YDFramework2\doc\changelog.html" "changelog.html"
 
 rem Zip up the build to an archive
