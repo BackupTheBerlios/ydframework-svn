@@ -229,6 +229,14 @@
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.tpl">email1.tpl</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="htmlarea.php">HTML Editor Control</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=htmlarea.php">htmlarea.php</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>

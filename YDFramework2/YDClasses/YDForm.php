@@ -12,12 +12,10 @@
     require_once( 'HTML/QuickForm.php' );
     require_once( 'HTML/QuickForm/Renderer/Array.php' );
 
-    /*
     // Register our custom form elements
-    $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']['wysiwygarea'] = array(
-        'QuickForm/wysiwygarea.php', 'HTML_QuickForm_wysiwygarea'
-    );
-    */
+    //$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']['htmlarea'] = array(
+    //    'QuickForm/htmlarea.php', 'HTML_QuickForm_htmlarea'
+    //);
 
     /**
      *  This class implements an HTML form. This class is based on the
@@ -67,6 +65,11 @@
             // Aggregate the functions from the YDBase class
             aggregate( $this, 'YDBase' );
             YDBase::YDBase();
+
+            // Add our custom elements
+            $this->registerElementType(
+                'htmlarea', 'QuickForm/htmlarea.php', 'HTML_QuickForm_htmlarea'
+            );
 
         }
 
