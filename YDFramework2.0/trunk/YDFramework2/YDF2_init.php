@@ -76,6 +76,7 @@
     if ( ! defined( 'YD_DIR_TEMP' ) ) {
         define( 'YD_DIR_TEMP', YD_DIR_HOME . YD_DIRDELIM . 'temp' );
     }
+    @define( 'YD_DIR_ADDO', YD_DIR_HOME . YD_DIRDELIM . 'addons' );
 
     // Action paths
     @define( 'YD_ACTION_PARAM', 'do' );
@@ -116,7 +117,16 @@
     $GLOBALS['YD_SQL_QUERY'] = array();
 
     // Update the include path
-    $includePath = YD_SELF_DIR;
+    $includePath = YD_DIR_ADDO;
+    if ( $handle = opendir( YD_DIR_ADDO ) ) {
+        while ( false !== ( $file = readdir( $handle ) ) ) {
+           if ( $file != '.' && $file != '..' && is_dir( YD_DIR_ADDO . YD_DIRDELIM . $file ) ) {
+                $includePath .= YD_PATHDELIM . YD_DIR_ADDO . YD_DIRDELIM . $file;
+           }
+        }
+        closedir( $handle );
+    }
+    $includePath .= YD_PATHDELIM . YD_SELF_DIR;
     if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
         $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
     }
@@ -137,6 +147,7 @@
     require_once( 'YDConfig.php' );
     require_once( 'YDLocale.php' );
     require_once( 'YDF2_functions.php' );
+    require_once( 'YDAddOnModule.php' );
 
     // Default the locale to English
     YDConfig::set( 'YD_LOCALE', 'en', false );
