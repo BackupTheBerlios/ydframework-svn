@@ -50,7 +50,7 @@
 
 			// Start with default headers
 			$headers = array();
-			$headers[] = "{$this->method} {$this->path} HTTP/1.1";
+			$headers[] = "{$this->method} {$this->path} HTTP/1.0";
 			$headers[] = "Host: {$this->host}";
 			$headers[] = "User-Agent: {$this->user_agent}";
 			$headers[] = "Accept: {$this->accept}";
