@@ -728,7 +728,7 @@
 		 *	@returns	False on failure, otherwise, it will return a YDFSDirectory object for the new directory.
 		 */
 		function createDirectory( $directory, $mode=0700 ) {
-			$directory = $this->getAbsolutePath() . '/fda/' . basename( $directory );
+			$directory = $this->getAbsolutePath() . '/' . basename( $directory );
 			if ( is_dir( $directory ) || mkdir( $directory, $mode ) ) {
 				return new YDFSDirectory( $directory );
 			} else {
