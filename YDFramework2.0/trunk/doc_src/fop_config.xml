@@ -30,5 +30,10 @@
                embed-file="fonts/LTYPE.TTF">
             <font-triplet name="LucidaTypewriter" style="normal" weight="normal"/>
         </font>
+        <font  metrics-file="fonts/lucida_typewriter-bold.xml"  
+               kerning="yes" 
+               embed-file="fonts/LTYPEB.TTF">
+            <font-triplet name="LucidaTypewriter" style="normal" weight="bold"/>
+        </font>
     </fonts>
 </configuration>
