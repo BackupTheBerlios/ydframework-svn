@@ -1,7 +1,7 @@
 <?php
 
     // Include our custom init file
-    require_once( dirname( __FILE__ ) . '/_includes/YDF2_include.php' );
+    include_once( dirname( __FILE__ ) . '/_includes/YDF2_include.php' );
 
     // Define the request class
     class index extends MyAppRequest {

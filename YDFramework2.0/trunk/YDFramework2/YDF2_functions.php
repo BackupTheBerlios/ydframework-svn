@@ -34,15 +34,15 @@
      */
     function YDInclude( $file ) {
         foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
-            if ( realpath( $include ) != false ) {
-                if ( file_exists( realpath( $include ) . '/' . $file ) ) {
-                    require_once( realpath( $include ) . '/' . $file );
+            if ( $include != false ) {
+                if ( is_file( $include . '/' . $file ) ) {
+                    include_once( $include . '/' . $file );
                     return;
                 }
             }
         }
         if ( is_file( $file ) ) {
-            require_once( $file );
+            include_once( $file );
             return;
         }
         trigger_error(

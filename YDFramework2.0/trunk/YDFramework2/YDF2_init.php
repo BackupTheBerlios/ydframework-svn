@@ -147,11 +147,11 @@
     @ini_set( 'include_path', $includePath );
 
     // Include the standard functions
-    require_once( 'YDBase.php' );
-    require_once( 'YDConfig.php' );
-    require_once( 'YDLocale.php' );
-    require_once( 'YDF2_functions.php' );
-    require_once( 'YDAddOnModule.php' );
+    include_once( 'YDBase.php' );
+    include_once( 'YDConfig.php' );
+    include_once( 'YDLocale.php' );
+    include_once( 'YDF2_functions.php' );
+    include_once( 'YDAddOnModule.php' );
 
     // Default the locale to English
     YDConfig::set( 'YD_LOCALE', 'en', false );

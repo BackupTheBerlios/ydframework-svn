@@ -1,7 +1,7 @@
 <?php
 
     // Include the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/../../../YDFramework2/YDF2_init.php' );
+    include_once( dirname( __FILE__ ) . '/../../../YDFramework2/YDF2_init.php' );
 
     // Include the classes you need on all pages
     YDInclude( 'YDRequest.php' );

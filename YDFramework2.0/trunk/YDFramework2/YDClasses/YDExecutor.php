@@ -114,32 +114,32 @@
             // Mark that the request is processed
             define( 'YD_REQ_PROCESSED', 1 );
 
-            // Total size of include files
-            $includeFiles = get_included_files();
-
-            // Calculate the total size
-            $includeFilesSize = 0;
-            $includeFilesWithSize = array();
-            foreach ( $includeFiles as $key=>$includeFile ) {
-                $includeFilesSize += filesize( $includeFile );
-                $includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
-            }
-            $includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
-
-            // Sort the list of include files by file size
-            krsort( $includeFilesWithSize );
-
-            // Convert to a string
-            $includeFiles = array();
-            foreach ( $includeFilesWithSize as $size=>$file ) {
-                array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
-            }
-
             // Stop the timer
             $GLOBALS['timer']->finish();
 
             // Show debugging info if needed
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
+
+                // Total size of include files
+                $includeFiles = get_included_files();
+
+                // Calculate the total size
+                $includeFilesSize = 0;
+                $includeFilesWithSize = array();
+                foreach ( $includeFiles as $key=>$includeFile ) {
+                    $includeFilesSize += filesize( $includeFile );
+                    $includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
+                }
+                $includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
+
+                // Sort the list of include files by file size
+                krsort( $includeFilesWithSize );
+
+                // Convert to a string
+                $includeFiles = array();
+                foreach ( $includeFilesWithSize as $size=>$file ) {
+                    array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
+                }
 
                 // Create the debug messages
                 $debug = YD_CRLF . YD_CRLF;
@@ -178,10 +178,11 @@
                 // Output the debug message
                 YDDebugUtil::debug( $debug );
 
-            } else {
-                $elapsed = $elapsed = $GLOBALS['timer']->getElapsed();
-                echo( YD_CRLF . '<!-- ' . $elapsed . ' ms / ' . $includeFilesSize . ' -->' );
             }
+
+            // Add the elapsed time
+            $elapsed = $elapsed = $GLOBALS['timer']->getElapsed();
+            echo( YD_CRLF . '<!-- ' . $elapsed . ' ms -->' );
 
             // Stop the execution of the request
             die();

@@ -1,7 +1,7 @@
 <?php
 
     // Initialize the Yellow Duck Framework
-    require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
+    include_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 	

@@ -1,7 +1,7 @@
 <?php
 
     // Standard include
-    require_once( 'YDF2_init.php' );
+    include_once( 'YDF2_init.php' );
 
     // Includes
     YDInclude( 'YDForm.php' );

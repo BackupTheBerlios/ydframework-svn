@@ -1,11 +1,11 @@
 <?php
 
     // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
     // Includes
-    require_once( 'YDForm.php' );
-    require_once( 'YDRequest.php' );
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDRequest.php' );
 
     // Class definition
     class form_rule extends YDRequest {

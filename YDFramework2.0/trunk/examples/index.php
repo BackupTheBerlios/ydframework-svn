@@ -1,12 +1,12 @@
 <?php
 
     // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDTemplate.php' );
-    
+
     // Class definition
     class index extends YDRequest {
 
