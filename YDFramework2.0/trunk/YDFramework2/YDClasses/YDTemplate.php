@@ -78,6 +78,17 @@
 		 */
 		function fetch( $file='', $cache_id=null, $display=false ) {
 
+			// Get the cache filename
+			$cacheFile = $this->_getCachePath( $cache_id );
+
+			// If the template is cached, return the cache
+			if ( $this->is_cached( $cache_id ) ) {
+				$fp = fopen( $cacheFile, 'rb' );
+				$data = fread( $fp, filesize( $cacheFile ) );
+				fclose( $fp );
+				return $data;
+			}
+
 			// Add some default variables
 			$this->assign( 'YD_FW_NAME', YD_FW_NAME );
 			$this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
@@ -96,7 +107,6 @@
 
 			// Save the cache if needed
 			if ( ! empty( $cache_id ) && ! $this->force_compile && $this->caching ) {
-				$cacheFile = $this->_getCachePath( $cache_id );
 				$fp = fopen( $cacheFile, 'wb' );
 				fwrite( $fp, $result );
 				fclose( $fp );
@@ -204,6 +214,9 @@
 		 *	@internal
 		 */
 		function _getCachePath( $cache_id ) {
+			if ( empty( $cache_id ) ) {
+				return '';
+			}
 			return realpath( $this->cache_dir ) . '/' . YD_TPL_CACHEPRE . md5( $cache_id ) . YD_TPL_CACHEEXT;
 		}
 
