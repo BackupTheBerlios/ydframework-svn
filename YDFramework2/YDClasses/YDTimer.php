@@ -17,8 +17,8 @@
      *  and which returns the elapsed time as soon as the finish method is called.
      *
      *  @todo
-     *      Needs to be replaced with the PEAR::Bench package. More info on:
-     *      http://www.pearfr.org/index.php/en/article/bench
+     *      We need to add a function getOutput which should return the results
+     *      as a nice text table.
      */
     class YDTimer extends YDBase {
 
@@ -27,35 +27,58 @@
          */
         function YDTimer() {
 
+            // Include the PEAR timer class
+            require_once( YD_DIR_3RDP_PEAR . '/Benchmark/Timer.php' );
+
             // Initialize YDBase
             $this->YDBase();
 
-            // Start the timer
-            $this->_startTime = $this->getTime();
+            // Create a new timer object
+            $this->_timer = new Benchmark_Timer();
 
         }
 
         /**
-         *  Stops the timer and returns the elapsed time.
-         *
-         *  @return The total elapsed time.
+         *  This function will start the timer.
          */
-        function finish() {
-            $this->_endTime = $this->getTime();
-            return round( ( $this->_endTime - $this->_startTime ), 4 );
-
+        function start() {
+            $this->_timer->start();
         }
 
         /**
-         *  This function returns the current microtime as a double.
+         *  This function will set a mark in the timer.
          *
-         *  @return Double containing the current time.
+         *  @param $marker Name of the marker
          */
-        function getTime() {
-            $time = explode ( ' ', microtime() );
-            return ( doubleval( $time[0] ) + $time[1] );
+        function setMarker( $marker ) {
+            $this->_timer->setMarker( $marker );
         }
 
+        /**
+         *  This function will stop the timer.
+         */
+        function stop() {
+            $this->_timer->stop();
+        }
+
+        /**
+         *  This function will return the info of the timer.
+         *
+         *  @returns Array with the timer information.
+         */
+        function getResult() {
+            return $this->_timer->getProfiling();
+        }
+
+        /**
+         *  This function will return the info of the timer.
+         *
+         *  @returns Array with the timer information.
+         */
+        function getOutput() {
+            return strip_tags( $this->_timer->getOutput() );
+        }
+    
     }
 
 ?>

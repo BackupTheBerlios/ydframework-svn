@@ -32,9 +32,12 @@
                 // Show debugging info if needed
                 if ( YD_DEBUG == 1 ) {
 
-                    // Indicate total processing time
+                    // Stop the timer
+                    $GLOBALS['timer']->stop();
+
+                    // Show the timings
                     YDDebugUtil::debug(
-                        'Total processing time:', $GLOBALS['timer']->finish(), 'seconds'
+                        var_export( $GLOBALS['timer']->getResult(), true )
                     );
 
                     // Number of database connections made
@@ -47,7 +50,7 @@
                     }
 
                     // Total size of include files
-                    $includeFiles = get_included_files ();
+                    $includeFiles = get_included_files();
                     $includeFilesSize = 0;
 
                     // Calculate the total size

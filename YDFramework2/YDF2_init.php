@@ -43,6 +43,9 @@
      *  Webpage: http://www.yellowduck.be/
      *  
      *  Author: Pieter Claerhout, pieter@yellowduck.be
+     *
+     *  @todo
+     *      Add the needed markers for timing purposes using the YDTimer class.
      */
 
     // Only execute this once
@@ -290,6 +293,7 @@
 
         // Instantiate the timer
         $timer = new YDTimer();
+        $timer->start();
     
     }
 
