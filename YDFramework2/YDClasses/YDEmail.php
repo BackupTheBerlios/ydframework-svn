@@ -124,12 +124,9 @@
          *  Sets the plain text part of a message.
          *
          *  @param $text The text to set.
-         *
-         *  @todo
-         *      Strip the HTML from the body
          */
         function setTxtBody( $text ) {
-            $this->_msg->setTxtBody( $text );
+            $this->_msg->setTxtBody( strip_tags( $text ) );
         }
 
         /**
