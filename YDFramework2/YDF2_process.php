@@ -34,21 +34,21 @@
                     require_once( 'YDDebugUtil.php' );
 
                     // Stop the timer
-                    $GLOBALS['timer']->stop();
+                    $elapsed = $GLOBALS['timer']->getElapsed();
 
                     // Show the timings
-                    YDDebugUtil::debug(
-                        var_export( $GLOBALS['timer']->getResult(), true )
-                    );
+                    YDDebugUtil::debug( 'Processing time:', $elapsed, 'ms' );
 
+                    /*
                     // Number of database connections made
                     if ( isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
                         YDDebugUtil::debug(
-                            $GLOBALS['YD_DB_CONN_CNT'] . ' database connections made'
+                            $GLOBALS['YD_DB_CONN_CNT'] . 'database connections made'
                         );
                     } else {
                         YDDebugUtil::debug( 'No database connections made' );
                     }
+                    */
 
                     // Total size of include files
                     $includeFiles = get_included_files();
@@ -59,15 +59,17 @@
                         $includeFilesSize += filesize( $includeFile );
                     }
 
+                    // Format it as KBytes
+                    $includeFilesSize = intval( $includeFilesSize / 1024 );
+
                     // Show the total size of the include files
                     YDDebugUtil::debug(
-                        'Total size include files: ', $includeFilesSize, ' bytes'
+                        'Total size include files:', $includeFilesSize, 'KB'
                     );
 
                     // List of include files
                     YDDebugUtil::debug(
-                        'Included files:' . "\n",
-                        implode( "\n", $includeFiles )
+                        'Included files:' . "\n" . implode( "\n", $includeFiles )
                     );
 
                 }

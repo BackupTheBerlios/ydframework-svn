@@ -12,15 +12,10 @@
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'Benchmark/Timer.php' );
 
     /**
      *  This is a general timer class that starts counting when it's instantiated,
      *  and which returns the elapsed time as soon as the finish method is called.
-     *
-     *  @todo
-     *      Revert back to a more simple YDTimer class that doesn't depend on
-     *      the PEAR libraries to do it's work.
      */
     class YDTimer extends YDBase {
 
@@ -32,50 +27,37 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Create a new timer object
-            $this->_timer = new Benchmark_Timer();
+            // Get the start time
+            $this->startTime = $this->_getMicroTime();
 
         }
 
         /**
-         *  This function will start the timer.
-         */
-        function start() {
-            $this->_timer->start();
-        }
-
-        /**
-         *  This function will set a mark in the timer.
+         *  This function returns the current microtime as a double.
          *
-         *  @param $marker Name of the marker
-         */
-        function setMarker( $marker ) {
-            $this->_timer->setMarker( $marker );
-        }
-
-        /**
-         *  This function will stop the timer.
-         */
-        function stop() {
-            $this->_timer->stop();
-        }
-
-        /**
-         *  This function will return the info of the timer.
+         *  @return Double containing the current time.
          *
-         *  @returns Array with the timer information.
+         *  @internal
          */
-        function getResult() {
-            return $this->_timer->getProfiling();
+        function _getMicroTime() {
+            $time = explode ( ' ', microtime() );
+            return ( doubleval( $time[0] ) + $time[1] );
         }
 
         /**
-         *  This function will return the info of the timer.
+         *  This function will return the number of milliseconds elapsed since
+         *  the timer was instantiated.
          *
-         *  @returns Array with the timer information.
+         *  @returns The total elapsed time
          */
-        function getOutput() {
-            return strip_tags( $this->_timer->getOutput() );
+        function getElapsed() {
+
+            // Get the end time
+            $endTime = $this->_getMicroTime();
+
+            // Return the elapsed time
+            return intval( ( $endTime - $this->startTime ) * 1000 );
+
         }
     
     }

@@ -275,7 +275,6 @@
 
             // Instantiate the timer
             $timer = new YDTimer();
-            $timer->start();
     
         }
 
