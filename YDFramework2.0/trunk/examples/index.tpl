@@ -75,6 +75,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="config.php">Using the YDConfig object</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=config.php">config.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="phpinfo.php">Showing the PHP information</a>
 			</td>
 			<td valign="top">
