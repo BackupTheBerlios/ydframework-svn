@@ -125,6 +125,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="form2.php">Form handling and validation (new style)</a>
+			</td>
+			<td valign="top">
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=form2.php">form.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="sample.php">Defining and using action requests</a>
 			</td>
 			<td valign="top">
@@ -196,6 +204,8 @@
 				<a href="http_auth/index.php">Basic HTTP Authentication</a>
 			</td>
 			<td valign="top">
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/includes/MyLoginRequest.php">http_auth/includes/MyLoginRequest.php</a>
+				<br>
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/index.php">http_auth/index.php</a>
 				<br>
 				<a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=http_auth/index.tpl">http_auth/index.tpl</a>

@@ -14,16 +14,13 @@
 		}
 
 		function isAuthenticated() {
-			if (
-				$_SERVER['PHP_AUTH_USER'] == 'pieter'
-				&&
-				$_SERVER['PHP_AUTH_PW'] == 'kermit'
-			) {
-				$_SESSION['usrName'] = $_SERVER['PHP_AUTH_USER'];
-				return true;
-			} else {
-				return false;
+			if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
+				if ( $_SERVER['PHP_AUTH_USER'] == 'pieter' && $_SERVER['PHP_AUTH_PW'] == 'kermit' ) {
+					$_SESSION['usrName'] = $_SERVER['PHP_AUTH_USER'];
+					return true;
+				}
 			}
+			return false;
 		}
 
 		function authenticationFailed() {
