@@ -9,7 +9,7 @@
 
             <title>SVN Repository details</title>
 
-            <para>Currently, only a test repository is setup, and it's set to readonly.</para>
+            <para>Currently, the main repository is setup, and it's set to readonly (unless you have the right username and password).</para>
 
             <itemizedlist spacing="compact">
                 <listitem>SVN repository protocol: SVN</listitem>
@@ -18,6 +18,8 @@
                 <listitem>SVN repository name: YDF2</listitem>
                 <listitem>SVN repository url: svn://65.254.53.157:8080/YDF2</listitem>
             </itemizedlist>
+
+            <para>If you want read/write access to the repository, please contact pieter@yellowduck.be and he will setup the account for you.</para>
 
         </sect1>
 
