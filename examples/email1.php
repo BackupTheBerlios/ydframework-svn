@@ -42,6 +42,9 @@
 
             // Add a rule
             $form->addRule(
+                'email', 'Please enter a valid email address', 'required'
+            );
+            $form->addRule(
                 'email', 'Please enter a valid email address', 'email'
             );
 

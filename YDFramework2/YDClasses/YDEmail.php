@@ -235,7 +235,7 @@
 
             // Send the actual message
             $mail = & Mail::factory( 'mail' );
-            $mail->send( $this->sender, $headers, $body );
+            $mail->send( $this->to_plain, $headers, $body );
 
         }
 
