@@ -31,7 +31,7 @@
 			$conv = new YDBBCode();
 
 			// Show the converted data
-			YDGlobalTimerMarker( 'Start of conversion' );
+			YDGlobalTimerMarker( 'Conversion to BBCode' );
 			echo( '<pre>' . htmlentities( $data ) . '</pre>' );
 			echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
 			echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
