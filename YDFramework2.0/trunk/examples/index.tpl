@@ -412,15 +412,6 @@
 		</tr>
 		<tr>
 			<td valign="top">
-				<a href="template_for.php">YDTemplate for loop</a></td>
-			<td valign="top">
-				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_for.php">template_for.php</a>
-				<br/>
-				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_for.tpl">template_for.tpl</a>
-			</td>
-		</tr>
-		<tr>
-			<td valign="top">
 				<a href="timer.php">Using timers/markers</a>
 				<br/>
 				<a href="timer.php?YD_DEBUG=1">Using timers/markers (debug 1)</a>
