@@ -42,7 +42,7 @@
             if ( YD_DEBUG == 1 ) {
 
                 // Output the debugging info
-                echo( "\n" . '<!-- [ YD_DEBUG ]' . "\n" );
+                echo( "\n" . '<!--' . "\n" . '[ YD_DEBUG ]' . "\n\n" );
                 echo( implode( ' ', $args ) . "\n" );
                 echo( '-->' . "\n" );
 
