@@ -693,17 +693,27 @@
                             }
                         }
 
-                        // Check the rule
-                        // @todo Are we able to handle arrays?
-                        $result = call_user_func( 
-                            $ruleDetails['callback'], $value, $rule['options'] 
-                        );
+                        // If field has been marked NOT mandatory, and field is empty, don't check for validity
+                        $obj = $this->getElement( $element );
+                        if (
+                            ! isset($obj->_options['mandatory'] )
+                            OR $obj->_options['mandatory'] == true
+                            OR strlen( $value ) > 0
+                        ) {
 
-                        // If the result is false, add the error
-                        if ( $result == false ) {
-                            if ( ! isset( $this->_errors[ $element ] ) ) {
-                                $this->_errors[ $element ] = $rule['error'];
+                            // Check the rule
+                            // @todo Are we able to handle arrays?
+                            $result = call_user_func( 
+                                $ruleDetails['callback'], $value, $rule['options'] 
+                            );
+  
+                            // If the result is false, add the error
+                            if ( $result == false ) {
+                                if ( ! isset( $this->_errors[ $element ] ) ) {
+                                    $this->_errors[ $element ] = $rule['error'];
+                                }
                             }
+
                         }
 
                     }
@@ -879,14 +889,12 @@
                 // Add the HTML labels
                 if ( $form[ $name ]['isButton'] === false && $form[ $name ]['type'] != 'hidden' ) {
                     $form[ $name ]['label_html'] = '';
-                    if ( $form[ $name ]['required'] ) {
-                        $form[ $name ]['label_html'] .= $this->_htmlRequiredStart;
-                    }
                     if ( ! empty( $form[ $name ]['label'] ) ) {
                         $form[ $name ]['label_html'] .= $form[ $name ]['label'];
                     }
-                    if ( $form[ $name ]['required'] ) {
-                        $form[ $name ]['label_html'] .= $this->_htmlRequiredEnd;
+                    $obj = $this->getElement( $name );
+                    if ( $form[ $name ]['required'] && ( ! isset( $obj->_options['mandatory'] ) OR $obj->_options['mandatory'] == true ) ) {
+                        $form[ $name ]['label_html'] = $this->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_htmlRequiredEnd;
                     }
                     if ( ! empty( $form[ $name ]['error'] ) ) {
                         $form[ $name ]['error_html'] = $this->_htmlErrorStart . $form[ $name ]['error'] . $this->_htmlErrorEnd;

@@ -36,7 +36,7 @@
 
         <form {$form.attribs}>
             <p>
-                {$form.name.label}
+                {$form.name.label_html}
                 <br>
                 {$form.name.html}
             </p>
