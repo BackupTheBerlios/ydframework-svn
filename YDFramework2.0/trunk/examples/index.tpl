@@ -330,6 +330,16 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=stacktrace.php">stacktrace.php</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="tplcache.php">Using template caching</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=tplcache.php">tplcache.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=tplcache.tpl">tplcache.tpl</a>
+			</td>
+		</tr>
 		</table>
 
 		<p>&nbsp;<br><b>Documentation</b></p>

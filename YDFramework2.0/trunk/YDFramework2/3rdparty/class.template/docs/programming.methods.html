@@ -133,10 +133,10 @@
 <hr>
 
 <h2><a name="clear_compiled"><code>clear_compiled</code></a></h2>
-<code>void <b>clear_compiled</b>([string $file [, string $compile_id]])</code><br>
+<code>void <b>clear_compiled</b>([string $file])</code><br>
 <p>
 	<h4>Description</h4>
-	This will clear out the compiled template folder, or if a file and/or a compile id is supplied, it will clear that specific template. If you have utilized <a href="appendix.groups.html">compile groups</a>, then it is possible to delete a specific group by specifying a compile id. If no file or compile id is specified, all compiled files will be deleted.
+	This will clear out the compiled template folder, or if a file is supplied, it will clear that specific template. If no file is specified, all compiled files will be deleted.
 
 	<h4>Example</h4>
 	<pre>
@@ -145,16 +145,8 @@
 	// clear all compiled files
 	$tpl->clear_compiled();
 
-	// clear all files in the "gallery" group, such as "gallery|view" and "gallery|thumbnail"
-	$tpl->clear_compiled(null, "gallery");
-
-	// clear only the gallery thumbnails
-	$tpl->clear_compiled(null, "gallery|thumbnail");
-
 	// clear the compiled file for the file called "index.tpl"
 	$tpl->clear_compiled("index.tpl");
-	// clear the compiled file for the file called "index.tpl" with the compile id of "homepage"
-	$tpl->clear_compiled("index.tpl", "homepage");
 	</pre>
 </p>
 <hr>
@@ -253,7 +245,7 @@
 <hr>
 
 <h2><a name="register_function"><code>register_function</code></a></h2>
-<code>void <b>register_compiler</b>(string $function, callback $implementation)</code><br>
+<code>void <b>register_function</b>(string $function, callback $implementation)</code><br>
 <p>
 	<h4>Description</h4>
 	Use this dynamically register a template function. Pass in the template function name, followed by the PHP function name that implements it.<br><br>
@@ -349,11 +341,11 @@
 <hr>
 
 <h2><a name="display"><code>display</code></a></h2>
-<code>void <b>display</b>(string $file [, string $compile_id [, string $cache_id]])</code><br>
+<code>void <b>display</b>(string $file [, string $cache_id]])</code><br>
 <p>
 	<h4>Description</h4>
-	This function will display a template. Supply a valid template file, with an optional compile id and cache id. See the <a href="appendix.caching.html">caching section</a> for more information on compiling and caching.<br><br>
-	It is highly recommended that you set a compile id for all templates and a cache id for all templates that you are caching. You might run into errors with filename overwriting if you don't.
+	This function will display a template. Supply a valid template file, with an optional cache id. See the <a href="appendix.caching.html">caching section</a> for more information on caching.<br><br>
+	It is highly recommended that you set a cache id for all templates that you are caching.
 
 	<h4>Example</h4>
 	<pre>
@@ -361,17 +353,17 @@
 	=============================
 	include("class.template.php");
 	$tpl = new template;
-	$tpl->display("index.tpl", "homepage", "homepage");
+	$tpl->display("index.tpl", "homepage");
 	</pre>
 </p>
 <hr>
 
 <h2><a name="fetch"><code>fetch</code></a></h2>
-<code>string <b>fetch</b>(string $file, [, string $compile_id [, string $cache_id]])</code><br>
+<code>string <b>fetch</b>(string $file, [, string $cache_id]])</code><br>
 <p>
 	<h4>Description</h4>
-	This function will return a string containing a template. Supply a valid template file, with an optional compile id and cache id. See the <a href="appendix.caching.html">caching section</a> for more information on compiling and caching.<br><br>
-	It is highly recommended that you set a compile id for all templates and a cache id for all templates that you are caching. You might run into errors with filename overwriting if you don't.
+	This function will return a string containing a template. Supply a valid template file, with an optional compile id and cache id. See the <a href="appendix.caching.html">caching section</a> for more information on caching.<br><br>
+	It is highly recommended that you set a cache id for all templates that you are caching.
 
 	<h4>Example</h4>
 	<pre>
@@ -379,7 +371,7 @@
 	=============================
 	include("class.template.php");
 	$tpl = new template;
-	$output = $tpl->fetch("index.tpl", "homepage", "homepage");
+	$output = $tpl->fetch("index.tpl", "homepage");
 	echo $output;
 	</pre>
 </p>

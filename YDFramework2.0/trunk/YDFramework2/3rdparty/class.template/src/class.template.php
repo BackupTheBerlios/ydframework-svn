@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.1.2
+ * Version:	2.2.0
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -57,8 +57,6 @@ class template {
 	var $_file		= "";		// the current file we are processing
 	var $_config_obj	= null;
 	var $_compile_obj	= null;
-	var $_compile_id	= null;	
-	var $_compile_dir	= "";		// stores where this specific file is going to be compiled
 	var $_cache_id		= null;
 	var $_cache_dir		= "";		// stores where this specific file is going to be cached
 	var $_sl_md5		= '39fc70570b8b60cbc1b85839bf242aff';
@@ -137,8 +135,8 @@ class template {
 		}
 	}
 	
-	function clear_compiled($file = null, $compile_id = null) {
-		$this->_destroy_dir($file, $compile_id, $this->_get_dir($this->compile_dir));
+	function clear_compiled($file = null) {
+		$this->_destroy_dir($file, null, $this->_get_dir($this->compile_dir));
 	}
 
 	function clear_cached($file = null, $cache_id = null) {
@@ -151,11 +149,14 @@ class template {
 		if (!$this->cache)
 			return false;
 		$name = md5($file).'.php';
-		$this->_cache_dir = $this->_get_dir($this->_cache_dir);
-		if (file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)))
+		$this->template_dir = $this->_get_dir($this->template_dir);
+		$this->_cache_dir = $this->_get_dir($this->cache_dir, $cache_id);
+
+		if (!$this->force_compile && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)) && $this->_is_cached($file, $cache_id)) {
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	function register_modifier($modifier, $implementation) {
@@ -192,29 +193,29 @@ class template {
 			return false;
 	}
 
-	function display($file, $compile_id = null, $cache_id = null) {
-		$this->fetch($file, $compile_id, $cache_id, true);
+	function display($file, $cache_id = null) {
+		$this->fetch($file, $cache_id, true);
 	}
 
-	function fetch($file, $compile_id = null, $cache_id = null, $display = false) {
-		$name = md5($file).'.php';
-		$this->_compile_id = $compile_id;
+	function fetch($file, $cache_id = null, $display = false) {
+		//$name = md5($file).'.php';
+		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
 		$this->_cache_id = $cache_id;
 		$this->template_dir = $this->_get_dir($this->template_dir);
-		$this->_compile_dir = $this->_build_dir($this->compile_dir, $this->_compile_id);
+		$this->compile_dir = $this->_get_dir($this->compile_dir);
 		if ($this->cache)
 			$this->_cache_dir = $this->_build_dir($this->cache_dir, $this->_cache_id);
 
 		// don't display any errors
 		$this->_error_level = error_reporting(error_reporting() & ~E_NOTICE);
 
-		if (!$this->force_compile && $this->cache && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file))) {
+		if (!$this->force_compile && $this->cache && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)) && $this->_is_cached($file, $cache_id)) {
 			ob_start();
 			include($this->_cache_dir.$name);
 			$output = ob_get_contents();
 			ob_end_clean();
 		} else {
-			$output = $this->_fetch_compile($file, $compile_id, $cache_id);
+			$output = $this->_fetch_compile($file, $cache_id);
 			if ($this->cache) {
 				$f = fopen($this->_cache_dir.$name, "w");
 				fwrite($f, $output);
@@ -231,6 +232,8 @@ class template {
 		}
 
 		error_reporting($this->_error_level);
+
+		$output = substr($output, strpos($output, "\n\n"));
 		if ($display)
 			echo $output;
 		else
@@ -238,7 +241,8 @@ class template {
 	}
 
 	function config_load($file, $section_name = null, $var_name = null) {
-		$name = md5($file.$section_name.$var_name).'.php';
+		//$name = md5($file.$section_name.$var_name).'.php';
+		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file.$section_name.$var_name ) ) ).'.php';
 		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
 		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->config_dir.$file))) {
@@ -275,12 +279,39 @@ class template {
 		return true;
 	}
 
-	function _fetch_compile($file, $compile_id) {
+	function _is_cached($file, $cache_id) {
 		$name = md5($file).'.php';
+		$this->_cache_dir = $this->_get_dir($this->_cache_dir);
+		$this->compile_dir = $this->_get_dir($this->compile_dir);
+		$this->template_dir = $this->_get_dir($this->template_dir);
+		if (file_exists($this->compile_dir.$name) && file_exists($this->template_dir.$file) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
+			if (file_exists($this->_cache_dir.$name)) {
+				// open file to get includes
+				$fp = fopen($this->_cache_dir.$name, "r");
+				$includes = fscanf($fp, "%s\n\n");
+				fclose($fp);
+				$_includes = unserialize($includes[0]);
 
-		if (!$this->force_compile && file_exists($this->_compile_dir.$name) && (filemtime($this->_compile_dir.$name) > filemtime($this->template_dir.$file))) {
+				// call this function on each included file
+				foreach ($_includes as $value)
+					if (!$this->_is_cached($value, $cache_id))
+						return false;
+			}
+
+			// finally return true
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	function _fetch_compile($file) {
+		//$name = md5($file).'.php';
+		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
+
+		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
 			ob_start();
-			include($this->_compile_dir.$name);
+			include($this->compile_dir.$name);
 			$output = ob_get_contents();
 			ob_end_clean();
 			error_reporting($this->_error_level);
@@ -289,7 +320,12 @@ class template {
 
 		if ($this->template_exists($file)) {
 			$f = fopen($this->template_dir.$file, "r");
-			$file_contents = fread($f, filesize($this->template_dir.$file));
+			$size = filesize($this->template_dir.$file);
+			if ($size > 0) {
+				$file_contents = fread($f, filesize($this->template_dir.$file));
+			} else {
+				$file_contents = "";
+			}
 			$this->_file = $file;
 			fclose($f);
 		} else {
@@ -304,8 +340,6 @@ class template {
 		$this->_compile_obj->right_tag = $this->right_tag;
 		$this->_compile_obj->plugin_dir = &$this->plugin_dir;
 		$this->_compile_obj->template_dir = &$this->template_dir;
-		$this->_compile_obj->cache = $this->cache;
-		$this->_compile_obj->_compile_id = $this->_compile_id;
 		$this->_compile_obj->_vars = &$this->_vars;
 		$this->_compile_obj->_confs = &$this->_confs;
 		$this->_compile_obj->_plugins = &$this->_plugins;
@@ -313,7 +347,7 @@ class template {
 		$this->_compile_obj->_file = &$this->_file;
 		$output = $this->_compile_obj->_compile_file($file_contents);
 
-		$f = fopen($this->_compile_dir.$name, "w");
+		$f = fopen($this->compile_dir.$name, "w");
 		fwrite($f, $output);
 		fclose($f);
 
@@ -350,11 +384,18 @@ class template {
 		}
 	}
 
-	function _get_dir($dir) {
+	function _get_dir($dir, $id = null) {
 		if (empty($dir))
 			$dir = '.';
-		if (substr($dir, -1) != '/')
+		if (substr($dir, -1) != DIRECTORY_SEPARATOR)
 			$dir .= DIRECTORY_SEPARATOR;
+		if (!empty($id)) {
+			$_args = explode('|', $id);
+			if (count($_args) == 1 && empty($_args[0]))
+				return $dir;
+			foreach($_args as $value)
+				$dir .= $value.DIRECTORY_SEPARATOR;
+		}
 		return $dir;
 	}
 
