@@ -31,7 +31,7 @@
          *                     Most of the times, this is either POST or GET.
          *  @param $action     (optional) Action used for submitting the form.
          *                     If not specified, it will default to the current
-         *                     script.
+         *                     URI.
          *  @param $target     (optional) HTML target for the form.
          *  @param $attributes (optional) Attributes for the form.
          */

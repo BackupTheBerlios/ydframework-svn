@@ -88,7 +88,18 @@
                 <link href="#ch05_04">Standard template variables</link>
                 <link href="#ch05_05">PHP configuration for short open tags</link>
             </link>
-            <link href="#ch06">Using and validating forms</link>
+            <link href="#ch06">Using and validating forms
+                <link href="#ch06_01">Background information</link>
+                <link href="#ch06_02">The YDForm class</link>
+                <link href="#ch06_03">Creating a new form</link>
+                <link href="#ch06_04">Adding form elements</link>
+                <link href="#ch06_05">The different form elements</link>
+                <link href="#ch06_06">Displaying the form</link>
+                <link href="#ch06_07">Validating forms</link>
+                <link href="#ch06_08">Processing forms</link>
+                <link href="#ch06_09">Tips and tricks</link>
+                <link href="#ch06_10">More information</link>
+            </link>
             <link href="#ch07">Accessing database contents</link>
             <link href="#ch08">How to handle authentication</link>
             <link href="#ch09">Using files, directories and images</link>
@@ -106,11 +117,11 @@
 
                 The Yellow Duck framework is web application framework created 
                 by Pieter Claerhout. More information can be found on 
-                <a href="http://www.yellowduck.be/">http://www.yellowduck.be/</a>.
+                <a target="_blank" href="http://www.yellowduck.be/">http://www.yellowduck.be/</a>.
 
                 <br/><br/>
 
-                The Yellow Duck Framework takes care of all the difficult work
+                he Yellow Duck Framework takes care of all the difficult work
                 you normally have to perform manually when developing a web
                 application. It is based on the idea of requests that can 
                 perform actions. By encapsulating all the programming in an
@@ -118,9 +129,7 @@
                 to use and understand, easy to extend and doesn't limit you in 
                 any way.
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li>Clean separation of code and output</li>
                     <li>Templates for outputting HTML easily</li>
                     <li>Automatic action dispatching using URL parameters</li>
@@ -134,8 +143,8 @@
                     library from the PHP project, which provides things such as
                     database connectivity. More information and documentation on 
                     the PEAR library can be found on 
-                    <a href="http://pear.php.net/">http://pear.php.net/</a>.</li>
-                </ul>
+                    <a target="_blank" href="http://pear.php.net/">http://pear.php.net/</a>.</li>
+                </ul></div>
 
             </section>
 
@@ -147,6 +156,8 @@
                 script that gets executed is based on the YDRequest class. This 
                 class is smart enough to figure out which functions needs to be
                 called using parameters given in the url.
+
+                <br/><br/>
 
                 Let's take a look at an example script to understand how this 
                 works:
@@ -192,8 +203,6 @@
 <font color="#000080">&lt;/html&gt;</font>
 <font color="#000000"></font></pre>
 
-                <br/>
-
                 When you request the following URL, a number of things happen:
 
                 <pre>http://localhost/sample1.php</pre>
@@ -202,16 +211,14 @@
                 of the file called "YDF2_init.php". This file is responsible for 
                 setting up the Yellow  Duck Framework, and does things such as:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li>Defining a number of constants with e.g. the path to
                     specific directories and URLs</li>
                     <li>Starts or restores the previous session</li> 
                     <li>Reconfigures the PHP include path</li>
                     <li>Includes the different files from the rest of the 
-                    framework<br/> </li>
-                </ul>
+                    framework</li>
+                </ul></div>
 
                 After that, we define a new class, called "sample1Request" which 
                 is based on the YDRequest class. For each script, you need to 
@@ -232,7 +239,6 @@
                 see later on how you can choose which one gets executed.
 
                 <br/><br/>
-
                 The last part of the script is the include of the
                 "YDF2_process.php" script, which processes the actual request.
                 It will look for a request class based on the name of the file,
@@ -268,13 +274,11 @@
 
                 To use the Yellow Duck Framework, you need to have the following prerequisites:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li>PHP version 4.x (tested with PHP 4.3)</li>
                     <li>Webserver capable of running PHP script, such as Apache or Microsoft Internet
                     Information Server</li>
-                </ul>
+                </ul></div>
               
             </section>
 
@@ -304,9 +308,7 @@
                 subdirectories in the YDFramework2 directory which each have a
                 specific function:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li>3rdparty: This directory contains the third party 
                     libraries that are needed for the Yellow Duck Framework to 
                     work properly. You will find a local copy of the PEAR 
@@ -318,16 +320,21 @@
                     created by the framework. In here, the compiled versions of 
                     the templates are saved.</li>
                     <li>YDClasses: In here, you will find all the classes that
-                    make up the framework.<br/> </li>
-                </ul>
+                    make up the framework.</li>
+                </ul></div>
 
-                <div class="note">
-                <b>Note</b><br/>You will never have to add or alter files in the 
-                YDFramework2 directory. It's not even a good idea to put your 
+                This directory structure is not really important for using the
+                Yellow Duck Framework. The only thing you might need to do from
+                time to time is to check the temp folder and empty it if it gets
+                too big.
+
+                <br/><br/>
+
+                <i><b>Note</b>: You will never have to add or alter files in the 
+                YDFramework2 directory. It's not even a good idea to put your
                 own files in there as they might get overridden when you upgrade 
-                your framework to a newer version.
-                </div>
-              
+                your framework to a newer version.</i>
+
             </section>
 
             <section name="ch02_03" label="Installation overview">
@@ -343,9 +350,7 @@
 
                 These are the steps needed to install the framework:
 
-                <br/><br/>
-
-                <ol>
+                <div><ol>
                     <li>Finding a place for the YDFramework2 directory</li>
                     <li>Assigning rights to the YDFramework2 directory</li>
                     <li>Configuring Apache to allow .htaccess files</li> 
@@ -354,7 +359,9 @@
                     <li>Using auto preprend and auto append</li> 
                     <li>Configuring the samples</li> 
                     <li>Testing the installation</li>
-                </ol>
+                </ol></div>
+
+                The next sections describe these steps in detail.
 
             </section>
 
@@ -398,14 +405,12 @@
 
                 <br/>
 
-                <div class="note">
-                <b>Note</b><br/>this is an optional setting and is already done 
+                <i><b>Note</b>: this is an optional setting and is already done 
                 on most systems. You only need to change this if you plan to use 
                 .htaccess files to change the PHP settings or if you want to 
-                deny access to the template files.
-                </div>
+                deny access to the template files.</i>
 
-                <br/>
+                <br/><br/>
 
                 In the Apache configuration file, you need to change the 
                 following for the web directory of your web application:
@@ -466,14 +471,12 @@ php_flag zlib.output_compression On</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>In order to have the examples working, you need 
+                <i><b>Note</b>: In order to have the examples working, you need 
                 to allow short open tags. this can be done by add the following 
                 to the .htaccess file:
                     <pre>php_flag short_open_tag On</pre>
                 This will enable the use of "&lt;?" as the open tag for PHP
-                scripts instead of the standard "&lt;?php".
-                </div>
+                scripts instead of the standard "&lt;?php".</i>
 
             </section>
 
@@ -564,9 +567,9 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 <br/>
 
                 To test the installation, run the sample scripts provided with 
-                the downloads. To run the samples, surf to the following URL
+                the downloads.
 
-                <pre>http://localhost/YDFramework2-2.0.0/index.php</pre>
+                <page-break />
 
             </section>
 
@@ -580,13 +583,11 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 which has three options. The following options are supported by 
                 our notebook:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li>Showing the list of notes (default)</li>
                     <li>Adding a note</li>
-                    <li>Deleting a note<br/> </li>
-                </ul>
+                    <li>Deleting a note</li>
+                </ul></div>
 
                 We will also use form validation to make sure that the data 
                 entered in the add note form is valid. This will prevent people
@@ -623,11 +624,9 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>In order no to over complicate this example, we 
+                <i><b>Note</b>: In order no to over complicate this example, we 
                 will store the notes as files on the disk instead of using a 
-                database.
-                </div>
+                database.</i>
 
             </section>
 
@@ -640,9 +639,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 create to make your application work. In our case, we are going 
                 to make 3 different actions:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li><b>default</b>: this is the default action and will show 
                     the list of notes. If no notes are found, it should tell us 
                     so.</li>
@@ -653,8 +650,8 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                     <li><b>deletenote</b>: this function will delete a note 
                     based on it's unique ID. In this example, it will not ask 
                     you for confirmation, but it will simply delete the 
-                    note.<br/> </li>
-                </ul>
+                    note.</li>
+                </ul></div>
 
                 Now that we know what actions the application will be able to 
                 perform, we now need to think about how we can store the notes 
@@ -669,14 +666,12 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>the example will not warn about the fact that a
+                <i><b>Note</b>: the example will not warn about the fact that a
                 duplicate entry was entered. It will just overwrite the existing 
                 one. I'll leave it up to you to implement that yourself after
-                finishing this chapter.
-                </div>
+                finishing this chapter.</i>
 
-                <br/>
+                <br/><br/>
 
                 We will use the functions provided by the Yellow Duck Framework 
                 to load the notes from disk and save the notes to disk. In the 
@@ -688,17 +683,19 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 After going through this example, you will have used and 
                 explored the following classes and modules in the Yellow Duck 
                 Framework:
-
-                <br/><br/>
                 
-                <ul>
+                <div><ul>
                     <li>YDRequest (class)</li>
                     <li>YDFSDirectory (class)</li>
                     <li>YDFSFile (class)</li>
                     <li>YDForm (class)</li>
                     <li>YDError and YDFatalError (classes)</li>
-                    <li>YDObjectUtil (module)<br/></li>
-                </ul>
+                    <li>YDObjectUtil (module)</li>
+                </ul></div>
+
+                For more detailed information of the functions and variables
+                exposed by these classes, consult the <a target="_blank"
+                href="api/index.html">API documentation</a>.
 
             </section>
 
@@ -786,9 +783,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                 There are a number of rules to follow to get the basis of the 
                 class implemented. Let's go over each one of them:
 
-                <br/><br/>
-
-                <ul>
+                <div><ul>
                     <li><b>Include the init file</b>: each script that wants to 
                     use the Yellow Duck Framework needs to include the 
                     "YDF2_init.php" file which initializes the framework. Make 
@@ -819,8 +814,8 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
                     action, we need to create a separate function in the class. 
                     Each function for an action has the name of the action 
                     prepended by "action" as it's function name. By default, 
-                    these function do not require any arguments.<br/> </li>
-                </ul>
+                    these function do not require any arguments.</li>
+                </ul></div>
                 
                 With this implemented, you can already surf to the index.php
                 page, but nothing will be shown. You can try the following URLs:
@@ -1034,11 +1029,11 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 automatically added to the template by the framework. We use 
                 the following ones:
 
-                <ul>
+                <div><ul>
                     <li><b>$YD_FW_NAMEVERS</b>: the name and the version of the framework</li>
                     <li><b>$YD_ACTION</b>: the name of the current action (always in lowercase)</li>
                     <li><b>$YD_SELF_SCRIPT</b>: the url of the script itself without parameters</li>
-                </ul>
+                </ul></div>
 
                 If you run the script now, it should tell you that no notes were
                 found, as we didn't create any yet. There should also be a link
@@ -1161,14 +1156,12 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>I specifically didn't explain the part which 
+                <i><b>Note</b>: I specifically didn't explain the part which 
                 save the note to a file, as it's not important yet. You first 
                 need to understand how this works before we can add the code for 
-                saving the note to disk.
-                </div>
+                saving the note to disk.</i>
 
-                <br/>
+                <br/><br/>
 
                 Before you can run the form, we need to add the code for the 
                 form to the template. Add the following stuff just before the 
@@ -1301,15 +1294,13 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>one could say that instead of forwarding the
+                <i><b>Note</b>: one could say that instead of forwarding the
                 request to a different action, you could just call the function 
                 for that action. Unfortunately, that doesn't work, since the 
                 framework will not know that the current action has been 
-                changed.
-                </div>
+                changed.</i>
 
-                <br/>
+                <br/><br/>
 
                 If you run the script now, you will be able to add notes and 
                 display them. Also try to add a note without a title or 
@@ -1366,15 +1357,13 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>there are some functions that could be added to 
+                <i><b>Note</b>: there are some functions that could be added to 
                 this action. First, it could check if there was an ID given or
                 not. If not, you could forward the request to the default
                 action, or you could show an error message. You could also add
                 some checking to see if the entry exists or not before deleting
                 it. Another option is to add a confirmation screen to prevent 
-                that someone accidently deletes a note.
-                </div>
+                that someone accidently deletes a note.</i>
 
             </section>
 
@@ -1385,6 +1374,8 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 You will find a complete working copy of this application in the
                 firstapp folder inside the examples folder of the Yellow Duck
                 Framework distribution.
+
+                <page-break />
 
             </section>
 
@@ -1464,9 +1455,7 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 basename of the script file with the text "Request" appended to 
                 it. Let's take a look at some examples:
 
-                <br/><br/>
-
-                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
                     <tr>
                         <td width="50%"><b>Script name</b></td>
                         <td width="50%"><b>Class name</b></td>
@@ -1483,30 +1472,24 @@ http://localhost/firstapp/index.php?do=oops</pre>
                         <td>MyOwnScriptForProcessing.php</td>
                         <td>MyOwnScriptForProcessingRequest</td>
                     </tr>
-                </table>
-
-                <br/>
+                </table></p>
 
                 If no class with the given name is declared, the execution will 
                 stop with a fatal error indicating this. The fatal error will 
                 also stop the execution of the script.
 
-                <br/>
+                <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>Class names are case insensitive in the Yellow 
+                <i><b>Note</b>: Class names are case insensitive in the Yellow 
                 Duck Framework. However, we strongly suggest you to maintain the
-                same case as in the filename.
-                </div>
+                same case as in the filename.</i>
 
-                <br/>
+                <br/><br/>
 
-                <div class="note">
-                <b>Note</b><br/>Also note that some characters are not allowed
+                <i><b>Note</b>: Also note that some characters are not allowed
                 as a class name, and as such are not allowed in the filename.
                 Especially characters like a dash, a dollar sign,
-                ad sign and an ampersand are not allowed.
-                </div>
+                ad sign and an ampersand are not allowed.</i>
 
             </section>
 
@@ -1681,6 +1664,8 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 class for this. This will not change the way the different 
                 checks are happening though (which is not advised by any means).
 
+                <page-break />
+
             </section>
 
         <section name="ch05" label="Using templates" />
@@ -1781,12 +1766,10 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 extension. In our example, you would need the following files to
                 make the example work:
 
-                <br/>
-
-                <ul>
+                <div><ul>
                     <li><b>mytemplate.php</b>: the actual PHP script</li>
                     <li><b>mytemplate.tpl</b>: the template attached to the PHP script</li> 
-                </ul>
+                </ul></div>
 
                 By convention, all templates have the extension "tpl". This is 
                 also hardcoded in the framework itself. Please, stick to this 
@@ -1802,16 +1785,14 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 search for templates. By default, there are two possible ways of
                 specifying the path for the templates:
 
-                <br/>
-
-                <ul>
+                <div><ul>
                     <li><b>Template specified by base name</b>: this will cause 
                     the template engine to look in the same directory as the 
                     current script.</li>
                     <li><b>Template specified by a full path</b>: this will 
                     cause the template engine to look for the template at the 
                     specified path.</li> 
-                </ul>
+                </ul></div>
                 
                 If you want, you can override the default search path for the 
                 templates. This is done by the class function "setTemplateDir" 
@@ -1832,9 +1813,7 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 start with "YD_" and are all uppercase. Here's the list of the 
                 standard variables:
 
-                <br/><br/>
-
-                <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
                     <tr>
                         <td width="30%"><b>Variable</b></td>
                         <td width="70%"><b>Explanantion</b></td>
@@ -1917,9 +1896,7 @@ http://localhost/firstapp/index.php?do=oops</pre>
                         <td valign="top">YD_DB_SQLQ_CNT</td>
                         <td>Number of database queries that were performed.</td>
                     </tr>
-                </table>
-
-                <br/>
+                </table></p>
     
                 Please do not use the "YD_" prefix for your own variables.
                 This prefix is uniquely reserverd for the variables 
@@ -1960,46 +1937,200 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 using short open tags. Make sure you have them enabled before 
                 running the examples.
 
+                <page-break />
+
             </section>
 
-        <section name="ch06" label="Using and validating forms">
-            <br/>
-            Not written yet
-        </section>
+        <section name="ch06" label="Using and validating forms" />
+
+            <section name="ch06_01" label="Background information">
+
+                <br/>
+
+                Processing and validating forms is probably one of the most
+                time-consuming and most difficult things to handle in a web
+                application. Forms can vary from very simple forms to really
+                difficult forms, which makes having a unified system to handle
+                all these forms a real time-saver.
+
+                <br/><br/>
+
+                By applying an object oriented approach to forms, and by
+                providing different methods and objects to handle forms with
+                ease, processing forms has become really easy and fast.
+
+                <br/><br/>
+
+                The form module in the Yellow Duck Framework is based on a 
+                package from the <a target="_blank" href="http://pear.php.net/">PEAR</a>
+                (PHP Extension and Application Repository) libraries. The
+                package we used is called <a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.php">HTML_QuickForm</a>
+                and provides most of the functionality. A number of additions
+                were made to this package to make it more straightforward for
+                using this in the Yellow Duck Framework.
+
+            </section>
+
+            <section name="ch06_02" label="The YDForm class">
+
+                <br/>
+
+                All te functionality for form handling in the Yellow Duck
+                Framework is handled by a class called "YDForm". The YDForm
+                class extends the HTML_QuickForm class to provide some 
+                additional features only found in the Yellow Duck Framework.
+
+                <br/><br/>
+
+                In addition to the standard functions provided by the
+                HTML_QuickForm class, the YDForm class provides one additional
+                function, called "toArray", which converts the form object into
+                an array suitable for using with the YDTemplate class.
+
+                <br/><br/>
+
+                For an overview of the standard functions for the HTML_QuickForm
+                class, please have a look on the documentation page which you 
+                can find on: <a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.php">http://pear.php.net/manual/en/package.html.html-quickform.php</a>.
+
+            </section>
+
+            <section name="ch06_03" label="Creating a new form">
+
+                <br/>
+
+                Creating a new form is done in two steps. First, you need to 
+                include the class definition, and then you need to create an
+                instance of the YDForm class. The following code sample will
+                illustrate this:
+
+                <pre><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDForm.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'myForm'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                The first line will include the correct class definition, while
+                the second one will create an instance of the form class. The 
+                class constructor takes a number of arguments, but only one is
+                required, the rest is optional. Here's the list of parameters
+                that you can pass when instantiating the form object.
+
+                <div><ul>
+                    <li><b>$name</b>: the name of the form.</li>
+                    <li><b>$method (optional)</b>:  Method used for submitting the form. 
+                    Most of the times, this is either POST or GET.</li>
+                    <li><b>$action (optional)</b>: Action used for submitting the form. 
+                    If not specified, it will default to the current URI.</li> 
+                    <li><b>$target (optional)</b>: HTML target for the form.</li>
+                    <li><b>$attributes (optional)</b>: Attributes for the form.</li>
+                </ul></div>
+
+                Make sure that all the different form instances you want to use
+                all have separate names. If not, the results might not be as you
+                expected.
+
+                <br/><br/>
+
+                By default, the form's action - the URI that will be called when 
+                the form is submitted - is the same URI that displayed the form 
+                in the first place. This may seem strange at first, but it is 
+                actually very useful, as we shall see.
+
+            </section>
+
+            <section name="ch06_04" label="Adding form elements">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_05" label="The different form elements">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_06" label="Displaying the form">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_07" label="Validating forms">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_08" label="Processing forms">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_09" label="Tips and tricks">
+
+                <br/>
+
+            </section>
+
+            <section name="ch06_10" label="More information">
+
+                <br/>
+
+                For more information about using the HTML_QuickForm package from
+                the PEAR project, you can visit the following websites:
+
+                <div><ul>
+                    <li><a target="_blank" href="http://www.thelinuxconsultancy.co.uk/quickform.html">http://www.thelinuxconsultancy.co.uk/quickform.html</a></li>
+                    <li><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.php">http://pear.php.net/manual/en/package.html.html-quickform.php</a></li>
+                </ul></div>
+
+                The YDForm class is an extension of the HTML_QuickForm package
+                and provides all the functionality and more.
+
+                <page-break />
+
+            </section>
 
         <section name="ch07" label="Accessing database contents">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch08" label="How to handle authentication">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch09" label="Using files, directories and images">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch10" label="Using URLs and downloading data">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch11" label="Using XML/RPC clients and servers">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch12" label="Sending emails">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
         <section name="ch13" label="Other classes and modules">
             <br/>
             Not written yet
+                <page-break />
         </section>
 
     </document-body>
