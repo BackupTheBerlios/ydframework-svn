@@ -25,6 +25,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	YDInclude( 'YDFileSystem.php' );
+
 	/**
 	 *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and 
 	 *	straightforward way. If you set up your class instance, you can automatically output to the different versions 
@@ -262,8 +264,10 @@
 		 */
 		function outputXml( $format='RSS2.0' ) {
 
+			// Get the XML data
 			$xml = $this->toXml( $format );
 
+			// Set the correct headers
 			$etag = '"' . md5( $xml ) . '"';
 			header( 'ETag: ' . $etag );
 			$inm = split( ',', getenv( 'HTTP_IF_NONE_MATCH' ) );
@@ -274,8 +278,32 @@
 				}
 			}
 
+			// Output the XML
 			header( 'Content-type: text/xml' );
 			echo( $xml );
+
+		}
+
+		/**
+		 *	This function will save the XML data to the specified file.
+		 *
+		 *	@remark
+		 *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
+		 *	format will be used.
+		 *
+		 *	@param $path	The path to save the XML data to.
+		 *	@param $format	(optional) The format in which the items should be converted.
+		 */
+		function saveXml( $path, $format='RSS2.0' ) {
+
+			// Get the XML data
+			$xml = $this->toXml( $format );
+
+			// Get the directory information
+			$dir = new YDFSDirectory( YDPath::getDirectoryName( $path ) );
+
+			// Create the file
+			$dir->createFile( YDPath::getFileName( $path ), $xml );
 
 		}
 

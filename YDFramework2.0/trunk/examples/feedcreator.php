@@ -55,6 +55,16 @@
 			echo( '<h3>ATOM</h3>' );
 			echo( htmlentities( $this->fc->toXml( 'ATOM' ) ) );
 
+			// Save the XML to disk
+			echo( '<h3>Saving as RSS 0.91 to __rss091.xml</h3>' );
+			$this->fc->saveXml( '__rss091.xml', 'RSS0.91' );
+			echo( '<h3>Saving as RSS 1.0 to __rss091.xml</h3>' );
+			$this->fc->saveXml( '__rss10.xml', 'RSS1.0' );
+			echo( '<h3>Saving as RSS 2.0 to __rss20.xml</h3>' );
+			$this->fc->saveXml( '__rss20.xml' );
+			echo( '<h3>Saving as ATOM to __atom.xml</h3>' );
+			$this->fc->saveXml( '__atom.xml', 'ATOM' );
+
 		}
 
 		// Output the feed in RSS 0.91
