@@ -147,7 +147,7 @@
 					$out .= '		}';
 					$out .= '	}';
 					$out .= '	function openWin( url, name, opts ) {';
-					$out .= '		window.open( url, name, opts );';
+					$out .= '		win = window.open( url, name, opts );';
 					$out .= '		win.focus();';
 					$out .= '	}';
 					$out .= '</script>';
