@@ -70,6 +70,9 @@
      *  function will check the value of the "do" parameter specified in the URL
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
+     *
+     *  @todo
+     *      $this->browser should not be instantiated automatically.
      */
     class YDRequest {
 
