@@ -46,15 +46,10 @@
 			$this->compile_dir = YD_DIR_TEMP;
 			$this->left_tag = '{';
 			$this->right_tag = '}';
-			$this->caching = false;
+			$this->cache = false;
 			$this->cache_lifetime = 3600;
 			$this->cache_dir = YD_DIR_TEMP;
 			$this->cache_dir = YD_DIR_TEMP . '/cache';
-
-			// Create the cache dir if it doesn't exist
-			if ( ! is_dir( $this->cache_dir ) ) {
-				@mkdir( $this->cache_dir );
-			}
 
 			// Register the custom modifiers
 			$this->register_modifier( 'sizeof', 'sizeof' );
@@ -98,6 +93,11 @@
 		 *	@returns	This function returns the output of the parsed template.
 		 */
 		function fetch( $file='', $cache_id=null, $display=false ) {
+
+			// Create the cache dir if it doesn't exist
+			if ( $this->cache && ! is_dir( $this->cache_dir ) ) {
+				@mkdir( $this->cache_dir );
+			}
 
 			// Add some default variables
 			$this->assign( 'YD_FW_NAME', YD_FW_NAME );

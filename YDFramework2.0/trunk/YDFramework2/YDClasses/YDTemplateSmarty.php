@@ -53,7 +53,7 @@
 			$this->cache_dir = YD_DIR_TEMP . '/cache';
 
 			// Create the cache dir if it doesn't exist
-			if ( ! is_dir( $this->cache_dir ) ) {
+			if ( $this->caching && ! is_dir( $this->cache_dir ) ) {
 				@mkdir( $this->cache_dir );
 			}
 
@@ -102,6 +102,11 @@
 		 */
 		function fetch( $file='', $cache_id=null, $compile_id=null, $display=false ) {
 
+			// Create the cache dir if it doesn't exist
+			if ( $this->caching && ! is_dir( $this->cache_dir ) ) {
+				@mkdir( $this->cache_dir );
+			}
+
 			// Add some default variables
 			$this->assign( 'YD_FW_NAME', YD_FW_NAME );
 			$this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
@@ -115,6 +120,11 @@
 			
 			// Get the template name
 			$tplName = $this->_getTemplateName( $file );
+
+			// Add pseudo compile id
+			if ( is_null( $compile_id ) ) {
+				$compile_id = sprintf( '%u', crc32( realpath( $this->template_dir ) . '/' . $tplName ) );
+			}
 
 			// Output the template
 			$result = parent::fetch( $tplName, $cache_id, $compile_id );

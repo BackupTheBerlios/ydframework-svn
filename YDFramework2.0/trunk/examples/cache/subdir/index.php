@@ -41,7 +41,7 @@
 			$this->template->assign( 'books', $array );
 
 			// Output the template
-			$this->template->display( 'index.tpl', null, md5( __FILE__ ) );
+			$this->template->display();
 
 		}
 
