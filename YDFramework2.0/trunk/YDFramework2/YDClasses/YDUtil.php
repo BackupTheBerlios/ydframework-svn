@@ -143,6 +143,8 @@
 		 *
 		 *  @returns	A multi-dimension array with the contents of the original array converted to a table with the 
 		 *				indicated number of colums.
+		 *
+		 *	@static
 		 */
 		function convertToTable( $array, $columns, $fillLastRow=false ) {
 
@@ -177,6 +179,8 @@
 		 *	@param $key		The column to use as the key name.
 		 *
 		 *	@returns	A new array which is a nested using the given column name.
+		 *
+		 *	@static
 		 */
 		function convertToNested( $array, $key ) {
 
@@ -213,6 +217,8 @@
 		 *
 		 *	This function accepts a variable amount of arguments which are all concatenated using a space in between.
 		 *	All debug messages will be shown as HTML comments with the prefix "[ YD_DEBUG ]".
+		 *
+		 *	@static
 		 */
 		function debug() {
 			$args = func_get_args();
@@ -234,6 +240,8 @@
 		 *
 		 *	@param $obj		Object you want to dump.
 		 *	@param $label	The label for the dump.
+		 *
+		 *	@static
 		 */
 		function dump( $obj, $label='' ) {
 			echo( YDDebugUtil::r_dump( $obj, true, $label ) );
@@ -248,6 +256,8 @@
 		 *	@param $label	The label for the dump.
 		 *
 		 *	@returns	Text representation of the object.
+		 *
+		 *	@static
 		 */
 		function r_dump( $obj, $html=false, $label='' ) {
 			$data = var_export( $obj, true );
@@ -316,6 +326,8 @@
 		 *	@param $class	The object type you want to check against.
 		 *
 		 *	@returns	Boolean indicating if the object is of the specified class.
+		 *
+		 *	@static
 		 */
 		function isSubClass( $obj, $class ) {
 			$class = strtolower( $class );
@@ -337,6 +349,8 @@
 		 *	@param $classname	Name of the class or object.
 		 *
 		 *	@returns	Array with all the ancestors.
+		 *
+		 *	@static
 		 */
 		function getAncestors( $classname ) {
 			if ( is_object( $classname ) ) {
@@ -355,6 +369,8 @@
 		 *	This function will serialize an object.
 		 *
 		 *	@param $obj	Object to serialize.
+		 *
+		 *	@static
 		 */
 		function serialize( $obj ) {
 			$obj = serialize( $obj );
@@ -368,6 +384,8 @@
 		 *	This function will unserialize an object.
 		 *
 		 *	@param $obj	Object to unserialize.
+		 *
+		 *	@static
 		 */
 		function unserialize( $obj ) {
 			$obj = unserialize( $obj );
@@ -392,6 +410,8 @@
 		 *	@param $decimals	(optional) The number of decimals that should be returned.
 		 *
 		 *	@returns String containing the formatted file size.
+		 *
+		 *	@static
 		 */
 		function formatFilesize( $bytes, $decimals=1 ) {
 
@@ -423,6 +443,8 @@
 		 *	@param $htmlent	Boolean indicating if the result should be HTML encoded or not.
 		 *
 		 *	@returns	String with all the characters with an ordinal bigger than 128 converted to numeric entities.
+		 *
+		 *	@static
 		 */
 		function encodeString( $string, $htmlent=false ) {
 			/*
@@ -460,6 +482,8 @@
 		 *	@param $length		(optional) The length to truncate to. Default length is 80 characters.
 		 *	@param $etc			(optional) The string to append if the item gets trunctated. Default is '...'.
 		 *	@param $break_words	(optional) Break in the middle of words or not. Default is false.
+		 *
+		 *	@static
 		 */
 		function truncate( $string, $length=80, $etc='...', $break_words=false ) {
 			if ( $length == 0 ) { return ''; }
