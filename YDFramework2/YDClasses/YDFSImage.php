@@ -20,7 +20,7 @@
     class YDFSImage extends YDFSFile {
 
         /**
-         *  The class constructor of the YDImage class takes the path to the 
+         *  The class constructor of the YDImage class takes the path to the
          *  image as it's only argument. It will then provide you with a number
          *  of functions to get the properties of the image and also provides
          *  some actions like generating thumbnails.
@@ -47,7 +47,7 @@
          *
          *  @param $width  The maximum width of the thumbnail.
          *  @param $height The maximum height of the thumbnail.
-         *  @param $cache  (optional) Indicate if the thumbnails should be 
+         *  @param $cache  (optional) Indicate if the thumbnails should be
          *                 cached or not. By default, caching is turned on.
          */
         function outputThumbnail( $width, $height, $cache=true ) {
@@ -78,7 +78,7 @@
             $cacheFName .= $this->getAbsolutePath();
             $cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.tmn';
             $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
-            
+
             // Check if caching is enabled
             if ( $cache == true ) {
 
@@ -94,7 +94,7 @@
 
                   // Stop the execution of the script
                   die();
-                  
+
               }
 
             }
@@ -143,8 +143,8 @@
             // Check for the getimagesize function
             if ( ! function_exists( 'getimagesize' ) ) {
                 new YDFatalError(
-                    'The "getimagesize" function does not exists. Make sure that '
-                    . 'the GD libraries are loaded before using the '
+                    'The "getimagesize" function does not exists. Make sure '
+                    . 'that the GD libraries are loaded before using the '
                     . 'YDFSImage::getImageSize function.'
                 );
             }
@@ -211,7 +211,7 @@
                 // JPG image
                 case 2:
                     return 'jpeg';
-                
+
                 // PNG image
                 case 3:
                     return 'png';
@@ -241,7 +241,7 @@
             return 'image/' . strtolower( $type );
 
          }
-         
+
          /**
           *  This function is used to output an error image.
           *

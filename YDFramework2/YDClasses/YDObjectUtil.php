@@ -23,11 +23,12 @@
 
         /**
          *  This function checks if an object instance is of a specific class
-         *  or is based on a derived class of the given class. The class name is 
+         *  or is based on a derived class of the given class. The class name is
          *  case insensitive.
          *
-         *  This function uses the is_a function from PHP if it's available, and if
-         *  not, it falls back on either the get_class or is_subclass_of functions.
+         *  This function uses the is_a function from PHP if it's available, and
+         *  if not, it falls back on either the get_class or is_subclass_of
+         *  functions.
          *
          *  @param $obj The object instance to check.
          *  @param $class The object type you want to check against.
@@ -64,16 +65,17 @@
                 }
 
             }
-     
+
             // None of the above, return false
             return false;
-       
+
         }
 
         /**
-         *  Function to get all the ancestors of a class. The list will contain the
-         *  parent class first, and then it's parent class, etc. You can pass both
-         *  the name of the class or an object instance to this function
+         *  Function to get all the ancestors of a class. The list will contain
+         *  the parent class first, and then it's parent class, etc. You can
+         *  pass both the name of the class or an object instance to this
+         *  function
          *
          *  The following examples shows you how it works:
          *
@@ -99,7 +101,7 @@
          *  array(2) {
          *      [0]=> string(16) "ExtendsBaseClass"
          *      [1]=> string(9) "BaseClass"
-         *  } 
+         *  }
          *  @endcode
          *
          *  @param $classname Name of the class or object.
@@ -107,7 +109,7 @@
          *  @return Array with all the ancestors.
          */
         function getAncestors( $classname ) {
-            
+
             // If the variable is an object, get the class name
             if ( is_object( $classname ) ) {
                 $classname = get_class( $classname );
@@ -131,9 +133,9 @@
         }
 
         /**
-         *  This function will check if the specified object has the method 
-         *  specified, and will raise a fatal error if not. This function does not
-         *  return any value.
+         *  This function will check if the specified object has the method
+         *  specified, and will raise a fatal error if not. This function does
+         *  not return any value.
          *
          *  @param $obj Object you want to check.
          *  @param $method Method you are looking for.
@@ -145,7 +147,7 @@
                 new YDFatalError(
                     'Class "' . $obj . '" does  not have a function called "'
                     . $method . '" which is required for proper operation.'
-                );   
+                );
             }
 
         }

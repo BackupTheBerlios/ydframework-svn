@@ -20,7 +20,7 @@
     class YDFSFile extends YDBase {
 
         /**
-         *  The class constructor of the YDFSFile class takes the path to the 
+         *  The class constructor of the YDFSFile class takes the path to the
          *  file as it's only argument. It will then provide you with a number
          *  of functions to get the properties of the file.
          *
@@ -52,8 +52,8 @@
         }
 
         /**
-         *  Function to get the filename of the object. This does not include the
-         *  path information.
+         *  Function to get the filename of the object. This does not include
+         *  the path information.
          *
          *  @returns String containing the name of the object.
          */
@@ -110,9 +110,9 @@
         /**
          *  Function to get the contents of the file. Depending on the file
          *  contents, this will be returned as binary or textual data.
-         *  
-         *  If no start byte is given, it will start reading from the beginning 
-         *  of the file. 
+         *
+         *  If no start byte is given, it will start reading from the beginning
+         *  of the file.
          *
          *  If the length is not given, it will read the rest of  the file
          *  starting from the start byte.
@@ -131,10 +131,12 @@
                 $start = 0;
 
             } else {
-                
+
                 // Check if the start is an integer
                 if ( ! is_int( $start ) ) {
-                    new YDFatalError( 'getContents: Start byte should be an integer.' );
+                    new YDFatalError(
+                        'getContents: Start byte should be an integer.'
+                    );
                 }
 
             }
@@ -153,7 +155,7 @@
             }
             if ( $length < 1 ) {
                 new YDFatalError(
-                    'getContents: Length should be a positive integer.' 
+                    'getContents: Length should be a positive integer.'
                 );
             }
 
@@ -176,7 +178,7 @@
             // Get the contents of the file
             $result = fread( $file, $length );
 
-            // Close the file handle    
+            // Close the file handle
             fclose( $file );
 
             // Return the result
@@ -186,7 +188,8 @@
 
         /**
          *  Function to determine if the file is an image or not. This function
-         *  will read the header of the file to find out if it's an image or not.
+         *  will read the header of the file to find out if it's an image or
+         *  not.
          *
          *  @remarks
          *      You need to have the GD library enabled in PHP in order to use

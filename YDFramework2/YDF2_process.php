@@ -74,7 +74,7 @@
 
                     // List of include files
                     YDDebugUtil::debug(
-                        'Included files:' . "\n" . implode( "\n", $includeFiles )
+                        'Includes:' . "\n" . implode( "\n", $includeFiles )
                     );
 
                 }
@@ -86,13 +86,15 @@
         }
 
         // Construct the name of the request class
-        $clsName = strtolower( basename( YD_SELF_FILE, YD_SCR_EXT ) . 'Request' );
+        $clsName = strtolower(
+            basename( YD_SELF_FILE, YD_SCR_EXT ) . 'Request'
+        );
 
         // Check if the class exists
         if ( ! class_exists( $clsName ) ) {
             new YDFatalError(
                 'No class definition found for the class "' . $clsName . '".'
-            );   
+            );
         }
 
         // Instantiate the class
@@ -118,7 +120,7 @@
             new YDFatalError(
                 'Class "' . $clsName . '" is not initialized properly. Make '
                 . 'sure loaded the base class YDRequest and initialized it.'
-            );   
+            );
         }
 
         // Check if we have a process function
@@ -135,13 +137,13 @@
 
             // Execute authentication fails/succeeds
             if ( $result ) {
-                YDObjectUtil::failOnMissingMethod( 
+                YDObjectUtil::failOnMissingMethod(
                     $clsInst, 'authenticationSucceeded'
                 );
                 $clsInst->authenticationSucceeded();
             } else {
-                YDObjectUtil::failOnMissingMethod( 
-                    $clsInst, 'authenticationFailed' 
+                YDObjectUtil::failOnMissingMethod(
+                    $clsInst, 'authenticationFailed'
                 );
                 $clsInst->authenticationFailed();
                 YDFinishRequest();

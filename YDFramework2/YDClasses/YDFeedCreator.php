@@ -68,7 +68,7 @@
         }
 
         /**
-         *  This function will set the image properties for the feed. It 
+         *  This function will set the image properties for the feed. It
          *  requires you to specify a title, url and link for the image. The
          *  description is an optional element.
          *
@@ -76,7 +76,7 @@
          *      Feed images are only supported for RSS feeds. ATOM feeds do not
          *      support a feed image. If you decide to output the feed to ATOM,
          *      the information set with this function will be discarded.
-         *  
+         *
          *  @param $title The title of the feed image.
          *  @param $link  The link to the feed image.
          *  @param $url   The URL of the feed image.
@@ -131,7 +131,7 @@
             if ( $guid != null ) {
                 $item->guid = $guid;
             } else {
-                
+
                 // Create the checksum parts
                 $checkSum = $item->title . $item->link;
 
@@ -164,7 +164,7 @@
          *      indicating the requested format, the "RSS2.0" format will be
          *      used.
          *
-         *  @param $format (optional) The format in which the items should be 
+         *  @param $format (optional) The format in which the items should be
          *                 converted.
          *
          *  @returns String with the data in the requested format.
@@ -180,8 +180,8 @@
             ) ) {
                 new YDFatalError(
                     'The YDFeedCreator does not support the format called '
-                    . '"' . $format . '". Only the formats "RSS0.91", "RSS1.0", '
-                    , '"RSS2.0" and "ATOM" are supported.'
+                    . '"' . $format . '". Only the formats "RSS0.91", '
+                    , '"RSS1.0", "RSS2.0" and "ATOM" are supported.'
                 );
             }
 
@@ -197,7 +197,7 @@
 
         /**
          *  This function will output the feed in the specified format. It will
-         *  send the output directly to the browser. The following formats are 
+         *  send the output directly to the browser. The following formats are
          *  recognized:
          *
          *  - RSS0.91
@@ -210,7 +210,7 @@
          *      indicating the requested format, the "RSS2.0" format will be
          *      used.
          *
-         *  @param $format (optional) The format in which the items should be 
+         *  @param $format (optional) The format in which the items should be
          *                 converted.
          */
         function outputXml( $format='RSS2.0' ) {
@@ -225,7 +225,7 @@
 
         /**
          *  This function will output the feed in the specified format and will
-         *  color the XML elements using HTML code. The following formats are 
+         *  color the XML elements using HTML code. The following formats are
          *  recognized:
          *
          *  - RSS0.91
@@ -238,7 +238,7 @@
          *      indicating the requested format, the "RSS2.0" format will be
          *      used.
          *
-         *  @param $format (optional) The format in which the items should be 
+         *  @param $format (optional) The format in which the items should be
          *                 converted.
          *
          *  @returns HTML colored XML data.

@@ -102,7 +102,7 @@
          *  is happening when there is no XML/RPC request found.
          */
         function requestNotXmlRpc() {
-            
+
             // Create a new list of the supported methods
             $methods = array();
 
@@ -148,7 +148,7 @@
             $template->setVar( 'capabilities', $this->getCapabilities( null ) );
             $template->setVar( 'rowcolor', '#EEEEEE' );
             echo( $template->getOutput(
-                dirname( __FILE__ ) . '/YDXmlRpcServer' 
+                dirname( __FILE__ ) . '/YDXmlRpcServer'
             ) );
 
         }
@@ -165,8 +165,9 @@
         function errorMissingAction( $action ) {
 
             // Construct the error message
-            $err = 'Class ' . get_class( $this ) . ' does not contain an action '
-                 . 'called "' . strtolower( $action ) . '" (function name).';
+            $err = 'Class ' . get_class( $this ) . ' does not contain an '
+                 . ' action called "' . strtolower( $action ) . '" '
+                 . '(function name).';
 
             // Raise the right error
             if ( ! $this->isXmlRpcRequest() ) {
@@ -206,7 +207,7 @@
         function actionNotAllowed() {
 
             // Construct the error message
-            $err = 'You are not allow to access the action "' 
+            $err = 'You are not allow to access the action "'
                  . $this->getActionName() . '"';
 
             // Raise the right error

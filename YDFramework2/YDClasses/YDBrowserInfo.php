@@ -14,15 +14,15 @@
     require_once( 'YDBase.php' );
 
     /**
-     *  This class uses the HTTP_USER_AGENT varaible to get information about 
-     *  the browser the visitor used to perform the request. We determine the 
+     *  This class uses the HTTP_USER_AGENT varaible to get information about
+     *  the browser the visitor used to perform the request. We determine the
      *  browser name, the version and the platform it's running on.
      */
     class YDBrowserInfo extends YDBase {
 
-        /** 
+        /**
          *  The class constructor analyzes for the YDBrowserInfo class. The
-         *  constructor takes no arguments and uses the 
+         *  constructor takes no arguments and uses the
          *  $_SERVER['HTTP_USER_AGENT'] variable to parse the browser info.
          */
         function YDBrowserInfo() {
@@ -45,16 +45,24 @@
                 $this->_agent = $_SERVER['HTTP_USER_AGENT'];
 
                 // Determine the browser name
-                if ( ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                if (
+                    ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'ie';
-                } elseif ( ereg( 'Safari\/([0-9]+)', $this->_agent, $ver ) ) {
+                } elseif (
+                    ereg( 'Safari\/([0-9]+)', $this->_agent, $ver
+                ) ) {
                     $this->_version = '1.0b' . $ver[1];
                     $this->_browser = 'safari';
-                } elseif ( ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                } elseif (
+                    ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'opera';
-                } elseif ( ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                } elseif (
+                    ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'mozilla';
                 } else {

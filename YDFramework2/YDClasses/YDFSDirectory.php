@@ -60,20 +60,20 @@
          *      This will not work recursively on the subdirectories.
          *
          *  @param $pattern (optional) Pattern to which the files should match.
-         *  
-         *  @returns Array of YDFile objects for the files that match the 
+         *
+         *  @returns Array of YDFile objects for the files that match the
          *           pattern.
          */
         function getContents( $pattern='') {
 
             // Start with an empty list
             $fileList = array();
-           
+
             // Get a handle to the directory
             $dirHandle = opendir( $this->getPath() );
 
             // Loop over the directory contents
-            while ( false !== ( $file = readdir( $dirHandle ) ) ) { 
+            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
                 if ( $file != '.' && $file != '..' ) {
                     if ( $pattern != '' ) {
                         if ( YDFSDirectory::_match( $pattern, $file ) ) {
@@ -168,7 +168,7 @@
          *  This function will delete a file from the current directory.
          *
          *  @param $filename    The file you want to delete.
-         *  @param $failOnError (optional) Indicate if a YDFatalError needs to 
+         *  @param $failOnError (optional) Indicate if a YDFatalError needs to
          *                      be raised if deleting the file failed.
          */
         function deleteFile( $filename, $failOnError=false ) {
@@ -227,7 +227,7 @@
                         $c++
                     ) {
                         if ( YDFSDirectory::_match(
-                            substr( $pattern, $i+1 ), substr( $file, $c ) ) 
+                            substr( $pattern, $i+1 ), substr( $file, $c ) )
                         ) {
                             return true;
                         }
@@ -248,12 +248,12 @@
                     foreach ( $letter_set as $letter ) {
                         if ( YDFSDirectory::_match(
                             $letter . substr( $pattern, $c+1 ),
-                            substr( $file, $i ) ) 
+                            substr( $file, $i ) )
                         ) {
                             return true;
                         }
                     }
-                    return false; 
+                    return false;
                 }
 
                 // Pattern is a ?

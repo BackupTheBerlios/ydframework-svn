@@ -15,7 +15,7 @@
     require_once( 'YDDatabase.php' );
 
     /**
-     *  This class defines a SQL query. There a a number of standard functions 
+     *  This class defines a SQL query. There a a number of standard functions
      *  this object has to get the data from this query given a database URL
      *  to retrieve the data from.
      */
@@ -32,12 +32,12 @@
 
             // Initialize YDBase
             $this->YDBase();
-    
+
             // Initialize the sql query
             $this->_sql = $sql;
 
         }
-        
+
         /**
          *  This function will return the raw SQL statement for this query.
          *
@@ -52,11 +52,11 @@
          *  affected rows.
          *
          *  @param $url The database url for this query.
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The number of affected row by the SQL query.
          */
@@ -75,11 +75,11 @@
          *  the query.
          *
          *  @param $url The database url for this query.
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The result of the SQL query.
          */
@@ -94,15 +94,15 @@
         }
 
         /**
-         *  This function will execute the query and return the first row from 
+         *  This function will execute the query and return the first row from
          *  the result of the query.
          *
          *  @param $url The database url for this query.
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The first row of the result of the SQL query.
          */

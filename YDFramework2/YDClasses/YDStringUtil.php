@@ -14,17 +14,17 @@
     require_once( 'YDBase.php' );
 
     /**
-     *  This class houses all the string related utility functions. All the methods
-     *  are implemented as static methods and do not require you to create a
-     *  class instance in order to use them.
+     *  This class houses all the string related utility functions. All the
+     *  methods are implemented as static methods and do not require you to
+     *  create a class instance in order to use them.
      */
     class YDStringUtil extends YDBase {
 
         /**
          *  Function to format a file size to a meaningful value.
-         *  
+         *
          *  @param $bytes    The file size to format.
-         *  @param $decimals (optional) The number of decimals that should be 
+         *  @param $decimals (optional) The number of decimals that should be
          *                   returned.
          *
          *  @returns String containing the formatted file size.
@@ -45,7 +45,7 @@
             if ( $bytes <= 1024 ) {
                 return $bytes . " Bytes";
             }
-            
+
             // Loop over the remaining possibilities
             foreach( $units as $base => $title ) {
                 if( floor( $bytes / $base ) != 0 ) {
@@ -164,7 +164,7 @@
                 } elseif ( ord( substr( $string, $i, 1 ) ) == 0 ) {
                     $encoded .= ' ';
                 } else {
-                    $encoded .= substr( $string, $i, 1 );    
+                    $encoded .= substr( $string, $i, 1 );
                 }
 
             }

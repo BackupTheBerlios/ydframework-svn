@@ -24,7 +24,7 @@
      */
     class YDEmail extends YDBase {
 
-        /** 
+        /**
          *  This is the class constructor for the YDEmail class.
          */
         function YDEmail( $crlf="\n" ) {
@@ -58,7 +58,7 @@
             $this->sender = $email;
         }
 
-        /** 
+        /**
          *  Function to set the reply to address.
          *
          *  @param $email Email address to use as reply to
@@ -68,7 +68,7 @@
             $this->replyto = $this->_mergeEmailName( $email, $name );
         }
 
-        /** 
+        /**
          *  Function to add an address the to list.
          *
          *  @param $email Email address to add
@@ -107,7 +107,7 @@
             array_push( $this->to_plain, $email );
         }
 
-        /** 
+        /**
          *  Function to set the subject of the email
          *
          *  @param $subject Subject of the email
@@ -139,16 +139,16 @@
          *
          *  @param $file     The file name or the data itself.
          *  @param $c_type   (optional) The content type of the image or file.
-         *  @param $name     (optional) The suggested file name for the data. 
-         *                   Only used, if $file contains data. 
+         *  @param $name     (optional) The suggested file name for the data.
+         *                   Only used, if $file contains data.
          *  @param $isfile   (optional) Whether $file is a file name or not.
-         *  @param $encoding (optional) Type of transfer encoding to use for the 
-         *                   file data. Defaults is "base64". For text based 
-         *                   files (eg. scripts/html etc.) this could be given 
+         *  @param $encoding (optional) Type of transfer encoding to use for the
+         *                   file data. Defaults is "base64". For text based
+         *                   files (eg. scripts/html etc.) this could be given
          *                   as "quoted-printable".
          */
         function addAttachment(
-            $file, $c_type='application/octet-stream', $name='', 
+            $file, $c_type='application/octet-stream', $name='',
             $isfile=true, $encoding='base64'
         ) {
             $this->_msg->addAttachment(
@@ -157,13 +157,13 @@
         }
 
         /**
-         *  If sending an HTML message with embedded images, use this function 
+         *  If sending an HTML message with embedded images, use this function
          *  to add the image.
          *
          *  @param $file     The image file name or the image data itself.
          *  @param $c_type   (optional) The content type of the image or file.
-         *  @param $name     (optional) The filename of the image. Only used, if 
-         *                   $file contains the image data. 
+         *  @param $name     (optional) The filename of the image. Only used, if
+         *                   $file contains the image data.
          *  @param $isfile   (optional) Whether $file is a file name or not.
          */
         function addHTMLImage(
@@ -174,7 +174,7 @@
             );
         }
 
-        /** 
+        /**
          *  This function will send the actual email. It accepts a list of
          *  recipients which should be defined as an array. If no recipients are
          *  defined, it will use the one setup in the email message using addTo.
@@ -239,13 +239,13 @@
 
         }
 
-        /** 
-         *  This will merge the email address and name to the standard format used
-         *  in the headers of an email. If you for example merge the email address
-         *  "pieter@yellowduck.be" with the name "Pieter Claerhout", the result of
-         *  this function will be ""Pieter Claerhout" <pieter@yellowduck.be>". So,
-         *  it surrounds the name by double quotes and appends the email address
-         *  surrounded by < and >.
+        /**
+         *  This will merge the email address and name to the standard format
+         *  used in the headers of an email. If you for example merge the email
+         *  address "pieter@yellowduck.be" with the name "Pieter Claerhout", the
+         *  result of this function will be ""Pieter Claerhout"
+         *  <pieter@yellowduck.be>". So, it surrounds the name by double quotes
+         *  and appends the email address surrounded by < and >.
          *
          *  @param $address Email address
          *  @param $name    Name

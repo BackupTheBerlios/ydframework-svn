@@ -14,7 +14,7 @@
     require_once( 'HttpClient.class.php' );
 
     /**
-     *  This is the YDHttpClient class. It extends the HttpClient class and adds 
+     *  This is the YDHttpClient class. It extends the HttpClient class and adds
      *  support for specifying the content type.
      */
     class YDHttpClient extends HttpClient {
@@ -68,7 +68,9 @@
 
             // Basic authentication
             if ( $this->username && $this->password ) {
-                $headers[] = 'Authorization: BASIC ' . base64_encode( $this->username.':'.$this->password );
+                $headers[] = 'Authorization: BASIC ' . base64_encode(
+                    $this->username.':'.$this->password
+                );
             }
 
             // If this is a POST, set the content type and length

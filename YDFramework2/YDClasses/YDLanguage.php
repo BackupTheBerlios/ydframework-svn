@@ -21,7 +21,7 @@
      */
     class YDLanguage extends YDBase {
 
-        /** 
+        /**
          *  This is the class constructor for the YDLanguage class.
          *
          *  @param $supported (optional) An array with the list of supported
@@ -63,7 +63,9 @@
         function getBrowserLanguages() {
 
             // We parse the language headers sent by the browser
-            $browserLanguages = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+            $browserLanguages = explode(
+                ',', $_SERVER['HTTP_ACCEPT_LANGUAGE']
+            );
 
             // Normalize the browser language headers
             for ( $i = 0; $i < sizeof( $browserLanguages ); $i++ ) {
@@ -84,7 +86,7 @@
          *  supported languages and the languages supported by the browser. It
          *  will take in account the order of the languages the server
          *  specified, and it will also take in account the order of the
-         *  languages in which the browser specified the supported languages. If 
+         *  languages in which the browser specified the supported languages. If
          *  no common language is found, the first server supported language is
          *  used.
          *

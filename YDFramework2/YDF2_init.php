@@ -28,14 +28,14 @@
      *
      *  To implement the base functionality, a lot of standard libraries were
      *  used. Included is a partial copy of the PEAR library from the PHP
-     *  project, which provides things such as database connectivity. More 
+     *  project, which provides things such as database connectivity. More
      *  information and documentation on the PEAR library can be found on
      *  http://pear.php.net/ .
      *
      *  (c) 2002-2004 Pieter Claerhout, pieter@yellowduck.be
      *
      *  Webpage: http://www.yellowduck.be/
-     *  
+     *
      *  Author: Pieter Claerhout, pieter@yellowduck.be
      */
 
@@ -75,8 +75,8 @@
 
         /**
          *  @enum YD_DIR_HOME
-         *        Home directory of the Yellow Duck Framework. This is the full path
-         *        to the YDFramework2 directory.
+         *        Home directory of the Yellow Duck Framework. This is the full
+         *        path to the YDFramework2 directory.
          *
          *  @internal
          */
@@ -84,7 +84,7 @@
 
         /**
          *  @enum YD_DIR_CLSS
-         *        Class directory of the Yellow Duck Framework. This is the full 
+         *        Class directory of the Yellow Duck Framework. This is the full
          *        path to the YDFramework2/YDClasses directory.
          *
          *  @internal
@@ -93,8 +93,8 @@
 
         /**
          *  @enum YD_DIR_SMPI
-         *        Smarty plugins directory of the Yellow Duck Framework. This is the  
-         *        full path to the YDFramework2/YDSmartyPlugins directory.
+         *        Smarty plugins directory of the Yellow Duck Framework. This is
+         *        the full path to the YDFramework2/YDSmartyPlugins directory.
          *
          *  @internal
          */
@@ -102,8 +102,8 @@
 
         /**
          *  @enum YD_DIR_3RDP
-         *        Third party code directory of the Yellow Duck Framework. This is   
-         *        the full path to the YDFramework2/3rdparty directory.
+         *        Third party code directory of the Yellow Duck Framework. This
+         *        is the full path to the YDFramework2/3rdparty directory.
          *
          *  @internal
          */
@@ -122,8 +122,8 @@
          *  @enum YD_DIR_TEMP
          *        Temporary directory of the Yellow Duck Framework. This is the
          *        full path to the YDFramework2/temp directory. This is the
-         *        directory where the compiled templates are stored. Make sure this
-         *        directory is world writeable.
+         *        directory where the compiled templates are stored. Make sure
+         *        this directory is world writeable.
          *
          *  @internal
          */
@@ -131,9 +131,9 @@
 
         /**
          *  @enum YD_ACTION_PARAM
-         *        Name of the $_GET variable that is used to determine which action
-         *        is requested. By default, this is the argument specified with the
-         *        name "do".
+         *        Name of the $_GET variable that is used to determine which
+         *        action is requested. By default, this is the argument
+         *        specified with the name "do".
          *
          *  @internal
          */
@@ -141,8 +141,8 @@
 
         /**
          *  @enum YD_ACTION_DEFAULT
-         *        the name of the $_GET parameter that specifies which action needs
-         *        to be executed. This is "do" by default.
+         *        the name of the $_GET parameter that specifies which action
+         *        needs to be executed. This is "do" by default.
          *
          *  @internal
          */
@@ -161,7 +161,8 @@
 
         /**
          *  @enum YD_SELF_FILE
-         *        Contains the physical script's path, e.g. "c:\myapp\index.php".
+         *        Contains the physical script's path, e.g.
+         *        "c:\myapp\index.php".
          */
         define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
 
@@ -173,7 +174,7 @@
 
         /**
          *  @enum YD_SELF_URI
-         *        The URI which was given in order to access thisp age, e.g. 
+         *        The URI which was given in order to access thisp age, e.g.
          *        "/myapp/index.php?do=edit"
          */
         define( 'YD_SELF_URI', $_SERVER['REQUEST_URI'] );
@@ -204,7 +205,11 @@
 
         // Get debugging mode
         if ( ! defined( 'YD_DEBUG' ) ) {
-            $_GET['YD_DEBUG'] == 1 ? define( 'YD_DEBUG', 1 ) : define( 'YD_DEBUG', 0 );
+            if ( $_GET['YD_DEBUG'] == 1 ) {
+                define( 'YD_DEBUG', 1 )
+            } else {
+                define( 'YD_DEBUG', 0 );
+            }
         }
 
         // Get the path delimiter
@@ -233,7 +238,7 @@
         require_once( 'YDObjectUtil.php' );
 
         /**
-         *  This function will return true if the current version is lower than 
+         *  This function will return true if the current version is lower than
          *  the indicated version. Internally, this uses the phpversion()
          *  function to get the current version number.
          *
@@ -247,11 +252,11 @@
             $curver = explode( '.', phpversion() );
             if (
                 ( $curver[0] <= $minver[0] ) && ( $curver[1] <= $minver[1] )
-                && 
-                ( $curver[1] <= $minver[1] ) && ( $curver[2][0] < $minver[2][0] )
-            ) {
+                && (
+                $curver[1] <= $minver[1] ) && ( $curver[2][0] < $minver[2][0]
+            ) ) {
                 return true;
-            } else { 
+            } else {
                 return false;
             }
         }
@@ -270,7 +275,7 @@
 
             // Instantiate the timer
             $timer = new YDTimer();
-    
+
         }
 
     }

@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    
+
     <p class="titleBig">XML/RPC Interface</p>
 
     <p class="text">URL: <a href="<?= $xmlRpcUrl ?>"><?= $xmlRpcUrl ?></a></p>
@@ -40,7 +40,7 @@
                     <?php } ?>
                 </b></td>
                 <td align="right" class="cell">
-                    returns: 
+                    returns:
                     <?php if ( $methodInfo['paramsOut'] ) { ?>
                         <?= strtolower( $methodInfo['paramsOut'] ) ?>
                     <?php } else { ?>
@@ -58,7 +58,7 @@
                 </td>
             </tr>
             <?php
-                if ( $bgcolor ) { $bgcolor = false; } else { $bgcolor = true; } 
+                if ( $bgcolor ) { $bgcolor = false; } else { $bgcolor = true; }
             ?>
         <?php } ?>
     </table>
@@ -74,7 +74,7 @@
                 <td class="cell" align="right">version <?= $info['specVersion'] ?></td>
             </tr>
             <?php
-                if ( $bgcolor ) { $bgcolor = false; } else { $bgcolor = true; } 
+                if ( $bgcolor ) { $bgcolor = false; } else { $bgcolor = true; }
             ?>
         <?php } ?>
     </table>

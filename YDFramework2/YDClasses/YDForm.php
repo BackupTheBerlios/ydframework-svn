@@ -27,7 +27,7 @@
          *  method for submitting the data.
          *
          *  @param $name       The name of the form.
-         *  @param $method     (optional) Method used for submitting the form. 
+         *  @param $method     (optional) Method used for submitting the form.
          *                     Most of the times, this is either POST or GET.
          *  @param $action     (optional) Action used for submitting the form.
          *                     If not specified, it will default to the current
@@ -35,7 +35,7 @@
          *  @param $target     (optional) HTML target for the form.
          *  @param $attributes (optional) Attributes for the form.
          */
-        function YDForm( 
+        function YDForm(
             $name, $method='', $action='', $target='_self', $attributes=null
         ) {
 
@@ -84,7 +84,7 @@
             // Create the array
             $array = $renderer->toArray();
 
-            // Loop over the elements 
+            // Loop over the elements
             foreach ( $array['elements'] as $element ) {
 
                 // Date elements need special treatment

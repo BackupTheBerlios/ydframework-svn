@@ -14,8 +14,9 @@
     require_once( 'YDBase.php' );
 
     /**
-     *  This is a general timer class that starts counting when it's instantiated,
-     *  and which returns the elapsed time as soon as the finish method is called.
+     *  This is a general timer class that starts counting when it's
+     *  instantiated, and which returns the elapsed time as soon as the finish
+     *  method is called.
      */
     class YDTimer extends YDBase {
 
@@ -59,7 +60,7 @@
             return intval( ( $endTime - $this->startTime ) * 1000 );
 
         }
-    
+
     }
 
 ?>

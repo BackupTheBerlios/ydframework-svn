@@ -29,24 +29,26 @@
 
             // Initialize YDBase
             $this->YDBase();
-            
+
             // Save the path
             $this->_url = $url;
 
             // Set the defaults
             $parts_default = array(
-                'scheme'   => '', 
-                'host'     => '', 
-                'port'     => '', 
-                'user'     => '', 
-                'pass'     => '', 
-                'path'     => '', 
-                'query'    => '', 
+                'scheme'   => '',
+                'host'     => '',
+                'port'     => '',
+                'user'     => '',
+                'pass'     => '',
+                'path'     => '',
+                'query'    => '',
                 'fragment' => ''
             );
 
             // Parse the URL
-            $this->_url_parsed = array_merge($parts_default, parse_url( $url ) );
+            $this->_url_parsed = array_merge(
+                $parts_default, parse_url( $url )
+            );
 
         }
 
@@ -63,7 +65,7 @@
          *  This function will return a named part of the URL. The following
          *  names are recognized: scheme, host, port, user, pass, path, query
          *  and fragment.
-         *  
+         *
          *  This function will return an empty string if the part doesn't exist
          *  or if an invalid part has been specified.
          *
@@ -181,7 +183,7 @@
          *  @remark
          *      This function only works for HTTP connections.
          *
-         *  @param $cache (optional) Indicate if the web content should be 
+         *  @param $cache (optional) Indicate if the web content should be
          *                cached or not. By default, caching is turned on.
          *
          *  @returns Returns the contents of the URL.
@@ -227,7 +229,7 @@
 
                         // Output the contents
                         return gzuncompress( $file->getContents() );
-                        
+
                     };
 
                 }
@@ -243,7 +245,7 @@
             // Check if there was a result
             if ( $result == false ) {
                 new YDFatalError(
-                    'Failed to retrieve the data from the url "' 
+                    'Failed to retrieve the data from the url "'
                     . $this->getUrl() . '". ' . $client->getError()
                 );
             } else {
@@ -274,7 +276,7 @@
 
         /**
          *  Function to get the contents of the URL and automatically applies a
-         *  regular expression to the result. It will get the contents using 
+         *  regular expression to the result. It will get the contents using
          *  Gzip compression if possible in order to save bandwidth. It uses the
          *  HTTP Client class from Simon Willison to do the dirty work.
          *
@@ -310,7 +312,8 @@
         }
 
         /**
-         *  This function retrieves the header information for the specified URL.
+         *  This function retrieves the header information for the specified
+         *  URL.
          *
          *  @return Array containing the headers fors the URL.
          */
@@ -325,7 +328,7 @@
             // Check the result
             if ( $result == false ) {
                 new YDFatalError(
-                    'Failed to retrieve the data from the url "' 
+                    'Failed to retrieve the data from the url "'
                     . $this->getUrl() . '". ' . $client->getError()
                 );
             } else {
@@ -335,7 +338,8 @@
         }
 
         /**
-         *  This function retrieves the header information for the specified URL.
+         *  This function retrieves the header information for the specified
+         *  URL.
          *
          *  @return Array containing the headers fors the URL.
          */
@@ -350,7 +354,7 @@
             // Check the result
             if ( $result == false ) {
                 new YDFatalError(
-                    'Failed to retrieve the data from the url "' 
+                    'Failed to retrieve the data from the url "'
                     . $this->getUrl() . '". ' . $client->getError()
                 );
             } else {
@@ -373,7 +377,9 @@
 
             // Check the URL scheme
             if ( $this->getScheme() != 'http' ) {
-                new YDFatalError( 'getContents: Only HTTP URLs are supported.' );
+                new YDFatalError(
+                    'getContents: Only HTTP URLs are supported.'
+                );
             }
 
             // Default to port 80

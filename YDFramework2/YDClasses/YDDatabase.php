@@ -22,7 +22,7 @@
      *
      *  The format of the supplied URL is in its fullest form:
      *  - phptype(dbsyntax)://username:password\@protocol+hostspec/database
-     *    
+     *
      *  Most variations are allowed:
      *  - phptype://username:password\@protocol+hostspec:110//usr/db_file.db
      *  - phptype://username:password\@hostspec/database_name
@@ -32,7 +32,7 @@
      *  - phptype://hostspec
      *  - phptype(dbsyntax)
      *  - phptype
-     *   
+     *
      *  The currently supported database backends are: mysql  -> MySQL
      *  - pgsql  -> PostgreSQL
      *  - ibase  -> InterBase
@@ -58,14 +58,14 @@
 
         /**
          *  The class constructor for the YDDbConn class. When you instantiate
-         *  this class, no connection is made yet. This is done when you use 
+         *  this class, no connection is made yet. This is done when you use
          *  one of the methods of the class.
          *
          *  @param $url The database url for this connection (see above for the
          *              syntax of the database url).
          */
         function YDDatabase( $url ) {
-    
+
             // Initialize YDBase
             $this->YDBase();
 
@@ -87,9 +87,9 @@
         }
 
         /**
-         *  The "getConnection" function establishes the connection with the 
+         *  The "getConnection" function establishes the connection with the
          *  database and returns the database connection object.
-         *  
+         *
          *  By default, a non persistent database connection is established. Not
          *  all database drivers support persistent connections, so use this
          *  option with care. Refer to the PHP documentation on
@@ -107,12 +107,12 @@
          *  @param $dieOnError This paramater (true by default) will stop the
          *                     execution if it fails to connect to the database.
          *  @param $persistent (optional) Indicates if a persistent database
-         *                     connection is made or not. Not all database 
-         *                     drivers support this option so be careful in 
+         *                     connection is made or not. Not all database
+         *                     drivers support this option so be careful in
          *                     using this option.
          *
-         *  @return Returns a connection object if the database connection was 
-         *          successfully established. If something went wrong, a YDError 
+         *  @return Returns a connection object if the database connection was
+         *          successfully established. If something went wrong, a YDError
          *          object is returned.
          */
         function getConnection( $dieOnError=true, $persistent=false ) {
@@ -137,7 +137,7 @@
                 } else {
                     return new YDError( $conn );
                 }
-    
+
             }
 
             // Set the correct fetch mode
@@ -159,11 +159,11 @@
          *  affected rows.
          *
          *  @param $query  The SQL query or the statement to execute.
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The number of affected rows by the SQL query.
          */
@@ -193,11 +193,11 @@
          *  the query.
          *
          *  @param $query  The SQL query or the statement to execute.
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The result of the SQL query.
          */
@@ -223,15 +223,15 @@
         }
 
         /**
-         *  This function will execute the query and return the first row from 
+         *  This function will execute the query and return the first row from
          *  the result of the query.
          *
          *  @param $query The SQL query or the statement to execute..
-         *  @param $params Array, string or numeric data to be added to the 
-         *                 prepared statement. Quantity of items passed must 
-         *                 match quantity of placeholders in the prepared 
-         *                 statement: meaning 1 placeholder for non-array 
-         *                 parameters or 1 placeholder per array element. 
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
          *
          *  @returns The first row of the result of the SQL query.
          */
@@ -276,7 +276,7 @@
         }
 
         /**
-         *  This function will add 1 to the counter of the number of database 
+         *  This function will add 1 to the counter of the number of database
          *  connections that were made.
          *
          *  @internal

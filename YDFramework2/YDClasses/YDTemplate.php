@@ -22,8 +22,8 @@
     class YDTemplate extends YDBase {
 
         /**
-         *  This is the class constructor for the YDTemplate class. It does not 
-         *  take any arguments and is smart enough to configure itself. By 
+         *  This is the class constructor for the YDTemplate class. It does not
+         *  take any arguments and is smart enough to configure itself. By
          *  default, it looks in the same directory as the current script to
          *  find the templates.
          */
@@ -60,7 +60,7 @@
          *  execution is stopped.
          *
          *  @param $dir Directory you want to use as the template directory.
-         *              This can be a relative or absolute path. An absolute 
+         *              This can be a relative or absolute path. An absolute
          *              path is the preferred way of working.
          */
         function setTemplateDir( $dir ) {
@@ -72,7 +72,7 @@
                     . 'directory because the directory could not be found'
                 );
             }
-            
+
             // Set the template directory
             $this->_tpl->addPath( 'template', $dir );
 
@@ -96,10 +96,9 @@
          *  This function automatically adds some variables to the template,
          *  which you can use as well in the template:
          *
-         *  - YD_FW_NAME:      name of the framework, e.g. "Yellow Duck Framework"
-         *  - YD_FW_VERSION:   version of the framework, e.g. "2.0.0"
-         *  - YD_FW_NAMEVERS:  the combination of the two items above, e.g.
-         *                     "Yellow Duck Framework 2.0.0"
+         *  - YD_FW_NAME:      name of the framework
+         *  - YD_FW_VERSION:   version of the framework
+         *  - YD_FW_NAMEVERS:  the combination of the two items above
          *  - YD_FW_HOMEPAGE:  the homepage of the Yellow Duck Framework.
          *  - YD_SELF_SCRIPT:  Contains the current script's path, e.g.
          *                     "/myapp/index.php"
@@ -116,12 +115,12 @@
          *                current script via HTTP cookies.
          *  - YD_GET:     An associative array of variables passed to the
          *                current script via the HTTP GET method. .
-         *  - YD_POST:    An associative array of variables passed to the 
-         *                current script via the HTTP POST method. 
+         *  - YD_POST:    An associative array of variables passed to the
+         *                current script via the HTTP POST method.
          *  - YD_FILES:   An associative array of items uploaded to the current
-         *                script via the HTTP POST method. 
+         *                script via the HTTP POST method.
          *  - YD_REQUEST: An associative array consisting of the contents of
-         *                YD_GET, YD_POST, and YD_COOKIE. 
+         *                YD_GET, YD_POST, and YD_COOKIE.
          *  - YD_SESSION: An associative array containing session variables
          *                available to the current script.
          *  - YD_GLOBALS: An associative array containing references to all

@@ -14,7 +14,7 @@
     require_once( 'YDBase.php' );
 
     /**
-     *  This class houses all the debug related utility functions. All the 
+     *  This class houses all the debug related utility functions. All the
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
      */
@@ -22,15 +22,15 @@
 
         /**
          *  Function to output a debug message. These message are only shown if
-         *  the constant YD_DEBUG is set to 1. You can turn on debugging by 
-         *  specifying the YD_DEBUG parameter in the url and assigning it the 
+         *  the constant YD_DEBUG is set to 1. You can turn on debugging by
+         *  specifying the YD_DEBUG parameter in the url and assigning it the
          *  value 1.
          *
          *  Example url with debugging turned on:
          *  http://localhost/index.php?YD_DEBUG=1
          *
          *  This function accepts a variable amount of arguments which are all
-         *  concatenated using a space in between. All debug messages will be 
+         *  concatenated using a space in between. All debug messages will be
          *  shown as HTML comments with the prefix "[ YD_DEBUG ]".
          */
         function debug() {
@@ -51,8 +51,8 @@
         }
 
         /**
-         *  Function to dump the contents of pretty much anything. This is the 
-         *  sames as the var_dump function in PHP, but has a much nicer and more 
+         *  Function to dump the contents of pretty much anything. This is the
+         *  sames as the var_dump function in PHP, but has a much nicer and more
          *  readable output.
          *
          *  @param $obj Object you want to dump.
@@ -65,11 +65,11 @@
         }
 
         /**
-         *  Function to return the contents of pretty much anything. This is the 
+         *  Function to return the contents of pretty much anything. This is the
          *  same as the var_export function in PHP.
          *
          *  @param $obj  Object you want to dump.
-         *  @param $html (optional) If you want to have everything returned as 
+         *  @param $html (optional) If you want to have everything returned as
          *               HTML or text. The default is false, returning text.
          *
          *  @returns Text representation of the object.
@@ -81,7 +81,8 @@
 
             // Convert to HTML if needed
             if ( $html == true ) {
-                $data = '<pre>' . stripslashes( htmlentities( $data ) ) . '</pre>';
+                $data = stripslashes( htmlentities( $data ) );
+                $data = '<pre>' . $data . '</pre>';
             }
 
             // Return the data

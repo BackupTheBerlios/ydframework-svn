@@ -43,7 +43,7 @@
 
                 // Standard variables
                 $this->_errorMessage = $errorMessage;
-            
+
             }
 
         }
@@ -63,9 +63,9 @@
         }
 
         /**
-         *  This function will check if the given object is an error object or not.
-         *  All objects that have the YDError class as one of it's ancestors is
-         *  considered as being an error class.
+         *  This function will check if the given object is an error object or
+         *  not. All objects that have the YDError class as one of it's
+         *  ancestors is considered as being an error class.
          *
          *  @remark
          *      This is a static method. You do not need to instantiate the
@@ -91,8 +91,9 @@
     class YDFatalError extends YDError {
 
         /**
-         *  The class constructor for the YDFatalError class. When you instantiate
-         *  this class, you need to specify the error message as a string.
+         *  The class constructor for the YDFatalError class. When you
+         *  instantiate this class, you need to specify the error message as a
+         *  string.
          *
          *  @param $errorMessage The string indicating the error message.
          */

@@ -81,7 +81,8 @@
 
         /**
          *  This function returns the full name the default action. This is the
-         *  full name of the function that will be executed as the default action.
+         *  full name of the function that will be executed as the default
+         *  action.
          *
          *  @returns The name of the function that will to be executed as the
          *           default action.
@@ -148,9 +149,9 @@
         }
 
         /**
-         *  This function will forward the current request to a different action.
-         *  By using this function, you make sure the action names and so on are
-         *  also update to reflect this.
+         *  This function will forward the current request to a different
+         *  action. By using this function, you make sure the action names and
+         *  so on are also update to reflect this.
          *
          *  @param $action Name of the action to forward to.
          */
@@ -199,7 +200,7 @@
         /**
          *  This function takes an associative array as it's argument, and
          *  assigns each individual key and value to the template.
-         *  
+         *
          *  Here's a code example of how it works:
          *
          *  @code
@@ -207,7 +208,7 @@
          *  $vars = array(
          *      'name1' => 'value1', 'name2' => 'value2', 'name3' => 'value4'
          *  )
-         *  
+         *
          *  // Add them to the template
          *  $this->setVarsFromArray( $vars );
          *  @endcode
@@ -261,7 +262,7 @@
         }
 
         /**
-         *  This function will get the contents of the processed template. 
+         *  This function will get the contents of the processed template.
          *  Optionally, the name of the template can be specified. If no
          *  template is specified, the basename of the current script will be
          *  used as the template name.
@@ -286,7 +287,7 @@
         }
 
         /**
-         *  This function will output the contents of the processed template. 
+         *  This function will output the contents of the processed template.
          *  Optionally, the name of the template can be specified. If no
          *  template is specified, the basename of the current script will be
          *  used as the template name.
@@ -313,7 +314,7 @@
             if ( $this->__isInitialized == true ) {
                 return true;
             } else {
-                return false;   
+                return false;
             };
         }
 
@@ -341,7 +342,7 @@
 
             // We now have the action and the class, so execute
             call_user_func( array( $this, $action ) );
-            
+
         }
 
         /**
@@ -357,7 +358,7 @@
             new YDFatalError(
                 'Class ' . get_class( $this ) . ' does not contain an action '
                 . 'called "' . strtolower( $action ) . '" (function name).'
-            );                    
+            );
         }
 
         /**
@@ -463,7 +464,7 @@
          */
         function actionNotAllowed() {
             new YDFatalError(
-                'You are not allow to access the action "' 
+                'You are not allow to access the action "'
                 . $this->getActionName() . '"'
             );
         }

@@ -18,7 +18,7 @@
 
     /**
      *  This is the actual implementation of the YDXmlRpcClient class. It
-     *  extends the IXR_Client class and adds support for GZip compressed 
+     *  extends the IXR_Client class and adds support for GZip compressed
      *  communications based on the HttpClient class.
      */
     class YDXmlRpcClientCore extends IXR_Client {
@@ -58,7 +58,8 @@
 
             // Show in debugging mode
             if ( $this->debug ) {
-                echo( '<pre>' . htmlspecialchars( $client->postdata ) . "\n</pre>\n\n" );
+                $tmp = htmlspecialchars( $client->postdata );
+                echo( '<pre>' . $tmp . "\n</pre>\n\n" );
             }
 
             // Now send the request
@@ -76,20 +77,25 @@
 
             // Show in debugging mode
             if ( $this->debug ) {
-                echo( '<pre>' . htmlspecialchars( $contents ) . "\n</pre>\n\n" );
+                $tmp = htmlspecialchars( $contents );
+                echo( '<pre>' . $tmp . "\n</pre>\n\n" );
             }
 
             // Now parse what we've got back
             $this->message = new IXR_Message( $contents );
             if ( ! $this->message->parse() ) {
                 // XML error
-                $this->error = new IXR_Error( -32700, 'parse error. not well formed' );
+                $this->error = new IXR_Error(
+                    -32700, 'parse error. not well formed'
+                );
                 return false;
             }
 
             // Is the message a fault?
             if ( $this->message->messageType == 'fault' ) {
-                $this->error = new IXR_Error( $this->message->faultCode, $this->message->faultString );
+                $this->error = new IXR_Error(
+                    $this->message->faultCode, $this->message->faultString
+                );
                 return false;
             }
 
@@ -135,7 +141,7 @@
          *  This function will execute the specified XML/RPC call on the server.
          *
          *  @param $method Name of the XML/RPC method.
-         *  @param $args   (optional) An array specifying the parameters for 
+         *  @param $args   (optional) An array specifying the parameters for
          *                 this method.
          *
          *  @returns Returns the result of the query. If something went wrong, a
@@ -147,8 +153,8 @@
             array_unshift( $args, $method );
 
             // Execute the function
-            $result = call_user_func_array( 
-                array( & $this->_client, 'query' ), $args 
+            $result = call_user_func_array(
+                array( & $this->_client, 'query' ), $args
             );
 
             // Check the result
