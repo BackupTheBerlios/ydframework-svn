@@ -21,7 +21,7 @@
 		 *	@param $target		(optional) HTML target for the form.
 		 *	@param $attributes	(optional) Attributes for the form.
 		 */
-		function YDForm( $name, $method='post', $action='', $target='_self', $attributes=null ) {
+		function YDForm( $name, $method='post', $action='', $target='_self', $attributes=array() ) {
 
 			// Initialize the parent
 			$this->YDBase();
