@@ -51,7 +51,7 @@ echo Converting YDFramework2.fo to PDF
 call fop -q -c fop_config.xml pdf\YDFramework2.fo pdf\YDFramework2.pdf
 
 rem Cleanup
-rem if exist pdf\YDFramework2.fo del pdf\YDFramework2.fo
+if exist pdf\YDFramework2.fo del pdf\YDFramework2.fo
 del pdf\*.gif > NUL
 
 rem Open the result
