@@ -7,4 +7,8 @@
     <xsl:param name="html.stylesheet">style.css</xsl:param>
     <xsl:param name="use.id.as.filename">1</xsl:param>
 
+    <xsl:param name="navig.graphics">1</xsl:param>
+    <xsl:param name="navig.graphics.path">./</xsl:param>
+    <xsl:param name="navig.graphics.extension">.gif</xsl:param>
+
 </xsl:stylesheet>
