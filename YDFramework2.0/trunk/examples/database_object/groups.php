@@ -1,11 +1,9 @@
 <?php
 
-	error_reporting( E_ALL );
-
 	// Initialize the Yellow Duck Framework
 	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
-	define( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
+	YDConfig::set( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 	
 	YDInclude( 'Group.php' );
 	
@@ -75,8 +73,11 @@
 	$group->reset();
 	$group->delete();
 
-	echo "<p>A PHP notice saying that I have no conditions... interesting.<br>";
-	echo "I can take this protection off, but I won't now. Let's set the ID.</p>";
+	echo "<p>A PHP notice saying that I have no conditions... This is a protection defined by the configuration<br>";
+	echo "YD_DATABASEOBJECT_DELETE. A similar configuration is available for UPDATEs that don't have conditions<br>";
+	echo "YD_DATABASEOBJECT_UPDATE. The default is false for both.</p>";
+	
+	echo "<p>Let's set the ID.</p>";
 	
 	$group->set( 'id', 3 ); // using set method it's an alternative
 	$group->delete();

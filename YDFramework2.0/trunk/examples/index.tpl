@@ -194,6 +194,10 @@
 			</td>
 		</tr>
 		<tr>
+            <td valign="top"><a href="database_object/index.php">YDDatabaseObjects</a></td>
+            <td valign="top">step by step tutorial</td>
+		    </tr>
+		<tr>
 			<td valign="top">
 				<a href="database_paging.php">Paged recordsets - YD MySQL library</a>
 			</td>

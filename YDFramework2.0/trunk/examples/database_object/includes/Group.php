@@ -17,10 +17,10 @@ class Group extends YDDatabaseObject {
 	}
 	
 	function setFields() {
-		$this->__fields['id']      = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_AUTO );
+		$this->__fields['id']      = array( 'type' => YD_DATABASEOBJECT_NUM, 'auto' => true );
 		$this->__fields['name']    = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['updated'] = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_NULL );	
-		$this->__fields['date']    = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_NULL );		
+		$this->__fields['updated'] = array( 'type' => YD_DATABASEOBJECT_NUM, 'null' => true );	
+		$this->__fields['date']    = array( 'type' => YD_DATABASEOBJECT_NUM, 'null' => true );		
 	}
 
 	function setKeys() {

@@ -1,11 +1,9 @@
 <?php
 
-	error_reporting( E_ALL );
-
 	// Initialize the Yellow Duck Framework
 	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
-	
-	define( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
+
+	YDConfig::set( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
 	YDInclude( 'User.php' );
 	

@@ -17,14 +17,11 @@ class User extends YDDatabaseObject {
 	}
 	
 	function setFields() {
-		$this->__fields['id']         = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_AUTO );
-		$this->__fields['name']       = array( 'type' => YD_DATABASEOBJECT_STR,
-											   'default' => 'John Doe' );
+		$this->__fields['id']         = array( 'type' => YD_DATABASEOBJECT_NUM, 'auto' => true );
+		$this->__fields['name']       = array( 'type' => YD_DATABASEOBJECT_STR, 'default' => 'John Doe' );
 		$this->__fields['email']      = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['is_admin']   = array( 'type' => YD_DATABASEOBJECT_NUM, 
-											   'column' => 'admin' );	
-		$this->__fields['birthday']   = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_NULL, 
-											   'callback' => 'getAge' );
+		$this->__fields['is_admin']   = array( 'type' => YD_DATABASEOBJECT_NUM, 'column' => 'admin' );	
+		$this->__fields['birthday']   = array( 'type' => YD_DATABASEOBJECT_NUM, 'null' => true, 'callback' => 'getAge' );
 											   
 		$this->registerSelect( 'birth_year', 'YEAR( users.birthday )' );
 	}
@@ -48,7 +45,7 @@ class User extends YDDatabaseObject {
 	function getAge( $birthday ) {
 	
 		if ( ! $birthday ) {
-			$this->age = null;
+			unset( $this->age );
 			return;
 		}
 		

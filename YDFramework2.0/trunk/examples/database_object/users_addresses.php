@@ -1,11 +1,9 @@
 <?php
 
-	error_reporting( E_ALL );
-
 	// Initialize the Yellow Duck Framework
 	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
-	define( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
+	YDConfig::set( 'YD_DATABASEOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
 	YDInclude( 'User.php' );
 	
@@ -87,7 +85,7 @@
 	echo "<p>You can take out this prefix setting false the prefix parameter, but is risky<br>";
 	echo "if you have same field names in different tables.</p>";
 
-	YDDebugUtil::dump( $user->getRelationValues( '', false ) );
+	YDDebugUtil::dump( $user->getRelationValues( false ) );
 		
 	echo "<p>&nbsp;</p>";
 	echo "<p>Let's do some more complex relations with Users Groups! <a href=\"users_groups.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";

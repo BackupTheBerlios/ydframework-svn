@@ -19,7 +19,7 @@ class UserGroup extends YDDatabaseObject {
 	function setFields() {
 		$this->__fields['user_id']  = array( 'type' => YD_DATABASEOBJECT_NUM  );
 		$this->__fields['group_id'] = array( 'type' => YD_DATABASEOBJECT_NUM  );
-		$this->__fields['joined']   = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_NULL );	
+		$this->__fields['joined']   = array( 'type' => YD_DATABASEOBJECT_NUM, 'null' => true );	
 		$this->__fields['active']   = array( 'type' => YD_DATABASEOBJECT_NUM );
 	}
 

@@ -6,12 +6,10 @@ class Admin extends User {
 
 	function Admin() {	
 		$this->User();
+		
+		$this->registerProtected( 'is_admin', 1 );
 	}
 	
-	function setProtected() {
-		$this->__protected['is_admin'] = 1;
-	}
-
 }
 
 
