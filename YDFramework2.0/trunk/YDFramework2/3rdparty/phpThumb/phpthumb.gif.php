@@ -12,6 +12,7 @@
 // <bool> = gif_outputAsBmp(<gif>, filename, [bgcolor])
 // <bool> = gif_outputAsJpeg(<gif>, filename, [bgcolor]) - use cjpeg if available otherwise uses GD
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+// Original code by Fabien Ezber
 // Modified by James Heinrich <info@silisoftware.com> for use in phpThumb() - December 10, 2003
 // * Added function gif_loadFileToGDimageResource() - this returns a GD image resource
 // * Modified gif_outputAsJpeg() to check if it's running under Windows, or if cjpeg is not

@@ -3,6 +3,71 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.6 - July 22, 2004
+  * Added new section to phpthumb.config.php where you can
+    easily specify defaults for any parameter you can set
+    in the URL. Normally URL parameters override these
+    default values, unless you set
+    $PHPTHUMB_DEFAULTS_GETSTRINGOVERRIDE to false
+  * Renamed phpthumb.config.php to phpThumb.config.php
+    since it's part of phpThumb.php, not part of
+    phpthumb.class.php (change of case only, will not
+    affect Windows servers, but will affect *nix)
+  * Changed cached filename of rawImageData-source images
+    from urlencode('') to md5(rawImageData). This should
+    make caching thumbnails from non-file sources more
+    reliable.
+  * Added ImageMagick debugging information
+  * Removed unneccesary default values from cached
+    filenames. This may invalidate some previously cached
+    files. phpthumb.demo.cacheconvert.php has been updated
+    to handle v1.4.1-1.4.5 => v1.4.6+ cache filenames.
+  * Bugfix: Cached filename did not have file-modified
+    datestamp when used as implmented in phpThumb.php
+  * Bugfix: RenderToFile() now accepts relative filenames
+    (thanks aidan*slingsbyÿlineone*net)
+  * Bugfix: AllowOutputEnlargment setting was ignored when
+    falling back to ImageMagick
+  * Bugfix: IgnoreAspectRatio setting was ignored when
+    falling back to ImageMagick
+  * Bugfix: config_temp_directory was ignored in gd_info()
+    in PHP < v4.3.0 when phpinfo() returns no GD
+    information (due to safe mode restrictions)
+    (thanks mimyrtekÿmyrtek*com)
+
+v1.4.5 - June 28, 2004
+  * Added new parameter 'down' where you can specify a
+    filename and OutputThumbnail() will cause the file
+    to be downloaded rather than displayed in the browser.
+    Demo images on silisoftware.com/scripts/phpThumb/demo/
+    can all be downloaded to show off this feature.
+    (thanks stuartscrumpÿyahoo*co*uk)
+  * Added ability to remove old files from cache directory
+    based on last-access time and/or number of cached files
+    and/or total size of cached files
+    (thanks jrmhaigÿyahoo*co*uk)
+  * Added public CleanUpCacheDirectory() for cache cleaning
+    (see above) if you need to call it manually
+  * Included new file phpThumb.demo.cacheconvert.php to
+    convert old-style cache names to the current (and
+    hopefully last!) standard naming convention.
+    (thanks joshgÿtwcny*rr*com)
+  * Added configuration value 'document_root' for rare case
+    when $_SERVER['DOCUMENT_ROOT'] return incorrect value
+    (thanks joshgÿtwcny*rr*com)
+  * Now tries to create thumbnail with ImageMagick if
+    ImageCreateFromJPEG etc fails, before falling back to
+    outputting unmodified source data.
+  * Bugfix: HTTP image sources were broken
+    (thanks fritz*weisshartÿt-online*de)
+  * Bugfix: ImageMagick callout wasn't being used if EXIF
+    thumbnail was available
+    (thanks joshgÿtwcny*rr*com)
+  * Bugfix: HTTP src with space in filename was broken
+    (thanks drÿrhodes360*com)
+  * Bugfix: version_compare_replacement() was broken for
+    PHP v4.1.0+
+
 v1.4.4 - June 8, 2004
   * Bugfix: network-share (Windows) source filenames were
     not possible. Now works, but you must use the network
@@ -47,7 +112,8 @@ v1.4.2 - May 10, 2004
   * Added IE-compatability mode for transparent corners
     (set 'bct=256')
   * Bugfix: version_compare_replacement() was broken in PHP
-    older than 4.1.0 (thanks nickÿregenmag*com)
+    older than 4.1.0
+    (thanks nickÿregenmag*com)
 
 v1.4.1.1 - May 9, 2004
  * Bugfix: Removed ImageTrueColorToPalette hack.
@@ -111,7 +177,8 @@ v1.3.7 - March 28, 2004
    on servers where phpinfo() was disabled
    (thanks javierÿircorion*net)
  * Bugfix: Non-GD GIF support was broken on restricted
-   PHP configurations (thanks javierÿircorion*net)
+   PHP configurations
+   (thanks javierÿircorion*net)
  * Bugfix: phpThumb.gif.php output error messages if PHP
    was running in Safe Mode
  * Added 'iar' parameter (Ignore Aspect Ratio) to allow
@@ -131,7 +198,8 @@ v1.3.6 - March 14, 2004
     (thanks dnÿxbe*ch)
   * Bugfix: EXIF thumbnail caching was broken
   * Bugfix: EXIF thumbnail handling was broken for PHP
-    v4.2.x (thanks smithk1ÿshaw*ca)
+    v4.2.x
+    (thanks smithk1ÿshaw*ca)
   * Bugfix: Image borders with GD2 were misaligned
   * Bugfix: virtual paths/filenames like /~user/foo.jpg
     should now work properly, if PHP is installed as an
@@ -204,7 +272,8 @@ v1.3.2 - February 3, 2004
   * Bugfix: when borders are enabled, portait images
     with no width constraint, or landscape images with
     no height constraint were smaller than neccesary by
-    double the border width (thanks jjjÿxs4all*nl)
+    double the border width
+    (thanks jjjÿxs4all*nl)
   * Added unsharp mask option thanks to Torstein H¯nsi:
     http://www.vikjavev.com/hovudsida/umtestside.php
     Note: requires GD v2.x to function
@@ -242,8 +311,8 @@ v1.2.8 - January 19, 2004
 
 v1.2.7 - January 7, 2004
   * Added patch to allow use of PHP older than 4.1.0
-      (or GD without PNG support) for non-GD GIF support
-      (thanks hostwebserverÿhotmail*com
+    (or GD without PNG support) for non-GD GIF support
+    (thanks hostwebserverÿhotmail*com)
 
 v1.2.6 - January 4, 2004
   * Added patch to allow use of PHP older than 4.1.0
@@ -293,6 +362,7 @@ v1.1.2 - October 26, 2003
     error messages
   * if GD not available, a GIF saying "no GD" is shown
     instead of showing the original image
+  * Cache feature introduced
 
 v1.1.1 - September 28, 2003
   * better resize code by sfisher10ÿcox*net

@@ -94,7 +94,7 @@ class phpthumb_functions {
 	function version_compare_replacement($version1, $version2, $operator='') {
 		if (function_exists('version_compare')) {
 			// built into PHP v4.1.0+
-			return version_compare($version1, $version2, $operator='');
+			return version_compare($version1, $version2, $operator);
 		}
 
 		// The function first replaces _, - and + with a dot . in the version strings
@@ -130,79 +130,6 @@ class phpthumb_functions {
 		return $phpinfo_array;
 	}
 
-	function gd_info() {
-		if (function_exists('gd_info')) {
-			// built into PHP v4.3.0+ (with bundled GD2 library)
-			return gd_info();
-		}
-
-		static $gd_info = array();
-		if (empty($gd_info)) {
-			// based on code by johnschaefer at gmx dot de
-			// from PHP help on gd_info()
-			$gd_info = array(
-				'GD Version'         => '',
-				'FreeType Support'   => false,
-				'FreeType Linkage'   => '',
-				'T1Lib Support'      => false,
-				'GIF Read Support'   => false,
-				'GIF Create Support' => false,
-				'JPG Support'        => false,
-				'PNG Support'        => false,
-				'WBMP Support'       => false,
-				'XBM Support'        => false
-			);
-			$phpinfo_array = phpthumb_functions::phpinfo_array();
-			foreach ($phpinfo_array as $line) {
-				$line = trim(strip_tags($line));
-				foreach ($gd_info as $key => $value) {
-					//if (strpos($line, $key) !== false) {
-					if (strpos($line, $key) === 0) {
-						$newvalue = trim(str_replace($key, '', $line));
-						$gd_info[$key] = $newvalue;
-					}
-				}
-			}
-			if (empty($gd_info['GD Version'])) {
-				// probable cause: "phpinfo() disabled for security reasons"
-				if (function_exists('ImageTypes')) {
-					$imagetypes = ImageTypes();
-					if ($imagetypes & IMG_PNG) {
-						$gd_info['PNG Support'] = true;
-					}
-					if ($imagetypes & IMG_GIF) {
-						$gd_info['GIF Create Support'] = true;
-					}
-					if ($imagetypes & IMG_JPG) {
-						$gd_info['JPG Support'] = true;
-					}
-					if ($imagetypes & IMG_WBMP) {
-						$gd_info['WBMP Support'] = true;
-					}
-				}
-				// to determine capability of GIF creation, try to use ImageCreateFromGIF on a 1px GIF
-				if (function_exists('ImageCreateFromGIF')) {
-					if ($tempfilename = tempnam(null, 'pThumb')) {
-						if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
-							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw==')); // very simple 1px GIF file base64-encoded as string
-							fclose($fp_tempfile);
-
-							// if we can convert the GIF file to a GD image then GIF create support must be enabled, otherwise it's not
-							$gd_info['GIF Read Support'] = (bool) @ImageCreateFromGIF($tempfilename);
-						}
-						unlink($tempfilename);
-					}
-				}
-				if (function_exists('ImageCreateTrueColor') && @ImageCreateTrueColor(1, 1)) {
-					$gd_info['GD Version'] = '2.0.1 or higher (assumed)';
-				} elseif (function_exists('ImageCreate') && @ImageCreate(1, 1)) {
-					$gd_info['GD Version'] = '1.6.0 or higher (assumed)';
-				}
-			}
-		}
-		return $gd_info;
-	}
-
 	function exif_info() {
 		static $exif_info = array();
 		if (empty($exif_info)) {
@@ -226,21 +153,6 @@ class phpthumb_functions {
 			}
 		}
 		return $exif_info;
-	}
-
-	function gd_version($fullstring=false) {
-		static $cache_gd_version = array();
-		if (empty($cache_gd_version)) {
-			$gd_info = phpthumb_functions::gd_info();
-			if (substr($gd_info['GD Version'], 0, strlen('bundled (')) == 'bundled (') {
-				$cache_gd_version[1] = $gd_info['GD Version'];                                         // e.g. "bundled (2.0.15 compatible)"
-				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], strlen('bundled ('), 3); // e.g. "2.0" (not "bundled (2.0.15 compatible)")
-			} else {
-				$cache_gd_version[1] = $gd_info['GD Version'];                       // e.g. "1.6.2 or higher"
-				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], 0, 3); // e.g. "1.6" (not "1.6.2 or higher")
-			}
-		}
-		return $cache_gd_version[intval($fullstring)];
 	}
 
 	function ImageTypeToMIMEtype($imagetype) {
@@ -291,48 +203,6 @@ class phpthumb_functions {
 			die('Invalid hex color string: "'.$HexColorString.'"');
 		}
 		return ImageColorAllocate($gdimg_hexcolorallocate, 0, 0, 0);
-	}
-
-	function ResolveFilenameToAbsolute($filename) {
-		$IsWindows = (bool) (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN');
-		if ($IsWindows && (substr($filename, 1, 1) == ':')) {
-
-			// absolute pathname (Windows)
-			$AbsoluteFilename = $filename;
-
-		} elseif ($IsWindows && ((substr($filename, 0, 2) == '//') || (substr($filename, 0, 2) == '\\\\'))) {
-
-			// absolute pathname (Windows)
-			$AbsoluteFilename = $filename;
-
-		} elseif (substr($filename, 0, 1) == '/') {
-
-			if (!file_exists(@$_SERVER['DOCUMENT_ROOT'].$filename) && file_exists($filename)) {
-				// absolute filename (*nix)
-				$AbsoluteFilename = $filename;
-			} elseif (substr($filename, 1, 1) == '~') {
-				// /~user/path
-				$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].$filename;
-				if ($apache_lookup_uri_object = apache_lookup_uri($filename)) {
-					$AbsoluteFilename = $apache_lookup_uri_object->filename;
-				}
-			} else {
-				// relative filename (any OS)
-				$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].$filename;
-			}
-
-		} else {
-
-			// relative to current directory (any OS)
-			$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].dirname(@$_SERVER['PHP_SELF']).'/'.$filename;
-			if (substr(dirname(@$_SERVER['PHP_SELF']), 0, 2) == '/~') {
-				if ($apache_lookup_uri_object = apache_lookup_uri(dirname(@$_SERVER['PHP_SELF']))) {
-					$AbsoluteFilename = $apache_lookup_uri_object->filename.'/'.$filename;
-				}
-			}
-
-		}
-		return $AbsoluteFilename;
 	}
 
 

@@ -16,16 +16,18 @@ class phpthumb {
 
 	// public:
 	// START CONFIGURATION OPTIONS
-	// See phpthumb.config.php for descriptions of what each of these settings do
-	// * Caching Configuration
-	var $config_cache_directory              = '';
+	// See phpThumb.config.php for descriptions of what each of these settings do
 
+	// * Directory Configuration
+	var $config_cache_directory              = null;
 	var $config_temp_directory               = null;
+	var $config_document_root                = null;
 
 	// * Default output configuration:
 	var $config_output_format                = 'jpeg';
 	var $config_output_maxwidth              = 0;
 	var $config_output_maxheight             = 0;
+	var $config_output_interlace             = true;
 
 	// * Error message configuration
 	var $config_error_message_image_default  = '';
@@ -72,32 +74,33 @@ class phpthumb {
 	var $h    = null;
 	var $f    = 'jpeg';
 	var $q    = 75;
-	var $sx   = 0;
-	var $sy   = 0;
+	var $sx   = null;
+	var $sy   = null;
 	var $sw   = null;
 	var $sh   = null;
 	var $bw   = null;
-	var $bg   = 'FFFFFF';
+	var $bg   = null;
 	var $bgt  = null;
-	var $bc   = '000000';
+	var $bc   = null;
 	var $usr  = null;
 	var $usa  = null;
 	var $ust  = null;
 	var $wmf  = null;
-	var $wmp  = 50;
-	var $wmm  = 5;
-	var $wma  = 'BR';
+	var $wmp  = null;
+	var $wmm  = null;
+	var $wma  = null;
 	var $file = null;
 	var $goto = null;
 	var $err  = null;
 	var $xto  = null;
 	var $ra   = null;
 	var $ar   = null;
-	var $aoe  = false;
-	var $iar  = false;
+	var $aoe  = null;
+	var $iar  = null;
 	var $brx  = null;
 	var $bry  = null;
 	var $maxb = null;
+	var $down = null;
 	// END PARAMETERS
 
 
@@ -135,7 +138,7 @@ class phpthumb {
 	// public: constructor
 	function phpThumb() {
 		if (!defined('PHPTHUMB_VERSION')) {
-			define('PHPTHUMB_VERSION', '1.4.4');
+			define('PHPTHUMB_VERSION', '1.4.6-200407221239');
 
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 				define('PHPTHUMB_ISWINDOWS', true);
@@ -144,6 +147,9 @@ class phpthumb {
 				define('PHPTHUMB_ISWINDOWS', false);
 				define('PHPTHUMB_OSSLASH',   '/');
 			}
+		}
+		if (!empty($_SERVER['DOCUMENT_ROOT'])) {
+			$this->config_document_root = $_SERVER['DOCUMENT_ROOT'];
 		}
 	}
 
@@ -172,20 +178,20 @@ class phpthumb {
 		if (empty($this->sourceFilename)) {
 			if (empty($this->rawImageData)) {
 
-				$this->sourceFilename = phpthumb_functions::ResolveFilenameToAbsolute($this->src);
+				$this->sourceFilename = $this->ResolveFilenameToAbsolute($this->src);
 
 			} else {
 
 				$RemoveFileOnCompletion = true;
-				if ($tempfilename = tempnam($this->config_temp_directory, 'pThumb')) {
-					$this->sourceFilename = realpath($this->sourceFilename);
+				if ($tempfilename = $this->phpThumb_tempnam()) {
+					$this->sourceFilename = $tempfilename;
 					if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
 						fwrite($fp_tempfile, $this->rawImageData);
 						unset($this->rawImageData);
 						fclose($fp_tempfile);
 					} else {
 						unlink($this->sourceFilename);
-						$this->ErrorImage('Failed to open temp file "'.$this->sourceFilename.'" for writing in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpthumb.config.php');
+						$this->ErrorImage('Failed to open temp file "'.$this->sourceFilename.'" for writing in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpThumb.config.php');
 					}
 				} else {
 					$this->ErrorImage('Failed to generate temp filename in '.__FILE__.' on line '.__LINE__);
@@ -233,12 +239,12 @@ class phpthumb {
 		$ImageOutFunction = 'image'.$this->thumbnailFormat;
 		switch ($this->thumbnailFormat) {
 			case 'jpeg':
-				@$ImageOutFunction($this->gdimg_output, $filename, $this->thumbnailQuality);
+				@$ImageOutFunction($this->gdimg_output, $this->ResolveFilenameToAbsolute($filename), $this->thumbnailQuality);
 				break;
 
 			case 'png':
 			case 'gif':
-				@$ImageOutFunction($this->gdimg_output, $filename);
+				@$ImageOutFunction($this->gdimg_output, $this->ResolveFilenameToAbsolute($filename));
 				break;
 		}
 		return true;
@@ -250,8 +256,17 @@ class phpthumb {
 		if (headers_sent()) {
 			die('OutputThumbnail() failed - headers already sent');
 		}
+
+		$downloadfilename = ereg_replace('[/\\:\*\?"<>|]', '_', $this->down);
+		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
+			$downloadfilename = trim($downloadfilename, '.');
+		}
+		if (!empty($downloadfilename)) {
+			header('Content-Disposition: attachment; filename="'.$downloadfilename.'"');
+		}
+
+		ImageInterlace($this->gdimg_output, intval($this->config_output_interlace));
 		$ImageOutFunction = 'image'.$this->thumbnailFormat;
-		ImageInterlace($this->gdimg_output, 1);
 		switch ($this->thumbnailFormat) {
 			case 'jpeg':
 				header('Content-type: image/'.$this->thumbnailFormat);
@@ -268,6 +283,87 @@ class phpthumb {
 		return true;
 	}
 
+
+	// public:
+	function CleanUpCacheDirectory() {
+		if (($this->config_cache_maxage > 0) || ($this->config_cache_maxsize > 0) || ($this->config_cache_maxfiles > 0)) {
+			$CacheDirOldFilesAge  = array();
+			$CacheDirOldFilesSize = array();
+			if ($dirhandle = opendir($this->config_cache_directory)) {
+				while ($oldcachefile = readdir($dirhandle)) {
+					if (eregi('^phpThumb_cache_', $oldcachefile)) {
+						$CacheDirOldFilesAge[$oldcachefile] = fileatime($this->config_cache_directory.'/'.$oldcachefile);
+						if ($CacheDirOldFilesAge[$oldcachefile] == 0) {
+							$CacheDirOldFilesAge[$oldcachefile] = filemtime($this->config_cache_directory.'/'.$oldcachefile);
+						}
+
+						$CacheDirOldFilesSize[$oldcachefile] = filesize($this->config_cache_directory.'/'.$oldcachefile);
+					}
+				}
+			}
+			asort($CacheDirOldFilesAge);
+
+			if ($this->config_cache_maxfiles > 0) {
+				$TotalCachedFiles = count($CacheDirOldFilesAge);
+				$DeletedKeys = array();
+				foreach ($CacheDirOldFilesAge as $oldcachefile => $filedate) {
+					if ($TotalCachedFiles > $this->config_cache_maxfiles) {
+						$TotalCachedFiles--;
+						unlink($this->config_cache_directory.'/'.$oldcachefile);
+						$DeletedKeys[] = $oldcachefile;
+					} else {
+						// there are few enough files to keep the rest
+						break;
+					}
+				}
+				foreach ($DeletedKeys as $oldcachefile) {
+					unset($CacheDirOldFilesAge[$oldcachefile]);
+					unset($CacheDirOldFilesSize[$oldcachefile]);
+				}
+			}
+
+			if ($this->config_cache_maxage > 0) {
+				$mindate = time() - $this->config_cache_maxage;
+				$DeletedKeys = array();
+				foreach ($CacheDirOldFilesAge as $oldcachefile => $filedate) {
+					if ($filedate > 0) {
+						if ($filedate < $mindate) {
+							unlink($this->config_cache_directory.'/'.$oldcachefile);
+							$DeletedKeys[] = $oldcachefile;
+						} else {
+							// the rest of the files are new enough to keep
+							break;
+						}
+					}
+				}
+				foreach ($DeletedKeys as $oldcachefile) {
+					unset($CacheDirOldFilesAge[$oldcachefile]);
+					unset($CacheDirOldFilesSize[$oldcachefile]);
+				}
+			}
+
+			if ($this->config_cache_maxsize > 0) {
+				$TotalCachedFileSize = array_sum($CacheDirOldFilesSize);
+				$DeletedKeys = array();
+				foreach ($CacheDirOldFilesAge as $oldcachefile => $filedate) {
+					if ($TotalCachedFileSize > $this->config_cache_maxsize) {
+						$TotalCachedFileSize -= $CacheDirOldFilesSize[$oldcachefile];
+						unlink($this->config_cache_directory.'/'.$oldcachefile);
+						$DeletedKeys[] = $oldcachefile;
+					} else {
+						// the total filesizes are small enough to keep the rest of the files
+						break;
+					}
+				}
+				foreach ($DeletedKeys as $oldcachefile) {
+					unset($CacheDirOldFilesAge[$oldcachefile]);
+					unset($CacheDirOldFilesSize[$oldcachefile]);
+				}
+			}
+
+		}
+		return true;
+	}
 
 	//////////////////////////////////////////////////////////////////////
 
@@ -321,7 +417,7 @@ class phpthumb {
 		}
 		if ((substr($this->config_cache_directory, 0, 1) == '.') && (substr($this->src, 0, 1) == '/')) {
 			// resolve relative cache directory to source image
-			$this->config_cache_directory = realpath(dirname($_SERVER['DOCUMENT_ROOT'].$this->src).'/'.$this->config_cache_directory);
+			$this->config_cache_directory = realpath(dirname($this->config_document_root.$this->src).'/'.$this->config_cache_directory);
 		}
 		if (substr($this->config_cache_directory, -1) == '/') {
 			$this->config_cache_directory = substr($this->config_cache_directory, 0, -1);
@@ -334,9 +430,77 @@ class phpthumb {
 	}
 
 
+	function ResolveFilenameToAbsolute($filename) {
+		$IsWindows = (bool) (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN');
+		if ($IsWindows && (substr($filename, 1, 1) == ':')) {
+
+			// absolute pathname (Windows)
+			$AbsoluteFilename = $filename;
+
+		} elseif ($IsWindows && ((substr($filename, 0, 2) == '//') || (substr($filename, 0, 2) == '\\\\'))) {
+
+			// absolute pathname (Windows)
+			$AbsoluteFilename = $filename;
+
+		} elseif (substr($filename, 0, 1) == '/') {
+
+			if (!file_exists($this->config_document_root.$filename) && file_exists($filename)) {
+				// absolute filename (*nix)
+				$AbsoluteFilename = $filename;
+			} elseif (substr($filename, 1, 1) == '~') {
+				// /~user/path
+				$AbsoluteFilename = $this->config_document_root.$filename;
+				if ($apache_lookup_uri_object = apache_lookup_uri($filename)) {
+					$AbsoluteFilename = $apache_lookup_uri_object->filename;
+				}
+			} else {
+				// relative filename (any OS)
+				$AbsoluteFilename = $this->config_document_root.$filename;
+			}
+
+		} else {
+
+			// relative to current directory (any OS)
+			$AbsoluteFilename = $this->config_document_root.dirname(@$_SERVER['PHP_SELF']).'/'.$filename;
+			if (substr(dirname(@$_SERVER['PHP_SELF']), 0, 2) == '/~') {
+				if ($apache_lookup_uri_object = apache_lookup_uri(dirname(@$_SERVER['PHP_SELF']))) {
+					$AbsoluteFilename = $apache_lookup_uri_object->filename.'/'.$filename;
+				}
+			}
+
+		}
+		return $AbsoluteFilename;
+	}
+
+
+	function ImageMagickVersion() {
+		if (file_exists($this->config_imagemagick_path)) {
+			if (PHPTHUMB_ISWINDOWS) {
+				$commandline = substr($this->config_imagemagick_path, 0, 2).' && cd "'.substr(dirname($this->config_imagemagick_path), 2).'" && '.basename($this->config_imagemagick_path);
+			} else {
+				$commandline = '"'.$this->config_imagemagick_path.'"';
+			}
+		} elseif (`which convert`) {
+			$commandline = 'convert';
+		}
+		if (!empty($commandline)) {
+			$commandline .= ' -version';
+			$versionstring = `$commandline`;
+			if (eregi('^Version: (.*) http', $versionstring, $matches)) {
+				return $matches[1];
+			}
+			return $versionstring;
+		}
+		return false;
+	}
+
 	function ImageMagickThumbnailToGD() {
 		// http://freealter.org/doc_distrib/ImageMagick-5.1.1/www/convert.html
 		if (ini_get('safe_mode')) {
+			return false;
+		}
+		if (!function_exists('ImageCreateFromPNG')) {
+			// ImageMagickThumbnailToGD() depends on ImageCreateFromPNG()
 			return false;
 		}
 		if (file_exists($this->config_imagemagick_path)) {
@@ -349,18 +513,26 @@ class phpthumb {
 			$commandline = 'convert';
 		}
 		if (!empty($commandline)) {
-			if ($IMtempfilename = tempnam($this->config_temp_directory, 'pThumb')) {
+			if ($IMtempfilename = $this->phpThumb_tempnam()) {
 				$IMtempfilename = realpath($IMtempfilename);
-				$IMwidth  = (!empty($this->w) ? $this->w : 640);
-				$IMheight = (!empty($this->h) ? $this->h : 480);
-				$commandline .= ' -geometry '.$IMwidth.'x'.$IMheight;
+				$IMwidth  = ((intval($this->w) > 0) ? intval($this->w) : 640);
+				$IMheight = ((intval($this->h) > 0) ? intval($this->h) : 480);
+				if ((empty($this->aoe) && empty($this->iar)) && ($getimagesize = @GetImageSize($this->sourceFilename))) {
+					// limit output size to input size unless AllowOutputEnlargement is enabled
+					$IMwidth  = min($IMwidth,  $getimagesize[0]);
+					$IMheight = min($IMheight, $getimagesize[1]);
+				}
+				$commandline .= ' -resize '.$IMwidth.'x'.$IMheight;
+				if (!empty($this->iar) && (intval($this->w) > 0) && (intval($this->h) > 0)) {
+					$commandline .= '!';
+				}
 				$commandline .= ' "'.str_replace('/', PHPTHUMB_OSSLASH, $this->sourceFilename).'"';
 				$commandline .= ' png:'.$IMtempfilename;
 				$commandline .= ' 2>&1';
 
 				$IMresult = `$commandline`;
 				if (!empty($IMresult)) {
-					$this->ErrorImage('ImageMagik failed with message:'."\n".$IMresult);
+					$this->ErrorImage('ImageMagick was called as:'."\n".$commandline."\n\n".'but failed with message:'."\n".$IMresult);
 				} else {
 					if ($this->gdimg_source = ImageCreateFromPNG($IMtempfilename)) {
 						unlink($IMtempfilename);
@@ -377,7 +549,7 @@ class phpthumb {
 
 
 	function ImageResizeFunction(&$dst_im, &$src_im, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH) {
-		if (phpthumb_functions::gd_version() >= 2.0) {
+		if ($this->gd_version() >= 2.0) {
 			return ImageCopyResampled($dst_im, $src_im, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
 		}
 		return ImageCopyResized($dst_im, $src_im, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
@@ -385,7 +557,7 @@ class phpthumb {
 
 	function ImageCreateFunction($x_size, $y_size) {
 		$ImageCreateFunction = 'ImageCreate';
-		if (phpthumb_functions::gd_version() >= 2.0) {
+		if ($this->gd_version() >= 2.0) {
 			$ImageCreateFunction = 'ImageCreateTrueColor';
 		}
 		if (!function_exists($ImageCreateFunction)) {
@@ -548,7 +720,7 @@ class phpthumb {
 
 				// PHP bug: ImageArc() with thicknesses > 1 give bad/undesirable/unpredicatable results
 				// Solution: Draw multiple 1px arcs side-by-side.
-				if (phpthumb_functions::gd_version(false) >= 2) {
+				if ($this->gd_version(false) >= 2) {
 					// imagesetthickness(): requires GD 2.0 or later
 					// GD1 always has line thickness of 1
 					ImageSetThickness($this->gdimg_output, 1);
@@ -592,7 +764,7 @@ class phpthumb {
 	function AntiOffsiteLinking() {
 		////////////////////////////////////////////////////////////////
 		// Optional anti-offsite hijacking of the thumbnail script
-		if ($this->config_nohotlink_enabled && (substr(strtolower($this->src), 0, strlen('http://')) == 'http://')) {
+		if ($this->config_nohotlink_enabled && (substr(strtolower($this->src), 0, 7) == 'http://')) {
 			$parsed_url = parse_url($this->src);
 			if (!in_array(@$parsed_url['host'], $this->config_nohotlink_valid_domains)) {
 				// This domain is not allowed
@@ -623,7 +795,7 @@ class phpthumb {
 			$this->usa = (isset($this->usa) ? $this->usa : 80);
 			$this->usr = (isset($this->usr) ? $this->usr : 0.5);
 			$this->ust = (isset($this->ust) ? $this->ust : 3);
-			if (phpthumb_functions::gd_version() >= 2.0) {
+			if ($this->gd_version() >= 2.0) {
 				if (@include_once('phpthumb.unsharp.php')) {
 					phpUnsharpMask($this->gdimg_output, $this->usa, $this->usr, $this->ust);
 				} else {
@@ -637,7 +809,7 @@ class phpthumb {
 
 	function Watermarking() {
 		if (!empty($this->wmf)) {
-			$WatermarkFilename = phpthumb_functions::ResolveFilenameToAbsolute($this->wmf);
+			$WatermarkFilename = $this->ResolveFilenameToAbsolute($this->wmf);
 			if (is_readable($WatermarkFilename)) {
 				if ($fp_watermark = @fopen($WatermarkFilename, 'rb')) {
 					$WatermarkImageData = fread($fp_watermark, filesize($WatermarkFilename));
@@ -727,7 +899,7 @@ class phpthumb {
 
 
 	function RoundedImageCorners() {
-		if (phpthumb_functions::gd_version() < 2) {
+		if ($this->gd_version() < 2) {
 			return false;
 		}
 		if (!empty($this->brx) && !empty($this->bry) && ($this->bw == 0)) {
@@ -772,7 +944,7 @@ class phpthumb {
 
 
 	function MaxFileSize() {
-		if (phpthumb_functions::gd_version() < 2) {
+		if ($this->gd_version() < 2) {
 			return false;
 		}
 		if (!empty($this->maxb) && ($this->maxb > 0)) {
@@ -1040,8 +1212,16 @@ class phpthumb {
 			}
 
 			if (($this->config_max_source_pixels > 0) && (($this->source_width * $this->source_height) > $this->config_max_source_pixels)) {
-				// Source image is larger than would fit in available PHP memory
-				if (!empty($this->exif_thumbnail_data)) {
+				// Source image is larger than would fit in available PHP memory.
+				// If ImageMagick is installed, use it to generate the thumbnail.
+				// Else, if an EXIF thumbnail is available, use that as the source image.
+				// Otherwise, no choice but to fail with an error message
+
+				if ($this->ImageMagickThumbnailToGD()) {
+
+					// excellent, we have a thumbnailed source image
+
+				} elseif (!empty($this->exif_thumbnail_data)) {
 
 					// EXIF thumbnail exists, and will be use as source image
 					$this->gdimg_source  = $this->ImageCreateFromStringReplacement($this->exif_thumbnail_data);
@@ -1054,14 +1234,7 @@ class phpthumb {
 
 				} else {
 
-					// EXIF thumbnail is unavailable
-					// if ImageMagick is installed, use it to thumbnail,
-					// otherwise no choice but to abort
-					if ($this->ImageMagickThumbnailToGD()) {
-						// excellent, we have a thumbnail
-					} else {
-						$this->ErrorImage('Source image is more than '.sprintf('%1.1f', ($this->config_max_source_pixels / 1000000)).' megapixels - insufficient memory.'."\n".'EXIF thumbnail unavailable.');
-					}
+					$this->ErrorImage('Source image is more than '.sprintf('%1.1f', ($this->config_max_source_pixels / 1000000)).' megapixels - insufficient memory.'."\n".'EXIF thumbnail unavailable.');
 
 				}
 			}
@@ -1075,16 +1248,28 @@ class phpthumb {
 		$this->setOutputFormat();
 		$this->setCacheDirectory();
 
+		if (empty($this->sourceFilename) && empty($this->rawImageData) && !empty($this->src)) {
+			$this->sourceFilename = $this->ResolveFilenameToAbsolute($this->src);
+		}
+
 		$cache_filename  = $this->config_cache_directory.'/phpThumb_cache';
-		$cache_filename .= '_'.urlencode($this->src);
+		if (empty($this->src) && !empty($this->rawImageData)) {
+			$cache_filename .= '_'.strtolower(md5($this->rawImageData));
+		} else {
+			$cache_filename .= '_'.urlencode($this->src);
+		}
 		$FilenameParameters = array('h', 'w', 'sx', 'sy', 'sw', 'sh', 'bw', 'brx', 'bry', 'bg', 'bgt', 'bc', 'usa', 'usr', 'ust', 'wmf', 'wmp', 'wmm', 'wma', 'xto', 'ra', 'ar', 'iar', 'maxb');
 		foreach ($FilenameParameters as $key) {
 			if (isset($this->$key)) {
-				$cache_filename .= '_'.$key.$this->$key;
+				if ($this->$key === true) {
+					$cache_filename .= '_'.$key.'1';
+				} else {
+					$cache_filename .= '_'.$key.$this->$key;
+				}
 			}
 		}
 		$cache_filename .= '_'.intval(@filemtime($this->sourceFilename));
-		$cache_filename .= '_'.$this->thumbnailQuality;
+		$cache_filename .= '_q'.$this->thumbnailQuality;
 		$cache_filename .= '_'.$this->thumbnailFormat;
 
 		return $cache_filename;
@@ -1148,30 +1333,38 @@ class phpthumb {
 						$this->gdimg_source = $this->ImageCreateFromStringReplacement($this->rawImageData, true);
 
 					} else {
-						$this->ErrorImage('cannot open "'.$this->sourceFilename.'"');
+						$this->ErrorImage('cannot fopen("'.$this->sourceFilename.'") on line '.__LINE__.' of '.__FILE__);
 					}
 				}
 			}
 
 			if (empty($this->gdimg_source)) {
-				// cannot create image for whatever reason,
-				// simply output original (not resized/modified) data and exit
-				switch (substr($this->rawImageData, 0, 3)) {
-					case 'GIF':
-						header('Content-type: image/gif');
-						break;
-					case "\xFF\xD8\xFF":
-						header('Content-type: image/jpeg');
-						break;
-					case "\x89".'PN':
-						header('Content-type: image/png');
-						break;
-					default:
-						$this->ErrorImage('Unknown image type identified by "'.substr($this->rawImageData, 0, 3).'" ('.phpthumb_functions::HexCharDisplay(substr($this->rawImageData, 0, 3)).') in SourceImageToGD()');
-						break;
+				if ($this->ImageMagickThumbnailToGD()) {
+
+					// excellent, we have a thumbnailed source image
+
+				} else {
+
+					// cannot create image for whatever reason (maybe ImageCreateFromJPEG et al are not available?)
+					// and ImageMagick is not available either, no choice but to output original (not resized/modified) data and exit
+					switch (substr($this->rawImageData, 0, 3)) {
+						case 'GIF':
+							header('Content-type: image/gif');
+							break;
+						case "\xFF\xD8\xFF":
+							header('Content-type: image/jpeg');
+							break;
+						case "\x89".'PN':
+							header('Content-type: image/png');
+							break;
+						default:
+							$this->ErrorImage('Unknown image type identified by "'.substr($this->rawImageData, 0, 3).'" ('.phpthumb_functions::HexCharDisplay(substr($this->rawImageData, 0, 3)).') in SourceImageToGD()');
+							break;
+					}
+					echo $this->rawImageData;
+					exit;
+
 				}
-				echo $this->rawImageData;
-				exit;
 			}
 
 		}
@@ -1215,23 +1408,31 @@ class phpthumb {
 		$OtherVariableNames = array('phpThumbDebug', 'thumbnailQuality', 'thumbnailFormat', 'gdimg_output', 'gdimg_source', 'sourceFilename', 'source_width', 'source_height', 'thumbnailCropX', 'thumbnailCropY', 'thumbnailCropW', 'thumbnailCropH', 'exif_thumbnail_width', 'exif_thumbnail_height', 'exif_thumbnail_type', 'thumbnail_width', 'thumbnail_height', 'thumbnail_image_width', 'thumbnail_image_height');
 
 		$DebugOutput = array();
-		$DebugOutput[] = 'phpThumb() version          = '.PHPTHUMB_VERSION;
-		$DebugOutput[] = 'phpversion()                = '.@phpversion();
-		$DebugOutput[] = 'PHP_OS                      = '.PHP_OS;
-		$DebugOutput[] = '$_SERVER[PHP_SELF]          = '.@$_SERVER['PHP_SELF'];
-		$DebugOutput[] = 'realpath(.)                 = '.@realpath('.');
-		$DebugOutput[] = 'get_magic_quotes_gpc()      = '.@get_magic_quotes_gpc();
-		$DebugOutput[] = 'get_magic_quotes_runtime()  = '.@get_magic_quotes_runtime();
-		$DebugOutput[] = 'ini_get(error_reporting)    = '.@ini_get('error_reporting');
-		$DebugOutput[] = 'ini_get(allow_url_fopen)    = '.@ini_get('allow_url_fopen');
-		$DebugOutput[] = 'ini_get(safe_mode)          = '.@ini_get('safe_mode');
-		$DebugOutput[] = 'ini_get(open_basedir)       = '.@ini_get('open_basedir');
-		$DebugOutput[] = 'ini_get(memory_limit)       = '.@ini_get('memory_limit');
-		$DebugOutput[] = 'get_cfg_var(memory_limit)   = '.@get_cfg_var('memory_limit');
-		$DebugOutput[] = 'memory_get_usage()          = '.(function_exists('memory_get_usage') ? @memory_get_usage() : 'n/a');
+		$DebugOutput[] = 'phpThumb() version         = '.PHPTHUMB_VERSION;
+		$DebugOutput[] = 'phpversion()               = '.@phpversion();
+		$DebugOutput[] = 'PHP_OS                     = '.PHP_OS;
+		$DebugOutput[] = '$_SERVER[PHP_SELF]         = '.@$_SERVER['PHP_SELF'];
+		$DebugOutput[] = '$_SERVER[DOCUMENT_ROOT]    = '.@$_SERVER['DOCUMENT_ROOT'];
+		$DebugOutput[] = 'realpath(.)                = '.@realpath('.');
+		$DebugOutput[] = 'get_magic_quotes_gpc()     = '.@get_magic_quotes_gpc();
+		$DebugOutput[] = 'get_magic_quotes_runtime() = '.@get_magic_quotes_runtime();
+		$DebugOutput[] = 'ini_get(error_reporting)   = '.@ini_get('error_reporting');
+		$DebugOutput[] = 'ini_get(allow_url_fopen)   = '.@ini_get('allow_url_fopen');
+		$DebugOutput[] = 'ini_get(safe_mode)         = '.@ini_get('safe_mode');
+		$DebugOutput[] = 'ini_get(open_basedir)      = '.@ini_get('open_basedir');
+		$DebugOutput[] = 'ini_get(memory_limit)      = '.@ini_get('memory_limit');
+		$DebugOutput[] = 'get_cfg_var(memory_limit)  = '.@get_cfg_var('memory_limit');
+		$DebugOutput[] = 'memory_get_usage()         = '.(function_exists('memory_get_usage') ? @memory_get_usage() : 'n/a');
+		$DebugOutput[] = '';
+
+		$DebugOutput[] = '$this->config_imagemagick_path              = '.$this->config_imagemagick_path;
+		$DebugOutput[] = 'file_exists($this->config_imagemagick_path) = '.$this->phpThumbDebugVarDump(file_exists($this->config_imagemagick_path));
+		$DebugOutput[] = '`which convert`                             = '.trim(`which convert`);
+		$DebugOutput[] = 'ImageMagickVersion()                        = '.$this->ImageMagickVersion();
 		$DebugOutput[] = '';
 
 		$DebugOutput[] = '$this->config_cache_directory              = '.$this->phpThumbDebugVarDump($this->config_cache_directory);
+		$DebugOutput[] = '$this->config_document_root                = '.$this->phpThumbDebugVarDump($this->config_document_root);
 		$DebugOutput[] = '$this->config_output_format                = '.$this->phpThumbDebugVarDump($this->config_output_format);
 		$DebugOutput[] = '$this->config_output_maxwidth              = '.$this->phpThumbDebugVarDump($this->config_output_maxwidth);
 		$DebugOutput[] = '$this->config_output_maxheight             = '.$this->phpThumbDebugVarDump($this->config_output_maxheight);
@@ -1249,7 +1450,6 @@ class phpthumb {
 		$DebugOutput[] = '$this->config_border_hexcolor              = '.$this->phpThumbDebugVarDump($this->config_border_hexcolor);
 		$DebugOutput[] = '$this->config_background_hexcolor          = '.$this->phpThumbDebugVarDump($this->config_background_hexcolor);
 		$DebugOutput[] = '$this->config_max_source_pixels            = '.$this->phpThumbDebugVarDump($this->config_max_source_pixels);
-		$DebugOutput[] = '$this->config_imagemagick_path             = '.$this->phpThumbDebugVarDump($this->config_imagemagick_path);
 		$DebugOutput[] = '$this->config_use_exif_thumbnail_for_speed = '.$this->phpThumbDebugVarDump($this->config_use_exif_thumbnail_for_speed);
 		$DebugOutput[] = '$this->config_output_allow_enlarging       = '.$this->phpThumbDebugVarDump($this->config_output_allow_enlarging);
 		$DebugOutput[] = '';
@@ -1273,7 +1473,7 @@ class phpthumb {
 		}
 		$DebugOutput[] = '';
 
-		$gd_info = phpthumb_functions::gd_info();
+		$gd_info = $this->gd_info();
 		foreach ($gd_info as $key => $value) {
 			$DebugOutput[] = 'gd_info.'.str_pad($key, 34, ' ', STR_PAD_RIGHT).' = '.$this->phpThumbDebugVarDump($value);
 		}
@@ -1368,7 +1568,7 @@ class phpthumb {
 		// there are serious bugs in the non-bundled versions of GD which may cause
 		// PHP to segfault when calling ImageCreateFromString() - avoid if at all possible
 		// when not using a bundled version of GD2
-		$gd_info = phpthumb_functions::gd_info();
+		$gd_info = $this->gd_info();
 		if (strpos($gd_info['GD Version'], 'bundled') !== false) {
 			return @ImageCreateFromString($RawImageData);
 		}
@@ -1384,10 +1584,10 @@ class phpthumb {
 				$ICFSreplacementFunctionName = 'ImageCreateFromPNG';
 				break;
 			default:
-				$this->ErrorImage('Unknown image type identified by "'.substr($this->rawImageData, 0, 3).'" ('.phpthumb_functions::HexCharDisplay(substr($this->rawImageData, 0, 3)).') in ImageCreateFromStringReplacement()');
+				$this->ErrorImage('Unknown image type identified by "'.substr($RawImageData, 0, 3).'" ('.phpthumb_functions::HexCharDisplay(substr($this->rawImageData, 0, 3)).') in ImageCreateFromStringReplacement()');
 				break;
 		}
-		if ($tempnam = tempnam($this->config_temp_directory, 'pThumb')) {
+		if ($tempnam = $this->phpThumb_tempnam()) {
 			if ($fp_tempnam = @fopen($tempnam, 'wb')) {
 				fwrite($fp_tempnam, $RawImageData);
 				fclose($fp_tempnam);
@@ -1396,7 +1596,7 @@ class phpthumb {
 					// Need to create from GIF file, but ImageCreateFromGIF does not exist
 					if (@include_once('phpthumb.gif.php')) {
 						// gif_loadFileToGDimageResource() cannot read from raw data, write to file first
-						if ($tempfilename = tempnam($this->config_temp_directory, 'pThumb')) {
+						if ($tempfilename = $this->phpThumb_tempnam()) {
 							if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
 								fwrite($fp_tempfile, $RawImageData);
 								fclose($fp_tempfile);
@@ -1430,16 +1630,108 @@ class phpthumb {
 
 				}
 			} else {
-				$ErrorMessage = 'Failed to fopen('.$tempnam.', "wb") in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpthumb.config.php';
+				$ErrorMessage = 'Failed to fopen('.$tempnam.', "wb") in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpThumb.config.php';
 			}
 			unlink($tempnam);
 		} else {
-			$ErrorMessage = 'Failed to generate tempnam() in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpthumb.config.php';
+			$ErrorMessage = 'Failed to generate phpThumb_tempnam() in '.__FILE__.' on line '.__LINE__."\n".'You may need to set $PHPTHUMB_CONFIG[temp_directory] in phpThumb.config.php';
 		}
 		if ($DieOnErrors && !empty($ErrorMessage)) {
 			die($ErrorMessage);
 		}
 		return false;
+	}
+
+	function phpThumb_tempnam() {
+		return tempnam($this->config_temp_directory, 'pThumb');
+	}
+
+	function gd_version($fullstring=false) {
+		static $cache_gd_version = array();
+		if (empty($cache_gd_version)) {
+			$gd_info = $this->gd_info();
+			if (substr($gd_info['GD Version'], 0, strlen('bundled (')) == 'bundled (') {
+				$cache_gd_version[1] = $gd_info['GD Version'];                                         // e.g. "bundled (2.0.15 compatible)"
+				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], strlen('bundled ('), 3); // e.g. "2.0" (not "bundled (2.0.15 compatible)")
+			} else {
+				$cache_gd_version[1] = $gd_info['GD Version'];                       // e.g. "1.6.2 or higher"
+				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], 0, 3); // e.g. "1.6" (not "1.6.2 or higher")
+			}
+		}
+		return $cache_gd_version[intval($fullstring)];
+	}
+
+	function gd_info() {
+		if (function_exists('gd_info')) {
+			// built into PHP v4.3.0+ (with bundled GD2 library)
+			return gd_info();
+		}
+
+		static $gd_info = array();
+		if (empty($gd_info)) {
+			// based on code by johnschaefer at gmx dot de
+			// from PHP help on gd_info()
+			$gd_info = array(
+				'GD Version'         => '',
+				'FreeType Support'   => false,
+				'FreeType Linkage'   => '',
+				'T1Lib Support'      => false,
+				'GIF Read Support'   => false,
+				'GIF Create Support' => false,
+				'JPG Support'        => false,
+				'PNG Support'        => false,
+				'WBMP Support'       => false,
+				'XBM Support'        => false
+			);
+			$phpinfo_array = phpthumb_functions::phpinfo_array();
+			foreach ($phpinfo_array as $line) {
+				$line = trim(strip_tags($line));
+				foreach ($gd_info as $key => $value) {
+					//if (strpos($line, $key) !== false) {
+					if (strpos($line, $key) === 0) {
+						$newvalue = trim(str_replace($key, '', $line));
+						$gd_info[$key] = $newvalue;
+					}
+				}
+			}
+			if (empty($gd_info['GD Version'])) {
+				// probable cause: "phpinfo() disabled for security reasons"
+				if (function_exists('ImageTypes')) {
+					$imagetypes = ImageTypes();
+					if ($imagetypes & IMG_PNG) {
+						$gd_info['PNG Support'] = true;
+					}
+					if ($imagetypes & IMG_GIF) {
+						$gd_info['GIF Create Support'] = true;
+					}
+					if ($imagetypes & IMG_JPG) {
+						$gd_info['JPG Support'] = true;
+					}
+					if ($imagetypes & IMG_WBMP) {
+						$gd_info['WBMP Support'] = true;
+					}
+				}
+				// to determine capability of GIF creation, try to use ImageCreateFromGIF on a 1px GIF
+				if (function_exists('ImageCreateFromGIF')) {
+					if ($tempfilename = $this->phpThumb_tempnam()) {
+						if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
+							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw==')); // very simple 1px GIF file base64-encoded as string
+							fclose($fp_tempfile);
+
+							// if we can convert the GIF file to a GD image then GIF create support must be enabled, otherwise it's not
+							$gd_info['GIF Read Support'] = (bool) @ImageCreateFromGIF($tempfilename);
+						}
+						unlink($tempfilename);
+					}
+				}
+				if (function_exists('ImageCreateTrueColor') && @ImageCreateTrueColor(1, 1)) {
+					$gd_info['GD Version'] = '2.0.1 or higher (assumed)';
+				} elseif (function_exists('ImageCreate') && @ImageCreate(1, 1)) {
+					$gd_info['GD Version'] = '1.6.0 or higher (assumed)';
+				}
+			}
+		}
+		return $gd_info;
 	}
 
 }

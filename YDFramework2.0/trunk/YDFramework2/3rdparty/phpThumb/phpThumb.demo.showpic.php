@@ -21,8 +21,8 @@
 // large (600x400 for example) and let it auto-resize it    //
 // smaller), and if the image is larger than 90% of the     //
 // current screen area the window respawns itself with      //
-// scrollbars.                                             //
-//                                                         //
+// scrollbars.                                              //
+//                                                          //
 // Usage:                                                   //
 // window.open('showpic.php?src=big.jpg&title=Big+picture', //
 //   'popupwindowname',                                     //

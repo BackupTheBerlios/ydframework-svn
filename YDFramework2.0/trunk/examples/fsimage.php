@@ -63,7 +63,7 @@
 
 		// Action to create and show thumbnail
 		function actionThumbnailSave() {
-			unlink( 'fsimage.thumb.jpg' );
+			@unlink( 'fsimage.thumb.jpg' );
 			$img = new YDFSImage( 'fsimage.jpg' );
 			$img->saveThumbnail( 150, 110, 'fsimage.thumb.jpg' );
 			header( 'Location: fsimage.thumb.jpg' );

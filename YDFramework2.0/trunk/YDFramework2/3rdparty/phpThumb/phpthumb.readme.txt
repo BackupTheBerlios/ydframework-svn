@@ -74,8 +74,23 @@ There are some configuration options you may (but are
 not required to) change. Most configuration options can
 be set when you call phpThumb() - see list below), but
 default configuration options (such as cache directory)
-are in phpthumb.config.php - this is the only file you
+are in phpThumb.config.php - this is the only file you
 should ever modify.
+
+The amount of memory required for phpThumb depends on
+several factors: the dimensions of the source image,
+the dimensions of the output image, whether unsharp
+masking is applied, whether watermarks are applied, etc.
+The auto-detection of memory limits works as a general
+"safe" value. You may be able to exceed the auto value
+by a small or large amount, depending on whether you
+apply watermarks and/or sharpening, and the output size
+of your thumbnails. I do not currently have a reliable
+formula for calculating such things, but I will attempt
+to craft one for future versions of phpThumb(). Until
+then, set "max_source_pixels" in phpThumb.config.php to a
+value that works well for you (or leave it alone if the
+defaults give you no problems).
 
 The configuration options you should maybe modify are:
 * cache_directory - thumbnailing is slow and processor-
@@ -101,9 +116,16 @@ phpThumb() object as follows:
   require_once('phpthumb.class.php');
   $phpThumb = new phpThumb();
 
-  // set options
-  $phpThumb->src = $sourceFilename;
-  // or $phpThumb->rawImageData = $binary_image_data;
+  // set data
+  $phpThumb->rawImageData = $binary_image_data;
+  // or $phpThumb->src = $sourceFilename;
+
+  // set parameters (see "URL Parameters" below)
+  $phpThumb->w = 100;
+
+  // set options (see phpThumb.config.php)
+  // here you must preface each option with "config_"
+  $phpThumb->config_output_format = 'jpeg';
 
   // Set error handling (optional)
   $phpThumb->config_error_die_on_error = false;
@@ -117,8 +139,9 @@ phpThumb() object as follows:
     echo 'Failed: '.$phpThumb->error;
   }
 
+
 If you want to change any of the configuration parameters
-you can change them like this:
+(see phpThumb.config.php) you can change them like this:
     $phpThumb->config_<variable_name> = <value>
 for example:
     $phpThumb->config_output_format = 'jpeg';
@@ -193,6 +216,9 @@ goto = URL to redirect to after rendering image to file
 maxb = MAXimum Byte size - auto-set compression (JPEG) or
        bit depth (GIF & PNG) to fit thumbnail into 'maxb'
        bytes of output image.
+down = filename to save image to. If this is set the
+       browser will prompt to save to this filename rather
+       than display the image
 
 
 Additional Object-only configuration variables:
@@ -203,6 +229,12 @@ Additional Object-only configuration variables:
 
 
 General Notes:
+
+* Always use the local image filename wherever possible
+  rather than a full http:// URL because performance is
+  much better, less (or no) use of temp files, and the
+  last-modified check for cached files doesn't work for
+  remote files.
 
 * Thumbnails will be scaled proportionately to fit in a
   box of at most (width * height) pixels

@@ -28,7 +28,7 @@ if (!function_exists('ImageJPEG') && !function_exists('ImagePNG') && !function_e
 
 // returned the fixed string if the evil "magic_quotes_gpc" setting is on
 if (get_magic_quotes_gpc()) {
-	$RequestVarsToStripSlashes = array('src', 'wmf', 'file', 'err', 'goto');
+	$RequestVarsToStripSlashes = array('src', 'wmf', 'file', 'err', 'goto', 'down');
 	foreach ($RequestVarsToStripSlashes as $key) {
 		if (isset($_REQUEST[$key])) {
 			$_REQUEST[$key] = stripslashes($_REQUEST[$key]);
@@ -42,8 +42,8 @@ if (!include_once('phpthumb.class.php')) {
 }
 $phpThumb = new phpThumb();
 
-if (!include_once('phpthumb.config.php')) {
-	die('failed to include_once("'.realpath('phpthumb.config.php').'")');
+if (!file_exists('phpThumb.config.php') || !@include_once('phpThumb.config.php')) {
+	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('phpThumb.config.php').'"');
 }
 foreach ($PHPTHUMB_CONFIG as $key => $value) {
 	$keyname = 'config_'.$key;
@@ -51,6 +51,13 @@ foreach ($PHPTHUMB_CONFIG as $key => $value) {
 }
 foreach ($_REQUEST as $key => $value) {
 	$phpThumb->$key = $value;
+}
+if (!empty($PHPTHUMB_DEFAULTS)) {
+	foreach ($PHPTHUMB_DEFAULTS as $key => $value) {
+		if ($PHPTHUMB_DEFAULTS_GETSTRINGOVERRIDE || !isset($_REQUEST[$key])) {
+			$phpThumb->$key = $value;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////
@@ -70,9 +77,9 @@ foreach ($FilenameParameters as $key) {
 		break;
 	}
 }
-if ($CanPassThroughDirectly) {
+if ($CanPassThroughDirectly && !empty($_REQUEST['src'])) {
 	// no parameters set, passthru
-	$SourceFilename = phpthumb_functions::ResolveFilenameToAbsolute($_REQUEST['src']);
+	$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($_REQUEST['src']);
 	if ($getimagesize = @GetImageSize($SourceFilename)) {
 		header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
 		@readfile($SourceFilename);
@@ -98,7 +105,7 @@ if (!empty($phpThumb->config_cache_directory) && empty($_REQUEST['phpThumbDebug'
 // Note: this must be the actual binary data of the image, not a URL or filename
 // see http://www.billy-corgan.com/blog/archive/000143.php for a brief tutorial on this section
 
-//$SQLquery = 'SELECT `Picture` FROM `products` WHERE (ProductID = \''.mysql_escape_string($_REQUEST['id']).'\')';
+//$SQLquery = 'SELECT `Picture` FROM `products` WHERE (`ProductID` = \''.mysql_escape_string($_REQUEST['id']).'\')';
 if (!empty($SQLquery)) {
 
 	// change this information to match your server
@@ -132,10 +139,11 @@ if (!empty($SQLquery)) {
 
 	$phpThumb->ErrorImage('Usage: '.$_SERVER['PHP_SELF'].'?src=/path/and/filename.jpg'."\n".'read Usage comments for details');
 
-} elseif (substr(@$phpThumb->src, 0, strlen(strtolower('http://'))) == 'http://') {
+} elseif (substr(strtolower(@$phpThumb->src), 0, 7) == 'http://') {
 
 	ob_start();
-	if ($fp = fopen($phpThumb->src, 'rb')) {
+	$HTTPurl = strtr($phpThumb->src, array(' '=>'%20'));
+	if ($fp = fopen($HTTPurl, 'rb')) {
 
 		$phpThumb->rawImageData = '';
 		do {
@@ -149,10 +157,10 @@ if (!empty($SQLquery)) {
 
 	} else {
 
-		$fopen_error = ob_get_contents();
+		$fopen_error = strip_tags(ob_get_contents());
 		ob_end_clean();
 		if (ini_get('allow_url_fopen')) {
-			$phpThumb->ErrorImage('cannot open "'.$phpThumb->src.'" - fopen() said: "'.$fopen_error.'"');
+			$phpThumb->ErrorImage('cannot open "'.$HTTPurl.'" - fopen() said: "'.$fopen_error.'"');
 		} else {
 			$phpThumb->ErrorImage('"allow_url_fopen" disabled');
 		}
@@ -181,7 +189,7 @@ if (@$_REQUEST['phpThumbDebug'] == '3') {
 
 if (!empty($_REQUEST['file'])) {
 
-	$phpThumb->RenderToFile(phpthumb_functions::ResolveFilenameToAbsolute($_REQUEST['file']));
+	$phpThumb->RenderToFile($phpThumb->ResolveFilenameToAbsolute($_REQUEST['file']));
 	if (!empty($_REQUEST['goto']) && (substr(strtolower($_REQUEST['goto']), 0, strlen('http://')) == 'http://')) {
 		// redirect to another URL after image has been rendered to file
 		header('Location: '.$_REQUEST['goto']);
@@ -190,6 +198,7 @@ if (!empty($_REQUEST['file'])) {
 
 } elseif (empty($phpThumb->phpThumbDebug) && !empty($phpThumb->config_cache_directory) && is_writable($phpThumb->config_cache_directory)) {
 
+	$phpThumb->CleanUpCacheDirectory();
 	$phpThumb->RenderToFile($cache_filename);
 
 }
