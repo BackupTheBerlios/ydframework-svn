@@ -10,6 +10,8 @@
 
 	<h3>Testing...</h3>
 
+	<p>Version: <?= $version ?></p>
+
 	<?php if ( $processList ) { ?>
 		<p><b>show processlist</b></p>
 		<p><table border="1" cellspacing="0" cellpadding="4">

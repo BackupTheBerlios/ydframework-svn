@@ -27,6 +27,8 @@
 			$this->setVar( 'status', $data );
 			$data = $db->getRecords( 'show variables' );
 			$this->setVar( 'variables', $data );
+			$data = $db->getServerVersion();
+			$this->setVar( 'version', $data );
 			$db->close();
 
 			// Output the template

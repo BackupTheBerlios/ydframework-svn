@@ -38,6 +38,15 @@
 		}
 
 		/**
+		 *	This function will return the version of the database server software.
+		 *
+		 *	@returns	The version of the database server software.
+		 */
+		function getServerVersion() {
+			return 'PostgreSQL ' . pg_version();
+		}
+
+		/**
 		 *	Function that makes the actual connection.
 		 */
 		function connect() {

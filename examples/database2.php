@@ -25,6 +25,9 @@
 			$db->close();
 
 			// Output the template
+			YDDebugUtil::dump( $db->getServerVersion(), 'Version:' );
+
+			// Output the template
 			YDDebugUtil::dump( $data );
 
 			// Test string escaping
