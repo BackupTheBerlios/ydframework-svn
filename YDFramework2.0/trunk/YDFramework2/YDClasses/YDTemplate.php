@@ -28,9 +28,6 @@
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'class.template/src/class.template.php' );
 
-	define( 'YD_TPL_CACHEEXT', '.phc' );
-	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
-
 	/**
 	 *	This class is a wrapper around Smarty Light. Documentation can be found on:
 	 *	http://www.paullockaby.com/projects/smarty-light/docs/

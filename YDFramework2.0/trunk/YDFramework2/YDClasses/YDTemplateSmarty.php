@@ -27,12 +27,6 @@
 	
 	define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
 
-	YDInclude( 'YDRequest.php' );
-	YDInclude( 'smarty/libs/Smarty.class.php' );
-
-	define( 'YD_TPL_CACHEEXT', '.phc' );
-	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
-
 	/**
 	 *	This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/
 	 */

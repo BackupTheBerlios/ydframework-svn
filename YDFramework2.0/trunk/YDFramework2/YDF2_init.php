@@ -77,6 +77,10 @@
 	@define( 'YD_SCR_EXT', '.php' );
 	@define( 'YD_TMP_PRE', 'YDF_' );
 
+	// Template constants
+	define( 'YD_TPL_CACHEEXT', '.phc' );
+	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
+
 	// Class executor
 	if ( ! defined( 'YD_EXECUTOR' ) ) {
 		define( 'YD_EXECUTOR', 'YDExecutor' );
