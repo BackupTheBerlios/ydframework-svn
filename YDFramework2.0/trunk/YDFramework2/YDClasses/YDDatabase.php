@@ -175,8 +175,17 @@
 		 *	@returns	A single value matching the SQL statement.
 		 */
 		function getValue( $sql, $index=0 ) {
-			$record = array_values( $this->getRecord( $sql ) );
-			if ( ! $record ) { return false; }
+			$records = $this->getRecord( $sql );
+			if ( $records == null ) {
+				return false;
+			}
+			$record = array_values( $records );
+			if ( ! $record ) {
+				return false;
+			}
+			if ( ! isset( $record[ $index ] ) ) {
+				return false;
+			}
 			return $record[ $index ];
 		}
 
