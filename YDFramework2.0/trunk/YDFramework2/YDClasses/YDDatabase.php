@@ -683,8 +683,8 @@
             }
 
             // Convert the fields and values to a string
-            $ifields = implode( ',', $ifields );
-            $ivalues = implode( ',', $ivalues );
+            $ifields = implode( ', ', $ifields );
+            $ivalues = implode( ', ', $ivalues );
 
             // Create the SQL statement
             return 'INSERT INTO ' . $table . ' (' . $ifields . ') VALUES (' . $ivalues . ')';
@@ -730,7 +730,7 @@
             }
 
             // Convert the fields and values to a string
-            $uvalues = implode( ',', $uvalues );
+            $uvalues = implode( ', ', $uvalues );
 
             // Create the SQL statement
             $sql =  'UPDATE ' . $table . ' SET ' . $uvalues;
