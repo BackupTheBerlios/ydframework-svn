@@ -53,7 +53,7 @@
 				$this->galleries[ $i ]['id'] = md5( $this->galleries[ $i ]['url'] );
 
 				// Get the contents of the URL
-				$pGallery = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+				$pGallery = '/www\.pbase\.com\/beachshop\/image\/([0-9]+)/ism';
 				$objUrl = new YDUrl( $this->galleries[ $i ]['url'] );
 				$pcontents = $objUrl->getContentsWithRegex( $pGallery );
 
