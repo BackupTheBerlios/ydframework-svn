@@ -132,7 +132,7 @@
 			}
 
 			// Show debugging info if needed
-			if ( YD_DEBUG == 1 ) {
+			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 
 				// Create the debug messages
 				$debug = "\n\n";

@@ -36,12 +36,12 @@ This option will turn on the debug messages for the current request only. If you
 <br />
 <span class="notes"><em><strong>Note:</strong> for release applications, you want to prevent users from seeing debug information. In order to prevent people from using the YD_DEBUG URL parameter to show debug information, which can reveal confidential information, make sure you define the YD_DEBUG constant with a value of 0 before you initialize the framework.</em></span><br />
 <br />
-Now that we know how debugging information can be enabled, let's have a look at how the Yellow Duck Framework displays this information. We specifically choose not to use any popup windows for this or display the information in the visible HTML code, since both methods are not easy to handle. In the Yellow Duck Framework, debugging information is added to the source code in the form of HTML comments. This makes it easy to find them without screwing up the layout of your pages. The following code snippet shows you an example of HTML code with debugging information added:<br />
+Now that we know how debugging information can be enabled, let's have a look at how the Yellow Duck Framework displays this information. We specifically choose not to use any popup windows for this or display the information in the visible HTML code, since both methods are not easy to handle. In the Yellow Duck Framework, debugging information is added to the source code in the form of HTML comments. This makes it easy to find them without screwing up the layout of your pages.<br />
 <br />
-<div class="code"><code><font color="#000000">
-Supported languages: en<br />&lt;pre&gt;'en'&lt;/pre&gt;<br />Supported languages: nl, fr, en<br />&lt;pre&gt;'en'&lt;/pre&gt;<br />Browser languages:<br />&lt;pre&gt;array (<br />&nbsp;&nbsp;0 =&amp;gt; 'en',<br />&nbsp;&nbsp;1 =&amp;gt; 'nl',<br />&nbsp;&nbsp;2 =&amp;gt; 'fr',<br />)&lt;/pre&gt;<br />&lt;!-- [ YD_DEBUG ] <br /><br />Processing time: 19 ms<br /><br />Total size include files: 35.7 KB<br /><br />Included files: <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;11.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDRequest.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.9 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDExecutor.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.8 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDF2_init.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTemplate.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDLanguage.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDStringUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDDebugUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDObjectUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.2 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTimer.php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\examples\language.php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDF2_process.php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDBase.php<br /><br /> --&gt;</font>
-</code></div><br />
-As you can see, the debug comments from the framework are always prepended but the text "[ YD_DEBUG ]" to make them easily recognizable. Each debug comment will also start on a new line to make it even easier.<br />
+By default, the debug information is shown as HTML comments and are not visible in the visual HTML output. During the development cycle, it might be needed to have the debug information visible in the HTML output. To do this, you need to append "YD_DEBUG=2" to the url to have the info show up. The URLs then look as follows:<br />
+<br />
+<ul><li> <a href="http://localhost/test.php?YD_DEBUG=2">http://localhost/test.php?YD_DEBUG=2</a>
+</li><li> <a href="http://localhost/test.php?id=01&YD_DEBUG=2">http://localhost/test.php?id=01&YD_DEBUG=2</a></li></ul>
 <br />
 <br />
 <h4> Standard debug information </h4>
@@ -55,7 +55,170 @@ By default, the Yellow Duck Framework shows a whole bunch of standard extra info
 Here is how this information looks like:<br />
 <br />
 <div class="code"><code><font color="#000000">
-&lt;!-- [ YD_DEBUG ] <br /><br />Processing time: 19 ms<br /><br />Total size include files: 35.7 KB<br /><br />Included files: <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;11.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDRequest.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.9 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDExecutor.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.8 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDF2_init.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTemplate.php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDLanguage.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDStringUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDDebugUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDObjectUtil.php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.2 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTimer.php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\examples\language.php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDF2_process.php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c:\program files\apache\htdocs\ydf2\YDFramework2\YDClasses\YDBase.php<br /><br /> --&gt;</font>
+<font color="#007700">&lt;!-- [ </font><font color="#0000BB">YD_DEBUG </font><font color="#007700">] <br /><br /></font><font color="#0000BB">Processing time</font><font color="#007700">: </font><font color="#0000BB">19 ms<br /><br />Total size </font><font color="#007700">include </font><font color="#0000BB">files</font><font color="#007700">: </font><font color="#0000BB">35.7 KB<br /><br />Included files</font><font color="#007700">: <br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">11.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDRequest</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.9 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDExecutor</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.8 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDF2_init</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDTemplate</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;3.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDLanguage</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.5 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDStringUtil</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDDebugUtil</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;2.3 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDObjectUtil</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.2 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDTimer</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;1.0 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+examples<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+language</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDF2_process</font><font color="#007700">.</font><font color="#0000BB">php<br />&nbsp;&nbsp;&nbsp;&nbsp;0.4 KB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;c</font><font color="#007700">:<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+</font><font color="#0000BB">program files<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+apache<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+htdocs<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+ydf2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDFramework2<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDClasses<br />
+<b>Warning</b>:  Unexpected character in input:  '\' (ASCII=92) state=1 in <b>/home/yellowd/public_html/ydf2/wiki/formatters/php.php</b> on line <b>2</b><br />
+YDBase</font><font color="#007700">.</font><font color="#0000BB">php<br /><br /> </font><font color="#007700">--&gt;</font>
+</font>
 </code></div><br />
 In the next section, we will see that it's very easy to add your own debugging information.<br />
 <br />

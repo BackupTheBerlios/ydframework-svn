@@ -95,7 +95,9 @@
 
 	// Debug constants
 	if ( ! defined( 'YD_DEBUG' ) ) {
-		if ( @ $_GET['YD_DEBUG'] == 1 ) {
+		if ( @ $_GET['YD_DEBUG'] == 2 ) {
+			define( 'YD_DEBUG', 2 );
+		} elseif ( @ $_GET['YD_DEBUG'] == 1 ) {
 			define( 'YD_DEBUG', 1 );
 		} else {
 			define( 'YD_DEBUG', 0 );

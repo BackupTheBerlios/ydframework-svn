@@ -684,9 +684,9 @@
 			}
 
 			// If debugging, show contents
-			if ( YD_DEBUG ) {
-				YDDebugUtil::debug( YDDebugUtil::r_dump( $form ) );
-			}
+			//if ( YD_DEBUG ) {
+			//	YDDebugUtil::debug( YDDebugUtil::r_dump( $form ) );
+			//}
 
 			// Return the form array
 			return $form;

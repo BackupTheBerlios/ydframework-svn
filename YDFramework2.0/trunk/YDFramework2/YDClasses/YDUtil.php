@@ -164,6 +164,13 @@
 			if ( YD_DEBUG == 1 ) {
 				echo( "\n" . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . "\n" );
 			}
+			if ( YD_DEBUG == 2 ) {
+				echo( '<table border="0" cellspacing="0" cellpadding="4"><tr>' );
+				echo( '<td bgcolor="#FFCC00">' );
+				echo( '<b>' . YD_FW_NAME . ' Debug Information</b> ' );
+				echo( '<pre>' . htmlspecialchars( trim( implode( ' ', $args ) ) ) . '</pre>' );
+				echo( '</td></tr></table>' );
+			}
 		}
 
 		/**
