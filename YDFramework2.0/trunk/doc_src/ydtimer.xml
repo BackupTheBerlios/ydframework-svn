@@ -69,34 +69,34 @@ $report = $timer->getReport();
 
 ?>]]></programlisting>
 
-        <para>The report will look a bit as follows:</para>
+        <para>The report array will look as follows:</para>
 
         <programlisting><![CDATA[array (
-  0 => 
+  '-- Start' =>
   array (
     0 => 0,
     1 => 0,
     2 => '-- Start',
   ),
-  1 => 
+  'Reading file' => 
   array (
     0 => 0,
     1 => 0,
     2 => 'Reading file',
   ),
-  2 => 
+  'Finished reading file' =>
   array (
     0 => 0,
     1 => 0,
     2 => 'Finished reading file',
   ),
-  3 => 
+  'YDBBCode object' =>
   array (
     0 => 0,
     1 => 0,
     2 => 'YDBBCode object',
   ),
-  4 => 
+  'Conversion to BBCode' =>
   array (
     0 => 0,
     1 => 0,

@@ -117,7 +117,7 @@
 					$report[$key][1] = '-';
 				}
 			}
-			YDDebugUtil::dump( $report );
+			//YDDebugUtil::dump( $report );
 			return $report;
 		}
 
