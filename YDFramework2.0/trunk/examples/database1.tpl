@@ -29,14 +29,14 @@
 			</tr>
 			{foreach from=$processList item=row}
 				<tr>
-					<td>{$row[id]}</td>
-					<td>{$row[user]}</td>
-					<td>{$row[host]}</td>
-					<td>{$row[db]}&nbsp;</td>
-					<td>{$row[command]}</td>
-					<td>{$row[time]}</td>
-					<td>{$row[state]}&nbsp;</td>
-					<td>{$row[info]}&nbsp;</td>
+					<td>{$row.id}</td>
+					<td>{$row.user}</td>
+					<td>{$row.host}</td>
+					<td>{$row.db}&nbsp;</td>
+					<td>{$row.command}</td>
+					<td>{$row.time}</td>
+					<td>{$row.state}&nbsp;</td>
+					<td>{$row.info}&nbsp;</td>
 				</tr>
 			{/foreach}
 			</table></p>
@@ -51,8 +51,8 @@
 			</tr>
 			{foreach from=$status item=row}
 				<tr>
-					<td>{$row[variable_name]}</td>
-					<td>{$row[value]}&nbsp;</td>
+					<td>{$row.variable_name}</td>
+					<td>{$row.value}&nbsp;</td>
 				</tr>
 			{/foreach}
 			</table></p>
@@ -67,8 +67,8 @@
 			</tr>
 			{foreach from=$variables item=row}
 				<tr>
-					<td>{$row[variable_name]}</td>
-					<td>{$row[value]}&nbsp;</td>
+					<td>{$row.variable_name}</td>
+					<td>{$row.value}&nbsp;</td>
 				</tr>
 			{/foreach}
 			</table></p>

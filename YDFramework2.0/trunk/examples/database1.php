@@ -6,7 +6,7 @@
 	// Includes
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDDatabase.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class database1 extends YDRequest {
