@@ -201,6 +201,14 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=xmlrpcclient1.php">xmlrpcclient1.php</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="language1.php">Language negotiator</a>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=language1.php">language1.php</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>
