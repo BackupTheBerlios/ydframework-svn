@@ -34,15 +34,19 @@
      *  - phptype
      *
      *  The currently supported database backends are: mysql  -> MySQL
-     *  - pgsql  -> PostgreSQL
+     *  - dbase  -> dBase
+     *  - fbsql  -> FrontBase
      *  - ibase  -> InterBase
+     *  - ifx    -> Informix
      *  - msql   -> Mini SQL
      *  - mssql  -> Microsoft SQL Server
-     *  - oci8   -> Oracle 7/8/8i
+     *  - mysql  -> MySQL (for MySQL <= 4.0)
+     *  - mysqli -> MySQL (for MySQL >= 4.1) (since DB 1.6.3)
+     *  - oci8   -> Oracle 7/8/9
      *  - odbc   -> ODBC (Open Database Connectivity)
-     *  - sybase -> SyBase
-     *  - ifx    -> Informix
-     *  - fbsql  -> FrontBase
+     *  - pgsql  -> PostgreSQL
+     *  - sqlite -> SQLite
+     *  - sybase -> Sybase
      *
      *  @remarks
      *      Some of the database types require you to have special extensions
@@ -53,6 +57,9 @@
      *
      *  @todo
      *      Add support for paged database results.
+     *
+     *  @todo
+     *      Add option to get the last insert ID.
      */
     class YDDatabase extends YDBase {
 
@@ -208,6 +215,43 @@
 
             // Execute the query
             $result = $conn->getAll( $query, $params );
+
+            // Update counter
+            $this->_incrementSqlCounter();
+
+            // Check for errors
+            if ( DB::isError( $result ) ) {
+                return new YDFatalError( $result );
+            }
+
+            // Return the result
+            return $result;
+
+        }
+
+        /**
+         *  This function will execute the query and return the result of
+         *  the query, but fetches only the the specificed count of rows. It is 
+         *  an emulation of the MySQL LIMIT option.
+         *
+         *  @param $query  The SQL query or the statement to execute.
+         *  @param $from   The row to start to fetch.
+         *  @param $count  The numbers of rows to fetch.
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
+         *
+         *  @returns The result of the SQL query.
+         */
+        function executeSelectLimit( $query, $from, $count, $params=array() ) {
+
+            // Get a connection
+            $conn = $this->getConnection();
+
+            // Execute the query
+            $result = $conn->limitQuery( $query, $from, $count, $params );
 
             // Update counter
             $this->_incrementSqlCounter();

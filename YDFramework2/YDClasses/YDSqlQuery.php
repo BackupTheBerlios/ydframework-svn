@@ -51,7 +51,7 @@
          *  This function will execute the query and return the number of
          *  affected rows.
          *
-         *  @param $url The database url for this query.
+         *  @param $url    The database url for this query.
          *  @param $params Array, string or numeric data to be added to the
          *                 prepared statement. Quantity of items passed must
          *                 match quantity of placeholders in the prepared
@@ -74,7 +74,7 @@
          *  This function will execute the query and return the result of
          *  the query.
          *
-         *  @param $url The database url for this query.
+         *  @param $url    The database url for this query.
          *  @param $params Array, string or numeric data to be added to the
          *                 prepared statement. Quantity of items passed must
          *                 match quantity of placeholders in the prepared
@@ -94,10 +94,38 @@
         }
 
         /**
+         *  This function will execute the query and return the result of
+         *  the query, but fetches only the the specificed count of rows. It is 
+         *  an emulation of the MySQL LIMIT option.
+         *
+         *  @param $query  The SQL query or the statement to execute.
+         *  @param $from   The row to start to fetch.
+         *  @param $count  The numbers of rows to fetch.
+         *  @param $params Array, string or numeric data to be added to the
+         *                 prepared statement. Quantity of items passed must
+         *                 match quantity of placeholders in the prepared
+         *                 statement: meaning 1 placeholder for non-array
+         *                 parameters or 1 placeholder per array element.
+         *
+         *  @returns The result of the SQL query.
+         */
+        function executeSelectLimit( $url, $start, $count, $params=array() ) {
+
+            // Instantiate the database object
+            $db = new YDDatabase( $url );
+
+            // Execute the query
+            return $db->executeSelectLimit( 
+                $this->getSql(), $start, $count, $params
+            );
+
+        }
+
+        /**
          *  This function will execute the query and return the first row from
          *  the result of the query.
          *
-         *  @param $url The database url for this query.
+         *  @param $url    The database url for this query.
          *  @param $params Array, string or numeric data to be added to the
          *                 prepared statement. Quantity of items passed must
          *                 match quantity of placeholders in the prepared
