@@ -85,9 +85,6 @@
      *
      *  By default, error messages are shown in a light yellow box with red text
      *  displaying the error message.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDFatalError extends YDError {
 

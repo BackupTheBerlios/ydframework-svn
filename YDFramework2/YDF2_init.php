@@ -43,11 +43,6 @@
      *  Webpage: http://www.yellowduck.be/
      *  
      *  Author: Pieter Claerhout, pieter@yellowduck.be
-     *
-     *  @todo
-     *      Check how static classes can be integrated with the YDBase class.
-     *      We might need to call the constructor before executing a static
-     *      method to ensure the class is setup the way it should be.
      */
 
     // Only execute this once

@@ -16,12 +16,6 @@
      *  This class uses the HTTP_USER_AGENT varaible to get information about 
      *  the browser the visitor used to perform the request. We determine the 
      *  browser name, the version and the platform it's running on.
-     *
-     *  @todo
-     *      Should we keep this class or have people look for their own classes
-     *      to do something like this? We might just ship phpSniff with our code
-     *      so that they don't even have to look for it:
-     *      http://phpsniff.sourceforge.net/
      */
     class YDBrowserInfo extends YDBase {
 

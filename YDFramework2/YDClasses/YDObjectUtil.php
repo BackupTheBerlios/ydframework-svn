@@ -31,10 +31,6 @@
          *  @param $class The object type you want to check against.
          *
          *  @return Boolean indicating if the object is of the specified class.
-         *
-         *  @todo
-         *      Need to move the serialize and unserialize functions to a base
-         *      class called YDBase (which extends PEAR).
          */
         function isSubClass( $obj, $class ) {
 
