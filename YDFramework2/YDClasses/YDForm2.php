@@ -8,19 +8,15 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'YDValidateRules.php' );
 
 	/**
 	 *	This class defines an object oriented form.
 	 *
 	 *	@todo
-	 *		Implement the validate function.
-	 *
-	 *	@todo
-	 *		Implement the addRule function.
-	 *
-	 *	@todo
 	 *		Implement the rest of the form elements.
+	 *
+	 *	@todo
+	 *		Convert all the examples to this new form object and kick out PEAR.
 	 */
 	class YDForm2 extends YDBase {
 
@@ -51,13 +47,19 @@
 			$this->_regFilters = array();
 			$this->_regValidators = array();
 
-			// The list of form elements
+			// The list of elements, rules and filters
 			$this->_elements = array();
 			$this->_rules = array();
+			$this->_formrules = array();
 			$this->_filters = array();
 
 			// The list of errors
 			$this->_errors = array();
+			
+			// Some static HTML things
+			$this->_htmlRequired = '<font color="red">*</font> ';
+			$this->_htmlErrorStart = '<font color="red">Error: ';
+			$this->_htmlErrorEnd = '</font>';
 
 			// The list of default values
 			$this->_defaults = array();
@@ -76,18 +78,18 @@
 			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
 
 			// Add the rules
-			$this->registerRule( 'required', array( 'YDValidatorRules', 'required' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'maxlength', array( 'YDValidatorRules', 'maxlength' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'minlength', array( 'YDValidatorRules', 'minlength' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'rangelength', array( 'YDValidatorRules', 'rangelength' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'regex', array( 'YDValidatorRules', 'regex' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'email', array( 'YDValidatorRules', 'email' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'lettersonly', array( 'YDValidatorRules', 'lettersonly' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'alphanumeric', array( 'YDValidatorRules', 'alphanumeric' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'numeric', array( 'YDValidatorRules', 'numeric' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'nopunctuation', array( 'YDValidatorRules', 'nopunctuation' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'nonzero', array( 'YDValidatorRules', 'nonzero' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'callback', array( 'YDValidatorRules', 'callback' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
+			$this->registerRule( 'maxlength', array( 'YDValidateRules', 'maxlength' ), 'YDValidateRules.php' );
+			$this->registerRule( 'minlength', array( 'YDValidateRules', 'minlength' ), 'YDValidateRules.php' );
+			$this->registerRule( 'rangelength', array( 'YDValidateRules', 'rangelength' ), 'YDValidateRules.php' );
+			$this->registerRule( 'regex', array( 'YDValidateRules', 'regex' ), 'YDValidateRules.php' );
+			$this->registerRule( 'email', array( 'YDValidateRules', 'email' ), 'YDValidateRules.php' );
+			$this->registerRule( 'lettersonly', array( 'YDValidateRules', 'lettersonly' ), 'YDValidateRules.php' );
+			$this->registerRule( 'alphanumeric', array( 'YDValidateRules', 'alphanumeric' ), 'YDValidateRules.php' );
+			$this->registerRule( 'numeric', array( 'YDValidateRules', 'numeric' ), 'YDValidateRules.php' );
+			$this->registerRule( 'nopunctuation', array( 'YDValidateRules', 'nopunctuation' ), 'YDValidateRules.php' );
+			$this->registerRule( 'nonzero', array( 'YDValidateRules', 'nonzero' ), 'YDValidateRules.php' );
+			$this->registerRule( 'callback', array( 'YDValidateRules', 'callback' ), 'YDValidateRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
@@ -248,6 +250,11 @@
 				YDFatalError( 'Unknown filter "' . $filter . '" for element "' . $element . '"' );
 			}
 
+			// Include the filter file
+			if ( ! empty( $this->_regFilters[ $filter ]['file'] ) ) {
+				require_once( $this->_regFilters[ $filter ]['file'] );
+			}
+
 			// Initialize the element
 			if ( ! is_array( $this->_filters[ $element ] ) ) {
 				$this->_filters[ $element ] = array();
@@ -259,9 +266,44 @@
 		}
 
 		/**
-		 *	This function will register a rule for the form.
+		 *	Add a rule to the form for the specified field.
+		 *
+		 *	@param	$element	The element to apply the rule on.
+		 *	@param	$rule		The name of the rule to apply.
+		 *	@param	$error		The error message to show if an error occured.
+		 *	@param	$options	(optional) The options to pass to the validator function.
 		 */
-		function addRule() {
+		function addRule( $element, $rule, $error, $options=null ) {
+
+			// Check if it's a known filter
+			if ( ! array_key_exists( $rule, $this->_regRules ) ) {
+				YDFatalError( 'Unknown rule "' . $rule . '" for element "' . $element . '"' );
+			}
+
+			// Include the rule file
+			if ( ! empty( $this->_regRules[ $rule ]['file'] ) ) {
+				require_once( $this->_regRules[ $rule ]['file'] );
+			}
+
+			// Initialize the element
+			if ( ! is_array( $this->_rules[ $element ] ) ) {
+				$this->_rules[ $element ] = array();
+			}
+
+			// Add the filter
+			array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
+
+		}
+
+		/**
+		 *	Add rule that point to a custom function and is not bound to a specific form element. The callback function
+		 *	should return an associative array with the names of the fields and the errors. You can use the special name
+		 *	__ALL__ to add a form wide error.
+		 *
+		 *	@param $callback	The callback of the funtion to perform for this form rule.
+		 */
+		function addFormRule( $callback ) {
+			array_push( $this->_formrules, $callback );
 		}
 
 		/**
@@ -333,28 +375,90 @@
 		 */
 		function validate() {
 
-			// PEAR way of working			
-			// If no rules and number of submitValues and submitFiles is 0, form is valid.
-			// Check if both number of submit values and submit files are 0, form is invalid
-
 			// Form should be submitted
-			if ( $this->isSubmitted() == false ) {
+			if ( $this->isSubmitted() == false ) { return false; }
+
+			// Check if there are any rules, if not, form is valid and return true
+			if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 ) { return true; }
+
+			// Apply the element rules
+			foreach ( $this->_rules as $element=>$rules ) {
+
+				// Check if the element exists
+				if ( array_key_exists( $element, $this->_elements ) ) {
+
+					// Loop over the rules
+					foreach ( $rules as $rule ) {
+
+						// Check if the rule exists
+						if ( ! array_key_exists( $rule['rule'], $this->_regRules ) ) {
+							YDFatalError( 'Unknown rule: ' . $rule['rule'] );
+						}
+
+						// Get the rule details
+						$ruleDetails = $this->_regRules[ $rule['rule'] ];
+
+						// Check if the callback is valid
+						if ( ! is_callable( $ruleDetails['callback'] ) ) {
+							YDFatalError( 'The callback specified for the rule "' . $rule['rule'] . '" is not valid' );
+						}
+
+						// Check the rule
+						$result = call_user_func( 
+							$ruleDetails['callback'], $this->getValue( $element ), $rule['options'] 
+						);
+
+						// If the result is false, add the error
+						if ( $result == false ) {
+							$this->_errors[ $element ] = $rule['error'];
+						}
+
+						// Step out of the loop
+						break;
+
+					}
+
+				}
+
+			}
+
+			// Check for errors
+			if ( sizeof( $this->_errors ) > 0 ) {
 				return false;
 			}
 
-			// Check if there are any rules, if not, form is valid and return true
-			if ( sizeof( $this->_regRules ) == 0 ) {
-				return true;
+			// Apply the form rules
+			foreach ( $this->_formrules as $rule ) {
+
+				// Check if the callback is valid
+				if ( ! is_callable( $rule ) ) {
+					YDFatalError( 'The callback specified for the form "' . $rule . '" is not valid' );
+				}
+
+				// Execute the rule
+				$result = call_user_func( $rule );
+
+				// Check the result
+				if ( is_array( $result ) ) {
+
+					// Add the errors
+					foreach ( $result as $element => $error ) {
+						$this->_errors[ $element ] = $error;
+					}
+
+					// Step out of the loop
+					break;
+
+				}
 			}
-			
-			// Check if we have any submit values or submitted files
-			// --> No, form valid, return true
-			
-			// Apply all rules, and add errors if needed
-			// Use te $this->getValue function to get the values for each field.
-			
-			// If errors, return false
-			// If no errors, return true
+
+			// Check for errors
+			if ( sizeof( $this->_errors ) > 0 ) {
+				return false;
+			}
+
+			// All went fine, return true
+			return true;
 			
 		}
 
@@ -396,6 +500,13 @@
 					$form[ $name ]['error'] = '';
 				}
 
+				// Check if the field is required
+				if ( array_key_exists( $name, $this->_rules ) ) {
+					$form[ $name ]['required'] = true;
+				} else {
+					$form[ $name ]['required'] = false;
+				}
+
 			}
 
 			// Return the form array
@@ -416,7 +527,10 @@
 			// Start with the form element
 			$html .= $form['tag'];
 
-			// Add errors if any
+			// Add form errors if any
+			if ( isset( $form['errors']['__ALL__'] ) ) {
+				$html .= '<p>' . $this->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_htmlErrorEnd . '</p>';
+			}
 
 			// Remove some things from the array
 			unset( $form['attribs'] );
@@ -426,10 +540,17 @@
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
 				$html .= '<p>';
+				if ( $element['required'] ) {
+					$html .= $this->_htmlRequired;
+				}
 				if ( ! empty( $element['label'] ) ) {
 					$html .= $element['label'] . '<br>';
 				}
-				$html .= $element['html'] . '</p>';
+				$html .= $element['html'];
+				if ( ! empty( $element['error'] ) ) {
+					$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+				}
+				$html .= '</p>';
 			}
 
 			// Close the form tag
@@ -474,6 +595,9 @@
 			if ( array_key_exists( $name, $this->_filters ) ) {
 				if ( is_array( $this->_filters[ $name ] ) ) {
 					foreach ( $this->_filters[ $name ] as $filter ) {
+						if ( ! is_callable( $this->_regFilters[ $filter ]['callback'] ) ) {
+							YDFatalError( 'The callback specified for the filter "' . $name . '" is not valid' );
+						}
 						$value = call_user_func( $this->_regFilters[ $filter ]['callback'], $value );
 					}
 				}

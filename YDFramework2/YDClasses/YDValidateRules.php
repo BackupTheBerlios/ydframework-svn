@@ -21,7 +21,7 @@
 		 *	@param $opts	(not required)
 		 */
 		function required( $val, $opts='' ) {
-			if ( empty( strval( $val ) ) ) {
+			if ( empty( $val ) ) {
 				return false;
 			} else {
 				return true;

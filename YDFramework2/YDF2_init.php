@@ -13,6 +13,10 @@
 	 *	Webpage: http://www.yellowduck.be/
 	 *
 	 *	Author: Pieter Claerhout, pieter@yellowduck.be
+	 *
+	 *	@todo
+	 *		We need to re_evaluate the way we use constants. If you use the auto prepend, you are not able to override
+	 *		them anymore (which is bad). I think the easiest is to make them global variables instead.
 	 */
 
 	// Set the error reporting correctly.
