@@ -16,13 +16,6 @@
      *  This class uses the HTTP_USER_AGENT varaible to get information about 
      *  the browser the visitor used to perform the request. We determine the 
      *  browser name, the version and the platform it's running on.
-     *  
-     *  @todo
-     *      Raise error if the HTTP_USER_AGENT variable doesn't exist.
-     *
-     *  @todo
-     *      Refine this class to output pretty much the same information as the
-     *      phpSniff class. Maybe it's easier to use that class instead.
      *
      *  @todo
      *      Should we keep this class or have people look for their own classes
@@ -42,38 +35,51 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Get the user agent
-            $this->_agent = $_SERVER['HTTP_USER_AGENT'];
+            // Check if the user agent was specified
+            if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 
-            // Determine the browser name
-            if ( ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
-                $this->_version = $ver[1];
-                $this->_browser = 'ie';
-            } elseif ( ereg( 'Safari\/([0-9]+)', $this->_agent, $ver ) ) {
-                $this->_version = '1.0b' . $ver[1];
-                $this->_browser = 'safari';
-            } elseif ( ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
-                $this->_version = $ver[1];
-                $this->_browser = 'opera';
-            } elseif ( ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
-                $this->_version = $ver[1];
-                $this->_browser = 'mozilla';
-            } else {
-                $this->_version = 0;
-                $this->_browser = 'other';
-            }
+                // Mark everything as unknown
+                $this->_agent = 'unknown';
+                $this->_browser = 'unknown';
+                $this->_version = 'unknown';
+                $this->_platform = 'unknown';
 
-            // Determine the platform
-            if ( stristr( $this->_agent,'Win' ) ) {
-                $this->_platform = 'win';
-            } elseif ( stristr( $this->_agent,'Mac' ) ) {
-                $this->_platform = 'mac';
-            } elseif ( stristr( $this->_agent,'Linux' ) ) {
-                $this->_platform = 'linux';
-            } elseif ( stristr( $this->_agent,'Unix' ) ) {
-                $this->_platform = 'unix';
             } else {
-                $this->_platform = 'other';
+
+                // Get the user agent
+                $this->_agent = $_SERVER['HTTP_USER_AGENT'];
+
+                // Determine the browser name
+                if ( ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                    $this->_version = $ver[1];
+                    $this->_browser = 'ie';
+                } elseif ( ereg( 'Safari\/([0-9]+)', $this->_agent, $ver ) ) {
+                    $this->_version = '1.0b' . $ver[1];
+                    $this->_browser = 'safari';
+                } elseif ( ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                    $this->_version = $ver[1];
+                    $this->_browser = 'opera';
+                } elseif ( ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver ) ) {
+                    $this->_version = $ver[1];
+                    $this->_browser = 'mozilla';
+                } else {
+                    $this->_version = 0;
+                    $this->_browser = 'other';
+                }
+
+                // Determine the platform
+                if ( stristr( $this->_agent,'Win' ) ) {
+                    $this->_platform = 'win';
+                } elseif ( stristr( $this->_agent,'Mac' ) ) {
+                    $this->_platform = 'mac';
+                } elseif ( stristr( $this->_agent,'Linux' ) ) {
+                    $this->_platform = 'linux';
+                } elseif ( stristr( $this->_agent,'Unix' ) ) {
+                    $this->_platform = 'unix';
+                } else {
+                    $this->_platform = 'other';
+                }
+
             }
 
         }
