@@ -150,8 +150,8 @@
             <link href="#ch14">Debugging tools
                 <link href="#ch14_01">Overview</link>
                 <link href="#ch14_02">Showing debug information</link>
-                <link href="#ch14_03">Adding debugging information</link>
-                <link href="#ch14_04">Automatically showing debug information</link>
+                <link href="#ch14_03">Standard debug information</link>
+                <link href="#ch14_04">Adding debugging information</link>
             </link>
             <link href="#ch15">Other classes and modules
                 <link href="#ch15_01">What is discussed in this chapter?</link>
@@ -3560,24 +3560,170 @@ phptype</pre>
         <section name="ch14" label="Debugging tools" />
 
             <section name="ch14_01" label="Overview">
+
                 <br/>
-                Not written yet
+
+                Debugging is an integral part of every web application. 
+                Debugging is the art of finding problems in your web application
+                and fixing them. In the Yellow Duck Framework, there are a
+                number of tools in addition to the standard PHP tools that will
+                help you debugging your applications.
+
             </section>
 
             <section name="ch14_02" label="Showing debug information">
+
                 <br/>
-                Not written yet
+
+                When the Yellow Duck Framework is initialized, it automatically
+                defines a constant called YD_DEBUG which is a boolean telling us
+                if we are running in debug mode or not. Depending on this 
+                setting, the framework will either show or hide debugging
+                information.
+
+                <br/><br/>
+
+                There are a number of ways of turning on debugging in the
+                Yellow Duck Framework. The first and easiest one is to add the
+                parameter YD_DEBUG=1 to the URL of the request. This will
+                enable showing of the debug message. Take a look at the 
+                following URLs which demonstrate this:
+
+                <pre>http://localhost/test.php?YD_DEBUG=1
+http://localhost/test.php?id=01&#38;YD_DEBUG=1</pre>
+
+                This option will turn on the debug messages for the current
+                request only. If you are developing a new application, it might
+                be easier to constantly turn on debugging. This is done by
+                defining a constant called YD_DEBUG <b>before</b> you include
+                the YDF2_init.php file. Having this constant defined before you
+                initialize the framework will override the default debugging
+                settings, and will force the debugging to be turned on or off.
+
+                <br/><br/>
+
+                <i><b>Note</b>: for release applications, you want to prevent
+                users from seeing debug information. In order to prevent people
+                from using the YD_DEBUG URL parameter to show debug information,
+                which can reveal confidential information, make sure you define
+                the YD_DEBUG constant with a value of 0 before you initialize 
+                the framework.</i>
+
+                <br/><br/>
+
+                Now that we know how debugging information can be enabled, let's
+                have a look at how the Yellow Duck Framework displays this
+                information. We specifically choose not to use any popup windows
+                for this or display the information in the visible HTML code,
+                since both methods are not easy to handle. In the Yellow Duck
+                Framework, debugging information is added to the source code in
+                the form of HTML comments. This makes it easy to find them
+                without screwing up the layout of your pages. The following code
+                snippet shows you an example of HMTL code with debugging
+                information added:
+
+                <pre><font color="#000000">Supported languages: en</font>
+<font color="#000080">&lt;pre&gt;</font><font color="#000000">'en'</font><font color="#000080">&lt;/pre&gt;</font>
+<font color="#000000">Supported languages: nl, fr, en</font>
+<font color="#000080">&lt;pre&gt;</font><font color="#000000">'en'</font><font color="#000080">&lt;/pre&gt;</font>
+<font color="#000000">Browser languages:</font>
+<font color="#000080">&lt;pre&gt;</font><font color="#000000">array (</font>
+<font color="#000000">  0 =</font><font color="#800080">&amp;gt;</font><font color="#000000"> 'en',</font>
+<font color="#000000">  1 =</font><font color="#800080">&amp;gt;</font><font color="#000000"> 'nl',</font>
+<font color="#000000">  2 =</font><font color="#800080">&amp;gt;</font><font color="#000000"> 'fr',</font>
+<font color="#000000">)</font><font color="#000080">&lt;/pre&gt;</font>
+<font color="#808000">&lt;!-- [ YD_DEBUG ]</font>
+<font color="#808000">Processing time: 28 ms</font>
+<font color="#808000">--&gt;</font>
+
+<font color="#808000">&lt;!-- [ YD_DEBUG ]</font>
+
+<font color="#808000">No database queries executed.</font>
+<font color="#808000">--&gt;</font>
+
+<font color="#808000">&lt;!-- [ YD_DEBUG ]</font>
+<font color="#808000">Total size include files: 130 KB</font>
+<font color="#808000">--&gt;</font>
+
+<font color="#808000">&lt;!-- [ YD_DEBUG ]</font>
+<font color="#808000">Includes:</font>
+<font color="#808000">c:\apache\htdocs\ydf2\examples\language1.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDF2_init.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDBase.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\3rdparty\PEAR\PEAR.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDError.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDObjectUtil.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTimer.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDRequest.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDTemplate.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\3rdparty\PEAR\Savant.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDLanguage.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDClasses\YDDebugUtil.php</font>
+<font color="#808000">c:\apache\htdocs\ydf2\YDFramework2\YDF2_process.php</font>
+<font color="#808000">--&gt;</font></pre>
+
+                As you can see, the debug comments from the framework are always
+                prepended but the text "[ YD_DEBUG ]" to make them easily
+                recognizable. Each debug comment will also start on a new line
+                to make it even easier.
+
             </section>
 
-            <section name="ch14_03" label="Adding debugging information">
+            <section name="ch14_03" label="Standard debug information">
+
                 <br/>
-                Not written yet
+
+                By default, the Yellow Duck Framework shows a whole bunch of
+                standard extra information if you turn on debugging. The
+                following information is always shown in debugging mode:
+
+                <div><ul>
+                    <li>The total processing time in seconds for this 
+                    request.</li>
+                    <li>The number of database queries that were executed.</li>
+                    <li>The total filesize of the include files.</li>
+                    <li>The list of the full paths of the included files.</li>
+                </ul></div>
+
+                In the next section, we will see that it's very easy to add your
+                own debugging information.
+
             </section>
 
-            <section name="ch14_04" label="Automatically showing debug information">
+            <section name="ch14_04" label="Adding debugging information">
+
                 <br/>
-                Not written yet
+                
+                To add your own debugging information, you can use the
+                YDDebugUtil module. This module has three static functions
+                specifically designed for debugging purposes.
+
+                <br/><br/>
+
+                By using the static function call 
+                <code>YDDebugUtil::debug</code>, we can show our own debugging
+                information. This function takes a variable number of arguments
+                and will glue all these together before showing the debug 
+                message.
+
+                <br/><br/>
+
+                The static function call <code>YDDebugUtil::dump</code> will
+                dump the contents of any variable and display it on the screen.
+                It basically does the same as the native <code>var_dump</code>
+                function from PHP, but the output is much more readable.
+
+                <br/><br/>
+
+                The static function call <code>YDDebugUtil::r_dump</code> does
+                the same as the <code>YDDebugUtil::dump</code> function, but it
+                will return the information instead of displaying it. If you
+                combine this function together with the function
+                <code>YDDebugUtil::debug</code>, you can dump the contents of 
+                a variable as a debug message.
+
                 <page-break />
+
             </section>
 
         <section name="ch15" label="Other classes and modules" />
