@@ -49,15 +49,33 @@
             }
 
             // Check if the url is defined
-            if ( ! isset( $GLOBALS['dbAliasses'][ $_GET['id'] ] ) ) {
+            $dbAliasses = $GLOBALS['dbAliasses'];
+            if ( ! isset( $dbAliasses[ $_GET['id'] ] ) ) {
                 $this->setVar( 'error', 'Alias "' . $_GET['id'] . '" is not defined.' );
             } else {
 
                 // Connect to the database
-                $conn = new YDDbConn( $GLOBALS['dbAliasses'][ $_GET['id'] ] );
-                $result = $conn->connect();
-                if ( YDError::isError( $result ) ) {
-                    $this->setVar( 'error', $result->getError() );
+                $db = new YDDatabase( $dbAliasses[ $_GET['id'] ] );
+                $conn = $db->getConnection( false );
+
+                // Check for errors
+                if ( YDError::isError( $conn ) ) {
+
+                    // Assign the error object
+                    $this->setVar( 'error', $conn->getError() );
+                    
+                    // Set the result to none
+                    $this->setVar( 'result', null );
+
+                } else {
+
+                    // Perform a database query
+                    $db = new YDDatabase( $dbAliasses[ $_GET['id'] ] );
+                    $result = $db->executeSelect( 'show processlist' );
+
+                    // Assign the database result
+                    $this->setVar( 'result', $result );
+
                 }
 
             }

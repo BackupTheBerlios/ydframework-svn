@@ -15,7 +15,36 @@
         {if $error}
             <p style="color: red"><b>ERROR: {$error}</b></p>
         {else}
+
             <p>Connected succesfully to database alias <b>{$YD_GET.id}</b>!</p>
+
+            {if $result}
+                <table border="1">
+                <tr>
+                    <td><b>Id</b></td>
+                    <td><b>User</b></td>
+                    <td><b>Host</b></td>
+                    <td><b>db</b></td>
+                    <td><b>Command</b></td>
+                    <td><b>Time</b></td>
+                    <td><b>State</b></td>
+                    <td><b>Info</b></td>
+                </tr>
+                {foreach from=$result item="row"}
+                    <tr>
+                        <td>{$row.Id}</td>
+                        <td>{$row.User}</td>
+                        <td>{$row.Host}</td>
+                        <td>{$row.db}</td>
+                        <td>{$row.Command}</td>
+                        <td>{$row.Time}</td>
+                        <td>{$row.State}</td>
+                        <td>{$row.Info}</td>
+                    </tr>
+                {/foreach}
+                </table>
+            {/if}
+
         {/if}
 
         <p>[
