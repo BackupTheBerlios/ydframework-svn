@@ -32,6 +32,7 @@
     // This is the list of support languages
     $GLOBALS[ 'YD_LANGUAGES' ] = array(
         'en'  => array( 'eng', 'english', 'en_US' ),
+        'eng' => array( 'en', 'english', 'en_US' ),
         'cs'  => array( 'csy', 'czech' ),
         'csy' => array( 'czech', 'cs' ),
         'da'  => array( 'dan', 'danish' ),

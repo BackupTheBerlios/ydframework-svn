@@ -33,7 +33,8 @@
             YDLocale::set( 'nl' );
             YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
             YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
-
+            YDDebugUtil::dump( date("l dS of F Y h:i:s A"), 'date function' );
+            
             // Set the locale to Portugese
             YDLocale::set( 'ptg' );
             YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
