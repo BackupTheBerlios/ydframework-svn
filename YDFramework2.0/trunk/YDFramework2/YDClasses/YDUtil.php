@@ -247,6 +247,42 @@
 			return $data;
 		}
 
+		/**
+		 *	This function will print a stack trace.
+		 *
+		 *	@static
+		 */
+		function stackTrace() {
+			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
+				$err = '';
+				$err .= 'URI: ' . YD_SELF_URI . "\n";
+				$err .= 'Debug backtrace:' . "\n";
+				foreach( debug_backtrace() as $t ) {
+					$err .= '    @ '; 
+					if ( isset( $t['file'] ) ) {
+						$err .= basename( $t['file'] ) . ':' . $t['line']; 
+					} else {
+						$err .= basename( YD_SELF_FILE );
+					} 
+					$err .= ' -- '; 
+					if ( isset( $t['class'] ) ) {
+						$err .= $t['class'] . $t['type'];
+					}
+					$err .= $t['function'];
+					if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
+						$err .= '(...)';
+					} else {
+						$err .= '()';
+					}
+					$err .= "\n"; 
+				}
+				if ( ini_get( 'display_errors' ) == 1 ) {
+					echo( '<pre>' . "\n" . htmlentities( $err ) . '</pre>' );
+				}
+				error_log( $err, 0 );
+			}
+		}
+
 	}
 
 	/**

@@ -135,42 +135,6 @@
 	// Start the session
 	@session_start();
 
-	/**
-	 *	This function will print a stack trace.
-	 */
-	if ( ! function_exists( 'YDStackTrace' ) ) {
-		function YDStackTrace() {
-			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
-				$err = '';
-				$err .= 'URI: ' . YD_SELF_URI . "\n";
-				$err .= 'Debug backtrace:' . "\n";
-				foreach( debug_backtrace() as $t ) {
-					$err .= '    @ '; 
-					if ( isset( $t['file'] ) ) {
-						$err .= basename( $t['file'] ) . ':' . $t['line']; 
-					} else {
-						$err .= basename( YD_SELF_FILE );
-					} 
-					$err .= ' -- '; 
-					if ( isset( $t['class'] ) ) {
-						$err .= $t['class'] . $t['type'];
-					}
-					$err .= $t['function'];
-					if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
-						$err .= '(...)';
-					} else {
-						$err .= '()';
-					}
-					$err .= "\n"; 
-				}
-				if ( ini_get( 'display_errors' ) == 1 ) {
-					echo( '<pre>' . "\n" . htmlentities( $err ) . '</pre>' );
-				}
-				error_log( $err, 0 );
-			}
-		}
-	}
-
 	// Update the include path
 	$includePath = YD_SELF_DIR;
 	if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
@@ -208,8 +172,7 @@
 				return;
 			}
 			trigger_error(
-				'Failed to include the file: ' . $file . ' The file was not found in the include path.',
-				YD_ERROR
+				'Failed to include the file: ' . $file . ' The file was not found in the include path.', YD_ERROR
 			);
 		}
 	}

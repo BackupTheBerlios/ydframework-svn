@@ -4,6 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
+	YDInclude( 'YDUtil.php' );
 	YDInclude( 'YDRequest.php' );
 
 	// Class definition
@@ -25,7 +26,7 @@
 			}
 
 			// Get the file object for the current file
-			YDStackTrace();
+			YDDebugUtil::stackTrace();
 
 		}
 
