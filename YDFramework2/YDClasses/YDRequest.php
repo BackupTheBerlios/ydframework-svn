@@ -70,9 +70,6 @@
      *  function will check the value of the "do" parameter specified in the URL
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
-     *
-     *  @todo
-     *      $this->browser should not be instantiated automatically.
      */
     class YDRequest {
 
@@ -90,9 +87,6 @@
 
             // Create the template object
             $this->template = new YDTemplate();
-
-            // Create the browser object
-            $this->browser = new YDBrowserInfo();
 
             // Mark that the request is initialized
             $this->__isInitialized = true;
@@ -162,10 +156,6 @@
          *  including hostname, port and request URI.
          *
          *  @returns The full url of the current request.
-         *
-         *  @todo
-         *      Check if we can figure out the current scheme instead of hard
-         *      coding it to be http.
          */
         function getCurrentUrl() {
 

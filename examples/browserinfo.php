@@ -20,7 +20,7 @@
 
         // Default action
         function actionDefault() {
-            $this->setVar( 'browser', $this->browser );
+            $this->setVar( 'browser', new YDBrowserInfo() );
             $this->outputTemplate();
         }
 
