@@ -17,9 +17,6 @@
 		/**
 		 *	This is the class constructor for the YDRequest class. This sets the default action to 'actionDefault' (but
 		 *	can be overridden later on).
-		 *
-		 *	@remark
-		 *		Do we really need te YD_ACTION_DEFAULT constant?
 		 */
 		function YDRequest() {
 
@@ -148,7 +145,6 @@
 		 */
 		function process() {
 			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-				//$action = $this->getDefaultAction();
 				$action = YD_ACTION_DEFAULT;
 			} else {
 				$action = 'action' . $_GET[ YD_ACTION_PARAM ];
