@@ -359,15 +359,25 @@
 		<tr>
             <td valign="top"><a href="tplcache.php">Using template caching</a> </td>
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=tplcache.php">tplcache.php</a> <br/>
-                    <a href="{$YD_SELF_SCRIPT}?do=source&id=tplcache.tpl">tplcache.tpl</a> </td>
-		    </tr>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=tplcache.tpl">tplcache.tpl</a>
+			</td>
+		</tr>
 		<tr>
 			<td valign="top">
-				<a href="cart.php">YDCart object </a></td>
+				<a href="cart.php">YDCart object</a></td>
 			<td valign="top">
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=cart.php">cart.php</a>
 				<br/>
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=cart.tpl">cart.tpl</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
+				<a href="template_for.php">YDTemplate for loop</a></td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_for.php">template_for.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_for.tpl">template_for.tpl</a>
 			</td>
 		</tr>
 		</table>

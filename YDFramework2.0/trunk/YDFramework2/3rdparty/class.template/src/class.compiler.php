@@ -255,10 +255,10 @@ class compiler extends template {
 					$this->trigger_error("missing 'stop' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
 				if (!isset($_args['step']))
 					$_args['stop'] = 1;
-				if ($_args['start'] < $_args['stop'])
-					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' > ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' - ' . $_args['step'] . '): ?>';
+				if ($_args['start'] > $_args['stop'])
+					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' >= ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' - ' . $_args['step'] . '): ?>';
 				else
-					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' < ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' + ' . $_args['step'] . '): ?>';
+					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' <= ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' + ' . $_args['step'] . '): ?>';
 				if (isset($_args['value']))
 					$_result .= '<?php $this->assign(\'' . $this->_dequote($_args['value']) . '\', $for' . $this->_for_stack . '); ?>';
 				return $_result;
