@@ -36,20 +36,20 @@
     <hr size="1" noshade>
 
     <h3>1. Introducing the Yellow Duck Framework</h3>
-    
+
     <hr size="1" noshade>
 
     <p><b>Introduction</b></p>
 
     <p>The Yellow Duck framework is web application framework created by
-    Pieter Claerhout. More information can be found on 
+    Pieter Claerhout. More information can be found on
     <a href="http://www.yellowduck.be/">http://www.yellowduck.be/</a>.</p>
 
-    <p>The Yellow Duck Framework takes care of all the difficult work you 
-    normally have to perform manually when developing a web application. It is 
-    based on the idea of requests that can perform actions. By encapsulating all 
-    the programming in an object-oriented environment, you get a framework that 
-    is easy to use and understand, easy to extend and doesn't limit you in any 
+    <p>The Yellow Duck Framework takes care of all the difficult work you
+    normally have to perform manually when developing a web application. It is
+    based on the idea of requests that can perform actions. By encapsulating all
+    the programming in an object-oriented environment, you get a framework that
+    is easy to use and understand, easy to extend and doesn't limit you in any
     way.</p>
 
     <p>The Yellow Duck Framework provides you with the following options:</p>
@@ -59,13 +59,13 @@
         <li>Templates for outputting HTML easily</li>
         <li>Automatic action dispatching using URL parameters</li>
         <li>Object oriented form construction and validation</li>
-        <li>PEAR based database connectivity which supports all major database 
+        <li>PEAR based database connectivity which supports all major database
         engines such as MySQL, PostgreSQL, Oracle, Microsoft SQL Server, ...</li>
         <li>Object oriented handling of authentication</li>
-        <li>To implement the base functionality, a lot of standard libraries 
-        were used. Included is a partial copy of the PEAR library from the PHP 
-        project, which provides things such as database connectivity. More 
-        information and documentation on the PEAR library can be found on 
+        <li>To implement the base functionality, a lot of standard libraries
+        were used. Included is a partial copy of the PEAR library from the PHP
+        project, which provides things such as database connectivity. More
+        information and documentation on the PEAR library can be found on
         <a href="http://pear.php.net/">http://pear.php.net/</a>.</li>
     </ul>
 
@@ -79,40 +79,39 @@
     <p>Let's take a look at an example script to understand how this works:</p>
 
     <b>Source: sample1.php</b><br>
-<pre class="fragment"><div>  <span class="comment">// Initialize the Yellow Duck Framework.</span>
-  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+<pre class="fragment"><span class="comment">// Initialize the Yellow Duck Framework.</span>
+require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
 
-  <span class="comment">// Includes.</span>
-  require_once( 'YDRequest.php' );
+<span class="comment">// Includes.</span>
+require_once( 'YDRequest.php' );
 
-  <span class="comment">// Class definition for the sample request.</span>
-  <span class="keyword">class </span>sample1Request <span class="keyword">extends</span> <a class="code">YDRequest</a> {
-  
-      <span class="comment">// Class constructor</span>
-      function <a class="code">sample1Request</a>() {
-  
-          <span class="comment">// Initialize the parent class</span>
-          $this-&gt;<a class="code">YDRequest</a>();
-  
-      }
-  
-      <span class="comment">// Default action</span>
-      function <a class="code">actionDefault</a>() {
-          $this-&gt;<a class="code">setVar</a>( 'title', 'sample1Request::actionDefault' );
-          $this-&gt;<a class="code">outputTemplate</a>();
-      }
-  
-      <span class="comment">// Edit action</span>
-      function <a class="code">actionEdit</a>() {
-          $this-&gt;<a class="code">setVar</a>( 'title', 'sample1Request::actionEdit' );
-          $this-&gt;<a class="code">outputTemplate</a>();
-      }
-  
-  }
-  
-  <span class="comment">// Process the request</span>
-  require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );
-</div></pre>
+<span class="comment">// Class definition for the sample request.</span>
+class sample1Request extends YDRequest {
+
+    <span class="comment">// Class constructor</span>
+    function sample1Request() {
+
+        <span class="comment">// Initialize the parent class</span>
+        $this-&gt;YDRequest();
+
+    }
+
+    <span class="comment">// Default action</span>
+    function actionDefault() {
+        $this-&gt;setVar( 'title', 'sample1Request::actionDefault' );
+        $this-&gt;outputTemplate();
+    }
+
+    <span class="comment">// Edit action</span>
+    function actionEdit() {
+        $this-&gt;setVar( 'title', 'sample1Request::actionEdit' );
+        $this-&gt;outputTemplate();
+    }
+
+}
+
+<span class="comment">// Process the request</span>
+require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_process.php' );</pre>
 
     <p>The template file that goes along with this script looks as follows:</p>
 
@@ -129,7 +128,7 @@
     <p>When you request the following URL, a number of things happen:</p>
 
     <pre class="fragment">http://localhost/sample1.php</pre>
-    
+
     <p>The first line you see in the sample1.php script is the include of the
     file called "YDF2_init.php". This file is responsible for setting up the
     Yellow Duck Framework, and does things such as:</p>
@@ -141,7 +140,7 @@
         <li>Reconfigures the PHP include path</li>
         <li>Includes the different files from the rest of the framework</li>
     </ul>
-    
+
     <p>After that, we define a new class, called "sample1Request" which is based
     on the YDRequest class. For each script, you need to have 1 class which is
     named as the basename of the file (sample1 in this case) and is appended

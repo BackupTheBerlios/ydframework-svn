@@ -1,6 +1,6 @@
 <?php
 
-    // Standard include
+    // Initialize the Yellow Duck Framework
     require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
     // Includes
@@ -9,13 +9,13 @@
     require_once( 'YDObjectUtil.php' );
     require_once( 'YDForm.php' );
 
-    // Class definition
+    // Class definition for the index request
     class indexRequest extends YDRequest {
 
         // Class constructor
         function indexRequest() {
 
-            // Initialize the request
+            // Initialize the parent class
             $this->YDRequest();
 
             // Set the path to the data directory
@@ -23,7 +23,7 @@
 
         }
 
-        // Default action will list the contents of the files
+        // Default action
         function actionDefault() {
 
             // Start with an empty list of entries
@@ -42,7 +42,7 @@
                 array_push( $entries, $entry );
 
             }
-            
+
             // Add the entries to the template
             $this->setVar( 'entries', $entries );
 
@@ -51,8 +51,8 @@
 
         }
 
-        // Function to add an entry
-        function actionAddEntry() {
+        // Add Note action
+        function actionAddNote() {
 
             // Create the add form
             $form = new YDForm( 'addEntryForm' );
@@ -61,7 +61,7 @@
             $form->addElement( 'text', 'title', 'Title:' );
             $form->addElement( 'textarea', 'body', 'Contents:' );
             $form->addElement( 'submit', 'cmdSubmit', 'Save' );
-            
+
             // Apply filters
             $form->applyFilter( 'title', 'trim' );
             $form->applyFilter( 'body', 'trim' );
@@ -74,8 +74,8 @@
             if ( $form->validate() ) {
 
                 // Save the entries in an array
-                $entry = array( 
-                    'id' => md5(  
+                $entry = array(
+                    'id' => md5(
                         $form->exportValue( 'title' ) . $form->exportValue( 'body' )
                     ),
                     'title' => $form->exportValue( 'title' ),
@@ -104,17 +104,14 @@
 
         }
 
-        // Function to delete an entry
-        function actionDeleteEntry() {
+        // Delete note action
+        function actionDeleteNote() {
 
             // Delete the file related to the entry
             $this->dataDir->deleteFile( $_GET['id'] . '.dat' );
 
             // Forward to the list view
             $this->forward( 'default' );
-
-            // Return
-            return;
 
         }
 

@@ -12,14 +12,14 @@
 
         <h3>Notes</h3>
 
-        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddEntry">Add a new note</a></p>
+        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddNote">Add a new note</a></p>
 
         <?php if ( $entries ) { ?>
 
             <?php foreach ( $entries as $entry ) { ?>
                 <p>
                 <b><?= $entry['title'] ?></b>
-                [ <a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteEntry&id=<?= $entry['id'] ?>">delete</a> ]
+                [ <a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteNote&id=<?= $entry['id'] ?>">delete</a> ]
                 <br>
                 <?= $entry['body'] ?>
                 </p>
@@ -31,15 +31,15 @@
 
     <?php } ?>
 
-    <?php if ( $YD_ACTION == 'addentry' ) { ?>
+    <?php if ( $YD_ACTION == 'addnote' ) { ?>
 
         <h3>Add a new note</h3>
 
         <?php if ( $form['errors'] ) { ?>
             <p style="color: red"><b>Errors during processing:</b>
-            <?php foreach ( $form['errors'] as $error ) { ?>
-                <br><?= $error ?>
-            <?php } ?>
+                <?php foreach ( $form['errors'] as $error ) { ?>
+                    <br><?= $error ?>
+                <?php } ?>
             </p>
         <?php } ?>
 
