@@ -77,11 +77,9 @@
                 );
 
                 // Save the serialized entry to a file
-                $fp = fopen( 
-                    $this->dataDir->getPath() . '/' . $entry['id'] . '.dat', 'wb' 
+                $this->dataDir->createFile(
+                    $entry['id'] . '.dat', YDObjectUtil::serialize( $entry )
                 );
-                fwrite( $fp, YDObjectUtil::serialize( $entry ) );
-                fclose( $fp );
 
                 // Forward to the list view
                 $this->forward( 'default' );

@@ -1,4 +1,4 @@
-<?php
+<u></u><?php
 
     /*
 
@@ -110,7 +110,41 @@
         }
 
         // should return file object
-        function createFile() {
+        /**
+         *  This function will create a new file in the current directory, and
+         *  will write the specified contents to the file. Once finished, it
+         *  will return a new YDFSFile object pointing to the file. All
+         *  directory paths are relative to the current directory.
+         *
+         *  @param $filename The filename of the new file.
+         *  @param $contents The contents of the new file.
+         *
+         *  @returns YDFSFile or YDFSImage object pointing to the new file.
+         */
+        function createFile( $filename, $contents ) {
+
+            // Set the directory of this object as the working directory
+            chdir( $this->_path );
+
+            // Create the new file
+            $fp = fopen( $filename, 'wb' );
+
+            // Save the contents to the file
+            fwrite( $fp, $contents );
+
+            // Close the file
+            fclose( $fp );
+
+            // Create the YDFSFile object
+            $obj = new YDFSFile( $filename );
+
+            // Check if it's an image
+            if ( $obj->isImage() ) {
+                $obj = new YDFSImage( $filename );
+            }
+
+            // Return the file object
+            return $obj;
 
         }
 
