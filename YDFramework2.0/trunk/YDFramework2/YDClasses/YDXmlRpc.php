@@ -323,7 +323,7 @@
 			}
 
 			// Create a new template
-			YDInclude( 'YDTemplate.php' );
+			YDInclude( 'YDTemplateSmarty.php' );
 			$template = new YDTemplate();
 			$template->template_dir = dirname( __FILE__ );
 			$template->assign( 'methods', $methods );

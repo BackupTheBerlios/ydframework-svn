@@ -27,12 +27,12 @@
 	<p class="titleSmall">XML-RPC interface methods</p>
 
 	<table border="0" width="100%" cellpadding="0"  cellspacing="0">
-		{foreach from=$methods item=methodInfo key=method}
+		{foreach from=$methods item="methodInfo" key="method"}
 			<tr class="{cycle values="rowDark,rowLight" advance=0}">
 				<td class="cell"><b>
-					{if $methodInfo[paramsIn]}
+					{if $methodInfo.paramsIn}
 						{$method}(
-						{$methodInfo[paramsIn]|@implode:' '|lower}
+						{$methodInfo.paramsIn|@implode:' '|lower}
 						)
 					{else}
 						{$method}()
@@ -40,20 +40,12 @@
 				</b></td>
 				<td align="right" class="cell">
 					returns:
-					{if $methodInfo[paramsOut]}
-						{$methodInfo[paramsOut]|lower}
-					{else}
-						none
-					{/if}
+					{if $methodInfo.paramsOut}{$methodInfo.paramsOut|lower}{else}none{/if}
 				</td>
 			</tr>
 			<tr class="{cycle values="rowDark,rowLight" advance=1}">
 				<td colspan="2" class="cell">
-					{if $methodInfo[help]}
-						{$methodInfo[help]}
-					{else}
-						No help available.
-					{/if}
+					{if $methodInfo.help}{$methodInfo.help}{else}No help available.{/if}
 				</td>
 			</tr>
 		{/foreach}
@@ -62,11 +54,11 @@
 	<p class="titleSmall">XML-RPC interface capabilities</p>
 
 	<table border="0" width="100%" cellpadding="3"  cellspacing="0">
-		{foreach from=$capabilities item=info key=key}
+		{foreach from=$capabilities item="info" key="key"}
 			<tr class="{cycle values="rowDark,rowLight"}">
 				<td class="cell">{$key}</td>
-				<td class="cell"><a href="{$info.specUrl}" target="_blank">{$info[specUrl]}</a></td>
-				<td class="cell" align="right">version {$info[specVersion]}</td>
+				<td class="cell"><a href="{$info.specUrl}" target="_blank">{$info.specUrl}</a></td>
+				<td class="cell" align="right">version {$info.specVersion}</td>
 			</tr>
 		{/foreach}
 	</table>
