@@ -41,10 +41,6 @@
             // Get the different other things
             echo( 'Browser languages:' );
             YDDebugUtil::dump( $langn->getBrowserLanguages() );
-        
-            // Get the different other things
-            echo( 'Locale:' );
-            YDDebugUtil::dump( $langn->getLocale() );
 
         }
 

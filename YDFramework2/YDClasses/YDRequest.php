@@ -38,10 +38,6 @@
      *  function will check the value of the "do" parameter specified in the URL
      *  to find out which action function it needs to call. If the do parameter
      *  specified "edit" as the action, the actionEdit function will be called.
-     *
-     *  @todo
-     *      Add function getTemplate to get an instance of a template instead of
-     *      creating one by default.
      */
     class YDRequest extends YDBase {
 

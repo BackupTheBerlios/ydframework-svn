@@ -113,9 +113,6 @@
          *  @param $dateFormat Date format to use.
          *
          *  @return Formatted date
-         *
-         *  @todo
-         *      Do we really need this function or can we take it out?.
          */
         function formatDate( $text, $dateFormat ) {
 

@@ -122,19 +122,6 @@
 
         }
 
-        /**
-         *  Function used to get the current locale.
-         *
-         *  @return String containing the current locale.
-         *
-         *  @todo
-         *      Needs to take the locale from the browser languages.
-         */
-        function getLocale() {
-            $langCode = $this->getLanguage();
-            return $langCode  . '_' . strtoupper( $langCode  );
-        }
-
     }
 
 ?>
