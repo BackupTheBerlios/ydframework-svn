@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.1.0
+ * Version:	2.1.2
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -159,7 +159,7 @@ class compiler extends template {
 
 		// add the required requires
 		while($add = array_pop($this->_require_stack))
-			$compiled_text = '<?php require_once("'. $this->_get_plugin_dir() . $add[0] . '"); $this->register_' . $add[1] . '("' . $add[2] . '", "' . $add[3] . '"); ?>' . $compiled_text;
+			$compiled_text = '<?php require_once(\''. $this->_get_plugin_dir() . $add[0] . '\'); $this->register_' . $add[1] . '("' . $add[2] . '", "' . $add[3] . '"); ?>' . $compiled_text;
 
 		// remove unnecessary close/open tags
 		$compiled_text = preg_replace('!\?>\n?<\?php!', '', $compiled_text);
@@ -327,9 +327,7 @@ class compiler extends template {
 				break;
 			default:
 				$_result = "";
-				if ($this->_compile_custom_compiler($function, $arguments, $_result)) {
-					return $_result;
-				} elseif ($this->_compile_custom_block($function, $modifiers, $arguments, $_result)) {
+				if ($this->_compile_custom_block($function, $modifiers, $arguments, $_result)) {
 					return $_result;
 				} elseif ($this->_compile_custom_function($function, $modifiers, $arguments, $_result)) {
 					return $_result;
@@ -341,7 +339,7 @@ class compiler extends template {
 	}
 
 	function _compile_custom_function($function, $modifiers, $arguments, &$_result) {
-		if ($this->_plugin_exists($function, "function")) {
+		if ($function = $this->_plugin_exists($function, "function")) {
 			$_args = $this->_parse_arguments($arguments);
 			foreach($_args as $key => $value) {
 				if (is_bool($value))
@@ -352,9 +350,9 @@ class compiler extends template {
 			}
 			$_result = '<?php echo ';
 			if (!empty($modifiers)) {
-				$_result .= $this->_parse_modifier('tpl_function_' . $function . '(array(' . implode(',', (array)$_args) . '), $this)', $modifiers) . '; ';
+				$_result .= $this->_parse_modifier($function . '(array(' . implode(',', (array)$_args) . '), $this)', $modifiers) . '; ';
 			} else {
-				$_result .= 'tpl_function_' . $function . '(array(' . implode(',', (array)$_args) . '), $this);';
+				$_result .= $function . '(array(' . implode(',', (array)$_args) . '), $this);';
 			}
 			$_result .= '?>';
 			return true;
@@ -371,7 +369,7 @@ class compiler extends template {
 			$start_tag = true;
 		}
 
-		if ($this->_plugin_exists($function, "block")) {
+		if ($function = $this->_plugin_exists($function, "block")) {
 			if ($start_tag) {
 				$_args = $this->_parse_arguments($arguments);
 				foreach($_args as $key => $value) {
@@ -382,27 +380,16 @@ class compiler extends template {
 					$_args[$key] = "'$key' => $value";
 				}
 				$_result = "<?php \$this->_tag_stack[] = array('$function', array(".implode(',', (array)$_args).")); ";
-				$_result .= 'tpl_block_' . $function . '(array(' . implode(',', (array)$_args) .'), null, $this); ';
+				$_result .= $function . '(array(' . implode(',', (array)$_args) .'), null, $this); ';
 				$_result .= 'ob_start(); ?>';
 			} else {
 				$_result .= '<?php $this->_block_content = ob_get_contents(); ob_end_clean(); ';
-				$_result .= '$this->_block_content = tpl_block_' . $function . '($this->_tag_stack[count($this->_tag_stack) - 1][1], $this->_block_content, $this); ';
+				$_result .= '$this->_block_content = ' . $function . '($this->_tag_stack[count($this->_tag_stack) - 1][1], $this->_block_content, $this); ';
 				if (!empty($modifiers)) {
 					$_result .= '$this->_block_content = ' . $this->_parse_modifier('$this->_block_content', $modifiers) . '; ';
 				}
 				$_result .= 'echo $this->_block_content; array_pop($this->_tag_stack); ?>';
 			}
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function _compile_custom_compiler($function, $arguments, &$_result) {
-		if ($this->_plugin_exists($function, "compiler")) {
-			$_args[] = $this->_parse_arguments($arguments);
-			$_args[] = &$this;
-			$_result = '<?php ' . call_user_func_array($this->_plugins["compiler"][$function], $_args) . ' ?>';
 			return true;
 		} else {
 			return false;
@@ -769,15 +756,18 @@ class compiler extends template {
 	}
 
 	function _plugin_exists($function, $type) {
+		// check for object functions
+		if (isset($this->_plugins[$type][$function]) && is_array($this->_plugins[$type][$function]) && is_object($this->_plugins[$type][$function][0]) && method_exists($this->_plugins[$type][$function][0], $this->_plugins[$type][$function][1]))
+			return '$this->_plugins[\'' . $type . '\'][\'' . $function . '\'][0]->' . $this->_plugins[$type][$function][1];
+		// check for standard functions
 		if (isset($this->_plugins[$type][$function]) && function_exists($this->_plugins[$type][$function]))
-			return true;
-		if (file_exists($this->_get_plugin_dir().$type.'.'.$function.'.php')) {
-			require_once($this->_get_plugin_dir().$type . '.' . $function . '.php');
+			return $this->_plugins[$type][$function];
+		// check for a plugin in the plugin directory
+		if (file_exists($this->_get_plugin_dir() . $type . '.' . $function . '.php')) {
+			require_once($this->_get_plugin_dir() . $type . '.' . $function . '.php');
 			if (function_exists('tpl_' . $type . '_' . $function)) {
-				array_push($this->_require_stack, array($type . '.' . $function . '.php',$type,$function,'tpl_' . $type . '_' . $function));
-				$_register = 'register_' . $type;
-				$this->$_register($function, 'tpl_' . $type . '_' . $function);
-				return true;
+				array_push($this->_require_stack, array($type . '.' . $function . '.php', $type, $function, 'tpl_' . $type . '_' . $function));
+				return ('tpl_' . $type . '_' . $function);
 			}
 		}
 		return false;

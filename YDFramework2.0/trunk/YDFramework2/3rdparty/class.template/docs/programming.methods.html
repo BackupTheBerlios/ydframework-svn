@@ -293,24 +293,6 @@
 </p>
 <hr>
 
-<h2><a name="register_compiler"><code>register_compiler</code></a></h2>
-<code>void <b>register_compiler</b>(string $function, callback $implementation)</code><br>
-<p>
-	<h4>Description</h4>
-	Use this to dynamically register a compiler function. Pass in the compiler function name, followed by the PHP function that implements it.
-	The php-function callback <code>$implementation</code> can either be a string containing the function name, or an array of the form <code>array(&$object, $method)</code> with <code>&$object</code> being a reference to an object and <code>$method</code> being a string that contains the method name, or an array of the form <code>array(&$class, $method)</code> with <code>&$class</code> being a reference to a class and <code>$method</code> being a method of that class.<br><br>
-	Template compiler functions will directly insert code to the template when the template is compiled, allowing for greater customizability to the template.
-</p>
-<hr>
-
-<h2><a name="unregister_compiler"><code>unregister_compiler</code></a></h2>
-<code>void <b>unregister_compiler</b>(string $function)</code><br>
-<p>
-	<h4>Description</h4>
-	Use this to dynamically unregister a template compiler function. Pass in the template function name.
-</p>
-<hr>
-
 <h2><a name="register_block"><code>register_block</code></a></h2>
 <code>void <b>register_block</b>(string $function, $string implementation)</code><br>
 <p>

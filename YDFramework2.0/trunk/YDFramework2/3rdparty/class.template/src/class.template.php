@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.1.0
+ * Version:	2.1.2
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -174,15 +174,6 @@ class template {
 	function unregister_function($function) {
 		if (isset($this->_plugins["function"][$function]))
 			unset($this->_plugins["function"][$function]);
-	}
-
-	function register_compiler($function, $implementation) {
-		$this->_plugins["compiler"][$function] = $implementation;
-	}
-
-	function unregister_compiler($function) {
-		if (isset($this->_plugins["compiler"][$function]))
-			unset($this->_plugins["compiler"][$function]);
 	}
 
 	function register_block($function, $implementation) {

@@ -178,23 +178,6 @@
 		}
 
 		/**
-		 *	Use this to dynamically register a compiler function. Pass in the compiler function name, followed by the
-		 *	PHP function that implements it. The php-function callback $implementation can either be a string containing
-		 *	the function name, or an array of the form array(&$object, $method) with &$object being a reference to an 
-		 *	object and $method being a string that contains the method name, or an array of the form
-		 *	array(&$class, $method) with &$class being a reference to a class and $method being a method of that class.
-		 *
-		 *	Template compiler functions will directly insert code to the template when the template is compiled,
-		 *	allowing for greater customizability to the template.
-		 *
-		 *	@param $function		Name of the compiler.
-		 *	@param $implementation	Function implementing the compiler.
-		 */
-		function registerCompiler( $function, $implementation ) {
-			$this->_tpl->registerCompiler( $function, $implementation );
-		}
-
-		/**
 		 *	Use this to dynamically register a block function. Pass in the block function name, followed by the PHP
 		 *	function that implements it. The php-function callback $implementation can either be a string containing the
 		 *	function name, or an array of the form array(&$object, $method) with &$object being a reference to an object 
