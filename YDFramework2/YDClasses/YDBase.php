@@ -10,22 +10,15 @@
         die( 'ERROR: Yellow Duck Framework is not loaded.' );
     }
 
-    // Include the needed files
-    require_once( 'PEAR.php' );
-
     /**
      *  This is the base class for all other YD classes.
      */
-    class YDBase extends PEAR {
+    class YDBase {
 
         /** 
          *  The class constructor for the YDBase class.
          */
         function YDBase() {
-
-            // Initialize PEAR
-            $this->PEAR();
-
         }
 
         /**
