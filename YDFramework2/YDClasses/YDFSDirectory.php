@@ -117,7 +117,19 @@
             return realpath( $this->_path );
         }
 
-        // should return file object
+        /**
+         *  This function will return true if the directory is writeable,
+         *  otherwise, it will return false.
+         *
+         *  @remarks
+         *      This only works correctly on Unix based systems.
+         *
+         *  @returns Boolean indicating if the directory is writeable or not.
+         */
+        function isWriteable() {
+            return is_writable( $this->getPath() );
+        }
+
         /**
          *  This function will create a new file in the current directory, and
          *  will write the specified contents to the file. Once finished, it

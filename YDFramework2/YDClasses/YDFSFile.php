@@ -221,6 +221,19 @@
 
         }
 
+        /**
+         *  This function will return true if the directory is writeable,
+         *  otherwise, it will return false.
+         *
+         *  @remarks
+         *      This only works correctly on Unix based systems.
+         *
+         *  @returns Boolean indicating if the directory is writeable or not.
+         */
+        function isWriteable() {
+            return is_writable( $this->getAbsolutePath() );
+        }
+
     }
 
 ?>

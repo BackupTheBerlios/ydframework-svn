@@ -118,6 +118,7 @@
         <li>YDFSDirectory (class)</li>
         <li>YDFSFile (class)</li>
         <li>YDForm (class)</li>
+        <li>YDError and YDFatalError (classes)</li>
         <li>YDObjectUtil (module)</li>
     </ul>
 
@@ -165,6 +166,7 @@ require_once( 'YDRequest.php' );
 require_once( 'YDFSDirectory.php' );
 require_once( 'YDObjectUtil.php' );
 require_once( 'YDForm.php' );
+require_once( 'YDError.php' );
 
 <span class="comment">// Class definition for the index request</span>
 class indexRequest extends YDRequest {
@@ -267,12 +269,20 @@ http://localhost/firstapp/index.php?do=oops</pre>
     <p>Once you did that, add the following code to the class constructor:</p>
 
 <pre class="fragment"><span class="comment">// Set the path to the data directory</span>
-$this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );</pre>
+$this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
+
+<span class="comment">// Check if the data directory is writeable</span>
+if ( ! $this->dataDir->isWriteable() ) {
+    new YDFatalError( 'Data directory must be writable!' );
+}</pre>
 
     <p>With this code, we create a new YDFSDirectory class which represents a 
     folder on disk. We define it specifically create it in the class constructor
     to ensure that all the actions are able to use this object (each action
     needs this).</p>
+
+    <p>We also check if the directory is writeable by the webserver process to
+    ensure that we will be able to save the notes in that directory.</p>
 
     <p>Later on, we will see that we can use this object to get a directory
     listing, but we will also  use it to delete and create new files.</p>

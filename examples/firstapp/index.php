@@ -8,6 +8,7 @@
     require_once( 'YDFSDirectory.php' );
     require_once( 'YDObjectUtil.php' );
     require_once( 'YDForm.php' );
+    require_once( 'YDError.php' );
 
     // Class definition for the index request
     class indexRequest extends YDRequest {
@@ -20,6 +21,11 @@
 
             // Set the path to the data directory
             $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
+
+            // Check if the data directory is writeable
+            if ( ! $this->dataDir->isWriteable() ) {
+                new YDFatalError( 'Data directory must be writable!' );
+            }
 
         }
 
