@@ -6,7 +6,7 @@
 	// Includes
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class fileupload extends YDRequest {
@@ -32,9 +32,9 @@
 
 			// Add a rule
 			$form->addRule( 'file1', 'uploadedfile', 'You need to select a valid file' );
-			$form->addRule( 'file1', 'maxlength', 'Path can only be 3 characters', 8 );
+			//$form->addRule( 'file1', 'maxlength', 'Path can only be 8 characters', 8 );
 			$form->addRule( 'file1', 'maxfilesize', 'Maximum filesize of 10 KB is exceeded!', 10*1024 );
-			$form->addRule( 'file1', 'extension', 'File extension should be txt!', 'txt' );
+			//$form->addRule( 'file1', 'extension', 'File extension should be txt!', 'txt' );
 
 			// Process the form
 			if ( $form->validate() ) {

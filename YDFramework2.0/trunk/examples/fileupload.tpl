@@ -12,8 +12,8 @@
 
 	{if $formValid}
 
-		<p>The file <b>{$form[file1][value][name]}</b>
-		({$form[file1][value][size]|fmtfilesize})
+		<p>The file <b>{$form.file1.value.name}</b>
+		({$form.file1.value.size|fmtfilesize})
 		was uploaded successfully!</p>		
 
 	{else}
