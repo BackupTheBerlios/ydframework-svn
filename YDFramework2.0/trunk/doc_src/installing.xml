@@ -152,12 +152,15 @@ php_flag zlib.output_compression On]]></programlisting>
         <para>Since we do not want people to access the template files directly, we need to tell Apache to deny access to these files. This can be done by adding the following code to the .htaccess file:</para>
 
         <programlisting><![CDATA[# Denying direct access to the templates
-<FilesMatch "(.tpl|config.php|includes)$">
+<FilesMatch "(.tpl|config.php)$">
     Order allow,deny
     Deny from all
-</FilesMatch>]]></programlisting>
+</FilesMatch>
 
-        <para>In the example above, I also denied access to the config.php file, as I do not want people to access this file directly. Access to the YDFramework2 and include directories are also denied.</para>
+# Disable directory browsing
+Options -Indexes]]></programlisting>
+
+        <para>In the example above, I also denied access to the config.php file, as I do not want people to access this file directly. Directory browsing in the folder is also prehibited to improve security.</para>
 
     </sect1>
         
