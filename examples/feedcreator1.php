@@ -25,26 +25,31 @@
             $this->fc = new YDFeedCreator();
             $this->fc->setTitle( 'Yellow Duck Framework & Co.' );
             $this->fc->setDescription( 'News about the Yellow Duck Framework & Co.' );
-            $this->fc->setLink( 'http://www.yellowduck.be/ydf2/' );
+            $this->fc->setLink( $this->getCurrentUrl() );
             $this->fc->setImage(
                 'Pieter &<> Fiona',
-                'http://www.yellowduck.be/ydf2/',
+                $this->getCurrentUrl(),
                 'http://www.yellowduck.be/images/site_images/YellowDuckEendje.gif'
             );
             $this->fc->addItem(
                 'Title 1 & Co.',
-                'http://www.yellowduck.be/ydf2/#1',
+                $this->getCurrentUrl() . '#1',
                 'Description 1 & Co.'
             );
             $this->fc->addItem(
                 'Title 2 & Co.',
-                'http://www.yellowduck.be/ydf2/#2',
+                $this->getCurrentUrl() . '#2',
                 'Description <b>2</b> & Co.'
             );
             $this->fc->addItem(
                 '<h3>Title 3 & Co.</h3>',
-                'http://www.yellowduck.be/ydf2/#2',
+                $this->getCurrentUrl() . '#3',
                 'Description 3 & Co.'
+            );
+            $this->fc->addItem(
+                '<h3>Title 4 & Co.</h3>',
+                $this->getCurrentUrl() . '#4',
+                '<img src="fsimage1.jpg">'
             );
 
         }

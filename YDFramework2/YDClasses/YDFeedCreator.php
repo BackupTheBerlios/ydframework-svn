@@ -21,6 +21,16 @@
      *  and Atom feeds in a very easy and straightforward way. If you set up
      *  your class instance, you can automatically output to the different
      *  versions of RSS and ATOM with the same source data.
+     *
+     *  @todo
+     *      Descriptions of ATOM feeds should be filtered for invalid elements.
+     *
+     *  @todo
+     *      If you specify a relative link to e.g. an image, it should be
+     *      converted to an absolute link. Get the list of tags we need to fix
+     *      from Mark Pilgrim's feed parser. Most parsers seems to do a good
+     *      job on this if the feed is RSS, but I think ATOM requires you to
+     *      have absolute links.
      */
     class YDFeedCreator extends YDBase {
 
