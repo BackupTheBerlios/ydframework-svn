@@ -25,6 +25,9 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	// Add a global marker
+	//YDGlobalTimerMarker( 'Initial setup' );
+
 	/**
 	 *	This is the executor class that contains all the logic for executing requests. It will instantiate the request
 	 *	class and execute the right functions to get the request processed correctly.
@@ -107,9 +110,6 @@
 			// Mark that the request is processed
 			define( 'YD_REQ_PROCESSED', 1 );
 
-			// Stop the timer
-			$elapsed = $GLOBALS['timer']->getElapsed();
-
 			// Total size of include files
 			$includeFiles = get_included_files();
 
@@ -131,12 +131,26 @@
 				array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
 			}
 
+			// Stop the timer
+			$GLOBALS['timer']->finish();
+
 			// Show debugging info if needed
 			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 
 				// Create the debug messages
 				$debug = "\n\n";
-				$debug .= 'Processing time: ' . $elapsed . ' ms' . "\n\n";
+
+				// Create the timings report
+				$debug .= "Processing time:\n\n";
+				$debug .= "\t0 ms\tStart\n";
+				foreach ( $GLOBALS['timer']->markers as $marker ) {
+					foreach ( $marker as $key=>$val ) {
+						$debug .= "\t" . $val . ' ms' . "\t" .$key . "\n";
+					}
+				}
+				$debug .= "\n";
+
+				// Create the include file details
 				$debug .= 'Total size include files: ' . $includeFilesSize . "\n\n";
 				$debug .= 'Included files: ' . "\n\n\t" . implode( "\n\t", $includeFiles ) . "\n\n";
 
@@ -155,10 +169,8 @@
 				YDDebugUtil::debug( $debug );
 
 			} else {
-				
-				// Short version
+				$elapsed = $elapsed = $GLOBALS['timer']->getElapsed();
 				echo( "\n" . '<!-- ' . $elapsed . ' ms / ' . $includeFilesSize . ' -->' );
-
 			}
 
 			// Stop the execution of the request

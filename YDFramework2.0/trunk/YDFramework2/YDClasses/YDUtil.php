@@ -42,6 +42,9 @@
 			// Get the start time
 			$this->startTime = $this->_getMicroTime();
 
+			// Keep a list of intermediate times
+			$this->markers = array();
+
 		}
 
 		/**
@@ -54,6 +57,22 @@
 		function _getMicroTime() {
 			$time = explode ( ' ', microtime() );
 			return ( doubleval( $time[0] ) + $time[1] );
+		}
+
+		/**
+		 *	This will add a named marker.
+		 *
+		 *	@param $name	The name to use for the marker
+		 */
+		function addMarker( $name ) {
+			array_push( $this->markers, array( $name => $this->getElapsed() ) );
+		}
+
+		/**
+		 *	Finish the timer.
+		 */
+		function finish() {
+			$this->addMarker( 'Finish' );
 		}
 
 		/**

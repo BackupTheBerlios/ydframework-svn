@@ -194,8 +194,6 @@
 	 *	@param $file	File to be included.
 	 */
 	if ( ! function_exists( 'YDInclude' ) ) {
-	
-		// Function to include a file from the known include path
 		function YDInclude( $file ) {
 			foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
 				if ( realpath( $include ) != false ) {
@@ -214,7 +212,17 @@
 				YD_ERROR
 			);
 		}
+	}
 
+	/**
+	 *	This function will add a marker to the global timer.
+	 *
+	 *	@param $name	The name of the marker.
+	 */
+	if ( ! function_exists( 'YDGlobalTimerMarker' ) ) {
+		function YDGlobalTimerMarker( $name ) {
+			$GLOBALS['timer']->addMarker( $name );
+		}
 	}
 
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
