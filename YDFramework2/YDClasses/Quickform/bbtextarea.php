@@ -15,37 +15,31 @@
 	require_once( 'HTML/QuickForm/element.php' );
 
 	/**
-	 *  This class defines a text area field that has support for a toolbar. 
-	 *  This widget can add BBCode style tags to the text in the textarea. It is
-	 *  created as a standard HTML_QuickForm element.
+	 *	This class defines a text area field that has support for a toolbar. This widget can add BBCode style tags to 
+	 *	the text in the textarea. It is created as a standard HTML_QuickForm element.
 	 *
-	 *  @todo
-	 *	  Add a function called getValueAsHtml.
+	 *	@todo
+	 *		Add a function called getValueAsHtml.
 	 *
-	 *  @todo
-	 *	  The parser indicated in the class constructor should be the one that
-	 *	  gets used instead of the default one. We should check if it's one of
-	 *	  the right type. Put this in a function called _getParser().
+	 *	@todo
+	 *		The parser indicated in the class constructor should be the one that gets used instead of the default one.
+	 *		We should check if it's one of the right type. Put this in a function called _getParser().
 	 */
 	class HTML_QuickForm_bbtextarea extends HTML_QuickForm_element {
 
 		var $_value = null;
 
 		/**
-		 *  This is the class constructor for the bbtextarea element.
+		 *	This is the class constructor for the bbtextarea element.
 		 *
-		 *  @param $elementName  The name of the element.
-		 *  @param $elementLabel The label for the element.
-		 *  @param $attributes   The attributes for the element.
+		 *	@param $elementName		The name of the element.
+		 *	@param $elementLabel	The label for the element.
+		 *	@param $attributes		The attributes for the element.
 		 */
-		function HTML_QuickForm_bbtextarea(
-			$elementName=null, $elementLabel=null, $attributes=null
-		) {
+		function HTML_QuickForm_bbtextarea( $elementName=null, $elementLabel=null, $attributes=null ) {
 
 			// Initialize the parent element
-			HTML_QuickForm_element::HTML_QuickForm_element(
-				$elementName, $elementLabel, $attributes
-			);
+			HTML_QuickForm_element::HTML_QuickForm_element( $elementName, $elementLabel, $attributes );
 
 			// Setup the class
 			$this->_persistantFreeze = true;
@@ -60,45 +54,45 @@
 		}
 
 		/**
-		 *  Function to set the name of the element.
+		 *	Function to set the name of the element.
 		 *
-		 *  @param $name The name of the element.
+		 *	@param $name	The name of the element.
 		 */
 		function setName( $name ) {
 			$this->updateAttributes( array( 'name' => $name ) );
 		}
 
 		/**
-		 *  Function to get the name of the element.
+		 *	Function to get the name of the element.
 		 *
-		 *  @returns The name of the element.
+		 *	@returns	The name of the element.
 		 */
 		function getName() {
 			return $this->getAttribute( 'name' );
 		}
 
 		/**
-		 *  Function to set the value of the element.
+		 *	Function to set the value of the element.
 		 *
-		 *  @param $name The value of the element.
+		 *	@param $name	The value of the element.
 		 */
 		function setValue( $value ) {
 			$this->_value = $value;
 		}
 		
 		/**
-		 *  Function to get the value of the element.
+		 *	Function to get the value of the element.
 		 *
-		 *  @returns The value of the element.
+		 *	@returns	The value of the element.
 		 */
 		function getValue() {
 			return $this->_value;
 		}
 
 		/**
-		 *  This function will return the html value of the element.
+		 *	This function will return the html value of the element.
 		 *
-		 *  @returns The HTML value of the elements.
+		 *	@returns	The HTML value of the elements.
 		 */
 		function getValueAsHtml() {
 			$parser = new YDBBCode();
@@ -106,9 +100,9 @@
 		}
 
 		/**
-		 *  Function to set the wrap attribute of the element.
+		 *	Function to set the wrap attribute of the element.
 		 *
-		 *  @param $name The wrap attribute of the element.
+		 *	@param $name	The wrap attribute of the element.
 		 */
 		function setWrap( $wrap ) {
 			$this->updateAttributes( array( 'wrap' => $wrap ) );
@@ -124,20 +118,20 @@
 		}
 
 		/**
-		 *  Function to set the column count of the element.
+		 *	Function to set the column count of the element.
 		 *
-		 *  @param $name The column count of the element.
+		 *	@param $name	The column count of the element.
 		 */
 		function setCols( $cols ) {
 			$this->updateAttributes( array( 'cols' => $cols ) );
 		}
 
 		/**
-		 *  This function will add a modifier.
+		 *	This function will add a modifier.
 		 *
-		 *  @param $name  The name of the modifier.
-		 *  @param $label The label of the modifier.
-		 *  @param $text  (optional) The initial text for the modifier.
+		 *	@param $name	The name of the modifier.
+		 *	@param $label	The label of the modifier.
+		 *	@param $text	(optional) The initial text for the modifier.
 		 */
 		function addModifier( $name, $label, $text='' ) {
 			$attrib = array();
@@ -149,17 +143,15 @@
 		}
 
 		/**
-		 *  This function will add a simple popup window.
+		 *	This function will add a simple popup window.
 		 *
-		 *  @param $name	 The name of the modifier.
-		 *  @param $label	The label of the simple popup.
-		 *  @param $question The question for in the popup window.
-		 *  @param $default  (optional) The default text for in the popup window.
-		 *  @param $text  (optional) The initial text for the modifier.
+		 *	@param $name		The name of the modifier.
+		 *	@param $label		The label of the simple popup.
+		 *	@param $question	The question for in the popup window.
+		 *	@param $default		(optional) The default text for in the popup window.
+		 *	@param $text		(optional) The initial text for the modifier.
 		 */
-		function addSimplePopup(
-			$name, $label, $question, $default='', $text='' 
-		) {
+		function addSimplePopup( $name, $label, $question, $default='', $text='' ) {
 			$attrib = array();
 			$attrib['name'] = $name;
 			$attrib['type'] = 'simplepopup';
@@ -171,19 +163,16 @@
 		}
 
 		/**
-		 *  This function will add a popup window. This is a popup window that
-		 *  will point to a URL. This window can do whatever it wants and can
-		 *  change values in the main window.
+		 *	This function will add a popup window. This is a popup window that
+		 *	will point to a URL. This window can do whatever it wants and can
+		 *	change values in the main window.
 		 *
-		 *  @param $url	  The url for the popup window.
-		 *  @param $label	The label of the popup window.
-		 *  @param $name	 (optional) The JavaScript name of the popup window.
-		 *  @param $params   (optional) The JavaScript parameters for the popup
-		 *				   window.
+		 *	@param $url		The url for the popup window.
+		 *	@param $label	The label of the popup window.
+		 *	@param $name	(optional) The JavaScript name of the popup window.
+		 *	@param $params	(optional) The JavaScript parameters for the popup window.
 		 */
-		function addPopupWindow( 
-			$url, $label, $name='', $params='' 
-		) {
+		function addPopupWindow( $url, $label, $name='', $params='' ) {
 			$attrib = array();
 			$attrib['url'] = $url;
 			$attrib['type'] = 'popupwindow';
@@ -198,20 +187,22 @@
 		}
 
 		/**
-		 *  This function will clear the list of modifiers.
+		 *	This function will clear the list of modifiers.
 		 */
 		function clearModifiers() {
 			$this->_modifiers = array();
 		}
 
 		/**
-		 *  This function will clear the list of popup dialogs.
+		 *	This function will clear the list of popup dialogs.
 		 */
 		function clearSimplePopups() {
 			$this->_simplepops = array();
 		}
 
-		// Function to get the HMTL
+		/**
+		 *	This function will render the HTML for our element.
+		 */
 		function toHtml() {
 			if ( $this->_flagFrozen ) {
 				return $this->getFrozenHtml();
@@ -286,7 +277,9 @@
 			}
 		}
 
-		// Function to get the frozen HTML
+		/**
+		 *	This function will render the frozen HTML for our element.
+		 */
 		function getFrozenHtml() {
 			$value = htmlspecialchars( $this->getValue() );
 			$parser = new YDBBCode();
@@ -299,14 +292,14 @@
 			return $html . $this->_getPersistantData();
 		}
 
-	   /**
-		*   Returns a 'safe' element's value
-		*
-		*   @param  array   array of submitted values to search
-		*   @param  bool	whether to return the value as associative array
-		*   @access public
-		*   @return mixed
-		*/
+		/**
+		 *	Returns a 'safe' element's value
+		 *
+		 *	@param  array	array of submitted values to search
+		 *	@param  bool	whether to return the value as associative array
+		 *	
+		 *	@returns	mixed
+		 */
 		function exportValue( &$submitValues, $assoc = false ) {
 			$value = $this->_findValue( $submitValues );
 			if ( null === $value ) {
