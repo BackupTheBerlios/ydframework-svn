@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDFormElement.php' );
+	require_once( 'YDForm.php' );
 
 	/**
 	 *	This is the class that define a submit button form element.
