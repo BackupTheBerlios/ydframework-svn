@@ -690,7 +690,12 @@
 						// Get the values for each element
 						$values = array();
 						foreach ( $rule['elements'] as $element ) {
-							array_push( $values, $this->getValue( $element ) );
+							$obj = & $this->getElement( $element );
+							if ( method_exists( $obj, 'getTimeStamp' ) ) {
+								array_push( $values, $obj->getTimeStamp() );
+							} else {
+								array_push( $values, $this->getValue( $element ) );
+							}
 						}
 
 						// Check that all the values are unique
