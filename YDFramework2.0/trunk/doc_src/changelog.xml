@@ -43,6 +43,10 @@
             <listitem>Removed the YDFSFile::toArray, YDFSImage::toArray and YDFSDirectory::toArray functions.</listitem>
             <listitem>Removed the YDBase::toArray functions.</listitem>
             <listitem>Removed the YDDatabase class constructor.</listitem>
+            <listitem>Added a new feature to YDForm: compare rules.</listitem>
+            <listitem>Added the executeDelete function to the YDDatabaseDriver class.</listitem>
+            <listitem>Improved the scripts for building the documentation.</listitem>
+            <listitem>Added the FAQ and Appendix C to the documentation.</listitem>
             <listitem>TODO: Add the date rule to check dates.</listitem>
             <listitem>TODO: Add the YDDate class to make it easier to work with dates.</listitem>
             <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
