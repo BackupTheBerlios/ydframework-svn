@@ -34,6 +34,8 @@
 		<p>View the <a href="../doc/api/index.html">API documentation</a> or read the
 		<a href="../doc/userguide/index.html">user guide</a>.</p>
 
+		<p>View the <a href="../license.txt">License information</a>.</p>
+
 		<p>For more information, please visit:<br>
 		<a href="http://www.yellowduck.be/ydf2/">http://www.yellowduck.be/ydf2/</a></p>
 
