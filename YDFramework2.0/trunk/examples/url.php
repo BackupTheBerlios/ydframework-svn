@@ -136,6 +136,41 @@
 
 		}
 
+		// Default action
+		function actionAlter() {
+
+			// Create the URL object
+			$url = new YDUrl( 'http://www.yellowduck.be:8080/directory/test/?do=x&id=1#10' );
+
+			// Show the original URL
+			YDDebugUtil::dump( $url->getUrl(), 'The original URL' );
+
+			// Get the contents of a query variable
+			$do = $url->getQueryVar( 'do', 'y' );
+
+			// Update a query variable
+			$url->setQueryVar( 'do', 'y' );
+
+			// setQueryVar can also be used to add a query variable
+			$url->setQueryVar( 'new', 'value' );
+
+			// Deleting a query variable
+			$url->deleteQueryVar( 'new' );
+
+			// Set a named part
+			$url->setNamedPart( 'host', 'yellowduck.be' );
+			$url->setNamedPart( 'user', 'pieter' );
+			$url->setNamedPart( 'pass', 'kermit' );
+			$url->setNamedPart( 'port', '8081' );
+			$url->setNamedPart( 'path', '/dir/index.php' );
+			$url->setNamedPart( 'fragment', '12' );
+			$url->setQueryVar( 'id', '22' );
+
+			// Show the new URL
+			YDDebugUtil::dump( $url->getUrl(), 'The new URL' );
+
+		}
+
 	}
 
 	// Process the request
