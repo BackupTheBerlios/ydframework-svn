@@ -4,6 +4,7 @@ import urllib
 import shutil
 
 pages = [
+    'YDTemplateBackground',
     'Documentation',
     'FirstSample',
     'InstallingYDF2',
@@ -23,6 +24,7 @@ pages = [
     'YDDatabase',
     'YDOther',
     'ReleaseHistory',
+    'WhatIs',
 ]
 
 images = [
