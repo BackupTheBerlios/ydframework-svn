@@ -51,29 +51,50 @@
 
         <programlisting><![CDATA[<?php
 
+    // Class definition
     class Template {
 
+        // The variable that keeps track of the variable assignmentes
         var $vars;
 
+        // The class constructor.
+        // The optional parameter is the path to the template
         function Template( $file = null ) {
             $this->file = $file;
         }
 
+        // Add a named variable to the template
         function set( $name, $value ) {
             $this->vars[ $name ] = $value;
         }
 
+        // Parse the template and return the output
+        // The optional parameter is the path to the template
         function fetch( $file = null ) {
-            if( ! $file ) {
+
+            // Use the default file if not specified otherwise
+            if ( ! $file ) {
                 $file = $this->file
             };
 
+            // Extract the variables to the local namespace
             extract( $this->vars );
+
+            // Start buffering the output
             ob_start();
+
+            // Include the template
             include( $file );
+
+            // Get the buffer contents
             $contents = ob_get_contents();
+
+            // Clean up
             ob_end_clean();
+
+            // Return the parsed template
             return $contents;
+
         }
 
     }
@@ -260,7 +281,7 @@ Percentage of the requests served within a certain time (ms)
 
         <para>Homepage: <ulink url="http://smarty.php.net/" /></para>
 
-        <para>After a lot of discussion on the forum for the Yellow Duck Framework, the descision was made to move again to Smarty, and keep the framework bundled with Smarty (final now). There were a good number of arguments for the move to Smarty again.</para>
+        <para>After a lot of discussion on the forum for the Yellow Duck Framework, the decision was made to move again to Smarty, and keep the framework bundled with Smarty (final now). There were a good number of arguments for the move to Smarty again.</para>
 
         <para>Here's a short overview of the advantages and disadvantages of both:</para>
 
