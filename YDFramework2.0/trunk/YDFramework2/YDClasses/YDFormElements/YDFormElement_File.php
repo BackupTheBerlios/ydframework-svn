@@ -65,12 +65,12 @@
         }
 
         /**
-         *	This function will move the uploaded file to the specified directory.
+         *  This function will move the uploaded file to the specified directory.
          *
-         *	@param $dir	(optional) The directory to move the file to. Defaults to the current directory.
+         *  @param $dir (optional) The directory to move the file to. Defaults to the current directory.
          *  @param $fname (optional) File name to use. Prevents e.g. the file hits the FS with unwanted chars in it
          *  @param $retainExt (optional) Retain file name extension or not
-         *	@returns	Boolean indicating if the move was succesful or not.
+         *  @returns  Boolean indicating if the move was succesful or not.
          */
         function moveUpload( $dir='.', $fname='', $retainExt=false ) {
             if ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) == 0 ) {
@@ -78,10 +78,10 @@
             }
             
             // Fetch extension if it is to be retained, set empty if otherwise
-            $retainExt AND $ext = YDPath::getExtension( $_FILES[ $this->_form . '_' . $this->_name ]['name'] ) OR $ext='';
+            $retainExt AND $ext = '.' . YDPath::getExtension( $_FILES[ $this->_form . '_' . $this->_name ]['name'] ) OR $ext='';
             
             // Create (new) file name
-            $fname = ($fname=='' ? $_FILES[ $this->_form . '_' . $this->_name ]['name'] : $fname . '.' . $ext );
+            $fname = ($fname=='' ? $_FILES[ $this->_form . '_' . $this->_name ]['name'] : $fname . $ext );
             
             // Compile path
             $path = realpath( $dir ) . '/' . $fname;
@@ -101,7 +101,7 @@
             
             return $result;
         }
-        
+
         /**
          *  This function will return the actual size of the uploaded file.
          *
