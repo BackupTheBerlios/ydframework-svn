@@ -212,10 +212,10 @@
         <programlisting><![CDATA[array(7) {
   ["attribs"]=>
   string(94) " name="firstForm" id="firstForm"
-    method="POST" action="/ydf2/examples/test.php" target="_self""
+    method="POST" action="/ydf/examples/test.php" target="_self""
   ["tag"]=>
   string(100) "<form name="firstForm" id="firstForm" method="POST"
-    action="/ydf2/examples/test.php" target="_self"><input type="hidden"
+    action="/ydf/examples/test.php" target="_self"><input type="hidden"
     name="PHPSESSID" value="d37da78c130376040a99404758f333c6" />"
   ["requirednote"]=>
   string(26) "Items in bold are required"

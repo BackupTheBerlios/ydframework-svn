@@ -20,16 +20,16 @@
     <channel>
         <title>Yellow Duck Framework</title>
         <description>News about the YDF</description>
-        <link>http://localhost/ydf2/?do=rss091</link>
+        <link>http://localhost/ydf/?do=rss091</link>
         <item>
             <title>Title 1</title>
-            <link>http://localhost/ydf2/?do=rss091#1</link>
+            <link>http://localhost/ydf/?do=rss091#1</link>
             <description>Description 1</description>
             <guid>3a31c01d5c9023115e2433cdb1b6515e</guid>
         </item>
         <item>
             <title>Title 2</title>
-            <link>http://localhost/ydf2/?do=rss091#2</link>
+            <link>http://localhost/ydf/?do=rss091#2</link>
             <description>Description 2</description>
             <guid>be3e15a372932faea5b235d1965c36bf</guid>
         </item>
@@ -45,25 +45,25 @@
     <channel rdf:about="">
         <title>Yellow Duck Framework</title>
         <description>News about the YDF</description>
-        <link>http://localhost/ydf2/?do=rss10</link>
+        <link>http://localhost/ydf/?do=rss10</link>
         <dc:date>2004-05-22T13:36:11+01:00</dc:date>
         <items>
             <rdf:Seq>
-                <rdf:li rdf:resource="http://localhost/ydf2/?do=rss10#1"/>
-                <rdf:li rdf:resource="http://localhost/ydf2/?do=rss10#2"/>
+                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#1"/>
+                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#2"/>
             </rdf:Seq>
         </items>
     </channel>
-    <item rdf:about="http://PClaerho1/ydf2/examples/?do=rss10#1">
+    <item rdf:about="http://localhost/ydf/examples/?do=rss10#1">
         <dc:format>text/html</dc:format>
         <title>Title 1</title>
-        <link>http://localhost/ydf2/feedcreator1.php?do=rss10#1</link>
+        <link>http://localhost/ydf/feedcreator1.php?do=rss10#1</link>
         <description>Description 1</description>
     </item>
-    <item rdf:about="http://PClaerho1/ydf2/examples/?do=rss10#2">
+    <item rdf:about="http://localhost/ydf/examples/?do=rss10#2">
         <dc:format>text/html</dc:format>
         <title>Title 2</title>
-        <link>http://localhost/ydf2/feedcreator1.php?do=rss10#2</link>
+        <link>http://localhost/ydf/feedcreator1.php?do=rss10#2</link>
         <description>Description 2</description>
     </item>
 </rdf:RDF>]]></programlisting>
@@ -75,17 +75,17 @@
     <channel>
         <title>Yellow Duck Framework</title>
         <description>News about the YDF</description>
-        <link>http://localhost/ydf2/?do=rss20</link>
+        <link>http://localhost/ydf/?do=rss20</link>
         <lastBuildDate>Sat, 22 May 2004 13:36:15+0100</lastBuildDate>
         <item>
             <title>Title 1</title>
-            <link>http://localhost/ydf2/?do=rss20#1</link>
+            <link>http://localhost/ydf/?do=rss20#1</link>
             <description>Description 1</description>
             <guid>d1c9daf41c19e53ed46f8081d4ab99b7</guid>
         </item>
         <item>
             <title>Title 2</title>
-            <link>http://localhost/ydf2/?do=rss20#2</link>
+            <link>http://localhost/ydf/?do=rss20#2</link>
             <description>Description 2</description>
             <guid>7dbd540a343ecc960efa3c1d9f715e74</guid>
         </item>
@@ -98,10 +98,10 @@
 <feed version="0.1" xmlns="http://example.com/newformat#">
     <title>Yellow Duck Framework</title>
     <subtitle>News about the YDF</subtitle>
-    <link>http://localhost/ydf2/?do=atom</link>
+    <link>http://localhost/ydf/?do=atom</link>
     <entry>
         <title>Title 1</title>
-        <link>http://localhost/ydf2/?do=atom#1</link>
+        <link>http://localhost/ydf/?do=atom#1</link>
         <id>2e3c209c100c00c83a791fdbc0c6af1b</id>
         <content type="text/html" xml:lang="en-us">
             <div xmlns="http://www.w3.org/1999/xhtml">
@@ -111,7 +111,7 @@
     </entry>
     <entry>
         <title>Title 2</title>
-        <link>http://localhost/ydf2/?do=atom#2</link>
+        <link>http://localhost/ydf/?do=atom#2</link>
         <id>5d7ed2c293a6e24c9be308e81a2fb8f5</id>
         <content type="text/html" xml:lang="en-us">
             <div xmlns="http://www.w3.org/1999/xhtml">
@@ -141,7 +141,7 @@
     $fc = new YDFeedCreator();
     $fc->setTitle( 'Yellow Duck Framework' );
     $fc->setDescription( 'News about the YDF' );
-    $fc->setLink( 'http://localhost/ydf2/' );
+    $fc->setLink( 'http://localhost/ydf/' );
 
 ?>]]></programlisting>
 
@@ -163,12 +163,12 @@
 
     $fc->addItem(
         'Title 1 & Co.',
-        'http://localhost/ydf2/#1',
+        'http://localhost/ydf/#1',
         'Description 1 & Co.'
     );
     $fc->addItem(
         'Title 2 & Co.',
-        'http://localhost/ydf2/#2',
+        'http://localhost/ydf/#2',
         'Description <b>2</b> & Co.'
     );
 

@@ -177,7 +177,7 @@
 
         <para><ulink url="http://www.paullockaby.com/projects/smarty-light/docs/appendix.caching.html" /></para>
 
-        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf2/examples/index.php"
+        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf/examples/index.php"
 This is ApacheBench, Version 2.0.40-dev <$Revision: 1.121.2.8 $> apache-2.0
 Copyright (c) 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Copyright (c) 1998-2002 The Apache Software Foundation, http://www.apache.org/
@@ -189,7 +189,7 @@ Server Software:        Apache/1.3.27
 Server Hostname:        localhost
 Server Port:            80
 
-Document Path:          /ydf2/examples/index.php
+Document Path:          /ydf/examples/index.php
 Document Length:        9339 bytes
 
 Concurrency Level:      5
@@ -224,7 +224,7 @@ Percentage of the requests served within a certain time (ms)
 
         <para>The same page using Smarty Light and the Smarty Light syntax gives me the following:</para>
 
-        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf2/examples/index.php"
+        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf/examples/index.php"
 This is ApacheBench, Version 2.0.40-dev <$Revision: 1.121.2.8 $> apache-2.0
 Copyright (c) 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Copyright (c) 1998-2002 The Apache Software Foundation, http://www.apache.org/
@@ -236,7 +236,7 @@ Server Software:        Apache/1.3.27
 Server Hostname:        localhost
 Server Port:            80
 
-Document Path:          /ydf2/examples/index.php
+Document Path:          /ydf/examples/index.php
 Document Length:        10342 bytes
 
 Concurrency Level:      5
