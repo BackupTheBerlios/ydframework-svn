@@ -47,6 +47,25 @@
             }
         }
     
+        /**
+         *  This function will check if the GD library is loaded or not. If not,
+         *  it will raise a fatal error indicating this.
+         */
+        function requiresGD() {
+
+            // Check if the GD library is loaded.
+            if ( ! extension_loaded( 'gd' ) ) {
+                
+                // Raise a fatal error
+                new YDFatalError(
+                    'The GD library is not installed which is required for '
+                    . 'the Yellow Duck Framework to work properly.'
+                );
+
+            }
+
+        }
+
     }
 
 ?>

@@ -50,6 +50,9 @@
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 
+            // Check for the GD library
+            YDPhpUtil::requiresGD();
+
             // Include phpThumb
             require_once( YD_DIR_3RDP_PTMB . '/phpthumb.class.php' );
 
