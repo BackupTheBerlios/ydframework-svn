@@ -156,12 +156,22 @@
 		define( 'YD_FIXED_MAGIC_QUOTES', true );
 	}
 
-	// Include the basis of Yellow Duck framework
-	require_once( 'YDBase.php' );
-
 	// Check if we have the right PHP version
 	if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {
 		YDFatalError( 'PHP version 4.2.0 or greater is required.' );
+	}
+
+	/**
+	 *	This is the base class for all other YD classes.
+	 */
+	class YDBase {
+
+		/**
+		 *	Class constructor for the YDBase class.
+		 */
+		function YDBase() {
+		}
+
 	}
 
 	// Start the timer
