@@ -358,6 +358,7 @@ $conv->addRule(
                     <listitem>EB (exabyte)</listitem>
                 </itemizedlist>
             </listitem>
+            <listitem><emphasis role="bold">formatDate:</emphasis> This function will format a timestamp or a date/time form element to a textual string using the strftime function.</listitem>
             <listitem><emphasis role="bold">encodeString:</emphasis> This function will encode all characters which have an ordinal bigger than 128 to numeric HTML entities, which can be safely included in e.g. XML output.</listitem>
             <listitem><emphasis role="bold">truncate:</emphasis> This function will truncate a string. It allows you to specify the maximum number of charaters, the text to add if the item needs to be truncated and an indicating if splitting in the middle of a word is allowed or not.</listitem>
             <listitem><emphasis role="bold">normalizeNewlines:</emphasis> This function normalizes all the newlines to the correct newline character for the current platform.</listitem>
@@ -399,6 +400,20 @@ $conv->addRule(
                     'Formatting filesize: ' . $filesize
                 );
             }
+
+            // Test the formatDate function
+            YDDebugUtil::dump(
+                YDStringUtil::formatDate( time(), 'date' ), 'Formatting date - date'
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::formatDate( time(), 'time' ), 'Formatting date - time'
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::formatDate( time(), 'datetime' ), 'Formatting date - datetime'
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::formatDate( time(), '%x' ), 'Formatting date - %x'
+            );
 
             // Test the encode string function
             $string = 'Pieter Claerhout @ creo.com "générales obsolète"';
@@ -471,6 +486,18 @@ Formatting filesize: 6543
 
 Formatting filesize: 42
 '42 bytes'
+
+Formatting date - date
+'24 January 2005'
+
+Formatting date - time
+'21:42'
+
+Formatting date - datetime
+'24 January 2005 21:42'
+
+Formatting date - %x
+'01/24/05'
 
 Encoding: Pieter Claerhout @ creo.com "générales obsolète"
 'Pieter Claerhout @ creo.com "g&#233;n&#233;rales obsol&#232;te"'

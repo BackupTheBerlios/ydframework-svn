@@ -27,10 +27,16 @@
                 YDDebugUtil::dump( YDStringUtil::formatFileSize( $filesize ), 'Formatting filesize: ' . $filesize );
             }
 
+            // Test the formatDate function
+            YDDebugUtil::dump( YDStringUtil::formatDate( time(), 'date' ), 'Formatting date - date' );
+            YDDebugUtil::dump( YDStringUtil::formatDate( time(), 'time' ), 'Formatting date - time' );
+            YDDebugUtil::dump( YDStringUtil::formatDate( time(), 'datetime' ), 'Formatting date - datetime' );
+            YDDebugUtil::dump( YDStringUtil::formatDate( time(), '%x' ), 'Formatting date - %x' );
+
             // Test the encode string function
             $string = 'Pieter Claerhout @ creo.com "générales obsolète"';
             YDDebugUtil::dump( YDStringUtil::encodeString( $string ), 'Encoding: ' . $string );
-
+            
             // Test the truncate function
             YDDebugUtil::dump( YDStringUtil::truncate( $string ), 'Truncate (default): ' . $string );
             YDDebugUtil::dump( YDStringUtil::truncate( $string, 20 ), 'Truncate (20): ' . $string );

@@ -439,6 +439,65 @@
             }
 
         }
+        
+        /**
+         *  This function will format a timestamp using the strftime function.
+         *
+         *  @param  $timestamp  The timestamp to format. It can also be a date/time form object.
+         *  @param  $format     The strftime format to use. You can also use the predefined options date, time and 
+         *                      datetime.
+         *  @param  $locale     (optional) The locale to use to format the date.
+         *
+         *  @returns    A formatted timestamp
+         *
+         *  @static
+         */
+        function formatDate( $timestamp, $format, $locale=null ) {
+        
+            // Check if the timestamp is an object and has the getTimeStamp function
+            if ( is_object( $timestamp ) && method_exists( $timestamp, 'getTimeStamp' ) ) {
+                $timestamp = $timestamp->getTimeStamp();
+            }
+            
+            // Convert to an integer
+            if ( is_numeric( $timestamp ) ) {
+                $timestamp = intval( $timestamp );
+            }
+            
+            // If text, convert to number
+            if ( is_string( $timestamp ) ) {
+                $timestamp = strtotime( $timestamp );
+            }
+            
+            // Check the standard formats
+            if ( strtolower( $format ) == 'date' ) {
+                $format = '%d %B %Y';
+            }
+            if ( strtolower( $format ) == 'datetime' ) {
+                $format = '%d %B %Y %H:%M';
+            }
+            if ( strtolower( $format ) == 'time' ) {
+                $format = '%H:%M';
+            }
+            
+            // Set the new locale
+            if ( ! is_null( $locale ) ) {
+                $currentLocale = YDLocale::get();
+                YDLocale::set( $locale );
+            }
+            
+            // Return the formatted date
+            $timestamp = strftime( $format, $timestamp );
+        
+            // Reset the old locale
+            if ( ! is_null( $locale ) ) {
+                YDLocale::set( $currentLocale );
+            }
+        
+            // Return the timestamp
+            return $timestamp;
+        
+        }
 
         /**
          *	This function will encode all characters which have an ordinal bigger than 128 to numeric HTML entities,
