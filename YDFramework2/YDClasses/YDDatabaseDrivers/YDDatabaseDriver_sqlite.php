@@ -42,8 +42,8 @@
 		 */
 		function connect() {
 			if ( $this->_conn == null ) {
-				$conn = @sqlite_open( $this->_db );
-				if ( ! $conn ) { YDFatalError( sqlite_error_string( sqlite_last_error() ) ); }
+				$conn = @sqlite_open( $this->_db, 0666, $error );
+				if ( ! $conn ) { YDFatalError( $error ); }
 				$this->_conn = $conn;
 			}
 		}
