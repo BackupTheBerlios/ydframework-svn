@@ -5,7 +5,7 @@
 
 	// Includes
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class constants extends YDRequest {
