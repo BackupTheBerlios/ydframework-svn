@@ -493,7 +493,7 @@
 		 *
 		 *  @returns  The expression.
 		 */				
-		function getSql( $break=false ) {
+		function getSql() {
 		
 			switch ( strtoupper( $this->action ) ) {
 			
@@ -524,47 +524,8 @@
 				return;
 			}
 			
-			if ( $break ) {
-				return $this->getBrokenSql( $sql );
-			}
 			return $sql;
 		
-		}
-		
-		function getBrokenSql( $sql='' ) {
-		
-			if ( ! strlen( $sql ) ) {
-				$sql = $this->getSql();
-			}
-			
-			$arr = explode( ' ', $sql );
-			$sql = '';
-			
-			foreach ( $arr as $word ) {
-				switch ( strtoupper( $word ) ) {
-					case 'FROM':
-					case 'VALUES':
-					case 'SET':
-					case 'WHERE':
-					case 'GROUP':
-					case 'HAVING':
-					case 'ORDER':
-					case 'LIMIT':
-						$break = true;
-						break;
-					default: 
-						$break = false;
-				}
-				
-				if ( $break ) {
-					$sql .= YD_CRLF;
-				}
-				$sql .= $word . " ";
-				
-			}
-			
-			return trim( $sql );
-			
 		}
 		
 		/**

@@ -43,7 +43,7 @@
 			
 			$q->addHaving( "total > 100" );
 			
-			YDDebugUtil::dump( $q->getBrokenSql() );
+			YDDebugUtil::dump( $q->getSql() );
 			
 			$q->reset();
 			
@@ -71,7 +71,7 @@
 			$q->addWhere( "$g.id = 144" );
 			$q->addOrder( "name" );
 			
-			YDDebugUtil::dump( $q->getBrokenSql() );
+			YDDebugUtil::dump( $q->getSql() );
 			
 			$q->reset();
 			
@@ -80,7 +80,7 @@
 			$q->addTable( 'user' );
 			$q->addWhere( "id = 144" );
 
-			YDDebugUtil::dump( $q->getBrokenSql() );
+			YDDebugUtil::dump( $q->getSql() );
 			
 			$q->reset();
 			
@@ -90,12 +90,12 @@
 			$q->setValues( array( 'name' => 'David', 'email' => 'email@host.com', 'admin' => 1, 'purple' => null ) );
 			$q->addWhere( "id = 144" );
 
-			YDDebugUtil::dump( $q->getBrokenSql() );
+			YDDebugUtil::dump( $q->getSql() );
 			
 			// Insert - using the same values
 			$q->setAction( 'INSERT' );
 			
-			YDDebugUtil::dump( $q->getBrokenSql() );
+			YDDebugUtil::dump( $q->getSql() );
 
 		}
 
