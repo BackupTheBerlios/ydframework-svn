@@ -28,22 +28,44 @@
                 array(
                     'id' => 1,
                     'url' => 'http://www.pbase.com/bba/odk2_2004&page=all',
-                    'title' => 'SYCOD Race II 2004'
+                    'title' => 'SYCOD Race II 2004',
+                    'thumbnail' => '29526953',
                 ),
                 array(
                     'id' => 2,
                     'url' => 'http://www.pbase.com/bba/krab04&page=all',
-                    'title' => 'Krab Rally 2004'
+                    'title' => 'Krab Rally 2004',
+                    'thumbnail' => '27371231',
                 ),
                 array(
                     'id' => 3,
                     'url' => 'http://www.pbase.com/bba/bc&page=all',
-                    'title' => 'Belgian Championship 2003'
+                    'title' => 'Belgian Championship 2003',
+                    'thumbnail' => '18158440',
                 ),
                 array(
                     'id' => 4,
                     'url' => 'http://www.pbase.com/bba/krab_zaterdag&page=all',
-                    'title' => 'Krab Rally 2003'
+                    'title' => 'Krab Rally 2003',
+                    'thumbnail' => '14133887',
+                ),
+                array(
+                    'id' => 5,
+                    'url' => 'http://www.pbase.com/beachshop/testdag_mei_2004&page=all',
+                    'title' => 'Beachshop Testdag 02/05/2004',
+                    'thumbnail' => '28557554',
+                ),
+                array(
+                    'id' => 6,
+                    'url' => 'http://www.pbase.com/beachshop/les_hemmes__27280304&page=all',
+                    'title' => 'Les Hemmes 27280304',
+                    'thumbnail' => '27409483',
+                ),
+                array(
+                    'id' => 7,
+                    'url' => 'http://www.pbase.com/beachshop/4w_buggy',
+                    'title' => 'Libre 4 Wheels Buggy',
+                    'thumbnail' => '27446851',
                 ),
             );
 
@@ -94,7 +116,10 @@
         function actionDefault() {
 
             // Add the list of galleries
-            $this->setVar( 'galleries', $this->galleries );
+            $this->setVar( 
+                'galleries',
+                YDArrayUtil::convertToTable( $this->galleries, 4, true )
+            );
 
             // Show the template
             $this->outputTemplate();

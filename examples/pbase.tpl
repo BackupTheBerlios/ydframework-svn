@@ -12,9 +12,20 @@
 
         <h3>PBase image galleries</h3>
 
-        <?php foreach ( $galleries as $gallery ) { ?>
-            <p><a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a></p>
-        <?php } ?>
+        <table cellpadding="16" cellspacing="0" border="0">
+        <?php foreach ( $galleries as $galleryrow ) { ?>
+            <tr>
+                <?php foreach ( $galleryrow as $gallery ) { ?>
+                    <td width="160" align="center">
+                    <?php if ( $gallery ) { ?>
+                        <a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><img src="http://www.pbase.com/image/<?= $gallery['thumbnail'] ?>/small.jpg" border="1"></a>
+                        <a href="<?= $YD_SELF_SCRIPT ?>?do=gallery&gal=<?= $gallery['id'] ?>"><?= $gallery['title'] ?></a>
+                    <?php } ?>
+                    </td>
+                <?php } ?>
+            </tr>
+        <? } ?>
+        </table>
 
     <?php } ?>
 
