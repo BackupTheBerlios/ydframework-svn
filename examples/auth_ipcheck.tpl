@@ -16,7 +16,13 @@
 
     <p>Tip: try accessing this page once with your computername as the hostname,
     and see the difference if you use localhost.</p>
-    
+
+    <?php if ( $YD_ACTION == 'test' ) { ?>
+        <p><a href="<?= $YD_SELF_SCRIPT ?>">default action</a></p>
+    <?php } else { ?>
+        <p><a href="<?= $YD_SELF_SCRIPT ?>?do=test">test action</a></p>
+    <?php } ?>
+
     <p>[
         <a href="index.php">other samples</a>
     ]</p>
