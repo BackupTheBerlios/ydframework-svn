@@ -81,14 +81,14 @@
          */
         function r_dump( $obj ) {
 
-            // Get the contents of the variable
-            ob_start();
-            var_dump( $obj );
-            $result = htmlentities( ob_get_contents() );
-            ob_end_clean(); 
+            // Include the Var_Dump package
+            require_once( YD_DIR_3RDP_PEAR . '/Var_Dump.php' );
+
+            // We want to have HTML4 text returned
+            Var_Dump::displayInit( array( 'display_mode' => 'HTML4_Text' ) );
 
             // Return the information
-            return '<code>' . nl2br( str_replace( ' ', '&nbsp;', $result ) ) . '</code>';
+            return Var_Dump::display( $obj, true );
 
         }
 
