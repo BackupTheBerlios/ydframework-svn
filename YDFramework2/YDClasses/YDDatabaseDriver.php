@@ -113,10 +113,25 @@
 		function getMatchedRowsNum( $sql ) {
 		}
 
+		/**
+		 *	This function will insert the specified values in to the specified table.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 */
 		function executeInsert( $table, $values ) {
 		}
 
-		function executeUpdate( $table, $values, $where ) {
+		/**
+		 *	This function will update the specified values in to the specified table using the specified where clause.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 *	@param $where	The where statement to execute.
+		 */
+		function executeUpdate( $table, $values, $where='' ) {
+			$sql = $this->_createSqlUpdate( $table, $values );
+			return $this->executeSql( $sql );
 		}
 
 		/**
@@ -134,6 +149,90 @@
 		 */
 		function string( $string ) {
 			return str_replace( "'", "''", $string );
+		}
+
+		/**
+		 *	This function will create an SQL insert statement from the specified array and table name.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 *
+		 *	@returns	The insert SQL statement
+		 *
+		 *	@internal
+		 */
+		function _createSqlInsert( $table, $values ) {
+
+			// Check if there are values
+			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
+
+			// Get the list of field names and values
+			$fields = array();
+			$values = array();
+			foreach ( $values as $key=>$value ) {
+				array_push( $fields, $key );
+				array_push( $values, "'" . $this->string( $value ) . "'" );
+			}
+
+			// Check if there are values
+			if ( sizeof( $fields ) == 0 ) { YDFatalError( 'No values were submitted for the INSERT statement.' ); }
+
+			// Convert the fields and values to a string
+			$fields = implode( ',', $fields );
+			$values = implode( ',', $values );
+
+			// Create the SQL statement
+			return 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $values . ')';
+
+		}
+
+		/**
+		 *	This function will create an SQL update statement from the specified array, table name and where clause.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 *	@param $where	The where statement to execute.
+		 *
+		 *	@returns	The insert SQL statement
+		 *
+		 *	@internal
+		 */
+		function _createSqlUpdate( $table, $values, $where='' ) {
+
+			// Check if there are values
+			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
+
+			// Get the list of field names and values
+			$values = array();
+			foreach ( $values as $key=>$value ) {
+				array_push( $values, $key . "='" . $this->string( $value ) . "'" );
+			}
+
+			// Check if there are values
+			if ( sizeof( $values ) == 0 ) { YDFatalError( 'No values were submitted for the UPDATE statement.' ); }
+
+			// Convert the fields and values to a string
+			$values = implode( ',', $values );
+
+			// Create the SQL statement
+			$sql =  'UPDATE ' . $table . 'SET ' . $fields;
+			if ( ! empty( $where ) ) { $sql .= ' WHERE ' . $where; }
+
+			// Return the SQL
+			return $sql;
+
+		}
+
+		/**
+		 *	This function will connect to the database, execute a query and will return the result handle.
+		 *
+		 *	@param $sql	The SQL statement to execute.
+		 *
+		 *	@returns	Handle to the result of the query.
+		 *
+		 *	@internal
+		 */
+		function & _connectAndExec( $sql ) {
 		}
 
 	}

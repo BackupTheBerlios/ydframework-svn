@@ -60,10 +60,7 @@
 		 *	@returns	A single record matching the SQL statement.
 		 */
 		function getRecord( $sql ) {
-			$this->connect();
-			$dataset = array();
-			$result = sqlite_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return sqlite_fetch_array( $result, SQLITE_ASSOC );
 		}
 
@@ -75,9 +72,7 @@
 		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
 		function getRecords( $sql ) {
-			$this->connect();
-			$result = sqlite_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return sqlite_fetch_all( $result, SQLITE_ASSOC );
 		}
 
@@ -89,9 +84,7 @@
 		 *	@returns	The number of affected rows.
 		 */
 		function executeSql( $sql ) {
-			$this->connect();
-			$result = sqlite_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return sqlite_changes( $this->_conn );
 		}
 
@@ -103,10 +96,20 @@
 		 *	@returns	The number of rows matched by the SQL query.
 		 */
 		function getMatchedRowsNum( $sql ) {
-			$this->connect();
-			$result = sqlite_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return sqlite_num_rows( $this->_conn );
+		}
+
+		/**
+		 *	This function will insert the specified values in to the specified table.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 */
+		function executeInsert( $table, $values ) {
+			$sql = $this->_createSqlInsert( $table, $values );
+			$result = & $this->_connectAndExec( $sql );
+			return sqlite_last_insert_rowid( $this->_conn );
 		}
 
 		/**
@@ -128,6 +131,22 @@
 		 */
 		function string( $string ) {
 			return sqlite_escape_string( $string );
+		}
+
+		/**
+		 *	This function will connect to the database, execute a query and will return the result handle.
+		 *
+		 *	@param $sql	The SQL statement to execute.
+		 *
+		 *	@returns	Handle to the result of the query.
+		 *
+		 *	@internal
+		 */
+		function & _connectAndExec( $sql ) {
+			$this->connect();
+			$result = sqlite_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			return $result;
 		}
 
 	}

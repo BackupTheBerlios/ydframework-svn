@@ -63,10 +63,7 @@
 		 *	@returns	A single record matching the SQL statement.
 		 */
 		function getRecord( $sql ) {
-			$this->connect();
-			$dataset = array();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			$record = mysql_fetch_assoc( $result );
 			mysql_free_result( $result );
 			return $record;
@@ -80,10 +77,8 @@
 		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
 		function getRecords( $sql ) {
-			$this->connect();
+			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
 			while ( $line = mysql_fetch_assoc( $result ) ) {
 				array_push( $dataset, $line );
 			}
@@ -99,9 +94,7 @@
 		 *	@returns	The number of affected rows.
 		 */
 		function executeSql( $sql ) {
-			$this->connect();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return mysql_affected_rows( $this->_conn );
 		}
 
@@ -113,10 +106,20 @@
 		 *	@returns	The number of rows matched by the SQL query.
 		 */
 		function getMatchedRowsNum( $sql ) {
-			$this->connect();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$result = & $this->_connectAndExec( $sql );
 			return mysql_num_rows( $this->_conn );
+		}
+
+		/**
+		 *	This function will insert the specified values in to the specified table.
+		 *
+		 *	@param $table	The table to insert the data into.
+		 *	@param $values	Associative array with the field names and their values to insert.
+		 */
+		function executeInsert( $table, $values ) {
+			$sql = $this->_createSqlInsert( $table, $values );
+			$result = & $this->_connectAndExec( $sql );
+			return mysql_insert_id( $this->_conn );
 		}
 
 		/**
@@ -138,6 +141,22 @@
 		 */
 		function string( $string ) {
 			return mysql_escape_string( $string );
+		}
+
+		/**
+		 *	This function will connect to the database, execute a query and will return the result handle.
+		 *
+		 *	@param $sql	The SQL statement to execute.
+		 *
+		 *	@returns	Handle to the result of the query.
+		 *
+		 *	@internal
+		 */
+		function & _connectAndExec( $sql ) {
+			$this->connect();
+			$result = mysql_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			return $result;
 		}
 
 	}
