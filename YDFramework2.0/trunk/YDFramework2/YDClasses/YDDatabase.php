@@ -89,9 +89,9 @@
 	}
 
 	/**
-	 *	This class implements a (paged) database recordset. It contains a lot of extra information about the recordset
-	 *	which is not available if you return the database results as an array. This object is really handy if you want
-	 *	to work with paged recordsets.
+	 *	This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is 
+	 *	not available if you return the database results as an array. This object is really handy if you want to work
+	 *	with paged recordsets.
 	 *
 	 *	Here's the extra information that is available:
 	 *
@@ -116,10 +116,10 @@
 	 *	@todo
 	 *		Improve performance with very large recordsets (millions of rows).
 	 */
-	class YDDatabaseSet extends YDBase {
+	class YDRecordSet extends YDBase {
 
 		/**
-		 * This is the class constructor for the YDDatabaseSet class. 
+		 * This is the class constructor for the YDRecordSet class. 
 		 *
 		 *	@param	$records	The list of records as an array (as returned by the YDDatabaseDriver::getRecords
 		 *						function.
@@ -128,7 +128,7 @@
 		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
 		 *						will be the same as the total number of rows in the recordset.
 		 */
-		function YDDatabaseSet( $records, $page=-1, $pagesize=YD_DB_DEFAULTPAGESIZE ) {
+		function YDRecordSet( $records, $page=-1, $pagesize=YD_DB_DEFAULTPAGESIZE ) {
 
 			// Convert the page and pagesize to integers
 			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
@@ -174,14 +174,14 @@
 		}
 
 		/**
-		 *	This function returns a reference to the URL for this databaseset object. If you want to alter this url, you
+		 *	This function returns a reference to the URL for this recordset object. If you want to alter this url, you
 		 *	should get a instance of it as a reference. This code shows you how to do this:
 		 *
 		 *	@code
 		 *	$url = & $dataset->getUrl();
 		 *	@endcode
 		 *
-		 *	@returns	Reference to the YDUrl object for this YDDatabaseSet object.
+		 *	@returns	Reference to the YDUrl object for this YDRecordSet object.
 		 */
 		function & getUrl() {
 			return $this->url;
@@ -456,7 +456,7 @@
 		}
 
 		/**
-		 *	This function executes the SQL statement and returns the records as a YDDatabaseSet object, which contains
+		 *	This function executes the SQL statement and returns the records as a YDRecordSet object, which contains
 		 *	meta information about the recordset as well as the recordset itself. Optionally, you can limit the number
 		 *	of records that are returned. Optionally, you can also specify which record to start from. This is the
 		 *	preferred way when you are using paged resultsets.
@@ -468,7 +468,7 @@
 		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
 		 *						will be the same as the total number of rows in the recordset.
 		 *
-		 *	@returns	The records matching the SQL statement as a YDDatabaseSet object.
+		 *	@returns	The records matching the SQL statement as a YDRecordSet object.
 		 *
 		 *	@todo
 		 *		Performance needs to be improved. This is a quick and dirty solution right now.
@@ -478,8 +478,8 @@
 			// Get all records
 			$records = $this->getRecords( $sql );
 
-			// Return the YDDatabaseSet
-			return new YDDatabaseSet( $records, $page, $pagesize );
+			// Return the YDRecordSet
+			return new YDRecordSet( $records, $page, $pagesize );
 
 		}
 

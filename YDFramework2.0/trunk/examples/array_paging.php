@@ -33,8 +33,8 @@
 			$dir = new YDFSDirectory();
 			$files = $dir->getContents( '*.*', null, 'YDFSFile' );
 
-			// Create the YDDatabaseSet object
-			$recordset = new YDDatabaseSet( $files, $page, $size );
+			// Create the YDRecordSet object
+			$recordset = new YDRecordSet( $files, $page, $size );
 
 			// Setup the template
 			$this->template->assign( 'recordset', $recordset );

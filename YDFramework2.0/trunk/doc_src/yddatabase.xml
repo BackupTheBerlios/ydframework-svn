@@ -198,7 +198,7 @@
             <listitem>$pagesize: the maximum number of records allowed for each page</listitem>
         </itemizedlist>
 
-        <para>This function returns a YDDatabaseSet object, which contains the records themselves, as well as a whole bunch of extra information about the recordset. Here's a lit of the extra items the YDDatabaseSet class contains</para>
+        <para>This function returns a YDRecordSet object, which contains the records themselves, as well as a whole bunch of extra information about the recordset. Here's a lit of the extra items the YDRecordSet class contains</para>
 
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">page:</emphasis> current page number</listitem>
@@ -214,7 +214,7 @@
             <listitem><emphasis role="bold">pages:</emphasis> all the page numbers as a single-dimension array</listitem>
         </itemizedlist>
 
-        <para>All these items are available as class variables from the YDDatabaseSet class.</para>
+        <para>All these items are available as class variables from the YDRecordSet class.</para>
 
         <para>The following example shows how this can be implemented in a real life example:</para>
 
@@ -333,7 +333,7 @@
 
 </html>]]></programlisting>
 
-        <para>As you can see in the previous example, we use the different getter functions to get the URL to the current, next and previous pages. Sometimes, you want to add some extra information to the URL. You can do this by getting a reference to the YDUrl object associated with the YDDatabaseSet. You can then change the URL using the methods provided by the YDUrl object. These changes will be automatically reflected in the YDDatabaseSet object linked with it. This is demonstrated with the following code sample:</para>
+        <para>As you can see in the previous example, we use the different getter functions to get the URL to the current, next and previous pages. Sometimes, you want to add some extra information to the URL. You can do this by getting a reference to the YDUrl object associated with the YDRecordSet. You can then change the URL using the methods provided by the YDUrl object. These changes will be automatically reflected in the YDRecordSet object linked with it. This is demonstrated with the following code sample:</para>
 
         <programlisting><![CDATA[<?php
 
@@ -393,7 +393,7 @@
 
         <note>Be careful with using very large recordsets with this method. With recordsets containing millions of rows, this way of working can be quite slow.</note>
 
-        <para>Since the YDDatabaseSet class is based on regular arrays, you can use it to page regular arrays as well. To page regular arrays, you need to instantiate the YDDatabaseSet class yourself, as illustrated by the following code sample:</para>
+        <para>Since the YDRecordSet class is based on regular arrays, you can use it to page regular arrays as well. To page regular arrays, you need to instantiate the YDRecordSet class yourself, as illustrated by the following code sample:</para>
 
         <programlisting><![CDATA[<?php
 
@@ -430,8 +430,8 @@
             $dir = new YDFSDirectory();
             $files = $dir->getContents( '*.*', null, 'YDFSFile' );
 
-            // Create the YDDatabaseSet object
-            $recordset = new YDDatabaseSet( $files, $page, $size );
+            // Create the YDRecordSet object
+            $recordset = new YDRecordSet( $files, $page, $size );
 
             // Setup the template
             $this->template->assign( 'recordset', $recordset );

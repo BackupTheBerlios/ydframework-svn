@@ -27,7 +27,7 @@
                     <listitem>exact</listitem>
                 </itemizedlist>
             </listitem>
-            <listitem>Implemented recordset paging using the YDDatabaseDriver::getRecordsAsSet function returning a YDDatabaseSet object.</listitem>
+            <listitem>Implemented recordset paging using the YDDatabaseDriver::getRecordsAsSet function returning a YDRecordSet object.</listitem>
             <listitem>Added the possibility to change URLs with the YDUrl class.</listitem>
             <listitem>Added the YDPath module containing a whole number of frequently-used path operations.</listitem>
             <listitem>YDDebugUtil can now output as HTML</listitem>
