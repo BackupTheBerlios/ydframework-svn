@@ -98,7 +98,7 @@
          *  the query, but fetches only the the specificed count of rows. It is 
          *  an emulation of the MySQL LIMIT option.
          *
-         *  @param $query  The SQL query or the statement to execute.
+         *  @param $url    The database url for this query.
          *  @param $from   The row to start to fetch.
          *  @param $count  The numbers of rows to fetch.
          *  @param $params Array, string or numeric data to be added to the
@@ -109,14 +109,14 @@
          *
          *  @returns The result of the SQL query.
          */
-        function executeSelectLimit( $url, $start, $count, $params=array() ) {
+        function executeSelectLimit( $url, $from, $count, $params=array() ) {
 
             // Instantiate the database object
             $db = new YDDatabase( $url );
 
             // Execute the query
             return $db->executeSelectLimit( 
-                $this->getSql(), $start, $count, $params
+                $this->getSql(), $from, $count, $params
             );
 
         }
