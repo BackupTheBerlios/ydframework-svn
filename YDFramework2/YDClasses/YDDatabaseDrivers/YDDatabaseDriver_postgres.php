@@ -55,13 +55,13 @@
 				$attribs = $this->_options;
 				$attribs['dbname'] = $this->_db;
 				$attribs['user'] = $this->_user;
-				$attribs['password'] = $this->_password;
+				$attribs['password'] = $this->_pass;
 				$attribs['host'] = $this->_host;
 				$connstr = array();
 				foreach ( $attribs as $key=>$value ) { array_push( $connstr, $key . '=' . $value ); }
 				$connstr = implode( ' ', $connstr );
-				$conn = @pg_open( $connstr );
-				if ( ! $conn ) { YDFatalError( $error ); }
+				$conn = @pg_connect( $connstr );
+				if ( ! $conn ) { YDFatalError( pg_last_error( $conn ) ); }
 				$this->_conn = $conn;
 			}
 		}
