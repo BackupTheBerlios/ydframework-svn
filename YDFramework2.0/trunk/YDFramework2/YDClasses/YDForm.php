@@ -127,6 +127,9 @@
 			$this->registerRule( 'mimetype', array( 'YDValidateRules', 'mimetype' ), 'YDValidateRules.php' );
 			$this->registerRule( 'filename', array( 'YDValidateRules', 'filename' ), 'YDValidateRules.php' );
 			$this->registerRule( 'extension', array( 'YDValidateRules', 'extension' ), 'YDValidateRules.php' );
+			$this->registerRule( 'is_date', array( 'YDValidateRules', 'is_date' ), 'YDValidateRules.php' );
+			$this->registerRule( 'is_time', array( 'YDValidateRules', 'is_time' ), 'YDValidateRules.php' );
+			$this->registerRule( 'is_datetime', array( 'YDValidateRules', 'is_datetime' ), 'YDValidateRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
@@ -297,6 +300,11 @@
 
 			// Register the element in the class.
 			$this->_elements[ $name ] = $instance;
+
+			// Register the automatic rules if any
+			foreach ( $instance->_autoRules as $rule ) {
+				$this->addRule( $name, $rule[0], $rule[1] );
+			}
 
 			// Return the reference to the instance
 			return $this->_elements[ $name ];
@@ -1014,7 +1022,7 @@
 			$this->YDBase();
 
 			// Initialize the variables
-			$this->_form = $form;
+			$this->_form = & $form;
 			$this->_name = $name;
 			$this->_label = $label;
 			$this->_attributes = $attributes;
@@ -1022,6 +1030,7 @@
 			$this->_type = '';
 			$this->_value = '';
 			$this->_isButton = false;
+			$this->_autoRules = array();
 
 			// Indicate where the label should be
 			$this->_labelPlace = 'before';

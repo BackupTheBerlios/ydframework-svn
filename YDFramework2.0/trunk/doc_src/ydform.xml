@@ -95,6 +95,9 @@
             <listitem><emphasis role="bold">text:</emphasis> Class for <![CDATA[<input type="text" />]]> elements.</listitem>
             <listitem><emphasis role="bold">textarea:</emphasis> Class for <![CDATA[<textarea />]]> elements.</listitem>
             <listitem><emphasis role="bold">bbtextarea:</emphasis> this is a special type of textarea field which has a toolbar for adding BBCode style tags to markup the text.</listitem>
+            <listitem><emphasis role="bold">date:</emphasis> a combination of select fields that allow a user to select a date.</listitem>
+            <listitem><emphasis role="bold">time:</emphasis> a combination of select fields that allow a user to select a time.</listitem>
+            <listitem><emphasis role="bold">datetime:</emphasis> is a combination of select fields that allow a user to select a datetime.</listitem>
         </itemizedlist>
 
         <para>You can also easily create your own form elements. Each form element needs to implement the following API:</para>
@@ -129,6 +132,7 @@
             $this->_type = '';
             $this->_value = '';
             $this->_isButton = false;
+            $this->_autoRules = array();
 
             // Indicate where the label should be
             $this->_labelPlace = 'before';
@@ -354,6 +358,14 @@
             <listitem><emphasis role="bold">mimetype:</emphasis> The file must have a correct mimetype</listitem>
             <listitem><emphasis role="bold">filename:</emphasis> The filename must match the given regex</listitem>
             <listitem><emphasis role="bold">extension:</emphasis> The filename must match the indicated extension</listitem>
+        </itemizedlist>
+
+        <para>We also have three rules that are used by the date/time form elements:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">is_date:</emphasis> value should be a valid date</listitem>
+            <listitem><emphasis role="bold">is_time:</emphasis> value should be a valid time</listitem>
+            <listitem><emphasis role="bold">is_datetime:</emphasis> value should be a valid datetime</listitem>
         </itemizedlist>
 
         <note>Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</note>
