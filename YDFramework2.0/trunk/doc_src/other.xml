@@ -33,6 +33,7 @@
 
         <programlisting><![CDATA[<?php
 
+    // Convert to a table with 3 columns
     YDArrayUtil::convertToTable( $array, 3 );
 
 ?>]]></programlisting>
@@ -83,6 +84,7 @@
 
         <programlisting><![CDATA[<?php
 
+    // Convert to a nested array, nesting on the group field
     YDArrayUtil::convertToNested( $array, 'group' );
 
 ?>]]></programlisting>
@@ -135,24 +137,60 @@
 
         <programlisting><![CDATA[<?php
 
-    $browser = new YDBrowserInfo()
-    echo( $browser->agent );
-    echo( $browser->browser );
-    echo( $browser->version );
-    echo( $browser->platform );
-    echo( $browser->dotnet );
-    echo( $browser->getBrowserLanguages() );
-    echo( $browser->getLanguage( array( 'en', 'nl', 'fr' ) ) );
+    // Instantiate a new YDBrowserInfo object
+    $browser = new YDBrowserInfo();
+
+    // Dump the different properties
+    YDDebugUtil::dump( $browser->agent, 'Agent' ); 
+    YDDebugUtil::dump( $browser->browser, 'Browser name' ); 
+    YDDebugUtil::dump( $browser->version, 'Version' ); 
+    YDDebugUtil::dump( $browser->platform, 'Platform' ); 
+    YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' ); 
+    YDDebugUtil::dump(
+        $browser->getBrowserLanguages(), 'Languages supported by the browser'
+    ); 
+    YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
 
 ?>]]></programlisting>
+
+        <para>If you execute this script, the following data will be outputted:</para>
+
+        <programlisting><![CDATA[Agent
+'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)'
+
+Browser name
+'ie'
+
+Version
+'6.0'
+
+Platform
+'win'
+
+Installed .NET runtimes
+array (
+  0 => '1.1',
+)
+
+Languages supported by the browser
+array (
+  0 => 'en',
+  1 => 'nl',
+  2 => 'fr',
+)
+
+Negotiated language
+'en']]></programlisting>
 
         <para>The getBrowser function will return one of the following values: ie, safari, opera, mozilla or other. The getPlatform function will return one of the following values: win, mac, linux, unix or other.</para>
 
         <para>The getAgent function will return the full HTTP user agent string as provided by the browser.</para>
 
-        <para>This class is very handy to display specific contents based on the browser of the user. You might e.g. specify a different stylesheet for Macintosh users compared to the stylesheet used for Windows users.</para>
+        <!-- TODO: add documentation about installed .net runtimes  -->
 
         <para>The getLanguage function helps you to choose a language from a list of supported languages based on the supported languages from the browser. The getLanguage function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that we gave as teh parameter to this function and will return the name of the most appropriate langauage. This function will also take into consideration the right priority of the languages specified by the browser. If no list of supported languages was specified, the framework will assume that only English is supported.</para>
+
+        <para>This class is very handy to display specific contents based on the browser of the user. You might e.g. specify a different stylesheet for Macintosh users compared to the stylesheet used for Windows users.</para>
 
     </sect1>
 
@@ -166,11 +204,13 @@
             <listitem><emphasis role="bold">isSubClass:</emphasis> This function will check if the specified object is subclassed from the specified class name or is an instance of the specified class.</listitem>
             <listitem><emphasis role="bold">getAncestors:</emphasis> This function will list you the parent classes of a specific class.</listitem>
             <listitem><emphasis role="bold">failOnMissingMethod:</emphasis> This function will raise a fatal exception if the specified object doens't contain the specified function.</listitem>
-            <listitem><emphasis role="bold">serialize:</emphasis> This function returns a gzipped stream containing a byte-stream representation of an object that can be stored anywhere.</listitem>
-            <listitem><emphasis role="bold">unserialize:</emphasis> This function takes a single gzipped serialized variable (the output from the YDObjectUtil::serialize() function) and converts it back into a PHP value.</listitem>
+            <listitem><emphasis role="bold">serialize:</emphasis> This function returns a stream containing a byte-stream representation of an object that can be stored anywhere.</listitem>
+            <listitem><emphasis role="bold">unserialize:</emphasis> This function takes a single serialized variable (the output from the YDObjectUtil::serialize() function) and converts it back into a PHP value.</listitem>
         </itemizedlist>
 
         <note>all these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</note>
+
+        <!-- TODO: add examples about the YDObjectUtil class -->
 
     </sect1>
 
@@ -225,9 +265,13 @@
 
         <programlisting><![CDATA[// The converter
 $conv = new YDBBCode();
+
+// Show the code converted to HTML
 echo( $conv->toHtml( $data ) );]]></programlisting>
 
         <para>The YDBBCode class also contains a static function that highlights ordinary links such as email links and web links and converts them into clickable links. For this purpose, you can use the YDBBCode::convertLinks method. This function can be used statically.</para>
+
+        <!-- TODO: add information about adding new tags to the YDBBCode class -->
 
     </sect1>
 
@@ -278,32 +322,58 @@ echo( $conv->toHtml( $data ) );]]></programlisting>
 
             // Test the formatting of filesizes
             $filesizes = array(
-                '1152921504606846977', '1125899906842625', '1099511627777', '75715455455', '1048577', '6543', '42'
+                '1152921504606846977', '1125899906842625',
+                '1099511627777', '75715455455',
+                '1048577', '6543', '42'
             );
 
             // Format the filesizes
             foreach ( $filesizes as $filesize ) {
-                YDDebugUtil::dump( YDStringUtil::formatFileSize( $filesize ), 'Formatting filesize: ' . $filesize );
+                YDDebugUtil::dump(
+                    YDStringUtil::formatFileSize( $filesize ),
+                    'Formatting filesize: ' . $filesize
+                );
             }
 
             // Test the encode string function
             $string = 'Pieter Claerhout @ creo.com "générales obsolète"';
-            YDDebugUtil::dump( YDStringUtil::encodeString( $string ), 'Encoding: ' . $string );
+            YDDebugUtil::dump(
+                YDStringUtil::encodeString( $string ), 'Encoding: ' . $string
+            );
 
             // Test the truncate function
-            YDDebugUtil::dump( YDStringUtil::truncate( $string ), 'Truncate (default): ' . $string );
-            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20 ), 'Truncate (20): ' . $string );
-            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20, ' [more]' ), 'Truncate (20/more): ' . $string );
-            YDDebugUtil::dump( YDStringUtil::truncate( $string, 20, ' [more]', true ), 'Truncate (20/more/true): ' . $string );
+            YDDebugUtil::dump(
+                YDStringUtil::truncate( $string ),
+                'Truncate (default): ' . $string
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::truncate( $string, 20 ),
+                'Truncate (20): ' . $string
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::truncate( $string, 20, ' [more]' ), 
+                'Truncate (20/more): ' . $string
+            );
+            YDDebugUtil::dump(
+                YDStringUtil::truncate( $string, 20, ' [more]', true ),
+                'Truncate (20/more/true): ' . $string
+            );
 
             // Test the normalizing of newlines
             $string = "line1\nline2\rline3\r\nline4";
-            YDDebugUtil::dump( explode( "\n", $string ), 'Original string' );
-            YDDebugUtil::dump( explode( YD_CRLF, YDStringUtil::normalizeNewlines( $string ) ), 'normalizeNewlines' );
+            YDDebugUtil::dump(
+                explode( "\n", $string ), 'Original string'
+            );
+            YDDebugUtil::dump(
+                explode( YD_CRLF, YDStringUtil::normalizeNewlines( $string ) ),
+                'normalizeNewlines'
+            );
 
             // Test the normalizing of newlines
             $string = "  line1  \n  line2  \r  line3  \r\n  line4  ";
-            YDDebugUtil::dump( YDStringUtil::removeWhiteSpace( $string ), 'removeWhiteSpace' );
+            YDDebugUtil::dump(
+                YDStringUtil::removeWhiteSpace( $string ), 'removeWhiteSpace'
+            );
 
         }
 
@@ -313,6 +383,65 @@ echo( $conv->toHtml( $data ) );]]></programlisting>
     YDInclude( 'YDF2_process.php' );
 
 ?>]]></programlisting>
+
+        <para>This script will output the following:</para>
+
+        <programlisting><![CDATA[Formatting filesize:1152921504606846977
+'1.0 EB'
+
+Formatting filesize: 1125899906842625
+'1.0 PB'
+
+Formatting filesize: 1099511627777
+'1.0 TB'
+
+Formatting filesize: 75715455455
+'70.5 GB'
+
+Formatting filesize: 1048577
+'1.0 MB'
+
+Formatting filesize: 6543
+'6.4 KB'
+
+Formatting filesize: 42
+'42 bytes'
+
+Encoding: Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout @ creo.com "g&#233;n&#233;rales obsol&#232;te"'
+
+Truncate (default): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout @ creo.com "générales obsolète"'
+
+Truncate (20): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout...'
+
+Truncate (20/more): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter [more]'
+
+Truncate (20/more/true): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerh [more]'
+
+Original string
+array (
+  0 => 'line1',
+  1 => 'line2
+line3
+',
+  2 => 'line4',
+)
+
+normalizeNewlines
+array (
+  0 => 'line1',
+  1 => 'line2',
+  2 => 'line3',
+  3 => 'line4',
+)
+
+removeWhiteSpace
+'line1 line2 line3 line4']]></programlisting>
+
     </sect1>
 
 </chapter>
