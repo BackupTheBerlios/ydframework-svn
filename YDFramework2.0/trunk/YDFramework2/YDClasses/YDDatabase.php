@@ -176,6 +176,9 @@
 			// Add the list of pages as an array
 			$this->pages = ( $this->totalPages == 1 ) ? array() : range( 1, $this->totalPages );
 
+			// Remove the original set of records, as we don't need them anymore
+			unset( $this->records );
+
 		}
 
 		/**
