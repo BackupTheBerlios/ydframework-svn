@@ -240,21 +240,11 @@
 		trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
 	}
 
-	/**
-	 *	This is the base class for all other YD classes.
-	 */
-	class YDBase {
-
-		/**
-		 *	Class constructor for the YDBase class.
-		 */
-		function YDBase() {
-		}
-
-	}
+	// Include the base classes
+	YDInclude( 'YDBase.php' );
+	YDInclude( 'YDUtil.php' );
 
 	// Start the timer
-	YDInclude( 'YDUtil.php' );
 	$timer = new YDTimer();
 
 ?>
