@@ -68,7 +68,7 @@
 			$file = new YDFSFile( YD_LOG_FILE );
 			$data = $file->getContents();
 
-			if ( substr( $data, 0, 5 ) == '<log>' ) {
+			if ( substr( $data, 0, 5 ) == '<?xml' ) {
 				header( 'Content-type: text/xml' );
 			} else {
 				header( 'Content-type: text/plain' );
