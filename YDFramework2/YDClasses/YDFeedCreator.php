@@ -10,13 +10,9 @@
         die(  'Yellow Duck Framework is not loaded.' );
     }
 
-    // Define our version
-    define( 'FEEDCREATOR_VERSION', YD_FW_NAMEVERS . ' - YDFeedCreator' );
-
     // Includes
     require_once( 'YDBase.php' );
     require_once( 'YDStringUtil.php' );
-    require_once( 'feedcreator/feedcreator.class.php' );
 
     /**
      *  This class defines a RSS/ATOM feed. You can use this class to create RSS
@@ -44,9 +40,23 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Instantiate the feed creator
-            $this->_ufc = new UniversalFeedCreator();
+            // Start with the general variables
+            $this->_encoding = 'ISO-8859-1';
+            $this->_title = '';
+            $this->_description = '';
+            $this->_link = '';
+            $this->_items = array();
+            $this->_generator = YD_FW_NAMEVERS . ' - YDFeedCreator';
 
+        }
+
+        /**
+         *  Function to set the encoding of the feed.
+         *
+         *  @param $encoding The encoding of the feed.
+         */
+        function setEncoding( $encoding ) {
+            $this->_encoding = strtoupper( $encoding );
         }
 
         /**
@@ -55,7 +65,7 @@
          *  @param $title The title of the feed.
          */
         function setTitle( $title ) {
-            $this->_ufc->title = YDStringUtil::encodeString( $title );
+            $this->_title = YDStringUtil::encodeString( $title, true );
         }
 
         /**
@@ -64,7 +74,7 @@
          *  @param $desc The description of the feed.
          */
         function setDescription( $desc ) {
-            $this->_ufc->description = YDStringUtil::encodeString( $desc );
+            $this->_description = YDStringUtil::encodeString( $desc, true );
         }
 
         /**
@@ -73,7 +83,7 @@
          *  @param $link The link of the feed.
          */
         function setLink( $link ) {
-            $this->_ufc->link = $link;
+            $this->_link = htmlentities( $link );
         }
 
         /**
@@ -89,39 +99,23 @@
          */
         function addItem( $title, $link, $desc=null, $guid=null ) {
 
-            // Create a new item
-            $item = new FeedItem();
-
-            // Add the title and link
-            $item->title = YDStringUtil::encodeString( $title );
-            $item->link = $link;
-
-            // Add the description if any
-            if ( $desc != null ) {
-                $item->description = YDStringUtil::encodeString( $desc );
+            // Create a GUID if there is not any
+            if ( empty( $guid  ) ) {
+                $checkSum = $this->_link . $title . $link;
+                if ( $desc != null ) { $checkSum .= $desc; }
+                $guid = md5( $checkSum );
             }
 
-            // Add a guid or create one
-            if ( $guid != null ) {
-                $item->guid = $guid;
-            } else {
+            // Create the array with the item information
+            $item = array(
+                'title' => YDStringUtil::encodeString( $title, true ), 
+                'link' => htmlentities( $link ),
+                'description' => $desc, 
+                'guid' => $guid
+            );
 
-                // Create the checksum parts
-                $checkSum = $this->_ufc->link;
-                $checkSum .= $item->title . $item->link;
-
-                // Add the description if any
-                if ( $desc != null ) {
-                    $checkSum .= $item->description;
-                }
-
-                // Assign the guid
-                $item->guid = md5( $checkSum );
-
-            }
-
-            // Add the item to the feed
-            $this->_ufc->addItem( $item );
+            // Add it to the list of items
+            $this->_items[ $guid ] = $item;
 
         }
 
@@ -160,38 +154,130 @@
                 );
             }
 
-            // The Universal Feed Creator has a different name for ATOM feeds
-            if ( $format == 'ATOM' ) {
-                $format = 'ATOM0.3';
+            // Start with the first XML line
+            $xml = '<?xml version="1.0" encoding="' . $this->_encoding . '"?>';
+      
+            // Formatter for RSS 0.91
+            if ( $format == 'RSS0.91' || $format == 'RSS2.0' ) {
+
+                // Setup the feed
+                if ( $format == 'RSS0.91' ) {
+                    $xml .= '<rss version="0.91">';
+                } else {
+                    $xml .= '<rss version="2.0">';
+                }
+                $xml .= '<channel>';
+                $xml .= '<title>' . $this->_title . '</title>';
+                if ( ! empty( $this->_description ) ) {
+                    $xml .= '<description>' . $this->_description . '</description>';
+                }
+                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<generator>' . $this->_generator . '</generator>';
+
+                // Add the items
+                foreach ( $this->_items as $item ) {
+                
+                    // Encode the description
+                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
+
+                    // Add the item
+                    $xml .= '<item>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link>' . $item['link'] . '</link>';
+                    $xml .= '<guid isPermanlink="false">' . $item['guid'] . '</guid>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<description>' . $item['description'] . '</description>';
+                    }
+                    $xml .= '</item>';
+
+                }
+
+                // Close the feed
+                $xml .= '</channel>';
+                $xml .= '</rss>';
+
             }
 
-            // Create the feed and return it
-            $result = $this->_ufc->createFeed( strtoupper( $format ) );
-
-            // The Universal Feed Creator has a different name for ATOM feeds
+            // Formatter for RSS1.0
             if ( $format == 'RSS1.0' ) {
 
-                // Strip the stylesheet from RSS 1.0
-                $result = str_replace(
-                    "\n" . '<?xml-stylesheet href="http://www.w3.org/2000/08/w3c-synd/style.css" type="text/css"?>',
-                    '',
-                    $result
-                );
+                // Setup the feed
+                $xml .= '<rdf:RDF';
+                $xml .= ' xmlns="http://purl.org/rss/1.0/"';
+                $xml .= ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"';
+                $xml .= ' xmlns:dc="http://purl.org/dc/elements/1.1/">';
 
-                // Fix a small display issue
-                $result = str_replace( '<dc:date>', ' <dc:date>', $result );
+                // Add the channel information
+                $xml .= '<channel rdf:about="">';
+                $xml .= '<title>' . $this->_title . '</title>';
+                $xml .= '<description>' . $this->_description . '</description>';
+                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<items>';
+                $xml .= '<rdf:Seq>';
+                foreach ( $this->_items as $item ) {
+                    $xml .= '<rdf:li rdf:resource="' . $item['link'] . '"/>';
+                }
+                $xml .= '</rdf:Seq>';
+                $xml .= '</items>';
+                $xml .= '</channel>';
+
+                // Add the items
+                foreach ( $this->_items as $item ) {
+                
+                    // Encode the description
+                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
+
+                    // Add the item
+                    $xml .= '<item rdf:about="' . $item['link'] . '">';
+                    $xml .= '<dc:format>text/html</dc:format>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link>' . $item['link'] . '</link>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<description>' . $item['description'] . '</description>';
+                    }
+                    $xml .= '</item>';
+
+                }
+
+                // Close the feed
+                $xml .= '</rdf:RDF>';
 
             }
 
-            // Strip the generator comment
-            $result = str_replace(
-                "\n" . '<!-- generator="' . YD_FW_NAMEVERS . ' - YDFeedCreator" -->',
-                '',
-                $result
-            );
+            // Formatter for ATOM
+            if ( $format == 'ATOM' ) {
 
-            // Return the result
-            return $result;
+                // Setup the feed
+                $xml .= '<feed version="0.3" xmlns="http://purl.org/atom/ns#">';
+                $xml .= '<title>' . $this->_title . '</title>';
+                if ( ! empty( $this->_description ) ) {
+                    $xml .= '<tagline>' . $this->_description . '</tagline>';
+                }
+                $xml .= '<link rel="alternate" type="text/html" href="' . $this->_link . '"/>';
+                $xml .= '<id>' . $this->_link . '</id>';
+                $xml .= '<generator>' . $this->_generator . '</generator>';
+
+                // Add the items
+                foreach ( $this->_items as $item ) {                
+                    $xml .= '<entry>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link rel="alternate" type="text/html" href="' . $item['link'] . '"/>';
+                    $xml .= '<id>' . $item['guid'] . '</id>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ '; 
+                        $xml .= $item['description'];
+                        $xml .= ' ]]></content>';
+                    }
+                    $xml .= '</entry>';
+                }
+
+                // Close the feed
+                $xml .= '</feed>';
+
+            }
+
+            // Return the XML
+            return $xml;
 
         }
 
@@ -220,46 +306,6 @@
 
             // Create the feed and return it
             echo( $this->toXml( $format ) );
-
-        }
-
-        /**
-         *  This function will output the feed in the specified format and will
-         *  color the XML elements using HTML code. The following formats are
-         *  recognized:
-         *
-         *  - RSS0.91
-         *  - RSS1.0
-         *  - RSS2.0
-         *  - ATOM
-         *
-         *  @remark
-         *      The default format is "RSS2.0". If you specify no argument
-         *      indicating the requested format, the "RSS2.0" format will be
-         *      used.
-         *
-         *  @param $format (optional) The format in which the items should be
-         *                 converted.
-         *  @param $color  (optional) The color of the XML tags.
-         *
-         *  @returns HTML colored XML data.
-         */
-        function getColoredXml( $format='RSS2.0', $color='darkred' ) {
-
-            // Create the feed as XML
-            $xml = $this->toXml( $format );
-
-            // Convert to pre and HTML entities
-            $xml = '<pre>' . htmlentities( $xml ) . '</pre>';
-
-            // Color code the xml
-            $xml = str_replace(
-                '&lt;', '<font color="' . $color . '">&lt;', $xml
-            );
-            $xml = str_replace( '&gt;', '&gt;</font>', $xml );
-
-            // Return the colored XML
-            return $xml;
 
         }
 

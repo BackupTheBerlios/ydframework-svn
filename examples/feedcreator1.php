@@ -54,19 +54,19 @@
 
             // Output the feed in RSS0.91
             echo( '<h3>RSS 0.91</h3>' );
-            echo( $this->fc->getColoredXml( 'RSS0.91' ) );
+            echo( htmlentities( $this->fc->toXml( 'RSS0.91' ) ) );
 
             // Output the feed in RSS1.0
             echo( '<h3>RSS 1.0</h3>' );
-            echo( $this->fc->getColoredXml( 'RSS1.0' ) );
+            echo( htmlentities( $this->fc->toXml( 'RSS1.0' ) ) );
 
             // Output the feed in the default format (RSS2.0)
             echo( '<h3>RSS 2.0 (default)</h3>' );
-            echo( $this->fc->getColoredXml() );
+            echo( htmlentities( $this->fc->toXml() ) );
 
             // Output the feed in ATOM
             echo( '<h3>ATOM</h3>' );
-            echo( $this->fc->getColoredXml( 'ATOM' ) );
+            echo( htmlentities( $this->fc->toXml( 'ATOM' ) ) );
 
         }
 
