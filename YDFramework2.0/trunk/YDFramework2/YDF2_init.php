@@ -133,7 +133,6 @@
 		}
 	}
 
-
 	// Update the include path
 	$includePath = YD_SELF_DIR;
 	if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
@@ -143,7 +142,11 @@
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
 	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
-	$includePath .= YD_PATHDELIM . YD_DIR_3RDP . '/PEAR';
+	if ( ini_get( 'include_path' ) != '' ) {
+		$includePath .= YD_PATHDELIM . ini_get( 'include_path' );
+	}
+	$GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
+	//var_dump( $GLOBALS['YD_INCLUDE_PATH'] );
 	ini_set( 'include_path', $includePath );
 
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
