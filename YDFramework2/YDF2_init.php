@@ -209,9 +209,22 @@
      *        long at that class has a "execute" function. The class
      *        constructor for this class gets the full path of the current
      *        request as it's argument.
+     * 
+     *  @internal
      */
     if ( ! defined( 'YD_EXECUTOR' ) ) {
         define( 'YD_EXECUTOR', 'YDExecutor' );
+    }
+
+    /**
+     *  @enum YD_ERR_HANDLER
+     *        This is the name of the function that will be used to handle
+     *        all errors in the Yellow Duck Framework.
+     * 
+     *  @internal
+     */
+    if ( ! defined( 'YD_ERR_HANDLER' ) ) {
+        define( 'YD_ERR_HANDLER', 'YDErrorHandler' );
     }
 
     // Get debugging mode
@@ -248,6 +261,9 @@
     require_once( 'YDBase.php' );
     require_once( 'YDError.php' );
     require_once( 'YDPhpUtil.php' );
+
+    // Register the error handler
+    set_error_handler( YD_ERR_HANDLER );
 
     // Check if we have the right PHP version
     if ( YDPhpUtil::versionCheck( '4.2.0' ) == false ) {

@@ -94,7 +94,4 @@
 
     }
 
-    // Set the error handler
-    set_error_handler( 'YDErrorHandler' );
-
 ?>
