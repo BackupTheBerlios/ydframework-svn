@@ -243,8 +243,22 @@
 		 *	@param $format	(optional) The format in which the items should be converted.
 		 */
 		function outputXml( $format='RSS2.0' ) {
+
+			$xml = $this->toXml( $format );
+
+			$etag = '"' . md5( $xml ) . '"';
+			header( 'ETag: ' . $etag );
+			$inm = split( ',', getenv( 'HTTP_IF_NONE_MATCH' ) );
+			foreach ( $inm as $i ) {
+				if ( trim($i) == $etag ) {
+					header( 'HTTP/1.0 304 Not Modified' );
+					die();
+				}
+			}
+
 			header( 'Content-type: text/xml' );
-			echo( $this->toXml( $format ) );
+			echo( $xml );
+
 		}
 
 	}
