@@ -85,7 +85,7 @@
 		 *	@returns	A single value matching the SQL statement.
 		 */
 		function getValue( $sql ) {
-			$record = $this->getRecord( $sql );
+			$record = array_values( $this->getRecord( $sql ) );
 			if ( ! $record ) { return false; }
 			return $record[0];
 		}

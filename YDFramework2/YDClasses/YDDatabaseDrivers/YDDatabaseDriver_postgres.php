@@ -43,8 +43,7 @@
 		 *	@returns	The version of the database server software.
 		 */
 		function getServerVersion() {
-			$this->connect();
-			return 'PostgreSQL ' . pg_version();
+			return $this->getValue( 'select version()' );
 		}
 
 		/**
@@ -58,7 +57,11 @@
 				$attribs['password'] = $this->_pass;
 				$attribs['host'] = $this->_host;
 				$connstr = array();
-				foreach ( $attribs as $key=>$value ) { array_push( $connstr, $key . '=' . $value ); }
+				foreach ( $attribs as $key=>$value ) {
+					if ( ! empty( $value ) ) {
+						array_push( $connstr, $key . '=' . $value );
+					}
+				}
 				$connstr = implode( ' ', $connstr );
 				$conn = @pg_connect( $connstr );
 				if ( ! $conn ) { YDFatalError( pg_last_error( $conn ) ); }
@@ -153,7 +156,7 @@
 			$this->_logSql( $sql );
 			$this->connect();
 			$result = pg_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( pg_last_error( $conn ) ); }
+			if ( ! $result ) { YDFatalError( pg_last_error( $this->_conn ) ); }
 			return $result;
 		}
 

@@ -163,7 +163,7 @@
 		function & _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
-			$result = mysql_query( $sql, $this->_conn );
+			$result = @mysql_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
 			return $result;
 		}

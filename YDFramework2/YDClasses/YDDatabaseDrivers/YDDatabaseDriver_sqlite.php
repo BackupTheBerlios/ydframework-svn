@@ -153,7 +153,7 @@
 		function & _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
-			$result = sqlite_query( $sql, $this->_conn );
+			$result = @sqlite_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $this->_conn ) ) ); }
 			return $result;
 		}

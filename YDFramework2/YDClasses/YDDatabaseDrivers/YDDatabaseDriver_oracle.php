@@ -57,7 +57,7 @@
 			if ( $this->_conn == null ) {
 				$conn = @OCILogon( $this->_user, $this->_pass, $this->_db );
 				if ( ! $conn ) { 
-					$error = ocierror();
+					$error = ocierror( $conn );
 					YDFatalError( $error['message'] );
 				}
 				$this->_conn = $conn;
@@ -142,9 +142,13 @@
 			$this->_logSql( $sql );
 			$this->connect();
 			$stmt = OCIParse( $this->_conn, $sql );
-			$result = OCIExecute( $stmt );
+			if ( ! $stmt ) {
+				$error = ocierror( $stmt );
+				YDFatalError( $error['message'] );
+			}
+			$result = @OCIExecute( $stmt );
 			if ( ! $result ) {
-				$error = ocierror();
+				$error = ocierror( $result );
 				YDFatalError( $error['message'] );
 			}
 			return $stmt;
