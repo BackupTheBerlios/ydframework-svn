@@ -17,8 +17,14 @@
 
 		// Default action
 		function actionDefault() {
-			$this->setVar( 'browser', new YDBrowserInfo() );
-			$this->outputTemplate();
+			$browser = new YDBrowserInfo();
+			YDDebugUtil::dump( $browser->getAgent(), 'Agent' );
+			YDDebugUtil::dump( $browser->getBrowser(), 'Browser name' );
+			YDDebugUtil::dump( $browser->getVersion(), 'Version' );
+			YDDebugUtil::dump( $browser->getPlatform(), 'Platform' );
+			YDDebugUtil::dump( $browser->getDotNetRuntimes(), 'Installed .NET runtimes' );
+			YDDebugUtil::dump( $browser->getBrowserLanguages(), 'Languages supported by the browser' );
+			YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
 		}
 
 	}

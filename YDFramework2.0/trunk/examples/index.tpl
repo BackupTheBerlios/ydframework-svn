@@ -41,8 +41,6 @@
 			</td>
 			<td valign="top">
 				<a href="[$YD_SELF_SCRIPT]?do=source&id=browserinfo.php">browserinfo.php</a>
-				<br>
-				<a href="[$YD_SELF_SCRIPT]?do=source&id=browserinfo.tpl">browserinfo.tpl</a>
 			</td>
 		</tr>
 		<tr>
