@@ -87,9 +87,6 @@
 		 *	@param $link	The link to the feed item.
 		 *	@param $desc	(optional) The description for the feed item.
 		 *	@param $guid	(optional) The guid for the feed item.
-		 *
-		 *	@todo
-		 *		If the link starts with a /, then prepend the current servername and port number.
 		 */
 		function addItem( $title, $link, $desc=null, $guid=null ) {
 
