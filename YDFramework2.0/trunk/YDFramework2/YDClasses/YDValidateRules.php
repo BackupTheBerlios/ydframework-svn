@@ -180,10 +180,14 @@
 		 *	This rule checks if a file upload had the right mime type.
 		 *
 		 *	@param $val		The value to test.
-		 *	@param $opts	The required mime type.
+		 *	@param $opts	The required mime type or an array of allowed mime types.
 		 */
 		function mimetype( $val, $opts ) {
-			return ( $val['type'] == $opts );
+			if ( ! is_array( $opts ) ) {
+				$opts = array( $opts );
+			}
+			return in_array( $val['type'], $opts );
+			//return ( $val['type'] == $opts );
 		}
 
 		/** 
