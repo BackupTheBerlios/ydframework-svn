@@ -461,6 +461,24 @@
 			$this->_path = realpath( $path );
 
 		}
+		
+		/**
+		 *	Function to get the basename of the directory. This does not include the path information.
+		 *
+		 *	@returns	String containing the name of the object.
+		 */
+		function getBasename() {
+			return basename( $this->getAbsolutePath() );
+		}
+
+		/**
+		 *	Function to get the full absolute path of the object.
+		 *
+		 *	@returns	String containing the full absolute path of the object.
+		 */
+		function getAbsolutePath() {
+			return $this->getPath();
+		}
 
 		/**
 		 *	This function will get a file list using a pattern. You can compare this function with the dir command from 

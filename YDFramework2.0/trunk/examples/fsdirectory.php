@@ -23,6 +23,11 @@
 
 			// Dump the object
 			YDDebugUtil::dump( $dir, dirname( __FILE__ ) );
+			
+			// Dump the path properties
+			YDDebugUtil::dump( $dir->getBasename(), '$dir->getBasename()' );
+			YDDebugUtil::dump( $dir->getPath(), '$dir->getPath()' );
+			YDDebugUtil::dump( $dir->getAbsolutePath(), '$dir->getAbsolutePath()' );
 
 			// All files in the directory
 			YDDebugUtil::dump( $dir->getContents(), '$dir->getContents()' );
