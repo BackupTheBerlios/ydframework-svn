@@ -21,6 +21,7 @@ pages = [
     'YDFeedCreator',
     'BestPractices',
     'YDDatabase',
+    'YDOther',
 ]
 
 images = [
@@ -101,6 +102,10 @@ def main():
                 'http://www.yellowduck.be/ydf2/images/' + imagelink, imagelink
             )
             out = out.replace( '../images/' + imagelink, imagelink )
+
+        out = out.replace(
+            'http://www.yellowduck.be/ydf2/api/index.html', '../api/index.html'
+        )
 
         saveData( out, os.path.join( outdir, page + '.html' ) )
 
