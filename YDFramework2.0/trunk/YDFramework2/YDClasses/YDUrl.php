@@ -142,6 +142,27 @@
 		}
 
 		/**
+		 *	This function will return the path part of the URL as an array.
+		 *
+		 *	@returns	The path part of the URL.
+		 */
+		function getPathSegments() {
+			$segments = explode( '/', $this->getNamedPart( 'path' ) );
+			return array_slice( $segments, 1 );
+		}
+
+		/**
+		 *	This function will return the path part of the URL as an array, only including directories. If the last part
+		 *	of the URL is not a forward slash, the last part is considered to be a regular file.
+		 *
+		 *	@returns	The path part of the URL.
+		 */
+		function getPathDirectories() {
+			$dirs = $this->getPathSegments();
+			return array_slice( $dirs, 0, -1 );
+		}
+
+		/**
 		 *	This function will return the query part of the URL. This is everything after the ? mark.
 		 *
 		 *	@returns	The query part of the URL.

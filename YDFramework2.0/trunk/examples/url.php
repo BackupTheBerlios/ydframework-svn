@@ -19,7 +19,7 @@
 		function actionDefault() {
 
 			// Create the URL object
-			$url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/index.xml' );
 
 			// The different parts
 			echo( '<br>URL: ' . $url->getUrl() );
@@ -29,6 +29,56 @@
 			echo( '<br>User: ' . $url->getUser() );
 			echo( '<br>Password: ' . $url->getPassword() );
 			echo( '<br>Path: ' . $url->getPath() );
+			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
+			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Fragment: ' . $url->getFragment() );
+
+			// Create the URL object
+			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/index' );
+
+			// The different parts
+			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br>Scheme: ' . $url->getScheme() );
+			echo( '<br>Host: ' . $url->getHost() );
+			echo( '<br>Port: ' . $url->getPort() );
+			echo( '<br>User: ' . $url->getUser() );
+			echo( '<br>Password: ' . $url->getPassword() );
+			echo( '<br>Path: ' . $url->getPath() );
+			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
+			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Fragment: ' . $url->getFragment() );
+
+			// Create the URL object
+			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/' );
+
+			// The different parts
+			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br>Scheme: ' . $url->getScheme() );
+			echo( '<br>Host: ' . $url->getHost() );
+			echo( '<br>Port: ' . $url->getPort() );
+			echo( '<br>User: ' . $url->getUser() );
+			echo( '<br>Password: ' . $url->getPassword() );
+			echo( '<br>Path: ' . $url->getPath() );
+			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
+			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Fragment: ' . $url->getFragment() );
+
+			// Create the URL object
+			$url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+
+			// The different parts
+			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br>Scheme: ' . $url->getScheme() );
+			echo( '<br>Host: ' . $url->getHost() );
+			echo( '<br>Port: ' . $url->getPort() );
+			echo( '<br>User: ' . $url->getUser() );
+			echo( '<br>Password: ' . $url->getPassword() );
+			echo( '<br>Path: ' . $url->getPath() );
+			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
 			echo( '<br>Query: ' . $url->getQuery() );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
