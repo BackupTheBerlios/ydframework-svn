@@ -44,7 +44,7 @@
 		@define( 'YD_CRLF', "\r\n" );
 		@define( 'YD_PATHDELIM', ';' );
 		@define( 'YD_DIRDELIM', '\\' );
-		} elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
+	} elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
 		@define( 'YD_CRLF', "\r" );
 		@define( 'YD_PATHDELIM', ':' );
 		@define( 'YD_DIRDELIM', '/' );

@@ -35,6 +35,17 @@
 				YDPath::hasExtension( YDPath::getFileNameWithoutExtension( __FILE__ ) ),
 				'hasExtension( YDPath::getFileNameWithoutExtension( __FILE__ ) )'
 			);
+			YDDebugUtil::dump( YDPath::isAbsolute( __FILE__ ), 'isAbsolute( __FILE__ )' );
+			YDDebugUtil::dump( YDPath::isAbsolute( YDPath::getFileName( __FILE__ ) ), 'isAbsolute( getFileName( __FILE__ ) )' );
+			YDDebugUtil::dump( YDPath::join( __FILE__ ), 'join( __FILE__ )' );
+			YDDebugUtil::dump(
+				YDPath::join( YDPath::getTempPath(), YDPath::getFileName( __FILE__ ) ), 
+				'join( getTempPath(), getFileName( __FILE__ ) )'
+			);
+			YDDebugUtil::dump(
+				YDPath::join( YDPath::getTempPath(), __FILE__ ), 
+				'join( getTempPath(), __FILE__ )'
+			);
 		}
 
 	}

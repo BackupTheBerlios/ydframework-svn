@@ -197,6 +197,85 @@
 			return empty( $ext ) ? false : true;
 		}
 
+		/**
+		 *	This function will check if the path is an absolute path or not.
+		 *
+		 *	@param	$path	The path to check
+		 *
+		 *	@returns	Boolean indicating if the path is absolute or not.
+		 *
+		 *	@static
+		 */
+		function isAbsolute( $path ) {
+			if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
+				if ( strlen( $path ) > 3 && substr( $path, 1, 2 ) == ':\\' ) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return ( substr( $path, 0, 1 ) == '/' );
+			}
+		}
+
+		/**
+		 *	This function combines different file path elements to each other.
+		 *
+		 *	join( 'C:\temp', 'subdir', 'file.html' )
+		 *
+		 *	results in the following path:
+		 *
+		 *	C:\temp\subdir\file.html
+		 *
+		 *	@returns	The joined path.
+		 *
+		 *	@static
+		 */
+		function join() {
+
+			// Get the arguments for this function
+			$args = func_get_args();
+
+			// Start with an empty path
+			$path = '';
+
+			// Loop over the different elements
+			foreach ( $args as $arg ) {
+
+				// Check for an absolute path
+				if ( YDPath::isAbsolute( $arg ) ) {
+					$path = $arg;
+				} else {
+
+					// Normalize the path elements
+					$path = str_replace( '/', YDPath::getDirectorySeparator(), $path );
+					$path = str_replace( '\\', YDPath::getDirectorySeparator(), $path );
+
+					// Remove the trailing directory separator
+					if ( substr( $arg, -1, 1 ) == YDPath::getDirectorySeparator() ) {
+						$arg = substr( $arg, 0, -1 );
+					}
+
+					// Add it to the path
+					if ( strlen( $path ) > 0 ) {
+						if ( substr( $arg, 0, 1 ) != YDPath::getDirectorySeparator() ) {
+							$path .= YDPath::getDirectorySeparator() . $arg;
+						} else {
+							$path .= $arg;
+						}
+					} else {
+						$path .= $arg;
+					}
+
+				}
+
+			}
+
+			// Return the joined path
+			return $path;
+
+		}
+
 	}
 
 	/**
