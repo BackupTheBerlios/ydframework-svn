@@ -69,51 +69,6 @@
         }
 
         /**
-         *  Function to check if a value is true or not. The value can be anything,
-         *  including a string, an object or an integer.
-         *
-         *  The following values are considered as being true:
-         *  - true (native true value of PHP)
-         *  - 1 (both as string and as integer)
-         *  - true
-         *  - yes
-         *  - on
-         *
-         *  All other values are considered to represent false.
-         *
-         *  @param $val Value to check.
-         *
-         *  @return Boolean indicating if the value is true or false.
-         *
-         *  @todo
-         *      Check if all the different instances work as expected.
-         *
-         *  @todo
-         *      Double check if this function is really needed or not.
-         */
-        function isTrue( $val ) {
-
-            // First, check if it's a real true or not
-            if ( $val == true || $val === 1 ) {
-                return true;
-            }
-
-            // The values we consider to be true
-            $trueVals = array( '1', 'true', 'yes', 'on' );
-
-            // If it's an array or object, return false
-            if ( is_array( $val ) || is_object( $val ) ) {
-                return false;
-            }
-
-            // Convert the value to lowercase
-            $val = strtolower( strval( $val ) );
-
-            // Return if it's true or not
-            return ( in_array( $val, $trueVals ) );
-        }
-
-        /**
          *  Function to get all the ancestors of a class. The list will contain the
          *  parent class first, and then it's parent class, etc. You can pass both
          *  the name of the class or an object instance to this function

@@ -411,7 +411,7 @@
          *               authentication or not.
          */
         function setRequiresAuthentication( $bool ) {
-            if ( YDObjectUtil::isTrue( $bool ) ) {
+            if ( $bool == true ) {
                 $this->__requiresAuthentication = true;
             } else {
                 $this->__requiresAuthentication = false;
@@ -426,10 +426,10 @@
          *           requires authentication or not.
          */
         function getRequiresAuthentication() {
-            if ( YDObjectUtil::isTrue( $this->__requiresAuthentication ) ) {
-                return true;
-            } else {
+            if ( $this->__requiresAuthentication == false ) {
                 return false;
+            } else {
+                return true;
             }
         }
 
