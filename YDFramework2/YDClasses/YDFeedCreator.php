@@ -88,7 +88,7 @@
             $img = new FeedImage();
 
             // Add the required properties
-            $img->title = htmlentities( YDStringUtil::encodeString( $title ) );
+            $img->title = YDStringUtil::encodeString( $title );
             $img->link = $link;
             $img->url = $url;
 
