@@ -116,6 +116,10 @@
 	 *	- isFirstPage: boolean indicating if we are on the first page or not
 	 *	- isLastPage: boolean indicating if we are on the last page or not
 	 *	- pages: all the page numbers as a single-dimension array
+	 *	- getPreviousUrl: the URL to the previous page
+	 *	- getCurrentUrl: the URL of the current page
+	 *	- getNextUrl: the URL of the next page
+	 *	- getPageUrl: the URL of the given page
 	 *
 	 *	All these options are available as class variables.
 	 *
