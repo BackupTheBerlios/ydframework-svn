@@ -54,6 +54,9 @@
 		 */
 		function getOutput( $name ) {
 
+			// Show the variables if debugging mode
+			YDDebugUtil::debug( YDDebugUtil::r_dump( $this->_vars ) );
+
 			// Add some default variables
 			$this->setVar( 'YD_FW_NAME', YD_FW_NAME );
 			$this->setVar( 'YD_FW_VERSION', YD_FW_VERSION );
