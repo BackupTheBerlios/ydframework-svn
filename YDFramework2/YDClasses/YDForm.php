@@ -10,15 +10,12 @@
 	require_once( 'YDBase.php' );
 
 	/**
-	 *	This class defines an object oriented form.
-	 *
-	 *	@todo
-	 *		Convert all the examples to this new form object and kick out PEAR.
+	 *	This class defines an object oriented HTML form.
 	 *
 	 *	@todo
 	 *		All registering functions should use lowercase element names.
 	 */
-	class YDForm2 extends YDBase {
+	class YDForm extends YDBase {
 
 		/**
 		 *
@@ -29,7 +26,7 @@
 		 *	@param $target		(optional) HTML target for the form.
 		 *	@param $attributes	(optional) Attributes for the form.
 		 */
-		function YDForm2( $name, $method='post', $action='', $target='_self', $attributes=null ) {
+		function YDForm( $name, $method='post', $action='', $target='_self', $attributes=null ) {
 
 			// Initialize the parent
 			$this->YDBase();

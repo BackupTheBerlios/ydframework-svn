@@ -4,7 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 	require_once( 'YDRequest.php' );
 	require_once( 'YDFSDirectory.php' );
 
@@ -26,7 +26,7 @@
 			$this->setVar( 'formValid', false );
 
 			// Create the form
-			$form = new YDForm2( 'firstForm' );
+			$form = new YDForm( 'firstForm' );
 
 			// Set the defaults
 			$form->setDefaults( array( 'name' => 'Joe User' ) );

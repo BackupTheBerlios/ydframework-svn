@@ -5,7 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 	require_once( 'YDTemplate.php' );
 	require_once( 'YDStringUtil.php' );
 
@@ -24,7 +24,7 @@
 			$this->setVar( 'formValid', false );
 
 			// Create the form
-			$form = new YDForm2( 'uploadForm' );
+			$form = new YDForm( 'uploadForm' );
 
 			// Add the elements
 			$file = & $form->addElement(  'file', 'file1', 'Select a file to upload:' );

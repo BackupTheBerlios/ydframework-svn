@@ -7,7 +7,7 @@
 	require_once( 'YDRequest.php' );
 	require_once( 'YDFSDirectory.php' );
 	require_once( 'YDObjectUtil.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 	require_once( 'YDError.php' );
 
 	// Class definition for the index request
@@ -61,7 +61,7 @@
 		function actionAddNote() {
 
 			// Create the add form
-			$form = new YDForm2( 'addEntryForm' );
+			$form = new YDForm( 'addEntryForm' );
 
 			// Add the elements
 			$form->addElement( 'text', 'title', 'Title:' );

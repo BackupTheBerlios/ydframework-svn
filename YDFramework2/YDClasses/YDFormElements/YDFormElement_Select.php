@@ -48,7 +48,7 @@
 
 			// Get the HTML
 			$html = '';
-			$html .= '<select' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>';
+			$html .= '<select' . YDForm::_convertToHtmlAttrib( $attribs ) . '>';
 			foreach ( $this->_options as $val=>$label ) {
 				if ( strval( $this->_value ) == strval( $val ) ) {
 					$html .= '<option value="' . $val . '" selected>' . $label . '</option>';

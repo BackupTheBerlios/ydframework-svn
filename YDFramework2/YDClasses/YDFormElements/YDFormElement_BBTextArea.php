@@ -187,11 +187,11 @@
 				$out .= '</td>';
 				$out .= '</tr>';
 				$out .= '<tr>';
-				$out .= '<td><textarea' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea></td>';
+				$out .= '<td><textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea></td>';
 				$out .= '</tr>';
 				$out .= '</table>';
 			} else {
-				$out .= '<textarea' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>' . $this->_name . '</textarea>';
+				$out .= '<textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_name . '</textarea>';
 			}
 			return $out;
 

@@ -5,7 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 	require_once( 'YDEmail.php' );
 	require_once( 'YDTemplate.php' );
 
@@ -24,7 +24,7 @@
 			$this->setVar( 'formValid', false );
 
 			// Create the form
-			$form = new YDForm2( 'emailForm' );
+			$form = new YDForm( 'emailForm' );
 
 			// Add the elements
 			$form->addElement( 'text', 'email', 'Enter your email address:', array( 'style' => 'width: 300px;' ) );

@@ -8,7 +8,7 @@
 	}
 
 	require_once( 'YDBase.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 
 	/**
 	 *	This is the base class for all form elements.

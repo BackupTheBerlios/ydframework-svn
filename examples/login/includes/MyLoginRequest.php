@@ -2,7 +2,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 
 	// Class definition
 	class MyLoginRequest extends YDRequest {
@@ -33,7 +33,7 @@
 			}
 
 			// Create the login form
-			$form = new YDForm2( 'loginForm' );
+			$form = new YDForm( 'loginForm' );
 			$form->setDefaults( array( 'name' => 'Joe User' ) );
 			$form->addElement( 'text', 'loginName', 'User name:' );
 			$form->addElement( 'password', 'loginPass', 'Password:' );

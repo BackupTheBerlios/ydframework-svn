@@ -45,7 +45,7 @@
 			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Get the HTML
-			return '<textarea' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea>';
+			return '<textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea>';
 
 		}
 

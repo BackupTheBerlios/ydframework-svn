@@ -5,7 +5,7 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm2.php' );
+	require_once( 'YDForm.php' );
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
@@ -20,7 +20,7 @@
 		function actionDefault() {
 
 			// Create the form
-			$form = new YDForm2( 'form1' );
+			$form = new YDForm( 'form1' );
 			$form->registerFilter( 'reverse', 'strrev' );
 			$form->setDefaults( 
 				array( 
@@ -70,7 +70,7 @@
 			YDDebugUtil::dump( $form->toArray(), '$form as array' );
 
 			// Create the form
-			$form2 = new YDForm2( 'form2' );
+			$form2 = new YDForm( 'form2' );
 			$form2->setDefaults( array( 'txt1' => 'First text' ) );
 			$form2->addElement( 'text', 'txt1', 'Enter text 1:' );
 			$form2->addElement( 'text', 'txt2', 'Enter text 2:' );
