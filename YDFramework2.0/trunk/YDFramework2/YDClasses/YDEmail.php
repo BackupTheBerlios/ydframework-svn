@@ -26,7 +26,7 @@
 	}
 
 	YDInclude( 'YDFileSystem.php' );
-	YDInclude( 'htmlMimeMail/htmlMimeMail.php' );
+	YDInclude( 'phpmailer/class.phpmailer.php' );
 
 	// General constants
 	define( 'YDEMAIL_PRIORITY_HIGH', '1' );
@@ -47,14 +47,11 @@
 			$this->YDBase();
 
 			// Intialize a new mime message
-			$this->_msg = new htmlMimeMail();
+			$this->_msg = new PHPMailer();
 
 			// Start with empty variables
 			$this->sender = '';
-			$this->to = array();
 			$this->to_plain = array();
-			$this->cc = array();
-			$this->bcc = array();
 
 			// The SMTP indication
 			$this->smtp = false;
@@ -68,7 +65,10 @@
 		 *	@param $name	Name to use as the from
 		 */
 		function setFrom( $email, $name='' ) {
-			$this->_msg->setFrom( $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->From = $email;
+			if ( ! empty( $name ) ) {
+				$this->_msg->FromName = $name;
+			}
 			$this->sender = $email;
 		}
 
@@ -79,7 +79,7 @@
 		 *	@param $name	Name to use as the relpy to
 		 */
 		function setReplyTo( $email, $name='' ) {
-			$this->_msg->setHeader( 'Reply-To', $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->AddReplyTo( $email, $name );
 		}
 
 		/**
@@ -89,7 +89,7 @@
 		 *	@param $name	Name to use as the return receipt address
 		 */
 		function setReturnReceipt ($email, $name = '') { 
-			$this->_msg->setHeader( 'Return-Receipt-To', $this->_mergeEmailName( $email, $name ) ); 
+			$this->_msg->AddCustomHeader( 'Return-Receipt-To:' . $this->_mergeEmailName( $email, $name ) );
 		}
 
 		/**
@@ -98,8 +98,11 @@
 		 *
 		 *	@param $priority	(optional) The priority of the email. Default is YDEMAIL_PRIORITY_NORMAL.
 		 */
-		function setPriority( $priority=YDEMAIL_PRIORITY_HIGH ) { 
-			$this->_msg->setHeader( 'X-Priority', $priority ); 
+		function setPriority( $priority=YDEMAIL_PRIORITY_NORMAL ) { 
+			if ( ! in_array( $priority, array( 1, 3, 5 ) ) ) {
+				$priority = YDEMAIL_PRIORITY_NORMAL;
+			}
+			$this->_msg->Priority = $priority;
 		}
 
 		/**
@@ -109,7 +112,7 @@
 		 *	@param $name	Name to add
 		 */
 		function addTo( $email, $name='' ) {
-			array_push( $this->to, $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->AddAddress( $email, $name );
 			array_push( $this->to_plain, $email );
 		}
 
@@ -120,7 +123,7 @@
 		 *	@param $name	Name to add
 		 */
 		function addCc( $email, $name='' ) {
-			array_push( $this->cc, $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->AddCC( $email, $name );
 		}
 
 		/**
@@ -130,7 +133,7 @@
 		 *	@param $name	Name to add
 		 */
 		function addBcc( $email, $name='' ) {
-			array_push( $this->bcc, $this->_mergeEmailName( $email, $name ) );
+			$this->_msg->AddBCC( $email, $name );
 		}
 
 		/**
@@ -139,7 +142,7 @@
 		 *	@param $subject	Subject of the email
 		 */
 		function setSubject( $subject ) {
-			$this->_msg->setSubject( strip_tags( $subject ) );
+			$this->_msg->Subject = strip_tags( $subject );
 		}
 
 		/**
@@ -148,7 +151,7 @@
 		 *	@param $text	The text to set.
 		 */
 		function setTxtBody( $text ) {
-			$this->_msg->setText( strip_tags( $text ) );
+			$this->_msg->AltBody = strip_tags( $text );
 		}
 
 		/**
@@ -158,22 +161,30 @@
 		 *	@param $text	The plain text version of the message.
 		 */
 		function setHtmlBody( $html, $text='' ) {
-			$this->_msg->setHtml( $html, $text );
+			$this->_msg->IsHTML( true );
+			$this->_msg->Body = $html;
 		}
 
 		/**
 		 *	Sets the SMTP parameters and indicates that the message needs to be send with SMTP.
 		 *
 		 *	@param $host	SMTP server.
-		 *	@param $port	SMTP server port
+		 *	@param $port	SMTP server port (defaults to 25)
 		 *	@param $helo	Which helo command that needs to be send
 		 *	@param $auth	Boolean indicating if authentication needs to be used
 		 *	@param $user	Username used for authentication
 		 *	@param $pass	Password used for authentication
 		 */
-		function setSMTP( $host=null, $port=null, $helo=null, $auth=null, $user=null, $pass=null ) {
-			$this->smtp = true;
-			$this->_msg->setSMTPParams( $host, $port, $helo, $auth, $user, $pass); 
+		function setSMTP( $host='localhost', $port=25, $helo='', $auth=false, $user='', $pass='' ) {
+			$this->_msg->IsSMTP( true );
+			$this->_msg->Host = $host;
+			$this->_msg->Port = $port;
+			$this->_msg->Helo = $helo;
+			if ( $auth ) {
+				$this->_msg->SMTPAuth = true;
+				$this->_msg->Username = $user;
+				$this->_msg->Password = $pass;
+			}
 		}
 
 		/**
@@ -187,11 +198,10 @@
 			if ( ! YDObjectUtil::isSubClass( $file, 'YDFSFile' ) ) {
 				$file = new YDFSFile( $file );
 			}
-			$data = $file->getContents();
 			if ( empty( $name ) ) { 
 				$name = $file->getBaseName();
 			}
-			$this->_msg->addAttachment( $data, $name, $c_type );
+			$this->_msg->AddAttachment( $file->getAbsolutePath(), $name, 'base64', $c_type );
 		}
 
 		/**
@@ -206,14 +216,13 @@
 			if ( ! YDObjectUtil::isSubClass( $file, 'YDFSImage' ) ) {
 				$file = new YDFSImage( $file );
 			}
-			$data = $file->getContents();
 			if ( empty( $name ) ) { 
 				$name = $file->getBaseName();
 			}
 			if ( empty( $c_type ) ) { 
 				$c_type = $file->getMimeType();
 			}
-			$this->_msg->addHTMLImage( $data, $name, $c_type );
+			$this->_msg->AddEmbeddedImage( $file->getAbsolutePath(), $name, $name, 'base64', $c_type );
 		}
 
 		/**
@@ -240,77 +249,17 @@
 			// Get the original the message
 			$message = & $this->_msg;
 
-			// Add the CC info
-			if ( sizeof( $this->cc ) > 0 ) {
-				$message->setCC( implode( '; ', $this->cc ) );
-			}
-
-			// Add the BCC info
-			if ( sizeof( $this->bcc ) > 0 ) {
-				$message->setBCC( implode( '; ', $this->bcc ) );
-			}
-
 			// Set the headers
-			$message->setHeader( 'To', implode( ', ', $this->to ) );
-			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
+			$message->AddCustomHeader( 'X-Mailer: ' . YD_FW_NAMEVERS );
 
-			// Build the message
-			if ( ! defined( 'CRLF' ) ) { $message->setCrlf( "\n" ); }
-			if ( ! $message->is_built ) { $message->buildMessage(); }
-
-			// Add the subject
-			$subject = '';
-			if ( ! empty( $message->headers['Subject'] ) ) {
-				$subject = $message->_encodeHeader(
-					$message->headers['Subject'], $message->build_params['head_charset']
-				);
-				unset( $message->headers['Subject'] );
-			}
-
-			// Get flat representation of headers
-			foreach ( $message->headers as $name => $value ) {
-				$headers[] = $name . ': ' . $message->_encodeHeader( $value, $message->build_params['head_charset'] );
-			}
-
-			// Get the to addresses
-			$to = $message->_encodeHeader( implode( ', ', $this->to_plain ), $message->build_params['head_charset'] );
-
-			// Send the email, try SMTP if possible
-			if ( $this->smtp == true ) {
-				$result =  $this->_msg->send( $to, 'smtp' );
+			// Send the message
+			if ( ! $message->Send() ) {
+				trigger_error( 'Mailer Error: ' . $message->ErrorInfo, YD_WARNING );
+				return false;
 			} else {
-				$result = mail( $to, $subject, $message->output, implode( CRLF, $headers ) );
-			}
-				
-			// Reset the subject in case mail is resent
-			if ( $subject !== '' ) {
-				$message->headers['Subject'] = $subject;
+				return true;
 			}
 
-			// Return the result
-			return $result;
-
-		}
-
-		/**
-		 *	This will merge the email address and name to the standard format used in the headers of an email. If you 
-		 *	for example merge the email address "pieter@yellowduck.be" with the name "Pieter Claerhout", the result of
-		 *	this function will be ""Pieter Claerhout" <pieter@yellowduck.be>". So, it surrounds the name by double 
-		 *	quotes and appends the email address surrounded by < and >.
-		 *
-		 *	@param $address	Email address
-		 *	@param $name	Name
-		 *
-		 *	@return	String containing formatted email address and name
-		 *
-		 *	@internal
-		 */
-		function _mergeEmailName( $address, $name='' ) {
-			if ( $name == '' ) {
-				return $address;
-			} else {
-				return "\"$name\" <$address>";
-			}
 		}
 
 	}
