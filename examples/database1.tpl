@@ -11,6 +11,7 @@
 	<h3>Testing...</h3>
 
 	<p>Version: <?= $version ?></p>
+	<p>Number of queries: <?= $sqlcount ?></p>
 
 	<?php if ( $processList ) { ?>
 		<p><b>show processlist</b></p>

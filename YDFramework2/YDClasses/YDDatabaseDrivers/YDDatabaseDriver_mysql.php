@@ -160,10 +160,10 @@
 		 *	@internal
 		 */
 		function & _connectAndExec( $sql ) {
+			$this->_logSql( $sql );
 			$this->connect();
 			$result = mysql_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
-			YDDebugUtil::debug( 'Executing SQL:', $sql );
 			return $result;
 		}
 

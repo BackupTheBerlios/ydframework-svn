@@ -21,17 +21,22 @@
 
 			// Get the data
 			$db = new YDDatabase( 'sqlite', 'database2.db' );
-			$data = $db->getRecords( 'select * from escalations' );
-			$db->close();
 
-			// Output the template
+			// Output the server version
 			YDDebugUtil::dump( $db->getServerVersion(), 'Version:' );
 
-			// Output the template
-			YDDebugUtil::dump( $data );
+			// Output some queries
+			YDDebugUtil::dump( $db->getRecords( 'select * from escalations' ), 'escalations' );
+			YDDebugUtil::dump( $db->getRecords( 'select * from sqlite_master' ), 'sqlite_master' );
 
 			// Test string escaping
 			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
+
+			// Show number of queries
+			YDDebugUtil::dump( $db->getSqlCount(), 'Number of queries' );
+
+			// Close the database connection
+			$db->close();
 
 		}
 

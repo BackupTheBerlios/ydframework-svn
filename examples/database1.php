@@ -21,14 +21,11 @@
 
 			// Get the data
 			$db = new YDDatabase( 'mysql', 'test', 'root', '', 'localhost' );
-			$data = $db->getRecords( 'show processlist' );
-			$this->setVar( 'processList', $data );
-			$data = $db->getRecords( 'show status' );
-			$this->setVar( 'status', $data );
-			$data = $db->getRecords( 'show variables' );
-			$this->setVar( 'variables', $data );
-			$data = $db->getServerVersion();
-			$this->setVar( 'version', $data );
+			$this->setVar( 'processList', $db->getRecords( 'show processlist' ) );
+			$this->setVar( 'status', $db->getRecords( 'show status' ) );
+			$this->setVar( 'variables', $db->getRecords( 'show variables' ) );
+			$this->setVar( 'version', $db->getServerVersion() );
+			$this->setVar( 'sqlcount', $db->getSqlCount() );
 			$db->close();
 
 			// Output the template

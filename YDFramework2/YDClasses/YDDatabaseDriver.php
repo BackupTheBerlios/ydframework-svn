@@ -39,6 +39,9 @@
 			// The connection object
 			$this->_conn = null;
 
+			// Keep count of the number of executed SQL statements
+			$this->_sqlCount = 0;
+
 		}
 
 		/**
@@ -63,6 +66,15 @@
 		 *	Function that makes the actual connection.
 		 */
 		function connect() {
+		}
+
+		/**
+		 *	This function will return the number of queries that were executed.
+		 *
+		 *	@returns	The number of queries that were executed.
+		 */
+		function getSqlCount() {
+			return $this->_sqlCount;
 		}
 
 		/**
@@ -238,6 +250,19 @@
 		 *	@internal
 		 */
 		function & _connectAndExec( $sql ) {
+		}
+
+		/**
+		 *	This function will log the SQL statement to the debug log and keep track of the number of queries that were
+		 *	executed.
+		 *
+		 *	@param $sql	The SQL statement to log.
+		 *
+		 *	@internal
+		 */
+		function _logSql( $sql ) {
+			$this->_sqlCount++;
+			YDDebugUtil::debug( 'SQL query #' . $this->_sqlCount . ':', $sql );
 		}
 
 	}
