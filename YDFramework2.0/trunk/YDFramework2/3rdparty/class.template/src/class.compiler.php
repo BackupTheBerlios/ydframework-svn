@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.3
+ * Version:	2.2.5
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -254,11 +254,8 @@ class compiler extends template {
 				if (!isset($_args['stop']))
 					$this->trigger_error("missing 'stop' attribute in 'for'", E_USER_ERROR, __FILE__, __LINE__);
 				if (!isset($_args['step']))
-					$_args['stop'] = 1;
-				if ($_args['start'] > $_args['stop'])
-					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' >= ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' - ' . $_args['step'] . '): ?>';
-				else
-					$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; $for' . $this->_for_stack . ' <= ' . $_args['stop'] . '; $for' . $this->_for_stack . ' = $for' . $this->_for_stack . ' + ' . $_args['step'] . '): ?>';
+					$_args['step'] = 1;
+				$_result = '<?php for($for' . $this->_for_stack . ' = ' . $_args['start'] . '; ((' . $_args['start'] . ' < ' . $_args['stop'] . ') ? ($for' . $this->_for_stack . ' < ' . $_args['stop'] . ') : ($for' . $this->_for_stack . ' > ' . $_args['stop'] . ')); $for' . $this->_for_stack . ' += ((' . $_args['start'] . ' < ' . $_args['stop'] . ') ? ' . $_args['step'] . ' : -' . $_args['step'] . ')): ?>';
 				if (isset($_args['value']))
 					$_result .= '<?php $this->assign(\'' . $this->_dequote($_args['value']) . '\', $for' . $this->_for_stack . '); ?>';
 				return $_result;
@@ -289,7 +286,7 @@ class compiler extends template {
 				break;
 			case 'switch':
 				$_args = $this->_parse_arguments($arguments);
-				if (!isset($_args['name']))
+				if (!isset($_args['from']))
 					$this->trigger_error("missing 'from' attribute in 'switch'", E_USER_ERROR, __FILE__, __LINE__);
 				array_push($this->_switch_stack, array("matched" => false, "var" => $this->_dequote($_args['from'])));
 				return;
@@ -403,8 +400,8 @@ class compiler extends template {
 		$_args		= array();
 		$_is_arg_stack	= array();
 
-		// parse arguments in a most unique manner
-		preg_match_all('/(?>' . $this->_var_regexp . '(?:' . $this->_mod_regexp . '*)?|\-?0[xX][0-9a-fA-F]+|\-?\d+(?:\.\d+)?|\.\d+|!==|===|==|!=|<>|<<|>>|<=|>=|\&\&|\|\||\(|\)|,|\!|\^|=|\&|\~|<|>|\||\%|\+|\-|\/|\*|\@|\b\w+\b|\S+)/x', $arguments, $_match);
+		// extract arguments from the equation
+		preg_match_all('/(?>(' . $this->_var_regexp . '|\/?' . $this->_func_regexp . ')(?:' . $this->_mod_regexp . '*)?|\-?0[xX][0-9a-fA-F]+|\-?\d+(?:\.\d+)?|\.\d+|!==|===|==|!=|<>|<<|>>|<=|>=|\&\&|\|\||\(|\)|,|\!|\^|=|\&|\~|<|>|\%|\+|\-|\/|\*|\@|\b\w+\b|\S+)/x', $arguments, $_match);
 		$_args = $_match[0];
 
 		// make sure we have balanced parenthesis
@@ -431,7 +428,6 @@ class compiler extends template {
 				case '>=':
 				case '&&':
 				case '||':
-				case '|':
 				case '^':
 				case '&':
 				case '~':
@@ -480,13 +476,14 @@ class compiler extends template {
 					array_push($_is_arg_stack, $i);
 					break;
 				default:
-					if(preg_match('!^' . $this->_func_regexp . '$!', $_arg) ) {
-						// function
-					} elseif(preg_match('!^' . $this->_var_regexp . '(?:' . $this->_mod_regexp . '*)$!', $_arg)) {
-						// object or variable
-						$_arg = $this->_parse_variable($_arg);
-					} elseif(is_numeric($_arg)) {
-						// number, skip it
+					preg_match('/(?:(' . $this->_var_regexp . '|' . $this->_func_regexp . ')(' . $this->_mod_regexp . '*)(?:\s*[,\.]\s*)?)(?:\s+(.*))?/xs', $_arg, $_match);
+					if ($_match[0]{0} == '$' || ($_match[0]{0} == '#' && $_match[0]{strlen($_match[0]) - 1} == '#') || $_match[0]{0} == "'" || $_match[0]{0} == '"') {
+						// process a variable
+						$_arg = $this->_parse_variables(array($_match[1]), array($_match[2]));
+					} elseif (is_numeric($_arg)) {
+						// pass the number through
+					} elseif (function_exists($_match[0]) || $_match[0] == "empty" || $_match[0] == "isset" || $_match[0] == "unset") {
+						// pass the function through
 					} else {
 						$this->trigger_error("unidentified token '$_arg'", E_USER_ERROR, __FILE__, __LINE__);
 					}

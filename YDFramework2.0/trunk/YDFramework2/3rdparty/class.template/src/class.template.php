@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.3
+ * Version:	2.2.5
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
