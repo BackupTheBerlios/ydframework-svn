@@ -164,7 +164,7 @@
 		}
 
 		/**
-		 *	@returns	A uniquely named zero-byte temporary file on disk and returns the full path to that file
+		 *	@returns	A uniquely named temporary file on disk and returns the full path to that file
 		 *
 		 *	@static
 		 */
@@ -310,7 +310,7 @@
 		 *	@returns	String containing the name of the object.
 		 */
 		function getBasename() {
-			return basename( $this->getAbsolutePath() );
+			return YDPath::getFileName( $this->getAbsolutePath() );
 		}
 
 		/**
@@ -319,8 +319,7 @@
 		 *	@returns	String containing the extension of the file.
 		 */
 		function getExtension() {
-			ereg( ".*\.([a-zA-Z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
-			return( $regs[1] );
+			return YDPath::getExtension( $this->getAbsolutePath() );
 		}
 
 		/**
@@ -329,7 +328,7 @@
 		 *	@returns	String containing the full path of the object.
 		 */
 		function getPath() {
-			return realpath( dirname( $this->_path ) );
+			return YDPath::getDirectoryName( $this->getAbsolutePath() );
 		}
 
 		/**
@@ -338,7 +337,7 @@
 		 *	@returns	String containing the full absolute path of the object.
 		 */
 		function getAbsolutePath() {
-			return realpath( $this->_path );
+			return YDPath::getFullPath( $this->_path );
 		}
 
 		/**
@@ -814,7 +813,7 @@
 		 *	@returns	String containing the name of the object.
 		 */
 		function getBasename() {
-			return basename( $this->getAbsolutePath() );
+			return YDPath::getFileName( $this->getAbsolutePath() );
 		}
 
 		/**
@@ -960,7 +959,8 @@
 		 *	@returns	String containing the full path of the directory.
 		 */
 		function getPath() {
-			return realpath( $this->_path );
+			return YDPath::getFullPath( $this->_path );
+			//return realpath( $this->_path );
 		}
 
 		/**
@@ -1074,7 +1074,7 @@
 		 *	@returns	False on failure, otherwise, it will return a YDFSDirectory object for the new directory.
 		 */
 		function createDirectory( $directory, $mode=0700 ) {
-			$directory = $this->getAbsolutePath() . '/' . basename( $directory );
+			$directory = YDPath::join( $this->getAbsolutePath(), $directory );
 			if ( is_dir( $directory ) || mkdir( $directory, $mode ) ) {
 				return new YDFSDirectory( $directory );
 			} else {
@@ -1091,7 +1091,7 @@
 		 *	@return	Boolean indicating if the directory could be deleted or not.
 		 */
 		function deleteDirectory( $directory ) {
-			$directory = $this->getAbsolutePath() . '/' . basename( $directory );
+			$directory = YDPath::join( $this->getAbsolutePath(), $directory );
 			if ( ! is_dir( $directory ) ) {
 				return false;
 			}

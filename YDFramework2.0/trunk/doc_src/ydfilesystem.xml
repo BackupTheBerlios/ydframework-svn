@@ -200,4 +200,33 @@
 
     </sect1>
 
+    <sect1 id="ydfilesystem_path">
+
+        <title>Using file paths</title>
+
+        <para>A lot of times, there is a need to extract information from a path that doesn't neccesarily exist. For this, there is the YDPath class which contains a whole bunch of static functions that allow you to work easily with path information.</para>
+
+        <para>Currently, the following static methods are exposed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getDirectorySeparator:</emphasis> Provides a platform-specific character used to separate directory levels in a path string that reflects a hierarchical file system organization.</listitem>
+            <listitem><emphasis role="bold">getPathSeparator:</emphasis> A platform-specific separator character used to separate path strings in environment variables.</listitem>
+            <listitem><emphasis role="bold">getVolumeSeparator:</emphasis> Provides a platform-specific volume separator character.</listitem>
+            <listitem><emphasis role="bold">changeExtension:</emphasis> Changes the extension of a path string.</listitem>
+            <listitem><emphasis role="bold">getDirectoryName:</emphasis> The directory information for the specified path string.</listitem>
+            <listitem><emphasis role="bold">getExtension:</emphasis> The extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFileName:</emphasis> The file name and extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFileNameWithoutExtension:</emphasis> The file name of the specified path string without the extension.</listitem>
+            <listitem><emphasis role="bold">getFilePath:</emphasis> The file path and extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFilePathWithoutExtension:</emphasis> The file path of the specified path string without the extension.</listitem>
+            <listitem><emphasis role="bold">getFullPath:</emphasis> The absolute path for the specified path string.</listitem>
+            <listitem><emphasis role="bold">getTempFileName:</emphasis> A uniquely named temporary file on disk and returns the full path to that file.</listitem>
+            <listitem><emphasis role="bold">getTempPath:</emphasis> The path of the current system's temporary folder.</listitem>
+            <listitem><emphasis role="bold">hasExtension:</emphasis> Determines whether a path includes a file name extension.</listitem>
+            <listitem><emphasis role="bold">isAbsolute:</emphasis> This function will check if the path is an absolute path or not.</listitem>
+            <listitem><emphasis role="bold">join:</emphasis> This function combines different file path elements to each other.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
 </chapter>
