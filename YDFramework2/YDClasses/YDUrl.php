@@ -284,9 +284,8 @@
                 if ( $cacheFName != null ) {
 
                     // Save the cache data
-                    $fp = fopen( $cacheFName, 'wb' );
-                    fwrite( $fp, gzcompress( $data ) );
-                    fclose( $fp );
+                    $dir = new YDFSDirectory( YD_DIR_TEMP );
+                    $dir->createFile( $cacheFName, gzcompress( $data ) );
 
                 }
 
