@@ -26,6 +26,7 @@
 	}
 
 	YDInclude( 'YDUrl.php' );
+	YDInclude( 'YDUtil.php' );
 
 	if ( ! defined( 'YD_DB_DEFAULTPAGESIZE' ) ) {
 		define( 'YD_DB_DEFAULTPAGESIZE', 20 );
@@ -772,7 +773,7 @@
 		 *	@internal
 		 */
 		function _logSql( $sql ) {
-			array_push( $GLOBALS['YD_SQL_QUERY'], $sql );
+			array_push( $GLOBALS['YD_SQL_QUERY'], YDStringUtil::removeWhiteSpace( $sql ) );
 		}
 
 		/**
