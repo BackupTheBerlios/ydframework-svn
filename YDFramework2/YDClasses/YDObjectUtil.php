@@ -204,6 +204,9 @@
          *  This function will unserialize an object.
          *
          *  @param $obj Object to unserialize.
+         *
+         *  @todo
+         *      Check if we are using the right gzip functions.
          */
         function unserialize( $obj ) {
 
