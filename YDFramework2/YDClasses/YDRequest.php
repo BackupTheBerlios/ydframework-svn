@@ -32,7 +32,9 @@
 
 			// Set up the request class
 			$this->defaultAction = YD_ACTION_DEFAULT;
-			$this->template = new YDTemplate();
+			if ( ! isset( $this->template ) ) {
+				$this->template = new YDTemplate();
+			}
 			$this->__isInitialized = true;
 			$this->__requiresAuthentication = false;
 
