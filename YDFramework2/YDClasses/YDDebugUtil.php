@@ -81,7 +81,7 @@
 
             // Convert to HTML if needed
             if ( $html == true ) {
-                $data = '<pre>' . htmlentities( $data ) . '</pre>';
+                $data = '<pre>' . stripslashes( htmlentities( $data ) ) . '</pre>';
             }
 
             // Return the data
