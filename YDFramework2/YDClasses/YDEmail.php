@@ -117,7 +117,8 @@
         }
 
         /**
-         *  Sets the plain text part of a message.
+         *  Sets the plain text part of a message. All HTML tags are 
+         *  automatically removed from the text.
          *
          *  @param $text The text to set.
          */
