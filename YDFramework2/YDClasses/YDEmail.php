@@ -250,8 +250,8 @@
          *  it surrounds the name by double quotes and appends the email address
          *  surrounded by < and >.
          *
-         *  @param $email Email address
-         *  @param $name  Name
+         *  @param $address Email address
+         *  @param $name    Name
          *
          *  @return String containing formatted email address and name
          *
