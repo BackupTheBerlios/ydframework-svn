@@ -3,27 +3,35 @@
 
     <title>Introduction</title>
 
-    <para>The Yellow Duck Framework takes care of all the difficult work you normally have to perform manually when developing a web application. It is based on the idea of requests that can perform actions. By encapsulating all the programming in an object-oriented environment, you get a framework that is easy to use and understand, easy to extend and doesn't limit you in any way.</para>
+    <para>The Yellow Duck Framework takes care of all the difficult work you normally have to perform manually when developing a web application. It is based on the idea of requests that can perform actions. Each request is a separate entity in the web application that takes care of a certain number of (related) actions. Each action is performing a specific task in the web application.</para>
+
+    <para>An example could be a weblog. The "post" request could take care of displaying and updating the items in the weblog. In this example, "update" would be an action as well as "display_list" and "display_item". Another request, "rss" for example could be used to generate RSS news feeds. In the "rss" request, we could for example find the actions "display_rss20" and "display_atom" which generate specific flavors of XML news feeds. Requests basically group action that are related.</para>
+
+    <para>By encapsulating all the programming in an object-oriented environment, you get a framework that is easy to use and understand, easy to extend and doesn't limit you in any way. If you combine this with a very feature-rich standard library that takes care of most common things that need to be programmed for a website, you have a very powerful environment available to develop web applications.</para>
 
     <sect1 id="introduction_features">
 
         <title>Features</title>
 
-        <para>The Yellow Duck Framework supports the following items:</para>
+        <para>The Yellow Duck Framework has the following features:</para>
 
         <itemizedlist spacing="compact">
+            <listitem>Structured programming envirmonment by using requests and actions</listitem>
             <listitem>Clean separation of code and output</listitem>
+            <listitem>Support for multi-langual websites by using locales</listitem>.
             <listitem>Templates for outputting HTML easily based on <ulink url="http://smarty.php.net/">Smarty</ulink></listitem>
             <listitem>Automatic action dispatching using URL parameters</listitem>
             <listitem>Object oriented form construction and validation</listitem>
             <listitem>Object oriented handling of authentication</listitem>
             <listitem>Classes for creating <ulink url="http://www.xmlrpc.com/">XML/RPC</ulink> clients and servers.</listitem>
             <listitem>Classes for creating syndicated XML feeds such as <ulink url="http://blogs.law.harvard.edu/tech/rss">RSS</ulink> and <ulink url="http://www.atomenabled.org/">Atom</ulink> feeds.</listitem>
-            <listitem>Easy handling of files, directories and images. For images, there are some very straightforward functions that can create thumbnails of those images.</listitem>
+            <listitem>Easy handling of files, directories and images. For images, there are some very straightforward functions that can create thumbnails and obtain specific information about these images.</listitem>
             <listitem>An object oriented interface for creating and sending email messages.</listitem>
             <listitem>Database abstraction layer supporting MySQL, PostgreSQL, SQLite and Oracle.</listitem>
             <listitem>Object oriented way of creating SQL statements.</listitem>
             <listitem>Logging infrastructure based on plain text or XML logfiles.</listitem>
+            <listitem>A shopping cart infrastructure that makes it easy to create webshops.</listitem>
+            <listitem>Different smaller modules that take care of string handling, debugging, configuration settings, timers.</listitem>
         </itemizedlist>
 
     </sect1>
@@ -34,13 +42,17 @@
 
         <para>The Yellow Duck Framework tries to be as flexible as possible so that you can tailor it in such a way that it works according to the way you want it to work. It's definitely not the framework that will solve all your needs, but for most web application related functions, you will find the Yellow Duck Framework a very handig tool to get your work done faster and more reliably.</para>
 
+        <para>If a certain module in the Yellow Duck Framework doesn't suit your needs, you can easily alter the way it works or replace it with your preferred module. Everything in the framework is designed as an object giving you all the flexibility you need to make developing an application fun.</para>
+
     </sect1>
 
     <sect1 id="introduction_ideas_behind">
 
         <title>The ideas behind the framework</title>
 
-        <para>The two main ideas behind the Yellow Duck Framework are simplicity and speed. Simplicity because I think most frameworks try to do too many without being good at what they are supposed to be doing. We feature only a limited set of things the framework can do, but we make sure that these are working as they should and in such a way that everybody can understand how they work.</para>
+        <para>The two main ideas behind the Yellow Duck Framework are simplicity and speed.</para>
+
+        <para>Simplicity because I think most frameworks try to do too many things without being good at what they are supposed to be doing. We feature only a limited set of things the framework can do, but we make sure that these are working as they should and in such a way that everybody can understand how they work. We don't try to cover every single bit of every kind of web application you can image, but we prefer to provide you with a solid base that performs 95% of the functions you need on a daily basis while also providing you with a way to build further on that solid base to create the rest of the functions you need.</para>
 
         <para>Speed of the framework is important as the goal of a framework is to speed up your development time and getting more maintanable code which is easier to debug. On top of that, the framework should not be a bottleneck in the execution speed of your scripts. We try to make the framework as less overhead as possible to keep your scripts running at full speed. If you e.g. take advantage of the caching possibilities from the templates, you can easily make very scalable high performance websites.</para>
 
