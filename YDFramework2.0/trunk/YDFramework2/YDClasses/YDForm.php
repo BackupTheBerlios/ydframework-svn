@@ -9,10 +9,6 @@
 
 	/**
 	 *	This class defines an object oriented HTML form.
-	 *
-	 *	@todo
-	 *		We need to change the way default values are assigned so that you can execute the setDefaults function after
-	 *		adding the elements. Maybe better to move it to a separate function.
 	 */
 	class YDForm extends YDBase {
 
