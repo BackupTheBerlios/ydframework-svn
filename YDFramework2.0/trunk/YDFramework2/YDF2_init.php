@@ -147,7 +147,7 @@
 	}
 	$GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
 	//var_dump( $GLOBALS['YD_INCLUDE_PATH'] );
-	ini_set( 'include_path', $includePath );
+	@ini_set( 'include_path', $includePath );
 
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
