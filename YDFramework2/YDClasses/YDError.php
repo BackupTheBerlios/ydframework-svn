@@ -12,7 +12,7 @@
      *  has just one error message. The class is also the base class for al
      *  other error classes.
      */
-    class YDError extends PEAR {
+    class YDError extends YDBase {
 
         /**
          *  The class constructor for the YDError class. When you instantiate
@@ -22,8 +22,8 @@
          */
         function YDError( $errorMessage ) {
 
-            // Initialize PEAR
-            $this->PEAR();
+            // Initialize YDBase
+            $this->YDBase();
 
             // Standard variables
             $this->_errorMessage = $errorMessage;

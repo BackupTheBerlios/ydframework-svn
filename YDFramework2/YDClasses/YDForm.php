@@ -68,6 +68,9 @@
      *      </form>
      *  {/if}
      *  @endcode
+     *
+     *  @todo
+     *      Needs to extend YDBase instead of HTML_QuickForm directly.
      */
     class YDForm extends HTML_QuickForm {
 

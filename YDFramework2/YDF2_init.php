@@ -261,6 +261,7 @@
         require_once( YD_DIR_3RDP_SMARTY . '/Smarty.class.php' );
 
         // Include the Yellow Duck framework
+        require_once( YD_DIR_CLSS . '/YDBase.php' );
         require_once( YD_DIR_CLSS . '/YDArrayUtil.php' );
         require_once( YD_DIR_CLSS . '/YDBrowserInfo.php' );
         require_once( YD_DIR_CLSS . '/YDDatabase.php' );

@@ -17,7 +17,7 @@
      *  the browser the visitor used to perform the request. We determine the 
      *  browser name, the version and the platform it's running on.
      */
-    class YDBrowserInfo extends PEAR {
+    class YDBrowserInfo extends YDBase {
 
         /** 
          *  The class constructor analyzes for the YDBrowserInfo class. The
@@ -26,8 +26,8 @@
          */
         function YDBrowserInfo() {
 
-            // Initialize PEAR
-            $this->PEAR();
+            // Initialize YDBase
+            $this->YDBase();
 
             // Get the user agent
             $this->_agent = $_SERVER['HTTP_USER_AGENT'];

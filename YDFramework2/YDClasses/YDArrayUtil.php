@@ -17,7 +17,7 @@
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
      */
-    class YDArrayUtil extends PEAR {
+    class YDArrayUtil extends YDBase {
 
         /**
          *  This function will convert a single dimension array to a multi

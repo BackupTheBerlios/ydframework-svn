@@ -48,7 +48,7 @@
      *      PHP documentation to find out which extensions are needed for which
      *      database types. More information can be found on http://www.php.net/
      */
-    class YDDatabase extends PEAR {
+    class YDDatabase extends YDBase {
 
         /**
          *  The class constructor for the YDDbConn class. When you instantiate
@@ -60,8 +60,8 @@
          */
         function YDDatabase( $url ) {
     
-            // Initialize PEAR
-            $this->PEAR();
+            // Initialize YDBase
+            $this->YDBase();
 
             // Initialize the database URL
             $this->_url = $url;

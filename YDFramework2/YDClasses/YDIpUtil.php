@@ -17,7 +17,7 @@
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
      */
-    class YDIpUtil extends PEAR {
+    class YDIpUtil extends YDBase {
 
         /**
          *  This function generates an IPv4 Internet network address from its 

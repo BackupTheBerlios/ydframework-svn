@@ -17,7 +17,7 @@
      *  are implemented as static methods and do not require you to create a
      *  class instance in order to use them.
      */
-    class YDPhpUtil extends PEAR {
+    class YDPhpUtil extends YDBase {
 
         /**
          *  This function will return true if the current version is lower than 

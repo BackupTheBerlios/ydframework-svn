@@ -17,7 +17,7 @@
      *  All the methods are implemented as static methods and do not require you
      *  to create a class instance in order to use them.
      */
-    class YDObjectUtil extends PEAR {
+    class YDObjectUtil extends YDBase {
 
         /**
          *  This function checks if an object instance is of a specific class
@@ -31,6 +31,10 @@
          *  @param $class The object type you want to check against.
          *
          *  @return Boolean indicating if the object is of the specified class.
+         *
+         *  @todo
+         *      Need to move the serialize and unserialize functions to a base
+         *      class called YDBase (which extends PEAR).
          */
         function isSubClass( $obj, $class ) {
 

@@ -17,7 +17,7 @@
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
      */
-    class YDDebugUtil extends PEAR {
+    class YDDebugUtil extends YDBase {
 
         /**
          *  Function to output a debug message. These message are only shown if the

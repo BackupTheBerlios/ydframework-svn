@@ -39,7 +39,7 @@
      *      be searched in for plugins.
      *
      *  @todo
-     *      Needs to be integrated with PEAR.
+     *      Needs to be integrated with YDBase.
      */
     class YDTemplate extends Smarty {
 

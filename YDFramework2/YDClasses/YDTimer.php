@@ -20,15 +20,15 @@
      *      Needs to be replaced with the PEAR::Bench package. More info on:
      *      http://www.pearfr.org/index.php/en/article/bench
      */
-    class YDTimer extends PEAR {
+    class YDTimer extends YDBase {
 
         /**
          *  This is the class constructor of the YDTimer class.
          */
         function YDTimer() {
 
-            // Initialize PEAR
-            $this->PEAR();
+            // Initialize YDBase
+            $this->YDBase();
 
             // Start the timer
             $this->_startTime = $this->getTime();

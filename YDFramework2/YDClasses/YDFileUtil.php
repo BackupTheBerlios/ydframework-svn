@@ -17,7 +17,7 @@
      *  methods are implemented as static methods and do not require you to
      *  create a class instance in order to use them.
      */
-    class YDFileUtil extends PEAR {
+    class YDFileUtil extends YDBase {
 
         /**
          *  Function to emulate the fnmatch function from UNIX which is not
