@@ -99,9 +99,10 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			$record = $this->_lowerKeyNames( pg_fetch_assoc( $result ) );
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$record = array_values( $record );
+			if ( YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ) {
+				$record = $this->_lowerKeyNames( pg_fetch_array( $result ) );
+			} else {
+				$record = $this->_lowerKeyNames( pg_fetch_assoc( $result ) );
 			}
 			return $record;
 		}
@@ -121,13 +122,16 @@
 			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = $this->_lowerKeyNames( pg_fetch_assoc( $result ) ) ) {
-				array_push( $dataset, $line );
+			if ( YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ) {
+				while ( $line = $this->_lowerKeyNames( pg_fetch_array( $result ) ) ) {
+					array_push( $dataset, $line );
+				}
+			} else {
+				while ( $line = $this->_lowerKeyNames( pg_fetch_assoc( $result ) ) ) {
+					array_push( $dataset, $line );
+				}
 			}
 			pg_free_result( $result );
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$dataset = array_map( 'array_values', $dataset );
-			}
 			return $dataset;
 		}
 

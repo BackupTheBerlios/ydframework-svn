@@ -88,11 +88,8 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			$record = $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) );
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$record = array_values( $record );
-			}
-			return $record;
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? SQLITE_NUM : SQLITE_ASSOC;
+			return $this->_lowerKeyNames( sqlite_fetch_array( $result, $type ) );
 		}
 
 		/**
@@ -109,12 +106,10 @@
 		function getRecords( $sql, $limit=-1, $offset=-1 ) {
 			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
 			$result = & $this->_connectAndExec( $sql );
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? SQLITE_NUM : SQLITE_ASSOC;
 			$dataset = array();
-			while ( $line = $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) ) ) {
+			while ( $line = $this->_lowerKeyNames( sqlite_fetch_array( $result, $type ) ) ) {
 				array_push( $dataset, $line );
-			}
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$dataset = array_map( 'array_values', $dataset );
 			}
 			return $dataset;
 		}

@@ -95,13 +95,10 @@
 		 */
 		function getRecord( $sql ) {
 			$result = $this->_connectAndExec( $sql );
-			ocifetchinto( $result, $record, OCI_ASSOC );
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? OCI_NUM : OCI_ASSOC;
+			ocifetchinto( $result, $record, $type );
 			OCIFreeStatement( $result );
-			$record = $this->_lowerKeyNames( $record );
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$record = array_values( $record );
-			}
-			return $record;
+			return $this->_lowerKeyNames( $record );
 		}
 
 		/**
@@ -118,14 +115,12 @@
 		function getRecords( $sql, $limit=-1, $offset=-1 ) {
 			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
 			$result = $this->_connectAndExec( $sql );
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? OCI_NUM : OCI_ASSOC;
 			$dataset = array();
-			while ( ocifetchinto( $result, $line, OCI_ASSOC ) ) {
+			while ( ocifetchinto( $result, $line, $type ) ) {
 				array_push( $dataset, $this->_lowerKeyNames( $line ) );
 			}
 			OCIFreeStatement( $result );
-			if ( strtoupper( YDConfig::get( 'YD_DB_FETCHTYPE' ) ) == YD_DB_FETCH_ARRAY ) {
-				$dataset = array_map( 'array_values', $dataset );
-			}
 			return $dataset;
 		}
 

@@ -56,7 +56,7 @@
         <para>The connection is not automatically opened when you instantiate the YDDatabaseDriver class, but is only opened when needed. There is however a way to force that a database connection will be made. This can be done by invoking the connect function on the YDDatabaseDriver class. If you execute the connect function twice on the same instance, the first connection will be reused. To close the connection and disconnect from the database, the close function of the YDDatabaseDriver class can be used.</para>
 
     </sect1>
-	
+
 	<sect1 id="yddatabase_config">
 	
 		<title>Configuring the YDDatabase class</title>
@@ -65,7 +65,7 @@
 		
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">YD_DB_DEFAULTPAGESIZE:</emphasis> The default pagesize for the YDRecordSet class</listitem>
-            <listitem><emphasis role="bold">YD_DB_FETCHTYPE:</emphasis> The result type you want to get from the getRecord and getRecords functions. This can either be YD_DB_FETCH_ASSOC to get them as an associative array or YD_DB_FETCH_ARRAY to get the records as a numeric array.</listitem>
+            <listitem><emphasis role="bold">YD_DB_FETCHTYPE:</emphasis> The result type you want to get from the getRecord and getRecords functions. This can either be YD_DB_FETCH_ASSOC to get them as an associative array or YD_DB_FETCH_NUM to get the records as a numeric array.</listitem>
         </itemizedlist>
 		
 		<para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
