@@ -8,11 +8,11 @@
 
 <body>
 
-    <h3>YDEmail test page</h3>
+    <h3>Upload test page</h3>
 
     <?php if ( $formValid ) { ?>
 
-        <p>The email to <b><?= $form['email']['value'] ?></b> was sent
+        <p>The file <b><?= $form['file1']['value']['name'] ?></b> was uploaded
         successfully!</p>
 
     <?php } else { ?>

@@ -233,6 +233,16 @@
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=bbcode.txt">bbcode.txt</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="fileupload1.php">Handling file uploads</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload1.php">fileupload1.php</a>
+                <br/>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=fileupload1.tpl">fileupload1.tpl</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>

@@ -10,14 +10,13 @@
     // Includes
     require_once( 'YDRequest.php' );
     require_once( 'YDForm.php' );
-    require_once( 'YDEmail.php' );
     require_once( 'YDTemplate.php' );
 
     // Class definition
-    class email1Request extends YDRequest {
+    class fileupload1Request extends YDRequest {
 
         // Class constructor
-        function email1Request() {
+        function fileupload1Request() {
 
             // Initialize the parent class
             $this->YDRequest();
@@ -31,44 +30,30 @@
             $this->setVar( 'formValid', false );
 
             // Create the form
-            $form = new YDForm( 'emailForm' );
+            $form = new YDForm( 'uploadForm' );
 
             // Add the elements
-            $form->addElement( 'text', 'email', 'Enter your email address:' );
+            $file = $form->addElement( 
+                'file', 'file1', 'Select a file to upload:'
+            );
             $form->addElement( 'submit', 'cmdSubmit', 'Send' );
-
-            // Apply a filter
-            $form->applyFilter( 'email', 'trim' );
 
             // Add a rule
             $form->addRule(
-                'email', 'Please enter a valid email address', 'required'
-            );
-            $form->addRule(
-                'email', 'Please enter a valid email address', 'email'
+                'file1', 'You need to select a valid file', 'uploadedfile'
             );
 
             // Process the form
             if ( $form->validate() ) {
 
+                // Move the uploaded file
+                if ( $file->isUploadedFile() ) {
+                    $file->moveUploadedFile( '.' );
+                }
+
                 // Mark the form as valid
                 $this->setVar( 'formValid', true );
 
-                // Parse the template for the email
-                $emlTpl = new YDTemplate();
-                $emlTpl->setVar( 'email', $form->exportValue( 'email' ) );
-                $body = $emlTpl->getOutput( 'email1_template' );
-
-                // Send the email
-                $eml = new YDEmail();
-                $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
-                $eml->addTo( $form->exportValue( 'email' ) );
-                $eml->setSubject( 'Hello from Pieter & Fiona!' );
-                $eml->setTxtBody( $body );
-                $eml->setHtmlBody( $body );
-                $eml->addAttachment( 'email1.tpl' );
-                $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
-                $eml->send();
 
             }
 
