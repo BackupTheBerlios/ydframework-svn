@@ -140,7 +140,11 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			return pg_escape_string( $string );
+			if ( is_string( $string ) {
+				return pg_escape_string( $string );
+			} else {
+				return $string;
+			}
 		}
 
 		/**

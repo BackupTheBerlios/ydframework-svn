@@ -183,7 +183,11 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			return str_replace( "'", "''", $string );
+			if ( is_string( $string ) {
+				return str_replace( "'", "''", $string );
+			} else {
+				return $string;
+			}
 		}
 
 		/**
