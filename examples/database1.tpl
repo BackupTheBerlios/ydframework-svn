@@ -50,7 +50,7 @@
         <p>[
             <a href="{$YD_SELF_SCRIPT}">go back</a>
             |
-            <a href="">other samples</a>
+            <a href="index.php">other samples</a>
         ]</p>
 
     {else}
@@ -79,7 +79,7 @@
         <p>[
             <a href="{$YD_SELF_SCRIPT}">refresh</a>
             |
-            <a href="">other samples</a>
+            <a href="index.php">other samples</a>
         ]</p>
 
     {/if}

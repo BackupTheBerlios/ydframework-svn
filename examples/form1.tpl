@@ -40,7 +40,7 @@
     <p>[
         <a href="{$YD_SELF_SCRIPT}">try again</a>
         |
-        <a href="">other samples</a>
+        <a href="index.php">other samples</a>
     ]</p>
 
 </body>
