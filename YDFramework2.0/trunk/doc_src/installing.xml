@@ -92,7 +92,7 @@
         
         <para>Since the framework needs to be able to write temporary data into it’s temp directory, we need to change the rights for this folder. On Windows, you normally don’t need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:</para>
 
-        <programlisting><![CDATA[/home/pieter # chmod 777 YDFramework2/temp]]></programlisting>
+        <programlisting><screen><prompt>/home/pieter #</prompt> <userinput>chmod 777 YDFramework2/temp</userinput></screen></programlisting>
 
         <para>If you are uploading the framework using your FTP client, please check the documentation of your FTP client on how to do this.</para>
         
