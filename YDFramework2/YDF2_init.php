@@ -284,8 +284,8 @@
         require_once( YD_DIR_CLSS . '/YDUrl.php' );
 
         // Check if we have the right PHP version
-        if ( YDPhpUtil::versionCheck( '4.1.0' ) ) {
-            new YDFatalError( 'PHP version 4.1.0 or greater is required.' );
+        if ( YDPhpUtil::versionCheck( '4.2.0' ) ) {
+            new YDFatalError( 'PHP version 4.2.0 or greater is required.' );
         }
 
         // Instantiate the timer
