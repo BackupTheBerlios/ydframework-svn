@@ -223,14 +223,6 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="htmlarea.php">HTML Editor Control</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=htmlarea.php">htmlarea.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
                 <a href="bbcode.php">BBCode conversion</a>
             </td>
             <td valign="top">

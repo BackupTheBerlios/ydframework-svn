@@ -67,9 +67,6 @@
 
             // Add our custom elements
             $this->registerElementType(
-                'htmlarea', 'QuickForm/htmlarea.php', 'HTML_QuickForm_htmlarea'
-            );
-            $this->registerElementType(
                 'bbtextarea', 'QuickForm/bbtextarea.php', 'HTML_QuickForm_bbtextarea'
             );
 
