@@ -99,9 +99,6 @@
 			// The connection object
 			$this->_conn = null;
 
-			// Keep count of the number of executed SQL statements
-			$this->_sqlCount = 0;
-
 			// Date and timestamp, and quote styles
 			$this->_fmtDate = 'Y-m-d';
 			$this->_fmtTimeStamp = 'Y-m-d H:i:s';
@@ -491,8 +488,7 @@
 		 *	@internal
 		 */
 		function _logSql( $sql ) {
-			$this->_sqlCount++;
-			//YDDebugUtil::debug( 'SQL query #' . $this->_sqlCount . ':', $sql );
+			array_push( $GLOBALS['YD_SQL_QUERY'], $sql );
 		}
 
 	}

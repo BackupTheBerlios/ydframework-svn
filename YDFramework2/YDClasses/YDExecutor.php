@@ -34,11 +34,11 @@
 
 			// Construct the name of the request class
 			$clsName = basename( $this->_file, YD_SCR_EXT );
-			$clsInst = new $clsName();
+			$this->clsInst = new $clsName();
 
 			// Check if the object a YDRequest object
-			if ( ! YDObjectUtil::isSubClass( $clsInst, 'YDRequest' ) ) {
-				$ancestors = YDObjectUtil::getAncestors( $clsInst );
+			if ( ! YDObjectUtil::isSubClass( $this->clsInst, 'YDRequest' ) ) {
+				$ancestors = YDObjectUtil::getAncestors( $this->clsInst );
 				trigger_error(
 					'Class "' . $clsName . '" should be derived from the YDRequest class. Currently, this class has the '
 					. 'following ancestors: ' . implode( ' -&gt; ', $ancestors ), YD_ERROR
@@ -46,7 +46,7 @@
 			}
 
 			// Check if the class is properly initialized
-			if ( $clsInst->isInitialized() != true ) {
+			if ( $this->clsInst->isInitialized() != true ) {
 				trigger_error(
 					'Class "' . $clsName . '" is not initialized properly. Make  sure loaded the base class YDRequest '
 					. 'and initialized it.', YD_ERROR
@@ -54,27 +54,27 @@
 			}
 
 			// Only if authentication is required
-			if ( $clsInst->getRequiresAuthentication() ) {
-				$result = $clsInst->isAuthenticated();
+			if ( $this->clsInst->getRequiresAuthentication() ) {
+				$result = $this->clsInst->isAuthenticated();
 				if ( $result ) {
-					$clsInst->authenticationSucceeded();
+					$this->clsInst->authenticationSucceeded();
 				} else {
-					$clsInst->authenticationFailed();
+					$this->clsInst->authenticationFailed();
 					$this->finish();
 				}
 			}
 
 			// Check if the current action is allowed or not
-			$result = $clsInst->isActionAllowed();
+			$result = $this->clsInst->isActionAllowed();
 
 			// Execute actionNotAllowed if failed
 			if ( $result == false ) {
-				$clsInst->actionNotAllowed();
+				$this->clsInst->actionNotAllowed();
 				$this->finish();
 			}
 
 			// Process the request
-			$clsInst->process();
+			$this->clsInst->process();
 			$this->finish();
 
 		}
@@ -121,6 +121,17 @@
 				$debug .= 'Processing time: ' . $elapsed . ' ms' . "\n\n";
 				$debug .= 'Total size include files: ' . $includeFilesSize . "\n\n";
 				$debug .= 'Included files: ' . "\n\n\t" . implode( "\n\t", $includeFiles ) . "\n\n";
+
+				// If there is a database instance
+				$debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_COUNT'] ) . "\n\n";
+
+				// Add the queries if any
+				if ( sizeof( $GLOBALS['YD_SQL_COUNT'] ) > 0 ) {
+					$debug .= 'Executed SQL queries: ' . "\n\n";
+					foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
+						$debug .= "\t" . ($key+1) . ': ' . trim( $query ) . "\n\n";
+					}
+				}
 
 				// Output the debug message
 				YDDebugUtil::debug( $debug );

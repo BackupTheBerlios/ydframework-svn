@@ -78,6 +78,9 @@
 	@define( 'YD_WARNING', E_USER_WARNING );
 	@define( 'YD_NOTICE', E_USER_NOTICE );
 
+	// Keep some global variables
+	$GLOBALS['YD_SQL_QUERY'] = array();
+
 	// Start the session
 	@session_start();
 
