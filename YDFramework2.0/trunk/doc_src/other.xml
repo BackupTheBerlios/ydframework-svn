@@ -182,11 +182,17 @@ array (
 Negotiated language
 'en']]></programlisting>
 
-        <para>The getBrowser function will return one of the following values: ie, safari, opera, mozilla or other. The getPlatform function will return one of the following values: win, mac, linux, unix or other.</para>
+        <para>The browser property will contain one of the following values: ie, safari, opera, firefox, mozilla or other.</para>
 
-        <para>The getAgent function will return the full HTTP user agent string as provided by the browser.</para>
+        <para>The platform property will contain one of the following values: win, mac, linux, unix or other.</para>
 
-        <!-- TODO: add documentation about installed .net runtimes  -->
+        <para>The agent property will contain the full HTTP user agent string as provided by the browser.</para>
+
+        <para>The version property will contain the actual version number of the browser.</para>
+
+        <para>If the browser has one or more versions of the <ulink url="http://www.microsoft.com/net/">Microsoft .NET Framework</ulink> installed, the dotnet property of the YDBrowserInfo object will contain an array with all the versions that are installed.</para>
+
+        <para>The getBrowserLanguages function looks at the HTTP_ACCEPT_LANGUAGE header and returns an ordered list of all the different content languages the browser understand. The first element in this array should always be the preferred one.</para>
 
         <para>The getLanguage function helps you to choose a language from a list of supported languages based on the supported languages from the browser. The getLanguage function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that we gave as teh parameter to this function and will return the name of the most appropriate langauage. This function will also take into consideration the right priority of the languages specified by the browser. If no list of supported languages was specified, the framework will assume that only English is supported.</para>
 
@@ -208,9 +214,7 @@ Negotiated language
             <listitem><emphasis role="bold">unserialize:</emphasis> This function takes a single serialized variable (the output from the YDObjectUtil::serialize() function) and converts it back into a PHP value.</listitem>
         </itemizedlist>
 
-        <note>all these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</note>
-
-        <!-- TODO: add examples about the YDObjectUtil class -->
+        <note>All these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</note>
 
     </sect1>
 
@@ -271,7 +275,55 @@ echo( $conv->toHtml( $data ) );]]></programlisting>
 
         <para>The YDBBCode class also contains a static function that highlights ordinary links such as email links and web links and converts them into clickable links. For this purpose, you can use the YDBBCode::convertLinks method. This function can be used statically.</para>
 
-        <!-- TODO: add information about adding new tags to the YDBBCode class -->
+        <para>If you want to add your own BBCode tags, you can use the addRule function to add them. The add rule function takes two arguments, one which is the regular expression defining the BBCode tags, the other one the replacement string. The following code sample shows you have the standard tags are defined:</para>
+
+        <programlisting><![CDATA[// The converter
+$conv = new YDBBCode();
+
+// Replace [b][/b] and [B][/B]
+$conv->addRule( "/\[[bB]\](.+?)\[\/[bB]\]/s", '<b>\\1</b>' );
+
+// Replace [i][/i] and [I][/I]
+$conv->addRule( "/\[[iI]\](.+?)\[\/[iI]\]/s", '<i>\\1</i>' );
+
+// Replace [u][/u] and [U][/U]
+$conv->addRule( "/\[[uU]\](.+?)\[\/[uU]\]/s", '<u>\\1</u>' );
+
+// Replace [p][/p] and [P][/P]
+$conv->addRule( "/\[[pP]\](.+?)\[\/[pP]\]/s", '<p>\\1</p>' );
+
+// Replace [code][/code]
+$conv->addRule( "/\[code\](.+?)\[\/code\]/s", '<code>\\1</code>' );
+
+// Replace [quote][/quote]
+$conv->addRule( "/\[quote\](.+?)\[\/quote\]/s", '<blockquote>\\1</blockquote>' );
+
+// Replace [url=][/url]
+$conv->addRule( "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i", '<a href="\\1">\\2</a>' );
+
+// Replace [url][/url]
+$conv->addRule( "/\[url\]([^<> \n]+?)\[\/url\]/i", '<a href="\\1">\\1</a>' );
+
+// Replace [mail=][/mail]
+$conv->addRule( "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>' );
+
+// Replace [email][/email]
+$conv->addRule( "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>' );
+
+// Replace [email=][/email]
+$conv->addRule( "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>' );
+
+// Replace [mail][/mail]
+$conv->addRule( "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' );
+
+// Replace [img=][/img]
+$conv->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2"></a>' );
+
+// Replace [img][/img]
+$conv->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
+
+// Replace [color=][/color]
+$conv->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );]]></programlisting>
 
     </sect1>
 
