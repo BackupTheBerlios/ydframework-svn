@@ -90,16 +90,19 @@
                 // Date elements need special treatment
                 if ( $element['type'] == 'date' ) {
 
-                    //var_dump( $element['value'] );
+                    // Check if the element has a value
+                    if ( $element['value'] ) {
 
-                    // Loop over the values
-                    foreach ( $element['value'] as $key => $value ) {
+                        // Loop over the values
+                        foreach ( $element['value'] as $key => $value ) {
 
-                        // Remove the original
-                        unset( $element['value'][$key] );
+                            // Remove the original
+                            unset( $element['value'][$key] );
 
-                        // Add them again
-                        $element['value'][$key] = $value[0];
+                            // Add them again
+                            $element['value'][$key] = $value[0];
+
+                        }
 
                     }
 
