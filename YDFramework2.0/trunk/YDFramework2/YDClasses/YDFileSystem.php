@@ -452,10 +452,12 @@
 		 *
 		 *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
 		 *					pass them as an array.
+		 *	@param $class	(optional) If you specify a not null value for this option, this function will return the 
+		 *					items in the directory as the indicated class.
 		 *
 		 *	@returns	Array of YDFile objects for the files that match the pattern.
 		 */
-		function getContents( $pattern='') {
+		function getContents( $pattern='', $class=null ) {
 
 			// Start with an empty list
 			$fileList = array();
@@ -495,12 +497,16 @@
 			$fileList2 = array();
 			foreach ( $fileList as $file ) {
 				$file = $this->getPath() . '/' . $file;
-				if ( is_dir( $file ) ) {
-					$fileObj = new YDFSDirectory( $file );
+				if ( ! is_null( $class ) ) {
+					$fileObj = new $class( $file );
 				} else {
-					$fileObj = new YDFSFile( $file );
-					if ( $fileObj->isImage() ) {
-						$fileObj = new YDFSImage( $file );
+					if ( is_dir( $file ) ) {
+						$fileObj = new YDFSDirectory( $file );
+					} else {
+						$fileObj = new YDFSFile( $file );
+						if ( $fileObj->isImage() ) {
+							$fileObj = new YDFSImage( $file );
+						}
 					}
 				}
 				array_push( $fileList2, $fileObj );
