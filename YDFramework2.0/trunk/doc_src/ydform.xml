@@ -94,10 +94,15 @@
             <listitem><emphasis role="bold">submit:</emphasis> Class for <![CDATA[<input type="submit" />]]> elements.</listitem>
             <listitem><emphasis role="bold">text:</emphasis> Class for <![CDATA[<input type="text" />]]> elements.</listitem>
             <listitem><emphasis role="bold">textarea:</emphasis> Class for <![CDATA[<textarea />]]> elements.</listitem>
+        </itemizedlist>
+
+        <para>There are also a number of custom form elements that are available:</para>
+
+        <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">bbtextarea:</emphasis> this is a special type of textarea field which has a toolbar for adding BBCode style tags to markup the text.</listitem>
-            <listitem><emphasis role="bold">date:</emphasis> a combination of select fields that allow a user to select a date.</listitem>
-            <listitem><emphasis role="bold">time:</emphasis> a combination of select fields that allow a user to select a time.</listitem>
-            <listitem><emphasis role="bold">datetime:</emphasis> is a combination of select fields that allow a user to select a datetime.</listitem>
+            <listitem><emphasis role="bold">dateselect:</emphasis> a combination of select fields that allow a user to select a date.</listitem>
+            <listitem><emphasis role="bold">timeselect:</emphasis> a combination of select fields that allow a user to select a time.</listitem>
+            <listitem><emphasis role="bold">datetimeselect:</emphasis> is a combination of select fields that allow a user to select a datetime.</listitem>
         </itemizedlist>
 
         <note>To influence the language of the months in the date and datetime elements, you should use the <link linkend="ydlocale">YDLocale::set</link> function to make sure you have the right locale set.</note>
