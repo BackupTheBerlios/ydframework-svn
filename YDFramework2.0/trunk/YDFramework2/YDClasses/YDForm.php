@@ -60,7 +60,7 @@
             $this->_regRules = array();
             $this->_regFilters = array();
             $this->_regValidators = array();
-            $tihs->_regRenderers = array();
+            $this->_regRenderers = array();
 
             // The list of elements, rules and filters
             $this->_elements = array();
