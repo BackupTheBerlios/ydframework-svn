@@ -334,7 +334,7 @@
 
         <para>The applyFilter function takes two arguments. The first argument is either the name of an element or the string "ALL", meaning that this filter applies to all elements on the form. The second argument is either a function, user-defined or built-in function.</para>
 
-        <note>All rules are evaluated on the server, and no javascript is involved. This is primarily done for safety and easy use. Image a browser not having JavaScript? support or a user having it turned off. This would lead to a form that is not checked for it's contents and can be a potential security hole. There are no plans to add client side rules.</note>
+        <note>All rules are evaluated on the server, and no javascript is involved. This is primarily done for safety and easy use. Imagine a browser not having JavaScript? support or a user having it turned off. This would lead to a form that is not checked for it's contents and can be a potential security hole. There are no plans to add client side rules.</note>
 
         <para>Up till now, we only discussed one specific rule, namely the required rule. There are of course a lot more rules which you can use. Here's the complete list:</para>
 
