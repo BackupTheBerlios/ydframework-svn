@@ -25,15 +25,15 @@
 
             // Get the language negotiator
             echo( 'Supported languages: en' );
-            $langn = new YDLanguageNegotiator();
-            YDDebugUtil::dump( $langn->getNegotiatedLanguage() );
+            $langn = new YDLanguage();
+            YDDebugUtil::dump( $langn->getLanguage() );
 
             // Get the language negotiator
             echo( 'Supported languages: nl, fr, en' );
-            $langn = new YDLanguageNegotiator(
+            $langn = new YDLanguage(
                 array( 'nl', 'fr', 'en' )    
             );
-            YDDebugUtil::dump( $langn->getNegotiatedLanguage() );
+            YDDebugUtil::dump( $langn->getLanguage() );
         
             // Get the different other things
             echo( 'Browser languages:' );

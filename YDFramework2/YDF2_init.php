@@ -281,7 +281,7 @@
         require_once( YD_DIR_CLSS . '/YDFSFile.php' );
         require_once( YD_DIR_CLSS . '/YDFSImage.php' );
         require_once( YD_DIR_CLSS . '/YDHttpClient.php' );
-        require_once( YD_DIR_CLSS . '/YDLanguageNegotiator.php' );
+        require_once( YD_DIR_CLSS . '/YDLanguage.php' );
         require_once( YD_DIR_CLSS . '/YDObjectUtil.php' );
         require_once( YD_DIR_CLSS . '/YDPhpUtil.php' );
         require_once( YD_DIR_CLSS . '/YDRequest.php' );

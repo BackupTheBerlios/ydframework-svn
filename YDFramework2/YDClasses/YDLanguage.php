@@ -17,7 +17,7 @@
      *  and, based on a list of supported languages, return the most appropriate
      *  language.
      */
-    class YDLanguageNegotiator extends YDBase {
+    class YDLanguage extends YDBase {
 
         /** 
          *  This is the class constructor for the YDLanguage class.
@@ -25,7 +25,7 @@
          *  @param $supported (optional) An array with the list of supported
          *                    languages. By default, only english is supported.
          */
-        function YDLanguageNegotiator( $supported=array( 'en' ) ) {
+        function YDLanguage( $supported=array( 'en' ) ) {
 
             // Initialize YDBase
             $this->YDBase();
@@ -88,7 +88,7 @@
          *
          *  @return String containing the language code.
          */
-        function getNegotiatedLanguage() {
+        function getLanguage() {
 
             // Start with the default language
             $language = $this->_supported[0];
@@ -129,7 +129,7 @@
          *      Needs to take the locale from the browser languages.
          */
         function getLocale() {
-            $langCode = $this->getNegotiatedLanguage();
+            $langCode = $this->getLanguage();
             return $langCode  . '_' . strtoupper( $langCode  );
         }
 
