@@ -236,35 +236,48 @@
                 // Only if something is in there
                 if ( $toolbarLength > 0 ) {
 
+                    // Add the AddText function if needed
+                    if ( ! defined( 'YD_BBTA_MAINSCRIPT' ) ) {
+
+                        // Create the AddText script
+                        $out .= '<script language="JavaScript">';
+                        $out .= '    function AddText( element, startTag, defaultText, endTag ) {';
+                        $out .= '        objElement = document.getElementById( element );';
+                        $out .= '        if ( objElement.createTextRange ) {';
+                        $out .= '            var text;';
+                        $out .= '            objElement.focus( objElement.caretPos);';
+                        $out .= '            objElement.caretPos = document.selection.createRange().duplicate();';
+                        $out .= '            if ( objElement.caretPos.text.length > 0 ) {' . "\n";
+                        $out .= '                objElement.caretPos.text = startTag + objElement.caretPos.text + endTag;';
+                        $out .= '            } else {';
+                        $out .= '                objElement.caretPos.text = startTag + defaultText + endTag;';
+                        $out .= '            }';
+                        $out .= '        } else {';
+                        $out .= '            objElement.value += startTag + defaultText + endTag;';
+                        $out .= '        }';
+                        $out .= '    }';
+                        $out .= '</script>';
+
+                        // Define that we added it
+                        define( 'YD_BBTA_MAINSCRIPT', 1 );
+
+                    }
+
                     // Create the JavaScript
                     $out .= '<script language="JavaScript">';
-                    $out .= '    function doButton( name ) {';
+                    $out .= '    function doButton( element, name ) {';
                     foreach ( $this->_modifiers as $mod ) {
                         $out .= 'if ( name == \'' . addslashes( $mod['name'] ) . '\' ) {';
-                        $out .= '    AddText (\'[' . addslashes( $mod['name'] ) . ']\',\'' . addslashes( $mod['text'] ) . '\',\'[/' . addslashes( $mod['name'] ) . ']\');';
+                        $out .= '    AddText ( element, \'[' . addslashes( $mod['name'] ) . ']\',\'' . addslashes( $mod['text'] ) . '\',\'[/' . addslashes( $mod['name'] ) . ']\');';
                         $out .= '}';
                     }
                     foreach ( $this->_simplepops as $pop ) {
                         $out .= 'if ( name == \'' . addslashes( $pop['name'] ) . '\' ) {';
                         $out .= '    data = prompt( "' . addslashes( $pop['question'] ) . '", "' . addslashes( $pop['default'] ) . '" );';
                         $out .= '    if ( data == null ) return;';
-                        $out .= '    AddText(\'[' . addslashes( $pop['name'] ) . '=\' + data + \']\',\'' . addslashes( $pop['text'] ) . '\',\'[/' . addslashes( $pop['name'] ) . ']\');';
+                        $out .= '    AddText( element, \'[' . addslashes( $pop['name'] ) . '=\' + data + \']\',\'' . addslashes( $pop['text'] ) . '\',\'[/' . addslashes( $pop['name'] ) . ']\');';
                         $out .= '}';
                     }
-                    $out .= '    }';
-                    $out .= '    function AddText(startTag,defaultText,endTag) {';
-                    $out .= '        if ( document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).createTextRange ) {';
-                    $out .= '            var text;';
-                    $out .= '            document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).focus(document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos);';
-                    $out .= '            document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos = document.selection.createRange().duplicate();';
-                    $out .= '            if(document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos.text.length>0){';
-                    $out .= '                document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos.text = startTag + document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos.text + endTag;';
-                    $out .= '            } else {';
-                    $out .= '                document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).caretPos.text = startTag+defaultText+endTag;';
-                    $out .= '            }';
-                    $out .= '        } else {';
-                    $out .= '            document.getElementById( \'' . addslashes( $this->getName() ) . '\' ).value += startTag+defaultText+endTag;';
-                    $out .= '        }';
                     $out .= '    }';
                     $out .= '</script>';
 
@@ -273,10 +286,10 @@
                     $out .= '<tr>';
                     $out .= '<td class="bbtoolbar">';
                     foreach ( $this->_modifiers as $mod ) {
-                        $out .= '<a href="javascript:void( doButton(\'' . addslashes( $mod['name'] ) . '\') );">[ ' . $mod['label'] . ' ]</a> ';
+                        $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $mod['name'] ) . '\') );">[ ' . $mod['label'] . ' ]</a> ';
                     }
                     foreach ( $this->_simplepops as $pop ) {
-                        $out .= '<a href="javascript:void( doButton(\'' . addslashes( $pop['name'] ) . '\') );">[ ' . $pop['label'] . ' ]</a> ';
+                        $out .= '<a href="javascript:void( doButton( \'' . addslashes( $this->getName() ) . '\', \'' . addslashes( $pop['name'] ) . '\') );">[ ' . $pop['label'] . ' ]</a> ';
                     }
                     $out .= '</td>';
                     $out .= '</tr>';

@@ -61,6 +61,11 @@
                 <?= $form['desc2']['html'] ?>
             </p>
             <p>
+                <?= $form['desc3']['label'] ?>
+                <br>
+                <?= $form['desc3']['html'] ?>
+            </p>
+            <p>
                 <?= $form['date']['label'] ?>
                 <br>
                 <?= $form['date']['html'] ?>

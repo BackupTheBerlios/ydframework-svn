@@ -52,6 +52,9 @@
                 'bbtextarea', 'desc2', 'Enter the description (no toolbar):'
             );
             $form->addElement(
+                'bbtextarea', 'desc3', 'Enter the description (no toolbar):'
+            );
+            $form->addElement(
                 'date', 'date', 'Enter the date:',
                 array( 'language'=>'en', 'format'=>'dMYHi' )
             );
