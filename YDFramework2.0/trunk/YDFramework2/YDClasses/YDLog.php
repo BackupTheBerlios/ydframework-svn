@@ -178,6 +178,8 @@
 				$msg .= '</log>';
 
 				// Write to the file
+				$f = fopen( YD_LOG_FILE, 'a' );
+				fclose( $f );
 				$f = fopen( YD_LOG_FILE, 'r+' );
 				clearstatcache();
 				if ( filesize( YD_LOG_FILE ) == 0 ) {
