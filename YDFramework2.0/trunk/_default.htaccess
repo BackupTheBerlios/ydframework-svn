@@ -2,10 +2,13 @@
 # (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
 
 # Denying direct access to the templates
-<FilesMatch "(tpl|config.php|includes)$">
+<FilesMatch "(.tpl|config.php)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
+
+# Disallow directory browsing
+Options -Indexes
 
 # Disable magic quotes
 php_value magic_quotes_gpc 0
