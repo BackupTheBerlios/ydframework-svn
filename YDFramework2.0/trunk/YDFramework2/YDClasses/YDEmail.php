@@ -80,6 +80,16 @@
 		}
 
 		/**
+		 *	Function to set the return receipt address.
+		 *
+		 *	@param $email	Email address to use as return receipt address
+		 *	@param $name	Name to use as the return receipt address
+		 */
+		function setReturnReceipt ($email, $name = '') { 
+			$this->_msg->setHeader( 'Return-Receipt-To', $this->_mergeEmailName( $email, $name ) ); 
+		}
+
+		/**
 		 *	Function to set the priority of the email. This can be one of the following constants:
 		 *	YDEMAIL_PRIORITY_HIGH, YDEMAIL_PRIORITY_NORMAL, YDEMAIL_PRIORITY_LOW.
 		 *
