@@ -69,6 +69,9 @@
             $this->registerElementType(
                 'htmlarea', 'QuickForm/htmlarea.php', 'HTML_QuickForm_htmlarea'
             );
+            $this->registerElementType(
+                'bbtextarea', 'QuickForm/bbtextarea.php', 'HTML_QuickForm_bbtextarea'
+            );
 
         }
 
@@ -112,6 +115,20 @@
                             $element['value'][$key] = $value[0];
 
                         }
+
+                    }
+
+                }
+
+                // Convert to BBCode if needed
+                if ( $element['type'] == 'bbtextarea' ) {
+
+                    // Check if the element has a value
+                    if ( $element['value'] ) {
+
+                        // Add the HTML equivalent
+                        $tmp = $this->getElement( $element['name'] );
+                        $element['value_html'] = $tmp->getValueAsHtml();
 
                     }
 

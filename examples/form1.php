@@ -46,13 +46,21 @@
                 'text', 'name', 'Enter your name:', array( 'size' => 50 )
             );
             $form->addElement(
-                'textarea', 'desc', 'Enter the description:'
+                'bbtextarea', 'desc', 'Enter the description:'
+            );
+            $form->addElement(
+                'bbtextarea', 'desc2', 'Enter the description (no toolbar):'
             );
             $form->addElement(
                 'date', 'date', 'Enter the date:',
                 array( 'language'=>'en', 'format'=>'dMYHi' )
             );
             $form->addElement( 'submit', 'cmdSubmit', 'Send' );
+
+            // Update the no toolbar element
+            $element = & $form->getElement( 'desc2' );
+            $element->clearModifiers();
+            $element->clearSimplePopups();
 
             // Apply a filter
             $form->applyFilter( 'name', 'trim' );
