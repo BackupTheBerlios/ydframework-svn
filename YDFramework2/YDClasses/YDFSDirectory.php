@@ -124,13 +124,21 @@
         function createFile( $filename, $contents ) {
 
             // Set the directory of this object as the working directory
-            chdir( $this->_path );
+            chdir( $this->getPath() );
 
             // Create the new file
             $fp = fopen( $filename, 'wb' );
 
             // Save the contents to the file
-            fwrite( $fp, $contents );
+            $result = fwrite( $fp, $contents );
+
+            // Check for errors
+            if ( $result === false ) {
+                new YDFatalError(
+                    'Failed writing to the file "' . $file . '" in the  '
+                    . ' directory called "' . $this->getPath() . '".'
+                );
+            }
 
             // Close the file
             fclose( $fp );
@@ -145,6 +153,41 @@
 
             // Return the file object
             return $obj;
+
+        }
+
+        /**
+         *  This function will delete a file from the current directory.
+         *
+         *  @param $filename    The file you want to delete.
+         *  @param $failOnError Indicate if a YDFatalError needs to be raised if
+         *                      deleting the file failed.
+         */
+        function deleteFile( $filename, $failOnError=false ) {
+
+            // Set the directory of this object as the working directory
+            chdir( $this->getPath() );
+
+            // Check if the file exists
+            if ( file_exists( $filename ) ) {
+
+                // Try to delete the file
+                $result = unlink( $filename );
+
+                // Check for errors
+                if ( $result === false ) {
+
+                    // Check if we need to raise an error
+                    if ( $failOnError === true ) {
+                        new YDFatalError(
+                            'Failed deleting the file "' . $file . '" in the  '
+                            . ' directory called "' . $this->getPath() . '".'
+                        );
+                    }
+
+                }
+
+            }
 
         }
 

@@ -101,13 +101,8 @@
         // Function to delete an entry
         function actionDeleteEntry() {
 
-            // Get the complete path to the entry
-            $file = $this->dataDir->getPath() . '/' . $_GET['id'] . '.dat';
-
-            // Delete the entry
-            if ( file_exists( $file ) ) {
-                unlink( $file );
-            }
+            // Delete the file related to the entry
+            $this->dataDir->deleteFile( $_GET['id'] . '.dat' );
 
             // Forward to the list view
             $this->forward( 'default' );
