@@ -155,6 +155,34 @@
         }
 
         /**
+         *  This function will return the full URL to the current request,
+         *  including hostname, port and request URI.
+         *
+         *  @returns The full url of the current request.
+         *
+         *  @todo
+         *      Check if we can figure out the current scheme instead of hard
+         *      coding it to be http.
+         */
+        function getCurrentUrl() {
+
+            // Get the server name
+            $url = 'http://' . $_SERVER['SERVER_NAME'];
+
+            // Add the port if different than port 80
+            if ( $_SERVER['SERVER_PORT'] != '80' ) {
+                $url = $url . ':' . $_SERVER['SERVER_PORT'];
+            }
+
+            // Add the request URL
+            $url = $url . $_SERVER['REQUEST_URI'];
+
+            // Return the URL
+            return $url;
+
+        }
+
+        /**
          *  This function will forward the current request to a different action.
          *  By using this function, you make sure the action names and so on are
          *  also update to reflect this.
