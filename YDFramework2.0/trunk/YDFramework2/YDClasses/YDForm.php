@@ -846,6 +846,7 @@
             $form['attribs'] = $this->_convertToHtmlAttrib( $attribs );
             $form['tag'] = '<form' . $form['attribs'] . '>';
             $form['requirednote'] = $this->_requiredNote;
+            $form['endtag'] = '</form>';
 
             // Add the errors
             $form['errors'] = $this->_errors;
