@@ -74,11 +74,39 @@
 	@session_start();
 
 	/**
+	 *	This function will print a stack trace.
+	 */
+	function YDStackTrace() {
+		if ( YD_DEBUG == 1 ) {
+			echo( "\r\n" . '<pre>' . "\r\n" );
+			echo( 'Debug backtrace:' . "\r\n" );
+			foreach( debug_backtrace() as $t ) {
+				echo( '    @ ' ); 
+				if ( isset( $t['file'] ) ) {
+					echo( basename( $t['file'] ) . ':' . $t['line'] ); 
+				} else {
+					echo( '<PHP inner-code>' ); 
+				} 
+				echo( ' -- ' ); 
+				if ( isset( $t['class'] ) ) { echo( $t['class'] . $t['type'] ); }
+				echo( $t['function'] );
+				if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
+					echo( '(...)' );
+				} else {
+					echo( '()' );
+				}
+				echo( "\r\n" ); 
+			} 
+			echo( '</pre>' );
+		}
+	}
+
+	/**
 	 *	This function defines a fatal error.
 	 *
 	 *	@param $error Error message.
 	 */
-	function YDFatalError( $error ) { trigger_error( $error, E_USER_ERROR ); }
+	function YDFatalError( $error ) { YDStackTrace(); trigger_error( $error, E_USER_ERROR ); }
 
 	/**
 	 *	This function defines a warning.
