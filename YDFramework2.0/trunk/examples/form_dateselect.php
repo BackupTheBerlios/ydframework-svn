@@ -71,6 +71,7 @@
                 YDDebugUtil::dump( $elementTime->getTimeStamp( '%H:%M' ), '$elementTime->getTimeStamp( "%H:%M" )' );
                 YDDebugUtil::dump( $elementDateTime->getTimeStamp(), '$elementDateTime->getTimeStamp()' );
                 YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%H:%M" )' );
+                YDDebugUtil::dump( YDStringUtil::formatDate( $elementDateTime, 'datetime', 'pt' ), 'YDStringUtil::formatDate' );
             }
 
         }
