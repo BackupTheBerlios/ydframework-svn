@@ -149,7 +149,7 @@
 
 				// Create the timings report
 				$debug .= 'Processing time(s):' . YD_CRLF . YD_CRLF;
-				$debug .= '\tElapsed\t  Diff\t  Marker' . YD_CRLF;
+				$debug .= "\tElapsed\t  Diff\t  Marker" . YD_CRLF;
 				$timings = $GLOBALS['timer']->getReport();
 				foreach ( $timings as $timing ) {
 					$debug .= "\t" . $timing[0] . ' ms' . "\t  " . $timing[1] . ' ms' . "\t  " .$timing[2] . YD_CRLF;

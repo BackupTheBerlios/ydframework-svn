@@ -39,6 +39,9 @@
 	// Disable magic_quotes_runtime
 	set_magic_quotes_runtime( 0 );
 
+	// Start the session
+	@session_start();
+
 	// Get the path delimiter and newline
 	if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
 		@define( 'YD_CRLF', "\r\n" );
@@ -96,6 +99,58 @@
 	define( 'YD_TPL_CACHEEXT', '.phc' );
 	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
 
+	// Error constants
+	@define( 'YD_ERROR', E_USER_ERROR );
+	@define( 'YD_WARNING', E_USER_WARNING );
+	@define( 'YD_NOTICE', E_USER_NOTICE );
+
+	// For servers that do not send the request uri
+	if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
+		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+		if ( isset ( $_SERVER['QUERY_STRING'] ) ) {
+			$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+		}
+	}
+
+	// Keep some global variables
+	$GLOBALS['YD_SQL_QUERY'] = array();
+
+	// Update the include path
+	$includePath = YD_SELF_DIR;
+	if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
+		$includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
+	}
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS;
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormRenderers';
+	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
+	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
+	$includePath .= YD_PATHDELIM . dirname( __FILE__ );
+	if ( ini_get( 'include_path' ) != '' ) {
+		$includePath .= YD_PATHDELIM . ini_get( 'include_path' );
+	}
+	$GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
+	@ini_set( 'include_path', $includePath );
+
+	// Include the standard functions
+	require_once( 'YDF2_functions.php' );
+
+	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
+	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
+		if ( get_magic_quotes_gpc() == 1 ) {
+			$_GET = @YDRemoveMagicQuotes( $_GET );
+			$_POST = @YDRemoveMagicQuotes( $_POST );
+			$_COOKIE = @YDRemoveMagicQuotes( $_COOKIE );
+			$_REQUEST = @YDRemoveMagicQuotes( $_REQUEST );
+		}
+		define( 'YD_FIXED_MAGIC_QUOTES', true );
+	}
+
+	// Check if we have the right PHP version
+	if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {
+		trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
+	}
+
 	// Class executor
 	if ( ! defined( 'YD_EXECUTOR' ) ) {
 		define( 'YD_EXECUTOR', 'YDExecutor' );
@@ -123,128 +178,11 @@
 		}
 	}
 
-	// Error constants
-	@define( 'YD_ERROR', E_USER_ERROR );
-	@define( 'YD_WARNING', E_USER_WARNING );
-	@define( 'YD_NOTICE', E_USER_NOTICE );
-
-	// For servers that do not send the request uri
-	if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
-		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-		if ( isset ( $_SERVER['QUERY_STRING'] ) ) {
-			$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
-		}
-	}
-
-	// Keep some global variables
-	$GLOBALS['YD_SQL_QUERY'] = array();
-
-	// Start the session
-	@session_start();
-
-	// Update the include path
-	$includePath = YD_SELF_DIR;
-	if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
-		$includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
-	}
-	$includePath .= YD_PATHDELIM . YD_DIR_CLSS;
-	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
-	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormRenderers';
-	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
-	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
-	$includePath .= YD_PATHDELIM . dirname( __FILE__ );
-	if ( ini_get( 'include_path' ) != '' ) {
-		$includePath .= YD_PATHDELIM . ini_get( 'include_path' );
-	}
-	$GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
-	@ini_set( 'include_path', $includePath );
-
-	/**
-	 *	This function will include a file from the filesystem. It works similar to the require_once function but it
-	 *	knows about the include path for the Yellow Duck Framework.
-	 *
-	 *	@param $file	File to be included.
-	 */
-	if ( ! function_exists( 'YDInclude' ) ) {
-		function YDInclude( $file ) {
-			foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
-				if ( realpath( $include ) != false ) {
-					if ( file_exists( realpath( $include ) . '/' . $file ) ) {
-						require_once( realpath( $include ) . '/' . $file );
-						return;
-					}
-				}
-			}
-			if ( is_file( $file ) ) {
-				require_once( $file );
-				return;
-			}
-			trigger_error(
-				'Failed to include the file: ' . $file . ' The file was not found in the include path.', YD_ERROR
-			);
-		}
-	}
-
-	/**
-	 *	This function will add a marker to the global timer.
-	 *
-	 *	@param $name	The name of the marker.
-	 */
-	if ( ! function_exists( 'YDGlobalTimerMarker' ) ) {
-		function YDGlobalTimerMarker( $name ) {
-			$GLOBALS['timer']->addMarker( $name );
-		}
-	}
-
-	/**
-	 *	This function will fix magic quotes.
-	 *
-	 *	@param $value	The value to fix.
-	 *
-	 *	@returns	The fixed value.
-	 */
-	if ( ! function_exists( 'YDRemoveMagicQuotes' ) ) {
-		function YDRemoveMagicQuotes( & $value ) {
-			if ( get_magic_quotes_gpc() == 1 ) {
-				if ( is_array( $value ) ) {
-					$result = array();
-					foreach ( $value as $key=>$val) {
-						if ( is_array( $val ) ) {
-							$result[ $key ] = YDRemoveMagicQuotes( $val );
-						} else {
-							$result[ $key ] = stripslashes( $val );
-						}
-					}
-					return $result;
-				} else {
-					return stripslashes( $value );
-				}
-			}
-			return $value;
-		}
-	}
-
-	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
-	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
-		if ( get_magic_quotes_gpc() == 1 ) {
-			$_GET = @YDRemoveMagicQuotes( $_GET );
-			$_POST = @YDRemoveMagicQuotes( $_POST );
-			$_COOKIE = @YDRemoveMagicQuotes( $_COOKIE );
-			$_REQUEST = @YDRemoveMagicQuotes( $_REQUEST );
-		}
-		define( 'YD_FIXED_MAGIC_QUOTES', true );
-	}
-
-	// Check if we have the right PHP version
-	if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {
-		trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
-	}
-
 	// Include the base classes
 	YDInclude( 'YDBase.php' );
 	YDInclude( 'YDUtil.php' );
 
-	// Start the timer
+	// Start the global timer
 	$timer = new YDTimer();
 
 ?>
