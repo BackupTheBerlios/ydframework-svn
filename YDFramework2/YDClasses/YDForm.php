@@ -77,13 +77,18 @@
          *  always point to itself as the URL. The form will also use the POST
          *  method for submitting the data.
          *
-         *  @param $name The name of the form.
-         *  @param $method (optional) Method used for submitting the form. Most
-         *                 of the times, this is either POST or GET.
-         *  @param $action (optional) Action used for submitting the form. If
-         *                 not specified, it will default to the current script.
+         *  @param $name       The name of the form.
+         *  @param $method     (optional) Method used for submitting the form. 
+         *                     Most of the times, this is either POST or GET.
+         *  @param $action     (optional) Action used for submitting the form.
+         *                     If not specified, it will default to the current
+         *                     script.
+         *  @param $target     (optional) HTML target for the form.
+         *  @param $attributes (optional) Attributes for the form.
          */
-        function YDForm( $name, $method='', $action='' ) {
+        function YDForm( 
+            $name, $method='', $action='' $target='_self', $attributes=null
+        ) {
 
             // Default to the post method
             if ( empty( $method ) ) {
@@ -100,7 +105,7 @@
 
             // Initialize the parent class
             $this->HTML_QuickForm(
-                $name, $method, YD_SELF_URI, '', $params
+                $name, $method, YD_SELF_URI, '', $params, $target, $attributes
             );
 
         }
