@@ -43,6 +43,7 @@
 		 *	@returns	The version of the database server software.
 		 */
 		function getServerVersion() {
+			$this->connect();
 			return 'SQLite ' . sqlite_libversion();
 		}
 

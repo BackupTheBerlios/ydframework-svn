@@ -34,6 +34,7 @@
 		 *	@returns	Boolean indicating if the database type is supported by the server.
 		 */
 		function isSupported() {
+			$this->connect();
 			return extension_loaded( 'pgsql' );
 		}
 

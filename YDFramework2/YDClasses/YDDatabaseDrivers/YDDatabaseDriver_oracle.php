@@ -10,12 +10,15 @@
 	require_once( 'YDDatabaseDriver.php' );
 
 	/**
-	 *	This class defines a database driver for MySQL.
+	 *	This class defines a database driver for Oracle8i using the OCI8 interface.
+	 *
+	 *	@remark
+	 *		This class is by no means stable and still very experimental. Use it at your own risk only!
 	 */
-	class YDDatabaseDriver_mysql extends YDDatabaseDriver {
+	class YDDatabaseDriver_oracle extends YDDatabaseDriver {
 
 		/**
-		 *	This is the class constructor for the YDDatabaseDriver_mysql class.
+		 *	This is the class constructor for the YDDatabaseDriver_oracle class.
 		 *
 		 *	@param $db		Name of the database.
 		 *	@param $user	(optional) User name to use for the connection.
@@ -24,7 +27,7 @@
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $options	(optional) Options to pass to the driver.
 		 */
-		function YDDatabaseDriver_mysql( $db, $user='', $pass='', $host='', $options=array() ) {
+		function YDDatabaseDriver_oracle( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
 		}
 
@@ -34,7 +37,7 @@
 		 *	@returns	Boolean indicating if the database type is supported by the server.
 		 */
 		function isSupported() {
-			return extension_loaded( 'mysql' );
+			return extension_loaded( 'oci8' );
 		}
 
 		/**
@@ -44,7 +47,7 @@
 		 */
 		function getServerVersion() {
 			$this->connect();
-			return 'MySQL ' . mysql_get_server_info();
+			return 'Oracle ' . ociserverversion( $this->_conn );
 		}
 
 		/**
@@ -52,12 +55,12 @@
 		 */
 		function connect() {
 			if ( $this->_conn == null ) {
-				$conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-				if ( ! $conn ) { YDFatalError( mysql_error() ); }
-				if ( ! @mysql_select_db( $this->_db, $conn ) ) { YDFatalError( mysql_error( $conn ) ); }
+				$conn = @OCILogon( $this->_user, $this->_pass, $this->_db );
+				if ( ! $conn ) { 
+					$error = ocierror();
+					YDFatalError( $error['message'] );
+				}
 				$this->_conn = $conn;
-			} else {
-				@mysql_ping( $this->_conn );
 			}
 		}
 
@@ -70,8 +73,8 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			$record = mysql_fetch_assoc( $result );
-			mysql_free_result( $result );
+			$record = oci_fetch_assoc( $result );
+			OCIFreeStatement( $result );
 			return $record;
 		}
 
@@ -85,10 +88,10 @@
 		function getRecords( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = mysql_fetch_assoc( $result ) ) {
+			while ( $line = oci_fetch_assoc( $result ) ) {
 				array_push( $dataset, $line );
 			}
-			mysql_free_result( $result );
+			OCIFreeStatement( $result );
 			return $dataset;
 		}
 
@@ -101,7 +104,7 @@
 		 */
 		function executeSql( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_affected_rows( $this->_conn );
+			return ocirowcount( $this->_conn );
 		}
 
 		/**
@@ -113,21 +116,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_num_rows( $this->_conn );
-		}
-
-		/**
-		 *	This function will insert the specified values in to the specified table.
-		 *
-		 *	@param $table	The table to insert the data into.
-		 *	@param $values	Associative array with the field names and their values to insert.
-		 *
-		 *	@returns	The ID of the last insert.
-		 */
-		function executeInsert( $table, $values ) {
-			$sql = $this->_createSqlInsert( $table, $values );
-			$result = & $this->_connectAndExec( $sql );
-			return mysql_insert_id( $this->_conn );
+			return ocirowcount( $this->_conn );
 		}
 
 		/**
@@ -136,19 +125,8 @@
 		function close() {
 			if ( $this->_conn != null ) {
 				$this->_conn = null;
-				@mysql_close( $this->_conn );
+				@OCILogoff( $this->_conn );
 			}
-		}
-
-		/**
-		 *	This function will escape a string so that it's safe to include it in an SQL statement.
-		 *
-		 *	@param $string	The string to escape.
-		 *
-		 *	@returns	The escaped string.
-		 */
-		function string( $string ) {
-			return mysql_escape_string( $string );
 		}
 
 		/**
@@ -163,9 +141,13 @@
 		function & _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
-			return $result;
+			$stmt = OCIParse( $this->_conn, $sql );
+			$result = OCIExecute( $stmt );
+			if ( ! $result ) {
+				$error = ocierror();
+				YDFatalError( $error['message'] );
+			}
+			return $stmt;
 		}
 
 	}

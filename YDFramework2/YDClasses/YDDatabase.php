@@ -27,12 +27,13 @@
 
 			// Register the standard drives
 			$this->registerDriver( 'mysql', 'YDDatabaseDriver_mysql', 'YDDatabaseDriver_mysql.php' );
+			$this->registerDriver( 'oracle', 'YDDatabaseDriver_oracle', 'YDDatabaseDriver_oracle.php' );
 			$this->registerDriver( 'postgres', 'YDDatabaseDriver_postgres', 'YDDatabaseDriver_postgres.php' );
 			$this->registerDriver( 'sqlite', 'YDDatabaseDriver_sqlite', 'YDDatabaseDriver_sqlite.php' );
 
 			// Check if the driver exists
 			if ( ! array_key_exists( strtolower( $driver ), $this->_regDrivers ) ) {
-				YDFatalError( 'Unsupported database type: "' . $driver . '"' );
+				YDFatalError( 'Unsupported database type: "' . $driver . '".' );
 			}
 
 			// Include the driver
@@ -42,7 +43,7 @@
 
 			// Check if the driver is supported
 			if ( ! call_user_func( array( $this->_regDrivers[ strtolower( $driver ) ]['class'], 'isSupported' ) ) ) {
-				YDFatalError( 'Unsupported database type: "' . $driver . '"' );
+				YDFatalError( 'Unsupported database type: "' . $driver . '". Extension is not loaded.' );
 			}
 
 			// Make a new connection object and return it
