@@ -3,7 +3,7 @@
 echo Started making of a new distribution archive.
 
 rem Get the latest revision number
-for /f "usebackq" %%f in (`svnlook youngest C:/_SVNRepos/YDF2`) do (set BLDREV=%%f)
+for /f "usebackq" %%f in (`svnlook youngest C:/_SVNRepos/YDF2/YDFramework2.0/trunk`) do (set BLDREV=%%f)
 echo Latest SVN revision: %BLDREV%
 
 rem Create a directory for the build
@@ -18,7 +18,7 @@ del /Q /S "%BLDDIR%.tar.gz" > NUL
 
 rem Checkout the current revision
 echo Checking out the revision %BLDREV%
-svn export -q "file:///C:/_SVNRepos/YDF2/" "%BLDDIR%"
+svn export -q "file:///C:/_SVNRepos/YDF2/YDFramework2.0/trunk" "%BLDDIR%"
 
 rem Update the documentation
 echo Regenerating documentation
@@ -26,7 +26,7 @@ cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
 echo Creating changelog file
-svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
+svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/YDFramework2.0" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
