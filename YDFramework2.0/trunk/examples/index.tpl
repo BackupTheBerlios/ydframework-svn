@@ -195,6 +195,16 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="database_paging.php">Paged recordsets - YD MySQL library</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=database_paging.php">database_paging.php</a>
+				<br>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=database_paging.tpl">database_paging.tpl</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="form.php">Form handling and validation</a>
 			</td>
 			<td valign="top">
