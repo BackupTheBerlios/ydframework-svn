@@ -127,6 +127,26 @@
 		}
 
 		/**
+		 *	Get the values as an associative array using the indicated columns for keys and values.
+		 *
+		 *	@param $sql		The SQL statement to use.
+		 *	@param $key		The field to use for the keys.
+		 *	@param $val		The field to use for the values.
+		 *	@param $prefix	(optional) The text to prepend to the key name.
+		 *
+		 *	@returns An associative array.
+		 */
+		function getAsAssocArray( $sql, $key, $val, $prefix='' ) {
+			$records = $this->getRecords( $sql );
+			if ( ! $records ) { return false; }
+			$result = array();
+			foreach ( $records as $record ) {
+				$result[ $prefix . $record[ strtolower( $key ) ] ] = $record[ strtolower( $val ) ];
+			}
+			return $result;
+		}
+
+		/**
 		 *	This function will return a single record.
 		 *
 		 *	@param $sql	The SQL statement to use.
