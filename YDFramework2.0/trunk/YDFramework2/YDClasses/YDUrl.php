@@ -129,10 +129,10 @@
 		 *	@param $name	The name of the part to update
 		 *	@param $value	The new value for the part
 		 */
-		function setNamedPart( $name, $val ) {
+		function setNamedPart( $name, $value ) {
 			$name = strtolower( $name );
 			if ( in_array( $name, array_keys( $this->defaults ) ) ) {
-				$this->_url_parsed[$name] = $val;
+				$this->_url_parsed[$name] = $value;
 			}
 		}
 

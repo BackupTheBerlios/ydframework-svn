@@ -221,11 +221,15 @@
 		/**
 		 *	This function combines different file path elements to each other.
 		 *
+		 *	@code
 		 *	join( 'C:\temp', 'subdir', 'file.html' )
+		 *	@endcode
 		 *
 		 *	results in the following path:
 		 *
+		 *	@code
 		 *	C:\temp\subdir\file.html
+		 *	@endcode
 		 *
 		 *	@returns	The joined path.
 		 *
