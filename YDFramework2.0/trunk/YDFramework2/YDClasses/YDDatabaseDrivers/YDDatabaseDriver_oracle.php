@@ -249,6 +249,42 @@
 			return $stmt;
 		}
 
+		/**
+		 *	This function will preprare an SQL SELECT statement for the getRecordsLimit and getRecordsPaged functions.
+		 *
+		 *	@param $sql	The SQL statement to prepare
+		 *	@param $limit	(optional) How many records to return
+		 *	@param $offset	(optional) Where to start from
+		 *
+		 *	@internal
+		 *
+		 *	@todo
+		 *		Still fails with SELECT * as SELECT rownum as rn, * is not supported
+		 */
+		function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) {
+
+			// If no limit and offset, return the original SQL statement
+			if ( $limit == -1 && $offset == -1 ) {
+				return $sql;
+			}
+
+			// Check if there is an offset
+			$start = ( $offset < 0 ) ? 1 : $offset+1;
+
+			// Check the limit clause
+			$end = ( $limit < 0 ) ? '' : $start + $limit;
+
+			// Change the select statement
+			if ( substr( strtolower( $sql ), 0, 6 ) == 'select' ) {
+				$sql = 'SELECT /*+FIRST_ROWS*/ rownum as rn, ' . substr( $sql, 7 );
+			}
+			$sql = 'select * from (' . $sql . ') where rn between ' . $start . ' and ' . $end . ';';
+
+			// Return the changed SQL statement
+			return $sql;
+
+		}
+
 	}
 
 ?>

@@ -188,6 +188,30 @@
 			return $result;
 		}
 
+		/**
+		 *	This function will preprare an SQL SELECT statement for the getRecordsLimit and getRecordsPaged functions.
+		 *
+		 *	@param $sql	The SQL statement to prepare
+		 *	@param $limit	(optional) How many records to return
+		 *	@param $offset	(optional) Where to start from
+		 *
+		 *	@internal
+		 */
+		function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) {
+
+			// If no limit and offset, return the original SQL statement
+			if ( $limit == -1 && $offset == -1 ) {
+				return $sql;
+			}
+
+			// Check if there is an offset
+			$offset = ( $offset >= 0 ) ? ' OFFSET ' . strval( $offset ) : '';
+
+			// Return the changed SQL statement
+			return $sql . ' LIMIT ' . strval( $limit ) . $offset;
+
+		}
+
 	}
 
 ?>

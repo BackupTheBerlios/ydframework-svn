@@ -263,6 +263,20 @@
 		}
 
 		/**
+		 *	This function will execute the SQL statement with the limit and offset parameters.
+		 *
+		 *	@param $sql	The SQL statement to prepare
+		 *	@param $limit	(optional) How many records to return
+		 *	@param $offset	(optional) Where to start from
+		 *
+		 *	@internal
+		 */
+		function getRecordsLimit( $sql, $limit=-1, $offset=-1 ) {
+			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
+			return $this->getRecords( $sql );
+		}
+
+		/**
 		 *	This function will execute the SQL statement and return the number of affected records.
 		 *
 		 *	@param $sql	The SQL statement to use.
@@ -533,6 +547,30 @@
 		 */
 		function _logSql( $sql ) {
 			array_push( $GLOBALS['YD_SQL_QUERY'], $sql );
+		}
+
+		/**
+		 *	This function will preprare an SQL SELECT statement for the getRecordsLimit and getRecordsPaged functions.
+		 *
+		 *	@param $sql	The SQL statement to prepare
+		 *	@param $limit	(optional) How many records to return
+		 *	@param $offset	(optional) Where to start from
+		 *
+		 *	@internal
+		 */
+		function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) {
+
+			// If no limit and offset, return the original SQL statement
+			if ( $limit == -1 && $offset == -1 ) {
+				return $sql;
+			}
+
+			// Check if there is an offset
+			$args = ( $offset >= 0 ) ? $offset . ',' . $limit : $limit;
+
+			// Return the changed SQL statement
+			return $sql . ' LIMIT ' . $args;
+
 		}
 
 	}

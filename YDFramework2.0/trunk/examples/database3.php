@@ -48,6 +48,10 @@
 			YDDebugUtil::dump( $db->sqlString( $db->getDate( '__NOW__' ) ), 'sqlString( getDate( \'__NOW__\' ) )' );
 			YDDebugUtil::dump( $db->sqlString( $db->getTime( '__NOW__' ) ), 'sqlString( getTime( \'__NOW__\' ) )' );
 
+			// Test limits
+			YDDebugUtil::dump( $db->_prepareSqlForLimit( 'SELECT * FROM TABLE', 10 ) );
+			YDDebugUtil::dump( $db->_prepareSqlForLimit( 'SELECT * FROM TABLE', 10, 25 ) );
+
 			// Test errors
 			YDDebugUtil::dump( $db->getRecords( 'xx' ), 'should return error' );
 
