@@ -1,5 +1,8 @@
 <?php
 
+	// Some defines we need to override
+	define( 'YD_HTTP_CACHE_USEHEAD', 0 );
+
 	// Standard include
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
@@ -9,7 +12,7 @@
 	require_once( 'YDDebugUtil.php' );
 	require_once( 'YDArrayUtil.php' );
 	require_once( 'YDFeedCreator.php' );
-
+S
 	// Class definition
 	class pbaseRequest extends YDRequest {
 
