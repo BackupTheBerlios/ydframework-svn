@@ -107,7 +107,6 @@
 					array_push( $report, array( $val, $diff, $key ) );
 				}
 			}			
-			/*
 			foreach ( $report as $key=>$val ) {
 				if ( isset( $report[ $key + 1 ] ) ) {
 					$report[$key][1] = $report[$key+1][1];
@@ -116,8 +115,7 @@
 					$report[$key][1] = '-';
 				}
 			}
-			YDDebugUtil::dump( $report );
-			*/
+			//YDDebugUtil::dump( $report );
 			return $report;
 		}
 
