@@ -8,10 +8,10 @@
 	YDInclude( 'YDSqlQuery.php' );
 
 	// Class definition
-	class sql extends YDRequest {
+	class sqlquery extends YDRequest {
 
 		// Class constructor
-		function path() {
+		function sqlquery() {
 			$this->YDRequest();
 		}
 
@@ -19,7 +19,7 @@
 		function actionDefault() {
 			
 			// Select with one table			
-			$q = $q = new YDSqlQuery( 'SELECT', array( 'DISTINCT' ) );
+			$q = new YDSqlQuery( 'SELECT', array( 'DISTINCT' ) );
 			
 			$u = $q->addTable( 'user' );
 			$q->addSelect( "$u.id" ); 
