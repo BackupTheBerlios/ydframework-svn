@@ -302,7 +302,7 @@
 		 *	@param $val		The value to test.
 		 *	@param $opts	(not required)
 		 */
-		function is_date( $val, $opts='' ) {
+		function date( $val, $opts='' ) {
 			if ( ! is_array( $val ) ) {
 				return false;
 			}
@@ -324,7 +324,7 @@
 		 *	@param $val		The value to test.
 		 *	@param $opts	(not required)
 		 */
-		function is_time( $val, $opts='' ) {
+		function time( $val, $opts='' ) {
 			if ( ! is_array( $val ) ) {
 				return false;
 			}
@@ -349,8 +349,8 @@
 		 *	@param $val		The value to test.
 		 *	@param $opts	(not required)
 		 */
-		function is_datetime( $val, $opts='' ) {
-			return YDValidateRules::is_date( $val ) && YDValidateRules::is_time( $val );
+		function datetime( $val, $opts='' ) {
+			return YDValidateRules::date( $val ) && YDValidateRules::time( $val );
 		}
 
 	}

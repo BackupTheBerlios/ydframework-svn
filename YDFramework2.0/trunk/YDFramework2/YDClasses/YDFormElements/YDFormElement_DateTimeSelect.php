@@ -48,7 +48,7 @@
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
 			// Set the automatic rules
-			$this->_autoRules = array( array( 'is_datetime', 'Value is not a valid datetime' ) );
+			$this->_autoRules = array( array( 'datetime', 'Value is not a valid datetime' ) );
 
 			// The default value is an array
 			$this->_value = array();

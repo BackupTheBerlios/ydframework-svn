@@ -127,9 +127,9 @@
 			$this->registerRule( 'mimetype', array( 'YDValidateRules', 'mimetype' ), 'YDValidateRules.php' );
 			$this->registerRule( 'filename', array( 'YDValidateRules', 'filename' ), 'YDValidateRules.php' );
 			$this->registerRule( 'extension', array( 'YDValidateRules', 'extension' ), 'YDValidateRules.php' );
-			$this->registerRule( 'is_date', array( 'YDValidateRules', 'is_date' ), 'YDValidateRules.php' );
-			$this->registerRule( 'is_time', array( 'YDValidateRules', 'is_time' ), 'YDValidateRules.php' );
-			$this->registerRule( 'is_datetime', array( 'YDValidateRules', 'is_datetime' ), 'YDValidateRules.php' );
+			$this->registerRule( 'date', array( 'YDValidateRules', 'date' ), 'YDValidateRules.php' );
+			$this->registerRule( 'time', array( 'YDValidateRules', 'time' ), 'YDValidateRules.php' );
+			$this->registerRule( 'datetime', array( 'YDValidateRules', 'datetime' ), 'YDValidateRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
