@@ -56,12 +56,15 @@
 		 *
 		 *	@internal
 		 */			
-		function _getAvailable( $id, $quantity ) {
+		function _getAvailable( $id, $quantity, $add ) {
 
-			$available = $this->product[$id]['quantity'];			
-			$incart = isset( $this->item[$id] ) ? $this->item[$id] : 0;
+			$available = $this->product[$id]['quantity'];
 			
-			$available -= $incart;
+			if ( $add ) {
+				$incart = isset( $this->item[$id] ) ? $this->item[$id] : 0;
+			}
+			
+			$available -= isset( $incart ) ? $incart : 0;
 			
 			if ( $quantity > $available ) {
 				return $available;
@@ -72,7 +75,12 @@
 		
 		function setItem( $id, $quantity, $add=false ) {
 		
-			$quantity = $this->_getAvailable( $id, $quantity );
+			if ( $quantity == 0 ) {
+				$this->remItem( $id );
+				return $quantity;
+			}
+		
+			$quantity = $this->_getAvailable( $id, $quantity, $add );
 		
 			if ( $add ) {
 			
@@ -90,15 +98,9 @@
 				
 			} 
 			
-			if ( $quantity ) {
-				$this->item[$id] = $quantity;
+			if ( $quantity ) {	
+				return $this->item[$id] = $quantity;
 			} 
-			
-			return $quantity;
-			
-			$this->remItem( $id );
-			
-			return null;
 		
 		}
 		
