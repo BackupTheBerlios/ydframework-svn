@@ -206,7 +206,7 @@
         // Get debugging mode
         if ( ! defined( 'YD_DEBUG' ) ) {
             if ( $_GET['YD_DEBUG'] == 1 ) {
-                define( 'YD_DEBUG', 1 )
+                define( 'YD_DEBUG', 1 );
             } else {
                 define( 'YD_DEBUG', 0 );
             }
