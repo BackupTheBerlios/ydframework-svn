@@ -22,18 +22,29 @@
 			// Create the form
 			$form = new YDForm2( 'form1' );
 			$form->registerFilter( 'reverse', 'strrev' );
-			$form->setDefaults( array( 'txt1' => 'First text', 'txt3' => "two\nlines" ) );
+			$form->setDefaults( 
+				array( 'txt2' => 'First text', 'txt3' => "two\nlines", 'hid1' => 'I am hidden', 'chk1' => 'x' )
+			);
 			$text = & $form->addElement( 'text', 'txt1', 'Enter text 1:' );
 			$text->_label = 'new label for txt1';
 			$form->addElement( 'text', 'txt2', 'Enter text 2:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
 			$form->addElement( 'textarea', 'txt3', 'Enter text 2:' );
 			$form->addElement( 'radio', 'rad1', 'Select a value 1:', array(), array( 1 => 'een', 2=>'twee' ) );
 			$form->addElement( 'radio', 'rad2', 'Select a value 2:', array(), array( 1 => 'een<br/>', 2=>'twee' ) );
+			$form->addElement( 'hidden', 'hid1', '' );
+			$form->addElement( 'hidden', 'hid2', '', array(), 'i am also hidden' );
+			$form->addElement( 'image', 'img1', '', array(), 'http://www.yellowduck.be/images/site_images/rss091.gif' );
+			$form->addElement( 'password', 'pas1', 'Enter your password' );
+			$form->addElement( 'bbtextarea', 'bbt1', 'Enter your BBCode' );
+			$form->addElement( 'checkbox', 'chk1', 'Select me please', array(), 'chk1 value' );
+			$form->addElement( 'checkbox', 'chk2', 'Select me please' );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
+			$form->addElement( 'reset', 'res1', 'Reset' );
 			$form->addFilter( '__ALL__', 'upper' );
 			$form->addFilter( 'txt1', 'trim' );
 			$form->addFilter( 'txt2', 'reverse' );
 			$form->addRule( 'txt1', 'required', 'txt1 is required' );
+			$form->addRule( 'chk2', 'required', 'chk2 is required' );
 			$form->addFormRule( array( & $this, 'formrule' ), 'txt1 is required' );
 			if ( YD_DEBUG == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
@@ -52,6 +63,12 @@
 				YDDebugUtil::dump( $form->getValue( 'txt3' ), 'txt3' );
 				YDDebugUtil::dump( $form->getValue( 'rad1' ), 'rad1' );
 				YDDebugUtil::dump( $form->getValue( 'rad2' ), 'rad2' );
+				YDDebugUtil::dump( $form->getValue( 'hid1' ), 'hid1' );
+				YDDebugUtil::dump( $form->getValue( 'hid2' ), 'hid2' );
+				YDDebugUtil::dump( $form->getValue( 'pas1' ), 'pas1' );
+				YDDebugUtil::dump( $form->getValue( 'bbt1' ), 'bbt1' );
+				YDDebugUtil::dump( $form->getValue( 'chk1' ), 'chk1' );
+				YDDebugUtil::dump( $form->getValue( 'chk2' ), 'chk2' );
 			} else {
 				$form->display();
 			}
@@ -68,7 +85,8 @@
 		}
 
 		function formrule() {
-			return array( '__ALL__' => 'fields are missing' );
+			//return array( '__ALL__' => 'fields are missing' );
+			return true;
 		}
 
 	}

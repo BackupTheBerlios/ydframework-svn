@@ -7,13 +7,11 @@
 		die(  'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-	require_once( 'YDForm2.php' );
 	require_once( 'YDFormElement.php' );
 
 	class YDFormElement_TextArea extends YDFormElement {
 
-		function YDFormElement_TextArea( $form, $name, $label, $attributes=array(), $options=array() ) {
+		function YDFormElement_TextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );

@@ -60,7 +60,8 @@
 			$this->_errors = array();
 			
 			// Some static HTML things
-			$this->_htmlRequired = '<font color="red">*</font> ';
+			$this->_htmlRequiredStart = '<font color="red">(required)</font> <b>';
+			$this->_htmlRequiredEnd = '</b></font>';
 			$this->_htmlErrorStart = '<font color="red">Error: ';
 			$this->_htmlErrorEnd = '</font>';
 
@@ -75,10 +76,16 @@
 			}
 
 			// Add the standard elements
+			$this->registerElement( 'bbtextarea', 'YDFormElement_BBTextArea', 'YDFormElement_BBTextArea.php' );
+			$this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
+			$this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
+			$this->registerElement( 'image', 'YDFormElement_Image', 'YDFormElement_Image.php' );
+			$this->registerElement( 'password', 'YDFormElement_Password', 'YDFormElement_Password.php' );
+			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
+			$this->registerElement( 'reset', 'YDFormElement_Reset', 'YDFormElement_Reset.php' );
+			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
 			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
-			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
-			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
 
 			// Add the rules
 			$this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
@@ -118,9 +125,7 @@
 		 *	@param $name	Name of the element.
 		 */
 		function unregisterElement( $name ) {
-			if ( array_key_exists( $name, $this->_regElements ) ) {
-				unset( $this->_regElements[ $name ] );
-			}
+			if ( array_key_exists( $name, $this->_regElements ) ) { unset( $this->_regElements[ $name ] ); }
 		}
 
 		/**
@@ -140,9 +145,7 @@
 		 *	@param $name	Name of the validation rule.
 		 */
 		function unregisterRule( $name ) {
-			if ( array_key_exists( $name, $this->_regRules ) ) {
-				unset( $this->_regRules[ $name ] );
-			}
+			if ( array_key_exists( $name, $this->_regRules ) ) { unset( $this->_regRules[ $name ] ); }
 		}
 
 		/**
@@ -162,9 +165,7 @@
 		 *	@param $name	Name of the filter.
 		 */
 		function unregisterFilter( $name ) {
-			if ( array_key_exists( $name, $this->_regFilters ) ) {
-				unset( $this->_regFilters[ $name ] );
-			}
+			if ( array_key_exists( $name, $this->_regFilters ) ) { unset( $this->_regFilters[ $name ] ); }
 		}
 
 		/**
@@ -179,13 +180,13 @@
 		/**
 		 *	This function will add a new element to the form.
 		 *
-		 *	@param $type	The type of element to add.
-		 *	@param $name	The HTML name for the element.
-		 *	@param $label	The label for the element.
-		 *	@param $attribs	The attributes for the element.
-		 *	@param $options	The options for the elment.
+		 *	@param $type		The type of element to add.
+		 *	@param $name		The name of the form element.
+		 *	@param $label		(optional) The label for the form element.
+		 *	@param $attributes	(optional) The attributes for the form element.
+		 *	@param $options		(optional) The options for the elment.
 		 */
-		function & addElement( $type, $name, $label, $attribs=array(), $options=array() ) {
+		function & addElement( $type, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Check if the element type is known
 			if ( ! array_key_exists( $type, $this->_regElements ) ) {
@@ -201,23 +202,22 @@
 			$class = $this->_regElements[ $type ]['class'];
 
 			// Create the instance
-			$instance = new $class( $this->_name, $name, $label, $attribs, $options );
+			$instance = new $class( $this->_name, $name, $label, $attributes, $options );
 
 			// Loop over the form variable
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
-
-				// Check if it matches the form element name
 				if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
 					$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
 				}
-
 			}
 
 			// If there is nothing that matches, use the default
 			if ( sizeof( $elementVars ) == 0 )  {
-				if ( isset( $this->_defaults[ $name ] ) ) {
-					$instance->_value = $this->_defaults[ $name ];
+				if ( ! $this->isSubmitted() ) {
+					if ( isset( $this->_defaults[ $name ] ) ) {
+						$instance->_value = $this->_defaults[ $name ];
+					}
 				}
 			} elseif ( sizeof( $elementVars ) == 1 ) {
 				$instance->_value = $elementVars[ $name ];
@@ -274,9 +274,7 @@
 			}
 
 			// Initialize the element
-			if ( ! @ is_array( $this->_filters[ $element ] ) ) {
-				$this->_filters[ $element ] = array();
-			}
+			if ( ! @ is_array( $this->_filters[ $element ] ) ) { $this->_filters[ $element ] = array(); }
 
 			// Add the filter
 			array_push( $this->_filters[ $element ], $filter );
@@ -304,9 +302,7 @@
 			}
 
 			// Initialize the element
-			if ( ! @ is_array( $this->_rules[ $element ] ) ) {
-				$this->_rules[ $element ] = array();
-			}
+			if ( ! @ is_array( $this->_rules[ $element ] ) ) { $this->_rules[ $element ] = array(); }
 
 			// Add the filter
 			array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
@@ -369,9 +365,7 @@
 				$key = str_replace( $this->_name . '_', '', $key );
 
 				// Check if the key is a form element
-				if ( array_key_exists( $key, $this->_elements ) ) {
-					return true;
-				};
+				if ( array_key_exists( $key, $this->_elements ) ) { return true; };
 
 			}
 
@@ -428,9 +422,7 @@
 						);
 
 						// If the result is false, add the error
-						if ( $result == false ) {
-							$this->_errors[ $element ] = $rule['error'];
-						}
+						if ( $result == false ) { $this->_errors[ $element ] = $rule['error']; }
 
 						// Step out of the loop
 						break;
@@ -442,9 +434,7 @@
 			}
 
 			// Check for errors
-			if ( sizeof( $this->_errors ) > 0 ) {
-				return false;
-			}
+			if ( sizeof( $this->_errors ) > 0 ) { return false; }
 
 			// Apply the form rules
 			foreach ( $this->_formrules as $rule ) {
@@ -459,22 +449,13 @@
 
 				// Check the result
 				if ( is_array( $result ) ) {
-
-					// Add the errors
-					foreach ( $result as $element => $error ) {
-						$this->_errors[ $element ] = $error;
-					}
-
-					// Step out of the loop
+					foreach ( $result as $element => $error ) { $this->_errors[ $element ] = $error; }
 					break;
-
 				}
 			}
 
 			// Check for errors
-			if ( sizeof( $this->_errors ) > 0 ) {
-				return false;
-			}
+			if ( sizeof( $this->_errors ) > 0 ) { return false; }
 
 			// All went fine, return true
 			return true;
@@ -559,15 +540,23 @@
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
 				$html .= '<p>';
-				if ( $element['required'] ) {
-					$html .= $this->_htmlRequired;
-				}
-				if ( ! empty( $element['label'] ) ) {
-					$html .= $element['label'] . '<br>';
-				}
-				$html .= $element['html'];
-				if ( ! empty( $element['error'] ) ) {
-					$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+				if ( $element['placeLabel'] == 'after' ) {
+					$html .= $element['html'];
+					if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
+					if ( ! empty( $element['label'] ) ) { $html .= $element['label'] ; }
+					if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
+					if ( ! empty( $element['error'] ) ) {
+						$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+					}
+				} else {
+					if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
+					if ( ! empty( $element['label'] ) ) { $html .= $element['label']; }
+					if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
+					if ( ! empty( $element['label'] ) ) { $html .= '<br>'; }
+					$html .= $element['html'];
+					if ( ! empty( $element['error'] ) ) {
+						$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+					}
 				}
 				$html .= '</p>';
 			}

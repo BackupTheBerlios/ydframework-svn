@@ -9,15 +9,15 @@
 
 	require_once( 'YDFormElement.php' );
 
-	class YDFormElement_Submit extends YDFormElement {
+	class YDFormElement_Reset extends YDFormElement {
 
-		function YDFormElement_Submit( $form, $name, $label='', $attributes=array(), $options=array() ) {
+		function YDFormElement_Reset( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
 			// Set the type
-			$this->_type = 'submit';
+			$this->_type = 'reset';
 
 			// Set the value correctly
 			$this->_value = $label;
