@@ -22,6 +22,7 @@
 		 *	@param $pass	(optional) Password to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
+		 *	@param $options	(optional) Options to pass to the driver.
 		 */
 		function YDDatabaseDriver( $db, $user='', $pass='', $host='', $options=array() ) {
 
