@@ -393,10 +393,6 @@
          *  @internal
          *
          *  @returns A new HttpClient class instance.
-         *
-         *  @todo
-         *      We need to have a global constant that indicates if we want to
-         *      use GZip compressed streams or not.
          */
         function _getHttpClient() {
 
@@ -419,9 +415,6 @@
 
             // Get the head of the file
             $client = new YDHttpClient( $this->getHost(), $port );
-            $client->useGzip( true );
-            $client->setDebug( YD_DEBUG );
-            //$client->path = $this->getUrl();
             $client->path = $this->getUri();
             $client->referer = $this->getUrl();
             $client->method = 'GET';

@@ -16,6 +16,12 @@
     /**
      *  This is the YDHttpClient class. It extends the HttpClient class and adds
      *  support for specifying the content type.
+     *
+     *  @todo
+     *      Redirects to different sites are not supported, and make retrieving
+     *      of images from pbase fail. This might result in the fact that we
+     *      need to move to a different HTTP library. Another option is to
+     *      rewrite the library completely.
      */
     class YDHttpClient extends HttpClient {
 
@@ -31,11 +37,20 @@
             $this->HttpClient( $host, $port );
 
             // Update the user agent
-            $this->user_agent = YD_FW_NAMEVERS . ' - YDHttpClient';
-            $this->user_agent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1';
+            $this->user_agent = 'Mozilla/4.0 (compatible; ' . YD_FW_NAMEVERS . ')';
 
             // Set the content type
             $this->contenttype = '';
+
+            // Enable GZip compressed streams if enabled
+            if ( YD_HTTP_USES_GZIP == 1 ) {
+                $this->useGzip( true );
+            } else {
+                $this->useGzip( false );
+            }
+
+            // Set the debugging mode
+            $this->setDebug( YD_DEBUG );
 
         }
 

@@ -227,6 +227,18 @@
         define( 'YD_ERR_HANDLER', 'YDErrorHandler' );
     }
 
+    /**
+     *  @enum YD_HTTP_USES_GZIP
+     *        This indicates if the YDHttpClient used in e.g. the YDUrl class
+     *        should try to use GZip compression if available or not. By
+     *        default, this is set to true.
+     * 
+     *  @internal
+     */
+    if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) {
+        define( 'YD_HTTP_USES_GZIP', 1 );
+    }
+
     // Get debugging mode
     if ( ! defined( 'YD_DEBUG' ) ) {
         if ( $_GET['YD_DEBUG'] == 1 ) {
