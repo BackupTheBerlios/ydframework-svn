@@ -25,28 +25,21 @@ echo Regenerating documentation
 cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
-echo Creating changelog files
+echo Creating changelog file
 svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
 del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
-del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
-del /Q "%BLDDIR%\YDFramework2\doc\ydf2.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
-del /Q "%BLDDIR%\YDFramework2\doc\style.css"
-del /Q "%BLDDIR%\YDFramework2\doc\*.li"
-del /Q "%BLDDIR%\YDFramework2\doc\*.ld"
-del /Q "%BLDDIR%\YDFramework2\doc\*.lt"
 del /Q "%BLDDIR%\YDFramework2\doc\*.doc"
-rmdir /Q /S "%BLDDIR%\YDFramework2\doc\xsl"
-copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt"
-copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf"
-move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc"
+copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
+copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf" > NUL
+move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc" > NUL
 
 rem Compressing the build archive
-del /Q /S %BLDDIR%\builds
+del /Q /S %BLDDIR%\builds > NUL
 echo Compressing the build archive: %BLDDIR%.tar.gz
 tar cf "%BLDDIR%.tar" "%BLDDIR%"
 gzip -f9q "%BLDDIR%.tar"
