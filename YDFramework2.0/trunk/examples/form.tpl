@@ -20,43 +20,43 @@
 
 		<p>Welcome to <b>{$form[name][value]}</b>!</p>
 
-		<p>Description1: <blockquote>{$form[desc1][value]}</blockquote></p>
-		<p>Description2: <blockquote>{$form[desc2][value]}</blockquote></p>
-		<p>Description3: <blockquote>{$form[desc3][value]}</blockquote></p>
+		<p>Description1: <blockquote>{$form.desc1.value}</blockquote></p>
+		<p>Description2: <blockquote>{$form.desc2.value}</blockquote></p>
+		<p>Description3: <blockquote>{$form.desc3.value}</blockquote></p>
 
 	{else}
 	
 		{if $form[errors]}
 			<p style="color: red"><b>Errors during processing:</b>
-			{foreach from=$form[errors] item=error}
+			{foreach from=$form.errors item="error"}
 				<br>{$error}
 			{/foreach}
 			</p>
 		{/if}
 
-		<form {$form[attribs]}>
+		<form {$form.attribs}>
 			<p>
-				{$form[name][label]}
+				{$form.name.label}
 				<br>
-				{$form[name][html]}
+				{$form.name.html}
 			</p>
 			<p>
-				{$form[desc1][label]}
+				{$form.desc1.label}
 				<br>
-				{$form[desc1][html]}
+				{$form.desc1.html}
 			</p>
 			<p>
-				{$form[desc2][label]}
+				{$form.desc2.label}
 				<br>
-				{$form[desc2][html]}
+				{$form.desc2.html}
 			</p>
 			<p>
-				{$form[desc3][label]}
+				{$form.desc3.label}
 				<br>
-				{$form[desc3][html]}
+				{$form.desc3.html}
 			</p>
 			<p>
-				{$form[cmdSubmit][html]}
+				{$form.cmdSubmit.html}
 			</p>
 		</form>
 
