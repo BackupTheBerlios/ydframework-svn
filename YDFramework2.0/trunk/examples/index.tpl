@@ -418,6 +418,14 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=timer.php">timer.php</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="objects_to_arrays.php">Using YDBase::toArray</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=objects_to_arrays.php">objects_to_arrays.php</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}

@@ -157,10 +157,29 @@
 		function assignForm( $name, $form ) {
 			if ( ! YDObjectUtil::isSubclass( $form, 'YDForm' ) ) {
 				trigger_error(
-					'The form you have tried to add to the form is not a subclass of the YDForm class.', YD_ERROR
+					'The form you have tried to add to the template is not a subclass of the YDForm class.', YD_ERROR
 				);
 			}
-			$this->assign( $name, $form->toArray( $this ) );
+			$this->assignObject( $name, $form );
+		}
+
+		/**
+		 *	This function will add a YDBase-based object to the template. It will automatically convert the form to an
+		 *	array using the object's toArray function.
+		 *
+		 *	If the object specified when calling this function is not a class derived from the YDBase class, a fatal
+		 *	error will be thrown.
+		 *
+		 *	@param $name	Name you want to use for this object for referencing it in the template.
+		 *	@param $obj		The object you want to add.
+		 */
+		function assignObject( $name, $obj ) {
+			if ( ! YDObjectUtil::isSubclass( $obj, 'YDBase' ) ) {
+				trigger_error(
+					'The object you have tried to add to the template is not a subclass of the YDBase class.', YD_ERROR
+				);
+			}
+			$this->assign( $name, $obj->toArray() );
 		}
 
 		/**

@@ -216,12 +216,19 @@
 		}
 
 		/**
-		 *	Converts the properties of the object to an associative array.
+		 *	Converts the properties of the object to an associative array. It will not include properties that start
+		 *	with an underscore or a double underscore.
 		 *
 		 *	@returns	Associative array with the object properties.
 		 */
 		function toArray() {
-			return get_object_vars( $this );
+			$vars = get_object_vars( $this );
+			foreach ( $vars as $key=>$var ) {
+				if ( substr( $key, 0, 1 ) == '_' || substr( $key, 0, 1 ) == '__' ) {
+					unset( $vars[$key] );
+				}
+			}
+			return $vars;
 		}
 
 	}
