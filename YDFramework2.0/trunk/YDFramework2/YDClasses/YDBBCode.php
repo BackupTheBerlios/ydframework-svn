@@ -41,6 +41,13 @@
 			$this->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
 			$this->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );
 
+			// Attributes to convert links
+			$this->_convertLinks = array(
+				"#([\t\r\n ])([a-z0-9]+?){1}://([\w\-]+\.([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i" => '\1[url]\2://\3[/url]',
+				"#([\t\r\n ])(www|ftp)\.(([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i" => '\1[url=http://\2.\3]\2.\3[/url]',
+				"#([\n ])([a-z0-9\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i" => "\\1[email]\\2@\\3[/email]"
+			);
+
 		}
 
 		/**
@@ -64,20 +71,9 @@
 		 *	@returns	The text with links highlighted as BBCode tags.
 		 */
 		function convertLinks( $text ) {
-			$text = preg_replace(
-				"#([\t\r\n ])([a-z0-9]+?){1}://([\w\-]+\.([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i",
-				'\1[url]\2://\3[/url]',
-				$text
-			);
-			$text = preg_replace(
-				"#([\t\r\n ])(www|ftp)\.(([\w\-]+\.)*[\w]+(:[0-9]+)?(/[^ \"\n\r\t<]*)?)#i", 
-				'\1[url=http://\2.\3]\2.\3[/url]',
-				$text
-			);
-			$text = preg_replace(
-				"#([\n ])([a-z0-9\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1[email]\\2@\\3[/email]", $text
-			);
-			return $text;
+			$search = array_keys( $this->_convertLinks );
+			$replace = array_values($this->_convertLinks );
+			return preg_replace( $search, $replace, $text  );
 		}
 
 		/**
@@ -98,12 +94,12 @@
 		function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true ) {
 
 			// Convert the links to BBcode
-			if ( $convertLinks = true ) {
+			if ( $convertLinks === true ) {
 				$data = $this->convertLinks( $data );
 			}
 
 			// Convert tags if needed
-			if ( $convertTags == true ) {
+			if ( $convertTags === true ) {
 				$data = str_replace( '<', '&lt;', $data );
 				$data = str_replace( '>', '&gt;', $data );
 			}
@@ -115,7 +111,7 @@
 			$data = str_replace( ' href="http://', ' target="_blank" href="http://', $data );
 
 			// Convert tags if needed
-			if ( $convertBr == true ) {
+			if ( $convertBr === true ) {
 				$data = nl2br( trim( $data ) );
 			}
 

@@ -309,20 +309,32 @@
 		 *	@returns	String with all the characters with an ordinal bigger than 128 converted to numeric entities.
 		 */
 		function encodeString( $string, $htmlent=false ) {
+			/*
 			$encoded = '';
-			for ( $i=0; $i < strlen( $string ); $i++ )  {
-				if ( ord( substr( $string, $i, 1 ) ) > 128 ) {
-					$encoded .= '&#' . ord( substr( $string, $i, 1 ) ) . ';';
-				} elseif ( ord( substr( $string, $i, 1 ) ) == 0 ) {
+			for ( $i=0; $i < strlen( $string ); $i++ ) {
+				$j = substr( $string, $i, 1 );
+				$jOrd = ord( $j );
+				if ( $jOrd > 128 ) {
+					$encoded .= '&#' . $jOrd . ';';
+				} elseif ( $jOrd == 0 ) {
 					$encoded .= ' ';
 				} else {
-					$encoded .= substr( $string, $i, 1 );
+					$encoded .= $j;
+				}
+			}*/
+			$trans = get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES );
+			foreach ( $trans as $key => $value ) {
+				if ( ord( $key ) == 60 || ord( $key ) == 62 ) {
+					unset( $trans[$key] );
+				} else {
+					$trans[$key] = '&#' . ord( $key ) . ';';
 				}
 			}
+			$string = strtr( $string, $trans );
 			if ( $htmlent == true ) {
-				$encoded = htmlentities( $encoded );
+				$string = htmlentities( $string );
 			}
-			return $encoded;
+			return $string;
 		}
 
 		/**
