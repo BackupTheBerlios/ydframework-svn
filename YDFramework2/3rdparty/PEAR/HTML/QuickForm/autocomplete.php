@@ -1,12 +1,72 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+// +----------------------------------------------------------------------+
+// | PHP Version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2003 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 2.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Author:  Matteo Di Giovinazzo <matteodg@infinito.it>                 |
+// |                                                                      |
+// | For the JavaScript code thanks to Martin Honnen and                  |
+// | Nicholas C. Zakas                                                    |
+// | See:                                                                 |
+// |      http://www.faqts.com/knowledge_base/view.phtml/aid/13562        |
+// | and                                                                  |
+// |      http://www.sitepoint.com/article/1220                           |
+// +----------------------------------------------------------------------+
+//
+// $Id: autocomplete.php,v 1.2 2003/11/12 10:48:42 avb Exp $
+
 
 require_once("HTML/QuickForm/text.php");
 
+
+/**
+ * Class to dynamically create an HTML input text element that
+ * at every keypressed javascript event, check in an array of options
+ * if there's a match and autocomplete the text in case of match.
+ *
+ * Ex:
+ * $autocomplete =& $form->addElement('autocomplete', 'fruit', 'Favourite fruit:');
+ * $options = array("Apple", "Orange", "Pear", "Strawberry");
+ * $autocomplete->setOptions($options);
+ *
+ * @author       Matteo Di Giovinazzo <matteodg@infinito.it>
+ */
 class HTML_QuickForm_autocomplete extends HTML_QuickForm_text
 {
+    // {{{ properties
 
+    /**
+     * Options for the autocomplete input text element
+     *
+     * @var       array
+     * @access    private
+     */
     var $_options = array();
 
+    // }}}
+    // {{{ constructor
+
+    /**
+     * Class constructor
+     *
+     * @param     string    $elementName    (optional)Input field name attribute
+     * @param     string    $elementLabel   (optional)Input field label in form
+     * @param     array     $options        (optional)Autocomplete options
+     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
+     *                                      or an associative array. Date format is passed along the attributes.
+     * @access    public
+     * @return    void
+     */
     function HTML_QuickForm_autocomplete($elementName = null, $elementLabel = null, $options = null, $attributes = null)
     {
         $this->HTML_QuickForm_text($elementName, $elementLabel, $attributes);
@@ -15,15 +75,35 @@ class HTML_QuickForm_autocomplete extends HTML_QuickForm_text
         if (isset($options)) {
             $this->setOptions($options);
         }
-    }
+    } //end constructor
 
+    // }}}
+    // {{{ setOptions()
+
+    /**
+     * Sets the options for the autocomplete input text element
+     *
+     * @param     array    $options    Array of options for the autocomplete input text element
+     * @access    public
+     * @return    void
+     */
     function setOptions($options)
     {
         $this->_options = array_values($options);
-    }
+    } // end func setOptions
 
+    // }}}
+    // {{{ toHtml()
+
+    /**
+     * Returns Html for the autocomplete input text element
+     *
+     * @access      public
+     * @return      string
+     */
     function toHtml()
     {
+        // prevent problems with grouped elements
         $arrayName = str_replace(array('[', ']'), array('__', ''), $this->getName()) . '_values';
 
         $this->updateAttributes(array(
@@ -153,7 +233,8 @@ EOS;
             $js .= "//-->\n</script>\n";
         }
         return $js . parent::toHtml();
-    }
+    }// end func toHtml
 
-}
+    // }}}
+} // end class HTML_QuickForm_autocomplete
 ?>

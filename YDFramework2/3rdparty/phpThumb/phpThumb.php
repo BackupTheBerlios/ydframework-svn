@@ -1,5 +1,15 @@
 <?php
+//////////////////////////////////////////////////////////////
+///  phpThumb() by James Heinrich <info@silisoftware.com>   //
+//        available at http://phpthumb.sourceforge.net     ///
+//////////////////////////////////////////////////////////////
+///                                                         //
+// See: phpthumb.changelog.txt for recent changes           //
+// See: phpthumb.readme.txt for usage instructions          //
+//                                                         ///
+//////////////////////////////////////////////////////////////
 
+// this script relies on the superglobal arrays, fake it here for old PHP versions
 if (phpversion() < '4.1.0') {
 	$_SERVER  = $HTTP_SERVER_VARS;
 	$_REQUEST = $HTTP_GET_VARS;
@@ -8,6 +18,8 @@ if (phpversion() < '4.1.0') {
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+
+// returned the fixed string if the evil "magic_quotes_gpc" setting is on
 if (get_magic_quotes_gpc()) {
 	$RequestVarsToStripSlashes = array('src', 'wmf', 'file', 'err', 'goto');
 	foreach ($RequestVarsToStripSlashes as $key) {
@@ -17,6 +29,7 @@ if (get_magic_quotes_gpc()) {
 	}
 }
 
+// instantiate a new phpThumb() object
 require_once('phpthumb.class.php');
 $phpThumb = new phpThumb();
 
@@ -29,11 +42,15 @@ foreach ($_REQUEST as $key => $value) {
 	$phpThumb->$key = $value;
 }
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
 if (@$_REQUEST['phpThumbDebug'] == '1') {
 	$phpThumb->phpThumbDebug();
 }
+////////////////////////////////////////////////////////////////
 
 
+// check to see if file already exists in cache, and output it with no processing if it does
 if (!empty($this->config['cache_directory']) && empty($_REQUEST['phpThumbDebug'])) {
 	$cache_filename = $phpThumb->GenerateCachedFilename();
 	if (is_file($cache_filename)) {
@@ -43,8 +60,17 @@ if (!empty($this->config['cache_directory']) && empty($_REQUEST['phpThumbDebug']
 	}
 }
 
+
+////////////////////////////////////////////////////////////////
+// You may want to pull data from a database rather than a physical file
+// If so, uncomment the following $SQLquery line (modified to suit your database)
+// Note: this must be the actual binary data of the image, not a URL or filename
+// see http://www.billy-corgan.com/blog/archive/000143.php for a brief tutorial on this section
+
+//$SQLquery = 'SELECT `Picture` FROM `products` WHERE (ProductID = \''.mysql_escape_string($_REQUEST['id']).'\')';
 if (!empty($SQLquery)) {
 
+	// change this information to match your server
 	$server   = 'localhost';
 	$username = 'user';
 	$password = 'password';
@@ -59,6 +85,7 @@ if (!empty($SQLquery)) {
 					unset($row);
 				} else {
 					$phpThumb->ErrorImage('no matching data in database.');
+					//$phpThumb->ErrorImage('no matching data in database. MySQL said: "'.mysql_error($cid).'"');
 				}
 			} else {
 				$phpThumb->ErrorImage('Error in MySQL query: "'.mysql_error($cid).'"');
@@ -104,20 +131,28 @@ if (!empty($SQLquery)) {
 
 }
 
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
 if (@$_REQUEST['phpThumbDebug'] == '2') {
 	$phpThumb->phpThumbDebug();
 }
+////////////////////////////////////////////////////////////////
 
 $phpThumb->GenerateThumbnail();
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
 if (@$_REQUEST['phpThumbDebug'] == '3') {
 	$phpThumb->phpThumbDebug();
 }
+////////////////////////////////////////////////////////////////
 
 if (!empty($_REQUEST['file'])) {
 
 	$phpThumb->RenderToFile(phpthumb_functions::ResolveFilenameToAbsolute($_REQUEST['file']));
 	if (!empty($_REQUEST['goto']) && (substr(strtolower($_REQUEST['goto']), 0, strlen('http://')) == 'http://')) {
+		// redirect to another URL after image has been rendered to file
 		header('Location: '.$_REQUEST['goto']);
 		exit;
 	}
@@ -128,9 +163,12 @@ if (!empty($_REQUEST['file'])) {
 
 }
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
 if (@$_REQUEST['phpThumbDebug'] == '4') {
 	$phpThumb->phpThumbDebug();
 }
+////////////////////////////////////////////////////////////////
 
 $phpThumb->OutputThumbnail();
 

@@ -1,11 +1,73 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+// +----------------------------------------------------------------------+
+// | PHP Version 4                                                        |
+// +----------------------------------------------------------------------+
+// | Copyright (c) 1997-2003 The PHP Group                                |
+// +----------------------------------------------------------------------+
+// | This source file is subject to version 2.0 of the PHP license,       |
+// | that is bundled with this package in the file LICENSE, and is        |
+// | available at through the world-wide-web at                           |
+// | http://www.php.net/license/2_02.txt.                                 |
+// | If you did not receive a copy of the PHP license and are unable to   |
+// | obtain it through the world-wide-web, please send a note to          |
+// | license@php.net so we can mail you a copy immediately.               |
+// +----------------------------------------------------------------------+
+// | Authors: Alexey Borzov <avb@php.net>                                 |
+// |          Adam Daniel <adaniel1@eesus.jnj.com>                        |
+// |          Bertrand Mansion <bmansion@mamasam.com>                     |
+// +----------------------------------------------------------------------+
+//
+// $Id: date.php,v 1.43 2004/03/10 08:58:38 mansion Exp $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
 
+/**
+ * Class for a group of elements used to input dates (and times).
+ * 
+ * Inspired by original 'date' element but reimplemented as a subclass
+ * of HTML_QuickForm_group
+ * 
+ * @author Alexey Borzov <avb@php.net>
+ * @access public
+ */
 class HTML_QuickForm_date extends HTML_QuickForm_group
 {
+    // {{{ properties
 
+   /**
+    * Various options to control the element's display.
+    * 
+    * Currently known options are
+    * 'language': date language
+    * 'format': Format of the date, based on PHP's date() function.
+    *     The following characters are recognised in format string:
+    *       D => Short names of days
+    *       l => Long names of days
+    *       d => Day numbers
+    *       M => Short names of months
+    *       F => Long names of months
+    *       m => Month numbers
+    *       Y => Four digit year
+    *       y => Two digit year
+    *       h => 12 hour format
+    *       H => 23 hour  format
+    *       i => Minutes
+    *       s => Seconds
+    *       a => am/pm
+    *       A => AM/PM
+    * 'minYear': Minimum year in year select
+    * 'maxYear': Maximum year in year select
+    * 'addEmptyOption': Should an empty option be added to the top of
+    *     each select box?
+    * 'emptyOptionValue': The value passed by the empty option.
+    * 'emptyOptionText': The text displayed for the empty option.
+    * 'optionIncrement': Step to increase the option values by (works for 'i' and 's')
+    * 
+    * @access   private
+    * @var      array
+    */
     var $_options = array(
         'language'         => 'en',
         'format'           => 'dMY',
@@ -16,7 +78,23 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'emptyOptionText'  => '&nbsp;',
         'optionIncrement'  => array('i' => 1, 's' => 1)
     );
+
+   /**
+    * These complement separators, they are appended to the resultant HTML
+    * @access   private
+    * @var      array
+    */
     var $_wrap = array('', '');
+
+   /**
+    * Options in different languages
+    * 
+    * Note to potential translators: to avoid encoding problems please send
+    * your translations with "weird" letters encoded as HTML Unicode entities
+    * 
+    * @access   private
+    * @var      array
+    */
     var $_locale = array(
         'en'    => array (
             'weekdays_short'=> array ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'),
@@ -128,12 +206,25 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         )
     );
 
+    // }}}
+    // {{{ constructor
+
+   /**
+    * Class constructor
+    * 
+    * @access   public
+    * @param    string  Element's name
+    * @param    mixed   Label(s) for an element
+    * @param    array   Options to control the element's display
+    * @param    mixed   Either a typical HTML attribute string or an associative array
+    */
     function HTML_QuickForm_date($elementName = null, $elementLabel = null, $options = array(), $attributes = null)
     {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_appendName = true;
         $this->_type = 'date';
+        // set the options, do not bother setting bogus ones
         if (is_array($options)) {
             foreach ($options as $name => $value) {
                 if ('language' == $name) {
@@ -148,6 +239,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             }
         }
     }
+
+    // }}}
+    // {{{ _createElements()
 
     function _createElements()
     {
@@ -164,6 +258,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 $loadSelect = true;
                 switch ($sign) {
                     case 'D':
+                        // Sunday is 0 like with 'w' in date()
                         $options = $locale['weekdays_short'];
                         break;
                     case 'l':
@@ -234,7 +329,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                         $this->_wrap[0] = $separator;
                     }
                     $separator = '';
+                    // Should we add an empty option to the top of the select?
                     if ($this->_options['addEmptyOption']) {
+                        // Preserve the keys
                         $options = array($this->_options['emptyOptionValue'] => $this->_options['emptyOptionText']) + $options;
                     }
                     $this->_elements[] =& new HTML_QuickForm_select($sign, null, $options, $this->getAttributes());
@@ -244,6 +341,18 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $this->_wrap[1] = $separator . ($backslash? '\\': '');
     }
 
+    // }}}
+    // {{{ _createOptionList()
+
+   /**
+    * Creates an option list containing the numbers from the start number to the end, inclusive
+    *
+    * @param    int     The start number
+    * @param    int     The end number
+    * @param    int     Increment by this value
+    * @access   private
+    * @return   array   An array of numeric options.
+    */
     function _createOptionList($start, $end, $step = 1)
     {
         for ($i = $start, $options = array(); $start > $end? $i >= $end: $i <= $end; $i += $step) {
@@ -251,6 +360,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         }
         return $options;
     }
+
+    // }}}
+    // {{{ setValue()
 
     function setValue($value)
     {
@@ -260,6 +372,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             if (!is_numeric($value)) {
                 $value = strtotime($value);
             }
+            // might be a unix epoch, then we fill all possible values
             $arr = explode('-', date('w-d-n-Y-h-H-i-s-a-A', (int)$value));
             $value = array(
                 'D' => $arr[0],
@@ -281,6 +394,9 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         parent::setValue($value);
     }
 
+    // }}}
+    // {{{ toHtml()
+
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
@@ -290,19 +406,28 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         return $renderer->toHtml();
     }
 
+    // }}}
+    // {{{ accept()
+
     function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderElement($this, $required, $error);
     }
 
+    // }}}
+    // {{{ onQuickFormEvent()
+
     function onQuickFormEvent($event, $arg, &$caller)
     {
         if ('updateValue' == $event) {
+            // we need to call setValue(), 'cause the default/constant value
+            // may be in fact a timestamp, not an array
             return HTML_QuickForm_element::onQuickFormEvent($event, $arg, $caller);
         } else {
             return parent::onQuickFormEvent($event, $arg, $caller);
         }
     }
 
+    // }}}
 }
 ?>

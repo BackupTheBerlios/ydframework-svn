@@ -1,7 +1,11 @@
 <?php
 
-class HttpClient {
+/* Version 0.9, 6th April 2003 - Simon Willison ( http://simon.incutio.com/ )
+   Manual: http://scripts.incutio.com/httpclient/
+*/
 
+class HttpClient {
+    // Request vars
     var $host;
     var $port;
     var $path;
@@ -13,20 +17,26 @@ class HttpClient {
     var $accept_encoding = 'gzip';
     var $accept_language = 'en-us';
     var $user_agent = 'Incutio HttpClient v0.9';
+    // Options
     var $timeout = 20;
     var $use_gzip = true;
-    var $persist_cookies = true;
-    var $persist_referers = true;
+    var $persist_cookies = true;  // If true, received cookies are placed in the $this->cookies array ready for the next request
+                                  // Note: This currently ignores the cookie path (and time) completely. Time is not important, 
+                                  //       but path could possibly lead to security problems.
+    var $persist_referers = true; // For each request, sends path of last request as referer
     var $debug = false;
-    var $handle_redirects = true;
+    var $handle_redirects = true; // Auaomtically redirect if Location or URI header is found
     var $max_redirects = 5;
-    var $headers_only = false;
+    var $headers_only = false;    // If true, stops receiving once headers have been read.
+    // Basic authorization variables
     var $username;
     var $password;
+    // Response vars
     var $status;
     var $headers = array();
     var $content = '';
     var $errormsg;
+    // Tracker variables
     var $redirect_count = 0;
     var $cookie_host = '';
     function HttpClient($host, $port=80) {
@@ -50,6 +60,7 @@ class HttpClient {
     function buildQueryString($data) {
         $querystring = '';
         if (is_array($data)) {
+            // Change data in to postable data
     		foreach ($data as $key => $val) {
     			if (is_array($val)) {
     				foreach ($val as $val2) {
@@ -59,14 +70,16 @@ class HttpClient {
     				$querystring .= urlencode($key).'='.urlencode($val).'&';
     			}
     		}
-    		$querystring = substr($querystring, 0, -1);
+    		$querystring = substr($querystring, 0, -1); // Eliminate unnecessary &
     	} else {
     	    $querystring = $data;
     	}
     	return $querystring;
     }
     function doRequest() {
+        // Performs the actual HTTP request, returning true or false depending on outcome
 		if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout)) {
+		    // Set error message
             switch($errno) {
 				case -3:
 					$this->errormsg = 'Socket creation failed (-3)';
@@ -85,23 +98,27 @@ class HttpClient {
         $request = $this->buildRequest();
         $this->debug('Request', $request);
         fwrite($fp, $request);
+    	// Reset all the variables that should not persist between requests
     	$this->headers = array();
     	$this->content = '';
     	$this->errormsg = '';
+    	// Set a couple of flags
     	$inHeaders = true;
     	$atStart = true;
+    	// Now start reading back the response
     	while (!feof($fp)) {
     	    $line = fgets($fp, 4096);
     	    if ($atStart) {
+    	        // Deal with first line of returned data
     	        $atStart = false;
     	        if (!preg_match('/HTTP\/(\\d\\.\\d)\\s*(\\d+)\\s*(.*)/', $line, $m)) {
     	            $this->errormsg = "Status code line invalid: ".htmlentities($line);
     	            $this->debug($this->errormsg);
     	            return false;
     	        }
-    	        $http_version = $m[1];
+    	        $http_version = $m[1]; // not used
     	        $this->status = $m[2];
-    	        $status_string = $m[3];
+    	        $status_string = $m[3]; // not used
     	        $this->debug(trim($line));
     	        continue;
     	    }
@@ -110,15 +127,17 @@ class HttpClient {
     	            $inHeaders = false;
     	            $this->debug('Received Headers', $this->headers);
     	            if ($this->headers_only) {
-    	                break;
+    	                break; // Skip the rest of the input
     	            }
     	            continue;
     	        }
     	        if (!preg_match('/([^:]+):\\s*(.*)/', $line, $m)) {
+    	            // Skip to the next header
     	            continue;
     	        }
     	        $key = strtolower(trim($m[1]));
     	        $val = trim($m[2]);
+    	        // Deal with the possibility of multiple headers of same name
     	        if (isset($this->headers[$key])) {
     	            if (is_array($this->headers[$key])) {
     	                $this->headers[$key][] = $val;
@@ -130,14 +149,17 @@ class HttpClient {
     	        }
     	        continue;
     	    }
+    	    // We're not in the headers, so append the line to the contents
     	    $this->content .= $line;
         }
         fclose($fp);
+        // If data is compressed, uncompress it
         if (isset($this->headers['content-encoding']) && $this->headers['content-encoding'] == 'gzip') {
             $this->debug('Content is gzip encoded, unzipping it');
-            $this->content = substr($this->content, 10);
+            $this->content = substr($this->content, 10); // See http://www.php.net/manual/en/function.gzencode.php
             $this->content = gzinflate($this->content);
         }
+        // If $persist_cookies, deal with any cookies
         if ($this->persist_cookies && isset($this->headers['set-cookie']) && $this->host == $this->cookie_host) {
             $cookies = $this->headers['set-cookie'];
             if (!is_array($cookies)) {
@@ -148,12 +170,15 @@ class HttpClient {
                     $this->cookies[$m[1]] = $m[2];
                 }
             }
+            // Record domain of cookies for security reasons
             $this->cookie_host = $this->host;
         }
+        // If $persist_referers, set the referer ready for the next request
         if ($this->persist_referers) {
             $this->debug('Persisting referer: '.$this->getRequestURL());
             $this->referer = $this->getRequestURL();
         }
+        // Finally, if handle_redirects and a redirect is sent, do that
         if ($this->handle_redirects) {
             if (++$this->redirect_count >= $this->max_redirects) {
                 $this->errormsg = 'Number of redirects exceeded maximum ('.$this->max_redirects.')';
@@ -165,6 +190,7 @@ class HttpClient {
             $uri = isset($this->headers['uri']) ? $this->headers['uri'] : '';
             if ($location || $uri) {
                 $url = parse_url($location.$uri);
+                // This will FAIL if redirect is to a different site
                 return $this->get($url['path']);
             }
         }
@@ -172,7 +198,7 @@ class HttpClient {
     }
     function buildRequest() {
         $headers = array();
-        $headers[] = "{$this->method} {$this->path} HTTP/1.0";
+        $headers[] = "{$this->method} {$this->path} HTTP/1.0"; // Using 1.1 leads to all manner of problems, such as "chunked" encoding
         $headers[] = "Host: {$this->host}";
         $headers[] = "User-Agent: {$this->user_agent}";
         $headers[] = "Accept: {$this->accept}";
@@ -183,6 +209,7 @@ class HttpClient {
         if ($this->referer) {
             $headers[] = "Referer: {$this->referer}";
         }
+    	// Cookies
     	if ($this->cookies) {
     	    $cookie = 'Cookie: ';
     	    foreach ($this->cookies as $key => $value) {
@@ -190,9 +217,11 @@ class HttpClient {
     	    }
     	    $headers[] = $cookie;
     	}
+    	// Basic authentication
     	if ($this->username && $this->password) {
     	    $headers[] = 'Authorization: BASIC '.base64_encode($this->username.':'.$this->password);
     	}
+    	// If this is a POST, set the content type and length
     	if ($this->postdata) {
     	    $headers[] = 'Content-Type: application/x-www-form-urlencoded';
     	    $headers[] = 'Content-Length: '.strlen($this->postdata);
@@ -231,6 +260,7 @@ class HttpClient {
         $url .= $this->path;
         return $url;
     }
+    // Setter methods
     function setUserAgent($string) {
         $this->user_agent = $string;
     }
@@ -241,6 +271,7 @@ class HttpClient {
     function setCookies($array) {
         $this->cookies = $array;
     }
+    // Option setting methods
     function useGzip($boolean) {
         $this->use_gzip = $boolean;
     }
@@ -262,6 +293,7 @@ class HttpClient {
     function setDebug($boolean) {
         $this->debug = $boolean;
     }
+    // "Quick" static methods
     function quickGet($url) {
         $bits = parse_url($url);
         $host = $bits['host'];
