@@ -258,17 +258,14 @@
 		}
 
 	    /**
-	     * get a concrete filename for automagically created content
+	     * Get a concrete filename for automagically created content.
 	     *
-	     * @param string $auto_base
-	     * @param string $auto_source
-	     * @param string $auto_id
-	     * @return string
-	     * @staticvar string|null
-	     * @staticvar string|null
+	     * @param $auto_base	Auto base.
+	     * @param $auto_source	Auto source
+	     * @param $auto_id		Auto ID
+	     * @returns string
 	     */
-	    function _get_auto_filename($auto_base, $auto_source = null, $auto_id = null)
-	    {
+	    function _get_auto_filename( $auto_base, $auto_source = null, $auto_id = null ) {
 	        $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
 	        $_return = $auto_base . DIRECTORY_SEPARATOR;
 	
