@@ -1,0 +1,82 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 beta 4 - YDError</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+
+    <div class="header">
+        <a href="http://www.redcarpethost.com/index.php?c=9&s=30" target="_blank"><img src="../../YDFramework2/images/sponsored_by_rch.gif"
+         align="right" border="0" alt="Proudly sponsered by Red Carpet Host" width="170" height="69" /></a>
+        <h2>Yellow Duck Framework 2.0</h2>
+    </div>
+
+    <div class="page">
+<h3> Error handling </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+This chapter will explain how errors can be reported and handled in the Yellow Duck Framework. Error handling in the YDFramework is based on the same error mechanism as all the other functions in PHP use.<br />
+<br />
+<br />
+<h4>  Types of errors </h4>
+<br />
+In the Yellow Duck Framework, we differentiate between fatal errors, warnings and notices.<br />
+<br />
+<ul><li> <strong>Fatal error</strong>: Fatal run-time errors. These indicate errors that can not be recovered from, such as a memory allocation problem. Execution of the script is halted.
+</li><li> <strong>Warning</strong>: Run-time warnings (non-fatal errors). Execution of the script is not halted. 
+</li><li> <strong>Notice</strong>: Run-time notices. Indicate that the script encountered something that could indicate an error, but could also happen in the normal course of running a script.</li></ul>
+<br />
+On top of the errors from the Yellow Duck Framework, the PHP scripts themselves can also generate error information.<br />
+<br />
+<br />
+<h4> Which error messages are shown? </h4>
+<br />
+By default, the Yellow Duck Framework will show all errors, warnings and notices.<br />
+<br />
+If you want to change which errors are shown, you can add the following code after the inclusion of the YDF2_init.php file:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Turn off all error reporting<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">error_reporting</font><font color="#007700">(</font><font color="#0000BB">0</font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Report simple running errors<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">error_reporting</font><font color="#007700">(</font><font color="#0000BB">E_ERROR </font><font color="#007700">| </font><font color="#0000BB">E_WARNING </font><font color="#007700">| </font><font color="#0000BB">E_PARSE</font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Reporting E_NOTICE can be good too (to report uninitialized <br />&nbsp;&nbsp;&nbsp;&nbsp;// variables or catch variable name misspellings ...)<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">error_reporting</font><font color="#007700">(</font><font color="#0000BB">E_ERROR </font><font color="#007700">| </font><font color="#0000BB">E_WARNING </font><font color="#007700">| </font><font color="#0000BB">E_PARSE </font><font color="#007700">| </font><font color="#0000BB">E_NOTICE</font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Report all errors except E_NOTICE<br />&nbsp;&nbsp;&nbsp;&nbsp;// This is the default value set in php.ini<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">error_reporting</font><font color="#007700">(</font><font color="#0000BB">E_ALL </font><font color="#007700">^ </font><font color="#0000BB">E_NOTICE</font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Report all PHP errors (bitwise 63 may be used in PHP 3)<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">error_reporting</font><font color="#007700">(</font><font color="#0000BB">E_ALL</font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Same as error_reporting(E_ALL);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">ini_set</font><font color="#007700">(</font><font color="#DD0000">'error_reporting'</font><font color="#007700">, </font><font color="#0000BB">E_ALL</font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+More information about this can be found in the <a href="http://www.php.net/manual/en/function.error-reporting.php">PHP manual</a>.<br />
+<br />
+<br />
+<h4> Raising errors </h4>
+<br />
+For raising errors in the Yellow Duck Framework, you should always use the trigger_error function. This function takes two arguments, being the error message and the type of error to raise. Here's an example:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;trigger_error</font><font color="#007700">( </font><font color="#DD0000">'Fatal error'</font><font color="#007700">, </font><font color="#0000BB">YD_ERROR </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A warning'</font><font color="#007700">, </font><font color="#0000BB">YD_WARNING </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A notice'</font><font color="#007700">, </font><font color="#0000BB">YD_NOTICE </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+<br />
+<h4> Printing a stack trace </h4>
+<br />
+When a fatal error occurs and debugging is turned on, a stack trace is printed as well. This will looks as:<br />
+<br />
+<div class="code"><xmp>Debug backtrace:
+    @ YDFSFile.php:30 -- trigger_error(...)
+    @ fsimage.php:44 -- ydfsfile->ydfsfile(...)
+    @ fsimage.php -- fsimage->actiondefault()
+    @ YDRequest.php:229 -- call_user_func(...)
+    @ YDExecutor.php:81 -- fsimage->process()
+    @ YDF2_process.php:19 -- ydexecutor->execute()
+    @ fsimage.php:69 -- require_once(...)</xmp></div><br />
+You can also print a stack trace yourself by simple calling the YDStackTrace function.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
+
+
+
+
+    <div class="copyright">
+        (c) Copyright 2003-2004 by <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>. All rights reserved.
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<html>
+<head>
+	<title>Variables :: Smarty-Light</title>
+</head>
+<body>
+<h4>Smarty-Light - the faster compiling PHP template engine</h4>
+<h1>Variables</h1>
+<hr>
+
+<h2><a name="template_dir">$template_dir</a></h2>
+<p>
+This is a string that tells Smarty-Light what directory to look for the templates in. You can refer to subdirectories of this folder, too, but this is the base folder for templates.<br><br>
+The default is the <code>templates</code> subdirectory of the Smarty-Light folder.
+</p>
+<hr>
+
+<h2><a name="config_dir">$config_dir</a></h2>
+<p>
+This is a string that tells Smarty-Light what directory to look for config files in.<br><br>
+The default is the <code>templates</code> subdirectory of the Smarty-Light folder.
+</p>
+<hr>
+
+<h2><a name="compile_dir">$compile_dir</a></h2>
+<p>
+This is a string that tells Smarty-Light what directory compiled files will be saved to. Whatever directory this is must have write permissions available for the webserver or else compiled files cannot be saved.<br><br>
+The default is the <code>compiled</code> subdirectory of the Smarty-Light folder.
+</p>
+<hr>
+
+<h2><a name="cache_dir">$cache_dir</a></h2>
+<p>
+This is a string that tells Smarty-Light what directory cached files will be saved to. Whatever directory this is must have write permissions available for the webserver or else cached files cannot be saved.<br><br>
+The default is the <code>cached</code> subdirectory of the Smarty-Light folder.
+</p>
+<hr>
+
+<h2><a name="plugins_dir">$plugins_dir</a></h2>
+<p>
+This is a string that tells Smarty-Light what directory plugins will be loaded from. There can only be one plugin directory and it will have all of the plugins in it. However, you can also dynamically register plugin functions if you must.<br><br>
+The default is the <code>plugins</code> subdirectory of the Smarty-Light folder.
+</p>
+<hr>
+
+<h2><a name="left_tag">$left_tag</a></h2>
+<p>
+This is the left tag used by the template engine. The default is "&lt;%".
+</p>
+<hr>
+
+<h2><a name="right_tag">$right_tag</a></h2>
+<p>
+This is the right tag used by the template engine. The default is "%&gt;".
+</p>
+<hr>
+
+<h2><a name="cache">$cache</a></h2>
+<p>
+Tells Smarty-Light whether or not to cache the output of the templates. By default this is set to <code>false</code> or disabled. If your templates generate content that rarely changes, or you are looking to increase the speed at which your templates are generated, it is advisable to turn on caching, as your templates will load significantly faster. You can have multiple caches for the same page, but this is described in the <a href="appendix.caching.html">caching appendix</a>. It is important to reset the <a href="#cache_lifetime"><code>$cache_lifetime</code></a> variable when beginning to work with a page that is being cached or else the page will not be cached. Before any cached file is loaded, it will be checked to see if the original template has changed, or if the cache is out of date. Also, if <a href="#force_compile"><code>$force_compile</code></a> is enabled, then the cache will be regenerated each time the page is loaded.
+</p>
+<hr>
+
+<h2><a name="cache_lifetime">$cache_lifetime</a></h2>
+<p>
+This is the length of time in seconds that a template cache is valid. Once this time has expired, the cache will be regenerated. <a href="#cache"><code>$cache</code></a> must be set to <code>true</code> for <code>$cache_lifetime</code> to have any valid meaning. A value of 0, the default, will always regenerate the cache, which is good for testing purposes only. To disable caching, you should always set <a href="#cache"><code>$cache</code></a> to <code>false</code>. If <a href="#force_compile"><code>$force_compile</code></a> is set to true, then the cache files will be regenerated every time the page is loaded, also effectively disabling caching. You can clear all cached files by calling <a href="programming.methods.html#clear_cached"><code>clear_cached()</code></a>.
+</p>
+<hr>
+
+<h2><a name="force_compile">$force_compile</a></h2>
+<p>
+If this is set to <code>true</code> then each page will be recompiled upon every viewing. This is horribly inefficient and highly discouraged, but is useful for testing your templates.
+</p>
+<hr>
+
+<h2><a name="config_overwrite">$config_overwrite</a></h2>
+<p>
+When loading config files either from your PHP script or from your templates themselves, this variable can change the behavior of the loading process. When set to <code>true</code>, config variables with the same name will overwrite each other. If set to <code>false</code>, config variables of the same name will be pushed into a numerically indexed array. The default is to not overwrite. This is for storing arrays in config files, simply by listing the same config file multiple times.
+</p>
+<hr>
+
+<h2><a name="config_booleanize">$config_booleanize</a></h2>
+<p>
+When this is set to <code>true</code>, a config value of <code>true</code> or <code>yes</code> or <code>on</code> or <code>1</code> will be translated to mean "true". At the same time, a config value of <code>false</code> or <code>no</code> or <code>off</code> or <code>0</code> will be translated to "false". This is <code>true</code> by default.
+</p>
+<hr>
+
+<h2><a name="config_fix_new_lines">$config_fix_new_lines</a></h2>
+<p>
+If set to true, Mac and DOS newlines, \r and \r\n, respectively, in config files are converted to \n when they are parsed. This is <code>true</code> by default.
+</p>
+<hr>
+
+<h2><a name="config_read_hidden">$config_read_hidden</a></h2>
+<p>
+If set to true, hidden sections, those are sections that begin with a period, such as [.secret], can be and are read from config files into templates. Hidden sections are usually meant to store things such as database passwords and thus, this is typically false. The default is set to true.
+</p>
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>

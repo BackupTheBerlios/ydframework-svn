@@ -1,0 +1,35 @@
+<?php
+
+	// Standard include
+	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
+
+	// Include our own request
+	YDInclude( 'MyLoginRequest.php' );
+
+	// Class definition
+	class index extends MyLoginRequest {
+
+		// Class constructor
+		function index() {
+			$this->MyLoginRequest();
+		}
+
+		// Default action
+		function actionDefault() {
+			$this->template->display();
+		}
+
+		// Function to logout
+		function actionLogout() {
+			unset( $_SESSION['usrName'] );
+			unset( $_SESSION['isLoggedIn'] );
+			$this->forward( 'login' );
+			return;
+		}
+
+	}
+
+	// Standard include
+	YDInclude( 'YDF2_process.php' );
+
+?>
