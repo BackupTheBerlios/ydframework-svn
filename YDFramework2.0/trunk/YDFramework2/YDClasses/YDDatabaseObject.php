@@ -279,9 +279,9 @@
 		/**
 		 *  This function sets the value of a field.
 		 *
-		 *  @param $field    The field name
-		 *  @param $value    The field value
-		 *	@param $protect  (optional) Sets protected fields. Default: false.
+		 *  @param $field		The field name
+		 *  @param $value		The field value
+		 *	@param $protected	(optional) Sets protected fields. Default: false.
 		 */				
 		function set( $field, $value, $protected=false ) {				
 			if ( empty( $field ) ) {
@@ -1003,6 +1003,7 @@
 		 *  This function prepares the SQL query based on the fields of the object.
 		 *
 		 *  @param $dataobject  A reference to the YDDatabaseObject.
+		 *  @param $prefix		(optional)
 		 *
 		 *  @internal
 		 */
