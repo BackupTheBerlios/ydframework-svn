@@ -10,7 +10,7 @@
     require_once( 'YDError.php' );
     require_once( 'YDDebugUtil.php' );
     require_once( 'HTML/QuickForm.php' );
-    require_once( 'HTML/QuickForm/Renderer/ArraySmarty.php' );
+    require_once( 'HTML/QuickForm/Renderer/Array.php' );
 
     /**
      *  This class implements an HTML form. This class is based on the
@@ -72,22 +72,40 @@
          *
          *  @return Array representing the form in a suitable format for use in
          *          the template.
+         *
+         *  @todo
+         *      For date elements, we need to add a pseudo element that can
+         *      recompose the original date/timestamp.
          */
         function toArray( $template ) {
 
             // Create the renderer object
-            $renderer = & new HTML_QuickForm_Renderer_ArraySmarty( $template );
+            $renderer = & new HTML_QuickForm_Renderer_Array( $template );
 
             // Connect the form to the renderer
             $this->accept( $renderer );
 
+            // Create the array
+            $array = $renderer->toArray();
+
+            // Loop over the elements and add them to the root of the array
+            foreach ( $array['elements'] as $element ) {
+                $array[ $element['name'] ] = $element;
+            }
+
+            // Remove the original elements array
+            unset( $array['elements'] );
+
+            // Just a cosmetic change
+            $array['attributes'] = trim( $array['attributes'] );
+
             // If debugging, show contents
             if ( YD_DEBUG ) {
-                YDDebugUtil::debug( YDDebugUtil::r_dump( $renderer->toArray() ) );
+                YDDebugUtil::debug( YDDebugUtil::r_dump( $array ) );
             }
 
             // Return the array
-            return $renderer->toArray();
+            return $array;
 
         }
 
