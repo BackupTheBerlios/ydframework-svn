@@ -34,7 +34,7 @@
 		 *	@param $opts	The maximum length of the variable.
 		 */
 		function maxlength( $val, $opts ) {
-			if ( strlen( $val ) < $opts ) {
+			if ( strlen( $val ) <= $opts ) {
 				return true;
 			} else {
 				return false;
@@ -49,7 +49,7 @@
 		 *	@param $opts	The minimum length of the variable.
 		 */
 		function minlength( $val, $opts ) {
-			if ( strlen( $val ) > $opts ) {
+			if ( strlen( $val ) >= $opts ) {
 				return true;
 			} else {
 				return false;
@@ -63,7 +63,7 @@
 		 *	@param $opts	Array containing the minimum and maximum length.
 		 */
 		function rangelength( $val, $opts ) {
-			if ( ( strlen( $val ) > $opts[0] ) && ( strlen( $val ) < $opts[1] ) ) {
+			if ( ( strlen( $val ) >= $opts[0] ) && ( strlen( $val ) <= $opts[1] ) ) {
 				return true;
 			} else {
 				return false;
