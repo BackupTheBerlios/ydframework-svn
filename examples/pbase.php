@@ -118,7 +118,7 @@
 			}
 
 			// Get the index if the next image
-			if ( $imageCurrent < sizeof( $this->gallery['images'] ) ) {
+			if ( $imageCurrent < ( sizeof( $this->gallery['images'] ) - 1 ) ) {
 				$imageNext = $this->gallery['images'][ $imageCurrent + 1 ];
 			}
 

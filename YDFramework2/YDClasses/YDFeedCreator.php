@@ -68,6 +68,13 @@
 		 *	@param $link	The link of the feed.
 		 */
 		function setLink( $link ) {
+			if ( substr( $link, 0, 1 ) == '/' ) {
+				$url = 'http://' . $_SERVER['SERVER_NAME'];
+				if ( $_SERVER['SERVER_PORT'] != '80' ) {
+					$url = $url . ':' . $_SERVER['SERVER_PORT'];
+				}
+				$link = $url . $link;
+			}
 			$this->_link = htmlentities( $link );
 		}
 
@@ -80,6 +87,9 @@
 		 *	@param $link	The link to the feed item.
 		 *	@param $desc	(optional) The description for the feed item.
 		 *	@param $guid	(optional) The guid for the feed item.
+		 *
+		 *	@todo
+		 *		If the link starts with a /, then prepend the current servername and port number.
 		 */
 		function addItem( $title, $link, $desc=null, $guid=null ) {
 
@@ -87,6 +97,14 @@
 				$checkSum = $this->_link . $title . $link;
 				if ( $desc != null ) { $checkSum .= $desc; }
 				$guid = md5( $checkSum );
+			}
+
+			if ( substr( $link, 0, 1 ) == '/' ) {
+				$url = 'http://' . $_SERVER['SERVER_NAME'];
+				if ( $_SERVER['SERVER_PORT'] != '80' ) {
+					$url = $url . ':' . $_SERVER['SERVER_PORT'];
+				}
+				$link = $url . $link;
 			}
 
 			$item = array(
