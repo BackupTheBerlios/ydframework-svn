@@ -22,6 +22,7 @@
     <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
     <!ENTITY appendixA SYSTEM "appendixA.xml">
     <!ENTITY appendixB SYSTEM "appendixB.xml">
+    <!ENTITY appendixC SYSTEM "appendixC.xml">
 ]>
 
 <book>
@@ -60,5 +61,6 @@
     &ydchangelog;
     &appendixA;
     &appendixB;
+    &appendixC;
 
 </book>
