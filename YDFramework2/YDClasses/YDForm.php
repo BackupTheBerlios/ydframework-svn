@@ -216,6 +216,7 @@
 			$instance = new $class( $this->_name, $name, $label, $attributes, $options );
 
 			// Loop over the form variable
+			// TODO: need to find a good way of checking multi-values
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
 				if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
