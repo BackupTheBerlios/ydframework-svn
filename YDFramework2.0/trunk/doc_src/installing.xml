@@ -18,6 +18,8 @@
 
         <para>The Yellow Duck Framework was primarily tested on the Windows platformand also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. PHP 5 works but the Yellow Duck Framework 2.0 will not take advantage of the new features provided with PHP 5).</para>
 
+		<warning>The Yellow Duck Framework is only working correctly when PHP is running as an Apache module. If you run PHP as a CGI process, the Yellow Duck Framework will not work correctly. It also preferred to run PHP as an Apache module for best performance.</warning>
+
     </sect1>
 
     <sect1 id="installing_framework_files">
