@@ -13,6 +13,21 @@
 	class YDDatabase extends YDBase {
 
 		/**
+		 *	Class constructor for the YDDatabase class.
+		 *
+		 *	@param $driver	Name of the database driver.
+		 *	@param $db		Database name to use for the connection.
+		 *	@param $user	(optional) User name to use for the connection.
+		 *	@param $pass	(optional) Password to use for the connection.
+		 *	@param $host	(optional) Host name to use for the connection.
+		 *
+		 *	@deprecated	Use the static method getInstance to get a new YDDatabase class instance.
+		 */
+		function YDDatabase( $driver, $db, $user='', $pass='', $host='' ) {
+			trigger_error( 'Use the static method getInstance to get a new YDDatabase class instance.', YD_ERROR );
+		}
+
+		/**
 		 *	Using this static function, you can get an instance of a YDDatabaseDriver class.
 		 *
 		 *	@param $driver	Name of the database driver.
