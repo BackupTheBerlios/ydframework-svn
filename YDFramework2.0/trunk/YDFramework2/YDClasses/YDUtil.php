@@ -445,6 +445,9 @@
 				} elseif ( preg_match( '/Opera ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
 					$this->version = $ver[1];
 					$this->browser = 'opera';
+				} elseif ( preg_match( '/Opera\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
+					$this->version = $ver[1];
+					$this->browser = 'opera';
 				} elseif ( preg_match( '/Mozilla\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
 					$this->version = $ver[1];
 					$this->browser = 'mozilla';
