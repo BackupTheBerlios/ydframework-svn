@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
