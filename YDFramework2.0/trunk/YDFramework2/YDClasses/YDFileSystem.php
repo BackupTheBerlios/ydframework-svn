@@ -51,7 +51,7 @@
 		 *	@returns	String containing the extension of the file.
 		 */
 		function getExtension() {
-			ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
+			ereg( ".*\.([a-zA-Z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
 			return( $regs[1] );
 		}
 

@@ -210,7 +210,7 @@
 			if ( ! is_array( $opts ) ) {
 				$opts = array( $opts );
 			}
-			ereg( ".*\.([a-zA-z0-9]{0,5})$", $val['name'], $regs );
+			ereg( ".*\.([a-zA-Z0-9]{0,5})$", $val['name'], $regs );
 			return in_array( $regs[1], $opts );
 		}
 
