@@ -7,7 +7,7 @@ for /f "usebackq" %%f in (`svnlook youngest C:/_SVNRepos/YDF2`) do (set BLDREV=%
 echo Latest SVN revision: %BLDREV%
 
 rem Create a directory for the build
-set BLDDIR=YDFramework2-bld%BLDREV%
+set BLDDIR=YDFramework_2.0.0.%BLDREV%
 echo Build directory: %BLDDIR%
 
 rem Remove the previous build directory and archive
