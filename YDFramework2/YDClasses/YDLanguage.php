@@ -47,6 +47,9 @@
 		function getBrowserLanguages() {
 
 			// We parse the language headers sent by the browser
+			if ( ! isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+				return array();
+			}
 			$browserLanguages = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
 
 			// Normalize the browser language headers
