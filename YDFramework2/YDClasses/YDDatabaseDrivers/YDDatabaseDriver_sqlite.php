@@ -153,6 +153,7 @@
 			$this->connect();
 			$result = sqlite_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			YDDebugUtil::debug( 'Executing SQL:', $sql );
 			return $result;
 		}
 

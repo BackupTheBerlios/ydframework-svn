@@ -168,6 +168,7 @@
 			$this->connect();
 			$result = pg_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( pg_last_error( $conn ) ); }
+			YDDebugUtil::debug( 'Executing SQL:', $sql );
 			return $result;
 		}
 

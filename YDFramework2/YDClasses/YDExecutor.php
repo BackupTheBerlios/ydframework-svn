@@ -124,10 +124,10 @@
 				}
 
 				// Create the debug messages
-				$debug = '';
+				$debug = "\n\n";
 				$debug .= 'Processing time: ' . $elapsed . ' ms' . "\n\n";
 				$debug .= 'Total size include files: ' . $includeFilesSize . "\n\n";
-				$debug .= 'Included files: ' . "\n\t" . implode( "\n\t", $includeFiles );
+				$debug .= 'Included files: ' . "\n\n\t" . implode( "\n\t", $includeFiles ) . "\n\n";
 
 				// Output the debug message
 				YDDebugUtil::debug( $debug );

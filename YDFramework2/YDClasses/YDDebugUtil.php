@@ -27,9 +27,7 @@
 		function debug() {
 			$args = func_get_args();
 			if ( YD_DEBUG == 1 ) {
-				echo( "\n" . '<!--' . "\n" . '[ YD_DEBUG ]' . "\n\n" );
-				echo( implode( ' ', $args ) . "\n" );
-				echo( '-->' . "\n" );
+				echo( "\n" . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . "\n" );
 			}
 		}
 
