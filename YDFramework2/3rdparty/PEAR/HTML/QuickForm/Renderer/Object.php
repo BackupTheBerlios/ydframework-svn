@@ -1,82 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Author: Ron McClain <ron@humaniq.com>                                |
-// +----------------------------------------------------------------------+
-//
-// $Id: Object.php,v 1.2 2003/11/03 12:53:01 avb Exp $
 
 require_once('HTML/QuickForm/Renderer.php');
 
-/**
- * A concrete renderer for HTML_QuickForm, makes an object from form contents
- *
- * Based on HTML_Quickform_Renderer_Array code
- *
- * @public
- */
 class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
-    /**
-     * The object being generated
-     * @var object $_obj
-     */
+
     var $_obj= null;
-
-    /**
-     * Number of sections in the form (i.e. number of headers in it)
-     * @var integer $_sectionCount
-     */
     var $_sectionCount;
-
-    /**
-    * Current section number
-    * @var integer $_currentSection
-    */
     var $_currentSection;
-
-    /**
-    * Object representing current group
-    * @var object $_currentGroup
-    */
     var $_currentGroup = null;
-
-    /**
-     * Class of Element Objects
-     * @var object $_elementType
-     */
     var $_elementType = 'QuickFormElement';
-
-    /**
-    * Additional style information for different elements  
-    * @var array $_elementStyles
-    */
     var $_elementStyles = array();
-
-    /**
-    * true: collect all hidden elements into string; false: process them as usual form elements
-    * @var bool $_collectHidden
-    */
     var $_collectHidden = false;
 
-
-    /**
-     * Constructor
-     *
-     * @param collecthidden bool    true: collect all hidden elements
-     * @public
-     */
     function HTML_QuickForm_Renderer_Object($collecthidden = false) 
     {
         $this->HTML_QuickForm_Renderer();
@@ -84,20 +19,11 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
         $this->_obj = new QuickformForm;
     }
 
-    /**
-     * Return the rendered Object
-     * @public
-     */
     function toObject() 
     {
         return $this->_obj;
     }
 
-    /**
-     * Set the class of the form elements.  Defaults to StdClass.
-     * @param type string   Name of element class
-     * @public
-     */
     function setElementType($type) {
         $this->_elementType = $type;
     }
@@ -116,7 +42,7 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
         $this->_elementIdx = 1;
         $this->_currentSection = null;
         $this->_sectionCount = 0;
-    } // end func startForm
+    }
 
     function renderHeader(&$header) 
     {
@@ -133,7 +59,7 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
             $this->_obj->errors->$name = $error;
         }
         $this->_storeObject($elObj);
-    } // end func renderElement
+    }
 
     function renderHidden(&$element) {
         if($this->_collectHidden) {
@@ -141,7 +67,7 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
         } else {
             $this->renderElement($element, false, null);
         }
-    } //end func renderHidden
+    }
 
     function startGroup(&$group, $required, $error) 
     {
@@ -150,23 +76,14 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
             $name = $this->_currentGroup->name;
             $this->_view->errors->$name = $error;
         }
-    } // end func startGroup
+    }
 
     function finishGroup(&$group) 
     {
         $this->_storeObject($this->_currentGroup);
         $this->_currentGroup = null;
-    } // end func finishGroup
+    }
 
-    /**
-     * Creates an object representing an element
-     *
-     * @private
-     * @param element object    An HTML_QuickForm_element object
-     * @param required bool         Whether an element is required
-     * @param error string    Error associated with the element
-     * @return object
-     */
     function _elementToObject(&$element, $required, $error) 
     {
         if($this->_elementType) {
@@ -202,13 +119,6 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
         return $ret;
     }
 
-    /** 
-     * Stores an object representation of an element in the form array
-     *
-     * @private
-     * @param elObj object     Object representation of an element
-     * @return void
-     */
     function _storeObject($elObj) 
     {
         $name = $elObj->name;
@@ -230,171 +140,41 @@ class HTML_QuickForm_Renderer_Object extends HTML_QuickForm_Renderer {
         }
     }
 
-} // end class HTML_QuickForm_Renderer_Object
+}
 
-
-
-/**
- * @abstract Long Description
- * This class represents the object passed to outputObject()
- * 
- * Eg.  
- * {form.outputJavaScript():h}
- * {form.outputHeader():h}
- *   <table>
- *     <tr>
- *       <td>{form.name.label:h}</td><td>{form.name.html:h}</td>
- *     </tr>
- *   </table>
- * </form>
- * 
- * @public
- */
 class QuickformForm {
-    /**
-     * Whether the form has been frozen
-     * @var boolean $frozen
-     */
+
     var $frozen;        
-    
-    /**
-     * Javascript for client-side validation
-     * @var string $javascript
-     */
-     var $javascript;
+    var $javascript;
+    var $attributes;
+    var $requirednote;
+    var $hidden;
+    var $errors;
+    var $elements;
+    var $sections;
 
-     /**
-      * Attributes for form tag
-      * @var string $attributes
-      */
-     var $attributes;
-
-     /**
-      * Note about required elements
-      * @var string $requirednote
-      */
-     var $requirednote;
-
-     /**
-      * Collected html of all hidden variables
-      * @var string $hidden
-      */
-     var $hidden;
-
-     /**
-      * Set if there were validation errors.  
-      * StdClass object with element names for keys and their
-      * error messages as values
-      * @var object $errors
-      */
-     var $errors;
-
-     /**
-      * Array of QuickformElementObject elements.  If there are headers in the form
-      * this will be empty and the elements will be in the 
-      * separate sections
-      * @var array $elements
-      */
-     var $elements;
-
-     /**
-      * Array of sections contained in the document
-      * @var array $sections
-      */
-     var $sections;
-
-     /**
-      * Output &lt;form&gt; header
-      * {form.outputHeader():h} 
-      * @return string    &lt;form attributes&gt;
-      */
      function outputHeader() {
         $hdr = "<form " . $this->attributes . ">\n";
         return $hdr;
        }
-     /**
-      * Output form javascript
-      * {form.outputJavaScript():h}
-      * @return string    Javascript
-      */
+
      function outputJavaScript() {
         return $this->javascript;
      }
-} // end class QuickformForm
+}
 
-
-/**
- * Convenience class describing a form element.
- * The properties defined here will be available from 
- * your flexy templates by referencing
- * {form.zip.label:h}, {form.zip.html:h}, etc.
- */
 class QuickformElement {
     
-    /**
-     * Element name
-     * @var string $name
-     */
     var $name;
-
-    /**
-     * Element value
-     * @var mixed $value
-     */
     var $value;
-
-    /**
-     * Type of element
-     * @var string $type
-     */
     var $type;
-
-    /**
-     * Whether the element is frozen
-     * @var boolean $frozen
-     */
     var $frozen;
-
-    /**
-     * Label for the element
-     * @var string $label
-     */
     var $label;
-
-    /**
-     * Whether element is required
-     * @var boolean $required
-     */
     var $required;
-
-    /**
-     * Error associated with the element
-     * @var string $error
-     */
     var $error;
-
-    /**
-     * Some information about element style
-     * @var string $style
-     */
     var $style;
-
-    /**
-     * HTML for the element
-     * @var string $html
-     */
     var $html;
-
-    /**
-     * If element is a group, the group separator
-     * @var mixed $separator
-     */
     var $separator;
-
-    /**
-     * If element is a group, an array of subelements
-     * @var array $elements
-     */
     var $elements;
 
     function isType($type)
@@ -434,5 +214,5 @@ class QuickformElement {
         return $ret;
     }
 
-} // end class QuickformElement
+}
 ?>
