@@ -25,6 +25,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	YDInclude( 'YDPath.php' );
+
 	// The different log levels
 	@define( 'YD_LOG_DEBUG', 4 );
 	@define( 'YD_LOG_INFO', 3 );
@@ -38,7 +40,7 @@
 
 	// Define the log file
 	if ( ! defined( 'YD_LOG_FILE' ) ) {
-		define( 'YD_LOG_FILE', YD_DIR_TEMP . '/YDFramework2_log.xml' );
+		define( 'YD_LOG_FILE', YDPath::join( YD_DIR_TEMP, 'YDFramework2_log.xml' ) );
 	}
 
 	// Define the log format (TEXT/XML)
