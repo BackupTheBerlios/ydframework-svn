@@ -124,9 +124,6 @@
             // Make the connection
             $conn = DB::connect( $this->getUrl(), $persistent );
 
-            // Update counter
-            $this->_incrementConnCounter();
-
             // Check for errors
             if ( DB::isError( $conn ) ) {
 
@@ -323,23 +320,6 @@
 
             // Return the quoted string
             return $conn->quote( $string );
-
-        }
-
-        /**
-         *  This function will add 1 to the counter of the number of database
-         *  connections that were made.
-         *
-         *  @internal
-         */
-        function _incrementConnCounter() {
-
-            // Update or create new counter
-            if ( ! isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
-                $GLOBALS['YD_DB_CONN_CNT'] = 1;
-            } else {
-                $GLOBALS['YD_DB_CONN_CNT'] = $GLOBALS['YD_DB_CONN_CNT'] + 1;
-            }
 
         }
 

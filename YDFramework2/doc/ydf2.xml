@@ -1994,10 +1994,6 @@ http://localhost/firstapp/index.php?do=oops</pre>
                         are currently defined in the global scope of the script.</td>
                     </tr>
                     <tr>
-                        <td valign="top">YD_DB_CONN_CNT</td>
-                        <td>Number of database connections that were made.</td>
-                    </tr>
-                    <tr>
                         <td valign="top">YD_DB_SQLQ_CNT</td>
                         <td>Number of database queries that were performed.</td>
                     </tr>

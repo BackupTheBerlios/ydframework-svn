@@ -40,16 +40,9 @@
                     YDDebugUtil::debug( 'Processing time:', $elapsed, 'ms' );
 
                     // Get database statistics
-                    $dbStats = '';
-                    if ( isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
-                        $dbStats .= $GLOBALS['YD_DB_CONN_CNT'];
-                        $dbStats .= ' database connection(s) made.';
-                    } else {
-                        $dbStats .= 'No database connections made.';
-                    }
                     if ( isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
-                        $dbStats .= "\n" . $GLOBALS['YD_DB_SQLQ_CNT'];
-                        $dbStats .= ' database querie(s) executes.';
+                        $dbStats .= $GLOBALS['YD_DB_SQLQ_CNT'];
+                        $dbStats .= ' database querie(s) executed.';
                     } else {
                         $dbStats .= "\n" . 'No database queries executed.';
                     }

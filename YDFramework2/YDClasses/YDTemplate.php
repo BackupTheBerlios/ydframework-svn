@@ -161,13 +161,6 @@
             $this->setVar( 'YD_GLOBALS', $GLOBALS );
             $this->setVar( 'YD_SERVER', $_SERVER );
 
-            // Add the database connection count
-            if ( isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
-                $this->setVar( 'YD_DB_CONN_CNT', $GLOBALS['YD_DB_CONN_CNT'] );
-            } else {
-                $this->setVar( 'YD_DB_CONN_CNT', 0 );
-            }
-
             // Add the database qeury count
             if ( isset( $GLOBALS['YD_DB_SQLQ_CNT'] ) ) {
                 $this->setVar( 'YD_DB_SQLQ_CNT', $GLOBALS['YD_DB_SQLQ_CNT'] );
