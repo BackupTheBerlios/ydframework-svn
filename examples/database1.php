@@ -21,7 +21,7 @@
         function actionDefault() {
 
             // Make the database connection
-            $db = mysql_connect( 'localhost', 'root', '' );
+            $db = mysql_pconnect( 'localhost', 'root', '' );
             $result = mysql_select_db( 'test' );
 
             // Check for errors

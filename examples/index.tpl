@@ -47,14 +47,6 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="htmlmenu1.php">Creating a HTML menu</a>
-            </td>
-            <td valign="top">
-                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=htmlmenu1.php">htmlmenu1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
                 <a href="arrayutil1.php">Array utilities</a>
             </td>
             <td valign="top">
