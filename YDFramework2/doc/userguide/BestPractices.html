@@ -14,6 +14,29 @@
 This chapter will give you an overview of common patterns and best practices for using the Yellow Duck Framework.<br />
 <br />
 <br />
+<h4> Configuring the Yellow Duck Framework using custom includes </h4>
+<br />
+If you want to configure the Yellow Duck Framework for a complete web application, you will need to use a custom include file. Configuring the Yellow Duck Framework happens using define functions which define the configuration constants. These defines happen in the YDF2_init.php file. If you want to override them, you have to define them before including the YDF2_init.php file. You can do this manually for each script, or you can put this in a custom include file which configures the Yellow Duck Framework and includes the YDF2_init.php file.<br />
+<br />
+Here's a code example:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// My_YDF2_init.php file<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;// Always turn on debugging<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">define</font><font color="#007700">( </font><font color="#DD0000">'YD_DEBUG'</font><font color="#007700">, </font><font color="#0000BB">1 </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Use custom temp directory<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">define</font><font color="#007700">( </font><font color="#DD0000">'YD_DIR_TEMP'</font><font color="#007700">, </font><font color="#DD0000">'C:/temp' </font><font color="#007700">);<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#FF8000">// Include the Yellow Duck Framework<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">require_once( </font><font color="#0000BB">dirname</font><font color="#007700">( </font><font color="#0000BB">__FILE__ </font><font color="#007700">) . </font><font color="#DD0000">'/../YDFramework2/YDF2_init.php' </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+<br />
+The following configuration constants can be altered:<br />
+<br />
+<ul><li> <strong>YD_DIR_TEMP</strong>: the path to the temp directory. By default, this is pointing to YDFramework2/temp.
+</li><li> <strong>YD_EXECUTOR</strong>: the class responsible for the execution as called with YDF2_process.php. By default, this is the class YDExector.
+</li><li> <strong>YD_HTTP_USES_GZIP</strong>: indicates if the YDUrl should use Gzip compressed streams. Turned on by default.
+</li><li> <strong>YD_HTTP_CACHE_TIMEOUT</strong>: the timeout for the cache of the YDUrl class in seconds. By default set to 1 hour.
+</li><li> <strong>YD_HTTP_CACHE_USEHEAD</strong>: whether a HTTP HEAD request should be used to verify the validity of the YDUrl cache. This overrides the default cache lifetime. This option is turned on by default.
+</li><li> <strong>YD_DEBUG</strong>: indicating if debugging information should be shown or not. By default, this is set to 1.</li></ul>
+<br />
+The custom include file is most probably the easiest way of working.<br />
+<br />
+<br />
 <h4> Subclassing YDRequest </h4>
 <br />
 For most web applications, you will probably start with subclassing the YDRequest class. This subclass can then house all the standard funtionality all requests will need. You can e.g. implement authentication in this subclass or use the YDBrowserInfo and YDLanguage objects to automatically have some standard information determined by for each request.<br />
