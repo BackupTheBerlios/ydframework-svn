@@ -121,12 +121,30 @@
 		 *	@returns	The form element as HTML text.
 		 */
 		function toHtml() {
+
+			// Fix up the value
+			if ( ! is_array( $this->_value ) ) {
+				if ( is_int( $this->_value ) ) {
+					$value = getdate( $this->_value );
+				} else {
+					$value = getdate( strtotime( $this->_value ) );
+				}
+				$this->_value = array();
+				$this->_value['day'] = $value['mday'];
+				$this->_value['month'] = $value['mon'];
+				$this->_value['year'] = $value['year'];
+				$this->_value['hours'] = $value['hours'];
+				$this->_value['minutes'] = $value['minutes'];
+			}
+
+			// Convert to HTML
 			$this->day->_value = isset( $this->_value['day'] ) ? $this->_value['day'] : '';
 			$this->month->_value = isset( $this->_value['month'] ) ? $this->_value['month'] : '';
 			$this->year->_value = isset( $this->_value['year'] ) ? $this->_value['year'] : '';
 			$this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';
 			$this->minutes->_value = isset( $this->_value['minutes'] ) ? $this->_value['minutes'] : '';
-			return $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
+			return $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' - ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
+
 		}
 
 	}
