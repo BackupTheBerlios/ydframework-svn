@@ -26,7 +26,7 @@ cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
 echo Creating changelog files
-svn log -v --xml -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
+svn log -v --xml -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
 call xsltproc --output "%BLDDIR%\YDFramework2\doc\changelog.html" "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl" "%BLDDIR%\YDFramework2\doc\changelog.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"

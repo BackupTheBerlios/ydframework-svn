@@ -7,51 +7,55 @@
         <html>
 
         <head>
-            <title>YDF2 - Change log</title>
+
+            <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+            <title>YDF2 - Build history</title>
+            <link href="api/doxygen.css" rel="stylesheet" type="text/css" />
+            <style>
+                td { border-bottom: 1px solid #CCCCCC; }
+                table { border: 0px; width: 80px }
+            </style>
+
         </head>
 
         <body>
 
-            <h1>Yellow Duck Framework version 2.0.0</h1>
+            <h1>Yellow Duck Framework </h1>
+
+            <h3 align="center">version 2.0.0 </h3>
+
+            <hr size="1" noshade="" />
+
+            <h3>Build history</h3>
 
             <xsl:for-each select="log/logentry">
                 <hr size="1" noshade="" />
-                <h3>
-                    Build <xsl:value-of select="@revision" />
-                    by <xsl:value-of select="author" />
-                </h3>
-                <p><code>
-                    <xsl:value-of select="msg" />
-                </code></p>
-                <p><b>Affected Files</b></p>
-                <blockquote>
-                <table border="0" width="80%" cellspacing="0" cellpadding="3">
+                <p><b>Build <xsl:value-of select="@revision" /></b></p>
+                <p><xsl:value-of select="msg" /></p>
+                <blockquote><table width="80%" cellspacing="0" cellpadding="3">
                     <tr>
-                        <td width="15%" style="border-bottom: 1px dashed #333333;">
-                            <b>Action</b>
-                        </td>
-                        <td style="border-bottom: 1px dashed #333333;">
-                            <b>File</b>
-                        </td>
+                        <td colspan="2"><b>Affected files</b></td>
                     </tr>
-                <xsl:for-each select="paths/path">
-                    <tr>
-                        <td width="10%" style="border-bottom: 1px dashed #333333;">
-                            <xsl:choose>
-                                <xsl:when test="@action = 'A'">add</xsl:when>
-                                <xsl:when test="@action = 'M'">modify</xsl:when>
-                                <xsl:when test="@action = 'D'">delete</xsl:when>
-                                <xsl:otherwise>unknown</xsl:otherwise>
-                            </xsl:choose>
-                        </td>
-                        <td style="border-bottom: 1px dashed #333333;">
-                            <xsl:value-of select="text()" />
-                        </td>
-                    </tr>
-                </xsl:for-each>
-                </table>
-                </blockquote>
+                    <xsl:for-each select="paths/path">
+                        <tr>
+                            <td><xsl:value-of select="text()" /></td>
+                            <td width="10%" align="right"><xsl:choose>
+                                    <xsl:when test="@action = 'A'">add</xsl:when>
+                                    <xsl:when test="@action = 'M'">modify</xsl:when>
+                                    <xsl:when test="@action = 'D'">delete</xsl:when>
+                                    <xsl:otherwise>unknown</xsl:otherwise>
+                            </xsl:choose></td>
+                        </tr>
+                    </xsl:for-each>
+                </table></blockquote>
             </xsl:for-each>
+
+            <hr size="1" noshade="" />
+
+            <address><small>
+                Yellow Duck Framework 2.0.0 by Pieter Claerhout,
+                <a href="mailto:pieter@yellowduck.be">pieter@yellowduck.be</a>
+            </small></address>
 
         </body>
 
