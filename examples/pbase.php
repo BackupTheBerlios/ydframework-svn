@@ -24,31 +24,93 @@
             $this->YDRequest();
 
             // The list of galleries
-            /*
             $this->galleries = array(
-                1 => 'http://www.pbase.com/bba/odk2_2004',
-                2 => 'http://www.pbase.com/bba/krab04',
+                array(
+                    'id' => 1,
+                    'url' => 'http://www.pbase.com/bba/odk2_2004&page=all',
+                    'title' => 'SYCOD Race II 2004'
+                ),
+                array(
+                    'id' => 2,
+                    'url' => 'http://www.pbase.com/bba/krab04&page=all',
+                    'title' => 'Krab Rally 2004'
+                ),
+                array(
+                    'id' => 3,
+                    'url' => 'http://www.pbase.com/bba/bc&page=all',
+                    'title' => 'Belgian Championship 2003'
+                ),
+                array(
+                    'id' => 4,
+                    'url' => 'http://www.pbase.com/bba/krab_zaterdag&page=all',
+                    'title' => 'Krab Rally 2003'
+                ),
             );
-            */
 
-            // The fixed url of our gallery
-            $this->url = 'http://www.pbase.com/bba/odk2_2004&page=all';
-            $this->setVar( 'url', $this->url );
-            
-            // The regex pattern to match the images
-            $this->pattern = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+            // If a gallery is selected, get the data
+            if ( isset( $_GET['gal'] ) ) {
 
-            // Get the list of images
-            $objUrl = new YDUrl( $this->url );
-            $contents = $objUrl->getContentsWithRegex( $this->pattern );
-            $this->images = $contents[1];
+                // Get the ID of the gallery
+                $this->gallery = null;
+
+                // Check if the specified gallery exists
+                foreach ( $this->galleries as $gallery ) {
+
+                    // Check if the ID matches
+                    if ( $gallery['id'] == $_GET['gal'] ) {
+
+                        // Save the gallery ID
+                        $this->gallery = $gallery;
+
+                        // Add it to the template
+                        $this->setVar( 'gallery', $gallery );
+
+                    }
+
+                }
+
+                // Get the gallery contents if it exists
+                if ( $this->gallery ) {
+
+                    // The fixed url of our gallery
+                    $this->url = $this->gallery['url'];
+                    $this->setVar( 'url', $this->url );
+                    
+                    // The regex pattern to match the images
+                    $this->pattern = '/www\.pbase\.com\/image\/([0-9]+)/ism';
+
+                    // Get the list of images
+                    $objUrl = new YDUrl( $this->url );
+                    $contents = $objUrl->getContentsWithRegex( $this->pattern );
+                    $this->images = $contents[1];
+
+                }
+
+            }
 
         }
 
         // Default action
         function actionDefault() {
 
+            // Add the list of galleries
+            $this->setVar( 'galleries', $this->galleries );
+
+            // Show the template
+            $this->outputTemplate();
+
+        }
+
+        // ShowGallery action
+        function actionGallery() {
+
+            // Redirect to default if no gallery
+            if ( ! $this->gallery ) { 
+                $this->redirectToAction();
+            }
+
             // Add the template variables
+            //$this->setVar( 'gallery', $this->gallery );
             $this->setVar( 
                 'images', YDArrayUtil::convertToTable( $this->images, 4, true )
             );
@@ -58,41 +120,17 @@
 
         }
 
-        // Show an image gallery
-        /*
-        function actionShowGallery() {
+        // ShowImage action
+        function actionImage() {
 
-            // Check if the ID exists
-            if ( ! isset( $_GET['id'] ) ) {
-                $this->redirectToAction();
-            }
-
-            // Check if the ID exists
-            if ( ! in_array( $_GET['id'], array_keys( $this->galleries ) ) ) {
-                $this->redirectToAction();
-            }
-
-            // Output the template
-            $this->outputTemplate();
-
-        }
-        */
-
-        // Show an image
-        function actionShowImage() {
-
-            // Check if the ID exists
-            if ( ! isset( $_GET['id'] ) ) {
-                $this->redirectToAction();
-            }
-
-            // Check if the ID exists
-            if ( ! in_array( $_GET['id'], $this->images ) ) {
+            // Redirect to the gallery if no matching image
+            // TODO: make it redirect correctly!
+            if ( ! in_array( $_GET['img'], $this->images ) ) { 
                 $this->redirectToAction();
             }
 
             // Get current image number
-            $imageCurrent = array_search( $_GET['id'], $this->images );
+            $imageCurrent = array_search( $_GET['img'], $this->images );
 
             // Start with no previous and next image
             $imagePrevious = null;
@@ -110,35 +148,11 @@
 
             // Add them to the template
             $this->setVar( 'imagePrevious', $imagePrevious );
-            $this->setVar( 'imageCurrent', $_GET['id'] );
+            $this->setVar( 'imageCurrent', $_GET['img'] );
             $this->setVar( 'imageNext', $imageNext );
 
             // Output the template
             $this->outputTemplate();
-
-        }
-
-        // Get the list of images as RSS feed
-        function actionRss() {
-
-            // Create a new Feed
-            $this->fc = new YDFeedCreator();
-            $this->fc->setTitle( $this->url );
-            $this->fc->setLink( $this->getCurrentUrl() );
-
-            // Add the images
-            foreach ( $this->images as $image ) {
-
-                $this->fc->addItem(
-                    $image . '.jpg',
-                    'http://www.pbase.com/image/' . $image . '.jpg',
-                    '<img src="http://www.pbase.com/image/' . $image . '.jpg">'
-                );
-
-            }
-
-            // Output the feed
-            $this->fc->outputXml( 'RSS2.0' );
 
         }
 

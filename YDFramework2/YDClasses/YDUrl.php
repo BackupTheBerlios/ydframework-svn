@@ -400,7 +400,7 @@
 
             // Check the URL scheme
             if ( $this->getScheme() != 'http' ) {
-                new YDFatalError(
+                YDFatalError(
                     'getContents: Only HTTP URLs are supported.'
                 );
             }
