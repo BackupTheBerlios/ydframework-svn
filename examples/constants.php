@@ -5,9 +5,6 @@
 
 	// Includes
 	require_once( 'YDRequest.php' );
-	require_once( 'YDForm.php' );
-	require_once( 'YDEmail.php' );
-	require_once( 'YDTemplate.php' );
 
 	// Class definition
 	class constantsRequest extends YDRequest {
