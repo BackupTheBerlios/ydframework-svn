@@ -503,11 +503,15 @@
 			</td>
 		</tr>
 		<tr>
+            <td valign="top"><a href="stringutil.php">StringUtil class</a> </td>
+            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
+		    </tr>
+		<tr>
 			<td valign="top">
-				<a href="stringutil.php">StringUtil class</a>
+				<a href="sql.php">YDSqlQuery class</a>
 			</td>
 			<td valign="top">
-				<a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=sql.php">sql.php</a>
 			</td>
 		</tr>
 		</table>
