@@ -10,6 +10,9 @@
 	require_once( 'YDRequest.php' );
 	require_once( YD_DIR_3RDP . '/class.template/src/class.template.php' );
 
+	define( 'YD_TPL_CACHEEXT', '.phc' );
+	define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
+
 	/**
 	 *	This class is a wrapper around Smarty Light. Documentation can be found on:
 	 *	http://www.paullockaby.com/projects/smarty-light/docs/
@@ -28,6 +31,7 @@
 			$this->compile_dir = YD_DIR_TEMP;
 			$this->left_tag = '{';
 			$this->right_tag = '}';
+			$this->caching = false;
 			$this->cache_lifetime = 3600;
 			$this->cache_dir = YD_DIR_TEMP;
 
@@ -74,10 +78,6 @@
 		 */
 		function fetch( $file='', $cache_id=null, $display=false ) {
 
-			if ( empty( $cache_id ) ) {
-				$cache_id = 'cache';
-			}
-
 			// Add some default variables
 			$this->assign( 'YD_FW_NAME', YD_FW_NAME );
 			$this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
@@ -92,7 +92,21 @@
 			$tplName = $this->_getTemplateName( $file );
 
 			// Output the template
-			return parent::fetch( $tplName, $cache_id, $display );
+			$result = parent::fetch( $tplName, $cache_id, false );
+
+			// Save the cache if needed
+			if ( ! empty( $cache_id ) && ! $this->force_compile && $this->caching ) {
+				$cacheFile = $this->_getCachePath( $cache_id );
+				$fp = fopen( $cacheFile, 'wb' );
+				fwrite( $fp, $result );
+				fclose( $fp );
+			}
+
+			if ( $display == true ) {
+				echo( $result );
+			} else {
+				return $result;
+			};
 
 		}
 
@@ -158,35 +172,25 @@
 		 *
 		 *	@internal
 		 */
-		function clear_cached($file=null, $cache_id=null ) {
-			if ( $file === '' ) {
-				$file = $this->_getTemplateName();
-			}
-			parent::clear_cached( $file, $cache_id );
+		function clear_cached( $cache_id=null ) {
+			@unlink( $this->_getCachePath( $cache_id ) );
 		}
 
 		/**
 		 *	Returns true if there is a valid cache for this template. This only works if caching is to true.
 		 *
-		 *	@param $file		(optional) The name of the template you want to parse and output.
-		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $cache_id	ID for the cache of the template (must be unique).
 		 *
 		 *	@returns	Boolean indicating if the item is cached or not.
 		 */
-		function is_cached( $file, $cache_id=null ) {
-			if ( $file === '' ) {
-				$file = $this->_getTemplateName();
-			}
-			if ( empty( $cache_id ) ) {
-				$cache_id = 'cache';
-			}
-			if ( ! $this->cache ) {
+		function is_cached( $cache_id ) {
+			if ( empty( $cache_id ) || $this->force_compile || ! $this->caching ) {
 				return false;
 			}
-			$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
-			$this->template_dir = $this->_get_dir( $this->template_dir );
-			$this->_cache_dir = $this->_get_dir( $this->cache_dir, $cache_id );
-			if (!$this->force_compile && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)) && $this->_is_cached($file, $cache_id)) {
+			$cacheFile = $this->_getCachePath( $cache_id );
+			if (
+				file_exists( $cacheFile ) && ( ( time() - filemtime( $cacheFile ) ) < $this->cache_lifetime )
+			) {
 				return true;
 			} else {
 				return false;
@@ -194,31 +198,16 @@
 		}
 
 		/**
-		 *	Helper function for caching.
+		 *	Function to convert a cache ID to a file name.
+		 *
+		 *	@param $cache_id	ID for the cache of the template (must be unique).
+		 *
+		 *	@returns	The file path of the cache file
 		 *
 		 *	@internal
 		 */
-		function _is_cached( $file, $cache_id=null ) {
-			$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
-			$this->_cache_dir = $this->_get_dir($this->_cache_dir);
-			$this->compile_dir = $this->_get_dir($this->compile_dir);
-			$this->template_dir = $this->_get_dir($this->template_dir);
-			if (file_exists($this->compile_dir.$name) && file_exists($this->template_dir.$file) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
-				if (file_exists($this->_cache_dir.$name)) {
-					$fp = fopen($this->_cache_dir.$name, "r");
-					$includes = fscanf($fp, "%s\n\n");
-					fclose($fp);
-					if ( $includes ) {
-						$_includes = unserialize($includes[0]);
-						foreach ($_includes as $value)
-							if (!$this->_is_cached($value, $cache_id))
-								return false;
-					}
-				}
-				return true;
-			} else {
-				return false;
-			}
+		function _getCachePath( $cache_id ) {
+			return realpath( $this->cache_dir ) . '/' . YD_TPL_CACHEPRE . md5( $cache_id ) . YD_TPL_CACHEEXT;
 		}
 
 	}

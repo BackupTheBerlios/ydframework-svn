@@ -13,30 +13,33 @@
 
 		// Class constructor
 		function tplcache() {
+
+			// Initialize the parent
 			$this->YDRequest();
+
+			// Initialize the template
+			$this->tpl = new YDTemplate();
+
+			// Enable caching
+			$this->tpl->caching = true;
+			$this->tpl->cache_dir = YD_DIR_TEMP;
+
 		}
 
 		// Default action
 		function actionDefault() {
 
-			// Setup the template
-			$tpl = new YDTemplate();
-
-			// Enable caching
-			$tpl->cache = true;
-			$tpl->cache_dir = YD_DIR_TEMP;
-
 			// Check if the template is cached
-			if ( ! $tpl->is_cached( 'tplcache.tpl' ) ) {
+			if ( ! $this->tpl->is_cached( YD_SELF_SCRIPT ) ) {
 
 				// Make some extensive database calls
 				$db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
 				$db->connect();
-				$tpl->assign( 'processList', $db->getRecords( 'show processlist' ) );
-				$tpl->assign( 'status', $db->getRecords( 'show status' ) );
-				$tpl->assign( 'variables', $db->getRecords( 'show variables' ) );
-				$tpl->assign( 'version', $db->getServerVersion() );
-				$tpl->assign( 'sqlcount', $db->getSqlCount() );
+				$this->tpl->assign( 'processList', $db->getRecords( 'show processlist' ) );
+				$this->tpl->assign( 'status', $db->getRecords( 'show status' ) );
+				$this->tpl->assign( 'variables', $db->getRecords( 'show variables' ) );
+				$this->tpl->assign( 'version', $db->getServerVersion() );
+				$this->tpl->assign( 'sqlcount', $db->getSqlCount() );
 
 				// Indicate the template was not cached
 				echo( 'not cached' );
@@ -44,8 +47,14 @@
 			}
 
 			// Display the template
-			$tpl->display( 'tplcache.tpl' );
+			$this->tpl->display( 'tplcache.tpl', YD_SELF_SCRIPT );
 
+		}
+
+		// Function to clear the action
+		function actionClearCache() {
+			$this->tpl->clear_cached( YD_SELF_SCRIPT );
+			$this->redirectToAction( 'default' );
 		}
 
 	}
