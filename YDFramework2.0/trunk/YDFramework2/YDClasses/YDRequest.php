@@ -119,7 +119,7 @@
 		}
 
 		/**
-		 *	This function will to a HTTP redirect to the specified action.
+		 *	This function will do a HTTP redirect to the specified action.
 		 *
 		 *	@param $action	(optional) Name of the action to redirect to. If no action is specified, it will redirect to
 		 *					the default action.
