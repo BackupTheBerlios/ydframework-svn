@@ -12,9 +12,9 @@ echo Build directory: %BLDDIR%
 
 rem Remove the previous build directory and archive
 echo Removing previous build directory: %BLDDIR%
-rmdir /Q /S %BLDDIR% > NUL
-echo Removing previous build archive: %BLDDIR%.zip
-del /Q /S %BLDDIR%.zip > NUL
+rmdir /Q /S "%BLDDIR%" > NUL
+echo Removing previous build archive: %BLDDIR%.tar.gz
+del /Q /S "%BLDDIR%.tar.gz" > NUL
 
 rem Checkout the current revision
 echo Checking out the revision %BLDREV%
@@ -37,16 +37,18 @@ del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 del /Q "%BLDDIR%\YDFramework2\doc\ydf2.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
+del /Q "%BLDDIR%\YDFramework2\doc\style.css"
 xcopy /I /Q /Y "%BLDDIR%\YDFramework2\doc\changelog.html" "changelog.html"
 copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf"
 
-rem Zip up the build to an archive
+rem Compressing the build archive
 del /Q /S %BLDDIR%\builds
-echo Zipping up the build: %BLDDIR%.zip
-zip -9qr "%BLDDIR%.zip" "%BLDDIR%"
+echo Compressing the build archive: %BLDDIR%.tar.gz
+tar cf "%BLDDIR%.tar" "%BLDDIR%"
+gzip -f9q "%BLDDIR%.tar"
 
 rem Remove the rest of the temp files
 echo Removing temporary build directory: %BLDDIR%
-rmdir /Q /S %BLDDIR%
+rmdir /Q /S "%BLDDIR%"
 
 echo Finished making of a new distribution archive.
