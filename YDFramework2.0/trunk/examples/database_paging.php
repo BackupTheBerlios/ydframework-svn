@@ -33,7 +33,6 @@
 
 			// Get the records
 			$recordset = $db->getRecordsAsSet( 'show status', $page, $size );
-			//$recordset->dump();
 
 			// Alter the URL
 			$url = & $recordset->getUrl();

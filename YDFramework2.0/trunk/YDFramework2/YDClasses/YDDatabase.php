@@ -290,26 +290,6 @@
 		}
 
 		/**
-		 *	This function dumps the parameters for the YDDatabaseSet class.
-		 */
-		function dump() {
-			YDDebugUtil::dump( $this->page, 'page' );
-			YDDebugUtil::dump( $this->pagesize, 'pagesize' );
-			YDDebugUtil::dump( $this->pagePrevious, 'pagePrevious' );
-			YDDebugUtil::dump( $this->pageNext, 'pageNext' );
-			YDDebugUtil::dump( $this->offset, 'offset' );
-			YDDebugUtil::dump( $this->totalPages, 'totalPages' );
-			YDDebugUtil::dump( $this->totalRows, 'totalRows' );
-			YDDebugUtil::dump( $this->totalRowsOnPage, 'totalRowsOnPage' );
-			YDDebugUtil::dump( $this->isFirstPage, 'isFirstPage' );
-			YDDebugUtil::dump( $this->isLastPage, 'isLastPage' );
-			YDDebugUtil::dump( $this->pages, 'pages' );
-			YDDebugUtil::dump( $this->getPreviousUrl(), 'getPreviousUrl' );
-			YDDebugUtil::dump( $this->getCurrentUrl(), 'getCurrentUrl' );
-			YDDebugUtil::dump( $this->getNextUrl(), 'getNextUrl()' );
-		}
-
-		/**
 		 *	Converts the YDDatabase set to an array containing the records of the recordset. The meta information about
 		 *	the dataset is not kept.
 		 */
