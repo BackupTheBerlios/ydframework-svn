@@ -193,6 +193,14 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.tpl">auth_ipcheck.tpl</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="xmlrpcclient1.php">XML/RPC client</a>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=xmlrpcclient1.php">xmlrpcclient1.php</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>
