@@ -37,10 +37,11 @@
 		 *	Function to dump the contents of pretty much anything. This is the same as the var_dump function in PHP, but
 		 *	has a nicer and more readable output.
 		 *
-		 *	@param $obj Object you want to dump.
+		 *	@param $obj		Object you want to dump.
+		 *	@param $label	The label for the dump.
 		 */
-		function dump( $obj ) {
-			echo( YDDebugUtil::r_dump( $obj, true ) );
+		function dump( $obj, $label='' ) {
+			echo( YDDebugUtil::r_dump( $obj, true, $label ) );
 		}
 
 		/**
@@ -49,14 +50,21 @@
 		 *	@param $obj		Object you want to dump.
 		 *	@param $html	(optional) If you want to have everything returned as HTML or text. The default is false,
 		 *					returning text.
+		 *	@param $label	The label for the dump.
 		 *
 		 *	@returns	Text representation of the object.
 		 */
-		function r_dump( $obj, $html=false ) {
+		function r_dump( $obj, $html=false, $label='' ) {
 			$data = var_export( $obj, true );
 			if ( $html == true ) {
 				$data = stripslashes( htmlentities( $data ) );
-				$data = '<pre>' . $data . '</pre>';
+				if ( ! empty( $label ) ) {
+					$data = '<pre><b>' . $label . '</b><br>' . $data . '</pre>';
+				} else {
+					$data = '<pre>' . $data . '</pre>';
+				}
+			} else {
+				$data = $label . "\n" . $data;
 			}
 			return $data;
 		}
