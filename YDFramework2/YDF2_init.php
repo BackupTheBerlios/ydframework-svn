@@ -279,13 +279,12 @@
     // Include the basis of Yellow Duck framework
     require_once( 'YDBase.php' );
     require_once( 'YDError.php' );
-    require_once( 'YDPhpUtil.php' );
 
     // Register the error handler
     set_error_handler( YD_ERR_HANDLER );
 
     // Check if we have the right PHP version
-    if ( YDPhpUtil::versionCheck( '4.2.0' ) == false ) {
+    if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {
         YDFatalError( 
             'PHP version 4.2.0 or greater is required.'
         );
