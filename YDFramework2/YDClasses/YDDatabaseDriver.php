@@ -137,6 +137,9 @@
 		 *	@param $values	Associative array with the field names and their values to insert.
 		 */
 		function executeInsert( $table, $values ) {
+			$sql = $this->_createSqlInsert( $table, $values );
+			$result = & $this->_connectAndExec( $sql );
+			return true;
 		}
 
 		/**

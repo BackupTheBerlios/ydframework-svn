@@ -120,22 +120,6 @@
 		}
 
 		/**
-		 *	This function will insert the specified values in to the specified table.
-		 *
-		 *	@param $table	The table to insert the data into.
-		 *	@param $values	Associative array with the field names and their values to insert.
-		 *
-		 *	@remarks
-		 *		This function will not automatically return the ID of the last insert.
-		 */
-		function executeInsert( $table, $values ) {
-			$sql = $this->_createSqlInsert( $table, $values );
-			$result = & $this->_connectAndExec( $sql );
-			//return sqlite_last_insert_rowid( $this->_conn );
-			return true;
-		}
-
-		/**
 		 *	This function will close the database connection.
 		 */
 		function close() {
