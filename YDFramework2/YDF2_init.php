@@ -148,42 +148,10 @@
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
 		if ( get_magic_quotes_gpc() == 1 ) {
-			if ( is_array( $_GET ) ) {
-				foreach ( $_GET as $k=>$v ) {
-					if ( is_array( $_GET[$k] ) ) {
-						foreach ( $_GET[$k] as $k2=>$v2 ) { $_GET[$k][$k2] = stripslashes( $v2 ); }
-						@reset( $_GET[$k] );
-					} else { $_GET[$k] = stripslashes( $v ); }
-				}
-				@reset( $_GET );
-			}
-			if ( is_array( $_POST ) ) {
-				foreach ( $_POST as $k=>$v ) {
-					if ( is_array( $_POST[$k] ) ) {
-						foreach ( $_POST[$k] as $k2=>$v2 ) { $_POST[$k][$k2] = stripslashes( $v2 ); }
-						@reset( $_POST[$k] );
-					} else { $_POST[$k] = stripslashes( $v ); }
-				}
-				@reset( $_POST );
-			}
-			if ( is_array( $_COOKIE ) ) {
-				foreach ( $_COOKIE as $k=>$v ) {
-					if ( is_array( $_COOKIE[$k] ) ) {
-						foreach ( $_COOKIE[$k] as $k2=>$v2 ) { $_COOKIE[$k][$k2] = stripslashes( $v2 ); }
-						@reset( $_COOKIE[$k] );
-					} else { $_COOKIE[$k] = stripslashes( $v ); }
-				}
-				@reset( $_COOKIE );
-			}
-			if ( is_array( $_REQUEST ) ) {
-				foreach ( $_REQUEST as $k=>$v ) {
-					if ( is_array( $_REQUEST[$k] ) ) {
-						foreach ( $_REQUEST[$k] as $k2=>$v2 ) { $_REQUEST[$k][$k2] = stripslashes( $v2 ); }
-						@reset( $_REQUEST[$k] );
-					} else { $_REQUEST[$k] = stripslashes( $v ); }
-				}
-				@reset( $_REQUEST );
-			}
+			$_GET = array_map( 'stripslashes', $_GET );
+			$_POST = array_map( 'stripslashes', $_POST );
+			$_COOKIE = array_map( 'stripslashes', $_COOKIE );
+			$_REQUEST = array_map( 'stripslashes', $_REQUEST );
 		}
 		define( 'YD_FIXED_MAGIC_QUOTES', true );
 	}
