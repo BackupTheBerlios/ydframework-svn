@@ -145,12 +145,14 @@
          *  bigger than 128 to numeric HTML entities, which can be safely
          *  included in e.g. XML output.
          *
-         *  @param $string The original string to encode.
+         *  @param $string  The original string to encode.
+         *  @param $htmlent Boolean indicating if the result should be HTML
+         *                  encoded or not.
          *
          *  @returns String with all the characters with an ordinal bigger than
          *           128 converted to numeric HTML entities.
          */
-        function encodeString( $string ) {
+        function encodeString( $string, $htmlent=false ) {
 
             // Start with an empty string
             $encoded = '';
@@ -177,6 +179,11 @@
                     $encoded .= substr( $string, $i, 1 );
                 }
 
+            }
+
+            // Convert to HTML entities if needed
+            if ( $htmlent == true ) {
+                $encoded = htmlentities( $encoded );
             }
 
             // Return the encoded string
