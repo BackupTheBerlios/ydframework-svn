@@ -52,7 +52,7 @@
             $this->_type = 'image';
 
             // If options is a string, it overrides the value
-            $this->_value = $options;
+            $this->setValue( $options );
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;

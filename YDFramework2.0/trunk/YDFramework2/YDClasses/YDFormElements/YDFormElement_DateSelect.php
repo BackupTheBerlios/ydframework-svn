@@ -50,7 +50,7 @@
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
 
             // The default value is an array
-            $this->_value = array();
+            $this->setValue();
 
             // Set the type
             $this->_type = 'dateselect';

@@ -53,7 +53,7 @@
 
             // If options is a string, it overrides the value
             if ( is_string( $options ) ) {
-                $this->_value = $options;
+                $this->setValue( $options );
             }
 
             // Indicate if filters need to be applied

@@ -53,7 +53,7 @@
 
             // Fix the value setting
             if ( ! empty( $this->_value ) ) {
-                $this->_value = 'on';
+                $this->setValue( 'on' );
             }
 
             // Indicate if filters need to be applied

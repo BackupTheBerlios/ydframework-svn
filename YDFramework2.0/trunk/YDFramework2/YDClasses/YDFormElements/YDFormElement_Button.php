@@ -52,7 +52,7 @@
             $this->_type = 'button';
 
             // Set the value correctly
-            $this->_value = $label;
+            $this->setValue( $label );
             $this->_label = '';
 
             // Indicate if filters need to be applied
