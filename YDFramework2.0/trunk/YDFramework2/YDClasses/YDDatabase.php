@@ -507,6 +507,8 @@
 		 *
 		 *	@param $table	The table to insert the data into.
 		 *	@param $values	Associative array with the field names and their values to insert.
+		 *
+		 *	@returns	The number of affected rows.
 		 */
 		function executeInsert( $table, $values ) {
 			$sql = $this->_createSqlInsert( $table, $values );
@@ -517,12 +519,30 @@
 		/**
 		 *	This function will update the specified values in to the specified table using the specified where clause.
 		 *
-		 *	@param $table	The table to insert the data into.
+		 *	@param $table	The table to update the data froms.
 		 *	@param $values	Associative array with the field names and their values to insert.
-		 *	@param $where	The where statement to execute.
+		 *	@param $where	(optional) The where statement to execute.
+		 *
+		 *	@returns	The number of affected rows.
 		 */
 		function executeUpdate( $table, $values, $where='' ) {
 			$sql = $this->_createSqlUpdate( $table, $values, $where );
+			return $this->executeSql( $sql );
+		}
+
+		/**
+		 *	This function will delete the records matching the where string from the specified database table.
+		 *
+		 *	@param $table	The table to delete the data from.
+		 *	@param $where	(optional) The where statement to execute.
+		 *
+		 *	@returns	The number of affected rows.
+		 */
+		function executeDelete( $table, $where='' ) {
+			$sql = 'DELETE FROM ' . $table;
+			if ( ! empty( $where ) ) {
+				$sql .= ' WHERE ' . trim( $where );
+			}
 			return $this->executeSql( $sql );
 		}
 

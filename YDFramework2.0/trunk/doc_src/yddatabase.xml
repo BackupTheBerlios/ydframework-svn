@@ -109,25 +109,38 @@
 
         <programlisting><![CDATA[<?php
 
+    // Includes
     YDInclude( 'YDDatabase.php' );
 
+    // Get the database connection
     $db = new YDDatabase( 'sqlite', 'mydb.db' );
 
+    // Get one record
     $result = $db->getRecord(
         'select * from users where userid = 1'
     );
+
+    // Get a list of records
     $result = $db->getRecords(
         'select * from users'
     );
+
+    // Get a specific value
     $result = $db->getValue(
         'select count(*) from users'
     );
+
+    // Get a specific value by name
     $result = $db->getValueByName(
         'select count(*) as usercount from users', 'usercount'
     );
+
+    // Get a list of values by name
     $result = $db->getValuesByName(
         'select username from users', 'username'
     );
+
+    // Get the result as an associative array
     $result = $db->getAsAssocArray(
         'select configname, configvalue from configuration',
         'configname', 'configvalue'
@@ -139,8 +152,10 @@
 
         <programlisting><![CDATA[<?php
 
+    // Includes
     YDInclude( 'YDDatabase.php' );
 
+    // Get the database connection
     $db = new YDDatabase( 'sqlite', 'mydb.db' );
 
     // Get maximum 10 records
@@ -386,18 +401,22 @@
 
         <para>To insert information in the database, there are a number of ways you can use. One way of working is to construct an insert SQL query and execute it using the executeSql function. This however has some drawbacks in that sense that you need to escape all the string values manually. A much easier is to use the executeInsert function which does most of the difficult work in the background.</para>
 
-        <para>This function takes two arguments, being the name of the table to insert the database into, and an associative array mapping the column names to their values. The following example demonstrates how this works:</para>
+        <para>This function takes two arguments, being the name of the table to insert the data into, and an associative array mapping the column names to their values. The following example demonstrates how this works:</para>
 
         <programlisting><![CDATA[<?php
 
+    // Includes
     YDInclude( 'YDDatabase.php' );
 
-    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
 
+    // The new values
     $values = array();
     $values['ConfigName'] = 'email';
     $values['ConfigValue'] = 'pieter@yellowduck.be';
 
+    // Insert the values into the database
     $db->executeInsert( 'configuration', $values );
 
 ?>]]></programlisting>
@@ -416,20 +435,52 @@
 
         <programlisting><![CDATA[<?php
 
+    // Includes
     YDInclude( 'YDDatabase.php' );
 
-    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
 
+    // The new values
     $values = array();
     $values['ConfigName'] = 'email';
     $values['ConfigValue'] = 'pieter@yellowduck.be';
 
-    $db->executeUpdate( 'configuration', $values, 'configname = ' . $db->sqlString( 'email' ) );
+    // Execute the update for all rows
     $db->executeUpdate( 'configuration', $values );
+
+    // Execute the update for a specific row
+    $db->executeUpdate( 'configuration', $values, 'configname = ' . $db->sqlString( 'email' ) );
 
 ?> ]]></programlisting>
 
         <para>This function will return the number of rows that was affected by this query.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_delete">
+
+        <title>Deleting information</title>
+
+        <para>To delete information from the database, you can either manually issue an SQL statement which deletes the data, or you can use the executeDelete function from the YDDatabaseDriver class. </para>
+
+        <para>This function takes two arguments, being the name of the table to delete the data from, and an optional where statement limiting the number of rows being deleted. The following example demonstrates how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // Remove all rows
+    $db->executeDelete( 'configuration' );
+
+    // Remove a specific row
+    $db->executeDelete( 'configuration', 'id = 1' );
+
+?>]]></programlisting>
 
     </sect1>
 
