@@ -27,6 +27,7 @@
 	
 	define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
 
+	YDInclude( 'YDFileSystem.php' );
 	YDInclude( SMARTY_DIR . '/Smarty.class.php' );
 
 	/**
@@ -173,15 +174,16 @@
 		 *	@internal
 		 */
 		function _getTemplateName( $file='' ) {
+			$this->template_dir = YDPath::getFullPath( $this->template_dir );
 			if ( empty( $file ) ) {
-				$file = basename( YD_SELF_FILE, YD_SCR_EXT );
+				$file = YDPath::getFileNameWithoutExtension( YD_SELF_FILE );
 			}
-			if ( is_file( realpath( $this->template_dir ) . '/' . $file . YD_TPL_EXT ) ) {
+			if ( is_file( YDPath::join( $this->template_dir, $file . YD_TPL_EXT ) ) ) {
 				$tplName = $file . YD_TPL_EXT;
 			} else {
 				$tplName = $file;
 			}
-			if ( ! is_file( realpath( $this->template_dir ) . '/' . $tplName ) ) {
+			if ( ! is_file( YDPath::join( $this->template_dir, $tplName ) ) ) {
 				trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
 			}
 			return $tplName;
