@@ -324,7 +324,7 @@
 		<p>&nbsp;<br><b>Documentation</b></p>
 
 		<p>View the <a href="../doc/api/index.html">API documentation</a> or read the
-		<a href="../doc/userguide/index.html">user guide</a> (online PDF).</p>
+		<a href="../doc/userguide/index.html">user guide</a>.</p>
 	
 	<?php } ?>
 
