@@ -49,7 +49,7 @@
 			$form->addRule( 'txt1', 'required', 'txt1 is required' );
 			$form->addRule( 'chk2', 'required', 'chk2 is required' );
 			$form->addFormRule( array( & $this, 'formrule' ), 'txt1 is required' );
-			if ( YD_DEBUG == 1 ) {
+			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
 				YDDebugUtil::dump( $form->_regFilters, 'Registered filters' );
@@ -60,6 +60,7 @@
 				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
 				YDDebugUtil::dump( $_POST, '$_POST' );
 				YDDebugUtil::dump( $_FILES, '$_FILES' );
+				YDDebugUtil::dump( $form->toArray() );
 			}
 			if ( $form->validate() ) {
 				YDDebugUtil::dump( $form->getValues(), 'Form values' );

@@ -51,6 +51,8 @@
 		 *	This function returns the name of the action that was specified by the do parameter specified in the URL. 
 		 *	This does NOT include the action prefix.
 		 *
+		 *	@static
+		 *
 		 *	@returns	The name of the current action.
 		 */
 		function getActionName() {

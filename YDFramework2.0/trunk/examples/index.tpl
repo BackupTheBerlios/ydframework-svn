@@ -196,6 +196,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="form_get.php">YDForm using GET parameters</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=form_get.php">form_get.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="sample.php">Defining and using action requests</a>
 			</td>
 			<td valign="top">
