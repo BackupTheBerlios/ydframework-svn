@@ -10,74 +10,152 @@
 	require_once( 'YDBase.php' );
 
 	/**
+	 *	This class contains abstract functions implementing the validation rules.
 	 */
 	class YDValidateRules extends YDBase {
 
-		// Value is not empty
-		function required( $val, $opts ) {
-			return true;
+		/** 
+		 *	This function returns false if the variable is empty, otherwise, it returns true.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function required( $val, $opts='' ) {
+			if ( empty( strval( $val ) ) ) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 
-		// Value must not exceed n characters
+		/** 
+		 *	This function returns true if the variable is smaller than the specified length, otherwise, it returns 
+		 *	false.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The maximum length of the variable.
+		 */
 		function maxlength( $val, $opts ) {
-			return true;
+			if ( strlen( $val ) < $opts ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
-		// Value must have more than n characters
+		/** 
+		 *	This function returns true if the variable is bigger than the specified length, otherwise, it returns 
+		 *	false.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The minimum length of the variable.
+		 */
 		function minlength( $val, $opts ) {
-			return true;
+			if ( strlen( $val ) > $opts ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
-		// Value must have between m and n characters
+		/** 
+		 *	This function returns true if the length of the variable is contained in the indicated range.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	Array containing the minimum and maximum length.
+		 */
 		function rangelength( $val, $opts ) {
-			return true;
+			if ( ( strlen( $val ) > $opts[0] ) && ( strlen( $val ) < $opts[1] ) ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
-		// Value must pass the regular expression
+		/** 
+		 *	This function returns true if the variable matches the given regular expression (PCRE syntax), otherwise, it  
+		 *	returns false.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The regular expression to use (PCRE syntax).
+		 */
 		function regex( $val, $opts ) {
-			return true;
+			if ( preg_match( $val, $opts ) ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
-		// Value is a correctly formatted email
+		/** 
+		 *	This function returns true if the variable is a correctly formatted email address.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function email( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]+))$/' );
 		}
 
-		// Value must contain only letters
+		/** 
+		 *	This function returns true if the variable contains only letters.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function lettersonly( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/^[a-zA-Z]+$/' );
 		}
 
-		// Value must contain only letters and numbers
+		/** 
+		 *	This function returns true if the variable contains only letters and numbers.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function alphanumeric( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/^[a-zA-Z0-9]+$/' );
 		}
 
-		// Value must be a number
+		/** 
+		 *	This function returns true if the variable contains only numbers.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function numeric( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
 		}
 
-		// Value must not contain punctuation characters
+		/** 
+		 *	This function returns true if the variable contains no punctuation characters.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function nopunctuation( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/' );
 		}
 
-		// Value must be a number not starting with 0
+		/** 
+		 *	This function returns true if the variable is a number not starting with 0.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
 		function nonzero( $val, $opts ) {
-			return true;
+			return YDValidateRules( $val, '/^-?[1-9][0-9]*/' );
 		}
 
-		// This rule allows to use an external function/method for validation, either by registering it or by passing a
-		// callback as a format parameter.
+		/** 
+		 *	This rule allows to use an external function/method for validation, either by registering it or by passing a
+		 *	callback as a format parameter.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The name of the function to use.
+		 */
 		function callback( $val, $opts ) {
-			return true;
-		}
-
-		// The rule allows to compare the values of two form fields. This can be used for e.g. 'Password repeat must 
-		// match password' kind of rule. 
-		function compare( $val, $opts ) {
-			return true;
+			return call_user_func( $opts, $val );
 		}
 
 	}

@@ -14,9 +14,6 @@
 	 *	This class defines an object oriented form.
 	 *
 	 *	@todo
-	 *		Implement the different rules in YDValidateRules.
-	 *
-	 *	@todo
 	 *		Implement the validate function.
 	 *
 	 *	@todo
@@ -91,7 +88,6 @@
 			$this->registerRule( 'nopunctuation', array( 'YDValidatorRules', 'nopunctuation' ), 'YDValidatorRules.php' );
 			$this->registerRule( 'nonzero', array( 'YDValidatorRules', 'nonzero' ), 'YDValidatorRules.php' );
 			$this->registerRule( 'callback', array( 'YDValidatorRules', 'callback' ), 'YDValidatorRules.php' );
-			$this->registerRule( 'compare', array( 'YDValidatorRules', 'compare' ), 'YDValidatorRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
