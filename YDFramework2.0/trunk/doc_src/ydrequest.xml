@@ -124,7 +124,7 @@
 
         <para>After the authentication tokens are checked, the framework will check if the specified action is allowed by calling the "isActionAllowed" function which returns a boolean indicating this. This function can for example limit certain actions to specific conditions such as the username.</para>
 
-        <para>If the "isActionAllowed" function returns false, the function called "actionNotAllowed" will be executed. By default, this function returns a fatal error indicating that the action is not allowed. You can override this function to make this work the way you want. After this function is executed, the processing of the request will stop.</para>
+        <para>If the "isActionAllowed" function returns false, the function called "errorActionNotAllowed" will be executed. By default, this function returns a fatal error indicating that the action is not allowed. You can override this function to make this work the way you want. After this function is executed, the processing of the request will stop.</para>
 
         <para>In the "isActionAllowed" function, you can use the class function "getActionName" to get the name of the current action in lowercase. The action name is the same as what is specified with the do function in the URL. If no action is specified, the text "default" will be returned which always points to the default action.</para>
 

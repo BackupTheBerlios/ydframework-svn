@@ -95,9 +95,9 @@
 			// Check if the current action is allowed or not
 			$result = $this->clsInst->isActionAllowed();
 
-			// Execute actionNotAllowed if failed
+			// Execute errorActionNotAllowed if failed
 			if ( $result == false ) {
-				$this->clsInst->actionNotAllowed();
+				$this->clsInst->errorActionNotAllowed();
 				$this->finish();
 			}
 

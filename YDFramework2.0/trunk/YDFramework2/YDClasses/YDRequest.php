@@ -252,7 +252,7 @@
 		/**
 		 *	You can use this function to check wether the current request is allowed to access the specified action or
 		 *	not. This check is performed just before the actual processing of the request and just after the
-		 *	authentication if any authentication was needed. If this check fails, the code in the actionNotAllowed 
+		 *	authentication if any authentication was needed. If this check fails, the code in the errorActionNotAllowed 
 		 *	method is performed. You will need to override this function in the classes that implement the YDRequest
 		 *	class.
 		 *
@@ -266,7 +266,7 @@
 		 *	If the current request is not allowed to execute the specified action, the code in this function gets 
 		 *	executed. You will need to override this function in the classes that implement the YDRequest class.
 		 */
-		function actionNotAllowed() {
+		function errorActionNotAllowed() {
 			trigger_error( 'You are not allow to access the action "' . $this->getActionName() . '"', YD_ERROR );
 		}
 

@@ -368,7 +368,7 @@
 		 *	If the current request is not allowed to execute the specified action, the code in this function gets
 		 *	executed. You will need to override this function in the classes that implement the YDRequest class.
 		 */
-		function actionNotAllowed() {
+		function errorActionNotAllowed() {
 			$err = 'You are not allow to access the action "' . $this->getActionName() . '"';
 			if ( ! $this->isXmlRpcRequest() ) {
 				return new IXR_Error( -100002, $err );
