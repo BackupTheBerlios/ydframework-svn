@@ -111,23 +111,17 @@
          */
         function getConnection( $dieOnError=true, $persistent=false ) {
 
-            // Include the DB library
-            require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
-
             // Make the connection
             $conn = DB::connect( $this->getUrl(), $persistent );
 
             // Check for errors
             if ( DB::isError( $conn ) ) {
 
-                // Get the error message
-                $err = $conn->getMessage();
-
                 // Return an error
                 if ( $dieOnError === true ) {
-                    return new YDFatalError( $err );
+                    return new YDFatalError( $conn );
                 } else {
-                    return new YDError( $err );
+                    return new YDError( $conn );
                 }
     
             }
@@ -173,7 +167,7 @@
 
             // Check for errors
             if ( DB::isError( $result ) ) {
-                return new YDFatalError( $result->getMessage() );
+                return new YDFatalError( $result );
             }
 
             // Return the result
@@ -204,7 +198,7 @@
 
             // Check for errors
             if ( DB::isError( $result ) ) {
-                return new YDFatalError( $result->getMessage() );
+                return new YDFatalError( $result );
             }
 
             // Return the result
@@ -235,7 +229,7 @@
 
             // Check for errors
             if ( DB::isError( $result ) ) {
-                return new YDFatalError( $result->getMessage() );
+                return new YDFatalError( $result );
             }
 
             // Return the result

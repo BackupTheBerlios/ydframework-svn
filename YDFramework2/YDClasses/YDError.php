@@ -11,6 +11,10 @@
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
+     *
+     *  @todo
+     *      This class should know about database errors and be able to extract
+     *      all the needed information from the error objects.
      */
     class YDError extends YDBase {
 
@@ -25,8 +29,24 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Standard variables
-            $this->_errorMessage = $errorMessage;
+            // Check if it's a database error
+            if ( DB::isError( $errorMessage ) ) {
+
+                // Start with the first part of the error message
+                $this->_errorMessage = $errorMessage->getMessage();
+
+                // Check if there is user info
+                $userInfo = $errorMessage->getUserInfo();
+                if ( ! empty( $userInfo ) ) {
+                    $this->_errorMessage .= '<br><br>' . $userInfo;
+                }
+
+            } else {
+
+                // Standard variables
+                $this->_errorMessage = $errorMessage;
+            
+            }
 
         }
 

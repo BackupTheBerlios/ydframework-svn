@@ -260,6 +260,7 @@
         ini_set( 'include_path', $includePath );
 
         // Include the PEAR modules
+        require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
         require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm.php' );
 
         // Include Smarty
