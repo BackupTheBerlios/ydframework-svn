@@ -23,6 +23,12 @@
      *  @todo
      *      Refine this class to output pretty much the same information as the
      *      phpSniff class. Maybe it's easier to use that class instead.
+     *
+     *  @todo
+     *      Should we keep this class or have people look for their own classes
+     *      to do something like this? We might just ship phpSniff with our code
+     *      so that they don't even have to look for it:
+     *      http://phpsniff.sourceforge.net/
      */
     class YDBrowserInfo extends YDBase {
 
