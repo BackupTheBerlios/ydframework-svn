@@ -146,7 +146,7 @@
             $action = strtolower( $action );
 
             // Remove the action prefix
-            if ( strpos( $action, 'action' ) === 0 ) {
+            if ( strpos( $action, 'action' ) == 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
 
@@ -189,7 +189,7 @@
         function forward( $action ) {
 
             // Remove the action prefix
-            if ( strpos( $action, 'action' ) === 0 ) {
+            if ( strpos( $action, 'action' ) == 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
 

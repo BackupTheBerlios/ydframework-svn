@@ -188,7 +188,7 @@
 
             // Check if caching is enabled
             $cacheFName = null;
-            if ( $cache === true ) {
+            if ( $cache == true ) {
 
                 // Get the headers
                 $headers = $this->getHeaders();
@@ -246,7 +246,7 @@
             }
 
             // Check if caching is enabled
-            if ( $cache === true ) {
+            if ( $cache == true ) {
 
                 // Save the cached data
                 if ( $cacheFName != null ) {
@@ -315,7 +315,7 @@
             $result = $client->doRequest();
 
             // Check the result
-            if ( $result === false ) {
+            if ( $result == false ) {
                 new YDFatalError(
                     'Failed to retrieve the data from the url "' 
                     . $this->getUrl() . '". ' . $client->getError()
@@ -340,7 +340,7 @@
             $result = $client->doRequest();
 
             // Check the result
-            if ( $result === false ) {
+            if ( $result == false ) {
                 new YDFatalError(
                     'Failed to retrieve the data from the url "' 
                     . $this->getUrl() . '". ' . $client->getError()

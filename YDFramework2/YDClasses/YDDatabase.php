@@ -115,7 +115,7 @@
             if ( DB::isError( $conn ) ) {
 
                 // Return an error
-                if ( $dieOnError === true ) {
+                if ( $dieOnError == true ) {
                     return new YDFatalError( $conn );
                 } else {
                     return new YDError( $conn );

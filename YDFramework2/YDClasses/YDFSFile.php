@@ -162,7 +162,7 @@
             $file = fopen( $this->getAbsolutePath(), 'rb' );
 
             // Check if we were able to open the file
-            if ( $file === false ) {
+            if ( $file == false ) {
                 return new YDFatalError(
                     'The file with path "' . $path . '" could not be read.'
                 );
@@ -207,7 +207,7 @@
             $params = getimagesize( $this->getAbsolutePath() );
 
             // Return false if not an image
-            if ( $params === false ) {
+            if ( $params == false ) {
                 return false;
             }
 

@@ -76,7 +76,7 @@
             $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
             
             // Check if caching is enabled
-            if ( $cache === true ) {
+            if ( $cache == true ) {
 
                // Output the cached version if any
                if ( is_file( $cacheFName ) ) {
@@ -119,7 +119,7 @@
             $thumb->GenerateThumbnail();
 
             // Check if caching is enabled
-            if ( $cache === true ) {
+            if ( $cache == true ) {
 
                // Cache the thumbnail
                $thumb->RenderToFile( $cacheFName );

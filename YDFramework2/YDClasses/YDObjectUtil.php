@@ -94,7 +94,7 @@
         function isTrue( $val ) {
 
             // First, check if it's a real true or not
-            if ( $val === true || $val === 1 ) {
+            if ( $val == true || $val == 1 ) {
                 return true;
             }
 

@@ -143,7 +143,7 @@
         $result = $clsInst->isActionAllowed();
 
         // Execute actionNotAllowed if failed
-        if ( $result === false ) {
+        if ( $result == false ) {
             YDObjectUtil::failOnMissingMethod( $clsInst, 'actionNotAllowed' );
             $clsInst->actionNotAllowed();
             YDFinishRequest();

@@ -137,7 +137,7 @@
             $result = fwrite( $fp, $contents );
 
             // Check for errors
-            if ( $result === false ) {
+            if ( $result == false ) {
                 new YDFatalError(
                     'Failed writing to the file "' . $file . '" in the  '
                     . ' directory called "' . $this->getPath() . '".'
@@ -179,10 +179,10 @@
                 $result = unlink( $filename );
 
                 // Check for errors
-                if ( $result === false ) {
+                if ( $result == false ) {
 
                     // Check if we need to raise an error
-                    if ( $failOnError === true ) {
+                    if ( $failOnError == true ) {
                         new YDFatalError(
                             'Failed deleting the file "' . $file . '" in the  '
                             . ' directory called "' . $this->getPath() . '".'
