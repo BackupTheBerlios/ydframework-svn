@@ -241,6 +241,7 @@
          *
          *  @param $format (optional) The format in which the items should be
          *                 converted.
+         *  @param $color  (optional) The color of the XML tags.
          *
          *  @returns HTML colored XML data.
          */
