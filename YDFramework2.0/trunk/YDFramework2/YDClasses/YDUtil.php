@@ -25,6 +25,8 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
+	YDInclude( 'YDLog.php' );
+
 	/**
 	 *	This is a general timer class that starts counting when it's instantiated, and which returns the elapsed time as
 	 *	soon as the finish method is called.
@@ -244,7 +246,28 @@
 		 *	@static
 		 */
 		function dump( $obj, $label='' ) {
-			echo( YDDebugUtil::r_dump( $obj, true, $label ) );
+
+			// Get the object as plain text
+			$text = YDDebugUtil::r_dump( $obj, true, $label );
+
+			// Get the maximum linesize
+			$maxlinesize = ( is_numeric( YD_LOG_MAX_LINESIZE ) ) ? intval( YD_LOG_MAX_LINESIZE ) : 80;
+			$wraplines = ( is_bool( YD_LOG_WRAPLINES ) ) ? YD_LOG_WRAPLINES : false;
+
+			// Split the text up in parts if longer than the maximum linesize
+			if ( strlen( $text ) > $maxlinesize && $wraplines ) {
+
+				// The break character we are going to use
+				$break = '__YD_LOG_BREAK__';
+
+				// Wrap the text
+				$text = YD_CRLF . "\t" . wordwrap( $text, $maxlinesize, YD_CRLF . "\t" );
+
+			}
+
+			// Output the text
+			echo( $text );
+
 		}
 
 		/**
