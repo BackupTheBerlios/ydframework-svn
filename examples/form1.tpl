@@ -16,7 +16,7 @@
 
         <p>Description: <?= $form['desc']['value'] ?></p>
 
-        <p>Date <?= $form['date']['value']['d'][0] ?>/<?= $form['date']['value']['M'][0] ?>/<?= $form['date']['value']['Y'][0] ?></p>
+        <p>Date <?= $form['date']['value']['d'] ?>/<?= $form['date']['value']['M'] ?>/<?= $form['date']['value']['Y'] ?></p>
 
     <?php } else { ?>
     

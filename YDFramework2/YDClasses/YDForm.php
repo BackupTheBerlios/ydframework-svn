@@ -72,10 +72,6 @@
          *
          *  @return Array representing the form in a suitable format for use in
          *          the template.
-         *
-         *  @todo
-         *      For date elements, we need to add a pseudo element that can
-         *      recompose the original date/timestamp.
          */
         function toArray( $template ) {
 
@@ -88,9 +84,30 @@
             // Create the array
             $array = $renderer->toArray();
 
-            // Loop over the elements and add them to the root of the array
+            // Loop over the elements 
             foreach ( $array['elements'] as $element ) {
+
+                // Date elements need special treatment
+                if ( $element['type'] == 'date' ) {
+
+                    //var_dump( $element['value'] );
+
+                    // Loop over the values
+                    foreach ( $element['value'] as $key => $value ) {
+
+                        // Remove the original
+                        unset( $element['value'][$key] );
+
+                        // Add them again
+                        $element['value'][$key] = $value[0];
+
+                    }
+
+                }
+
+                // Add it to the root of the array
                 $array[ $element['name'] ] = $element;
+
             }
 
             // Remove the original elements array

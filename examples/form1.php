@@ -49,7 +49,8 @@
                 'textarea', 'desc', 'Enter the description:'
             );
             $form->addElement(
-                'date', 'date', 'Enter the date:'
+                'date', 'date', 'Enter the date:',
+                array( 'language'=>'en', 'format'=>'dMYHi' )
             );
             $form->addElement( 'submit', 'cmdSubmit', 'Send' );
 
