@@ -18,9 +18,9 @@
 		 *	This is the class constructor for the YDDatabaseDriver class.
 		 *
 		 *	@param $db		Name of the database.
+		 *	@param $db		Database name to use for the connection.
 		 *	@param $user	(optional) User name to use for the connection.
 		 *	@param $pass	(optional) Password to use for the connection.
-		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $options	(optional) Options to pass to the driver.
 		 */
