@@ -56,6 +56,37 @@
 		 *	@returns	The name of the current action.
 		 */
 		function getActionName() {
+
+			// First, we check the path info. The first item is the name of the action, the rest is arg0 - ... in the
+			// $_GET parameters.
+			if ( ! empty( $_SERVER['PATH_INFO'] ) ) {
+				$pathInfo = explode( '/', substr( $_SERVER['PATH_INFO'], 1 ) );
+				$action = ( sizeof( $pathInfo ) > 0 ) ? $pathInfo[0] : YD_ACTION_DEFAULT;
+				foreach ( array_slice( $pathInfo, 1 ) as $idx=>$val ) {
+					$_GET[ 'arg' . $idx ] = $val;
+				}
+
+			// Then we check the $_GET parameters
+			} elseif ( ! empty( $_GET[ YD_ACTION_PARAM ] ) ) {
+				$action = 'action' . $_GET[ YD_ACTION_PARAM ];
+
+			// Else, we keep the default
+			} else {
+				$action = YD_ACTION_DEFAULT;
+			}
+
+			// We convert to lowercase
+			$action = strtolower( $action );
+
+			// Remove the action prefix
+			if ( strpos( $action, 'action' ) === 0 ) {
+				$action = substr( $action, strlen( 'action' ) );
+			}
+
+			// Return the action name
+			return strtolower( $action );
+
+			/*
 			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
 				$action = YD_ACTION_DEFAULT;
 			} else {
@@ -66,6 +97,8 @@
 				$action = substr( $action, strlen( 'action' ) );
 			}
 			return strtolower( $action );
+			*/
+
 		}
 
 		/**
@@ -169,7 +202,8 @@
 		 *	action function is specified or not.
 		 */
 		function process() {
-			$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
+			//$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
+			$action = 'action' . $this->getActionName();
 			call_user_func( array( $this, $action ) );
 		}
 
