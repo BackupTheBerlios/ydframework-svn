@@ -7,7 +7,7 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     /**
@@ -15,8 +15,8 @@
      */
     class YDBase {
 
-        /** 
-         *  The class constructor for the YDBase class.
+        /**
+         *  Class constructor for the YDBase class.
          */
         function YDBase() {
         }

@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
 
     /**
      *  This class defines a filesystem file.
@@ -33,14 +32,14 @@
 
             // Check if the file exists
             if ( ! file_exists( $path ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The file with path "' . $path . '" does not exist.'
                 );
             }
 
             // Fail if directory
             if ( ! is_file( $path ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The path "' . $path . '" is not a file and can not be '
                     . 'converted into YDFSFile object.'
                 );
@@ -134,7 +133,7 @@
 
                 // Check if the start is an integer
                 if ( ! is_int( $start ) ) {
-                    new YDFatalError(
+                    YDFatalError(
                         'getContents: Start byte should be an integer.'
                     );
                 }
@@ -151,10 +150,12 @@
 
             // Check that length is a positive integer
             if ( ! is_int( $length ) ) {
-                new YDFatalError( 'getContents: Length should be an integer.' );
+                YDFatalError( 
+                    'getContents: Length should be an integer.'
+                );
             }
             if ( $length < 1 ) {
-                new YDFatalError(
+                YDFatalError(
                     'getContents: Length should be a positive integer.'
                 );
             }
@@ -167,7 +168,7 @@
 
             // Check if we were able to open the file
             if ( $file == false ) {
-                return new YDFatalError(
+                YDFatalError(
                     'The file with path "' . $path . '" could not be read.'
                 );
             }
@@ -201,7 +202,7 @@
 
             // Check for the getimagesize function
             if ( ! function_exists( 'getimagesize' ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The "getimagesize" function does not exists. Make sure '
                     . 'that the GD libraries are loaded before using the '
                     . 'YDFSImage::getImageSize function.'

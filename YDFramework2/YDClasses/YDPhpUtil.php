@@ -7,7 +7,7 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
@@ -34,10 +34,10 @@
             $minver = explode( '.', $vercheck );
             $curver = explode( '.', phpversion() );
             if (
-                ( $curver[0] <= $minver[0] ) && ( $curver[1] <= $minver[1] )
-                && (
-                $curver[1] <= $minver[1] ) && ( $curver[2][0] < $minver[2][0]
-            ) ) {
+                ( $curver[0] >= $minver[0] ) && ( $curver[1] >= $minver[1] )
+                &&
+                ( $curver[1] >= $minver[1] ) && ( $curver[2][0] > $minver[2][0] )
+            ) {
                 return true;
             } else {
                 return false;

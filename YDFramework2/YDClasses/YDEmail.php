@@ -7,7 +7,7 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
@@ -183,7 +183,7 @@
 
             // Check if there is a to address
             if ( sizeof( $this->to_plain ) == 0 ) {
-                new YDFatalError(
+                YDFatalError(
                     'You need to specify at least one recipient in the YDEmail '
                     . 'class'
                 );
@@ -191,7 +191,7 @@
 
             // Check if there is a to address
             if ( empty( $this->sender ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'You need to specify who this email message coming from.'
                 );
             }

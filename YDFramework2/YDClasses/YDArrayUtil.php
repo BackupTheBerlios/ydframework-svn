@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
 
     /**
      *  This class houses all the array related utility functions. All the
@@ -43,7 +42,7 @@
 
             // Check if the number of columns is an integer or not
             if ( ! is_int( $columns ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'Number of columns parameter of the '
                     . 'YDArrayUtil::convertToTable function should be an '
                     . 'integer.'

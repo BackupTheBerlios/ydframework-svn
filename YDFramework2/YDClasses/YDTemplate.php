@@ -5,6 +5,11 @@
      *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
      */
 
+    // Check if the YDFramework is loaded.
+    if ( ! defined( 'YD_FW_NAME' ) ) {
+        die(  'Yellow Duck Framework is not loaded.' );
+    }
+
     // Includes
     require_once( 'YDBase.php' );
     require_once( 'YDError.php' );
@@ -133,7 +138,7 @@
 
             // Check if the file exists
             if ( ! is_file( $tplPath ) ) {
-                new YDFatalError( 'Template not found: ' . $tplPath );
+                YDFatalError( 'Template not found: ' . $tplPath );
             }
 
             // Extract the variables

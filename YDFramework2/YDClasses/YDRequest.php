@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDTemplate.php' );
     require_once( 'YDObjectUtil.php' );
 
@@ -250,7 +249,7 @@
 
             // Check if the object is a form
             if ( ! YDObjectUtil::isSubclass( $form, 'YDForm' ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The form you have tried to add to the form is not a '
                     . 'subclass of the YDForm class.'
                 );
@@ -355,7 +354,7 @@
          *  @param $action The name of the action that is missing.
          */
         function errorMissingAction( $action ) {
-            new YDFatalError(
+            YDFatalError(
                 'Class ' . get_class( $this ) . ' does not contain an action '
                 . 'called "' . strtolower( $action ) . '" (function name).'
             );
@@ -434,7 +433,7 @@
          *  class.
          */
         function authenticationFailed() {
-            new YDFatalError( 'Authentication failed.' );
+            YDFatalError( 'Authentication failed.' );
         }
 
         /**
@@ -463,7 +462,7 @@
          *  class.
          */
         function actionNotAllowed() {
-            new YDFatalError(
+            YDFatalError(
                 'You are not allow to access the action "'
                 . $this->getActionName() . '"'
             );

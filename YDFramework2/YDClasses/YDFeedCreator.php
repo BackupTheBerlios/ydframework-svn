@@ -7,7 +7,7 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Define our version
@@ -15,7 +15,6 @@
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDStringUtil.php' );
     require_once( 'feedcreator/feedcreator.class.php' );
 
@@ -154,7 +153,7 @@
             if ( ! in_array(
                 $format, array( 'RSS0.91', 'RSS1.0', 'RSS2.0', 'ATOM' )
             ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The YDFeedCreator does not support the format called '
                     . '"' . $format . '". Only the formats "RSS0.91", '
                     , '"RSS1.0", "RSS2.0" and "ATOM" are supported.'

@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDDebugUtil.php' );
     require_once( 'YDObjectUtil.php' );
 
@@ -58,7 +57,7 @@
                 $ancestors = YDObjectUtil::getAncestors( $clsInst );
 
                 // Fail with an error
-                new YDFatalError(
+                YDFatalError(
                     'Class "' . $clsName . '" should be derived from the YDRequest '
                     . 'class. Currently, this class has the following ancestors: '
                     . implode( ' -&gt; ', $ancestors )
@@ -68,7 +67,7 @@
 
             // Check if the class is properly initialized
             if ( $clsInst->isInitialized() != true ) {
-                new YDFatalError(
+                YDFatalError(
                     'Class "' . $clsName . '" is not initialized properly. Make '
                     . 'sure loaded the base class YDRequest and initialized it.'
                 );

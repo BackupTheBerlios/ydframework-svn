@@ -47,6 +47,10 @@
             echo( 'YDArrayUtil::convertToTable( $array, 2, true )' );
             YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 2, true ) );
 
+            // Test for errors
+            echo( 'YDArrayUtil::convertToTable( $array, "a", true )' );
+            YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 'a', true ) );
+
         }
 
     }

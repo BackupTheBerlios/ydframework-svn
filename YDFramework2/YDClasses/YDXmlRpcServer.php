@@ -7,11 +7,10 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
-    require_once( 'YDError.php' );
     require_once( 'YDRequest.php' );
     require_once( 'IXR_Library.inc.php' );
 
@@ -173,7 +172,7 @@
             if ( ! $this->isXmlRpcRequest() ) {
                 return new IXR_Error( -100001, $err );
             } else {
-                new YDFatalError( $err );
+                YDFatalError( $err );
             }
 
         }
@@ -193,7 +192,7 @@
             if ( ! $this->isXmlRpcRequest() ) {
                 return new IXR_Error( -100002, $err );
             } else {
-                new YDFatalError( $err );
+                YDFatalError( $err );
             }
 
         }
@@ -214,7 +213,7 @@
             if ( ! $this->isXmlRpcRequest() ) {
                 return new IXR_Error( -100002, $err );
             } else {
-                new YDFatalError( $err );
+                YDFatalError( $err );
             }
 
         }

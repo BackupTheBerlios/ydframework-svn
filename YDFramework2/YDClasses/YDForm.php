@@ -5,9 +5,13 @@
      *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
      */
 
+    // Check if the YDFramework is loaded.
+    if ( ! defined( 'YD_FW_NAME' ) ) {
+        die(  'Yellow Duck Framework is not loaded.' );
+    }
+
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDDebugUtil.php' );
     require_once( 'HTML/QuickForm.php' );
     require_once( 'HTML/QuickForm/Renderer/Array.php' );

@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDHttpClient.php' );
     require_once( 'IXR_Library.inc.php' );
 
@@ -120,7 +119,7 @@
 
             // Check for the url
             if ( empty( $url ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'You did not specify an URL for the YDXmlRpcClient.'
                 );
             }

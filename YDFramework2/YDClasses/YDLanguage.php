@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
 
     /**
      *  This class will inspect the $_SERVER['HTTP_ACCEPT_LANGUAGE'] variable
@@ -34,7 +33,7 @@
 
             // Check if the list of languages is an array
             if ( ! is_array( $supported ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'YDLanguageNegotiator requires an array with the list of '
                     . 'supported languages.'
                 );
@@ -42,7 +41,7 @@
 
             // Check if at least one language is specified
             if ( sizeof( $supported ) < 1 ) {
-                new YDFatalError(
+                YDFatalError(
                     'YDLanguageNegotiator requires you to specify at least one '
                     . 'supported language. None were specified.'
                 );

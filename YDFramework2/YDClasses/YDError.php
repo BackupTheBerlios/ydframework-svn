@@ -5,116 +5,96 @@
      *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
      */
 
-    // Includes
-    require_once( 'YDBase.php' );
-    require_once( 'YDObjectUtil.php' );
-
-    /**
-     *  This class defines an error using an error message. Each error object
-     *  has just one error message. The class is also the base class for al
-     *  other error classes.
-     */
-    class YDError extends YDBase {
-
-        /**
-         *  The class constructor for the YDError class. When you instantiate
-         *  this class, you need to specify the error message as a string.
-         *
-         *  @param $errorMessage The string indicating the error message.
-         */
-        function YDError( $errorMessage ) {
-
-            // Initialize YDBase
-            $this->YDBase();
-
-            // Check if it's a database error
-            if ( YDObjectUtil::isSubClass( $errorMessage, 'db_error' ) ) {
-
-                // Start with the first part of the error message
-                $this->_errorMessage = $errorMessage->getMessage();
-
-                // Check if there is user info
-                $userInfo = $errorMessage->getUserInfo();
-                if ( ! empty( $userInfo ) ) {
-                    $this->_errorMessage .= '<br><br>' . $userInfo;
-                }
-
-            } else {
-
-                // Standard variables
-                $this->_errorMessage = $errorMessage;
-
-            }
-
-        }
-
-        /**
-         *  This function returns the string of the error message. If no error
-         *  message is specified, the string "Unknow error" is returned.
-         *
-         *  @returns String indicating the error message.
-         */
-        function getError() {
-            if ( empty( $this->_errorMessage ) ) {
-                return 'Unknown error';
-            } else {
-                return $this->_errorMessage;
-            }
-        }
-
-        /**
-         *  This function will check if the given object is an error object or
-         *  not. All objects that have the YDError class as one of it's
-         *  ancestors is considered as being an error class.
-         *
-         *  @remark
-         *      This is a static method. You do not need to instantiate the
-         *      the class in order to use this function.
-         *
-         *  @return Boolean indicating if the object is an error object or not.
-         */
-        function isError( $obj ) {
-            return YDObjectUtil::isSubClass( $obj, 'YDError' );
-        }
-
+    // Check if the YDFramework is loaded.
+    if ( ! defined( 'YD_FW_NAME' ) ) {
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     /**
-     *  This class defines a fatal error. Since this class is based on the
-     *  YDError class, you also need to specify an error message. The difference
-     *  is that this class will output the error message, and will stop the
-     *  execution of the script after this error occured.
+     *  This function defines a fatal error.
      *
-     *  By default, error messages are shown in a light yellow box with red text
-     *  displaying the error message.
+     *  @param $error Error message.
      */
-    class YDFatalError extends YDError {
+    function YDFatalError( $error ) {
+        trigger_error( $error, E_USER_ERROR );
+    }
 
-        /**
-         *  The class constructor for the YDFatalError class. When you
-         *  instantiate this class, you need to specify the error message as a
-         *  string.
-         *
-         *  @param $errorMessage The string indicating the error message.
-         */
-        function YDFatalError( $errorMessage ) {
+    /**
+     *  This function defines a warning.
+     *
+     *  @param $error Error message.
+     */
+    function YDWarning( $error ) {
+        trigger_error( $error, E_USER_WARNING );
+    }
 
-            // Initialize the parent
-            $this->YDError( $errorMessage );
+    /**
+     *  This function defines a notice.
+     *
+     *  @param $error Error message.
+     */
+    function YDNotice( $error ) {
+        trigger_error( $error, E_USER_NOTICE );
+    }
 
-            // Echo the error message
-            echo( '<p style="background-color: lightyellow;">' );
-            echo( '<font color="red" size="-1">' );
-            echo( '<b>' . YD_FW_NAME . ' Fatal Error</b>' );
-            echo( '<br>' );
-            echo( $this->getError() );
-            echo( '</font></p>' );
+    /**
+     *  This is the global error handler for the Yellow Duck Framework. This
+     *  function will take care of all error handling.
+     *
+     *  @param $errno   Type of the error (fatal/warning/notice).
+     *  @param $errstr  Error string.
+     *  @param $errfile Name of the file in which the error occured.
+     *  @param $errline Line number in the file where the error occured.
+     */
+    function YDErrorHandler( $errno, $errstr, $errfile, $errline ) {
 
-            // Die the execution
-            die();
+        // Text values for the error types
+        $errortypes = array(
+            E_ERROR           => 'ERROR',
+            E_WARNING         => 'WARNING',
+            E_PARSE           => 'PARSING ERROR',
+            E_NOTICE          => 'NOTICE',
+            E_CORE_ERROR      => 'CORE ERROR',
+            E_CORE_WARNING    => 'CORE WARNING',
+            E_COMPILE_ERROR   => 'COMPILE ERROR',
+            E_COMPILE_WARNING => 'COMPILE WARNING',
+            E_USER_ERROR      => 'USER ERROR',
+            E_USER_WARNING    => 'USER WARNING',
+            E_USER_NOTICE     => 'USER NOTICE',
+        );
+
+        // Honour the defined level of error reporting set either in php.ini or 
+        // with error_reporting()
+        if ( ! ( $errno & error_reporting() ) ) {
+            return;
+        }
+
+        // Output the error text
+        echo( '<p style="background-color: lightyellow;">' );
+        echo( '<font color="red" size="-1">' );
+        echo( '<b>' . $errortypes[ $errno ] . '</b>' );
+        echo( '<br>' );
+        echo( '<i>' . $errfile . ' (line ' . $errline . ')</i>' );
+        echo( '<br>' );
+        echo( $errstr );
+        echo( '</font></p>' );
+
+        // Check the type of the error
+        switch ( $errno ) {
+
+            case E_ERROR:
+            case E_PARSE:
+            case E_CORE_ERROR:
+            case E_COMPILE_ERROR:
+            case E_USER_ERROR:
+                die();
+                break;
 
         }
 
     }
+
+    // Set the error handler
+    set_error_handler( 'YDErrorHandler' );
 
 ?>

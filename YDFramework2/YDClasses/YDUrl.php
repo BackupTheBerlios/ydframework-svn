@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
 
     /**
      *  This class defines a url.
@@ -34,7 +33,7 @@
             $this->_url = $url;
 
             // Set the defaults
-            $parts_default = array(
+            $defaults = array(
                 'scheme'   => '',
                 'host'     => '',
                 'port'     => '',
@@ -46,9 +45,7 @@
             );
 
             // Parse the URL
-            $this->_url_parsed = array_merge(
-                $parts_default, parse_url( $url )
-            );
+            $this->_url_parsed = array_merge( $defaults, parse_url( $url ) );
 
         }
 
@@ -327,7 +324,7 @@
 
             // Check the result
             if ( $result == false ) {
-                new YDFatalError(
+                YDFatalError(
                     'Failed to retrieve the data from the url "'
                     . $this->getUrl() . '". ' . $client->getError()
                 );
@@ -353,7 +350,7 @@
 
             // Check the result
             if ( $result == false ) {
-                new YDFatalError(
+                YDFatalError(
                     'Failed to retrieve the data from the url "'
                     . $this->getUrl() . '". ' . $client->getError()
                 );

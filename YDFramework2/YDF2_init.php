@@ -234,6 +234,7 @@
         define( 'YD_PATHDELIM', ':' );
     }
 
+    // Update the include path
     $includePath = YD_SELF_DIR;
     if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
         $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
@@ -249,8 +250,10 @@
     require_once( 'YDPhpUtil.php' );
 
     // Check if we have the right PHP version
-    if ( YDPhpUtil::versionCheck( '4.2.0' ) ) {
-        new YDFatalError( 'PHP version 4.2.0 or greater is required.' );
+    if ( YDPhpUtil::versionCheck( '4.2.0' ) == false ) {
+        YDFatalError( 
+            'PHP version 4.2.0 or greater is required.'
+        );
     }
 
     // Check if running in debugging mode

@@ -7,12 +7,11 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
     require_once( 'YDBase.php' );
-    require_once( 'YDError.php' );
     require_once( 'YDFSFile.php' );
     require_once( 'YDFSImage.php' );
 
@@ -33,14 +32,14 @@
 
             // Check if the file exists
             if ( ! file_exists( $path ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The directory with path "' . $path . '" does not exist.'
                 );
             }
 
             // Fail if directory
             if ( ! is_dir( $path ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The path "' . $path . '" is not a directory and can not '
                     . 'be converted into YDFSFile object.'
                 );
@@ -154,7 +153,7 @@
 
             // Check for errors
             if ( $result == false ) {
-                new YDFatalError(
+                YDFatalError(
                     'Failed writing to the file "' . $file . '" in the  '
                     . ' directory called "' . $this->getPath() . '".'
                 );
@@ -180,7 +179,7 @@
          *  This function will delete a file from the current directory.
          *
          *  @param $filename    The file you want to delete.
-         *  @param $failOnError (optional) Indicate if a YDFatalError needs to
+         *  @param $failOnError (optional) Indicate if a fatal error needs to
          *                      be raised if deleting the file failed.
          */
         function deleteFile( $filename, $failOnError=false ) {
@@ -199,7 +198,7 @@
 
                     // Check if we need to raise an error
                     if ( $failOnError == true ) {
-                        new YDFatalError(
+                        YDFatalError(
                             'Failed deleting the file "' . $file . '" in the  '
                             . ' directory called "' . $this->getPath() . '".'
                         );

@@ -7,11 +7,10 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
-    require_once( 'YDError.php' );
     require_once( 'YDFSFile.php' );
 
     /**
@@ -142,7 +141,7 @@
 
             // Check for the getimagesize function
             if ( ! function_exists( 'getimagesize' ) ) {
-                new YDFatalError(
+                YDFatalError(
                     'The "getimagesize" function does not exists. Make sure '
                     . 'that the GD libraries are loaded before using the '
                     . 'YDFSImage::getImageSize function.'
@@ -219,9 +218,9 @@
             }
 
             // Raise error about unsupported image type
-            new YDFatalError(
+            YDFatalError(
                 'The getImageType function does not support the file format of '
-                . 'the file "' . $this->getAbsolutePath() . '"'
+                . 'the file "' . $this->getAbsolutePath() . '".'
             );
 
          }

@@ -7,7 +7,7 @@
 
     // Check if the YDFramework is loaded.
     if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'ERROR: Yellow Duck Framework is not loaded.' );
+        die(  'Yellow Duck Framework is not loaded.' );
     }
 
     // Includes
@@ -131,28 +131,6 @@
             return array_reverse( $ancestors );
 
         }
-
-        /**
-         *  This function will check if the specified object has the method
-         *  specified, and will raise a fatal error if not. This function does
-         *  not return any value.
-         *
-         *  @param $obj Object you want to check.
-         *  @param $method Method you are looking for.
-         */
-        /*
-        function failOnMissingMethod( $obj, $method ) {
-
-            // Check if the method exists and raise an error if needed
-            if ( ! method_exists( $obj, $method ) ) {
-                new YDFatalError(
-                    'Class "' . $obj . '" does  not have a function called "'
-                    . $method . '" which is required for proper operation.'
-                );
-            }
-
-        }
-        */
 
         /**
          *  This function will serialize an object. The serialized output is
