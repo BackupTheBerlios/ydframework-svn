@@ -219,6 +219,8 @@
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.php">email1.php</a>
                 <br>
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1.tpl">email1.tpl</a>
+                <br>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=email1_template.tpl">email1_template.tpl</a>
             </td>
         </tr>
         <tr>
