@@ -27,24 +27,33 @@
     class YDDebugUtil extends YDBase {
 
         /**
-         *  Function to output a debug message. These message are only shown if the
-         *  constant YD_DEBUG is set to 1. You can turn on debugging by specifying
-         *  the YD_DEBUG parameter in the url and assigning it the value 1.
+         *  Function to output a debug message. These message are only shown if
+         *  the constant YD_DEBUG is set to 1. You can turn on debugging by 
+         *  specifying the YD_DEBUG parameter in the url and assigning it the 
+         *  value 1.
          *
          *  Example url with debugging turned on:
          *  http://localhost/index.php?YD_DEBUG=1
          *
          *  This function accepts a variable amount of arguments which are all
-         *  concatenated using a space in between. All debug messages will be shown
-         *  in a gray box and are prepended with the text "[ debug ]".
+         *  concatenated using a space in between. All debug messages will be 
+         *  shown as HTML comments with the prefix "[ YD_DEBUG ]".
          */
         function debug() {
+
+            // Get the function arguments
             $args = func_get_args();
+
+            // Check if debugging is on
             if ( YD_DEBUG == 1 ) {
-                echo( '<p style="background-color: #CCCCCC;"><font size="-1">' );
-                echo( '<b>[ debug ]</b> '. implode( ' ', $args ) );
-                echo( '</font></p>' );
+
+                // Output the debugging info
+                echo( "\n" . '<!-- [ YD_DEBUG ]' . "\n" );
+                echo( implode( ' ', $args ) . "\n" );
+                echo( '-->' . "\n" );
+
             }
+
         }
 
         /**

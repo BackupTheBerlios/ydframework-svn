@@ -64,8 +64,8 @@
 
                     // List of include files
                     YDDebugUtil::debug(
-                        'Included files:<br>',
-                        implode( '<br>', $includeFiles )
+                        'Included files:' . "\n",
+                        implode( "\n", $includeFiles )
                     );
 
                 }
