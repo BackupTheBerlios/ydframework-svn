@@ -92,6 +92,21 @@ The biggest change in comparison to the original Smarty Light template class and
 </code></div><br />
 If you want to use caching in your YDTemplate class, you need to setup the caching parameters first. First of all, you need to set the class variable caching to true to indicate that all contents should be cached. When you want to check if a specific item exists in the cache, you can use the is_cached function specifying the cache ID. With the display function, you also need to specify the cache ID. To clear the cache, you can use the clear_cached function.<br />
 <br />
+<br />
+<h4> Escaping JavaScript and CSS items in your template </h4>
+<br />
+As <span class="missingpage">JavaScript</span><a href="http://www.yellowduck.be/ydf2/wiki/JavaScript/edit">?</a> and CSS use the same delimiters as the template engine, you need to add some special stuff to the template so that the parser doesn't get confused. The easiest is to surround the CSS and the <span class="missingpage">JavaScript</span><a href="http://www.yellowduck.be/ydf2/wiki/JavaScript/edit">?</a> code with the {literal} tag. This will make the template parser ignore the text in between the tags and will avoid that the parser get's confused.<br />
+<br />
+Here's an example:<br />
+<br />
+<div class="code"><code><font color="#000000">
+{literal}<br />&nbsp;&nbsp;&nbsp;&nbsp;Here is an example: {config_load file="config.conf"}<br />{/literal}</font>
+</code></div><br />
+This will output the following:<br />
+<br />
+<div class="code"><code><font color="#000000">
+Here is an example: {config_load file="config.conf"}</font>
+</code></div><br />
 <a href="Documentation.html">Documentation table of contents</a></div>
 
 
