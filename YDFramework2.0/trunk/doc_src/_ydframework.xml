@@ -5,6 +5,8 @@
     <!ENTITY firstsample SYSTEM "firstsample.xml">
     <!ENTITY installing SYSTEM "installing.xml">
     <!ENTITY tutorial SYSTEM "tutorial.xml">
+    <!ENTITY ydbase SYSTEM "ydbase.xml">
+    <!ENTITY ydconfig SYSTEM "ydconfig.xml">
     <!ENTITY ydrequest SYSTEM "ydrequest.xml">
     <!ENTITY ydtemplate SYSTEM "ydtemplate.xml">
     <!ENTITY ydform SYSTEM "ydform.xml">
@@ -61,6 +63,8 @@
     &firstsample;
     &installing;
     &tutorial;
+    &ydbase;
+    &ydconfig;
     &ydrequest;
     &ydtemplate;
     &ydform;

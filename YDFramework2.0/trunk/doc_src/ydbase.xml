@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydbase">
+
+	<title>YDBase: the base class</title>
+
+	<para>The YDBase class is the basis of most of the classes in the Yellow Duck Framework. It provides a number of base functions that are available to all the classes available in the framework. The following methods are part of all the classes based on YDBase:</para>
+	
+	<itemizedlist spacing="compact">
+		<listitem><emphasis role="bold">getClassName:</emphasis> returns the name of the class in lowercase.</listitem>
+		<listitem><emphasis role="bold">hasMethod:</emphasis> checks if the specified method exists in the class definition.</listitem>
+		<listitem><emphasis role="bold">isSubClass:</emphasis> checks if the class has the specified class as one of it's parents.</listitem>
+		<listitem><emphasis role="bold">getAncestors:</emphasis> returns the list of parent classes.</listitem>
+		<listitem><emphasis role="bold">serialize:</emphasis> returns the serialized version of the class instance which can be e.g. saved to a file.</listitem>
+	</itemizedlist>
+
+	<para>The following code sample gives you an example of the different possibilities:</para>
+	
+    <programlisting><![CDATA[<?php
+
+	// Standard include
+	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+	// Includes
+	YDInclude( 'YDRequest.php' );
+
+	// Our first class
+	class SubClassA extends YDBase {
+	
+		// Class constructor
+		function SubClassA() {
+			$this->YDBase();
+		}
+		
+		// Add a method
+		function MyMethod() {
+		}
+	
+	}
+	
+	// Add another class
+	class SubClassB extends SubClassA {
+	
+		// Class constructor
+		function SubClassB() {
+			$this->SubClassA();
+		}
+	
+	}
+	
+	// Class definition
+	class base extends YDRequest {
+
+		// Class constructor
+		function base() {
+			$this->YDRequest();
+		}
+
+		// Default action
+		function actionDefault() {
+
+			// Instantiate our objects
+			$objA = new SubClassA();
+			$objB = new SubClassB();
+			
+			// Get the names of both classes
+			YDDebugUtil::dump( $this->getClassName(), 'Class Name $this' );
+			YDDebugUtil::dump( $objA->getClassName(), 'Class Name $objA' );
+			YDDebugUtil::dump( $objB->getClassName(), 'Class Name $objB' );
+
+			// Test the hasMethod function
+			YDDebugUtil::dump( $objA->hasMethod( 'MyMethod' ), 'Check $objA->MyMethod' );
+			YDDebugUtil::dump( $objA->hasMethod( 'xx' ), 'Check $objA->xx' );
+
+			// Test the isSubclass function
+			YDDebugUtil::dump( $objA->isSubclass( 'YDBase' ), 'Is $objA subclass of YDBase?' );
+			YDDebugUtil::dump( $objB->isSubclass( 'YDBase' ), 'Is $objB subclass of YDBase?' );
+			YDDebugUtil::dump( $objB->isSubclass( 'SubClassA' ), 'Is $objB subclass of SubClassA?' );
+			YDDebugUtil::dump( $objB->isSubclass( 'YDRequest' ), 'Is $objB subclass of YDRequest?' );
+			
+			// Get the ancestors of both classes
+			YDDebugUtil::dump( $this->getAncestors(), 'Ancestors of $this' );
+			YDDebugUtil::dump( $objA->getAncestors(), 'Ancestors of $objA' );
+			YDDebugUtil::dump( $objB->getAncestors(), 'Ancestors of $objB' );
+			
+		}
+
+	}
+
+	// Process the request
+	YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+	<para>This returns the following output:</para>
+		
+    <programlisting><![CDATA[Class Name $this
+'base'
+
+Class Name $objA
+'subclassa'
+
+Class Name $objB
+'subclassb'
+
+Check $objA->MyMethod
+true
+
+Check $objA->xx
+false
+
+Is $objA subclass of YDBase?
+true
+
+Is $objB subclass of YDBase?
+true
+
+Is $objB subclass of SubClassA?
+true
+
+Is $objB subclass of YDRequest?
+false
+
+Ancestors of $this
+array (
+  0 => 'ydrequest',
+  1 => 'ydbase',
+)
+
+Ancestors of $objA
+array (
+  0 => 'ydbase',
+)
+
+Ancestors of $objB
+array (
+  0 => 'subclassa',
+  1 => 'ydbase',
+)]]></programlisting>
+
+</chapter>
