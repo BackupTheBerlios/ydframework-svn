@@ -377,7 +377,7 @@
 			$cacheFName = $thumb->GenerateCachedFilename();
 			$cacheFName .= $this->getLastModified();
 			$cacheFName .= $this->getAbsolutePath();
-			$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.tmn';
+			$cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.tmn';
 			$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
 
 			// Check if caching is enabled
