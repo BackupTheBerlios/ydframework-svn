@@ -3,6 +3,57 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.9 - August 9, 2004
+  * Bugfix: changed destination filename in RenderToFile()
+    (thanks alextkÿwalla*com)
+  * Bugfix: problems with HTTP image source when called as
+    an object (thanks alextkÿwalla*com)
+
+v1.4.8 - August 4, 2004
+  * $this->error has changed to $this->errors and is now
+    an array of strings (instead of a single string)
+  * A lot more error conditions (invalid cache directory,
+    etc) are now reported in $this->errors
+    (thanks aidan*slingsbyÿlineone*net)
+  * Removed all define(CONSTANT) in the phpThumb()
+    constructor - you can now access:
+    - PHPTHUMB_VERSION   == $this->phpthumb_version;
+    - PHPTHUMB_OSSLASH   == $this->osslash;
+    - PHPTHUMB_ISWINDOWS == $this->iswindows;
+  * Bugfix: Error message from apache_lookup_uri() failing
+    under Apache2 now reported cleanly
+    (thanks derbaffÿyahoo*com)
+  * Bugfix: missing phpthumb_functions:: class name for
+    ImageTypeToMIMEtype() call in ExtractEXIFgetImageSize()
+    (thanks aidan*slingsbyÿlineone*net)
+  * Bugfix: ImageTypeToMIMEtype() was broken for PHP older
+    than v4.3.0  (thanks georg*schreiberÿbatch-pc*es)
+  * Bugfix: RenderToFile() now returns false if it fails
+    (thanks phpthumbÿsendthemtomir*com)
+  * Bugfix: Corrupt JPEG/PNG/GIF files that failed
+    ImageCreateFrom*() were not being passed to ImageMagick
+    for fallback, nor passed through unmodified if IM was
+    unavailable or failed  (thanks r*chongÿmogenic*net)
+  * Bugfix: Improved backtick safe-mode limit detection
+    (thanks 1ÿadamcarrington*com)
+  * Bugfix: EXIF thumbnails were being used as source when
+    they should not be  (thanks aidan*slingsbyÿlineone*net)
+  * Bugfix: Cached files were not being created or used
+    properly  (thanks aidan*slingsbyÿlineone*net)
+  * Bugfix: max_source_pixels not set correct on some PHP
+    versions  (thanks derbaffÿyahoo*com)
+  * Bugfix: 'down' parameter ignored for unprocessed and
+    cached files  (thanks aidan*slingsbyÿlineone*net)
+
+v1.4.7 - July 27, 2004
+  * Included a modified version of "module.graphic.bmp.php"
+    from getID3() [http://getid3.sourceforge.net] as
+    "phpthumb.bmp.php" for BMP reading support without
+    ImageMagick. It works, but it's *very* slow, especially
+    for large images (as in 640x480 or larger).
+  * Added check to prevent error messages when shell_exec
+    is disabled (thanks webmasterÿneester*com)
+
 v1.4.6 - July 22, 2004
   * Added new section to phpthumb.config.php where you can
     easily specify defaults for any parameter you can set

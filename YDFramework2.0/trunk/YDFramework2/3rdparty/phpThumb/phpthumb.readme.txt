@@ -266,6 +266,13 @@ General Notes:
   can be forced to 256-color mode for compatability by
   setting the 'bgt' parameter to '256'
 
+* Properly resolving /~user/ style filenames requires
+  apache_lookup_uri(), which is missing or broken in
+  Apache2, or if PHP is not installed as an Apache module.
+  phpThumb() does try and work around this if it is
+  unavailble, but you may have to specify a full filename
+  for "src" if you encounter problems.
+
 * phpThumb() works fine with GD v1.x, but works better
    with GD v2.0+ because of the true-color image support
    and ImageCopyResampled(). Also, there appears to be a

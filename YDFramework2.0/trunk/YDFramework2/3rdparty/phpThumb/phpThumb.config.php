@@ -50,7 +50,7 @@ $PHPTHUMB_CONFIG['temp_directory'] = null;
 // you can process with your memory limitation (e.g. 1600 * 1200 = 1920000)
 // As a general guideline, this number will be about 20% of your PHP memory
 // configuration, so 8M = 1,677,722; 16M = 3,355,443; 32M = 6,710,886; etc.
-if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=') && !defined('memory_get_usage')) {
+if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=') && !defined('memory_get_usage') && !@ini_get('memory_limit')) {
 	// memory_get_usage() will only be defined if your PHP is compiled with the --enable-memory-limit configuration option.
 	$PHPTHUMB_CONFIG['max_source_pixels'] = 0;       // no memory limit
 } else {
@@ -72,7 +72,8 @@ if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 	// Windows: set absolute pathname
 	$PHPTHUMB_CONFIG['imagemagick_path'] = 'c:\\Program Files\\ImageMagick-5.5.7-Q8\\convert.exe';
 } else {
-	// *nix: set absolute pathname, or leave as null if "convert" is in the path
+	// *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path
+	//$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
 	$PHPTHUMB_CONFIG['imagemagick_path'] = null;
 }
 

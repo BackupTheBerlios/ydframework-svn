@@ -12,6 +12,19 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+function SendSaveAsFileHeaderIfNeeded() {
+	if (!empty($_REQUEST['down'])) {
+		$downloadfilename = ereg_replace('[/\\:\*\?"<>|]', '_', $_REQUEST['down']);
+		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
+			$downloadfilename = trim($downloadfilename, '.');
+		}
+		if (!empty($downloadfilename)) {
+			header('Content-Disposition: attachment; filename="'.$downloadfilename.'"');
+		}
+	}
+	return true;
+}
+
 // this script relies on the superglobal arrays, fake it here for old PHP versions
 if (phpversion() < '4.1.0') {
 	$_SERVER  = $HTTP_SERVER_VARS;
@@ -42,7 +55,7 @@ if (!include_once('phpthumb.class.php')) {
 }
 $phpThumb = new phpThumb();
 
-if (!file_exists('phpThumb.config.php') || !@include_once('phpThumb.config.php')) {
+if (!file_exists('phpThumb.config.php') || !include_once('phpThumb.config.php')) {
 	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('phpThumb.config.php').'"');
 }
 foreach ($PHPTHUMB_CONFIG as $key => $value) {
@@ -73,31 +86,64 @@ $CanPassThroughDirectly = true;
 $FilenameParameters = array('h', 'w', 'sx', 'sy', 'sw', 'sh', 'bw', 'brx', 'bry', 'bg', 'bgt', 'bc', 'usa', 'usr', 'ust', 'wmf', 'wmp', 'wmm', 'wma', 'xto', 'ra', 'ar', 'iar', 'maxb');
 foreach ($FilenameParameters as $key) {
 	if (isset($_REQUEST[$key])) {
+		$phpThumb->DebugMessage('Cannot pass through directly because $_REQUEST['.$key.'] is set to "'.$_REQUEST[$key].'"', __FILE__, __LINE__);
 		$CanPassThroughDirectly = false;
 		break;
 	}
 }
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_REQUEST['phpThumbDebug'] == '2') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
 if ($CanPassThroughDirectly && !empty($_REQUEST['src'])) {
 	// no parameters set, passthru
 	$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($_REQUEST['src']);
 	if ($getimagesize = @GetImageSize($SourceFilename)) {
-		header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
-		@readfile($SourceFilename);
-		exit;
+		if (!empty($_REQUEST['phpThumbDebug'])) {
+			$phpThumb->DebugMessage('Would have passed "'.$SourceFilename.'" through directly, but skipping due to phpThumbDebug', __FILE__, __LINE__);
+		} else {
+			SendSaveAsFileHeaderIfNeeded();
+			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+			@readfile($SourceFilename);
+			exit;
+		}
+	} else {
+		$phpThumb->DebugMessage('Cannot pass through directly because GetImageSize("'.$SourceFilename.'") failed', __FILE__, __LINE__);
 	}
 }
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_REQUEST['phpThumbDebug'] == '3') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
 
 // check to see if file already exists in cache, and output it with no processing if it does
-if (!empty($phpThumb->config_cache_directory) && empty($_REQUEST['phpThumbDebug'])) {
-	$cache_filename = $phpThumb->GenerateCachedFilename();
-	if (is_file($cache_filename)) {
+$phpThumb->SetCacheFilename();
+if (is_file($phpThumb->cache_filename)) {
+	if (empty($_REQUEST['phpThumbDebug'])) {
+		SendSaveAsFileHeaderIfNeeded();
 		header('Content-type: image/'.$phpThumb->thumbnailFormat);
-		@readfile($cache_filename);
+		@readfile($phpThumb->cache_filename);
 		exit;
+	} else {
+		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'", but skipping due to phpThumbDebug', __FILE__, __LINE__);
 	}
+} else {
+	$phpThumb->DebugMessage('Cached file "'.$phpThumb->cache_filename.'" does not exist, processing as normal', __FILE__, __LINE__);
 }
 
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_REQUEST['phpThumbDebug'] == '4') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////
 // You may want to pull data from a database rather than a physical file
@@ -170,10 +216,9 @@ if (!empty($SQLquery)) {
 
 }
 
-
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '2') {
+if (@$_REQUEST['phpThumbDebug'] == '5') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -182,7 +227,7 @@ $phpThumb->GenerateThumbnail();
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '3') {
+if (@$_REQUEST['phpThumbDebug'] == '6') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -196,16 +241,24 @@ if (!empty($_REQUEST['file'])) {
 		exit;
 	}
 
-} elseif (empty($phpThumb->phpThumbDebug) && !empty($phpThumb->config_cache_directory) && is_writable($phpThumb->config_cache_directory)) {
+} else {
 
-	$phpThumb->CleanUpCacheDirectory();
-	$phpThumb->RenderToFile($cache_filename);
+	if ((file_exists($phpThumb->cache_filename) && is_writable($phpThumb->cache_filename)) || is_writable(dirname($phpThumb->cache_filename))) {
+
+		$phpThumb->CleanUpCacheDirectory();
+		$phpThumb->RenderToFile($phpThumb->cache_filename);
+
+	} else {
+
+		$phpThumb->DebugMessage('Cannot write to $phpThumb->cache_filename ('.$phpThumb->cache_filename.') because that directory ('.dirname($phpThumb->cache_filename).') is not writable', __FILE__, __LINE__);
+
+	}
 
 }
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '4') {
+if (@$_REQUEST['phpThumbDebug'] == '7') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////

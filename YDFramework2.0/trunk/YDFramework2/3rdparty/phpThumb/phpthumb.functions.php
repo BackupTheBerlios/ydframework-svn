@@ -4,7 +4,7 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 ///                                                         //
-// See: phpthumb.readme.txt for usage instructions          //
+// phpthumb.functions.php - general support functions       //
 //                                                         ///
 //////////////////////////////////////////////////////////////
 
@@ -156,7 +156,7 @@ class phpthumb_functions {
 	}
 
 	function ImageTypeToMIMEtype($imagetype) {
-		if (!function_exists('image_type_to_mime_type')) {
+		if (function_exists('image_type_to_mime_type')) {
 			return image_type_to_mime_type($imagetype);
 		}
 		static $image_type_to_mime_type = array(
@@ -205,6 +205,31 @@ class phpthumb_functions {
 		return ImageColorAllocate($gdimg_hexcolorallocate, 0, 0, 0);
 	}
 
+	function SafeBackTick($command) {
+		static $BacktickDisabled = null;
+		if (is_null($BacktickDisabled)) {
+			$disable_functions = explode(',', ini_get('disable_functions'));
+			if (in_array('shell_exec', $disable_functions) || in_array('exec', $disable_functions) || in_array('system', $disable_functions)) {
+				$BacktickDisabled = true;
+			} else {
+				$BacktickDisabled = false;
+			}
+		}
+		if ($BacktickDisabled) {
+			return '';
+		}
+		return `$command`;
+	}
+
+	function ApacheLookupURIarray($filename) {
+		$apacheLookupURIarray = array();
+		$keys = array('status', 'the_request', 'status_line', 'method', 'content_type', 'handler', 'uri', 'filename', 'path_info', 'args', 'boundary', 'no_cache', 'no_local_copy', 'allowed', 'send_bodyct', 'bytes_sent', 'byterange', 'clength', 'unparsed_uri', 'mtime', 'request_time');
+		$apacheLookupURIobject = @apache_lookup_uri($filename);
+		foreach ($keys as $key) {
+			$apacheLookupURIarray[$key] = @$apacheLookupURIobject->$key;
+		}
+		return $apacheLookupURIarray;
+	}
 
 }
 
