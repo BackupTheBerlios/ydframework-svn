@@ -78,6 +78,28 @@
 
         }
 
+        // Function to get the header for a URL
+        function actionHeaders() {
+
+            // Create the URL object
+            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+
+            // Dump the headers
+            YDDebugUtil::dump( $url->getHeaders() );
+
+        }
+
+        // Function to get the status for a URL
+        function actionStatus() {
+
+            // Create the URL object
+            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+
+            // Dump the headers
+            YDDebugUtil::dump( $url->getStatus() );
+
+        }
+
     }
 
     // Process the request

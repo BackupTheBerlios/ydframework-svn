@@ -160,6 +160,16 @@
         <tr>
             <td valign="top">
                 <a href="ydurl1.php">YDUrl object</a>
+                <br>
+                <a href="ydurl1.php?do=image1">YDUrl object - Image 1</a>
+                <br>
+                <a href="ydurl1.php?do=image2">YDUrl object - Image 2</a>
+                <br>
+                <a href="ydurl1.php?do=image3">YDUrl object - Image 3</a>
+                <br>
+                <a href="ydurl1.php?do=headers">YDUrl object - Headers</a>
+                <br>
+                <a href="ydurl1.php?do=status">YDUrl object - Status</a>
             </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=ydurl1.php">ydurl1.php</a>

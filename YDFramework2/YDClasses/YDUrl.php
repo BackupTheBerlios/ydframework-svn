@@ -183,86 +183,51 @@
          */
         function getContents( $cache=true ) {
 
-            // Include the HTTP client
-            require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
-
-            // Check the URL scheme
-            if ( $this->getScheme() != 'http' ) {
-                new YDFatalError( 'getContents: Only HTTP URLs are supported.' );
-            }
-
-            // Default to port 80
-            if ( $this->getPort() == null ) {
-                $port = 80;
-            } else {
-                $port = $this->getPort();
-            }
-
             // Check if caching is enabled
             $cacheFName = null;
             if ( $cache === true ) {
 
-                // Get the head of the file
-                $client = new HttpClient( $this->getHost(), $port );
-                $client->useGzip( true );
-                $client->setDebug( YD_DEBUG );
-                $client->path = $this->getUrl();
-                $client->method = 'HEAD';
-                $client->referer = $this->getUrl();
-                $client->headers_only = true;
-                $result = $client->doRequest();
+                // Get the headers
+                $headers = $this->getHeaders();
 
-                // Check the result
-                if ( $result ) {
+                // Check if we have etag or last modified
+                if (
+                    isset( $headers['etag'] )
+                    ||
+                    isset( $headers['last-modified'] )
+                ) {
 
-                    // Get the headers
-                    $headers = $client->headers;
-
-                    // Check if we have etag or last modified
-                    if (
-                        isset( $headers['etag'] )
-                        ||
-                        isset( $headers['last-modified'] )
-                    ) {
-
-                        // Generate the cache file name
-                        $cacheFName = $this->getUrl();
-                        if ( isset( $headers['etag'] ) ) {
-                            $cacheFName .= $headers['etag'];
-                        }
-                        if ( isset( $headers['last-modified'] ) ) {
-                            $cacheFName .= $headers['last-modified'];
-                        }
-                        if ( isset( $headers['content-length'] ) ) {
-                            $cacheFName .= $headers['content-length'];
-                        }
-                        $cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
-                        $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
-
-                        // Use the cache file if any
-                        if ( is_file( $cacheFName ) ) {
-
-                            // Create a file object for the cache file
-                            $file = new YDFSFile( $cacheFName );
-
-                            // Output the contents
-                            return gzuncompress( $file->getContents() );
-                            
-                        };
-    
+                    // Generate the cache file name
+                    $cacheFName = $this->getUrl();
+                    if ( isset( $headers['etag'] ) ) {
+                        $cacheFName .= $headers['etag'];
                     }
+                    if ( isset( $headers['last-modified'] ) ) {
+                        $cacheFName .= $headers['last-modified'];
+                    }
+                    if ( isset( $headers['content-length'] ) ) {
+                        $cacheFName .= $headers['content-length'];
+                    }
+                    $cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
+                    $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
+
+                    // Use the cache file if any
+                    if ( is_file( $cacheFName ) ) {
+
+                        // Create a file object for the cache file
+                        $file = new YDFSFile( $cacheFName );
+
+                        // Output the contents
+                        return gzuncompress( $file->getContents() );
+                        
+                    };
 
                 }
 
             }
 
             // Create a new HTTP client
-            $client = new HttpClient( $this->getHost(), $port );
-            $client->useGzip( true );
-            $client->setDebug( YD_DEBUG );
-            $client->path = $this->getUrl();
-            $client->method = 'GET';
-            $client->referer = $this->getUrl();
+            $client = $this->_getHttpClient();
 
             // Now send the request
             $result = $client->doRequest();
@@ -330,6 +295,93 @@
 
             // Return the matches
             return $matches;
+
+        }
+
+        /**
+         *  This function retrieves the header information for the specified URL.
+         *
+         *  @return Array containing the headers fors the URL
+         */
+        function getHeaders() {
+
+            // Get the head of the file
+            $client = $this->_getHttpClient();
+            $client->method = 'HEAD';
+            $client->headers_only = true;
+            $result = $client->doRequest();
+
+            // Check the result
+            if ( $result === false ) {
+                new YDFatalError(
+                    'Failed to retrieve the data from the url "' 
+                    . $this->getUrl() . '". ' . $client->getError()
+                );
+            } else {
+                return $client->headers;
+            }
+
+        }
+
+        /**
+         *  This function retrieves the header information for the specified URL.
+         *
+         *  @return Array containing the headers fors the URL
+         */
+        function getStatus() {
+
+            // Get the head of the file
+            $client = $this->_getHttpClient();
+            $client->method = 'HEAD';
+            $client->headers_only = true;
+            $result = $client->doRequest();
+
+            // Check the result
+            if ( $result === false ) {
+                new YDFatalError(
+                    'Failed to retrieve the data from the url "' 
+                    . $this->getUrl() . '". ' . $client->getError()
+                );
+            } else {
+                return intval( $client->status );
+            }
+
+        }
+
+        /**
+         *  This function will return an already setup HTTP client object.
+         *
+         *  @internal
+         *
+         *  @returns A new HttpClient class instance.
+         */
+        function _getHttpClient() {
+
+            // Include the HTTP client
+            require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
+
+            // Check the URL scheme
+            if ( $this->getScheme() != 'http' ) {
+                new YDFatalError( 'getContents: Only HTTP URLs are supported.' );
+            }
+
+            // Default to port 80
+            if ( $this->getPort() == null ) {
+                $port = 80;
+            } else {
+                $port = $this->getPort();
+            }
+
+            // Get the head of the file
+            $client = new HttpClient( $this->getHost(), $port );
+            $client->useGzip( true );
+            $client->setDebug( YD_DEBUG );
+            $client->path = $this->getUrl();
+            $client->referer = $this->getUrl();
+            $client->method = 'GET';
+
+            // Return the client
+            return $client;
 
         }
 
