@@ -34,7 +34,6 @@
 		 *	@returns	Boolean indicating if the database type is supported by the server.
 		 */
 		function isSupported() {
-			$this->connect();
 			return extension_loaded( 'pgsql' );
 		}
 
@@ -44,6 +43,7 @@
 		 *	@returns	The version of the database server software.
 		 */
 		function getServerVersion() {
+			$this->connect();
 			return 'PostgreSQL ' . pg_version();
 		}
 
