@@ -229,6 +229,16 @@
                 <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=htmlarea.php">htmlarea.php</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="bbcode.php">BBCode conversion</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=bbcode.php">bbcode.php</a>
+                <br/>
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=bbcode.txt">bbcode.txt</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>

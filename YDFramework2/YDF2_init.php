@@ -227,6 +227,17 @@
         define( 'YD_ERR_HANDLER', 'YDErrorHandler' );
     }
 
+    /**
+     *  @enum YD_BB_PARSER
+     *        This is the name of the class that will be used to parse BBCode
+     *        style tags.
+     * 
+     *  @internal
+     */
+    if ( ! defined( 'YD_BB_PARSER' ) ) {
+        define( 'YD_BB_PARSER', 'YDBBCode' );
+    }
+
     // Get debugging mode
     if ( ! defined( 'YD_DEBUG' ) ) {
         if ( $_GET['YD_DEBUG'] == 1 ) {
