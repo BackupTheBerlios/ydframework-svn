@@ -21,7 +21,7 @@
         function actionDefault() {
 
             // Make the database connection
-            $db = mysql_pconnect( 'localhost', 'root', '' );
+            $db = mysql_connect( 'localhost', 'root', '' );
             $result = mysql_select_db( 'test' );
 
             // Check for errors
@@ -46,6 +46,9 @@
                 $this->setVar( 'variables', $data );
 
             }
+
+            // Close the database query
+            mysql_close( $db );
 
             // Output the template
             $this->outputTemplate();

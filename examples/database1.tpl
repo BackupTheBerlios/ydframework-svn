@@ -14,8 +14,6 @@
         <p style="color: red"><b>ERROR: <?= $error ?></b></p>
     <?php } else { ?>
 
-        <p>Connected succesfully to database alias <b><?= $YD_GET['id'] ?></b>!</p>
-
         <?php if ( $processList ) { ?>
             <p><b>show processlist</b></p>
             <p><table border="1" cellspacing="0" cellpadding="4">
