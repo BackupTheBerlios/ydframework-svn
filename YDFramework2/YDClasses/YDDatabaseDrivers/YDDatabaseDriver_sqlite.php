@@ -63,6 +63,21 @@
 		}
 
 		/**
+		 *	This function will return a single record.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single record matching the SQL statement.
+		 */
+		function getRecord( $sql ) {
+			$this->connect();
+			$dataset = array();
+			$result = sqlite_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			return sqlite_fetch_array( $result, SQLITE_ASSOC );
+		}
+
+		/**
 		 *	This function will close the database connection.
 		 */
 		function close() {

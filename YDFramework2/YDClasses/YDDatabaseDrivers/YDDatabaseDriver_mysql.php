@@ -71,6 +71,23 @@
 		}
 
 		/**
+		 *	This function will return a single record.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single record matching the SQL statement.
+		 */
+		function getRecord( $sql ) {
+			$this->connect();
+			$dataset = array();
+			$result = mysql_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$record = mysql_fetch_assoc( $result );
+			mysql_free_result( $result );
+			return $record;
+		}
+
+		/**
 		 *	This function will close the database connection.
 		 */
 		function close() {

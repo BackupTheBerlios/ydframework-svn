@@ -59,6 +59,13 @@
 		function getValue( $sql ) {
 		}
 
+		/**
+		 *	This function will return a single record.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single record matching the SQL statement.
+		 */
 		function getRecord( $sql ) {
 		}
 
