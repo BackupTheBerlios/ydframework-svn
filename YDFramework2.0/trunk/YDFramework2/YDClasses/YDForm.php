@@ -537,7 +537,10 @@
 
 			// Add the timestamp if needed
 			if ( method_exists( $element, 'getTimeStamp' ) ) {
-				$value['timestamp'] = $element->getTimeStamp();
+				if ( ! is_array( $value ) ) {
+					$value = $element->_value;
+				}
+				@ $value['timestamp'] = $element->getTimeStamp();
 			}
 
 			// Unset the element
