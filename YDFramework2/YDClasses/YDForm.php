@@ -105,7 +105,7 @@
 
             // Initialize the parent class
             $this->HTML_QuickForm(
-                $name, $method, YD_SELF_URI, '', $params, $target, $attributes
+                $name, $method, YD_SELF_URI, $target, $attributes
             );
 
         }
