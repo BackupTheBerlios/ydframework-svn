@@ -277,6 +277,23 @@
 		}
 
 		/**
+		 *	This function will remove the specified form element.
+		 *
+		 *	@param $name	The name of the form element.
+		 */
+		function removeElement( $name ) {
+
+			// Check if the element exists
+			if ( ! array_key_exists( $name, $this->_elements ) ) {
+				trigger_error( 'The specified element "' . $name . '" does not exist.', YD_ERROR );
+			}
+
+			// Get the element
+			unset( $this->_elements[ $name ] );
+
+		}
+
+		/**
 		 *	This function will return a reference to the specified form element.
 		 *
 		 *	@param $name	The name of the form element.
