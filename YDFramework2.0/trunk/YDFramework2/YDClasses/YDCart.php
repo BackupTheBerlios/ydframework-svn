@@ -21,8 +21,6 @@
 		 *	Class constructor for the YDCart class.
 		 *
 		 *	@param $session_var		(optional) Name to use in the session var - $_SESSION[ $session_var ]
-		 *
-		 *	@deprecated	 			Use the static method getInstance to get a new YDCart class instance.
 		 */			
 		function YDCart( $session_var='YDCart' ) {			
 		
