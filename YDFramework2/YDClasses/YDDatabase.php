@@ -136,7 +136,7 @@
 		 *	@returns	The number of queries that were executed.
 		 */
 		function getSqlCount() {
-			return $this->_sqlCount;
+			return sizeof( $GLOBALS['YD_SQL_QUERY'] );
 		}
 
 		/**
