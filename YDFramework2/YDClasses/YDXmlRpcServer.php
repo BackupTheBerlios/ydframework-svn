@@ -108,9 +108,6 @@
                 $methods[ $method ] = $methodInfo;
 
             }
-            
-            // Just show the contents
-            //YDDebugUtil::dump( $methods );
 
             // Create a new template
             require_once( 'YDTemplate.php' );
@@ -119,12 +116,11 @@
             $template = new YDTemplate();
             $template->setVar( 'methods', $methods );
             $template->setVar( 'xmlRpcUrl', $this->getCurrentUrl() );
+            $template->setVar( 'capabilities', $this->getCapabilities( null ) );
+            $template->setVar( 'rowcolor', '#EEEEEE' );
             echo( $template->getOutput(
                 dirname( __FILE__ ) . '/YDXmlRpcServer' 
             ) );
-
-            // Raise a fatal error.
-            //new YDFatalError( 'XML-RPC server accepts POST requests only.' );
 
         }
 
