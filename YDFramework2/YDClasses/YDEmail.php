@@ -165,12 +165,12 @@
 
 			// Check if there is a to address
 			if ( sizeof( $this->to_plain ) == 0 ) {
-				YDFatalError( 'You need to specify at least one recipient in the YDEmail class'	);
+				trigger_error( 'You need to specify at least one recipient in the YDEmail class', YD_ERROR );
 			}
 
 			// Check if there is a to address
 			if ( empty( $this->sender ) ) {
-				YDFatalError( 'You need to specify who this email message coming from.' );
+				trigger_error( 'You need to specify who this email message coming from.', YD_ERROR );
 			}
 
 			// Get the original the message

@@ -224,7 +224,7 @@
 
 			// Check if the element type is known
 			if ( ! array_key_exists( $type, $this->_regElements ) ) {
-				YDFatalError( 'Unknown for element type "' . $type . '" for element "' . $name . '".' );
+				trigger_error( 'Unknown for element type "' . $type . '" for element "' . $name . '".', YD_ERROR );
 			}
 
 			// Include the element file
@@ -287,7 +287,7 @@
 
 			// Check if the element exists
 			if ( ! array_key_exists( $name, $this->_elements ) ) {
-				YDFatalError( 'The specified element "' . $name . '" does not exist.' );
+				trigger_error( 'The specified element "' . $name . '" does not exist.', YD_ERROR );
 			}
 
 			// Get the element
@@ -308,7 +308,7 @@
 
 			// Check if it's a known filter
 			if ( ! array_key_exists( $filter, $this->_regFilters ) ) {
-				YDFatalError( 'Unknown filter "' . $filter . '" for element "' . $element . '"' );
+				trigger_error( 'Unknown filter "' . $filter . '" for element "' . $element . '"', YD_ERROR );
 			}
 
 			// Include the filter file
@@ -336,7 +336,7 @@
 
 			// Check if it's a known filter
 			if ( ! array_key_exists( $rule, $this->_regRules ) ) {
-				YDFatalError( 'Unknown rule "' . $rule . '" for element "' . $element . '"' );
+				trigger_error( 'Unknown rule "' . $rule . '" for element "' . $element . '"', YD_ERROR );
 			}
 
 			// Include the rule file
@@ -498,7 +498,7 @@
 
 						// Check if the rule exists
 						if ( ! array_key_exists( $rule['rule'], $this->_regRules ) ) {
-							YDFatalError( 'Unknown rule: ' . $rule['rule'] );
+							trigger_error( 'Unknown rule: ' . $rule['rule'], YD_ERROR );
 						}
 
 						// Get the rule details
@@ -506,7 +506,9 @@
 
 						// Check if the callback is valid
 						if ( ! is_callable( $ruleDetails['callback'] ) ) {
-							YDFatalError( 'The callback specified for the rule "' . $rule['rule'] . '" is not valid' );
+							trigger_error(
+								'The callback specified for the rule "' . $rule['rule'] . '" is not valid', YD_ERROR
+							);
 						}
 
 						// Check the rule
@@ -535,7 +537,7 @@
 
 				// Check if the callback is valid
 				if ( ! is_callable( $rule ) ) {
-					YDFatalError( 'The callback specified for the form "' . $rule . '" is not valid' );
+					trigger_error( 'The callback specified for the form "' . $rule . '" is not valid', YD_ERROR );
 				}
 
 				// Get the form values
@@ -736,7 +738,9 @@
 				if ( is_array( $this->_filters[ $name ] ) ) {
 					foreach ( $this->_filters[ $name ] as $filter ) {
 						if ( ! is_callable( $this->_regFilters[ $filter ]['callback'] ) ) {
-							YDFatalError( 'The callback specified for the filter "' . $name . '" is not valid' );
+							trigger_error(
+								'The callback specified for the filter "' . $name . '" is not valid', YD_ERROR
+							);
 						}
 						if ( is_array( $value ) ) {
 							foreach ( $value as $key=>$x ) {

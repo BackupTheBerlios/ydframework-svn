@@ -131,9 +131,9 @@
 			if ( ! in_array(
 				$format, array( 'RSS0.91', 'RSS1.0', 'RSS2.0', 'ATOM' )
 			) ) {
-				YDFatalError(
+				trigger_error(
 					'The YDFeedCreator does not support the format called "' . $format . '". Only the formats "RSS0.91"'
-					. ', "RSS1.0", "RSS2.0" and "ATOM" are supported.'
+					. ', "RSS1.0", "RSS2.0" and "ATOM" are supported.', YD_ERROR
 				);
 			}
 

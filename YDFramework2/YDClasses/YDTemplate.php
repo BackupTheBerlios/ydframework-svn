@@ -95,7 +95,7 @@
 
 			// Check if the file exists
 			if ( ! is_file( $tplPath ) ) {
-				YDFatalError( 'Template not found: ' . $tplPath );
+				trigger_error( 'Template not found: ' . $tplPath, YD_ERROR );
 			}
 
 			// Include smarty

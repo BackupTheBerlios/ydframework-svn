@@ -73,6 +73,11 @@
 		@define( 'YD_PATHDELIM', ':' );
 	}
 
+	// Error constants
+	@define( 'YD_ERROR', E_USER_ERROR );
+	@define( 'YD_WARNING', E_USER_WARNING );
+	@define( 'YD_NOTICE', E_USER_NOTICE );
+
 	// Start the session
 	@session_start();
 
@@ -106,32 +111,6 @@
 		}
 	}
 
-	/**
-	 *	This function defines a fatal error.
-	 *
-	 *	@param $error Error message.
-	 */
-	if ( ! function_exists( 'YDFatalError' ) ) {
-		function YDFatalError( $error ) { YDStackTrace(); trigger_error( $error, E_USER_ERROR ); }
-	}
-
-	/**
-	 *	This function defines a warning.
-	 *
-	 *	@param $error Error message.
-	 */
-	if ( ! function_exists( 'YDWarning' ) ) {
-		function YDWarning( $error ) { trigger_error( $error, E_USER_WARNING ); }
-	}
-
-	/**
-	 *	This function defines a notice.
-	 *
-	 *	@param $error Error message.
-	 */
-	if ( ! function_exists( 'YDNotice' ) ) {
-		function YDNotice( $error ) { trigger_error( $error, E_USER_NOTICE ); }
-	}
 
 	// Update the include path
 	$includePath = YD_SELF_DIR;
@@ -158,7 +137,7 @@
 
 	// Check if we have the right PHP version
 	if ( version_compare( phpversion(), '4.2.0' ) == -1 ) {
-		YDFatalError( 'PHP version 4.2.0 or greater is required.' );
+		trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
 	}
 
 	/**

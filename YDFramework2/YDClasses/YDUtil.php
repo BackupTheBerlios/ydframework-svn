@@ -78,7 +78,9 @@
 
 			// Use the array_chunk function to convert to a table
 			$newArray = @array_chunk( $array, $columns );
-			if ( $newArray == null ) { YDFatalError( 'Failed to split the array in chunks.' ); }
+			if ( $newArray == null ) {
+				trigger_error( 'Failed to split the array in chunks.', YD_ERROR );
+			}
 
 			// Pad the last row
 			if ( $fillLastRow ) {
@@ -111,7 +113,7 @@
 			// Loop over the original array
 			foreach ( $array as $item ) {
 				if ( ! array_key_exists( $key, $item ) ) {
-					YDFatalError( 'YDArrayUtil::convertToNested: key "' . $key . '" not found' );
+					trigger_error( 'YDArrayUtil::convertToNested: key "' . $key . '" not found', YD_ERROR );
 				}
 				if ( ! isset( $new[ $item[ $key ] ] ) ) { $new[ $item[ $key ] ] = array(); }
 				array_push( $new[ $item[ $key ] ], $item );
@@ -240,7 +242,9 @@
 		 */
 		function serialize( $obj ) {
 			$obj = serialize( $obj );
-			if ( ! $obj ) { YDFatalError( 'Failed serializing the object' ); }
+			if ( ! $obj ) { 
+				trigger_error( 'Failed serializing the object', YD_ERROR );
+			}
 			return $obj;
 		}
 
@@ -251,7 +255,9 @@
 		 */
 		function unserialize( $obj ) {
 			$obj = unserialize( $obj );
-			if ( ! $obj ) { YDFatalError( 'Failed unserializing the object' ); }
+			if ( ! $obj ) {
+				trigger_error( 'Failed unserializing the object', YD_ERROR );
+			}
 			return $obj;
 		}
 

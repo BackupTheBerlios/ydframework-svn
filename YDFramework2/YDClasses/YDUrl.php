@@ -233,8 +233,9 @@
 
 			// Check if there was a result
 			if ( $result == false ) {
-				YDFatalError(
-					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError()
+				trigger_error(
+					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
+					YD_ERROR
 				);
 			} else {
 				$data = $client->getContent();
@@ -283,8 +284,9 @@
 			$client->headers_only = true;
 			$result = $client->doRequest();
 			if ( $result == false ) {
-				YDFatalError(
-					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError()
+				trigger_error(
+					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
+					YD_ERROR
 				);
 			} else {
 				return $client->headers;
@@ -302,8 +304,9 @@
 			$client->headers_only = true;
 			$result = $client->doRequest();
 			if ( $result == false ) {
-				YDFatalError(
-					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError()
+				trigger_error(
+					'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
+					YD_ERROR
 				);
 			} else {
 				return intval( $client->status );
@@ -320,7 +323,7 @@
 		function _getHttpClient() {
 			require_once( 'YDHttpClient.php' );
 			if ( $this->getScheme() != 'http' ) {
-				YDFatalError( 'getContents: Only HTTP URLs are supported.' );
+				trigger_error( 'getContents: Only HTTP URLs are supported.', YD_ERROR );
 			}
 			$client = new YDHttpClient( $this->getHost(), $this->getPort() );
 			$client->path = $this->getUri();

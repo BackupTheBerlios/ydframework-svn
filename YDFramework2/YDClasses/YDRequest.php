@@ -168,7 +168,9 @@
 		 */
 		function addForm( $name, $form ) {
 			if ( ! YDObjectUtil::isSubclass( $form, 'YDForm' ) ) {
-				YDFatalError( 'The form you have tried to add to the form is not a subclass of the YDForm class.' );
+				trigger_error(
+					'The form you have tried to add to the form is not a subclass of the YDForm class.', YD_ERROR
+				);
 			}
 			$this->setVar( $name, $form->toArray( $this->template ) );
 		}
@@ -236,9 +238,9 @@
 		 *	@param $action	The name of the action that is missing.
 		 */
 		function errorMissingAction( $action ) {
-			YDFatalError(
+			trigger_error(
 				'Class ' . get_class( $this ) . ' does not contain an action called "' . strtolower( $action ) . '" '
-				. '(function name).'
+				. '(function name).', YD_ERROR
 			);
 		}
 
@@ -302,7 +304,7 @@
 		 *	request. You will need to override this function in the classes that implement the YDRequest class.
 		 */
 		function authenticationFailed() {
-			YDFatalError( 'Authentication failed.' );
+			trigger_error( 'Authentication failed.', YD_ERROR );
 		}
 
 		/**
@@ -323,7 +325,7 @@
 		 *	executed. You will need to override this function in the classes that implement the YDRequest class.
 		 */
 		function actionNotAllowed() {
-			YDFatalError( 'You are not allow to access the action "' . $this->getActionName() . '"' );
+			trigger_error( 'You are not allow to access the action "' . $this->getActionName() . '"', YD_ERROR );
 		}
 
 	}

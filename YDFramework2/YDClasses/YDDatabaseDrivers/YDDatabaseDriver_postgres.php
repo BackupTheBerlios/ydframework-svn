@@ -65,7 +65,9 @@
 				}
 				$connstr = implode( ' ', $connstr );
 				$conn = pg_connect( $connstr );
-				if ( ! $conn ) { YDFatalError( pg_last_error( $conn ) ); }
+				if ( ! $conn ) {
+					trigger_error( pg_last_error( $conn ), YD_ERROR );
+				}
 				$this->_conn = $conn;
 			}
 		}
@@ -162,7 +164,9 @@
 			$this->_logSql( $sql );
 			$this->connect();
 			$result = @pg_query( $this->_conn, $sql );
-			if ( ! $result ) { YDFatalError( pg_last_error( $this->_conn ) ); }
+			if ( ! $result ) {
+				trigger_error( pg_last_error( $conn ), YD_ERROR );
+			}
 			return $result;
 		}
 

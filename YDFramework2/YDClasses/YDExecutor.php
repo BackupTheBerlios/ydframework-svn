@@ -39,17 +39,17 @@
 			// Check if the object a YDRequest object
 			if ( ! YDObjectUtil::isSubClass( $clsInst, 'YDRequest' ) ) {
 				$ancestors = YDObjectUtil::getAncestors( $clsInst );
-				YDFatalError(
+				trigger_error(
 					'Class "' . $clsName . '" should be derived from the YDRequest class. Currently, this class has the '
-					. 'following ancestors: ' . implode( ' -&gt; ', $ancestors )
+					. 'following ancestors: ' . implode( ' -&gt; ', $ancestors ), YD_ERROR
 				);
 			}
 
 			// Check if the class is properly initialized
 			if ( $clsInst->isInitialized() != true ) {
-				YDFatalError(
+				trigger_error(
 					'Class "' . $clsName . '" is not initialized properly. Make  sure loaded the base class YDRequest '
-					. 'and initialized it.'
+					. 'and initialized it.', YD_ERROR
 				);
 			}
 

@@ -53,8 +53,12 @@
 		function connect() {
 			if ( $this->_conn == null ) {
 				$conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-				if ( ! $conn ) { YDFatalError( mysql_error() ); }
-				if ( ! @mysql_select_db( $this->_db, $conn ) ) { YDFatalError( mysql_error( $conn ) ); }
+				if ( ! $conn ) {
+					trigger_error( mysql_error(), YD_ERROR );
+				}
+				if ( ! @mysql_select_db( $this->_db, $conn ) ) {
+					trigger_error( mysql_error( $conn ), YD_ERROR );
+				}
 				$this->_conn = $conn;
 			} else {
 				@mysql_ping( $this->_conn );
@@ -170,7 +174,7 @@
 			$this->connect();
 			$result = @mysql_query( $sql, $this->_conn );
 			if ( ! $result ) { 
-				YDFatalError( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ) );
+				trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
 			}
 			return $result;
 		}

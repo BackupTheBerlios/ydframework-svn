@@ -122,7 +122,7 @@
 			array_unshift( $args, $method );
 			$result = call_user_func_array( array( & $this->_client, 'query' ), $args );
 			if ( $result == false ) {
-				YDFatalError( $this->_client->getErrorMessage() );
+				trigger_error( $this->_client->getErrorMessage(), YD_ERROR );
 			}
 			return $this->_client->getResponse();
 		}
@@ -253,7 +253,7 @@
 			if ( ! $this->isXmlRpcRequest() ) {
 				return new IXR_Error( -100001, $err );
 			} else {
-				YDFatalError( $err );
+				trigger_error( $err, YD_ERROR );
 			}
 		}
 
@@ -266,7 +266,7 @@
 			if ( ! $this->isXmlRpcRequest() ) {
 				return new IXR_Error( -100002, $err );
 			} else {
-				YDFatalError( $err );
+				trigger_error( $err, YD_ERROR );
 			}
 		}
 
@@ -279,7 +279,7 @@
 			if ( ! $this->isXmlRpcRequest() ) {
 				return new IXR_Error( -100002, $err );
 			} else {
-				YDFatalError( $err );
+				trigger_error( $err, YD_ERROR );
 			}
 		}
 

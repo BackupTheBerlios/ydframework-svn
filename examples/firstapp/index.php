@@ -22,7 +22,7 @@
 
 			// Check if the data directory is writeable
 			if ( ! $this->dataDir->isWriteable() ) {
-				YDFatalError( 'Data directory must be writable!' );
+				trigger_error( 'Data directory must be writable!', YD_ERROR );
 			}
 
 		}

@@ -37,7 +37,7 @@
 
 			// Check if the driver exists
 			if ( ! array_key_exists( strtolower( $driver ), $this->_regDrivers ) ) {
-				YDFatalError( 'Unsupported database type: "' . $driver . '".' );
+				trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
 			}
 
 			// Include the driver
@@ -47,7 +47,7 @@
 
 			// Check if the driver is supported
 			if ( ! call_user_func( array( $this->_regDrivers[ strtolower( $driver ) ]['class'], 'isSupported' ) ) ) {
-				YDFatalError( 'Unsupported database type: "' . $driver . '". Extension is not loaded.' );
+				trigger_error( 'Unsupported database type: "' . $driver . '". Extension is not loaded.', YD_ERROR );
 			}
 
 			// Make a new connection object and return it
@@ -379,7 +379,9 @@
 		function _createSqlInsert( $table, $values ) {
 
 			// Check if there are values
-			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
+			if ( empty( $table ) ) {
+				trigger_error( 'No table specified for the INSERT statement.', YD_ERROR );
+			}
 
 			// Get the list of field names and values
 			$ifields = array();
@@ -392,7 +394,9 @@
 			}
 
 			// Check if there are values
-			if ( sizeof( $ifields ) == 0 ) { YDFatalError( 'No values were submitted for the INSERT statement.' ); }
+			if ( sizeof( $ifields ) == 0 ) {
+				trigger_error( 'No values were submitted for the INSERT statement.', YD_ERROR );
+			}
 
 			// Convert the fields and values to a string
 			$ifields = implode( ',', $ifields );
@@ -420,7 +424,9 @@
 		function _createSqlUpdate( $table, $values, $where='' ) {
 
 			// Check if there are values
-			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
+			if ( empty( $table ) ) {
+				trigger_error( 'No table specified for the INSERT statement.', YD_ERROR );
+			}
 
 			// Get the list of field names and values
 			$uvalues = array();
@@ -431,7 +437,9 @@
 			}
 
 			// Check if there are values
-			if ( sizeof( $uvalues ) == 0 ) { YDFatalError( 'No values were submitted for the UPDATE statement.' ); }
+			if ( sizeof( $uvalues ) == 0 ) {
+				trigger_error( 'No values were submitted for the UPDATE statement.', YD_ERROR );
+			}
 
 			// Convert the fields and values to a string
 			$uvalues = implode( ',', $uvalues );

@@ -25,7 +25,7 @@
 
 			// Fail if directory
 			if ( ! is_file( $path ) ) {
-				YDFatalError( 'The file with path "' . $path . '" does not exist.' );
+				trigger_error( 'The file with path "' . $path . '" does not exist.', YD_ERROR );
 			}
 
 			// Save the path
@@ -113,7 +113,7 @@
 
 			// Check that length is a positive integer
 			if ( $length < 1 ) {
-				YDFatalError( 'getContents: Length should be a positive integer.' );
+				trigger_error( 'getContents: Length should be a positive integer.', YD_ERROR );
 			}
 
 			// Variable to hold the return data
@@ -124,7 +124,7 @@
 
 			// Check if we were able to open the file
 			if ( $file == false ) {
-				YDFatalError( 'The file with path "' . $path . '" could not be read.' );
+				trigger_error( 'The file with path "' . $path . '" could not be read.', YD_ERROR );
 			}
 
 			// Find the start position
@@ -154,9 +154,9 @@
 
 			// Check for the getimagesize function
 			if ( ! function_exists( 'getimagesize' ) ) {
-				YDFatalError(
+				trigger_error(
 					'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
-					. 'using the YDFSImage::getImageSize function.'
+					. 'using the YDFSImage::getImageSize function.', YD_ERROR
 				);
 			}
 
@@ -252,9 +252,9 @@
 
 			// Check for the getimagesize function
 			if ( ! function_exists( 'getimagesize' ) ) {
-				YDFatalError(
+				trigger_error(
 					'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
-					. 'using the YDFSImage::getImageSize function.'
+					. 'using the YDFSImage::getImageSize function.', YD_ERROR
 				);
 			}
 
@@ -310,8 +310,9 @@
 			}
 
 			// Raise error about unsupported image type
-			YDFatalError(
-				'The getImageType function does not support the file format of the file "' . $this->getAbsolutePath() . '".'
+			trigger_error(
+				'The getImageType function does not support the file format of the file "'
+				. $this->getAbsolutePath() . '".', YD_ERROR
 			);
 
 		 }
@@ -434,7 +435,7 @@
 
 			// Fail if directory
 			if ( ! is_dir( $path ) ) {
-				YDFatalError( 'The directory with path "' . $path . '" does not exist.' );
+				trigger_error( 'The directory with path "' . $path . '" does not exist.', YD_ERROR );
 			}
 
 			// Save the path
@@ -554,8 +555,9 @@
 
 			// Check for errors
 			if ( $result == false ) {
-				YDFatalError(
-					'Failed writing to the file "' . $file . '" in the directory called "' . $this->getPath() . '".'
+				trigger_error(
+					'Failed writing to the file "' . $file . '" in the directory called "' . $this->getPath() . '".',
+					YD_ERROR
 				);
 			}
 
@@ -597,8 +599,9 @@
 
 					// Check if we need to raise an error
 					if ( $failOnError == true ) {
-						YDFatalError(
-							'Failed deleting the file "' . $file . '" from the directory "' . $this->getPath() . '".'
+						trigger_error(
+							'Failed deleting the file "' . $file . '" from the directory "' . $this->getPath() . '".',
+							YD_ERROR
 						);
 					}
 
