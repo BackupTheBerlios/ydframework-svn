@@ -87,7 +87,7 @@
             $action = 'action' . $this->clsInst->getActionName();
 
             // Check if the action exists
-            if ( ! method_exists( $this->clsInst, $action ) ) {
+            if ( ! $this->clsInst->hasMethod( $action ) ) {
                 $this->clsInst->errorMissingAction( $action );
                 $this->finish();
             }

@@ -545,7 +545,7 @@
             }
 
             // Add the timestamp if needed
-            if ( method_exists( $element, 'getTimeStamp' ) ) {
+            if ( $element->hasMethod( 'getTimeStamp' ) ) {
                 if ( ! is_array( $value ) ) {
                     $element->setValue( $value );
                     $value = $element->_value;
@@ -723,7 +723,7 @@
                         $values = array();
                         foreach ( $rule['elements'] as $element ) {
                             $obj = & $this->getElement( $element );
-                            if ( method_exists( $obj, 'getTimeStamp' ) ) {
+                            if ( $obj->hasMethod( 'getTimeStamp' ) ) {
                                 array_push( $values, $obj->getTimeStamp() );
                             } else {
                                 array_push( $values, $this->getValue( $element ) );
@@ -747,7 +747,7 @@
                         $values = array();
                         foreach ( $rule['elements'] as $element ) {
                             $obj = & $this->getElement( $element );
-                            if ( method_exists( $obj, 'getTimeStamp' ) ) {
+                            if ( $obj->hasMethod( 'getTimeStamp' ) ) {
                                 array_push( $values, $obj->getTimeStamp() );
                             } else {
                                 array_push( $values, $this->getValue( $element ) );
