@@ -47,9 +47,6 @@
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
-			// Set the automatic rules
-			$this->_autoRules = array( array( 'date', 'Value is not a valid date' ) );
-
 			// The default value is an array
 			$this->_value = array();
 
@@ -99,15 +96,17 @@
 					$val = intval( $val );
 				}
 				$now = getdate( $val );
+				$this->_value = array();
 				$this->_value['day'] = $now['mday'];
 				$this->_value['month'] = $now['mon'];
 				$this->_value['year'] = $now['year'];
-			}
-			if ( $val == array() ) {
+			} elseif ( $val == array() ) {
 				$now = getdate();
 				$this->_value['day'] = $now['mday'];
 				$this->_value['month'] = $now['mon'];
 				$this->_value['year'] = $now['year'];
+			} else {
+				$this->_value = $val;
 			}
 		}
 		
@@ -120,8 +119,8 @@
 		 *	@returns	An integer with the current date/time stamp.
 		 */
 		function getTimeStamp( $format=null ) {
-			$this->_value = $this->setValue( $this->_value );
-			$tstamp = mktime( 0, 0, 0, $this->_value['month'], $this->_value['day'], $this->_value['year'] );
+			$this->setValue( $this->_value );
+			$tstamp = mktime( 11, 0, 0, $this->_value['month'], $this->_value['day'], $this->_value['year'] );
 			if ( is_null( $format ) ) {
 				return $tstamp;
 			} else {
@@ -136,18 +135,8 @@
 		 */
 		function toHtml() {
 		
-			// Fix up the value
-			if ( ! is_array( $this->_value ) ) {
-				if ( is_int( $this->_value ) ) {
-					$value = getdate( $this->_value );
-				} else {
-					$value = getdate( strtotime( $this->_value ) );
-				}
-				$this->_value = array();
-				$this->_value['day'] = $value['mday'];
-				$this->_value['month'] = $value['mon'];
-				$this->_value['year'] = $value['year'];
-			}
+			// Update the value
+			$this->setValue( $this->_value );
 
 			// Convert to HTML
 			$this->day->_value = isset( $this->_value['day'] ) ? $this->_value['day'] : '';

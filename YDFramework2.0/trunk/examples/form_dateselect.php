@@ -43,6 +43,9 @@
 					'datetimeSelect2' => time() + 3600 * 24,
 				)
 			);
+			
+			// Display the form
+			$form->display();
 
 			// Show the contents of the form
 			if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
@@ -69,9 +72,6 @@
 				YDDebugUtil::dump( $elementDateTime->getTimeStamp(), '$elementDateTime->getTimeStamp()' );
 				YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%H:%M" )' );
 			}
-			
-			// Display the form
-			$form->display();
 
 		}
 

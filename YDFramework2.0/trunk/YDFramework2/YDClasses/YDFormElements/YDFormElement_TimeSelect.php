@@ -47,9 +47,6 @@
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
-			// Set the automatic rules
-			$this->_autoRules = array( array( 'time', 'Value is not a valid time' ) );
-
 			// The default value is an array
 			$this->_value = array();
 
@@ -89,13 +86,15 @@
 					$val = intval( $val );
 				}
 				$now = getdate( $val );
+				$this->_value = array();
 				$this->_value['hours'] = $now['hours'];
 				$this->_value['minutes'] = $now['minutes'];
-			}
-			if ( $val == array() ) {
+			} elseif ( $val == array() ) {
 				$now = getdate();
 				$this->_value['hours'] = $now['hours'];
 				$this->_value['minutes'] = $now['minutes'];
+			} else {
+				$this->_value = $val;
 			}
 		}
 
@@ -108,8 +107,8 @@
 		 *	@returns	An integer with the current date/time stamp.
 		 */
 		function getTimeStamp( $format=null ) {
-			$this->_value = $this->setValue( $this->_value );
-			$tstamp = mktime( $this->_value['hours'], $this->_value['minutes'], 0, 1, 1, 1970 );
+			$this->setValue( $this->_value );
+			$tstamp = mktime( $this->_value['hours'], $this->_value['minutes'], 0, 1, 1, 1980 );
 			if ( is_null( $format ) ) {
 				return $tstamp;
 			} else {
@@ -123,18 +122,9 @@
 		 *	@returns	The form element as HTML text.
 		 */
 		function toHtml() {
-
-			// Fix up the value
-			if ( ! is_array( $this->_value ) ) {
-				if ( is_int( $this->_value ) ) {
-					$value = getdate( $this->_value );
-				} else {
-					$value = getdate( strtotime( $this->_value ) );
-				}
-				$this->_value = array();
-				$this->_value['hours'] = $value['hours'];
-				$this->_value['minutes'] = $value['minutes'];
-			}
+		
+			// Update the value
+			$this->setValue( $this->_value );
 
 			// Convert to HTML
 			$this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';

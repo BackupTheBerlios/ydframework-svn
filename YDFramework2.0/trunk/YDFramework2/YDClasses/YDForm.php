@@ -325,7 +325,6 @@
 			if ( sizeof( $elementVars ) == 0 )  {
 				if ( ! $this->isSubmitted() ) {
 					if ( isset( $this->_defaults[ $name ] ) ) {
-						//$instance->_value = $this->_defaults[ $name ];
 						$instance->setValue( $this->_defaults[ $name ] );
 					}
 				}
@@ -337,11 +336,6 @@
 
 			// Register the element in the class.
 			$this->_elements[ $name ] = $instance;
-
-			// Register the automatic rules if any
-			foreach ( $instance->_autoRules as $rule ) {
-				$this->addRule( $name, $rule[0], $rule[1] );
-			}
 
 			// Return the reference to the instance
 			return $this->_elements[ $name ];
@@ -1028,7 +1022,7 @@
 			$this->_type = '';
 			$this->_value = '';
 			$this->_isButton = false;
-			$this->_autoRules = array();
+			//$this->_autoRules = array();
 
 			// Indicate where the label should be
 			$this->_labelPlace = 'before';
