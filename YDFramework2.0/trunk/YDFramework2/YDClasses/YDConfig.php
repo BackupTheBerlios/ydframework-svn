@@ -45,16 +45,16 @@
 		/**
 		 *	This funtion add a new configuration variable to the configuration.
 		 *
-		 *	@param	$name	The name of the configuration variable.
-		 *	@param	$value	The value of the configuration variable.
+		 *	@param	$name		The name of the configuration variable.
+		 *	@param	$value		The value of the configuration variable.
+		 *	@param	$override	(optional) Override the current value or not. Default is true.
 		 */
-		function set( $name, $value ) {
-
-			// Initialize the global configuration if needed
-			YDConfig::init();
+		function set( $name, $value, $override=true ) {
 
 			// Set the new variable
-			$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+			if ( YDConfig::exists( $name ) && $override ) {
+				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+			}
 
 		}
 
