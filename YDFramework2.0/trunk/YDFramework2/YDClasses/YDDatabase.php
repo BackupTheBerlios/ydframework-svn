@@ -27,6 +27,10 @@
 
 	YDInclude( 'YDUrl.php' );
 
+	if ( ! defined( 'YD_DB_DEFAULTPAGESIZE' ) ) {
+		define( 'YD_DB_DEFAULTPAGESIZE', 20 );
+	}
+
 	/**
 	 *	This class defines a database object.
 	 */
@@ -138,11 +142,11 @@
 		 *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
 		 *						will be the same as the total number of rows in the recordset.
 		 */
-		function YDDatabaseSet( $records, $page=-1, $pagesize=20 ) {
+		function YDDatabaseSet( $records, $page=-1, $pagesize=YD_DB_DEFAULTPAGESIZE ) {
 
 			// Convert the page and pagesize to integers
 			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
-			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : 20;
+			$pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : YD_DB_DEFAULTPAGESIZE;
 
 			// This original recordset
 			$this->page = ( $page >= 1 ) ? $page : 1;
@@ -150,7 +154,7 @@
 			if ( $page == -1 ) {
 				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $records );
 			} else {
-				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : 20;
+				$this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YD_DB_DEFAULTPAGESIZE;
 			}
 
 			// Get the offset
@@ -183,9 +187,13 @@
 		/**
 		 *	This returns the URL to the previous page. If there is no previous page, it will return false.
 		 *
+		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *						"size"
+		 *
 		 *	@returns	The URL to the previous page or false if no previous page.
 		 */
-		function getPreviousUrl() {
+		function getPreviousUrl( $pagevar='page', $sizevar='size' ) {
 
 			// Return false if no previous page
 			if ( $this->isFirstPage ) {
@@ -193,28 +201,36 @@
 			}
 
 			// Return the updated URL
-			return $this->getPageUrl( $this->pagePrevious );
+			return $this->getPageUrl( $this->pagePrevious, $pagevar, $sizevar );
 
 		}
 
 		/**
 		 *	This returns the URL to the current page.
 		 *
+		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *						"size"
+		 *
 		 *	@returns	The URL to the current page.
 		 */
-		function getCurrentUrl() {
+		function getCurrentUrl( $pagevar='page', $sizevar='size' ) {
 
 			// Return the updated URL
-			return $this->getPageUrl( $this->page );
+			return $this->getPageUrl( $this->page, $pagevar, $sizevar );
 
 		}
 
 		/**
 		 *	This returns the URL to the next page. If there is no next page, it will return false.
 		 *
+		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *						"size"
+		 *
 		 *	@returns	The URL to the next page or false if no next page.
 		 */
-		function getNextUrl() {
+		function getNextUrl( $pagevar='page', $sizevar='size' ) {
 
 			// Return false if no next page
 			if ( $this->isLastPage ) {
@@ -222,18 +238,21 @@
 			}
 
 			// Return the updated URL
-			return $this->getPageUrl( $this->pageNext );
+			return $this->getPageUrl( $this->pageNext, $pagevar, $sizevar );
 
 		}
 
 		/**
 		 *	This function will update the query string to set the page size and page number.
 		 *
-		 *	@param	$page	The page number.
+		 *	@param	$page		The page number.
+		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *						"size"
 		 *
 		 *	@returns	The updated URL.
 		 */
-		function getPageUrl( $page ) {
+		function getPageUrl( $page, $pagevar='page', $sizevar='size'  ) {
 
 			// Doublecheck the pagenumber
 			$page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
@@ -245,8 +264,8 @@
 			$url = new YDUrl( YD_SELF_URI );
 
 			// Set the query variables
-			$url->setQueryVar( 'page', $page );
-			$url->setQueryVar( 'size', $this->pagesize );
+			$url->setQueryVar( $pagevar, $page );
+			$url->setQueryVar( $sizevar, $this->pagesize );
 
 			// Return the url
 			return $url->getUri();
