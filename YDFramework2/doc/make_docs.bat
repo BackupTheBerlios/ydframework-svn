@@ -10,4 +10,6 @@ doxygen docs_api.dxy
 
 rem Generate the actual documentation
 :docs
-call aurigadoc -pdf  -XML ydf2.xml -OUT ydf2_userguide.pdf
+rem call aurigadoc -pdf  -XML ydf2.xml -OUT ydf2_userguide.pdf
+lout -PDF ydf2.lt > ydf2_userguide.pdf
+lout -PDF ydf2.lt > ydf2_userguide.pdf

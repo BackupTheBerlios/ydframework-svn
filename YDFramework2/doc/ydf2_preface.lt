@@ -1,0 +1,19 @@
+@Preface @Begin
+
+@LP
+This User's Guide brings together in one document everything needed for the 
+day-to-day use of version 2.0.0 of the Yellow Duck Framework.
+
+@LP
+The Yellow Duck framework is web application framework created by Pieter 
+Claerhout. More information can be found on
+darkblue @Color { "http://www.yellowduck.be/ydf2/" }.
+
+@LP
+lines @Break {
+Author: Pieter Claerhout
+Email: darkblue @Color { "pieter@yellowduck.be" }
+Version: 2.0.0, june 2004
+}
+
+@End @Preface
