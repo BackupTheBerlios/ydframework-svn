@@ -248,4 +248,107 @@
 
     </sect1>
 
+    <sect1 id="ydtemplate_using_smarty">
+
+        <title>Using Smarty templates</title>
+
+        <para>In some cases, you will need a more advanced template engine. For these cases, there is a class called "YDTemplateSmarty" that enables you to use the full blown Smarty template engine in your templates. The API for this class is the same as for the SmartyLight based YDTemplate class, but nevertheless features some small differences:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>The syntax you need to use in the templates is the Smarty syntax, which is described on http://smarty.php.net/.</listitem>
+            <listitem>The assignObject function is the same as the assign function, basically keeping objects as objects instead of converting them to an array using the objects toArray() function.</listitem>
+            <listitem>The assignForm function still converts the form to an array.</listitem>
+        </itemizedlist>
+
+        <para>As you can see in the following example, there are some subtle differences:</para>
+
+        <para>The request class looks as follows:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDUtil.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
+
+    // Class definition
+    class template_smarty extends YDRequest {
+
+        // Class constructor
+        function template_smarty() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Create the template object
+            $tpl = new YDTemplateSmarty();
+
+            // Assign some stuff
+            $browser = new YDBrowserInfo();
+            $tpl->assign( 'browser', $browser );
+            $tpl->assign( 'array', $browser->toArray() );
+        
+            // Display the template
+            $tpl->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>The template looks as follows:</para>
+
+        <programlisting><![CDATA[<html>
+
+<head>
+
+    <title>{$YD_FW_NAMEVERS}</title>
+
+</head>
+
+<body>
+
+    {$YD_FW_NAMEVERS}
+
+    <p><b>Using an object</b></p>
+    <ul>
+        <li>{$browser->agent}</li>
+        <li>{$browser->browser}</li>
+        <li>{$browser->version}</li>
+        <li>{$browser->platform}</li>
+        <li>{$browser->dotnet|@dump}</li>
+        <li>{$browser->getBrowserLanguages()|@dump}</li>
+        <li>{$browser->getLanguage()}</li>
+    </ul>
+        
+    <p><b>Using an array</b></p>
+    <ul>
+        <li>{$array.agent}</li>
+        <li>{$array.browser}</li>
+        <li>{$array.version}</li>
+        <li>{$array.platform}</li>
+        <li>{$array.dotnet|@dump}</li>
+    </ul>
+
+</body>
+
+</html>]]></programlisting>
+
+        <para>The biggest new thing you can see here is that Smarty allows you to use real objects in the template code, using the same syntax as you use in PHP itself. This makes the code much cleaner and avoids a lot of unneccesary processing to convert objects into arrays suitable for the template engine.</para>
+
+        <warning>As Smarty is a much bigger library than Smarty Light, you might have a penalty in performance if you compare both template engines.</warning>
+
+        <para>For more information about the Smarty template engine, you can check the following website: http://smarty.php.net/</para>
+
+    </sect1>
+
 </chapter>
