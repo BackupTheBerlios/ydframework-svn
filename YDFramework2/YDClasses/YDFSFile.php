@@ -14,9 +14,6 @@
 
     /**
      *  This class defines a filesystem file.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDFSFile extends YDBase {
 

@@ -18,9 +18,6 @@
      *  create a class instance in order to use them.
      *
      *  @todo
-     *      Implement new error mechanism.
-     *
-     *  @todo
      *      Have a look at the PEAR logging classes to see if there is a better
      *      way of working with debugging information. We might be better off
      *      outputting the debugging information to a logfile in the temp

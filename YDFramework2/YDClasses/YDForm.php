@@ -71,9 +71,6 @@
      *
      *  @todo
      *      Needs to extend YDBase instead of HTML_QuickForm directly.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDForm extends HTML_QuickForm {
 

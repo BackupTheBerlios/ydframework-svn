@@ -49,9 +49,6 @@
      *      database types. More information can be found on http://www.php.net/
      *
      *  @todo
-     *      Implement new error mechanism.
-     *
-     *  @todo
      *      Test if the parametrized queries actually work.
      */
     class YDDatabase extends YDBase {

@@ -16,9 +16,6 @@
      *  This class houses all the PHP related utility functions. All the methods
      *  are implemented as static methods and do not require you to create a
      *  class instance in order to use them.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDPhpUtil extends YDBase {
 
@@ -33,8 +30,14 @@
          *          or lower than the indicated PHP version.
          */
         function versionCheck( $vercheck ) {
+
+            // Get the minimum version
             $minver = explode( '.', $vercheck );
+
+            // Get the current version
             $curver = explode( '.', phpversion() );
+
+            // Compare the versions
             if (
                 ( $curver[0] <= $minver[0] )
                 &&
@@ -48,6 +51,7 @@
             } else { 
                 return false;
             }
+
         }
     
         /**

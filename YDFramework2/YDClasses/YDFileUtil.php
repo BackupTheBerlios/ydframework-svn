@@ -18,9 +18,6 @@
      *  create a class instance in order to use them.
      *
      *  @todo
-     *      Implement new error mechanism.
-     *
-     *  @todo
      *      Check if we can change the match function to a static function in
      *      the YDFSDirectory class. There is no real need in having a separate
      *      class for doing this.

@@ -11,9 +11,6 @@
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDError extends YDBase {
 

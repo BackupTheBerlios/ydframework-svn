@@ -18,9 +18,6 @@
      *  to retrieve the data from.
      *
      *  @todo
-     *      Implement new error mechanism.
-     *
-     *  @todo
      *      Test if the parametrized queries actually work.
      */
     class YDSqlQuery extends YDBase {

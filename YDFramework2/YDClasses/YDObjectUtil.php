@@ -16,9 +16,6 @@
      *  This class houses all the object and class related utility functions.
      *  All the methods are implemented as static methods and do not require you
      *  to create a class instance in order to use them.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDObjectUtil extends YDBase {
 
@@ -189,12 +186,15 @@
          *  @param $method Method you are looking for.
          */
         function failOnMissingMethod( $obj, $method ) {
-            if ( ! method_exists( $obj, 'authenticationSucceeded' ) ) {
+
+            // Check if the method exists and raise an error if needed
+            if ( ! method_exists( $obj, $method ) ) {
                 new YDFatalError(
                     'Class "' . $obj . '" does  not have a function called "'
                     . $method . '" which is required for proper operation.'
                 );   
             }
+
         }
 
         /**

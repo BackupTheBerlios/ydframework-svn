@@ -14,9 +14,6 @@
 
     /**
      *  This class defines an image file.
-     *
-     *  @todo
-     *      Implement new error mechanism.
      */
     class YDFSImage extends YDFSFile {
 
