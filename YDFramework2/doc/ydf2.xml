@@ -170,12 +170,13 @@
 
                 <pre><font color="#000080">&lt;html&gt;</font>
 <font color="#000080">&lt;head&gt;</font>
-<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#0000FF">=</font><font color="#000033"> </font><font color="#0000FF">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
 <font color="#000080">&lt;/head&gt;</font>
 <font color="#000080">&lt;body&gt;</font>
-<font color="#000000">    </font><font color="#0000FF">&lt;?</font><font color="#0000FF">=</font><font color="#000033"> </font><font color="#0000FF">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$title</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
 <font color="#000080">&lt;/body&gt;</font>
-<font color="#000080">&lt;/html&gt;</font></pre>
+<font color="#000080">&lt;/html&gt;</font>
+<font color="#000000"></font></pre>
 
                 <br/>
 
@@ -820,6 +821,559 @@ http://localhost/firstapp/index.php?do=oops</pre>
                 our class.
 
             </section>
+
+            <section name="ch03_05" label="Improving the class constructor">
+                
+                <br/>
+
+                We will add one thing to the class constructor, which is a 
+                reference to the data directory. Before you add the code, make a
+                new folder called "data" in the "firstapp" folder. Also make 
+                sure that the webserver process can write into that directory. 
+                On unix systems, you can do this with the following shell 
+                command:
+
+                <pre>/home/pieter # <b>chmod 777 data</b></pre>
+                
+                Once you did that, add the following code to the class 
+                constructor:
+
+                <pre><font color="#666666">// Set the path to the data directory</font>
+<font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDFSDirectory</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/data/'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#666666">// Check if the data directory is writeable</font>
+<font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#000000">!</font><font color="#000033"> </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">isWriteable</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">    </font><font color="#7F007F">new</font><font color="#000033"> YDFatalError</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'Data directory must be writable!'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000000">}</font></pre>
+                
+                With this code, we create a new YDFSDirectory class which 
+                represents a folder on disk. We define it specifically create it 
+                in the class constructor to ensure that all the actions are able
+                to use this object (each action needs this).
+
+                <br/><br/>
+
+                We also check if the directory is writeable by the webserver 
+                process to ensure that we will be able to save the notes in that 
+                directory. If the directory is not writable, we will raise a 
+                fatal error which stops the execution and displays the error 
+                message.
+
+                <br/><br/>
+
+                Later on, we will see that we can use this object to get a 
+                directory listing, but we will also use it to delete and create 
+                new files.
+
+            </section>
+
+            <section name="ch03_06" label="Improving the class constructor">
+                
+                <br/>
+
+                We will now implement the default action. Add the following code
+                to the function actionDefault:
+
+                <pre><font color="#666666">// Default action</font>
+<font color="#7F007F">function</font><font color="#000033"> actionDefault</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">    </font><font color="#666666">// Start with an empty list of entries</font>
+<font color="#000033">    </font><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">();</font>
+
+<font color="#000033">    </font><font color="#666666">// Loop over the data directory contents</font>
+<font color="#000033">    </font><font color="#7F007F">foreach</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">getContents</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'*.dat'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#7F007F">as</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">        </font><font color="#666666">// Get the contents</font>
+<font color="#000033">        </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000000">-&gt;</font><font color="#000033">getContents</font><font color="#000000">();</font>
+
+<font color="#000033">        </font><font color="#666666">// Unserialize</font>
+<font color="#000033">        </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> YDObjectUtil</font><font color="#000000">::</font><font color="#000033">unserialize</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">        </font><font color="#666666">// Add it to the list of entries</font>
+<font color="#000033">        array_push</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#666666">// Add the entries to the template</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'entries'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Output the template</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font>
+
+<font color="#000000">}</font></pre>
+
+                The code of this function is pretty self explanatory. Let's go 
+                over each line to see what it does:
+
+                <pre><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">();</font></pre>
+
+                This line creates a new array which will use to store the
+                entries in. 
+
+                <pre><font color="#7F007F">foreach</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">getContents</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'*.dat'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#7F007F">as</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font></pre>
+
+                This line line will query the data directory and get a YDFSFile 
+                object for each file that ends with the extension "dat". The 
+                getContents function always returns objects.
+
+                <pre><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000000">-&gt;</font><font color="#000033">getContents</font><font color="#000000">();</font></pre>
+
+                This line line will replace the variable $entry with the
+                contents of our YDFSFile object. 
+
+                <pre><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> YDObjectUtil</font><font color="#000000">::</font><font color="#000033">unserialize</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                Since the entries are serialized, we need to unserialize them to 
+                get the original object back. The YDObjectUtil::unserialize 
+                function will take care of this.
+
+                <pre><font color="#000033">array_push</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                We now have the original object back, which we will just add to 
+                the list of entries.
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">setVar</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'entries'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                When a new YDRequest class is instantiated, automatically a new
+                template object is created. You can then use the setVar function 
+                from the YDRequest class to assign variables to the template. We
+                add a new template variable called "entries" which holds the 
+                list of entries.
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font></pre>
+
+                The last step is to parse the template and output it to the 
+                browser. Since we didn't specify the name of the template, it 
+                will look for a file with the same name as the script, but which 
+                has the extension "tpl" instead of "php". It will parse the 
+                template and send the result to the browser.
+
+                <br/><br/>
+
+                If you run the script now in the browser, you will see an empty 
+                screen, and no errors should be shown. You don't see anything 
+                yet since the template is still an empty file.
+
+            </section>
+
+            <section name="ch03_07" label="Implementing the template">
+                
+                <br/>
+
+                Now that we have the default action implemented, we will change
+                the template so that it shows the list of notes which it should
+                do. Here's is how the template looks like to show the list of 
+                entries:
+
+                <pre><font color="#000080">&lt;html&gt;</font>
+
+<font color="#000080">&lt;head&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;title&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$YD_FW_NAMEVERS</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/title&gt;</font>
+
+<font color="#000080">&lt;/head&gt;</font>
+
+<font color="#000080">&lt;body&gt;</font>
+
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$YD_ACTION</font><font color="#000033"> </font><font color="#000000">==</font><font color="#000033"> </font><font color="#009F00">'default'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">        </font><font color="#000080">&lt;h3&gt;</font><font color="#000000">Notes</font><font color="#000080">&lt;/h3&gt;</font>
+
+<font color="#000000">        </font><font color="#000080">&lt;p&gt;&lt;a</font><font color="#800080"> </font><font color="#008080">href</font><font color="#800080">=</font><font color="#7F007F">"</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$YD_SELF_SCRIPT</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#7F007F">?do=AddNote"</font><font color="#000080">&gt;</font><font color="#000000">Add a new note</font><font color="#000080">&lt;/a&gt;&lt;/p&gt;</font>
+
+<font color="#000000">        </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">foreach</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entries</font><font color="#000033"> </font><font color="#7F007F">as</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;p&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;b&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000000">[</font><font color="#009F00">'title'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&lt;/b&gt;</font>
+<font color="#000000">                [ </font><font color="#000080">&lt;a</font><font color="#800080"> </font><font color="#008080">href</font><font color="#800080">=</font><font color="#7F007F">"</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$YD_SELF_SCRIPT</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#7F007F">?do=DeleteNote&amp;id=</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000000">[</font><font color="#009F00">'id'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#7F007F">"</font><font color="#000080">&gt;</font><font color="#000000">delete</font><font color="#000080">&lt;/a&gt;</font><font color="#000000"> ]</font>
+<font color="#000000">                </font><font color="#000080">&lt;br&gt;</font>
+<font color="#000000">                </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000000">[</font><font color="#009F00">'body'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">        </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#7F007F">else</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;p&gt;</font><font color="#000000">No notes were found.</font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">        </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000080">&lt;/body&gt;</font>
+
+<font color="#000080">&lt;/html&gt;</font></pre>
+
+                The first thing we do in the template is to check if we are 
+                running the default action. Since we are going to combine the 
+                templates for all the different actions, we need to make sure we 
+                only show the parts relevant for the current action.
+
+                <br/><br/>
+
+                As you can see, this is a plain PHP script which only contains 
+                the code needed to display the list. As you can see, we can
+                reference the variables as normal PHP variables and show their 
+                contents.
+
+                <br/><br/>
+
+                We also use some special variables in the script that are 
+                automatically added to the template by the framework. We use 
+                the following ones:
+
+                <ul>
+                    <li><b>$YD_FW_NAMEVERS</b>: the name and the version of the framework</li>
+                    <li><b>$YD_ACTION</b>: the name of the current action (always in lowercase)</li>
+                    <li><b>$YD_SELF_SCRIPT</b>: the url of the script itself without parameters</li>
+                </ul>
+
+                If you run the script now, it should tell you that no notes were
+                found, as we didn't create any yet. There should also be a link
+                that you can use to add a new entry. The next step is to create
+                the form to add a new entry.
+
+            </section>
+
+            <section name="ch03_08" label="Implementing the addnote action">
+                
+                <br/>
+
+                The next step is to implement the action that will take care of 
+                adding new items. Add the following code to the actionAddEntry 
+                function to do this:
+
+                <pre><font color="#666666">// Add Note action</font>
+<font color="#7F007F">function</font><font color="#000033"> actionAddNote</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">    </font><font color="#666666">// Create the add form</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'addEntryForm'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Add the elements</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'text'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Title:'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'textarea'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Contents:'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'submit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'cmdSubmit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Save'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Apply filters</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">applyFilter</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'trim'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">applyFilter</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'trim'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Add a rule</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addRule</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Title is required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'required'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">    </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addRule</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Contents is required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'required'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Process the form</font>
+<font color="#000033">    </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">validate</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">        </font><font color="#666666">// Save the entries in an array</font>
+<font color="#000033">        </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font>
+<font color="#000033">            </font><font color="#009F00">'id'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> md5</font><font color="#000000">(</font>
+<font color="#000033">                </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000033">            </font><font color="#000000">),</font>
+<font color="#000033">            </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">),</font>
+<font color="#000033">            </font><font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000033">        </font><font color="#000000">);</font>
+
+<font color="#000033">        </font><font color="#666666">// Save the serialized entry to a file</font>
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">createFile</font><font color="#000000">(</font>
+<font color="#000033">            </font><font color="#00007F">$entry</font><font color="#000000">[</font><font color="#009F00">'id'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'.dat'</font><font color="#000000">,</font><font color="#000033"> YDObjectUtil</font><font color="#000000">::</font><font color="#000033">serialize</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000033">        </font><font color="#000000">);</font>
+
+<font color="#000033">        </font><font color="#666666">// Forward to the list view</font>
+<font color="#000033">        </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">forward</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'default'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">        </font><font color="#666666">// Return</font>
+<font color="#000033">        </font><font color="#7F007F">return</font><font color="#000000">;</font>
+
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#666666">// Add the form to the template</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">addForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'form'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Output the template</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font>
+
+<font color="#000000">}</font></pre>
+
+                This action does two separate things. It knows how to show the 
+                form which is used to add a new note, and it also knows how to
+                save a note to a file on disk which can be retrieved later on.
+                
+                <br/><br/>
+
+                Let's evaluate this action step by step:
+
+                <pre><font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'addEntryForm'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                This will create a new form object called "addEntryForm". We 
+                will assign elements to this object to construct the whole form.
+                
+                <pre><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'text'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Title:'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'textarea'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Contents:'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'submit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'cmdSubmit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Save'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                Now we add three elements to the form. We add a text element 
+                called "title", a textarea called "body" and a submit button 
+                called "cmdSubmit". For each of these elements, we also specify
+                a label.
+
+                <pre><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">applyFilter</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'trim'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">applyFilter</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'trim'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                To the title and body field, we also add a filter called "trim".
+                The trim filter will remove all spaces at the beginning and the 
+                end of the form values before validating the form. We do this to 
+                make sure that e.g. if the title would be just a space, it 
+                wouldn't be considered as being valid.
+
+                <pre><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addRule</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Title is required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'required'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addRule</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Contents is required'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'required'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                For the validation, we add two rules. With these two rules, we 
+                mark the elements title and body as required elements. We also 
+                specify the error message in case the validation fails.
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">addForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'form'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+                
+                This function will assign the form object to the template. 
+                Please note that we didn't use the setVar function, but used the
+                addForm function instead. We need to use this function because 
+                the form object needs some special treatment before it can be 
+                used in the template. Never use the setVar function to assing a
+                form object to the template. 
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">outputTemplate</font><font color="#000000">();</font></pre>
+
+                The last step is to parse and output the template which is done
+                by executing the outputTemplate function. 
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>I specifically didn't explain the part which 
+                save the note to a file, as it's not important yet. You first 
+                need to understand how this works before we can add the code for 
+                saving the note to disk.
+                </div>
+
+                <br/>
+
+                Before you can run the form, we need to add the code for the 
+                form to the template. Add the following stuff just before the 
+                "&lt;/body&gt;" tag in the template:
+
+                <pre><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$YD_ACTION</font><font color="#000033"> </font><font color="#000000">==</font><font color="#000033"> </font><font color="#009F00">'addnote'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;h3&gt;</font><font color="#000000">Add a new note</font><font color="#000080">&lt;/h3&gt;</font>
+
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'errors'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;p</font><font color="#800080"> </font><font color="#008080">style</font><font color="#800080">=</font><font color="#7F007F">"color: red"</font><font color="#000080">&gt;&lt;b&gt;</font><font color="#000000">Errors during processing:</font><font color="#000080">&lt;/b&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#7F007F">foreach</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'errors'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#7F007F">as</font><font color="#000033"> </font><font color="#00007F">$error</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">                </font><font color="#000080">&lt;br&gt;</font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$error</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">    </font><font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+
+<font color="#000000">    </font><font color="#000080">&lt;form</font><font color="#800080"> </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'attributes'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font><font color="#000080">&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;p&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'title'</font><font color="#000000">][</font><font color="#009F00">'label'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;br&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'title'</font><font color="#000000">][</font><font color="#009F00">'html'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;p&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'body'</font><font color="#000000">][</font><font color="#009F00">'label'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">            </font><font color="#000080">&lt;br&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'body'</font><font color="#000000">][</font><font color="#009F00">'html'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;p&gt;</font>
+<font color="#000000">            </font><font color="#0000FF">&lt;?</font><font color="#000000">=</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">[</font><font color="#009F00">'cmdSubmit'</font><font color="#000000">][</font><font color="#009F00">'html'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font>
+<font color="#000000">        </font><font color="#000080">&lt;/p&gt;</font>
+<font color="#000000">    </font><font color="#000080">&lt;/form&gt;</font>
+
+<font color="#0000FF">&lt;?php</font><font color="#000033"> </font><font color="#000000">}</font><font color="#000033"> </font><font color="#0000FF">?&gt;</font></pre>
+
+                If we a look at that code, we see that it will only be shown if
+                the current action is called "addnote" (always in lowercase!). 
+                The first part will take care of showing the errors if there are
+                any.
+
+                <br/><br/>
+
+                The errors are always found in the $form['error'] array. this
+                array is just a list of all the different error messages. In 
+                this example, we use a little but of stylesheets to make them
+                appear in red.
+
+                <br/><br/>
+
+                Then, the code for the form itself is added. We first define the 
+                form tag, and use the $form['attributes'] variable to 
+                automatically add all the parameters of the form such as the 
+                action and method. The framework is smart enough to take care of
+                that automatically.
+
+                <br/><br/>
+
+                Then we will add the different elements. Each element can be 
+                referenced as $form[elementname]. In this example, we use the 
+                label and html properties of each element. The label property 
+                contains the label as specified when you created the form 
+                object. The html property contains the HTML version of the 
+                element.
+
+                <br/><br/>
+
+                This is the only code we need to add for the form. The framework
+                will take care of remembering what was entered in each field and
+                displays it when needed. It will also take care of the error
+                messages.
+
+                <br/><br/>
+
+                Now that we have the basis of the form, you can surf to the 
+                index.php page and see what happens. If you submit the form, you
+                will see that the values are remembered accross submits, and 
+                that the right errors are raised if the input was not valid.
+
+                <br/><br/>
+
+                Let's examine the code that saves the entry to disk. We'll go 
+                over it step by step.
+
+                <pre><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">validate</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font></pre>
+
+                With this, we can check if the form was validated succesfully. 
+                The form is only validated when all the validation rules were
+                passed.
+
+                <pre><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font>
+    <font color="#009F00">'id'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> md5</font><font color="#000000">(</font>
+        <font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">)</font>
+    <font color="#000000">),</font>
+    <font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'title'</font><font color="#000033"> </font><font color="#000000">),</font>
+    <font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'body'</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000000">);</font></pre>
+
+                This code will create a new associative array with the 
+                information of the entry. We can use the form's exportValue 
+                function to get the value of a specific field of the form. We 
+                used the md5 function to create the unique ID for the entry.
+
+                <pre><font color="#666666">// Save the serialized entry to a file</font>
+<font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">createFile</font><font color="#000000">(</font>
+    <font color="#00007F">$entry</font><font color="#000000">[</font><font color="#009F00">'id'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'.dat'</font><font color="#000000">,</font><font color="#000033"> YDObjectUtil</font><font color="#000000">::</font><font color="#000033">serialize</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$entry</font><font color="#000033"> </font><font color="#000000">)</font>
+<font color="#000000">);</font></pre>
+
+                The next line does two things. First, it will serialize the 
+                array of the object. This means it's converted into code which
+                can be saved to a file, and which can be read later on again to
+                get the original array back. This function is part of the 
+                YDObjectUtil module. After we have the array as a serialized
+                item, we can use the createFile function from the YDFSDirectory
+                object to dump it to a file. The file name will be the id of the 
+                entry with the extension "dat".
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">forward</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'default'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                Now that the note is saved to disk, we need to show the list of
+                notes again. We have two options here. Either you do a redirect,
+                which will redirect you to the url of the default action, but 
+                this requires two HTTP interactions. A lot faster is to forward
+                the execution to a different action. The difference is that 
+                forwarding happens in the same request.
+
+                <pre><font color="#7F007F">return</font><font color="#000000">;</font></pre>
+
+                It's very important to add the return statement, since 
+                otherwise, the form will be displayed again.
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>one could say that instead of forwarding the
+                request to a different action, you could just call the function 
+                for that action. Unfortunately, that doesn't work, since the 
+                framework will not know that the current action has been 
+                changed.
+                </div>
+
+                <br/>
+
+                If you run the script now, you will be able to add notes and 
+                display them. Also try to add a note without a title or 
+                description, and check that it is showing the right errors. Also
+                check the contents of the data directory to see that the entries
+                are correctly saved in there.
+
+            </section>
+
+            <section name="ch03_09" label="Implementing the deletenote action">
+                
+                <br/>
+
+                To finish off, we will create the action that can delete a note.
+                This action will take 1 parameter from the URL, which is called 
+                ID. This entry will contain the unique ID of the entry.
+
+                <br/><br/>
+
+                To implement this action, add the following code to the 
+                actiondeletenote function:
+
+                <pre><font color="#666666">// Delete note action</font>
+<font color="#7F007F">function</font><font color="#000033"> actionDeleteNote</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">    </font><font color="#666666">// Delete the file related to the entry</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">deleteFile</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$_GET</font><font color="#000000">[</font><font color="#009F00">'id'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'.dat'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#666666">// Forward to the list view</font>
+<font color="#000033">    </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">forward</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'default'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000000">}</font></pre>
+
+                Let's go over this action to see how it works:
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">dataDir</font><font color="#000000">-&gt;</font><font color="#000033">deleteFile</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$_GET</font><font color="#000000">[</font><font color="#009F00">'id'</font><font color="#000000">]</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'.dat'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                With the deleteFile function from the YDFSDirectory object, we 
+                can delete the file for this specific note. We find the id of 
+                the note in the $_GET['id'] variable, which was passed with the
+                URL.
+
+                <pre><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">forward</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'default'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                After the deletion of the file, we just forward the request to 
+                the default action again to show the list of the notes.
+
+                <br/><br/>
+
+                After adding this code, you can run the sample again and try to
+                delete a note. If you delete the note, it should disappear from
+                the list and the file should also be removed from the data
+                directory.
+
+                <br/><br/>
+
+                <div class="note">
+                <b>Note</b><br/>there are some functions that could be added to 
+                this action. First, it could check if there was an ID given or
+                not. If not, you could forward the request to the default
+                action, or you could show an error message. You could also add
+                some checking to see if the entry exists or not before deleting
+                it. Another option is to add a confirmation screen to prevent 
+                that someone accidently deletes a note.
+                </div>
+
+            </section>
+
+            <section name="ch03_10" label="The complete application">
+                
+                <br/>
+
+                You will find a complete working copy of this application in the
+                firstapp folder inside the examples folder of the Yellow Duck
+                Framework distribution.
+
+            </section>
+
 
         <section name="ch04" label="How requests are processed" />
 
