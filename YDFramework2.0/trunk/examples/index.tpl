@@ -459,6 +459,14 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_smarty.tpl">template_smarty.tpl</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="logging.php">Using file logging</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=logging.php">logging.php</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}
