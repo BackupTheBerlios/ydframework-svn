@@ -62,6 +62,7 @@
 			// The list of elements, rules and filters
 			$this->_elements = array();
 			$this->_rules = array();
+			$this->_comparerules = array();
 			$this->_formrules = array();
 			$this->_filters = array();
 
@@ -418,8 +419,40 @@
 			// Initialize the element
 			if ( ! @ is_array( $this->_rules[ $element ] ) ) { $this->_rules[ $element ] = array(); }
 
-			// Add the filter
+			// Add the rule
 			array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
+
+		}
+
+		/**
+		 *	Add a rule to compare different form elements with each other.
+		 *
+		 *	@param	$elements	The array of elements to compare.
+		 *	@param	$rule		The name of the rule to apply.
+		 *	@param	$error		The error message to show if an error occured.
+		 *
+		 *	@todo
+		 *		Add documentation for these types of rules.
+		 */
+		function addCompareRule( $elements, $rule, $error ) {
+
+			// Check if we have a valid rule
+			if ( ! in_array( strtolower( $rule ), array( 'equal', 'asc', 'desc' ) ) ) {
+				trigger_error( 'Unknown compare rule "' . $rule . '"', YD_ERROR );
+			}
+
+			// Check if we have enough elements
+			if ( sizeof( $elements ) < 2 ) {
+				trigger_error(
+					'A compare rule needs at least 2 elements, only ' . sizeof( $elements ) . ' given.', YD_ERROR
+				);
+			}
+
+			// Add the compare rule
+			array_push(
+				$this->_comparerules,
+				array( 'elements' => $elements, 'rule' => strtolower( $rule ), 'error' => $error )
+			);
 
 		}
 
@@ -622,7 +655,78 @@
 			}
 
 			// Check for errors
-			if ( sizeof( $this->_errors ) > 0 ) { return false; }
+			if ( sizeof( $this->_errors ) > 0 ) {
+				return false;
+			}
+
+			// Execute the compare rules
+			foreach ( $this->_comparerules as $rule ) {
+
+				// Check the type of the rule
+				switch ( $rule['rule'] ) {
+
+					// Equal rule
+					case 'equal':
+
+						// Get the values for each element
+						$values = array();
+						foreach ( $rule['elements'] as $element ) {
+							array_push( $values, $this->getValue( $element ) );
+						}
+
+						// Check if the value is the same for each element
+						if ( sizeof( array_unique( $values ) ) > 1 ) {
+							$this->_errors[ $rule['elements'][0] ] =  $rule['error'];
+							return false;
+						}
+
+						// Rule passed
+						break;
+
+					// Asc rule
+					case 'asc':
+					case 'desc':
+
+						// Get the values for each element
+						$values = array();
+						foreach ( $rule['elements'] as $element ) {
+							array_push( $values, $this->getValue( $element ) );
+						}
+
+						// Check that all the values are unique
+						if ( sizeof( $values ) != sizeof( array_unique( $values ) ) ) {
+							$this->_errors[ $rule['elements'][0] ] =  $rule['error'];
+							return false;
+						}
+
+						// Make a copy of our array
+						$sorted = $values;
+
+						// Check if the order of the elements is correct
+						if ( $rule['rule'] == 'asc' ) {
+							sort( $sorted, SORT_NUMERIC );
+						}
+						if ( $rule['rule'] == 'desc' ) {
+							rsort( $sorted, SORT_NUMERIC );
+						}
+
+						// Test if they are the same
+						if ( $sorted != $values ) {
+							$this->_errors[ $rule['elements'][0] ] =  $rule['error'];
+							return false;
+						}
+
+						// Rule passed
+						break;
+
+				}
+
+			}
+
+			// Check for errors
+			if ( sizeof( $this->_errors ) > 0 ) {
+				return false;
+			}
 
 			// Apply the form rules
 			foreach ( $this->_formrules as $rule ) {
@@ -640,13 +744,17 @@
 
 				// Check the result
 				if ( is_array( $result ) ) {
-					foreach ( $result as $element => $error ) { $this->_errors[ $element ] = $error; }
+					foreach ( $result as $element => $error ) {
+						$this->_errors[ $element ] = $error;
+					}
 					break;
 				}
 			}
 
 			// Check for errors
-			if ( sizeof( $this->_errors ) > 0 ) { return false; }
+			if ( sizeof( $this->_errors ) > 0 ) {
+				return false;
+			}
 
 			// All went fine, return true
 			return true;

@@ -241,6 +241,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="form_compare.php">YDForm using compare rules</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=form_compare.php">form_compare.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="sample.php">Defining and using action requests</a>
 			</td>
 			<td valign="top">
