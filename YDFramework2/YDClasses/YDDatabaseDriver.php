@@ -11,6 +11,10 @@
 
 	/**
 	 *	This class defines a database driver.
+	 *
+	 *	@todo
+	 *		The code for making the connection, executing and checking a query and then returning the result should be
+	 *		put into an internal function to promote code reuse.
 	 */
 	class YDDatabaseDriver extends YDBase {
 
@@ -56,7 +60,17 @@
 		function connect() {
 		}
 
+		/**
+		 *	This function will return a single value.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single value matching the SQL statement.
+		 */
 		function getValue( $sql ) {
+			$record = $this->getRecord( $sql );
+			if ( ! $record ) { return false; }
+			return $record[0];
 		}
 
 		/**
@@ -79,11 +93,23 @@
 		function getRecords( $sql ) {
 		}
 
-		// mysql_affected_rows
+		/**
+		 *	This function will execute the SQL statement and return the number of affected records.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	The number of affected rows.
+		 */
 		function executeSql( $sql ) {
 		}
 
-		// mysql_num_rows
+		/**
+		 *	This function will return the number of rows matched by the SQL query.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	The number of rows matched by the SQL query.
+		 */
 		function getMatchedRowsNum( $sql ) {
 		}
 

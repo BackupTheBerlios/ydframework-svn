@@ -11,6 +11,10 @@
 
 	/**
 	 *	This class defines a database driver for MySQL.
+	 *
+	 *	@todo
+	 *		The code for making the connection, executing and checking a query and then returning the result should be
+	 *		put into an internal function to promote code reuse.
 	 */
 	class YDDatabaseDriver_mysql extends YDDatabaseDriver {
 
@@ -52,6 +56,23 @@
 		}
 
 		/**
+		 *	This function will return a single record.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single record matching the SQL statement.
+		 */
+		function getRecord( $sql ) {
+			$this->connect();
+			$dataset = array();
+			$result = mysql_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$record = mysql_fetch_assoc( $result );
+			mysql_free_result( $result );
+			return $record;
+		}
+
+		/**
 		 *	This function will execute the SQL statement and return the records as an associative array.
 		 *
 		 *	@param $sql	The SQL statement to use.
@@ -71,20 +92,31 @@
 		}
 
 		/**
-		 *	This function will return a single record.
+		 *	This function will execute the SQL statement and return the number of affected records.
 		 *
 		 *	@param $sql	The SQL statement to use.
 		 *
-		 *	@returns	A single record matching the SQL statement.
+		 *	@returns	The number of affected rows.
 		 */
-		function getRecord( $sql ) {
+		function executeSql( $sql ) {
 			$this->connect();
-			$dataset = array();
 			$result = mysql_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
-			$record = mysql_fetch_assoc( $result );
-			mysql_free_result( $result );
-			return $record;
+			return mysql_affected_rows( $this->_conn );
+		}
+
+		/**
+		 *	This function will return the number of rows matched by the SQL query.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	The number of rows matched by the SQL query.
+		 */
+		function getMatchedRowsNum( $sql ) {
+			$this->connect();
+			$result = mysql_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			return mysql_num_rows( $this->_conn );
 		}
 
 		/**

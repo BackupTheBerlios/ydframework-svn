@@ -11,6 +11,10 @@
 
 	/**
 	 *	This class defines a database driver for SQLite.
+	 *
+	 *	@todo
+	 *		The code for making the connection, executing and checking a query and then returning the result should be
+	 *		put into an internal function to promote code reuse.
 	 */
 	class YDDatabaseDriver_sqlite extends YDDatabaseDriver {
 
@@ -49,6 +53,21 @@
 		}
 
 		/**
+		 *	This function will return a single record.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	A single record matching the SQL statement.
+		 */
+		function getRecord( $sql ) {
+			$this->connect();
+			$dataset = array();
+			$result = sqlite_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			return sqlite_fetch_array( $result, SQLITE_ASSOC );
+		}
+
+		/**
 		 *	This function will execute the SQL statement and return the records as an associative array.
 		 *
 		 *	@param $sql	The SQL statement to use.
@@ -63,18 +82,31 @@
 		}
 
 		/**
-		 *	This function will return a single record.
+		 *	This function will execute the SQL statement and return the number of affected records.
 		 *
 		 *	@param $sql	The SQL statement to use.
 		 *
-		 *	@returns	A single record matching the SQL statement.
+		 *	@returns	The number of affected rows.
 		 */
-		function getRecord( $sql ) {
+		function executeSql( $sql ) {
 			$this->connect();
-			$dataset = array();
 			$result = sqlite_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
-			return sqlite_fetch_array( $result, SQLITE_ASSOC );
+			return sqlite_changes( $this->_conn );
+		}
+
+		/**
+		 *	This function will return the number of rows matched by the SQL query.
+		 *
+		 *	@param $sql	The SQL statement to use.
+		 *
+		 *	@returns	The number of rows matched by the SQL query.
+		 */
+		function getMatchedRowsNum( $sql ) {
+			$this->connect();
+			$result = sqlite_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
+			return sqlite_num_rows( $this->_conn );
 		}
 
 		/**
