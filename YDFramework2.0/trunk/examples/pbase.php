@@ -7,10 +7,10 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDUrl.php' );
-	require_once( 'YDRequest.php' );
-	require_once( 'YDTemplate.php' );
-	require_once( 'YDFeedCreator.php' );
+	YDInclude( 'YDUrl.php' );
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDFeedCreator.php' );
 
 	// Class definition
 	class pbase extends YDRequest {
@@ -139,6 +139,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

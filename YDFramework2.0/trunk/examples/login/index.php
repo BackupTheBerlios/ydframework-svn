@@ -4,7 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
 	// Include our own request
-	require_once( 'MyLoginRequest.php' );
+	YDInclude( 'MyLoginRequest.php' );
 
 	// Class definition
 	class index extends MyLoginRequest {
@@ -30,6 +30,6 @@
 	}
 
 	// Standard include
-	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

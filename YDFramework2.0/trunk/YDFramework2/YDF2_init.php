@@ -142,12 +142,42 @@
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
 	$includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
 	$includePath .= YD_PATHDELIM . YD_DIR_3RDP;
+	$includePath .= YD_PATHDELIM . dirname( __FILE__ );
 	if ( ini_get( 'include_path' ) != '' ) {
 		$includePath .= YD_PATHDELIM . ini_get( 'include_path' );
 	}
 	$GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
-	//var_dump( $GLOBALS['YD_INCLUDE_PATH'] );
 	@ini_set( 'include_path', $includePath );
+
+	/**
+	 *	This function will include a file from the filesystem. It works similar to the require_once function but it
+	 *	knows about the include path for the Yellow Duck Framework.
+	 *
+	 *	@param $file	File to be included.
+	 */
+	if ( ! function_exists( 'YDInclude' ) ) {
+	
+		// Function to include a file from the known include path
+		function YDInclude( $file ) {
+			foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
+				if ( realpath( $include ) != false ) {
+					if ( file_exists( realpath( $include ) . '/' . $file ) ) {
+						require_once( realpath( $include ) . '/' . $file );
+						return;
+					}
+				}
+			}
+			if ( is_file( $file ) ) {
+				require_once( $file );
+				return;
+			}
+			trigger_error(
+				'Failed to include the file: ' . $file . ' The file was not found in the include path.',
+				YD_ERROR
+			);
+		}
+
+	}
 
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {

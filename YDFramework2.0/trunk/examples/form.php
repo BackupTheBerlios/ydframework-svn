@@ -4,10 +4,10 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDForm.php' );
-	require_once( 'YDRequest.php' );
-	require_once( 'YDTemplate.php' );
-	require_once( 'YDFileSystem.php' );
+	YDInclude( 'YDForm.php' );
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDFileSystem.php' );
 
 	// Class definition
 	class form extends YDRequest {
@@ -108,6 +108,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

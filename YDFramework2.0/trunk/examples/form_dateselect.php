@@ -4,8 +4,8 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDForm.php' );
-	require_once( 'YDRequest.php' );
+	YDInclude( 'YDForm.php' );
+	YDInclude( 'YDRequest.php' );
 
 	// Class definition
 	class form_dateselect extends YDRequest {
@@ -54,6 +54,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

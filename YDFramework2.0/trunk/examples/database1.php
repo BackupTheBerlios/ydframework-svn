@@ -4,9 +4,9 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDRequest.php' );
-	require_once( 'YDDatabase.php' );
-	require_once( 'YDTemplate.php' );
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDDatabase.php' );
+	YDInclude( 'YDTemplate.php' );
 
 	// Class definition
 	class database1 extends YDRequest {
@@ -57,6 +57,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

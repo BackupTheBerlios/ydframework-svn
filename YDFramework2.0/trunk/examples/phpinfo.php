@@ -4,7 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDRequest.php' );
+	YDInclude( 'YDRequest.php' );
 
 	// Class definition
 	class phpinfo extends YDRequest {
@@ -22,6 +22,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>

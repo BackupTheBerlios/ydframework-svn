@@ -5,10 +5,10 @@
 	require_once( dirname( __FILE__ ) . '/config.php' );
 
 	// Includes
-	require_once( 'YDForm.php' );
-	require_once( 'YDRequest.php' );
-	require_once( 'YDTemplate.php' );
-	require_once( 'YDDatabase.php' );
+	YDInclude( 'YDForm.php' );
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDDatabase.php' );
 
 	// Class definition for the index request
 	class index extends YDRequest {
@@ -146,6 +146,6 @@
 	}
 
 	// Process the request
-	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_process.php' );
+	YDInclude( 'YDF2_process.php' );
 
 ?>
