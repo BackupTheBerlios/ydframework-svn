@@ -25,11 +25,11 @@ The template file that goes along with this script looks as follows (sample1.tpl
 <div class="code"><xmp><html>
 
 <head>
-	<title><?= $title ?></title>
+	<title>[$title]</title>
 </head>
 
 <body>
-	<?= $title ?>
+	[$title]
 </body>
 
 </html></xmp></div><br />
@@ -55,7 +55,9 @@ The last part of the script is the include of the "YDF2_process.php" script, whi
 <br />
 The process function checks the URL to see if there was a parameter defined with the name "do". This parameter can indicate the action that needs to be executed. If the url looked as <a href="http://localhost/sample1.php?do=edit">http://localhost/sample1.php?do=edit</a>, the function called "actionEdit" will be executed.<br />
 <br />
-If no action is specified in the url, the default action, called "actionDefault" will be executed. In both actions, the functions in this script don't do a lot. They will set a template variable called "title" and they will output the template to the browser. The template contains special tags that are filled in on the fly with the right contents.</div>
+If no action is specified in the url, the default action, called "actionDefault" will be executed. In both actions, the functions in this script don't do a lot. They will set a template variable called "title" and they will output the template to the browser. The template contains special tags that are filled in on the fly with the right contents.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
 
 
 

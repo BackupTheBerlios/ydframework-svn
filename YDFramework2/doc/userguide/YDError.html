@@ -43,7 +43,7 @@ More information about this can be found in the <a href="http://www.php.net/manu
 For raising errors, there are three different functions which you can use: YDFatalError, YDWarning and YDNotice.<br />
 <br />
 <div class="code"><code><font color="#000000">
-<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;YDFatalError</font><font color="#007700">( </font><font color="#DD0000">'Fatal error' </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">YDWarning</font><font color="#007700">( </font><font color="#DD0000">'A warning' </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">YDNotice</font><font color="#007700">( </font><font color="#DD0000">'A notice' </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;trigger_error</font><font color="#007700">( </font><font color="#DD0000">'Fatal error'</font><font color="#007700">, </font><font color="#0000BB">YD_ERROR </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A warning'</font><font color="#007700">, </font><font color="#0000BB">YD_WARNING </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A notice'</font><font color="#007700">, </font><font color="#0000BB">YD_NOTICE </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
 </font>
 </code></div><br />
 <br />
@@ -52,15 +52,16 @@ For raising errors, there are three different functions which you can use: YDFat
 When a fatal error occurs and debugging is turned on, a stack trace is printed as well. This will looks as:<br />
 <br />
 <div class="code"><xmp>Debug backtrace:
-    @ YDF2_init.php:107 -- ydstacktrace()
-    @ YDFSFile.php:30 -- ydfatalerror(...)
+    @ YDFSFile.php:30 -- trigger_error(...)
     @ fsimage.php:44 -- ydfsfile->ydfsfile(...)
     @  -- fsimage->actiondefault()
     @ YDRequest.php:229 -- call_user_func(...)
     @ YDExecutor.php:81 -- fsimage->process()
     @ YDF2_process.php:19 -- ydexecutor->execute()
     @ fsimage.php:69 -- require_once(...)</xmp></div><br />
-You can also print a stack trace yourself by simple calling the YDStackTrace function.</div>
+You can also print a stack trace yourself by simple calling the YDStackTrace function.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
 
 
 

@@ -81,9 +81,11 @@ After you got the body of your email, you can assign this to the YDEmail class u
 The template for this email will look like:<br />
 <br />
 <div class="code"><code><font color="#000000">
-&lt;html&gt;<br /><br />&lt;head&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;<font color="#0000BB">&lt;?= $YD_FW_NAMEVERS ?&gt;</font>&lt;/title&gt;<br />&lt;/head&gt;<br /><br />&lt;body&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Hello from Pieter &amp; Fiona&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;img src="fsimage1.jpg" border="1" alt="Pieter &amp; Fiona"<br />&nbsp;&nbsp;&nbsp;&nbsp;width="320" height="213"&gt;&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;This email was sent to <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="mailto:<font color="#0000BB">&lt;?= $email ?&gt;</font>"&gt;<font color="#0000BB">&lt;?= $email ?&gt;</font>&lt;/a&gt;.&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;<font color="#0000BB">&lt;?= $YD_FW_NAMEVERS ?&gt;</font>&lt;/p&gt;<br /><br />&lt;/body&gt;<br /><br />&lt;/html&gt;</font>
+&lt;html&gt;<br /><br />&lt;head&gt;<br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;[$YD_FW_NAMEVERS]&lt;/title&gt;<br />&lt;/head&gt;<br /><br />&lt;body&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Hello from Pieter &amp; Fiona&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;&lt;img src="fsimage1.jpg" border="1" alt="Pieter &amp; Fiona"<br />&nbsp;&nbsp;&nbsp;&nbsp;width="320" height="213"&gt;&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;This email was sent to <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;a href="mailto:[$email]"&gt;[$email]&lt;/a&gt;.&lt;/p&gt;<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;[$YD_FW_NAMEVERS]&lt;/p&gt;<br /><br />&lt;/body&gt;<br /><br />&lt;/html&gt;</font>
 </code></div><br />
-<span class="notes"><em><strong>Note:</strong> if you look carefully at the example above, you will see that we referenced the image in the template by it's name given when you added the file to the YDEmail object. This src attribute should only contain the name of the image, and not a local path. An internet url is supported as well.</em></span></div>
+<span class="notes"><em><strong>Note:</strong> if you look carefully at the example above, you will see that we referenced the image in the template by it's name given when you added the file to the YDEmail object. This src attribute should only contain the name of the image, and not a local path. An internet url is supported as well.</em></span><br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
 
 
 

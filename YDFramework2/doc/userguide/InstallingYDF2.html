@@ -41,7 +41,7 @@ The main directory of the framework, called "YDFramework-2.0.0" in this example,
 <br />
 <ul><li> <strong>3rdparty:</strong> This directory contains the third party libraries that are needed for the Yellow Duck Framework to work properly.
 </li><li> <strong>docs:</strong> This directory contains the documentation at which you are currently looking. It also contains the complete API documentation. 
-</li><li> <strong>temp:</strong> This directory contains the temporary files created by the framework. In here, the cache files for the thumbnails and web downloads will be saved.
+</li><li> <strong>temp:</strong> This directory contains the temporary files created by the framework. In here, the cache files for the thumbnails and web downloads will be saved, as well as the temporary items from the template engine.
 </li><li> <strong>YDClasses:</strong> In here, you will find all the classes that make up the framework.</li></ul>
 <br />
 This directory structure is not really important for using the Yellow Duck Framework. The only thing you might need to do from time to time is to check the temp folder and empty it if it gets too big. You can safely delete it contents without affecting the actual Framework.<br />
@@ -110,8 +110,8 @@ php_value register_argc_argv 0
 
 # Disallow some security holes
 php_value allow_call_time_pass_reference 0
-php_value allow_url_fopen 1
-php_flag short_open_tag On
+php_value allow_url_fopen 0
+php_flag short_open_tag Off
 php_flag enable_dl Off
 
 # Gzip compress the output
@@ -156,7 +156,9 @@ On Windows, you will have to use forward slashes instead of backslashes. Also ma
 <br />
 <h4> Testing the installation </h4>
 <br />
-To test the installation, run the sample scripts provided with the downloads.</div>
+To test the installation, run the sample scripts provided with the downloads.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
 
 
 

@@ -27,7 +27,7 @@ It will then use the function "isAuthenticated" from the request class to find o
 If the "isAuthenticated" function returns true, the class function "authenticationSucceeded" is executed, after which the execution of the request continues. This function can for example set a session variable indicating that we are logged in or can add an entry to the database.<br />
 <br />
 <br />
-<h4> Example 1 - IP based authentication </h4>
+<h4> Example 1 - Form based authentication </h4>
 <br />
 In this example, we use a form to allow the user to enter a username and password.<br />
 <br />
@@ -57,7 +57,7 @@ When authentication fails, the authenticationFailed will return the headers that
 For each request that needs HTTP authentication, you would subclass from this class instead of from the standard YDRequest class.<br />
 <br />
 <br />
-<h4> Example 3 - Form based authentication </h4>
+<h4> Example 3 - IP based authentication </h4>
 <br />
 This third example checks the IP number of the client and only allows access if you are surfing from localhost.<br />
 <br />

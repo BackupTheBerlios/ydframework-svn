@@ -13,6 +13,8 @@
 <br />
 In this chapter, we will discuss some of the smaller classes and modules. There are a whole bunch of small extra things in the Yellow Duck Framework that take care of some very specific functions. Most of these classes are not rocket science, but they make that you don't have to reinvent the wheel every time you need them.<br />
 <br />
+<span class="notes"><em><strong>Note:</strong> All the classes ending with "Util" are stored in the YDUtil include file.</em></span><br />
+<br />
 <br />
 <h4> YDArrayUtil </h4>
 <br />
@@ -68,7 +70,7 @@ The YDBrowserInfo object returns information about the browser that performed th
 The following code sample demonstrates how to use this class:<br />
 <br />
 <div class="code"><code><font color="#000000">
-<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$browser </font><font color="#007700">= new </font><font color="#0000BB">YDBrowserInfo</font><font color="#007700">()<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getAgent</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowser</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getVersion</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getPlatform</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getDotNetRuntimes</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowserLanguages</font><font color="#007700">() );<br /><br /></font><font color="#0000BB">?&gt;</font>
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$browser </font><font color="#007700">= new </font><font color="#0000BB">YDBrowserInfo</font><font color="#007700">()<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getAgent</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowser</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getVersion</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getPlatform</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getDotNetRuntimes</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowserLanguages</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getLanguage</font><font color="#007700">( array( </font><font color="#DD0000">'en'</font><font color="#007700">, </font><font color="#DD0000">'nl'</font><font color="#007700">, </font><font color="#DD0000">'fr' </font><font color="#007700">) ) );<br /> <br /></font><font color="#0000BB">?&gt;</font>
 </font>
 </code></div><br />
 The getBrowser function will return one of the following values: ie, safari, opera, mozilla or other. The getPlatform function will return one of the following values: win, mac, linux, unix or other.<br />
@@ -77,22 +79,7 @@ The getAgent function will return the full HTTP user agent string as provided by
 <br />
 This class is very handy to display specific contents based on the browser of the user. You might e.g. specify a different stylesheet for Macintosh users compared to the stylesheet used for Windows users.<br />
 <br />
-<br />
-<h4> YDLanguage </h4>
-<br />
-The YDLanguage class helps you to choose a language from a list of supported languages based on the supported languages from the browser. <br />
-<br />
-This function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that the class supports and will return the name of the most appropriate langauage. <br />
-<br />
-This class will also take into consideration the right priority of the languages specified by the browser. Let's take a look at a small example illustrating this. In this example, the browser supports the following languages in this specific order: nl (dutch), fr (french) and en (english). The code sample looks as follows:<br />
-<br />
-<div class="code"><code><font color="#000000">
-<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$lang </font><font color="#007700">= new </font><font color="#0000BB">YDLanguage</font><font color="#007700">( array( </font><font color="#DD0000">'en'</font><font color="#007700">, </font><font color="#DD0000">'nl'</font><font color="#007700">, </font><font color="#DD0000">'fr' </font><font color="#007700">) );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$lang</font><font color="#007700">-&gt;</font><font color="#0000BB">getLanguage</font><font color="#007700">() );<br /><br /></font><font color="#0000BB">?&gt;</font>
-</font>
-</code></div><br />
-If you run this example, the output of the getLanguage function will be "fr". French is the first language specified by the browser and is supported by the server. If not matching language was found, the first language specified by the server will be used.<br />
-<br />
-If no list of supported languages was specified when instantiating this class, the class will assume that only English is supported.<br />
+The getLanguage function helps you to choose a language from a list of supported languages based on the supported languages from the browser. The getLanguage function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that we gave as teh parameter to this function and will return the name of the most appropriate langauage. This function will also take into consideration the right priority of the languages specified by the browser. If no list of supported languages was specified, the framework will assume that only English is supported.<br />
 <br />
 <br />
 <h4> YDObjectUtil </h4>
@@ -150,7 +137,9 @@ The codes above will be converted to the following HTML code:<br />
 <div class="code"><code><font color="#000000">
 &lt;img border="0" src="http://elouai.com/images/star.gif"&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://www.yellowduck.be/"&gt;&lt;img border="0" src="http://elouai.com/images/star.gif"&gt;&lt;/a&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://elouai.com"&gt;eLouai&lt;/a&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://elouai.com"&gt;http://elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="index.php?YD_DEBUG=1"&gt;Yellow Duck Framework examples&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="index.php?YD_DEBUG=1"&gt;index.php?YD_DEBUG=1&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;Webmaster&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;webmaster@elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;Webmaster&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;webmaster@elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;font color="red"&gt;RED&lt;/font&gt;&lt;br /&gt;<br />&lt;b&gt;bold&lt;/b&gt;&lt;br /&gt;<br />&lt;i&gt;italic&lt;/i&gt;&lt;br /&gt;<br />&lt;u&gt;underline&lt;/u&gt;&lt;br /&gt;<br />&lt;code&gt;value="123";&lt;/code&gt;&lt;br /&gt;<br />&lt;blockquote&gt;a quote&lt;/blockquote&gt;&lt;br /&gt;</font>
 </code></div><br />
-Additionally, as you can see, newlines are converted to &lt;br /&gt; tags. The class will also converted non ascii characters to HTML entities.</div>
+Additionally, as you can see, newlines are converted to &lt;br /&gt; tags. The class will also converted non ascii characters to HTML entities.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
 
 
 
