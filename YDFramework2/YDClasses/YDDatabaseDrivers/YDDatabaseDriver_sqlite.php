@@ -7,7 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDDatabaseDriver.php' );
+	require_once( 'YDDatabase.php' );
 
 	/**
 	 *	This class defines a database driver for SQLite.
