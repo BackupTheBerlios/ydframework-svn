@@ -49,12 +49,6 @@
          *  @param $height The maximum height of the thumbnail.
          *  @param $cache  (optional) Indicate if the thumbnails should be 
          *                 cached or not. By default, caching is turned on.
-         *
-         *  @todo
-         *      If somethings goes wrong with making the thumbnails, we need to
-         *      send an error image instead of displaying text. We might need to
-         *      save the binary data of the image in the source script, or in a 
-         *      different include file.
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 
