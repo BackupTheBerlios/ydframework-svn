@@ -26,7 +26,7 @@ cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
 echo Creating changelog file
-svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
+svn log -v -r %BLDREV%:2 "file:///C:/_SVNRepos/YDF2" > "changelog.txt"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
@@ -34,7 +34,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 del /Q "%BLDDIR%\YDFramework2\doc\api\doxygen.png"
 del /Q "%BLDDIR%\YDFramework2\doc\*.py"
-copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
+rem copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
 move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc" > NUL
 
 rem Compressing the build archive
