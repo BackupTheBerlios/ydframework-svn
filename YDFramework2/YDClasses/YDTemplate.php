@@ -113,10 +113,17 @@
 			$tpl->right_delimiter = ']';
 
 			// Trim whitespace
-			$tpl->load_filter( 'output', 'trimwhitespace' );
+			$tpl->register_outputfilter( 'YDTemplate_outputfilter_trimwhitespace' );
+
+			// Register the custom modifiers
+			$tpl->register_modifier( 'addslashes', 'addslashes' );
+			$tpl->register_modifier( 'lower', 'strtolower' );
+			$tpl->register_modifier( 'implode', 'YDTemplate_modifier_implode' );
+			$tpl->register_modifier( 'fmtfileize', 'YDTemplate_modifier_fmtfileize' );
+			$tpl->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
 
 			// Add a custom plugins dir
-			array_push( $tpl->plugins_dir, YD_DIR_CLSS . '/YDTemplatePlugins' );
+			//array_push( $tpl->plugins_dir, YD_DIR_CLSS . '/YDTemplatePlugins' );
 
 			// Assign the variables
 			$tpl->assign( $this->_vars );
@@ -128,6 +135,101 @@
 			return $contents; 
 
 		}
+
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_modifier_fmtfileize( $size ) {
+		return YDStringUtil::formatFileSize( $size );
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_modifier_implode( $array, $separator=', ' ) {
+		return implode( $separator, $array );
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_make_timestamp( $string ) {
+		if ( empty( $string ) ) {
+			$string = "now";
+		}
+		$time = strtotime( $string );
+		if ( is_numeric( $time ) && $time != -1 ) {
+			return $time;
+		}
+		if ( preg_match( '/^\d{14}$/', $string ) ) {
+			$time = mktime(
+				substr( $string, 8, 2 ), substr( $string, 10, 2 ), substr( $string, 12, 2 ),
+				substr( $string, 4, 2 ), substr( $string, 6, 2 ), substr( $string,0 ,4 )
+			);
+			return $time;
+		}
+		$time = ( int ) $string;
+		if ( $time > 0 ) {
+			return $time;
+		} else {
+			return time();
+		}
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_modifier_date_format( $string, $format='%b %e, %Y', $default_date=null ) {
+		if( $string != '' ) {
+			return strftime( $format, YDTemplate_make_timestamp( $string ) );
+		} elseif ( isset( $default_date ) && $default_date != '' ) {
+			return strftime( $format, YDTemplate_make_timestamp( $default_date ) );
+		} else {
+			return;
+		}
+	}
+
+	/**
+	 *	@internal
+	 */
+	function YDTemplate_outputfilter_trimwhitespace( $source, &$smarty ) {
+
+		// Pull out the script blocks
+		preg_match_all( "!<script[^>]+>.*?</script>!is", $source, $match );
+		$_script_blocks = $match[0];
+		$source = preg_replace( "!<script[^>]+>.*?</script>!is", '@@@SMARTY:TRIM:SCRIPT@@@', $source );
+
+		// Pull out the pre blocks
+		preg_match_all( "!<pre>.*?</pre>!is", $source, $match );
+		$_pre_blocks = $match[0];
+		$source = preg_replace( "!<pre>.*?</pre>!is", '@@@SMARTY:TRIM:PRE@@@', $source );
+
+		// Pull out the textarea blocks
+		preg_match_all( "!<textarea[^>]+>.*?</textarea>!is", $source, $match );
+		$_textarea_blocks = $match[0];
+		$source = preg_replace( "!<textarea[^>]+>.*?</textarea>!is", '@@@SMARTY:TRIM:TEXTAREA@@@', $source );
+
+		// remove all leading spaces, tabs and carriage returns NOT preceeded by a php close tag.
+		$source = preg_replace( '/((?<!\?>)\n)[\s]+/m', '\1', $source );
+
+		// replace script blocks
+		foreach ( $_script_blocks as $curr_block ) {
+			$source = preg_replace( "!@@@SMARTY:TRIM:SCRIPT@@@!", $curr_block, $source, 1 );
+		}
+
+		// replace pre blocks
+		foreach ( $_pre_blocks as $curr_block ) {
+			$source = preg_replace( "!@@@SMARTY:TRIM:PRE@@@!", $curr_block, $source, 1 );
+		}
+
+		// replace textarea blocks
+		foreach ( $_textarea_blocks as $curr_block ) {
+			$source = preg_replace( "!@@@SMARTY:TRIM:TEXTAREA@@@!", $curr_block, $source, 1 );
+		}
+
+		return $source;
 
 	}
 
