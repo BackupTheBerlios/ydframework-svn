@@ -8,13 +8,13 @@
 	}
 
 	require_once( 'YDBase.php' );
+	require_once( 'YDFSFile.php' );
+	require_once( 'YDFSImage.php' );
+	require_once( 'YDObjectUtil.php' );
 	require_once( 'htmlMimeMail/htmlMimeMail.php' );
 
 	/**
 	 *	This class defines an email message.
-	 *
-	 *	@todo
-	 *		Needs to be written without the PEAR libraries.
 	 */
 	class YDEmail extends YDBase {
 
@@ -128,8 +128,13 @@
 		 *	@param $name		(optional) The suggested file name for the data.
 		 */
 		function addAttachment( $file, $c_type='application/octet-stream', $name='' ) {
-			$data = $this->_msg->getFile( $file );
-			if ( empty( $name ) ) { $name = basename( $file ); }
+			if ( ! YDObjectUtil::isSubClass( $file, 'YDFSFile' ) ) {
+				$file = new YDFSFile( $file );
+			}
+			$data = $file->getContents();
+			if ( empty( $name ) ) { 
+				$name = $file->getBaseName();
+			}
 			$this->_msg->addAttachment( $data, $name, $c_type );
 		}
 
@@ -141,9 +146,17 @@
 		 *	@param $c_type	(optional) The content type of the image or file.
 		 *	@param $name	(optional) The filename of the image.
 		 */
-		function addHTMLImage( $file, $c_type='application/octet-stream', $name='' ) {
-			$data = $this->_msg->getFile( $file );
-			if ( empty( $name ) ) { $name = basename( $file ); }
+		function addHTMLImage( $file, $c_type='', $name='' ) {
+			if ( ! YDObjectUtil::isSubClass( $file, 'YDFSImage' ) ) {
+				$file = new YDFSImage( $file );
+			}
+			$data = $file->getContents();
+			if ( empty( $name ) ) { 
+				$name = $file->getBaseName();
+			}
+			if ( empty( $c_type ) ) { 
+				$c_type = $file->getMimeType();
+			}
 			$this->_msg->addHTMLImage( $data, $name, $c_type );
 		}
 
@@ -177,10 +190,11 @@
 			}
 
 			// Set the header
+			$message->setHeader( 'To', implode( ', ', $this->to ) );
 			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
 			// Send the email
-			$message->send( $this->to );
+			$message->send( $this->to_plain );
 
 		}
 
