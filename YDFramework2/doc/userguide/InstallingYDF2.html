@@ -37,7 +37,6 @@ When you downloaded the latest release of the Yellow Duck Framework, you need to
       +- docs
       +- temp
       +- YDClasses</xmp></div><br />
-<br />
 The main directory of the framework, called "YDFramework-2.0.0" in this example, contains a number of sample files. In this directory, there is also a directory called "YDFramework2", which contains the actual framework files. There are a number of subdirectories in the YDFramework2 directory which each have a specific function:<br />
 <br />
 <ul><li> <strong>3rdparty:</strong> This directory contains the third party libraries that are needed for the Yellow Duck Framework to work properly.
@@ -52,8 +51,7 @@ This directory structure is not really important for using the Yellow Duck Frame
 <br />
 <h4> Installation overview </h4>
 <br />
-There are a number of steps we need to do to get the framework installed properly. The install instructions here apply to the Apache webserver, but similar techniques are available on other<br />
-servers. These are the steps needed to install the framework:<br />
+There are a number of steps we need to do to get the framework installed properly. The install instructions here apply to the Apache webserver, but similar techniques are available on other servers. These are the steps needed to install the framework:<br />
 <br />
 <ol type="1)"><li> Finding a place for the YDFramework2 directory
 </li><li> Assigning rights to the YDFramework2 directory
@@ -69,17 +67,16 @@ The next sections describe these steps in detail.<br />
 <br />
 <h4> Finding a place for the YDFramework2 directory </h4>
 <br />
-The YDFramework2 directory can be placed anywhere in the file system. For security reasons,we suggest you to put the YDFramework directory in a directory which is not viewable by the webserver. It’s not a good idea to put the YDFramework2 directory into the htdocs folders from Apache.<br />
+The YDFramework2 directory can be placed anywhere in the file system. For security reasons, we suggest you to put the YDFramework directory in a directory which is not viewable by the webserver. It’s not a good idea to put the YDFramework2 directory into the htdocs folders from Apache.<br />
 <br />
-The YDFramework2 directory can also be shared among multiple web applications. You only need one YDFramework2 directory on your system. You can if you want install a separate copy<br />
-for each web application.<br />
+The YDFramework2 directory can also be shared among multiple web applications. You only need one YDFramework2 directory on your system. You can if you want install a separate copy for each web application.<br />
 <br />
 <span class="notes"><em><strong>Note:</strong> If you plan to share the Yellow Duck Framework among multiple web applications, you need to think about how you will handle the temporary data from the Framework. A good idea is to write a sheduled task or a cron job that clears the temporary directory every hour to keep the size of this directory within reasonable sizes.</em></span><br />
 <br />
 <br />
 <h4> Assigning rights to the YDFramework2 directory </h4>
 <br />
-Since the framework needs to be able to write temporary data into it’s temp directory,we need to change the rights for this folder. On Windows, you normally don’t need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:<br />
+Since the framework needs to be able to write temporary data into it’s temp directory, we need to change the rights for this folder. On Windows, you normally don’t need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:<br />
 <br />
 <tt>/home/pieter # chmod 777 YDFramework2/temp</tt><br />
 <br />
@@ -95,7 +92,6 @@ In the Apache configuration file, you need to change the following for the web d
 <div class="code"><xmp><Directory "C:/Program Files/Apache/htdocs">
     AllowOverride All
 </Directory></xmp></div><br />
-<br />
 With configuring the directory like this in Apache, you indicate that .htaccess files can be used to override the settings.<br />
 <br />
 <br />
@@ -121,8 +117,7 @@ php_flag enable_dl Off
 # Gzip compress the output
 php_flag output_buffering Off
 php_flag zlib.output_compression On</xmp></div><br />
-<br />
-With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled.<br />
+With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts.<br />
 <br />
 <span class="notes"><em><strong>Note:</strong> for the GZip compression of the output, you need to have the zlib extension loaded in PHP.</em></span><br />
 <br />
@@ -137,14 +132,13 @@ This will enable the use of "&lt;?" as the open tag for PHP scripts instead of t
 <br />
 <h4> Denying direct access to the templates </h4>
 <br />
-Since we do not want people to access the template files directly,we need to tell Apache to deny access to these files. This can be done by adding the following code to the .htaccess file:<br />
+Since we do not want people to access the template files directly, we need to tell Apache to deny access to these files. This can be done by adding the following code to the .htaccess file:<br />
 <br />
 <div class="code"><xmp># Denying direct access to the templates
 <FilesMatch "(.tpl|config.php|includes)$">
     Order allow,deny
     Deny from all
 </FilesMatch></xmp></div><br />
-<br />
 In the example above, I also denied access to the config.php file, as I do not want people to access this file directly. Access to the YDFramework2 and include directories are also denied.<br />
 <br />
 <br />
@@ -157,7 +151,6 @@ To enable this feature, add the following lines to the .htaccess file:<br />
 <div class="code"><xmp># Auto include the Framework files
 php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
 php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</xmp></div><br />
-<br />
 On Windows, you will have to use forward slashes instead of backslashes. Also make sure you use the complete path to the files.<br />
 <br />
 <br />

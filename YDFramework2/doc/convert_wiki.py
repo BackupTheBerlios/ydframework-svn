@@ -60,17 +60,20 @@ def saveData( data, file ):
 
 def main():
 
-    print 'Deleting previous directory...',
+    print 'Deleting previous version...',
     if os.path.exists( outdir ):
-        shutil.rmtree( outdir )
-    print 'Done!'
+        for item in os.listdir( outdir ):
+            if not item.startswith( '.' ):
+                print '    Deleting file %s...' %( item ),
+                os.remove( os.path.join( outdir, item ) )
+                print 'Done!'
 
     if not os.path.exists( outdir ):
         print '\nCreating directory %s...' %( outdir ),
         os.mkdir( outdir )
         print 'Done!'
 
-    print '\nDownloading style sheet...',
+    print '\nDownloading style sheet ydf2.css...',
     data = getData( 'http://www.yellowduck.be/ydf2/wiki/css/wakka.css' )
     saveData( data, os.path.join( outdir, 'ydf2.css' ) )
     print 'Done!'

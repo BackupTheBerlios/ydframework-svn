@@ -33,7 +33,6 @@ The template file that goes along with this script looks as follows (sample1.tpl
 </body>
 
 </html></xmp></div><br />
-<br />
 When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can<br />
 be changed to work exactly the way you want it to work.<br />
 <br />
@@ -46,11 +45,11 @@ The first line you see in the sample1.php script is the include of the file call
 </li><li> Reconfigures the PHP include path
 </li><li> Includes the different files from the rest of the framework</li></ul>
 <br />
-After that,we define a new class, called "sample1Request" which is based on the YDRequest class. For each script, you need to have 1class which is named as the basename of the file (sample1in this case). This class should have the YDRequest class as one of it ancestors.<br />
+After that, we define a new class, called "sample1Request" which is based on the YDRequest class. For each script, you need to have 1class which is named as the basename of the file (sample1in this case). This class should have the YDRequest class as one of it ancestors.<br />
 <br />
 Since we are inheriting from the YDRequest class, we initialize the parent class in the class constructor of the "sample1" class.<br />
 <br />
-Then we see two functions that start with the text "action". All functions that implement actions start with "action".We will see later on how you can choose which one gets executed.<br />
+Then we see two functions that start with the text "action". All functions that implement actions start with "action". We will see later on how you can choose which one gets executed.<br />
 <br />
 The last part of the script is the include of the "YDF2_process.php" script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens.<br />
 <br />
