@@ -427,18 +427,20 @@
 		/**
 		 *	Add a rule to compare different form elements with each other.
 		 *
-		 *	@param	$elements	The array of elements to compare.
-		 *	@param	$rule		The name of the rule to apply.
+		 *	@param	$elements	The array of elements to compare with each other.
+		 *	@param	$rule		The name of the rule to apply. This can be "equal", "asc" or "desc".
 		 *	@param	$error		The error message to show if an error occured.
-		 *
-		 *	@todo
-		 *		Add documentation for these types of rules.
 		 */
 		function addCompareRule( $elements, $rule, $error ) {
 
 			// Check if we have a valid rule
 			if ( ! in_array( strtolower( $rule ), array( 'equal', 'asc', 'desc' ) ) ) {
 				trigger_error( 'Unknown compare rule "' . $rule . '"', YD_ERROR );
+			}
+
+			// Check if we have an array as list of elements
+			if ( ! is_array( $elements ) ) {
+				trigger_error( 'The addCompareRule function requires the list elements to be an array.', YD_ERROR );
 			}
 
 			// Check if we have enough elements

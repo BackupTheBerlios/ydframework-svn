@@ -97,7 +97,77 @@
             <listitem><emphasis role="bold">bbtextarea:</emphasis> this is a special type of textarea field which has a toolbar for adding BBCode style tags to markup the text.</listitem>
         </itemizedlist>
 
-        <note>Need to write more about how to create your own elements.</note>
+        <para>You can also easily create your own form elements. Each form element needs to implement the following API:</para>
+
+        <programlisting><![CDATA[<?php
+
+    /**
+     *	This is the base class for all form elements.
+     */
+    class YDFormElement extends YDBase {
+
+        /**
+         *	This is the class constructor for the YDFormElement class.
+         *
+         *	@param $form		The name of the form to which this element is connected.
+         *	@param $name		The name of the form element.
+         *	@param $label		(optional) The label for the form element.
+         *	@param $attributes	(optional) The attributes for the form element.
+         *	@param $options		(optional) The options for the elment.
+         */
+        function YDFormElement( $form, $name, $label='', $attributes=array(), $options=array() ) {
+
+            // Initialize the parent
+            $this->YDBase();
+
+            // Initialize the variables
+            $this->_form = $form;
+            $this->_name = $name;
+            $this->_label = $label;
+            $this->_attributes = $attributes;
+            $this->_options = $options;
+            $this->_type = '';
+            $this->_value = '';
+            $this->_isButton = false;
+
+            // Indicate where the label should be
+            $this->_labelPlace = 'before';
+
+            // Indicate if filters need to be applied
+            $this->_applyFilters = true;
+
+        }
+
+        /**
+         *	Indicates if the element is a button or not.
+         *
+         *	@returns	Boolean indicating if the element is a button or not.
+         */
+        function isButton() {
+            if ( $this->_isButton === true ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         *	This function will return the element as an array.
+         *
+         *	@returns	The form element as an array.
+         */
+        function toArray() {
+        }
+
+        /**
+         *	This function will return the element as HTML.
+         *
+         *	@returns	The form element as HTML text.
+         */
+        function toHtml() {
+        }
+
+?>]]></programlisting>
 
     </sect1>
 
@@ -289,6 +359,131 @@
         <note>Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</note>
 
         <note>If you apply one of the standard rules to a file element, it will apply to the filename of the file that was entered in the file text field. It will not apply to the contents of the uploaded file.</note>
+
+        <para>There are also two other types of rules: form rules and compare rules.</para>
+
+        <para>Form rules can be added using the addFormRule function. This function call takes one argument, which is a callback function. When the form rule get's executed, it will execute the indicated function passing the form values as an associative array. If the function returns true, the validation is passed, otherwise, the validation fails. This is demonstrated by the following code sample:</para>
+
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDForm.php' );
+    require_once( 'YDRequest.php' );
+
+    // Class definition
+    class form_rule extends YDRequest {
+
+        // Class constructor
+        function form_rule() {
+
+            // Initialize the parent class
+            $this->YDRequest();
+
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Create the form
+            $form = new YDForm( 'myForm' );
+            $form->setDefaults( array( 'name' => 'Joe User' ) );
+            $form->addElement( 'text', 'loginName', 'User name:' );
+            $form->addElement( 'password', 'loginPass', 'Password:' );
+            $form->addElement( 'submit', 'cmdSubmit', 'Login' );
+
+            // Add the form rule
+            $form->addFormRule( array( & $this, 'checkLogin' ) );
+
+            // Process the form
+            if ( $form->validate() ) {
+                YDDebugUtil::dump( $form->getValues() );
+            } else {
+                $form->display();
+            }
+
+        }
+
+        // Function to check the login. This is the callback for the form rule.
+        function checkLogin( $fields ) {
+            if ( $fields['loginName'] == 'pieter' && $fields['loginPass'] == 'kermit' ) {
+                return true;
+            } else {
+                return array( 'loginName' => 'Username and/or password incorrect' );
+            }
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>There are also what we call compare rules, which are used to compare the values of form elements with each other. The compare rules are added using the addCompareRule function. This function takes the following arguments:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">$element</emphasis> The array of elements to compare with each other.</listitem>
+            <listitem><emphasis role="bold">$rule</emphasis> The name of the rule to apply. This can be "equal", "asc" or "desc".</listitem>
+            <listitem><emphasis role="bold">$error</emphasis> The error message to show if an error occured.</listitem>
+        </itemizedlist>
+
+        <para>If you use the "equal" rule, the values for all the different form elements should be the same. For the "asc" rule, the first element should be smaller than the second one, the second element smaller than the third one, ... The "desc" rule is the opposite of the "asc" rule.</para>
+
+        <para>The "asc" and "desc" rules are designed to be used with numeric values and date/time form elements.</para>
+
+        <para>The following code listing gives you an example on how to use the compare rules:</para>
+
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDRequest.php' );
+
+    // Class definition
+    class form_compare extends YDRequest {
+
+        // Class constructor
+        function form_compare() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Create the form
+            $form1 = new YDForm( 'form_equal' );
+            $form1->addElement( 'text', 'txt1', 'Enter text 1:' );
+            $form1->addElement( 'text', 'txt2', 'Enter text 2:' );
+            $form1->addElement( 'text', 'txt3', 'Enter text 3:' );
+            $form1->addElement( 'submit', 'cmd1', 'equal' );
+
+            // Add the rules
+            $form1->addRule( 'txt1', 'numeric', 'txt1 should be numeric' );
+            $form1->addRule( 'txt2', 'numeric', 'txt2 should be numeric' );
+            $form1->addRule( 'txt3', 'numeric', 'txt2 should be numeric' );
+            $form1->addCompareRule( array( 'txt1', 'txt2', 'txt3' ), 'equal', 'txt1, txt2 and txt3 should be equal' );
+
+            // Validate or show the form
+            if ( $form1->validate() ) {
+                YDDebugUtil::dump( $form1->getValues(), 'Form1 values' );
+            } else {
+                $form1->display();
+            }
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
 
         <para>Now that we assigned all the rules and filters to the form, we can use the validate function to check if the input from our form was validated succesfully. Only if this condition is met, we will do something with the data of the form. This is also called "processing the form" which is discussed in the next section.</para>
 
