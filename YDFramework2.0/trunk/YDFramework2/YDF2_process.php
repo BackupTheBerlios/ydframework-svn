@@ -28,7 +28,7 @@
 	YDInclude( 'YDExecutor.php' );
 
 	// Get the name of the executor class
-	$clsName = YD_EXECUTOR;
+	$clsName = YDConfig::get( 'YD_EXECUTOR' );
 
 	// Instantiate the executor class
 	$clsInst = new $clsName( YD_SELF_FILE );

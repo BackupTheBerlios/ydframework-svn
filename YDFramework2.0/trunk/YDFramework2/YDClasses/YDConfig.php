@@ -37,7 +37,7 @@
 		 *	This function initializes the global configuration.
 		 */
 		function init() {
-			if ( ! is_array( $GLOBALS[ YD_CONFIG_VAR ] ) ) {
+			if ( ! isset( $GLOBALS[ YD_CONFIG_VAR ] ) ) {
 				$GLOBALS[ YD_CONFIG_VAR ] = array();
 			}
 		}
@@ -53,6 +53,8 @@
 
 			// Set the new variable
 			if ( YDConfig::exists( $name ) && $override ) {
+				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+			} else { 
 				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
 			}
 

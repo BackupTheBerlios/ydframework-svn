@@ -154,9 +154,7 @@
 	}
 
 	// Class executor
-	if ( ! defined( 'YD_EXECUTOR' ) ) {
-		define( 'YD_EXECUTOR', 'YDExecutor' );
-	}
+	YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
 
 	// HTTP constants
 	if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) {
