@@ -264,6 +264,9 @@
         // Include Smarty
         require_once( YD_DIR_3RDP_SMARTY . '/Smarty.class.php' );
 
+        // Include the HTTP client
+        require_once( YD_DIR_3RDP . '/IXR_Library.inc.php' );
+
         // Include the Yellow Duck framework
         require_once( YD_DIR_CLSS . '/YDBase.php' );
         require_once( YD_DIR_CLSS . '/YDArrayUtil.php' );
@@ -285,6 +288,7 @@
         require_once( YD_DIR_CLSS . '/YDTemplateSmarty.php' );
         require_once( YD_DIR_CLSS . '/YDTimer.php' );
         require_once( YD_DIR_CLSS . '/YDUrl.php' );
+        require_once( YD_DIR_CLSS . '/YDXmlRpcClient.php' );
 
         // Check if we have the right PHP version
         if ( YDPhpUtil::versionCheck( '4.2.0' ) ) {
