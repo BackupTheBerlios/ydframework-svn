@@ -250,7 +250,8 @@
 			$elementVars = array();
 			foreach ( $this->_formVars as $var=>$value ) {
 				if ( $var === $this->_name . '_' . $name ) {
-					$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
+					//$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
+					$elementVars[ preg_replace( '/^' . $this->_name . '_/', '', $var ) ] = $value;
 				}
 			}
 
@@ -445,7 +446,8 @@
 			foreach ( $_POST as $key=>$value ) {
 
 				// Remove the form name from the element name
-				$key = str_replace( $this->_name . '_', '', $key );
+				//$key = str_replace( $this->_name . '_', '', $key );
+				$key = preg_replace( '/^' . $this->_name . '_/', '', $key );
 
 				// Check if the key is a form element
 				if ( array_key_exists( $key, $this->_elements ) ) { return true; };
