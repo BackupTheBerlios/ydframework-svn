@@ -68,7 +68,7 @@
         /**
          *  This function will return the full URL to the database.
          *
-         *  @param The full URL to the database.
+         *  @returns The full URL to the database.
          */
         function getUrl() {
             return $this->_url;
