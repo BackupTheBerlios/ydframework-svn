@@ -70,7 +70,7 @@
 				'name'	=> $this->_name,
 				'value'	=> $this->_value,
 				'type'	=> $this->_type,
-				'label'	=> $this->_label,
+				'label'	=> '<label for="' . $this->_form . '_' . $this->_name . '">' . $this->_label . '</label>',
 				'options' => $this->_options,
 				'placeLabel' => $this->_labelPlace,
 				'html'	=> $this->toHtml(),
