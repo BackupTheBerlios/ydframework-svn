@@ -1,312 +1,314 @@
 <?php
 
-	/*
-	
-		Yellow Duck Framework version 2.0
-		Copyright (C) (c) copyright 2004 Pieter Claerhout
-	
-		This library is free software; you can redistribute it and/or
-		modify it under the terms of the GNU Lesser General Public
-		License as published by the Free Software Foundation; either
-		version 2.1 of the License, or (at your option) any later version.
-	
-		This library is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-		Lesser General Public License for more details.
-	
-		You should have received a copy of the GNU Lesser General Public
-		License along with this library; if not, write to the Free Software
-		Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-	
-	*/
+    /*
 
-	if ( ! defined( 'YD_FW_NAME' ) ) {
-		die( 'Yellow Duck Framework is not loaded.' );
-	}
+        Yellow Duck Framework version 2.0
+        Copyright (C) (c) copyright 2004 Pieter Claerhout
 
-	YDInclude( 'YDFileSystem.php' );
+        This library is free software; you can redistribute it and/or
+        modify it under the terms of the GNU Lesser General Public
+        License as published by the Free Software Foundation; either
+        version 2.1 of the License, or (at your option) any later version.
 
-	/**
-	 *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and 
-	 *	straightforward way. If you set up your class instance, you can automatically output to the different versions 
-	 *	of RSS and ATOM with the same source data.
-	 */
-	class YDFeedCreator extends YDBase {
+        This library is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+        Lesser General Public License for more details.
 
-		/**
-		 *	This is the class constructor for the YDFeedCreator class.
-		 */
-		function YDFeedCreator() {
+        You should have received a copy of the GNU Lesser General Public
+        License along with this library; if not, write to the Free Software
+        Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-			// Initialize YDBase
-			$this->YDBase();
+    */
 
-			// Start with the general variables
-			$this->_encoding = 'ISO-8859-1';
-			$this->_title = '';
-			$this->_description = '';
-			$this->_link = '';
-			$this->_items = array();
-			$this->_generator = YD_FW_NAMEVERS . ' - YDFeedCreator';
+    // Check if the framework is loaded
+    if ( ! defined( 'YD_FW_NAME' ) ) {
+        die( 'Yellow Duck Framework is not loaded.' );
+    }
 
-		}
+    // Includes
+    YDInclude( 'YDFileSystem.php' );
 
-		/**
-		 *	Function to set the encoding of the feed.
-		 *
-		 *	@param $encoding	The encoding of the feed.
-		 */
-		function setEncoding( $encoding ) {
-			$this->_encoding = strtoupper( $encoding );
-		}
+    /**
+     *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and 
+     *	straightforward way. If you set up your class instance, you can automatically output to the different versions 
+     *	of RSS and ATOM with the same source data.
+     */
+    class YDFeedCreator extends YDBase {
 
-		/**
-		 *	Function to set the title of the feed.
-		 *
-		 *	@param $title	The title of the feed.
-		 */
-		function setTitle( $title ) {
-			$this->_title = YDStringUtil::encodeString( $title, true );
-		}
+        /**
+         *	This is the class constructor for the YDFeedCreator class.
+         */
+        function YDFeedCreator() {
 
-		/**
-		 *	Function to set the description of the feed.
-		 *
-		 *	@param $desc	The description of the feed.
-		 */
-		function setDescription( $desc ) {
-			$this->_description = YDStringUtil::encodeString( $desc, true );
-		}
+            // Initialize YDBase
+            $this->YDBase();
 
-		/**
-		 *	Function to set the link of the feed.
-		 *
-		 *	@param $link	The link of the feed.
-		 */
-		function setLink( $link ) {
-			if ( substr( $link, 0, 1 ) == '/' ) {
-				$url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
-				if ( $_SERVER['SERVER_PORT'] != '80' ) {
-					$url = $url . ':' . $_SERVER['SERVER_PORT'];
-				}
-				$link = $url . $link;
-			}
-			$this->_link = htmlentities( $link );
-		}
+            // Start with the general variables
+            $this->_encoding = 'ISO-8859-1';
+            $this->_title = '';
+            $this->_description = '';
+            $this->_link = '';
+            $this->_items = array();
+            $this->_generator = YD_FW_NAMEVERS . ' - YDFeedCreator';
 
-		/**
-		 *	This function will add a new item to the feed. You need to at least give in a title, link. A description is
-		 *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which 
-		 *	is the md5 checksum of the different elememts.
-		 *
-		 *	@param $title	The title of the feed item.
-		 *	@param $link	The link to the feed item.
-		 *	@param $desc	(optional) The description for the feed item.
-		 *	@param $guid	(optional) The guid for the feed item.
-		 */
-		function addItem( $title, $link, $desc=null, $guid=null ) {
+        }
 
-			if ( empty( $guid  ) ) {
-				$checkSum = $this->_link . $title . $link;
-				if ( $desc != null ) { $checkSum .= $desc; }
-				$guid = md5( $checkSum );
-			}
+        /**
+         *	Function to set the encoding of the feed.
+         *
+         *	@param $encoding	The encoding of the feed.
+         */
+        function setEncoding( $encoding ) {
+            $this->_encoding = strtoupper( $encoding );
+        }
 
-			if ( substr( $link, 0, 1 ) == '/' ) {
-				$url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
-				if ( $_SERVER['SERVER_PORT'] != '80' ) {
-					$url = $url . ':' . $_SERVER['SERVER_PORT'];
-				}
-				$link = $url . $link;
-			}
+        /**
+         *	Function to set the title of the feed.
+         *
+         *	@param $title	The title of the feed.
+         */
+        function setTitle( $title ) {
+            $this->_title = YDStringUtil::encodeString( $title, true );
+        }
 
-			$item = array(
-				'title' => YDStringUtil::encodeString( $title, true ), 'link' => htmlentities( $link ),
-				'description' => $desc, 'guid' => $guid
-			);
+        /**
+         *	Function to set the description of the feed.
+         *
+         *	@param $desc	The description of the feed.
+         */
+        function setDescription( $desc ) {
+            $this->_description = YDStringUtil::encodeString( $desc, true );
+        }
 
-			$this->_items[ $guid ] = $item;
+        /**
+         *	Function to set the link of the feed.
+         *
+         *	@param $link	The link of the feed.
+         */
+        function setLink( $link ) {
+            if ( substr( $link, 0, 1 ) == '/' ) {
+                $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+                if ( $_SERVER['SERVER_PORT'] != '80' ) {
+                    $url = $url . ':' . $_SERVER['SERVER_PORT'];
+                }
+                $link = $url . $link;
+            }
+            $this->_link = htmlentities( $link );
+        }
 
-		}
+        /**
+         *	This function will add a new item to the feed. You need to at least give in a title, link. A description is
+         *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which 
+         *	is the md5 checksum of the different elememts.
+         *
+         *	@param $title	The title of the feed item.
+         *	@param $link	The link to the feed item.
+         *	@param $desc	(optional) The description for the feed item.
+         *	@param $guid	(optional) The guid for the feed item.
+         */
+        function addItem( $title, $link, $desc=null, $guid=null ) {
 
-		/**
-		 *	This function will return the feed in the specified format. The following formats are recognized: RSS0.91,
-		 *	RSS1.0, RSS2.0, ATOM
-		 *
-		 *	@remark
-		 *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
-		 *		format will be used.
-		 *
-		 *	@param $format	(optional) The format in which the items should be converted.
-		 *
-		 *	@returns	String with the data in the requested format.
-		 */
-		function toXml( $format='RSS2.0' ) {
+            if ( empty( $guid  ) ) {
+                $checkSum = $this->_link . $title . $link;
+                if ( $desc != null ) { $checkSum .= $desc; }
+                $guid = md5( $checkSum );
+            }
 
-			// Convert the format to uppercase
-			$format = strtoupper( $format );
+            if ( substr( $link, 0, 1 ) == '/' ) {
+                $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+                if ( $_SERVER['SERVER_PORT'] != '80' ) {
+                    $url = $url . ':' . $_SERVER['SERVER_PORT'];
+                }
+                $link = $url . $link;
+            }
 
-			// Check if the format is an allowed one
-			if ( ! in_array(
-				$format, array( 'RSS0.91', 'RSS1.0', 'RSS2.0', 'ATOM' )
-			) ) {
-				trigger_error(
-					'The YDFeedCreator does not support the format called "' . $format . '". Only the formats "RSS0.91"'
-					. ', "RSS1.0", "RSS2.0" and "ATOM" are supported.', YD_ERROR
-				);
-			}
+            $item = array(
+                'title' => YDStringUtil::encodeString( $title, true ), 'link' => htmlentities( $link ),
+                'description' => $desc, 'guid' => $guid
+            );
 
-			// Start with the first XML line
-			$xml = '<?xml version="1.0" encoding="' . $this->_encoding . '"?>';
-	  
-			// Formatter for RSS 0.91
-			if ( $format == 'RSS0.91' || $format == 'RSS2.0' ) {
-				if ( $format == 'RSS0.91' ) {
-					$xml .= '<rss version="0.91">';
-				} else {
-					$xml .= '<rss version="2.0">';
-				}
-				$xml .= '<channel>';
-				$xml .= '<title>' . $this->_title . '</title>';
-				if ( ! empty( $this->_description ) ) {
-					$xml .= '<description>' . $this->_description . '</description>';
-				}
-				$xml .= '<link>' . $this->_link . '</link>';
-				$xml .= '<generator>' . $this->_generator . '</generator>';
-				foreach ( $this->_items as $item ) {
-					$item['description'] = YDStringUtil::encodeString( $item['description'], true );
-					$xml .= '<item>';
-					$xml .= '<title>' . $item['title'] . '</title>';
-					$xml .= '<link>' . $item['link'] . '</link>';
-					$xml .= '<guid isPermanlink="false">' . $item['guid'] . '</guid>';
-					if ( ! empty( $item['description'] ) ) {
-						$xml .= '<description>' . $item['description'] . '</description>';
-					}
-					$xml .= '</item>';
-				}
-				$xml .= '</channel>';
-				$xml .= '</rss>';
-			}
+            $this->_items[ $guid ] = $item;
 
-			// Formatter for RSS1.0
-			if ( $format == 'RSS1.0' ) {
-				$xml .= '<rdf:RDF';
-				$xml .= ' xmlns="http://purl.org/rss/1.0/"';
-				$xml .= ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"';
-				$xml .= ' xmlns:dc="http://purl.org/dc/elements/1.1/">';
-				$xml .= '<channel rdf:about="">';
-				$xml .= '<title>' . $this->_title . '</title>';
-				$xml .= '<description>' . $this->_description . '</description>';
-				$xml .= '<link>' . $this->_link . '</link>';
-				$xml .= '<items>';
-				$xml .= '<rdf:Seq>';
-				foreach ( $this->_items as $item ) {
-					$xml .= '<rdf:li rdf:resource="' . $item['link'] . '"/>';
-				}
-				$xml .= '</rdf:Seq>';
-				$xml .= '</items>';
-				$xml .= '</channel>';
-				foreach ( $this->_items as $item ) {
-					$item['description'] = YDStringUtil::encodeString( $item['description'], true );
-					$xml .= '<item rdf:about="' . $item['link'] . '">';
-					$xml .= '<dc:format>text/html</dc:format>';
-					$xml .= '<title>' . $item['title'] . '</title>';
-					$xml .= '<link>' . $item['link'] . '</link>';
-					if ( ! empty( $item['description'] ) ) {
-						$xml .= '<description>' . $item['description'] . '</description>';
-					}
-					$xml .= '</item>';
+        }
 
-				}
-				$xml .= '</rdf:RDF>';
-			}
+        /**
+         *	This function will return the feed in the specified format. The following formats are recognized: RSS0.91,
+         *	RSS1.0, RSS2.0, ATOM
+         *
+         *	@remark
+         *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
+         *		format will be used.
+         *
+         *	@param $format	(optional) The format in which the items should be converted.
+         *
+         *	@returns	String with the data in the requested format.
+         */
+        function toXml( $format='RSS2.0' ) {
 
-			// Formatter for ATOM
-			if ( $format == 'ATOM' ) {
-				$xml .= '<feed version="0.3" xmlns="http://purl.org/atom/ns#">';
-				$xml .= '<title>' . $this->_title . '</title>';
-				if ( ! empty( $this->_description ) ) {
-					$xml .= '<tagline>' . $this->_description . '</tagline>';
-				}
-				$xml .= '<link rel="alternate" type="text/html" href="' . $this->_link . '"/>';
-				$xml .= '<id>' . $this->_link . '</id>';
-				$xml .= '<generator>' . $this->_generator . '</generator>';
-				foreach ( $this->_items as $item ) {				
-					$xml .= '<entry>';
-					$xml .= '<title>' . $item['title'] . '</title>';
-					$xml .= '<link rel="alternate" type="text/html" href="' . $item['link'] . '"/>';
-					$xml .= '<id>' . $item['guid'] . '</id>';
-					if ( ! empty( $item['description'] ) ) {
-						$xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ '; 
-						$xml .= $item['description'];
-						$xml .= ' ]]></content>';
-					}
-					$xml .= '</entry>';
-				}
-				$xml .= '</feed>';
-			}
+            // Convert the format to uppercase
+            $format = strtoupper( $format );
 
-			// Return the XML
-			return $xml;
+            // Check if the format is an allowed one
+            if ( ! in_array(
+                $format, array( 'RSS0.91', 'RSS1.0', 'RSS2.0', 'ATOM' )
+            ) ) {
+                trigger_error(
+                    'The YDFeedCreator does not support the format called "' . $format . '". Only the formats "RSS0.91"'
+                    . ', "RSS1.0", "RSS2.0" and "ATOM" are supported.', YD_ERROR
+                );
+            }
 
-		}
+            // Start with the first XML line
+            $xml = '<?xml version="1.0" encoding="' . $this->_encoding . '"?>';
+      
+            // Formatter for RSS 0.91
+            if ( $format == 'RSS0.91' || $format == 'RSS2.0' ) {
+                if ( $format == 'RSS0.91' ) {
+                    $xml .= '<rss version="0.91">';
+                } else {
+                    $xml .= '<rss version="2.0">';
+                }
+                $xml .= '<channel>';
+                $xml .= '<title>' . $this->_title . '</title>';
+                if ( ! empty( $this->_description ) ) {
+                    $xml .= '<description>' . $this->_description . '</description>';
+                }
+                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<generator>' . $this->_generator . '</generator>';
+                foreach ( $this->_items as $item ) {
+                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
+                    $xml .= '<item>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link>' . $item['link'] . '</link>';
+                    $xml .= '<guid isPermanlink="false">' . $item['guid'] . '</guid>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<description>' . $item['description'] . '</description>';
+                    }
+                    $xml .= '</item>';
+                }
+                $xml .= '</channel>';
+                $xml .= '</rss>';
+            }
 
-		/**
-		 *	This function will output the feed in the specified format. It will send the output directly to the browser.
-		 *	The following formats are recognized: RSS0.91, RSS1.0, RSS2.0, ATOM
-		 *
-		 *	@remark
-		 *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
-		 *	format will be used.
-		 *
-		 *	@param $format	(optional) The format in which the items should be converted.
-		 */
-		function outputXml( $format='RSS2.0' ) {
+            // Formatter for RSS1.0
+            if ( $format == 'RSS1.0' ) {
+                $xml .= '<rdf:RDF';
+                $xml .= ' xmlns="http://purl.org/rss/1.0/"';
+                $xml .= ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"';
+                $xml .= ' xmlns:dc="http://purl.org/dc/elements/1.1/">';
+                $xml .= '<channel rdf:about="">';
+                $xml .= '<title>' . $this->_title . '</title>';
+                $xml .= '<description>' . $this->_description . '</description>';
+                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<items>';
+                $xml .= '<rdf:Seq>';
+                foreach ( $this->_items as $item ) {
+                    $xml .= '<rdf:li rdf:resource="' . $item['link'] . '"/>';
+                }
+                $xml .= '</rdf:Seq>';
+                $xml .= '</items>';
+                $xml .= '</channel>';
+                foreach ( $this->_items as $item ) {
+                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
+                    $xml .= '<item rdf:about="' . $item['link'] . '">';
+                    $xml .= '<dc:format>text/html</dc:format>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link>' . $item['link'] . '</link>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<description>' . $item['description'] . '</description>';
+                    }
+                    $xml .= '</item>';
 
-			// Get the XML data
-			$xml = $this->toXml( $format );
+                }
+                $xml .= '</rdf:RDF>';
+            }
 
-			// Set the correct headers
-			$etag = '"' . md5( $xml ) . '"';
-			header( 'ETag: ' . $etag );
-			$inm = split( ',', getenv( 'HTTP_IF_NONE_MATCH' ) );
-			foreach ( $inm as $i ) {
-				if ( trim($i) == $etag ) {
-					header( 'HTTP/1.0 304 Not Modified' );
-					die();
-				}
-			}
+            // Formatter for ATOM
+            if ( $format == 'ATOM' ) {
+                $xml .= '<feed version="0.3" xmlns="http://purl.org/atom/ns#">';
+                $xml .= '<title>' . $this->_title . '</title>';
+                if ( ! empty( $this->_description ) ) {
+                    $xml .= '<tagline>' . $this->_description . '</tagline>';
+                }
+                $xml .= '<link rel="alternate" type="text/html" href="' . $this->_link . '"/>';
+                $xml .= '<id>' . $this->_link . '</id>';
+                $xml .= '<generator>' . $this->_generator . '</generator>';
+                foreach ( $this->_items as $item ) {				
+                    $xml .= '<entry>';
+                    $xml .= '<title>' . $item['title'] . '</title>';
+                    $xml .= '<link rel="alternate" type="text/html" href="' . $item['link'] . '"/>';
+                    $xml .= '<id>' . $item['guid'] . '</id>';
+                    if ( ! empty( $item['description'] ) ) {
+                        $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ '; 
+                        $xml .= $item['description'];
+                        $xml .= ' ]]></content>';
+                    }
+                    $xml .= '</entry>';
+                }
+                $xml .= '</feed>';
+            }
 
-			// Output the XML
-			header( 'Content-type: text/xml' );
-			echo( $xml );
+            // Return the XML
+            return $xml;
 
-		}
+        }
 
-		/**
-		 *	This function will save the XML data to the specified file.
-		 *
-		 *	@remark
-		 *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
-		 *	format will be used.
-		 *
-		 *	@param $path	The path to save the XML data to.
-		 *	@param $format	(optional) The format in which the items should be converted.
-		 */
-		function saveXml( $path, $format='RSS2.0' ) {
+        /**
+         *	This function will output the feed in the specified format. It will send the output directly to the browser.
+         *	The following formats are recognized: RSS0.91, RSS1.0, RSS2.0, ATOM
+         *
+         *	@remark
+         *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
+         *	format will be used.
+         *
+         *	@param $format	(optional) The format in which the items should be converted.
+         */
+        function outputXml( $format='RSS2.0' ) {
 
-			// Get the XML data
-			$xml = $this->toXml( $format );
+            // Get the XML data
+            $xml = $this->toXml( $format );
 
-			// Get the directory information
-			$dir = new YDFSDirectory( YDPath::getDirectoryName( $path ) );
+            // Set the correct headers
+            $etag = '"' . md5( $xml ) . '"';
+            header( 'ETag: ' . $etag );
+            $inm = split( ',', getenv( 'HTTP_IF_NONE_MATCH' ) );
+            foreach ( $inm as $i ) {
+                if ( trim($i) == $etag ) {
+                    header( 'HTTP/1.0 304 Not Modified' );
+                    die();
+                }
+            }
 
-			// Create the file
-			$dir->createFile( YDPath::getFileName( $path ), $xml );
+            // Output the XML
+            header( 'Content-type: text/xml' );
+            echo( $xml );
 
-		}
+        }
 
-	}
+        /**
+         *	This function will save the XML data to the specified file.
+         *
+         *	@remark
+         *		The default format is "RSS2.0". If you specify no argument indicating the requested format, the "RSS2.0"
+         *	format will be used.
+         *
+         *	@param $path	The path to save the XML data to.
+         *	@param $format	(optional) The format in which the items should be converted.
+         */
+        function saveXml( $path, $format='RSS2.0' ) {
+
+            // Get the XML data
+            $xml = $this->toXml( $format );
+
+            // Get the directory information
+            $dir = new YDFSDirectory( YDPath::getDirectoryName( $path ) );
+
+            // Create the file
+            $dir->createFile( YDPath::getFileName( $path ), $xml );
+
+        }
+
+    }
 
 ?>

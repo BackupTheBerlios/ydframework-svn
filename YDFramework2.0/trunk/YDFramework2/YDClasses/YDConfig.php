@@ -1,117 +1,118 @@
 <?php
 
-	/*
-	
-		Yellow Duck Framework version 2.0
-		Copyright (C) (c) copyright 2004 Pieter Claerhout
-	
-		This library is free software; you can redistribute it and/or
-		modify it under the terms of the GNU Lesser General Public
-		License as published by the Free Software Foundation; either
-		version 2.1 of the License, or (at your option) any later version.
-	
-		This library is distributed in the hope that it will be useful,
-		but WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-		Lesser General Public License for more details.
-	
-		You should have received a copy of the GNU Lesser General Public
-		License along with this library; if not, write to the Free Software
-		Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-	
-	*/
+    /*
 
-	if ( ! defined( 'YD_FW_NAME' ) ) {
-		die( 'Yellow Duck Framework is not loaded.' );
-	}
+        Yellow Duck Framework version 2.0
+        Copyright (C) (c) copyright 2004 Pieter Claerhout
 
-	// The global variable holding the configuration
-	define( 'YD_CONFIG_VAR', 'YDF2_GLOBAL_CONFIG' );
+        This library is free software; you can redistribute it and/or
+        modify it under the terms of the GNU Lesser General Public
+        License as published by the Free Software Foundation; either
+        version 2.1 of the License, or (at your option) any later version.
 
-	/**
-	 *	This is the class that hold the global configuration.
-	 */
-	class YDConfig extends YDBase {
+        This library is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+        Lesser General Public License for more details.
 
-		/**
-		 *	This function initializes the global configuration.
-		 *
-		 *	@internal
-		 */
-		function _init() {
-			if ( ! isset( $GLOBALS[ YD_CONFIG_VAR ] ) ) {
-				$GLOBALS[ YD_CONFIG_VAR ] = array();
-			}
-		}
+        You should have received a copy of the GNU Lesser General Public
+        License along with this library; if not, write to the Free Software
+        Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-		/**
-		 *	This funtion add a new configuration variable to the configuration.
-		 *
-		 *	@param	$name		The name of the configuration variable.
-		 *	@param	$value		The value of the configuration variable.
-		 *	@param	$override	(optional) Override the current value or not. Default is true.
-		 */
-		function set( $name, $value, $override=true ) {
+    */
 
-			// Set the new variable
-			if ( YDConfig::exists( $name ) ) {
-         			if ( $override ) {
-					$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
-				}
-			} else {
-				$GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
-			}
+    // Check if the framework is loaded
+    if ( ! defined( 'YD_FW_NAME' ) ) {
+        die( 'Yellow Duck Framework is not loaded.' );
+    }
 
-		}
+    // Constants
+    define( 'YD_CONFIG_VAR', 'YDF2_GLOBAL_CONFIG' );
 
-		/**
-		 *	This function returns a variable from the configuration. If the configuration variable doesn't exist, it
-		 *	returns a fatal error.
-		 *
-		 *	@param	$name	The name of the configuration variable to retrieve.
-		 *
-		 *	@returns	The value of the configuration variable.
-		 */
-		function get( $name ) {
+    /**
+     *	This is the class that hold the global configuration.
+     */
+    class YDConfig extends YDBase {
 
-			// Raise an error if an invalid configuration setting
-			if ( ! YDConfig::exists( $name ) ) {
-				trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
-			}
+        /**
+         *	This function initializes the global configuration.
+         *
+         *	@internal
+         */
+        function _init() {
+            if ( ! isset( $GLOBALS[ YD_CONFIG_VAR ] ) ) {
+                $GLOBALS[ YD_CONFIG_VAR ] = array();
+            }
+        }
 
-			// Return the value
-			return $GLOBALS[ YD_CONFIG_VAR ][ $name ];
+        /**
+         *	This funtion add a new configuration variable to the configuration.
+         *
+         *	@param	$name		The name of the configuration variable.
+         *	@param	$value		The value of the configuration variable.
+         *	@param	$override	(optional) Override the current value or not. Default is true.
+         */
+        function set( $name, $value, $override=true ) {
 
-		}
+            // Set the new variable
+            if ( YDConfig::exists( $name ) ) {
+                    if ( $override ) {
+                    $GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+                }
+            } else {
+                $GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
+            }
 
-		/**
-		 *	This function checks if the configuration value is set or not.
-		 *
-		 *	@returns	Boolean indicating if the configuration value is set or not.
-		 */
-		function exists( $name ) {
+        }
 
-			// Initialize the global configuration if needed
-			YDConfig::_init();
+        /**
+         *	This function returns a variable from the configuration. If the configuration variable doesn't exist, it
+         *	returns a fatal error.
+         *
+         *	@param	$name	The name of the configuration variable to retrieve.
+         *
+         *	@returns	The value of the configuration variable.
+         */
+        function get( $name ) {
 
-			// Return true or false
-			return isset( $GLOBALS[ YD_CONFIG_VAR ][ $name ] );
+            // Raise an error if an invalid configuration setting
+            if ( ! YDConfig::exists( $name ) ) {
+                trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
+            }
 
-		}
-		
-		/**
-		 *	This function dumps the contents of the configuration.
-		 */
-		function dump() {
+            // Return the value
+            return $GLOBALS[ YD_CONFIG_VAR ][ $name ];
 
-			// Initialize the global configuration if needed
-			YDConfig::_init();
+        }
 
-			// Dump the configuration
-			YDDebugUtil::dump( $GLOBALS[ YD_CONFIG_VAR ], 'YDConfig contents' );
-		
-		}
+        /**
+         *	This function checks if the configuration value is set or not.
+         *
+         *	@returns	Boolean indicating if the configuration value is set or not.
+         */
+        function exists( $name ) {
 
-	}
+            // Initialize the global configuration if needed
+            YDConfig::_init();
+
+            // Return true or false
+            return isset( $GLOBALS[ YD_CONFIG_VAR ][ $name ] );
+
+        }
+        
+        /**
+         *	This function dumps the contents of the configuration.
+         */
+        function dump() {
+
+            // Initialize the global configuration if needed
+            YDConfig::_init();
+
+            // Dump the configuration
+            YDDebugUtil::dump( $GLOBALS[ YD_CONFIG_VAR ], 'YDConfig contents' );
+        
+        }
+
+    }
 
 ?>
