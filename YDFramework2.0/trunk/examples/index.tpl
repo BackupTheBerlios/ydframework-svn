@@ -205,6 +205,16 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="database_paging.php">Paged arrays</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging.php">array_paging.php</a>
+				<br>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging.tpl">array_paging.tpl</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="form.php">Form handling and validation</a>
 			</td>
 			<td valign="top">

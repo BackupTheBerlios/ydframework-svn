@@ -393,6 +393,124 @@
 
         <note>Be careful with using very large recordsets with this method. With recordsets containing millions of rows, this way of working can be quite slow.</note>
 
+        <para>Since the YDDatabaseSet class is based on regular arrays, you can use it to page regular arrays as well. To page regular arrays, you need to instantiate the YDDatabaseSet class yourself, as illustrated by the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Define the default pagesize
+    define( 'YD_DB_DEFAULTPAGESIZE', 15 );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition
+    class array_paging extends YDRequest {
+
+        // Class constructor
+        function array_paging() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Get the pagesize and current page from the URL
+            // We use the @ mark to supress any error messsages
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
+
+            // Get the list of files in the current directory
+            $dir = new YDFSDirectory();
+            $files = $dir->getContents( '*.*', null, 'YDFSFile' );
+
+            // Create the YDDatabaseSet object
+            $recordset = new YDDatabaseSet( $files, $page, $size );
+
+            // Setup the template
+            $this->template->assign( 'recordset', $recordset );
+
+            // Display the template
+            $this->template->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>
+]]></programlisting>
+
+        <para>The template that goes along with this code sample looks as follows:</para>
+
+        <programlisting><![CDATA[{capture assign="browsebar"}
+    {if $recordset->pages}
+        <p>
+        {if ! $recordset->isFirstPage}
+            <a href="{$recordset->getPreviousUrl()}">previous</a>
+        {else}
+            previous
+        {/if}
+        {foreach from=$recordset->pages item="page"}
+            {if $page == $recordset->page}
+                {$page}
+            {else}
+                <a href="{$recordset->getPageUrl($page)}">{$page}</a>
+            {/if}
+        {/foreach}
+        {if ! $recordset->isLastPage}
+            <a href="{$recordset->getNextUrl()}">next</a>
+        {else}
+            next
+        {/if}
+        </p>
+    {/if}
+    {/capture}
+
+    <html>
+
+    <head>
+
+    <title>{$YD_FW_NAMEVERS}</title>
+
+    </head>
+
+    <body>
+
+    <h3>Array paging example</h3>
+
+    {if $recordset->set}
+        <p>
+            Showing page {$recordset->page} of {$recordset->totalPages} pages
+            ({$recordset->totalRowsOnPage} row(s))
+        </p>
+        {$browsebar}
+        <table border="1" width="400">
+        {foreach from=$recordset->set item="record"}
+            <tr>
+                <td width="200">
+                    <a href="{$record->getBasename()}">{$record->getBasename()}</a>
+                </td>
+            </tr>
+        {/foreach}
+        </table>
+        {$browsebar}
+    {else}
+        <p>No files were found.</p>
+    {/if}
+
+    </body>
+
+    </html>]]></programlisting>
+
     </sect1>
 
     <sect1 id="yddatabase_insert">
@@ -412,6 +530,8 @@
     $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
 
     // The new values
+    // These should be specified as an associative array, using the column name
+    // as the field name, and the value as the field value.
     $values = array();
     $values['ConfigName'] = 'email';
     $values['ConfigValue'] = 'pieter@yellowduck.be';
@@ -442,6 +562,8 @@
     $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
 
     // The new values
+    // These should be specified as an associative array, using the column name
+    // as the field name, and the value as the field value.
     $values = array();
     $values['ConfigName'] = 'email';
     $values['ConfigValue'] = 'pieter@yellowduck.be';
@@ -450,7 +572,9 @@
     $db->executeUpdate( 'configuration', $values );
 
     // Execute the update for a specific row
-    $db->executeUpdate( 'configuration', $values, 'configname = ' . $db->sqlString( 'email' ) );
+    $db->executeUpdate(
+        'configuration', $values, 'configname = ' . $db->sqlString( 'email' )
+    );
 
 ?> ]]></programlisting>
 
