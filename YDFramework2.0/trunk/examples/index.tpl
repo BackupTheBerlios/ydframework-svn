@@ -29,7 +29,13 @@
 
 		<h3>{$YD_FW_NAMEVERS}</h3>
 
-		<p>Welcome to the {$YD_FW_NAMEVERS}!</p>
+		<p><b>Documentation</b></p>
+
+		<p>View the <a href="../doc/api/index.html">API documentation</a> or read the
+		<a href="../doc/userguide/index.html">user guide</a>.</p>
+
+		<p>For more information, please visit:<br>
+		<a href="http://www.yellowduck.be/ydf2/">http://www.yellowduck.be/ydf2/</a></p>
 
 		<p>&nbsp;<br><b>Samples</b></p>
 
@@ -341,11 +347,6 @@
 			</td>
 		</tr>
 		</table>
-
-		<p>&nbsp;<br><b>Documentation</b></p>
-
-		<p>View the <a href="../doc/api/index.html">API documentation</a> or read the
-		<a href="../doc/userguide/index.html">user guide</a>.</p>
 	
 	{/if}
 
