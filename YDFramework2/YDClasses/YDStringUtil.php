@@ -71,6 +71,28 @@
 			return $encoded;
 		}
 
+		/**
+		 *	This function will truncate a string.
+		 *
+		 *	@param $string		String to truncate.
+		 *	@param $length		(optional) The length to truncate to. Default length is 80 characters.
+		 *	@param $etc			(optional) The string to append if the item gets trunctated. Default is '...'.
+		 *	@param $break_words	(optional) Break in the middle of words or not. Default is false.
+		 */
+		function truncate( $string, $length=80, $etc='...', $break_words=false ) {
+			if ( $length == 0 ) { return ''; }
+			if ( strlen( $string ) > $length ) {
+				$string = html_entity_decode( strip_tags( $string ) );
+				$length -= strlen( $etc );
+				if ( ! $break_words ) {
+					$string = preg_replace( '/\s+?(\S+)?$/', '', substr( $string, 0, $length+1 ) );
+				}
+				return htmlentities( substr( $string, 0, $length ) . $etc );
+			} else {
+				return $string;
+			}
+		}
+
 	}
 
 ?>
