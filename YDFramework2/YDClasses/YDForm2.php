@@ -50,7 +50,14 @@
 			$this->_errors = array();
 
 			// The list of default values
-			$this->_default = array();
+			$this->_defaults = array();
+
+			// Check for post or get variables
+			if ( strtoupper( $this->_method ) == 'POST' ) {
+				$this->_formVars = $_POST;
+			} else {
+				$this->_formVars = $_GET;
+			}
 
 			// Add the standard elements
 			$this->registerElement( 'text', 'YDFormElement_Text' );
@@ -107,7 +114,14 @@
 			}
 
 			// Create the instance
-			$instance = new $class( $name, $label, $attribs );
+			$instance = new $class( $this->_name, $name, $label, $attribs );
+
+			// Fill in the value if any
+			if ( isset( $this->_formVars[ $this->_name . '_' . $name ] ) ) {
+				$instance->_value = $this->_formVars[ $this->_name . '_' . $name ];
+			} elseif ( isset( $this->_defaults[ $name ] ) ) {
+				$instance->_value = $this->_defaults[ $name ];
+			}
 
 			// Register the element in the class.
 			$this->_elements[ $name ] = $instance;
@@ -125,7 +139,7 @@
 
 			// Check if the element exists
 			if ( ! array_key_exists( $name, $this->_elements ) ) {
-				YDFatalError( 'The specified element, "' . $name . '" does not exist.' );
+				YDFatalError( 'The specified element "' . $name . '" does not exist.' );
 			}
 
 			// Get the element
@@ -173,37 +187,12 @@
 		 */
 		function toArray() {
 
-			// Update the values of the different elements with their defaults
-			foreach ( $this->_defaults as $key=>$value ) {
-				if ( array_key_exists( $key, $this->_elements ) ) {
-					$element = & $this->_elements[ $key ];
-					$element->_value = $value;
-					unset( $element );
-				}
-			}
-
-			// Check for post or get variables
-			if ( $this->_method == 'POST' ) {
-				$formVars = $_POST;
-			} else {
-				$formVars = $_GET;
-			}
-
-			// Update the values of the different elements with their real values
-			foreach ( $formVars as $key=>$value ) {
-				if ( array_key_exists( $key, $this->_elements ) ) {
-					$element = & $this->_elements[ $key ];
-					$element->_value = $value;
-					unset( $element );
-				}
-			}
-
 			// Start with an empty array
 			$form = array();
 
 			// Add the list of attributes
 			$attribs = array(
-				'name'		=> $this->_name, 'id'		=> $this->_name,
+				'name'		=> $this->_name, 'id'		=> $this->_name, 'method' => strtoupper( $this->_method ),
 				'action'	=> $this->_action, 'target'	=> $this->_target,
 			);
 			$attribs = array_merge( $this->_attributes, $attribs );
@@ -255,8 +244,6 @@
 
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
-				echo( $name );
-				echo( $element );
 				$html .= '<p>';
 				if ( ! empty( $element['label'] ) ) {
 					$html .= $element['label'] . '<br>';

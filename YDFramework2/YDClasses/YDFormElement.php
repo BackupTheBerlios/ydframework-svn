@@ -18,16 +18,18 @@
 		/**
 		 *	This is the class constructor for the YDFormElement class.
 		 *
+		 *	@param $form		The name of the form to which this element is connected.
 		 *	@param $name		The name of the form element.
 		 *	@param $label		The label for the form element.
-		 *	@param $attributes	The attributes for the form element.
+		 *	@param $attributes	(optional) The attributes for the form element.
 		 */
-		function YDFormElement( $name=null, $label=null, $attributes=null ) {
+		function YDFormElement( $form, $name, $label, $attributes=array() ) {
 
 			// Initialize the parent
 			$this->YDBase();
 
 			// Initialize the variables
+			$this->_form = $form;
 			$this->_name = $name;
 			$this->_label = $label;
 			$this->_attributes = $attributes;

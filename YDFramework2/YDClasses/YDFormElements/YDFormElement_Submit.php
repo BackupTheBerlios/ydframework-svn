@@ -13,10 +13,10 @@
 
 	class YDFormElement_Submit extends YDFormElement {
 
-		function YDFormElement_Submit( $name=null, $label=null, $attributes=null ) {
+		function YDFormElement_Submit( $form, $name, $label, $attributes=array() ) {
 
 			// Initialize the parent
-			$this->YDFormElement( $name, $label, $attributes );
+			$this->YDFormElement( $form, $name, $label, $attributes );
 
 			// Set the type
 			$this->_type = 'submit';
@@ -30,7 +30,9 @@
 		function toHtml() {
 
 			// Create the list of attributes
-			$attribs = array( 'type' => $this->_type, 'name' => $this->_name, 'value' => $this->_value );
+			$attribs = array(
+				'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value 
+			);
 			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Get the HTML
