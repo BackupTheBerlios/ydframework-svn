@@ -16,6 +16,10 @@
 			// Initialize the parent
 			$this->YDRequest();
 
+			// Determine the base directory
+			$this->basedir = dirname( YD_SELF_SCRIPT ) . '/';
+			$this->setVar( 'basedir', $this->basedir );
+
 			// Connect to the database
 			$this->_connectToDatabase();
 
@@ -31,7 +35,6 @@
 			// Add the version
 			$this->setVar( 'YD_CMS_NAMEVERS', YD_FW_NAME . ' CMS 1.0' );
 			$this->setVar( 'YD_CMS_HOMEPAGE', YD_FW_HOMEPAGE . 'wiki/YDCms' );
-
 
 		}
 
@@ -153,7 +156,7 @@
 				foreach ( $this->config['site_languages'] as $key=>$lang ) {
 					if ( $key < 4 ) {
 						$this->languages[ strtolower( $lang[0] ) ] = array(
-							'name'=>$lang[1], 'idx'=>$key+1, 'url'=>'language.php?lang=' . $lang[0]
+							'name'=>$lang[1], 'idx'=>$key+1, 'url'=>$this->basedir . 'language.php?lang=' . $lang[0]
 						);
 					}
 				}
@@ -252,6 +255,15 @@
 			$this->setVar( 'username', $this->username );
 		}
 
+		// Function to make an url to an alias
+		function makeAliasUrl( $alias ) {
+			if ( $this->config['short_urls'] == '1' ) {
+				return $this->basedir . $GLOBALS['cfg']['item_url'] . '/' . $alias;
+			} else {
+				return $this->basedir . $GLOBALS['cfg']['item_url'] . '?id=' . $alias;
+			}
+		}
+
 	}
 
 	// Class definition
@@ -283,7 +295,9 @@
 			// Add the urls to the items
 			foreach ( $this->items1 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
-					$this->items1[ $key ]['itemurl'] = 'item.php?id=' . $item['itemalias'];
+					$this->items1[ $key ]['itemurl'] = $this->makeAliasUrl( $item['itemalias'] );
+				} else {
+					$this->items1[ $key ]['itemurl'] = $this->basedir . $this->items1[ $key ]['itemurl'];
 				}
 			}
 
@@ -315,7 +329,8 @@
 			}
 
 			// Set the images directory
-			$this->setVar( 'site_images', 'skins/' . $this->config['site_skin'] . '/images' );
+			$this->setVar( 'site_images', $this->basedir . 'skins/' . $this->config['site_skin'] . '/images' );
+			$this->setVar( 'site_skindir', $this->basedir . 'skins/' . $this->config['site_skin'] );
 
 			// Add the breadcrumb
 			$breadcrumb = $this->getBreadCrumb();
@@ -415,7 +430,9 @@
 			// Add the missing properties
 			foreach ( $this->items2 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
-					$this->items2[ $key ]['itemurl'] = 'item.php?id=' . $item['itemalias'];
+					$this->items2[ $key ]['itemurl'] = $this->makeAliasUrl( $item['itemalias'] );
+				} else {
+					$this->items2[ $key ]['itemurl'] = $this->basedir . $this->items2[ $key ]['itemurl'];
 				}
 			}
 
