@@ -603,7 +603,7 @@
         /**
          *	This function will move the file to the specified path and update the object accordingly.
          *
-         *	@param	$target	Target path.
+         *	@param	$path	Target path.
          *
          *	@returns	False on a failure, true on success.
          */
@@ -1228,7 +1228,7 @@
         /**
          *	This function will move the directory to the specified path and update the object accordingly.
          *
-         *	@param	$target	Target path.
+         *	@param	$path	Target path.
          *
          *	@returns	False on a failure, true on success.
          */
