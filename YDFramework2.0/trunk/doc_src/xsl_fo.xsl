@@ -34,7 +34,7 @@
     <xsl:param name="ulink.show">0</xsl:param>
 
     <xsl:attribute-set name="xref.properties">
-        <xsl:attribute name="color">blue</xsl:attribute>
+        <xsl:attribute name="color">darkred</xsl:attribute>
     </xsl:attribute-set>
 
     <fo:simple-page-master master-name="titlepage-first">
