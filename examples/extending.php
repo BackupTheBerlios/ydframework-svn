@@ -27,8 +27,7 @@
 
 		// Default action
 		function actionDefault() {
-			echo( '<p>ancestors of this request:</p>' );
-			YDDebugUtil::dump( YDObjectUtil::getAncestors( $this ) );
+			YDDebugUtil::dump( YDObjectUtil::getAncestors( $this ), 'ancestors of this request:' );
 		}
 
 	}

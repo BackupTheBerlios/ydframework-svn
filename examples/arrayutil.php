@@ -21,28 +21,28 @@
 
 			// The original array
 			$array = array( 1, 2, 3, 4, 5, 6, 7 );
-			echo( 'Original array' );
-			YDDebugUtil::dump( $array );
+			YDDebugUtil::dump( $array, 'Original array' );
 
 			// Convert to a three column table
-			echo( 'YDArrayUtil::convertToTable( $array, 3 )' );
-			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 3 ) );
+			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 3 ), 'YDArrayUtil::convertToTable( $array, 3 )' );
 
 			// Convert to a three column table
-			echo( 'YDArrayUtil::convertToTable( $array, 3, true )' );
-			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 3, true ) );
+			YDDebugUtil::dump(
+				YDArrayUtil::convertToTable( $array, 3, true ), 'YDArrayUtil::convertToTable( $array, 3, true )'
+			);
 
 			// Convert to a three column table
-			echo( 'YDArrayUtil::convertToTable( $array, 2 )' );
-			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 2 ) );
+			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 2 ), 'YDArrayUtil::convertToTable( $array, 2 )' );
 
 			// Convert to a three column table
-			echo( 'YDArrayUtil::convertToTable( $array, 2, true )' );
-			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 2, true ) );
+			YDDebugUtil::dump(
+				YDArrayUtil::convertToTable( $array, 2, true ), 'YDArrayUtil::convertToTable( $array, 2, true )'
+			);
 
 			// Test for errors
-			echo( 'YDArrayUtil::convertToTable( $array, "a", true )' );
-			YDDebugUtil::dump( YDArrayUtil::convertToTable( $array, 'a', true ) );
+			YDDebugUtil::dump( 
+				YDArrayUtil::convertToTable( $array, 'a', true ), 'YDArrayUtil::convertToTable( $array, "a", true )' 
+			);
 
 		}
 

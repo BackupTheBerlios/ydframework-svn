@@ -23,9 +23,8 @@
 			$client = new YDXmlRpcClient( 'http://www.grijzeblubber.be/bba/xmlrpc.php' );
 
 			// tide.getTideForDay
-			echo( '<p>tide.getTideForDay( 11/05/2004 )</p>' );
 			$result = $client->execute( 'tide.getTideForDay', array( '2004-05-11' ) );
-			YDDebugUtil::dump( $result );
+			YDDebugUtil::dump( $result, 'tide.getTideForDay( 11/05/2004 )' );
 
 		}
 
@@ -36,9 +35,8 @@
 			$client = new YDXmlRpcClient( 'http://time.xmlrpc.com/RPC2' );
 
 			// currentTime.getCurrentTime
-			echo( '<p>currentTime.getCurrentTime</p>' );
 			$result = $client->execute( 'currentTime.getCurrentTime' );
-			YDDebugUtil::dump( $result );
+			YDDebugUtil::dump( $result, 'currentTime.getCurrentTime' );
 
 		}
 

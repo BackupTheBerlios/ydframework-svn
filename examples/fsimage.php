@@ -24,8 +24,7 @@
 			$img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
 
 			// Dump the object
-			echo( __FILE__ );
-			YDDebugUtil::dump( $img );
+			YDDebugUtil::dump( $img, __FILE__ );
 
 			// Dump the object
 			echo( '<br>Basename: ' . $img->getBasename() );
@@ -39,8 +38,7 @@
 			echo( '<br>MIME type: ' . $img->getMimeType() );
 
 			// Image size
-			echo( '<br>Imagesize:' );
-			YDDebugUtil::dump( $img->getImageSize() );
+			YDDebugUtil::dump( $img->getImageSize(), 'Imagesize' );
 
 			// Get the file object for the current file
 			$file = new YDFSFile( 'nofile.php' );

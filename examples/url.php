@@ -34,7 +34,7 @@
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
 			// Get the contents
-			YDDebugUtil::dump( $url->getContents() );
+			YDDebugUtil::dump( $url->getContents(), 'URL contents' );
 
 		}
 

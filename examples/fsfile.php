@@ -34,12 +34,10 @@
 			echo( '<br>File size: ' . $file->getSize() );
 
 			// Contents
-			echo( '<br>getContents:' );
-			YDDebugUtil::dump( $file->getContents() );
+			YDDebugUtil::dump( $file->getContents(), '$file->getContents()' );
 
 			// Contents
-			echo( '<br>getContents( 2, 3 ):' );
-			YDDebugUtil::dump( $file->getContents( 2, 3 ) );
+			YDDebugUtil::dump( $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )' );
 
 			// Get the file object for the current file
 			$file = new YDFSFile( 'nofile.php' );
