@@ -184,6 +184,34 @@
             }
         }
 
+        /**
+         *  This function will serialize an object. The serialized output is
+         *  GZip compressed to save space.
+         *
+         *  @param $obj Object to serialize.
+         *
+         *  @todo
+         *      Check if we are using the right gzip functions.
+         */
+        function serialize( $obj ) {
+
+            // We first serialize and then gzdeflate
+            return gzdeflate( serialize( $obj ) );
+
+        }
+
+        /**
+         *  This function will unserialize an object.
+         *
+         *  @param $obj Object to unserialize.
+         */
+        function unserialize( $obj ) {
+
+            // We first gzinflate and then deserialize
+            return unserialize( gzinflate( $obj ) );
+
+        }
+
     }
 
 ?>
