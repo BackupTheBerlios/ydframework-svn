@@ -56,6 +56,9 @@
 			$this->cc = array();
 			$this->bcc = array();
 
+			// The SMTP indication
+			$this->smtp = false;
+
 		}
 
 		/**
@@ -159,6 +162,21 @@
 		}
 
 		/**
+		 *	Sets the SMTP parameters and indicates that the message needs to be send with SMTP.
+		 *
+		 *	@param $host	SMTP server.
+		 *	@param $port	SMTP server port
+		 *	@param $helo	Which helo command that needs to be send
+		 *	@param $auth	Boolean indicating if authentication needs to be used
+		 *	@param $user	Username used for authentication
+		 *	@param $pass	Password used for authentication
+		 */
+		function setSMTP( $host=null, $port=null, $helo=null, $auth=null, $user=null, $pass=null ) {
+			$this->smtp = true;
+			$this->_msg->setSMTPParams( $host, $port, $helo, $auth, $user, $pass); 
+		}
+
+		/**
 		 *	Adds an attachment to a message.
 		 *
 		 *	@param $file		The file path.
@@ -201,6 +219,9 @@
 		/**
 		 *	This function will send the actual email. It accepts a list of recipients which should be defined as an 
 		 *	array. If no recipients are defined, it will use the one setup in the email message using addTo.
+		 *
+		 *	If the SMTP parameters were set, it will try to send the message with SMTP, otherwise the mail function from
+		 *	PHP is going to be used.
 		 *
 		 *	@returns	Boolean indicating if the message was send succesfully or not.
 		 */
@@ -254,8 +275,12 @@
 			// Get the to addresses
 			$to = $message->_encodeHeader( implode( ', ', $this->to_plain ), $message->build_params['head_charset'] );
 
-			// Send the email
-			$result = mail( $to, $subject, $message->output, implode( CRLF, $headers ) );
+			// Send the email, try SMTP if possible
+			if ( $this->smtpParams == true ) {
+				$result =  $this->_msg->send( $to, 'smtp' );
+			} else {
+				$result = mail( $to, $subject, $message->output, implode( CRLF, $headers ) );
+			}
 				
 			// Reset the subject in case mail is resent
 			if ( $subject !== '' ) {
@@ -264,8 +289,6 @@
 
 			// Return the result
 			return $result;
-
-
 
 		}
 
