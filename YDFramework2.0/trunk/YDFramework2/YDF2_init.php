@@ -23,7 +23,7 @@
 
 	// Global framework constants
 	@define( 'YD_FW_NAME', 'Yellow Duck Framework' );
-	@define( 'YD_FW_VERSION', '2.0.0' );
+	@define( 'YD_FW_VERSION', '2.0 beta 2' );
 	@define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
 	@define( 'YD_FW_HOMEPAGE', 'http://www.yellowduck.be/ydf2/' );
 

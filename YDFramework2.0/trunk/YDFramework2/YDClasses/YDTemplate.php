@@ -212,16 +212,12 @@
 		 *	This function will parse the template and will return the parsed contents. The name of the template you need
 		 *	to specify is the basename of the template without the file extension. This function automatically adds some
 		 *	variables to the template, which you can use as well in the template: YD_FW_NAME, YD_FW_VERSION, 
-		 *	YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM, YD_ENV, YD_COOKIE, YD_GET,
-		 *	YD_POST, YD_FILES, YD_REQUEST, YD_SESSION, YD_GLOBALS.
+		 *	YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
 		 *
 		 *	@param $name	The name of the template you want to parse and output.
 			@param $cacheID	ID for the cache of the template (must be unique).
 		 *
 		 *	@returns	This function returns the output of the parsed template.
-		 *
-		 *	@todo
-		 *		We should add options here to cache the output.
 		 */
 		function getOutput( $name, $cacheID=null ) {
 
