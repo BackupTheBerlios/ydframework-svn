@@ -196,10 +196,8 @@
 		YDFatalError( 'PHP version 4.2.0 or greater is required.' );
 	}
 
-	// Check if running in debugging mode
-	if ( YD_DEBUG == 1 ) {
-		require_once( 'YDTimer.php' );
-		$timer = new YDTimer();
-	}
+	// Start the timer
+	require_once( 'YDTimer.php' );
+	$timer = new YDTimer();
 
 ?>

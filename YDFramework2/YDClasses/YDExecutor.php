@@ -93,35 +93,35 @@
 			// Mark that the request is processed
 			define( 'YD_REQ_PROCESSED', 1 );
 
+			// Include the string utilities
+			require_once( 'YDStringUtil.php' );
+
+			// Stop the timer
+			$elapsed = $GLOBALS['timer']->getElapsed();
+
+			// Total size of include files
+			$includeFiles = get_included_files();
+
+			// Calculate the total size
+			$includeFilesSize = 0;
+			$includeFilesWithSize = array();
+			foreach ( $includeFiles as $key=>$includeFile ) {
+				$includeFilesSize += filesize( $includeFile );
+				$includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
+			}
+			$includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
+
+			// Sort the list of include files by file size
+			krsort( $includeFilesWithSize );
+
+			// Convert to a string
+			$includeFiles = array();
+			foreach ( $includeFilesWithSize as $size=>$file ) {
+				array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
+			}
+
 			// Show debugging info if needed
 			if ( YD_DEBUG == 1 ) {
-
-				// Include the string utilities
-				require_once( 'YDStringUtil.php' );
-
-				// Stop the timer
-				$elapsed = $GLOBALS['timer']->getElapsed();
-
-				// Total size of include files
-				$includeFiles = get_included_files();
-
-				// Calculate the total size
-				$includeFilesSize = 0;
-				$includeFilesWithSize = array();
-				foreach ( $includeFiles as $key=>$includeFile ) {
-					$includeFilesSize += filesize( $includeFile );
-					$includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
-				}
-				$includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
-
-				// Sort the list of include files by file size
-				krsort( $includeFilesWithSize );
-
-				// Convert to a string
-				$includeFiles = array();
-				foreach ( $includeFilesWithSize as $size=>$file ) {
-					array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
-				}
 
 				// Create the debug messages
 				$debug = "\n\n";
@@ -131,6 +131,11 @@
 
 				// Output the debug message
 				YDDebugUtil::debug( $debug );
+
+			} else {
+				
+				// Short version
+				echo( "\n" . '<!-- ' . $elapsed . ' ms / ' . $includeFilesSize . ' -->' );
 
 			}
 
