@@ -276,7 +276,7 @@
         require_once( YD_DIR_CLSS . '/YDObjectUtil.php' );
         require_once( YD_DIR_CLSS . '/YDPhpUtil.php' );
         require_once( YD_DIR_CLSS . '/YDRequest.php' );
-        require_once( YD_DIR_CLSS . '/YDSqlRaw.php' );
+        require_once( YD_DIR_CLSS . '/YDSqlQuery.php' );
         require_once( YD_DIR_CLSS . '/YDStringUtil.php' );
         require_once( YD_DIR_CLSS . '/YDTemplate.php' );
         require_once( YD_DIR_CLSS . '/YDTimer.php' );

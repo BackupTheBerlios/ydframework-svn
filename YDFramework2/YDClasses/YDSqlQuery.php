@@ -13,11 +13,11 @@
     }
 
     /**
-     *  This class defines a raw SQL query. There a a number of standard
-     *  functions this object has to get the data from this query given a 
-     *  database URL to retrieve the data from.
+     *  This class defines a SQL query. There a a number of standard functions 
+     *  this object has to get the data from this query given a database URL
+     *  to retrieve the data from.
      */
-    class YDSqlRaw {
+    class YDSqlQuery {
 
         /**
          *  The class constructor for the YDSqlRaw class. When you instantiate
@@ -26,7 +26,7 @@
          *
          *  @param $sql The SQL query associated with this object.
          */
-        function YDSqlRaw( $sql ) {
+        function YDSqlQuery( $sql ) {
     
             // Initialize the sql query
             $this->_sql = $sql;

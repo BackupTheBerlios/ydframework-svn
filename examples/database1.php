@@ -70,7 +70,7 @@
                 } else {
 
                     // Perform a database query
-                    $sql = new YDSqlRaw( 'show processlist' );
+                    $sql = new YDSqlQuery( 'show processlist' );
                     $result = $sql->executeSelect( $dbAliasses[ $_GET['id'] ] );
 
                     // Assign the database result
