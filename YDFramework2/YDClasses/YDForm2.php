@@ -203,11 +203,26 @@
 			// Create the instance
 			$instance = new $class( $this->_name, $name, $label, $attribs, $options );
 
-			// Fill in the value if any
-			if ( isset( $this->_formVars[ $this->_name . '_' . $name ] ) ) {
-				$instance->_value = $this->_formVars[ $this->_name . '_' . $name ];
-			} elseif ( isset( $this->_defaults[ $name ] ) ) {
-				$instance->_value = $this->_defaults[ $name ];
+			// Loop over the form variable
+			$elementVars = array();
+			foreach ( $this->_formVars as $var=>$value ) {
+
+				// Check if it matches the form element name
+				if ( strpos( $var, $this->_name . '_' . $name ) === 0 ) {
+					$elementVars[ str_replace( $this->_name . '_', '', $var ) ] = $value;
+				}
+
+			}
+
+			// If there is nothing that matches, use the default
+			if ( sizeof( $elementVars ) == 0 )  {
+				if ( isset( $this->_defaults[ $name ] ) ) {
+					$instance->_value = $this->_defaults[ $name ];
+				}
+			} elseif ( sizeof( $elementVars ) == 1 ) {
+				$instance->_value = $elementVars[ $name ];
+			} else {
+				$instance->_value = $elementVars;
 			}
 
 			// Register the element in the class.
@@ -315,11 +330,6 @@
 		 *	@param $name	The name of the form element.
 		 *
 		 *	@returns	The value to the specified form element.
-		 *
-		 *	@todo
-		 *		Should loop over all the post variables and add all to an associative array. If the array contains only
-		 *		one item, it should be returned as a string, otherwise, the associative array should be returned. We
-		 *		need this for supporting multi-item form elements such as e.g. a date or time selector.
 		 */
 		function getValue( $name ) {
 
@@ -412,6 +422,7 @@
 						}
 
 						// Check the rule
+						// @todo Are we able to handle arrays?
 						$result = call_user_func( 
 							$ruleDetails['callback'], $this->getValue( $element ), $rule['options'] 
 						);
@@ -607,7 +618,13 @@
 						if ( ! is_callable( $this->_regFilters[ $filter ]['callback'] ) ) {
 							YDFatalError( 'The callback specified for the filter "' . $name . '" is not valid' );
 						}
-						$value = call_user_func( $this->_regFilters[ $filter ]['callback'], $value );
+						if ( is_array( $value ) ) {
+							foreach ( $value as $key=>$x ) {
+								$value[$key] = call_user_func( $this->_regFilters[ $filter ]['callback'], $value[$key] );
+							}
+						} else {
+							$value = call_user_func( $this->_regFilters[ $filter ]['callback'], $value );
+						}
 					}
 				}
 			}

@@ -35,6 +35,7 @@
 			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Create the HTML
+			$out = '';
 			if ( sizeof( $this->_options ) > 0 ) {
 				foreach ( $this->_options as $key=>$val ) {
 					$attribsElement = $attribs;
