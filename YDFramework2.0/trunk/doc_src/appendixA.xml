@@ -254,4 +254,16 @@ Percentage of the requests served within a certain time (ms)
 
     </sect1>
 
+    <sect1 id="appendixA_try_06">
+
+        <title>Sixth try: Smarty</title>
+
+        <para>Homepage: http://smarty.php.net/</para>
+
+        <para>After a lot of discussion on the forum for the Yellow Duck Framework, the descision was made to move again to Smarty, and keep the framework bundled with Smarty (final now). There were a good number of arguments for the move to Smarty again.</para>
+
+
+
+    </sect1>
+
 </appendix>
