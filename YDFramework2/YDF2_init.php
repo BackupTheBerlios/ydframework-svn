@@ -121,11 +121,15 @@
          *        Temporary directory of the Yellow Duck Framework. This is the
          *        full path to the YDFramework2/temp directory. This is the
          *        directory where the compiled templates are stored. Make sure
-         *        this directory is world writeable.
+         *        this directory is world writeable. By defining this constant
+         *        before you include the Yellow Duck Framework, you can change
+         *        this path to whatever you like.
          *
          *  @internal
          */
-        define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
+        if ( ! defined( 'YD_DIR_TEMP' ) ) {
+            define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
+        }
 
         /**
          *  @enum YD_ACTION_PARAM
