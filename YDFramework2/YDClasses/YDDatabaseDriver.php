@@ -266,6 +266,23 @@
 		}
 
 		/**
+		 *	This function will convert the given record so that all the keys are lowercase.
+		 *
+		 *	@param $array	The array to convert.
+		 *
+		 *	@returns	The original array with all the field names as lowercase.
+		 *
+		 *	@internal
+		 */
+		function _lowerKeyNames( $array ) {
+			if ( $array ) {
+				return array_change_key_case( $array, CASE_LOWER );
+			} else {
+				return $array;
+			}
+		}
+
+		/**
 		 *	This function will log the SQL statement to the debug log and keep track of the number of queries that were
 		 *	executed.
 		 *

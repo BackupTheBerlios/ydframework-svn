@@ -70,7 +70,7 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			$record = mysql_fetch_assoc( $result );
+			$record = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) );
 			mysql_free_result( $result );
 			return $record;
 		}
@@ -85,7 +85,7 @@
 		function getRecords( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = mysql_fetch_assoc( $result ) ) {
+			while ( $line = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) ) ) {
 				array_push( $dataset, $line );
 			}
 			mysql_free_result( $result );

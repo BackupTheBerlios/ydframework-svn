@@ -27,8 +27,8 @@
 			$this->form = new YDForm( 'addEntryForm' );
 
 			// Add the elements
-			$this->form->addElement( 'text', 'NoteTitle', 'Title:' );
-			$this->form->addElement( 'textarea', 'NoteContents', 'Contents:' );
+			$this->form->addElement( 'text', 'notetitle', 'Title:' );
+			$this->form->addElement( 'textarea', 'notecontents', 'Contents:' );
 			$this->form->addElement( 'submit', '_cmdSubmit', 'Save' );
 
 			// Apply filters
@@ -36,8 +36,8 @@
 			$this->form->addFilter( 'NoteContents', 'trim' );
 
 			// Add a rule
-			$this->form->addRule( 'NoteTitle', 'required', 'Title is required' );
-			$this->form->addRule( 'NoteContents', 'required', 'Contents is required' );
+			$this->form->addRule( 'notetitle', 'required', 'Title is required' );
+			$this->form->addRule( 'notecontents', 'required', 'Contents is required' );
 
 		}
 
@@ -90,7 +90,7 @@
 		function actionEditNote() {
 
 			// Add the hidden field
-			$this->form->addElement( 'hidden', '_NoteID' );
+			$this->form->addElement( 'hidden', '_noteid' );
 
 			// Process the form
 			if ( $this->form->validate() ) {
@@ -99,7 +99,7 @@
 				$entry = $this->form->getValues();
 
 				// Save them
-				$this->db->executeUpdate( 'Notes', $entry, 'NoteID = ' . $entry['_NoteID'] );
+				$this->db->executeUpdate( 'Notes', $entry, 'NoteID = ' . $entry['_noteid'] );
 
 				// Forward to the list view
 				$this->forward( 'default' );

@@ -75,7 +75,7 @@
 			$result = $this->_connectAndExec( $sql );
 			ocifetchinto( $result, $record, OCI_ASSOC );
 			OCIFreeStatement( $result );
-			return $record;
+			return $this->_lowerKeyNames( $record );
 		}
 
 		/**
@@ -89,7 +89,7 @@
 			$result = $this->_connectAndExec( $sql );
 			$dataset = array();
 			while ( ocifetchinto( $result, $line, OCI_ASSOC ) ) {
-				array_push( $dataset, $line );
+				array_push( $dataset, $this->_lowerKeyNames( $line ) );
 			}
 			OCIFreeStatement( $result );
 			return $dataset;

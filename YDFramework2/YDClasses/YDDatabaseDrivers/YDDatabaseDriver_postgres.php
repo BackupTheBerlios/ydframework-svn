@@ -78,7 +78,7 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return pg_fetch_assoc( $result );
+			return $this->_lowerKeyNames( pg_fetch_assoc( $result ) );
 		}
 
 		/**
@@ -91,7 +91,7 @@
 		function getRecords( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = pg_fetch_assoc( $result ) ) {
+			while ( $line = $this->_lowerKeyNames( pg_fetch_assoc( $result ) ) ) {
 				array_push( $dataset, $line );
 			}
 			pg_free_result( $result );

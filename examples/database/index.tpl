@@ -18,11 +18,11 @@
 
 			<?php foreach ( $entries as $entry ) { ?>
 				<p>
-				<b><?= $entry['NoteTitle'] ?></b>
-				[ <a href="<?= $YD_SELF_SCRIPT ?>?do=EditNote&id=<?= $entry['NoteID'] ?>">edit</a> | 
-				<a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteNote&id=<?= $entry['NoteID'] ?>">delete</a> ]
+				<b><?= $entry['notetitle'] ?></b>
+				[ <a href="<?= $YD_SELF_SCRIPT ?>?do=EditNote&id=<?= $entry['noteid'] ?>">edit</a> | 
+				<a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteNote&id=<?= $entry['noteid'] ?>">delete</a> ]
 				<br>
-				<?= $entry['NoteContents'] ?>
+				<?= $entry['notecontents'] ?>
 				</p>
 			<?php } ?>
 

@@ -67,7 +67,7 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return sqlite_fetch_array( $result, SQLITE_ASSOC );
+			return $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) );
 		}
 
 		/**
@@ -79,7 +79,11 @@
 		 */
 		function getRecords( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return sqlite_fetch_all( $result, SQLITE_ASSOC );
+			$dataset = array();
+			while ( $line = $this->_lowerKeyNames( sqlite_fetch_array( $result, SQLITE_ASSOC ) ) ) {
+				array_push( $dataset, $line );
+			}
+			return $dataset;
 		}
 
 		/**
