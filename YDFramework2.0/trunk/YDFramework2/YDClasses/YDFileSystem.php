@@ -679,6 +679,10 @@
 		 *
 		 *	@param $filename	The file you want to delete.
 		 *	@param $failOnError	(optional) Indicate if a fatal error needs to be raised if deleting the file failed.
+		 *
+		 *	@return	There are three possible return values for this function. True indicates that the file exists and
+		 *			is deleted successfully. False indicates the file exists but could not be deleted. Null indicates
+		 *			the file didn't exist and therefor could not be deleted.
 		 */
 		function deleteFile( $filename, $failOnError=false ) {
 
@@ -704,7 +708,14 @@
 
 				}
 
+				
+				// Return if the file was deleted or not
+				return $result;
+				
 			}
+			
+			// Return null if the file doesn't exist
+			return null;
 
 		}
 
