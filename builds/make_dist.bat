@@ -29,8 +29,6 @@ echo Creating changelog files
 svn log -v -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 svn log -v --xml -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
 
-pause
-
 rem Zip up the build to an archive
 echo Zipping up the build: %BLDDIR%.zip
 del /Q /S %BLDDIR%\builds
