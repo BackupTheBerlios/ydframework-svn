@@ -12,27 +12,27 @@
 	
 	<p>You can login as the user <b>pieter</b> with the password <b>kermit</b>.</p>
 
-	<?php if ( $form['errors'] ) { ?>
+	[if $form.errors]
 		<p style="color: red">
-			<?php foreach ( $form['errors'] as $error ) { ?>
-				<?= $error ?><br>
-			<?php } ?>
+			[foreach from=$form.errors item=error]
+				[$error ?><br>
+			[/foreach]
 		</p>
-	<?php } ?>
+	[/if]s
 
-	<form <?= $form['attribs'] ?>>
+	<form [$form.attribs]>
 		<p>
-			<?= $form['loginName']['label'] ?>
+			[$form.loginName.label]
 			<br>
-			<?= $form['loginName']['html'] ?>
+			[$form.loginName.html]
 		</p>
 		<p>
-			<?= $form['loginPass']['label'] ?>
+			[$form.loginPass.label]
 			<br>
-			<?= $form['loginPass']['html'] ?>
+			[$form.loginPass.html]
 		</p>
 		<p>
-			<?= $form['cmdSubmit']['html'] ?>
+			[$form.cmdSubmit.html]
 		</p>
 	</form>
 

@@ -2,7 +2,7 @@
 
 <head>
 
-	<title><?= $YD_FW_NAMEVERS ?></title>
+	<title>[$YD_FW_NAMEVERS]</title>
 
 </head>
 
@@ -10,25 +10,25 @@
 
 	<h3>YDEmail test page</h3>
 
-	<?php if ( $formValid ) { ?>
+	[if $formValid]
 
-		<?php if ( $result ) { ?>
-			<p>The email to <b><?= $form['email']['value'] ?></b> was sent successfully!</p>
-		<?php } else { ?>
-			<p style="color: red">The email to <b><?= $form['email']['value'] ?></b> was NOT sent successfully!</p>
-	<?php } ?>
+		[if $result]
+			<p>The email to <b>[$form.email.value]</b> was sent successfully!</p>
+		[else]
+			<p style="color: red">The email to <b>[$form.email.value]</b> was NOT sent successfully!</p>
+		[/if]
 
-	<?php } else { ?>
+	[else]
 
-		<?= $form_html ?>
+		[$form_html]
 
-	<?php } ?>
+	[/if]
 
-	<p>[
-		<a href="<?= $YD_SELF_SCRIPT ?>">try again</a>
+	<p>
+		<a href="[$YD_SELF_SCRIPT]">try again</a>
 		|
 		<a href="index.php">other samples</a>
-	]</p>
+	</p>
 
 </body>
 

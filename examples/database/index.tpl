@@ -2,39 +2,39 @@
 
 <head>
 
-	<title><?= $YD_FW_NAMEVERS ?></title>
+	<title>[$YD_FW_NAMEVERS]</title>
 
 </head>
 
 <body>
 
-	<h3><?= $title ?></h3>
+	<h3>[$title]</h3>
 
-	<?php if ( $YD_ACTION == 'default' ) { ?>
+	[if $YD_ACTION == 'default']
 
-		<p><a href="<?= $YD_SELF_SCRIPT ?>?do=AddNote">Add a new note</a></p>
+		<p><a href="[$YD_SELF_SCRIPT]?do=AddNote">Add a new note</a></p>
 
-		<?php if ( $entries ) { ?>
+		[if $entries]
 
-			<?php foreach ( $entries as $entry ) { ?>
+			[foreach from=$entries item=entry]
 				<p>
-				<b><?= $entry['notetitle'] ?></b>
-				[ <a href="<?= $YD_SELF_SCRIPT ?>?do=EditNote&id=<?= $entry['noteid'] ?>">edit</a> | 
-				<a href="<?= $YD_SELF_SCRIPT ?>?do=DeleteNote&id=<?= $entry['noteid'] ?>">delete</a> ]
+				<b>[$entry.notetitle]</b>
+				[ <a href="[$YD_SELF_SCRIPT]?do=EditNote&id=[$entry.noteid]">edit</a> | 
+				<a href="[$YD_SELF_SCRIPT]?do=DeleteNote&id=[$entry.noteid]">delete</a> ]
 				<br>
-				<?= $entry['notecontents'] ?>
+				[$entry.notecontents]
 				</p>
-			<?php } ?>
+			[/foreach]
 
-		<?php } else { ?>
+		[else]
 			<p>No notes were found.</p>
-		<?php } ?>
+		[/if]
 
-	<?php } ?>
+	[/if]
 
-	<?php if ( $YD_ACTION == 'addnote' || $YD_ACTION == 'editnote' ) { ?>
-		<?= $form ?>
-	<?php } ?>
+	[if $YD_ACTION == 'addnote' || $YD_ACTION == 'editnote']
+		[$form]
+	[/if]
 
 </body>
 

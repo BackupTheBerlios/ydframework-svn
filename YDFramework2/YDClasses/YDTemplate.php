@@ -100,14 +100,26 @@
 				YDFatalError( 'Template not found: ' . $tplPath );
 			}
 
-			// Extract the variables
-			extract( $this->_vars );
+			// Include smarty
+			require_once( YD_DIR_3RDP . '/smarty/Smarty.class.php' );
 
-			// Process the template
-			ob_start();
-			include( $tplPath );
-			$contents = ob_get_contents();
-			ob_end_clean();
+			// Instantiate smarty
+			$tpl = new Smarty();
+	
+			// Configure smarty
+			$tpl->template_dir = dirname( $tplPath );
+			$tpl->compile_dir = YD_DIR_TEMP;
+			$tpl->left_delimiter = '[';
+			$tpl->right_delimiter = ']';
+
+			// Add a custom plugins dir
+			array_push( $tpl->plugins_dir, YD_DIR_CLSS . '/YDTemplatePlugins' );
+
+			// Assign the variables
+			$tpl->assign( $this->_vars );
+
+			// Output the template
+			$contents = $tpl->fetch( basename( $tplPath ), null, md5( $tplPath ) );
 
 			// Returns the contents
 			return $contents; 

@@ -8,7 +8,7 @@
 
 <body>
 
-	<p>Login name: <b><?= $YD_SESSION['usrName'] ?></b>!</p>
+	<p>Login name: <b>[$YD_SESSION.usrName]</b>!</p>
 	<p><a href="index.php">go back</a></p>
 
 </body>

@@ -2,7 +2,7 @@
 
 <head>
 
-	<title><?= $YD_FW_NAMEVERS ?></title>
+	<title>[$YD_FW_NAMEVERS]</title>
 
 	<style>
 		body { 
@@ -43,7 +43,7 @@
 	<p><img src="fsimage.jpg" border="1" alt="Pieter & Fiona"
 	width="320" height="213"></p>
 
-	<p>This email was sent to <a href="mailto:<?= $email ?>"><?= $email ?></a>.</p>
+	<p>This email was sent to <a href="mailto:[$email]">[$email]</a>.</p>
 
 	<p class="title2">Lorem Ipsum</p>
 
@@ -52,11 +52,11 @@
 	congue venenatis. Morbi hendrerit, dolor eget posuere rhoncus, nulla libero
 	viverra mi, vitae convallis mi tortor et leo.</p>
 
-	<p class="title2"><?= $YD_FW_NAMEVERS ?></p>
+	<p class="title2">[$YD_FW_NAMEVERS]</p>
 
 	<p>
 		Thanks for trying out
-		<a href="<?= $YD_FW_HOMEPAGE ?>"><?= $YD_FW_NAMEVERS ?></a>.
+		<a href="[$YD_FW_HOMEPAGE]">[$YD_FW_NAMEVERS]</a>.
 	</p>
 
 	<p class="title2">Oh, yes, important!</p>

@@ -2,7 +2,7 @@
 
 <head>
 
-	<title><?= $YD_FW_NAMEVERS ?></title>
+	<title>[$YD_FW_NAMEVERS]</title>
 
 </head>
 
@@ -10,11 +10,11 @@
 
 	<h3>Testing...</h3>
 
-	<?php if ( isset( $error ) ) { ?>
-		<p style="color: red"><b>ERROR: <?= $error ?></b></p>
-	<?php } else { ?>
+	[if $error]
+		<p style="color: red"><b>ERROR: [$error]</b></p>
+	[else]
 
-		<?php if ( $processList ) { ?>
+		[if $processList]
 			<p><b>show processlist</b></p>
 			<p><table border="1" cellspacing="0" cellpadding="4">
 			<tr>
@@ -27,56 +27,56 @@
 				<td><b>state</b></td>
 				<td><b>info</b></td>
 			</tr>
-			<?php foreach ( $processList as $row ) { ?>
+			[foreach from=$processList item=row]
 				<tr>
-					<td><?= $row['Id'] ?></td>
-					<td><?= $row['User'] ?></td>
-					<td><?= $row['Host'] ?></td>
-					<td><?= $row['db'] ?>&nbsp;</td>
-					<td><?= $row['Command'] ?></td>
-					<td><?= $row['Time'] ?></td>
-					<td><?= $row['State'] ?>&nbsp;</td>
-					<td><?= $row['Info'] ?>&nbsp;</td>
+					<td>[$row.Id]</td>
+					<td>[$row.User]</td>
+					<td>[$row.Host]</td>
+					<td>[$row.db]&nbsp;</td>
+					<td>[$row.Command]</td>
+					<td>[$row.Time]</td>
+					<td>[$row.State]&nbsp;</td>
+					<td>[$row.Info]&nbsp;</td>
 				</tr>
-			<?php } ?>
+			[/foreach]
 			</table></p>
-		<?php } ?>
+		[/if]
 
-		<?php if ( $status ) { ?>
+		[if $status]
 			<p><b>show status</b></p>
 			<p><table border="1" cellspacing="0" cellpadding="4">
 			<tr>
 				<td><b>name</b></td>
 				<td><b>value</b></td>
 			</tr>
-			<?php foreach ( $status as $row ) { ?>
+			[foreach from=$status item=row]
 				<tr>
-					<td><?= $row['Variable_name'] ?></td>
-					<td><?= $row['Value'] ?>&nbsp;</td>
+					<td>[$row.Variable_name]</td>
+					<td>[$row.Value]&nbsp;</td>
 				</tr>
-			<?php } ?>
+			[/foreach]
 			</table></p>
-		<?php } ?>
+		[/if]
 
-		<?php if ( $variables ) { ?>
+		[if $variables]
 			<p><b>show variables</b></p>
 			<p><table border="1" cellspacing="0" cellpadding="4">
 			<tr>
 				<td><b>name</b></td>
 				<td><b>value</b></td>
 			</tr>
-			<?php foreach ( $variables as $row ) { ?>
+			[foreach from=$variables item=row]
 				<tr>
-					<td><?= $row['Variable_name'] ?></td>
-					<td><?= $row['Value'] ?>&nbsp;</td>
+					<td>[$row.Variable_name]</td>
+					<td>[$row.Value]&nbsp;</td>
 				</tr>
-			<?php } ?>
+			[/foreach]
 			</table></p>
-		<?php } ?>
+		[/if]
 
-	<?php } ?>
+	[/if]
 
-	<p>[ <a href="index.php">other samples</a> ]</p>
+	<p><a href="index.php">other samples</a></p>
 
 </body>
 
