@@ -13,7 +13,7 @@
             <link href="api/doxygen.css" rel="stylesheet" type="text/css" />
             <style>
                 td { border-bottom: 1px solid #CCCCCC; }
-                table { border: 0px; width: 80px }
+                table { border: 0px; width: 80%; }
             </style>
 
         </head>
@@ -32,7 +32,7 @@
                 <hr size="1" noshade="" />
                 <p><b>Build <xsl:value-of select="@revision" /></b></p>
                 <p><xsl:value-of select="msg" /></p>
-                <blockquote><table width="80%" cellspacing="0" cellpadding="3">
+                <blockquote><table cellspacing="0" cellpadding="3">
                     <tr>
                         <td colspan="2"><b>Affected files</b></td>
                     </tr>
