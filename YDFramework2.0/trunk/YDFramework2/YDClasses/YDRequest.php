@@ -86,19 +86,6 @@
 			// Return the action name
 			return strtolower( $action );
 
-			/*
-			if ( empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-				$action = YD_ACTION_DEFAULT;
-			} else {
-				$action = $_GET[ YD_ACTION_PARAM ];
-			}
-			$action = strtolower( $action );
-			if ( strpos( $action, 'action' ) === 0 ) {
-				$action = substr( $action, strlen( 'action' ) );
-			}
-			return strtolower( $action );
-			*/
-
 		}
 
 		/**
@@ -150,7 +137,11 @@
 				$action = substr( $action, strlen( 'action' ) );
 			}
 			$_GET[ YD_ACTION_PARAM ] = $action;
-			call_user_func( array( $this, 'action' . $action ) );
+			if ( ! $this->isActionAllowed() ) {
+				$this->errorActionNotAllowed();
+			} else {
+				call_user_func( array( $this, 'action' . $action ) );
+			}
 		}
 
 		/**
@@ -202,7 +193,6 @@
 		 *	action function is specified or not.
 		 */
 		function process() {
-			//$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
 			$action = 'action' . $this->getActionName();
 			call_user_func( array( $this, $action ) );
 		}

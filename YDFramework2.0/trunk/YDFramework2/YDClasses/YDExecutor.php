@@ -83,7 +83,6 @@
 			}
 
 			// Get the action name
-			//$action = empty( $_GET[ YD_ACTION_PARAM ] ) ? YD_ACTION_DEFAULT : 'action' . $_GET[ YD_ACTION_PARAM ];
 			$action = 'action' . $this->clsInst->getActionName();
 
 			// Check if the action exists
@@ -92,11 +91,8 @@
 				$this->finish();
 			}
 
-			// Check if the current action is allowed or not
-			$result = $this->clsInst->isActionAllowed();
-
-			// Execute errorActionNotAllowed if failed
-			if ( $result == false ) {
+			// Check if the current action is allowed or not and execute errorActionNotAllowed if failed
+			if ( ! $this->clsInst->isActionAllowed() ) {
 				$this->clsInst->errorActionNotAllowed();
 				$this->finish();
 			}
