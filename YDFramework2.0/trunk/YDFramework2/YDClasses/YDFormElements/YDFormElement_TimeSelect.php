@@ -58,7 +58,7 @@
 
 			// Fill in the default date
 			if ( $this->_value == array() ) {
-				$now = getdate();
+				$now = getdate( time() );
 				$this->_value['hours'] = $now['hours'];
 				$this->_value['minutes'] = $now['minutes'];
 			}
@@ -114,7 +114,7 @@
 				if ( is_int( $this->_value ) ) {
 					$value = getdate( $this->_value );
 				} else {
-					$value = getdate( strtotime( $this->_value ) );
+					$value = getdate( strtotime( $this->_value, time() ) );
 				}
 				$this->_value = array();
 				$this->_value['hours'] = $value['hours'];

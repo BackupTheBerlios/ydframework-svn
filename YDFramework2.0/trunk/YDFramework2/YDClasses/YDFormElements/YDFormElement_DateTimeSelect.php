@@ -58,7 +58,7 @@
 
 			// Fill in the default date
 			if ( $this->_value == array() ) {
-				$now = getdate();
+				$now = getdate( time() );
 				$this->_value['day'] = $now['mday'];
 				$this->_value['month'] = $now['mon'];
 				$this->_value['year'] = $now['year'];
@@ -79,7 +79,7 @@
 			}
 
 			// Get the names of the years
-			$now = getdate();
+			$now = getdate( time() );
 			$years = array();
 			for ( $i = $now['year'] - 5 ; $i <= $now['year'] + 5; $i++ ) {
 				$years[$i] = $i;
@@ -148,7 +148,7 @@
 				if ( is_int( $this->_value ) ) {
 					$value = getdate( $this->_value );
 				} else {
-					$value = getdate( strtotime( $this->_value ) );
+					$value = getdate( strtotime( $this->_value, time() ) );
 				}
 				$this->_value = array();
 				$this->_value['day'] = $value['mday'];
