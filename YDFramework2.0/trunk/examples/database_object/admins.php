@@ -14,13 +14,7 @@
 	// Let's begin
 	echo "<h1>Let's see who are the admins</h1>";
 	echo "<p>The Admins here are just an extension of the User object. Isn't another table, it's the same, <br>";
-	echo "but with some protected fields values that cannot be changed.</p>";
-	
-	YDDebugUtil::dump( $adm->getValues() );	
-	
-	echo "<p>John Doe is not a protected field, it's a default value, so we just need to reset the object.</p>";
-
-	$adm->reset();
+	echo "but with some protected fields values that cannot be changed. In this case the \"is_admin\" field.</p>";
 	
 	YDDebugUtil::dump( $adm->getValues() );	
 	
@@ -49,7 +43,7 @@
 	echo "If you want to unset a Admin you have to use the User object as it doesn't protect this field.</p>";
 	
 	echo "<p>&nbsp;</p>";
-	echo "<p>Now we are going to define users addressses! <a href=\"users_addresses.php\">Click here</a>.</p>";
+	echo "<p>Now we are going to define users addressses! <a href=\"users_addresses.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

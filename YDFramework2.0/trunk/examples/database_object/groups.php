@@ -57,7 +57,8 @@
 	
 	echo "<p>We've found " . $total . " groups starting with Y.</p>";
 	
-	if ( $total > 1 ) {
+	// we can use the count method to get the same result
+	if ( $group->count() > 1 ) {
 		while( $group->fetch() ) {
 			YDDebugUtil::dump( $group->getValues() );
 		}
@@ -69,7 +70,7 @@
 	$group->find( 1 );
 	YDDebugUtil::dump( $group->getValues() );
 	
-	echo "<h1>And I don't like the 'Yo! Ugly Group, so I'll delete it.</h1>";
+	echo "<h1>And I don't like the 'Yo! Ugly Group, so I'll delete it. I will reset the object and execute a delete.</h1>";
 	
 	$group->reset();
 	$group->delete();
@@ -83,16 +84,16 @@
 	echo "<h1>Great! Now we have the following groups.</h1>";
 	
 	$group->reset();
-	$total = $group->find();
+	$group->find();
 	
-	if ( $total > 1 ) {
+	if ( $group->count() > 1 ) {
 		while( $group->fetch() ) {
 			YDDebugUtil::dump( $group->getValues() );
 		}
 	}
 	
 	echo "<p>&nbsp;</p>";
-	echo "<p>Let's add some Users! <a href=\"users.php\">Click here</a>.</p>";
+	echo "<p>Let's add some Users! <a href=\"users.php?YD_DEBUG=" . YD_DEBUG . "\">Click here</a>.</p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>

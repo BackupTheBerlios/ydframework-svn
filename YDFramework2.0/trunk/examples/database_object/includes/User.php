@@ -24,9 +24,9 @@ class User extends YDDatabaseObject {
 		$this->__fields['is_admin']   = array( 'type' => YD_DATABASEOBJECT_NUM, 
 											   'column' => 'admin' );	
 		$this->__fields['birthday']   = array( 'type' => YD_DATABASEOBJECT_NUM + YD_DATABASEOBJECT_NULL, 
-											   'callback' => 'getAge' );		
-		$this->__fields['birth_year'] = array( 'type' => YD_DATABASEOBJECT_SQL, 
-											   'column' => 'YEAR( users.birthday )' );
+											   'callback' => 'getAge' );
+											   
+		$this->registerSelect( 'birth_year', 'YEAR( users.birthday )' );
 	}
 
 	function setKeys() {

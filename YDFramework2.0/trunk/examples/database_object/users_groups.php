@@ -22,9 +22,7 @@
 	// Let's truncate the join table
 	$user->executeSql( 'TRUNCATE ' . $user->join_groups->getTable() );	
 	
-	$user->resetRelation();
-	
-	echo "<p>Let's add me (ID=1) to the \"Yellow Duck Framework Group\" (ID=1).</p>";
+	echo "<p>Let's add me to the \"Yellow Duck Framework Group\".</p>";
 	
 	$user->join_groups->user_id = 1;
 	$user->join_groups->group_id = 1;
@@ -37,7 +35,7 @@
 	echo "<p>Done. Now I can get the results of the relation if I want.</p>";
 		
 	$user->user_id = 1;
-	$user->getRelation();
+	$user->findRelation();
 
 	YDDebugUtil::dump( $user->groups->getValues() );
 
@@ -49,7 +47,7 @@
 		
 	YDDebugUtil::dump( $user->getValues() );
 	
-	echo "<p>Let's add me to the other group and add the other users to them too.</p>";
+	echo "<p>Let's do some more adding.</p>";
 		
 	// Myself to the second group
 	$user->resetRelation();
@@ -88,9 +86,9 @@
 	
 	$user->resetRelation();
 	$user->groups->id = 1;
-	$total = $user->getRelation();
+	$user->findRelation();
 	
-	if ( $total > 1 ) {
+	if ( $user->count() > 1 ) {
 		$user->groups->fetch();
 		YDDebugUtil::dump( $user->groups->getValues() );
 		while ( $user->fetchRelation() ) {			
@@ -102,47 +100,37 @@
 	
 	echo "<h1>And how about the second group?</h1>";
 	echo "<p>Let's order by name and return only the group name, user name, is_admin and active.</p>";
+	echo "<p>And return the values in a single array.</p>";
 	
 	$user->resetRelation();
 	$user->groups->id = 2;
-	$user->resetSelect();
-	$user->addSelect( 'users.name', 'name' );
-	$user->addSelect( 'users.admin', 'is_admin' );
 	$user->addOrder( 'users.name' );
-
-	$user->join_groups->resetSelect();
-	$user->join_groups->addSelect( 'users_groups.active', 'active' );
+	$user->addSelect( 'name', 'is_admin' );
 	
-	$user->groups->resetSelect();
-	$user->groups->addSelect( 'groups.name', 'name' );
+	$user->join_groups->addSelect( 'active' );
+	$user->groups->addSelect( 'name' );
 	
-	$total = $user->getRelation();
+	$user->findRelation();
 	
-	if ( $total > 1 ) {
-		$user->groups->fetch();
-		YDDebugUtil::dump( $user->groups->getValues() );
+	if ( $user->count() > 1 ) {
 		while ( $user->fetchRelation() ) {
 			YDDebugUtil::dump( '-----------------------------------' );
-			YDDebugUtil::dump( $user->getValues() );
-			YDDebugUtil::dump( $user->join_groups->getValues() );
+			YDDebugUtil::dump( $user->getRelationValues() );
 		}
 	}
 	
-	echo "<h1>But I only want it's active users.</h1>";
+	echo "<h1>But I only want the active users.</h1>";
 	
 	$user->resetRelation();	
 	$user->groups->id = 2;
 	$user->join_groups->active = 1;
-	$total = $user->getRelation();
+	$user->findRelation();
 	
-	YDDebugUtil::dump( $user->groups->getValues() );
-	YDDebugUtil::dump( '-----------------------------------' );
-	YDDebugUtil::dump( $user->getValues() );
-	YDDebugUtil::dump( $user->join_groups->getValues() );
+	YDDebugUtil::dump( $user->getRelationValues() );
 	
 	echo "<p>&nbsp;</p>";
 	echo "<p>That's it! Take a look at other methods available in the class source code.</p>";
-	echo "<p><a href=\"index.php\">Click here to return</a></p>";
+	echo "<p><a href=\"index.php?YD_DEBUG=" . YD_DEBUG . "\">Click here to return</a></p>";
 	echo "<p></p><p>&nbsp;</p>";
 	
 ?>
