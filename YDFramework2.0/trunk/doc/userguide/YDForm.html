@@ -109,7 +109,7 @@ The code above results in the following array structure:<br />
   ["attribs"]=>
   string(94) " name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self""
   ["tag"]=>
-  string(100) "<form name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self"><input type="hidden" name="PHPSESSID" value="2876d34a7633a34844bb3948a6b806ed" />"
+  string(100) "<form name="firstForm" id="firstForm" method="POST" action="/ydf2/examples/test.php" target="_self"><input type="hidden" name="PHPSESSID" value="b6ef6aceb2292e37769f8bf4c1f18d67" />"
   ["requirednote"]=>
   string(26) "Items in bold are required"
   ["errors"]=>
@@ -234,10 +234,11 @@ Up till now, we only discussed one specific rule, namely the required rule. Ther
 <br />
 There are also some rules that apply specifically to file uploads:<br />
 <br />
-<ul><li> <strong>uploadedfile uploadedfile:</strong> Required file upload
-</li><li> <strong>maxfilesize maxfilesize:</strong> The file size must not exceed the given number of bytes
-</li><li> <strong>mimetype mimetype:</strong> The file must have a correct mimetype
-</li><li> <strong>filename filename:</strong> The filename must match the given regex</li></ul>
+<ul><li> <strong>uploadedfile:</strong> Required file upload
+</li><li> <strong>maxfilesize:</strong> The file size must not exceed the given number of bytes
+</li><li> <strong>mimetype:</strong> The file must have a correct mimetype
+</li><li> <strong>filename:</strong> The filename must match the given regex
+</li><li> <strong>extension</strong>: The filename must match the indicated extension</li></ul>
 <br />
 <span class="notes"><em><strong>Note:</strong> Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</em></span><br />
 <br />

@@ -200,6 +200,20 @@
 			return YDValidateRules::regex( $val['name'], $opts );
 		}
 
+		/** 
+		 *	This rule checks if a file upload has the right file extension.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	The file extension it should match (can also be an array of extensions).
+		 */
+		function extension( $val, $opts ) {
+			if ( ! is_array( $opts ) ) {
+				$opts = array( $opts );
+			}
+			ereg( ".*\.([a-zA-z0-9]{0,5})$", $val['name'], $regs );
+			return in_array( $regs[1], $opts );
+		}
+
 	}
 
 ?>

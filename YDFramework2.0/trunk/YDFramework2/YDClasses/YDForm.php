@@ -100,6 +100,7 @@
 			$this->registerRule( 'maxfilesize', array( 'YDValidateRules', 'maxfilesize' ), 'YDValidateRules.php' );
 			$this->registerRule( 'mimetype', array( 'YDValidateRules', 'mimetype' ), 'YDValidateRules.php' );
 			$this->registerRule( 'filename', array( 'YDValidateRules', 'filename' ), 'YDValidateRules.php' );
+			$this->registerRule( 'extension', array( 'YDValidateRules', 'extension' ), 'YDValidateRules.php' );
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
