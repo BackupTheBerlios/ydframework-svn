@@ -173,6 +173,33 @@ class indexRequest extends YDRequest {
     create an instance of the request class. When instantiating, no parameters
     are passed to the class constructor of the request class.</p>
 
+
+    <p>&nbsp;<br><b>Step 4 - Does this request requires authentication?</b></p>
+
+    <p>In every request class, you can enable authentication. If you enable
+    authentication for a request class, the framework will execute certain
+    functions to check if the authentication before the request is processed.<p>
+
+    <p>You can enable authentication in a request class by using the following
+    code:</p>
+    
+    <p><pre class="fragment">$this->setRequiresAuthentication( true );</pre></p>
+
+    <p>It will then use the function "isAuthenticated" from the request class to
+    find out if the user is already authenticated. If not, the function
+    "authenticationFailed" is executed which can e.g. redirect to the login.
+    page which takes care of the rest. After executing the "authenticationFailed"
+    function, the execution of the script is stopped.</p>
+    
+    <p>If the "isAuthenticated" function returns true, the class function 
+    "authenticationSucceeded" is executed, after which the execution of the 
+    request continues. This function can for example set a session variable
+    indicating that we are logged in or can add an entry to the database.</p>
+
+    <p><b>Note:</b> for an in depth look at how authentication is handled in the
+    framework, please go through the chapter <a href="tutorial_06.html"
+    ><i>How to handle authentication</i></a>.</p>
+
     <hr size="1" noshade>
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <tr>
