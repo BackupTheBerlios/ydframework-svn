@@ -469,6 +469,20 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=validaterules.php">validaterules.php</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="cache/index.php">Smarty caching</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=cache/index.php">cache/index.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=cache/index.tpl">cache/index.tpl</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=cache/subdir/index.php">cache/subdir/index.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=cache/subdir/index.tpl">cache/subdir/index.tpl</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}

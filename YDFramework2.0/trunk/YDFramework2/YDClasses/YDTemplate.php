@@ -49,7 +49,12 @@
 			$this->caching = false;
 			$this->cache_lifetime = 3600;
 			$this->cache_dir = YD_DIR_TEMP;
-			$this->cache_dir = YD_DIR_TEMP . '/cache/';
+			$this->cache_dir = YD_DIR_TEMP . '/cache';
+
+			// Create the cache dir if it doesn't exist
+			if ( ! is_dir( $this->cache_dir ) ) {
+				@mkdir( $this->cache_dir );
+			}
 
 			// Register the custom modifiers
 			$this->register_modifier( 'sizeof', 'sizeof' );

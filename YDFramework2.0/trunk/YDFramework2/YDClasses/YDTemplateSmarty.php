@@ -50,7 +50,7 @@
 			$this->use_sub_dirs = false;
 			$this->caching = false;
 			$this->cache_lifetime = 3600;
-			$this->cache_dir = YD_DIR_TEMP . '/cache/';
+			$this->cache_dir = YD_DIR_TEMP . '/cache';
 
 			// Create the cache dir if it doesn't exist
 			if ( ! is_dir( $this->cache_dir ) ) {
@@ -78,9 +78,10 @@
 		 *
 		 *	@param $file		(optional) The name of the template you want to parse and output.
 		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $compile_id	(optional) ID for the compilation of the template (must be unique).
 		 */
-		function display( $file='', $cache_id=null ) {
-			$this->fetch( $file, $cache_id, true );
+		function display( $file='', $cache_id=null, $compile_id=null ) {
+			$this->fetch( $file, $cache_id, $compile_id, true );
 		}
 
 		/**
@@ -94,11 +95,12 @@
 		 *
 		 *	@param $file		(optional) The name of the template you want to parse and output.
 		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $compile_id	(optional) ID for the compilation of the template (must be unique).
 		 *	@param $display		(optional) Whether the output should be displayed or returned.
 		 *
 		 *	@returns	This function returns the output of the parsed template.
 		 */
-		function fetch( $file='', $cache_id=null, $display=false ) {
+		function fetch( $file='', $cache_id=null, $compile_id=null, $display=false ) {
 
 			// Add some default variables
 			$this->assign( 'YD_FW_NAME', YD_FW_NAME );
@@ -115,7 +117,7 @@
 			$tplName = $this->_getTemplateName( $file );
 
 			// Output the template
-			$result = parent::fetch( $tplName, $cache_id, false );
+			$result = parent::fetch( $tplName, $cache_id, $compile_id );
 
 			// Display the template or return the result
 			if ( $display == true ) {
