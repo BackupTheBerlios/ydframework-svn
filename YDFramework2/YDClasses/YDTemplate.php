@@ -8,10 +8,8 @@
     */
 
     /**
-     *  This class implements an template object and does this by extending the
-     *  Smarty class. For more information about Smarty, please take a look at
-     *  http://smarty.php.net/ which contains a reference about all the tags
-     *  that can be used in the templates.
+     *  This class implements an template object and does this by using the
+     *  YDTemplateSmarty class.
      *
      *  In order to make this work, you will need to make the temp directory
      *  under the YDFramework2 directory world-writeable as this directory is
@@ -37,16 +35,13 @@
      *      upgrade Smarty to a new version if needed. If there is a folder
      *      called "includes" in the current script's directory, this will also
      *      be searched in for plugins.
-     *
-     *  @todo
-     *      Needs to be integrated with YDBase.
      */
-    class YDTemplate extends Smarty {
+    class YDTemplate extends YDBase {
 
         /**
-         *  This is the class constructor for the YDTemplateSmarty class. It 
-         *  does not take any arguments and is smart enough to configure itself.
-         *  By default, it looks in the same directory as the current script to
+         *  This is the class constructor for the YDTemplate class. It does not 
+         *  take any arguments and is smart enough to configure itself. By 
+         *  default, it looks in the same directory as the current script to
          *  find the templates.
          *
          *  The temporary directory is set to the YDFramework2/temp directory
@@ -55,27 +50,11 @@
          */
         function YDTemplate() {
 
-            // Initialize the Smarty class
-            $this->Smarty();
+            // Initialize YDBase
+            $this->YDBase();
 
-            // Configure Smarty
-            $this->config_dir = YD_DIR_3RDP_SMARTY . '/configs';
-            $this->template_dir = YD_SELF_DIR;
-            $this->compile_dir = YD_DIR_TEMP;
-            $this->caching = false;
-            $this->use_sub_dirs = false;
-            $this->compile_id = md5( YD_SELF_DIR );
-
-            // Add an extra plugins directory
-            $this->plugins_dir = array(
-                YD_DIR_HOME . '/YDSmartyPlugins',
-                YD_DIR_3RDP_SMARTY . '/plugins',
-            );
-
-            // Add the includes directory if any
-            if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
-                array_push( $this->plugins_dir, YD_PATHDELIM . YD_SELF_DIR );
-            }
+            // Instantiate the template object
+            $this->tpl = new YDTemplateSmarty();
 
         }
 
@@ -88,7 +67,7 @@
          *  @param $value The value of the variable you want to add.
          */
         function setVar( $name, $value ) {
-            $this->assign( $name, $value );
+            $this->tpl->assign( $name, $value );
         }
 
         /**
@@ -113,7 +92,7 @@
             }
             
             // Set the template directory
-            $this->templateDir = realpath( $dir );
+            $this->tpl->templateDir = realpath( $dir );
 
         }
 
@@ -173,9 +152,9 @@
         function getOutput( $name ) {
 
             // Check if the template directory is writeable
-            if ( ! is_writable( $this->compile_dir ) ) {
+            if ( ! is_writable( $this->tpl->compile_dir ) ) {
                 new YDFatalError(
-                    'The directory "' . $this->compile_dir . '" should be '
+                    'The directory "' . $this->tpl->compile_dir . '" should be '
                     . 'world writable for the Yellow Duck Framework to work '
                     . 'properly.'
                 );
@@ -201,64 +180,7 @@
             $this->setVar( 'YD_SERVER', $_SERVER );
 
             // Get the output from the template
-            return $this->fetch( $name . YD_TPL_EXT );
-
-        }
-
-        /**
-         *  We create a custom version of Smarty's temporary filename generator
-         *  to make it support the fact that we want to put all the compiled
-         *  templates from different directories in the same temp directory.
-         *
-         *  First thing we do it to change the compile_id parameter to include
-         *  the current directory. To shorten the names of the files, we perform
-         *  an md5 checksum on them so that they are fixed in length.
-         *
-         *  @internal
-         *
-         *  @param $auto_base
-         *  @param $auto_source
-         *  @param $auto_id
-         *
-         *  @return string
-         */
-        function _get_auto_filename(
-            $auto_base, $auto_source = null, $auto_id = null
-        ) {
-
-            $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
-
-            if(@is_dir($auto_base)) {
-                $_return = $auto_base . DIRECTORY_SEPARATOR;
-            } else {
-                // auto_base not found, try include_path
-                $_params = array('file_path' => $auto_base);
-                require_once(SMARTY_DIR . 'core' . DIRECTORY_SEPARATOR . 'core.get_include_path.php');
-                smarty_core_get_include_path($_params, $this);
-                $_return = isset($_params['new_file_path']) ? $_params['new_file_path'] . DIRECTORY_SEPARATOR : null;
-            }
-
-            $fileid = '';
-
-            if(isset($auto_id)) {
-                // make auto_id safe for directory names
-                $auto_id = str_replace('%7C',$_compile_dir_sep,(urlencode($auto_id)));
-                // split into separate directories
-                $fileid .= $auto_id . $_compile_dir_sep;
-            }
-
-            if(isset($auto_source)) {
-                // make source name safe for filename
-                $_filename = urlencode(basename($auto_source));
-                //$_filename = urlencode($auto_source);
-                $_crc32 = crc32($auto_source) . $_compile_dir_sep;
-                // prepend %% to avoid name conflicts with
-                // with $params['auto_id'] names
-                $_crc32 = '%%' . substr($_crc32,0,3) . $_compile_dir_sep . '%%' . $_crc32;
-                $fileid .= $_crc32 . $_filename;
-            }
-
-            return $_return . YD_TMP_PRE . md5( $fileid );
+            return $this->tpl->fetch( $name . YD_TPL_EXT );
 
         }
 

@@ -280,6 +280,7 @@
         require_once( YD_DIR_CLSS . '/YDSqlQuery.php' );
         require_once( YD_DIR_CLSS . '/YDStringUtil.php' );
         require_once( YD_DIR_CLSS . '/YDTemplate.php' );
+        require_once( YD_DIR_CLSS . '/YDTemplateSmarty.php' );
         require_once( YD_DIR_CLSS . '/YDTimer.php' );
         require_once( YD_DIR_CLSS . '/YDUrl.php' );
 
