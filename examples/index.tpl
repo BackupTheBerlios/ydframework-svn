@@ -215,7 +215,7 @@
 
         <p>&nbsp;<br><b>Documentation</b></p>
 
-        <p>The documentation for the {$YD_FW_NAME} can be found in the
+        <p>The documentation for the <?= $YD_FW_NAME ?> can be found in the
         <a href="../YDFramework2/doc/index.html">YDFramework2/docs</a> directory
         of the download.</p>
     
