@@ -262,7 +262,34 @@ Percentage of the requests served within a certain time (ms)
 
         <para>After a lot of discussion on the forum for the Yellow Duck Framework, the descision was made to move again to Smarty, and keep the framework bundled with Smarty (final now). There were a good number of arguments for the move to Smarty again.</para>
 
+        <para>Here's a short overview of the advantages and disadvantages of both:</para>
 
+        <para><emphasis role="strong">Smarty</emphasis></para>
+
+        <itemizedlist spacing="compact">
+            <listitem>+ Big install base</listitem>
+            <listitem>+ Big group of developers</listitem>
+            <listitem>+ Best known template engine for PHP (from what I could see)</listitem>
+            <listitem>+ All the possibilities you can think of are there: use of objects, arrays, simple variables, caching, ...</listitem>
+            <listitem>+ Good "developer performance"</listitem>
+            <listitem>- Performance is not top notch without caching</listitem>
+            <listitem>- Big library and bloated code</listitem>
+        </itemizedlist>
+
+        <para><emphasis role="strong">Smarty Light</emphasis></para>
+
+        <itemizedlist spacing="compact">
+            <listitem>+ Smaller than Smarty</listitem>
+            <listitem>+ Faster than Smarty</listitem>
+            <listitem>+ Quite a lot of features</listitem>
+            <listitem>+ Good for easy things </listitem>
+            <listitem>- Only one developer</listitem>
+            <listitem>- Small install base (I think the Yellow Duck Framework is one of the few using this library)</listitem>
+            <listitem>- No possibility to use objects in templates</listitem>
+            <listitem>- Sometimes requires a lot of preprocessing work to get the stuff in the template</listitem>
+        </itemizedlist>
+
+        <para>Considering the pros and the cons, I tend to prefer Smarty, even though it's performance is not so good. The syntaxical differences are not so big, so the migration of the templates should go quite fast.</para>
 
     </sect1>
 
