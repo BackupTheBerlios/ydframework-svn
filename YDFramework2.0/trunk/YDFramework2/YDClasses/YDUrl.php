@@ -89,7 +89,7 @@
 			}
 
 			// Add the host information
-			$url .= $this->getNamedPart( 'host' ) . '://';
+			$url .= $this->getNamedPart( 'host' );
 
 			// Add the port information
 			if ( $this->getNamedPart( 'port' ) != '' ) {
