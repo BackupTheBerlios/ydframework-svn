@@ -344,10 +344,24 @@
 		/**
 		 *	Add a filter to the form for the specified field.
 		 *
-		 *	@param	$element	The element to apply the filter on.
+		 *	@param	$element	The element to apply the filter on. If you specify an array, it will add the filter for
+		 *						each element in the array.
 		 *	@param	$filter		The name of the filter to apply.
 		 */
 		function addFilter( $element, $filter ) {
+
+			// Check if the element is an array or not
+			if ( is_array( $element ) ) {
+
+				// Add the rule for each element
+				foreach ( $element as $e ) {
+					$this->addFilter( $e, $filter );
+				}
+
+				// Return
+				return;
+
+			}
 
 			// Check if it's a known filter
 			if ( ! array_key_exists( $filter, $this->_regFilters ) ) {
@@ -370,12 +384,26 @@
 		/**
 		 *	Add a rule to the form for the specified field.
 		 *
-		 *	@param	$element	The element to apply the rule on.
+		 *	@param	$element	The element to apply the rule on. If you specify an array, it will add the rule for each
+		 *						element in the array.
 		 *	@param	$rule		The name of the rule to apply.
 		 *	@param	$error		The error message to show if an error occured.
 		 *	@param	$options	(optional) The options to pass to the validator function.
 		 */
 		function addRule( $element, $rule, $error, $options=null ) {
+
+			// Check if the element is an array or not
+			if ( is_array( $element ) ) {
+
+				// Add the rule for each element
+				foreach ( $element as $e ) {
+					$this->addRule( $e, $rule, $error, $options );
+				}
+
+				// Return
+				return;
+
+			}
 
 			// Check if it's a known filter
 			if ( ! array_key_exists( $rule, $this->_regRules ) ) {
