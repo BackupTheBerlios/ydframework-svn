@@ -68,6 +68,12 @@
         define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
 
         /**
+         *  @enum YD_FW_HOMEPAGE
+         *        The homepage of the Yellow Duck Framework.
+         */
+        define( 'YD_FW_HOMEPAGE', 'http://www.yellowduck.be/ydf2/' );
+
+        /**
          *  @enum YD_DIR_HOME
          *        Home directory of the Yellow Duck Framework. This is the full path
          *        to the YDFramework2 directory.

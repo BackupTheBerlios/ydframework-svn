@@ -11,6 +11,7 @@
     require_once( 'YDRequest.php' );
     require_once( 'YDForm.php' );
     require_once( 'YDEmail.php' );
+    require_once( 'YDTemplate.php' );
 
     // Class definition
     class email1Request extends YDRequest {
@@ -50,16 +51,18 @@
                 // Mark the form as valid
                 $this->setVar( 'formValid', true );
 
+                // Parse the template for the email
+                $emlTpl = new YDTemplate();
+                $emlTpl->setVar( 'email', $form->exportValue( 'email' ) );
+                $body = $emlTpl->getOutput( 'email1_template' );
+
                 // Send the email
                 $eml = new YDEmail();
                 $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
                 $eml->addTo( $form->exportValue( 'email' ) );
                 $eml->setSubject( 'Hello from Pieter & Fiona!' );
-                $eml->setTxtBody( 'Hello from Pieter & Fiona!' );
-                $eml->setHtmlBody(
-                    '<h1>Hello from Pieter & Fiona!</h1>'
-                    . '<img src="fsimage1.jpg" border="1">'
-                );
+                $eml->setTxtBody( $body );
+                $eml->setHtmlBody( $body );
                 $eml->addAttachment( 'email1.tpl' );
                 $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
                 $eml->send();

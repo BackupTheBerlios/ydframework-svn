@@ -100,6 +100,7 @@
          *  - YD_FW_VERSION:   version of the framework, e.g. "2.0.0"
          *  - YD_FW_NAMEVERS:  the combination of the two items above, e.g.
          *                     "Yellow Duck Framework 2.0.0"
+         *  - YD_FW_HOMEPAGE:  the homepage of the Yellow Duck Framework.
          *  - YD_SELF_SCRIPT:  Contains the current script's path, e.g.
          *                     "/myapp/index.php"
          *  - YD_SELF_URI:     The URI which was given in order to access this
@@ -140,6 +141,7 @@
             $this->setVar( 'YD_FW_NAME', YD_FW_NAME );
             $this->setVar( 'YD_FW_VERSION', YD_FW_VERSION );
             $this->setVar( 'YD_FW_NAMEVERS', YD_FW_NAMEVERS );
+            $this->setVar( 'YD_FW_HOMEPAGE', YD_FW_HOMEPAGE );
             $this->setVar( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
             $this->setVar( 'YD_SELF_URI', YD_SELF_URI );
             $this->setVar( 'YD_ACTION_PARAM', YD_ACTION_PARAM );

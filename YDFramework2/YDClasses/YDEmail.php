@@ -19,10 +19,6 @@
      *  This class defines an email message.
      *
      *  @todo
-     *      Add options to get the text and HTML contents for an email from a
-     *      YDTemplate object.
-     *
-     *  @todo
      *      If you send an email with an embedded image, the email sometimes
      *      shows up with the body in an attachment.
      */
