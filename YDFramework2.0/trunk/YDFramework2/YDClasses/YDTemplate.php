@@ -132,9 +132,6 @@
 		/**
 		 *	This function will get the name of the template.
 		 *
-		 *	@todo
-		 *		Needs to be able to handle non empty template names and templates without the extension.
-		 *
 		 *	@internal
 		 */
 		function _getTemplateName( $file='' ) {
