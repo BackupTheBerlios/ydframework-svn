@@ -135,6 +135,18 @@
 			return $lang->getBrowserLanguages();
 		}
 
+		/**
+		 *	This function will get the most appropriate language for the browser, considering the list of supported
+		 *	languages by both the browser and the web application.
+		 *
+		 *	@param $supported	(optional) An array with the list of supported languages. By default, only english is
+		 *						supported.
+		 */
+		function getLanguage( $supported=array( 'en' ) ) {
+			$lang = new YDLanguage( $supported );
+			return $lang->getLanguage();
+		}
+
 	}
 
 ?>
