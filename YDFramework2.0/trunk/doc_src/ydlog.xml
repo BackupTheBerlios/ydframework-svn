@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydlog">
+
+    <title>Using logfiles</title>
+
+    <para>In this chapter, we will see how you can use logfiles to gather data about your web application. These files are stored a either plain text or XML files on disk. This is a great way to capture information without having to put it in the actual HTML contents.</para>
+
+    <sect1 id="ydlog_types">
+
+        <para>In the logging system of the Yellow Duck Framework, there are different levels of messages. We make a differentiation between the following types of log messages:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>debug messages (level 4 - YD_LOG_DEBUG)</listitem>
+            <listitem>informational messages (level 3 - YD_LOG_INFO)</listitem>
+            <listitem>warning messages (level 2 - YD_LOG_WARNING)</listitem>
+            <listitem>error messages (level 1 - YD_LOG_ERROR)</listitem>
+        </itemizedlist>
+
+        <para>The higher the level, the more messages will be shown.</para>
+
+        <para>Logfiles can be both XML or plain text based. Here are some samples from logfiles:</para>
+
+        <para>A plain text logfile:</para>
+
+        <programlisting><![CDATA[2004-12-09 20:49:12 | DEBUG | a debug message
+2004-12-09 20:49:12 | INFO | an informational message
+2004-12-09 20:49:12 | WARNING | a warning message
+2004-12-09 20:49:12 | ERROR | an error message]]></programlisting>
+
+        <para>An XML logfile:</para>
+
+        <programlisting><![CDATA[<?xml version='1.0'?>
+<log creator="Yellow Duck Framework 2.0 (build unknown)">
+    <entry>
+        <date>2004-12-09 20:49:12</date>
+        <level>INFO</level>
+        <file>c:\ydf2\examples\logging.php</file>
+        <basefile>logging.php</basefile>
+        <uri>/ydframework/examples/logging.php</uri>
+        <line>46</line>
+        <class>logging</class>
+        <type>-&gt;</type>
+        <function>actiondefault</function>
+        <message>info message</message>
+    </entry>
+    <entry>
+        <date>2004-12-09 20:49:12</date>
+        <level>WARNING</level>
+        <file>c:\ydf2\examples\logging.php</file>
+        <basefile>logging.php</basefile>
+        <uri>/ydframework/examples/logging.php</uri>
+        <line>49</line>
+        <class>logging</class>
+        <type>-&gt;</type>
+        <function>actiondefault</function>
+        <message>warning message</message>
+    </entry>
+    <entry>
+        <date>2004-12-09 20:49:12</date>
+        <level>ERROR</level>
+        <file>c:\ydf2\examples\logging.php</file>
+        <basefile>logging.php</basefile>
+        <uri>/ydframework/examples/logging.php</uri>
+        <line>52</line>
+        <class>logging</class>
+        <type>-&gt;</type>
+        <function>actiondefault</function>
+        <message>error message</message>
+    </entry>
+</log>]]></programlisting>
+
+        <para>The text based logfiles are very handy if you don't intend to postprocess the logfiles. The XML files however are much more structured and therefore easier to postprocess (e.g. to make you own logging user interface).</para>
+
+    </sect1>
+
+    <sect1 id="ydlog_setup">
+
+        <title>Setting up logging</title>
+
+        <para>Before you can use the logging, you need to perform some configuration. The configuration is done by defining a number of constants.</para>
+
+        <para><emphasis role="bold">YD_LOG_LEVEL:</emphasis> this indicates which messages are written to the logfiles. By default, this is set to YD_LOG_INFO.</para>
+
+        <para><emphasis role="bold">YD_LOG_FILE:</emphasis> the file to where the logging messages should be send. Make sure this is an absolute path. By default, this points to the YDFramework2_log.xml file in the Yellow Duck Framework's temporary directory.</para>
+
+        <para><emphasis role="bold">YD_LOG_FORMAT:</emphasis> indicates if the logfiles should be in plain text or XML. By default, this is XML.</para>
+
+        <para><emphasis role="bold">YD_LOG_TEXTFORMAT:</emphasis> indicates how the entries in the plain text logfile should be formatted. By default, the format is as follows:</para>
+
+        <programlisting><![CDATA[%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%]]></programlisting>
+
+        <para>The following placeholders can be used in the YD_LOG_TEXTFORMAT definition:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>%date%</listitem>
+            <listitem>%level%</listitem>
+            <listitem>%uri%</listitem>
+            <listitem>%file%</listitem>
+            <listitem>%basefile%</listitem>
+            <listitem>%line%</listitem>
+            <listitem>%function%</listitem>
+            <listitem>%message%</listitem>
+        </itemizedlist>
+
+        <para>These defaults should be set before including the YDLog.php file. If one or more options are not defined, it will revert to the defaults.</para>
+
+    </sect1>
+
+    <sect1 id="ydlog_logging">
+
+        <title>Sending messages to the logfile</title>
+
+        <para>To send a new message to the logfile, you need to call one of the static functions from the YDLog class. For each type of messages, you need to use the accompanying function.</para>
+
+        <para>Here is a sample file on how to use the logging functions:</para>
+
+        <programlisting><![CDATA[<?php
+
+	// Standard include
+	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+	// Includes
+	YDInclude( 'YDLog.php' );
+	YDInclude( 'YDRequest.php' );
+
+	// Plain function
+	function PlainFunction() {
+		YDLog::info( 'Message from PlainFunction' );
+	}
+
+	// Class definition
+	class logging extends YDRequest {
+
+		// Class constructor
+		function logging() {
+			$this->YDRequest();
+		}
+
+		// Default action
+		function actionDefault() {
+			YDLog::clear();
+			YDLog::debug( 'debug message' );
+			YDLog::info( 'info message' );
+			YDLog::warning( 'warning message' );
+			YDLog::error( 'error message' );
+			PlainFunction();
+		}
+
+	}
+
+	// Process the request
+	YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+    </sect1>
+
+</chapter>

@@ -9,6 +9,7 @@
     <!ENTITY ydtemplate SYSTEM "ydtemplate.xml">
     <!ENTITY ydform SYSTEM "ydform.xml">
     <!ENTITY yddebug SYSTEM "yddebug.xml">
+    <!ENTITY ydlog SYSTEM "ydlog.xml">
     <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
     <!ENTITY yddatabase SYSTEM "yddatabase.xml">
     <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
@@ -49,6 +50,7 @@
     &ydtemplate;
     &ydform;
     &yddebug;
+    &ydlog;
     &ydauthentication;
     &yddatabase;
     &ydfilesystem;

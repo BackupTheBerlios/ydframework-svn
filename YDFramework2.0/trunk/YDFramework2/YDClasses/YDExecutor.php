@@ -25,9 +25,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	// Add a global marker
-	//YDGlobalTimerMarker( 'Initial setup' );
-
 	/**
 	 *	This is the executor class that contains all the logic for executing requests. It will instantiate the request
 	 *	class and execute the right functions to get the request processed correctly.
