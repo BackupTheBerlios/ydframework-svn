@@ -3,6 +3,9 @@
 	// Standard include
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
+	// Include all log messages
+	define( 'YD_LOG_LEVEL', 4 );
+
 	// Includes
 	YDInclude( 'YDLog.php' );
 	YDInclude( 'YDRequest.php' );
@@ -26,17 +29,17 @@
 
 			echo( 'Log level: ' );
 			switch ( YD_LOG_LEVEL ) {
-				case 4:
-					echo( 'YD_DEBUG' );
+				case YD_LOG_DEBUG:
+					echo( 'YD_LOG_DEBUG' );
 					break;
-				case 3:
-					echo( 'YD_INFO' );
+				case YD_LOG_INFO:
+					echo( 'YD_LOG_INFO' );
 					break;
-				case 2:
-					echo( 'YD_WARNING' );
+				case YD_LOG_WARNING:
+					echo( 'YD_LOG_WARNING' );
 					break;
 				default:
-					echo( 'YD_ERROR' );
+					echo( 'YD_LOG_ERROR' );
 					break;
 			}
 			echo( '<br/><br/>' );
@@ -56,8 +59,11 @@
 			echo( 'Adding error message<br/>' );
 			YDLog::error( 'error message' );
 
-			echo( 'Testing PlainFunction' );
+			echo( 'Testing PlainFunction<br/>' );
 			PlainFunction();
+
+			echo( 'Adding very long info message<br/>' );
+			YDLog::info( 'this is a very long info message and should break up over several lines in the logfile. Each line should be a separate info message in the logfile if everything goes correctly.' );
 
 			echo( '<br/><a href="' . YD_SELF_SCRIPT . '?do=showlog">show logfile</a>' );
 

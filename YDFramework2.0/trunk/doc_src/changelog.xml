@@ -51,6 +51,8 @@
             <listitem>The YDBrowserInfo class now recognizes FireFox as a separate browser.</listitem>
             <listitem>Added an autorules option to the YDFormElement class.</listitem>
             <listitem>Added an option to specify a template outside the template directory (as smarty supports it).</listitem>
+            <listitem>The debug function now use YD_CRLF instead of \n for the newline characters.</listitem>
+            <listitem>The logging functions are now able to wordwrap long lines if you define YD_LOG_WRAPLINES. This is off by default.</listitem>
             <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
         </itemizedlist>
 

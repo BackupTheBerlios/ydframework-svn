@@ -25,7 +25,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	YDInclude( 'YDPath.php' );
+	YDInclude( 'YDFileSystem.php' );
 
 	// The different log levels
 	@define( 'YD_LOG_DEBUG', 4 );
@@ -54,6 +54,16 @@
 			'YD_LOG_TEXTFORMAT',
 			"%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%"
 		);
+	}
+
+	// Define if long lines need to be wrapped or not
+	if ( ! defined( 'YD_LOG_WRAPLINES' ) ) {
+		define( 'YD_LOG_WRAPLINES', false );
+	}
+
+	// Define the maximum line width for a log entry
+	if ( ! defined( 'YD_LOG_MAX_LINESIZE' ) ) {
+		define( 'YD_LOG_MAX_LINESIZE', 100 );
 	}
 
 	/**
@@ -136,6 +146,17 @@
 		 */
 		function _log( $level, $text ) {
 
+			// Split the text up in parts if longer than the maximum linesize
+			if ( strlen( $text ) > YD_LOG_MAX_LINESIZE && YD_LOG_WRAPLINES ) {
+
+				// The break character we are going to use
+				$break = '__YD_LOG_BREAK__';
+
+				// Wrap the text
+				$text = YD_CRLF . "\t" . wordwrap( $text, YD_LOG_MAX_LINESIZE, YD_CRLF . "\t" );
+
+			}
+
 			// Get the current stack
 			$stack = debug_backtrace();
 
@@ -175,7 +196,7 @@
 				$msg .= '<uri>' . htmlentities( YD_SELF_URI ) . '</uri>';
 				$msg .= '<line>' . htmlentities( $stack[1]['line'] ) . '</line>';
 				$msg .= '<function>' . htmlentities( $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'] ) . '</function>';
-				$msg .= '<message>' . htmlentities( $text ) . '</message>';
+				$msg .= '<message>' . htmlentities( trim( $text ) ) . '</message>';
 				$msg .= '</entry>';
 				$msg .= '</log>';
 
