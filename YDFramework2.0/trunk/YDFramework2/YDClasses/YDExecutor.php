@@ -157,6 +157,13 @@
                 $debug .= 'Total size include files: ' . $includeFilesSize . YD_CRLF . YD_CRLF;
                 $debug .= 'Included files: ' . YD_CRLF . YD_CRLF . "\t" . implode( "\n\t", $includeFiles ) . YD_CRLF . YD_CRLF;
 
+                // Create the list of include directories
+                $debug .= 'Includes search path:' . YD_CRLF . YD_CRLF;
+                foreach ( explode( YD_PATHDELIM, ini_get( 'include_path' ) ) as $path ) {
+                    $debug .= "\t" . $path . YD_CRLF;
+                }
+                $debug .= YD_CRLF;
+
                 // If there is a database instance
                 $debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . YD_CRLF . YD_CRLF;
 
