@@ -75,7 +75,7 @@
 			// Get the names of the months
 			$months = array();
 			for ( $i = 1; $i <= 12; $i++ ) {
-				$months[$i] = strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) );
+				$months[$i] = strtolower( strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) ) );
 			}
 
 			// Get the names of the years
