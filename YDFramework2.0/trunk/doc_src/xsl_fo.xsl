@@ -24,4 +24,8 @@
     <xsl:param name="line-height">1.5</xsl:param>
     <xsl:param name="hyphenate">false</xsl:param>
 
+    <xsl:attribute-set name="xref.properties">
+        <xsl:attribute name="color">blue</xsl:attribute>
+    </xsl:attribute-set>
+
 </xsl:stylesheet>
