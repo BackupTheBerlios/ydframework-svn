@@ -20,13 +20,7 @@
 
         <body>
 
-            <h1>Yellow Duck Framework </h1>
-
-            <h3 align="center">version 2.0.0 </h3>
-
-            <hr size="1" noshade="" />
-
-            <h3>Build history</h3>
+            <h3>Yellow Duck Framework 2.0.0 - Build history</h3>
 
             <xsl:for-each select="log/logentry">
                 <hr size="1" noshade="" />
