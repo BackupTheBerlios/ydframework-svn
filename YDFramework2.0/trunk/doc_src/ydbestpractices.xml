@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydbestpractices">
+
+    <title>Best practices</title>
+
+    <para>This chapter will give you an overview of common design patterns and best practices for using the Yellow Duck Framework.</para>
+
+    <sect1 id="ydbestpractices_custom_includes">
+
+        <title>Configuration using custom includes </title>
+
+        <para>If you want to configure the Yellow Duck Framework for a complete web application, you will need to use a custom include file. Configuring the Yellow Duck Framework happens using define functions which define the configuration constants. These defines happen in the YDF2_init.php file. If you want to override them, you have to define them before including the YDF2_init.php file. You can do this manually for each script, or you can put this in a custom include file which configures the Yellow Duck Framework and includes the YDF2_init.php file.</para>
+
+        <para>Here's a code example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // My_YDF2_init.php file
+
+    // Always turn on debugging
+    define( 'YD_DEBUG', 1 );
+
+    // Use custom temp directory
+    define( 'YD_DIR_TEMP', 'C:/temp' );
+
+    // Include the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+?>]]></programlisting>
+
+        <para>The following configuration constants can be altered:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">YD_DIR_TEMP:</emphasis> the path to the temp directory. By default, this is pointing to YDFramework2/temp.</listitem>
+            <listitem><emphasis role="bold">YD_EXECUTOR:</emphasis> the class responsible for the execution as called with YDF2_process.php. By default, this is the class YDExector.</listitem>
+            <listitem><emphasis role="bold">YD_HTTP_USES_GZIP:</emphasis> indicates if the YDUrl should use Gzip compressed streams. Turned on by default.</listitem>
+            <listitem><emphasis role="bold">YD_HTTP_CACHE_TIMEOUT:</emphasis> the timeout for the cache of the YDUrl class in seconds. By default set to 1 hour.</listitem>
+            <listitem><emphasis role="bold">YD_HTTP_CACHE_USEHEAD:</emphasis> whether a HTTP HEAD request should be used to verify the validity of the YDUrl cache. This overrides the default cache lifetime. This option is turned on by default.</listitem>
+            <listitem><emphasis role="bold">YD_DEBUG:</emphasis> indicating if debugging information should be shown or not. By default, this is set to 1.</listitem>
+        </itemizedlist>
+
+        <para>The custom include file is most probably the easiest way of working.</para>
+
+    </sect1>
+
+    <sect1 id="ydbestpractices_subclassing_ydrequest">
+
+        <title>Subclassing YDRequest</title>
+
+        <para>For most web applications, you will probably start with subclassing the YDRequest class. This subclass can then house all the standard funtionality all requests will need. You can e.g. implement authentication in this subclass or use the YDBrowserInfo and YDLanguage objects to automatically have some standard information determined by for each request.</para>
+
+    </sect1>
+
+    <sect1 id="ydbestpractices_subclassing_form_elmnts">
+
+        <title>Subclassing form elements</title>
+
+        <para>Some of the standard form elements, such as the bbtextarea element, have special functions which you can use to make them work differently. You can easily subclass these elements to create custom form elements so that you don't have to do all this manually.</para>
+
+        <para>Let's take a look at an example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    require_once( 'YDFormElement_BBTextArea.php' );
+
+    class YDFormElement_MyBBTextArea extends YDFormElement_BBTextArea {
+
+        function YDFormElement_MyBBTextArea( 
+            $form, $name, $label='', $attributes=array(), $options=array()
+        ) {
+
+            // Initialize the parent
+            $this->YDFormElement_BBTextArea(
+                $form, $name, $label, $attributes, $options
+            );
+
+            // Set the type
+            $this->_type = 'pietersbbtextarea';
+
+            // Add some custom popup windows
+            $this->addPopupWindow(
+                'form.php?do=selector&field=firstForm_desc3&tag=img', 
+                'select image'
+            );
+            $this->addPopupWindow(
+                'form.php?do=selector&field=firstForm_desc3&tag=url',
+                'select url'
+            );
+
+        }
+
+    }
+
+?>]]></programlisting>
+
+        <para>In the example above, we created a custom form element based on the YDFormElement_BBTextArea class, which automatically adds two popup windows with their associated buttons to the toolbar. Also make sure the _type variable has a unique name. Do not forget to add this class to the PHP search path.</para>
+
+        <para>Before we can use this new form element, we need to register it with our form instance (which you could again subclass and use instead of the plain YDForm class). Registering goes as follows:</para>
+
+        <programlisting><![CDATA[<?php
+
+    require_once( 'YDForm.php' );
+
+    class MyCustomForm extends YDForm {
+
+        function MyCustomForm(
+            $name, $method='post', $action='', $target='_self', $attributes=null
+        ) {
+
+            // Initialize the parent
+            $this->YDForm( $name, $method, $action, $target, $attributes );
+
+            // Register our custom element
+            $this->registerElement(
+                'mybbtextarea',
+                'YDFormElement_MyBBTextArea',
+                'YDFormElement_MyBBTextArea.php'
+            );
+
+        }
+
+    }
+
+?> ]]></programlisting>
+
+        <para>In the code above, we declared a new form class that subclasses the YDForm class. We used the registerElement function to add our custom form element. This function takes 3 parameters: the name of the element (same as the _type variable of the form element's class), the class name and the include file.</para>
+
+    </sect1>
+
+</chapter>

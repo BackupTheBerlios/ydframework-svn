@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="firstsample">
+
+    <title>First sample</title>
+
+    <para>In the object oriented nature of the Yellow Duck Framework, each script that gets executed is based on a common class, which is the YDRequest class. This class is smart enough to figure out which functions needs to be called using parameters given in the url and also supports some advanced functions such as authentication handling.</para>
+
+    <para>Let's take a look at an example script (named sample1.php) to understand how this works:</para>
+
+    <programlisting><![CDATA[<?php
+
+require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+YDInclude( 'YDRequest.php' );
+YDInclude( 'YDTemplate.php' );
+
+class sample1 extends YDRequest {
+
+    function sample1() {
+        $this->YDRequest();
+        $this->template = new YDTemplate();
+    }
+
+    function actionDefault() {
+        $this->template->assign( 'title', 'sample1Request::actionDefault' );
+        $this->template->display();
+    }
+
+    function actionEdit() {
+        $this->template->assign( 'title', 'sample1Request::actionEdit' );
+        $this->template->display();
+    }
+
+}
+
+YDInclude( 'YDF2_process.php' );
+
+?> ]]></programlisting>
+
+    <para>The template file that goes along with this script looks as follows (sample1.tpl):</para>
+
+    <programlisting><![CDATA[<html>
+
+    <head>
+        <title>{$title}</title>
+    </head>
+
+    <body>
+        {$title}
+    </body>
+
+</html> ]]></programlisting>
+
+    <para>When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can be changed to work exactly the way you want it to work.</para>
+
+    <para>In the Yellow Duck Framework, all requests are always processed in the same way and order. Let's evaluate the sample above step by step to explain how the processing is happening.</para>
+
+    <para>The first line you see in the sample1.php script is the include of the file called "YDF2_init.php". This file is responsible for setting up the Yellow Duck Framework, and does things such as:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem>Defining a number of constants with e.g. the path to specific directories and URLs</listitem>
+        <listitem>Starts or restores the previous session</listitem>
+        <listitem>Reconfigures the PHP include path</listitem>
+        <listitem>Includes the different files from the rest of the framework</listitem>
+    </itemizedlist>
+
+    <para>After that, we define a new class, called "sample1" which is based on the YDRequest class. For each script, you need to have 1 class which is named as the basename of the file (sample1 in this case). This class should have the YDRequest class as one of it ancestors.</para>
+
+    <para>Since we are inheriting from the YDRequest class, we initialize the parent class in the class constructor of the "sample1" class. In this example, we create a new instance of the YDTemplate class which we will need later on in the different actions.</para>
+
+    <para>Then we see two functions that start with the text "action". All functions that implement actions start with "action". The action that is going to be executed is always defined via the parameter "do" in the URL. If the url would be "sample1.php?do=default", the function actionDefault will be executed. If the url would have been "sample1.php?do=edit", the function actionEdit would be executed. If no action is specified, the actionDefault function will be executed.</para>
+
+    <para>Each one of the actions in the sample above link a variable to the template so that we can use this variable in the template. They both end with displaying the parsed template on the screen.</para>
+
+    <para>The last part of the script is the include of the "YDF2_process.php" script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens. Based on the class information, the complete request will be processed.</para>
+
+</chapter>

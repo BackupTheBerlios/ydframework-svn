@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydtemplate">
+
+    <title>Using templates</title>
+
+    <para>In this chapter, we will have a closer look at how the template engine in the Yellow Duck Framework is working and how it's implemented. The template engine in the framework is based on Smarty Light and follows the same syntax as any normal Smarty Light template file, except that is uses curly brackets as the template delimiters instead of the standard '<![CDATA[<% %>]]>' brackets. The homepage for the Smarty Light library is:</para>
+
+    <para>http://sourceforge.net/projects/smarty-light</para>
+
+    <para>The documentation for the Smarty Light template engine can be found on the following website:</para>
+
+    <para>http://www.paullockaby.com/projects/smarty-light/docs/</para>
+
+    <para>The API of the YDTemplate class is exactly the same, except for the caching functions. You can think of the YDTemplate class as a preconfigured Smarty Light template class.</para>
+
+    <note>If you don't want to use the Smarty Light template engine, you can easily use any other template engine you want. You are not limited to using just the Smarty Light template engine. If you want to use a different template engine, you can create your own version of the YDTemplate class by extending the existing one or reimplementing it from scratch.</note>
+
+    <sect1 id="ydtemplate_ydtemplate_class">
+
+        <title>The YDTemplate class</title>
+
+        <para>For managing templates, there is a specific class class YDTemplate. If you instantiate this class, you can assign variables to it, and then, using these variables, you can output a named template.</para>
+
+        <para>The following code sample gives you a small example on how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Include the YDTemplate class
+    require_once( 'YDTemplate.php' );
+
+    // This is the array we are going to use in the template
+    $array = array(
+        array(
+            'author' => 'Stephen King',
+            'title' => 'The Stand'
+        ),
+        array(
+            'author' => 'Neal Stephenson',
+            'title' => 'Cryptonomicon'
+        ),
+        array(
+            'author' => 'Milton Friedman',
+            'title' => 'Free to Choose'
+        )
+    );
+
+    // Instantiate a template object
+    $template = new YDTemplate();
+
+    // Assign the variables
+    $template->setVar( 'title', 'This is the title' );
+    $template->setVar( 'books', $array );
+
+    // Output the template
+    $template->display();
+
+?>]]></programlisting>
+
+        <para>The template for this code could look as follows:</para>
+
+        <programlisting><![CDATA[<html>
+
+<head>
+    <title>{$title}</title>
+</head>
+
+<body>
+
+    {if is_array( $books )}
+        <table>
+            <tr>
+                <th>Author</th>
+                <th>Title</th>
+            </tr>
+            {foreach from=$books item=val}
+                <tr>
+                    <td>{$val[author]}</td>
+                    <td>{$val[title]}</td>
+                </tr>
+            {/foreach}
+        </table>
+    {else}
+        <p>There are no books to display.</p>
+    {/if}
+
+</body>
+
+</html>]]></programlisting>
+
+        <para>As you can see, we assigned two variables to our template instance. Each variable you want to use in the template engine needs to be assigned to the template instance before you can use it. Assigning a variable to a template implies that we link a template variable name to a PHP object. These objects can be anything from an array to a simple string. Assigning objects to a template is not supported.</para>
+
+        <para>Once we assigned all the variables, we can issue the "fetch" function of the template class to get the result of the parsed template. This function takes one argument, which is the name of the template. If you want to immediately show the template result, you can use the "display" function instead.</para>
+
+        <para>The name of the template you need to specify for the "fetch" and "display" functions is the basename of the template without the "tpl" extension. In our example, you would need the following files to make the example work:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">mytemplate.php:</emphasis> the actual PHP script</listitem>
+            <listitem><emphasis role="bold">mytemplate.tpl:</emphasis> the template attached to the PHP script</listitem>
+        </itemizedlist>
+
+        <para>By convention, all templates have the extension "tpl". This is also hardcoded in the framework itself. Please, stick to this standard.</para>
+
+    </sect1>
+
+    <sect1 id="ydtemplate_search_paths">
+
+        <title>The YDTemplate class</title>
+
+        <para>To find templates, the Yellow Duck Framework takes a look at the template_dir class variable. By default, this is set to the same directory of the current PHP script. You can easily change by assigning a new value to the template_dir class variable.</para>
+
+        <warning>Do not change the value of the template_dir class during in the middle of the script, or you might not get the result you expected. Make it a habit of setting up this value when you instantiate the YDTemplate class.</warning>
+
+    </sect1>
+
+    <sect1 id="ydtemplate_standard_vars">
+
+        <title>Standard template variables</title>
+
+        <para>For each template, there are a number of standard variables available which you can always reference. These variables all start with "YD_" and are all uppercase. Here's the list of the standard variables:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">YD_FW_NAME:</emphasis> name of the framework</listitem>
+            <listitem><emphasis role="bold">YD_FW_VERSION:</emphasis> version of the framework</listitem>
+            <listitem><emphasis role="bold">YD_FW_NAMEVERS:</emphasis> the combination of the two items above</listitem>
+            <listitem><emphasis role="bold">YD_FW_HOMEPAGE:</emphasis> the homepage of the Yellow Duck Framework</listitem>
+            <listitem><emphasis role="bold">YD_SELF_SCRIPT:</emphasis> the current script's path, e.g. "/myapp/index.php"</listitem>
+            <listitem><emphasis role="bold">YD_SELF_URI:</emphasis> the URI which was given in order to access this page, e.g. "/myapp/index.php?do=edit"</listitem>
+            <listitem><emphasis role="bold">YD_ACTION_PARAM:</emphasis> the name of the $_GET parameter that specifies which action needs to be executed. This is "do" by convention.</listitem>
+        </itemizedlist>
+
+        <warning>Please do not use the "YD_" prefix for your own variables. This prefix is uniquely reserverd for the variables automatically assigned by the Yellow Duck Framework.</warning>
+
+    </sect1>
+
+    <sect1 id="ydtemplate_syntax">
+
+        <title>Template syntax</title>
+
+        <para>Since the YDTemplate class is based on the Smarty Light template engine, the same functionality and options are provided. There is one major difference though with a standard Smarty Light. The YDTemplate engine uses curly brackets as delimiters, while Smarty normally uses '<![CDATA[<%]]>' and '<![CDATA[%>]]>'.</para>
+
+        <para>To find more information about the Smarty Light syntax, please take a look at the Smarty Light documentation.</para>
+
+    </sect1>
+
+    <sect1 id="ydtemplate_caching">
+
+        <title>Template caching</title>
+
+        <para>The biggest change in comparison to the original Smarty Light template class and the YDTemplate class is the way the caching functions work. In the YDTemplate class, the caching is controlled by what we call a cache ID. Each item in the cache has a unique ID and this is what is used to check what is cached and what is not. The following sample illustrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDTemplate.php' );
+    YDInclude( 'YDDatabase.php' );
+
+    // Class definition
+    class tplcache extends YDRequest {
+
+        // Class constructor
+        function tplcache() {
+
+            // Initialize the parent
+            $this->YDRequest();
+
+            // Initialize the template
+            $this->tpl = new YDTemplate();
+
+            // Enable caching
+            $this->tpl->caching = true;
+            $this->tpl->cache_dir = YD_DIR_TEMP;
+
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Check if the template is cached
+            if ( ! $this->tpl->is_cached( YD_SELF_SCRIPT ) ) {
+
+                // Make some extensive database calls
+                $db = YDDatabase::getInstance(
+                    'mysql', 'test', 'root', '', 'localhost'
+                );
+                $db->connect();
+                $this->tpl->assign(
+                    'processList', $db->getRecords( 'show processlist' )
+                );
+                $this->tpl->assign(
+                    'status', $db->getRecords( 'show status' )
+                );
+                $this->tpl->assign( 
+                    'variables', $db->getRecords( 'show variables' )
+                );
+                $this->tpl->assign( 
+                    'version', $db->getServerVersion()
+                );
+                $this->tpl->assign( 
+                    'sqlcount', $db->getSqlCount()
+                );
+
+                // Indicate the template was not cached
+                echo( 'not cached' );
+
+            }
+
+            // Display the template
+            $this->tpl->display( 'tplcache.tpl', YD_SELF_SCRIPT );
+
+        }
+
+        // Function to clear the action
+        function actionClearCache() {
+            $this->tpl->clear_cached( YD_SELF_SCRIPT );
+            $this->redirectToAction( 'default' );
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>If you want to use caching in your YDTemplate class, you need to setup the caching parameters first. First of all, you need to set the class variable caching to true to indicate that all contents should be cached. When you want to check if a specific item exists in the cache, you can use the is_cached function specifying the cache ID. With the display function, you also need to specify the cache ID. To clear the cache, you can use the clear_cached function.</para>
+
+    </sect1>
+
+    <sect1 id="ydtemplate_escaping_js_and_css">
+
+        <title>Escaping JavaScript and CSS items in your template</title>
+
+        <para>As JavaScript and CSS use the same delimiters as the template engine, you need to add some special stuff to the template so that the parser doesn't get confused. The easiest is to surround the CSS and the JavaScript code with the {literal} tag. This will make the template parser ignore the text in between the tags and will avoid that the parser get's confused.</para>
+
+        <para>Here's an example:</para>
+
+        <programlisting><![CDATA[{literal}
+    Here is an example: {config_load file="config.conf"}
+{/literal}]]></programlisting>
+
+        <para>This will output the following:</para>
+
+        <programlisting><![CDATA[Here is an example: {config_load file="config.conf"}]]></programlisting>
+
+    </sect1>
+
+</chapter>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+          "./dtd/docbookx.dtd" [
+    <!ENTITY introduction SYSTEM "introduction.xml">
+    <!ENTITY firstsample SYSTEM "firstsample.xml">
+    <!ENTITY installing SYSTEM "installing.xml">
+    <!ENTITY tutorial SYSTEM "tutorial.xml">
+    <!ENTITY ydrequest SYSTEM "ydrequest.xml">
+    <!ENTITY ydtemplate SYSTEM "ydtemplate.xml">
+    <!ENTITY ydform SYSTEM "ydform.xml">
+    <!ENTITY yddebug SYSTEM "yddebug.xml">
+    <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
+    <!ENTITY yddatabase SYSTEM "yddatabase.xml">
+    <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
+    <!ENTITY ydurl SYSTEM "ydurl.xml">
+    <!ENTITY ydxmlrpc SYSTEM "ydxmlrpc.xml">
+    <!ENTITY ydemail SYSTEM "ydemail.xml">
+    <!ENTITY ydfeedcreator SYSTEM "ydfeedcreator.xml">
+    <!ENTITY yderror SYSTEM "yderror.xml">
+    <!ENTITY ydother SYSTEM "ydother.xml">
+    <!ENTITY ydbestpractices SYSTEM "ydbestpractices.xml">
+    <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
+    <!ENTITY appendixA SYSTEM "appendixA.xml">
+    <!ENTITY appendixB SYSTEM "appendixB.xml">
+]>
+
+<book>
+
+    <bookinfo>
+        <title>Yellow Duck Framework 2.0 - User Guide</title>
+        <authorgroup>
+            <author>
+                <surname>Claerhout</surname>
+                <firstname>Pieter</firstname>
+            </author>
+        </authorgroup>
+        <copyright>
+            <year>2004</year><holder>Pieter Claerhout</holder>
+        </copyright>
+    </bookinfo>
+
+    &introduction;
+    &firstsample;
+    &installing;
+    &tutorial;
+    &ydrequest;
+    &ydtemplate;
+    &ydform;
+    &yddebug;
+    &ydauthentication;
+    &yddatabase;
+    &ydfilesystem;
+    &ydurl;
+    &ydxmlrpc;
+    &ydemail;
+    &ydfeedcreator;
+    &yderror;
+    &ydother;
+    &ydbestpractices;
+    &ydchangelog;
+    &appendixA;
+    &appendixB;
+
+</book>

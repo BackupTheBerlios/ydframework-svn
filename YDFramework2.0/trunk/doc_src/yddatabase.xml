@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="yddatabase">
+
+    <title>Connecting to and using databases</title>
+
+    <para>The Yellow Duck Framework has a relatively simple but very effective and easy to use database connection layer. Even though there are already a lot of database connection layers available on the market, we found that there would be place for something more simple. The difference is that the library included in the Yellow Duck Framework doesn't try to support every feature available in every database, but tries to concentrate on a common set of functions that work across all major database engines.</para>
+
+    <para>Currently, the following database engines are supported:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">MySQL:</emphasis> http://www.mysql.com/</listitem>
+        <listitem><emphasis role="bold">Oracle:</emphasis> http://www.oracle.com/</listitem>
+        <listitem><emphasis role="bold">SQLite:</emphasis> http://www.sqlite.org/</listitem>
+        <listitem><emphasis role="bold">PostgreSQL:</emphasis> http://www.postgresql.org/</listitem>
+    </itemizedlist>
+
+    <para>More database engines will be added in the future depending on the requests from the users.</para>
+
+    <sect1 id="yddatabase_connecting">
+
+        <title>Connecting to a database</title>
+
+        <para>For establishing a database connection, you will use the YDDatabase class. Using the static method getInstance of the YDDatabase class, you can get an instance of a YDDatabaseDriver class which is used to interact with the database. The following code sample illustrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+    $db = YDDatabase::getInstance(
+        'mysql', 'test', 'root', '', 'localhost'
+    );
+
+?>]]></programlisting>
+
+        <para>The following options can be specified:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">$driver:</emphasis> Name of the database driver.</listitem>
+            <listitem><emphasis role="bold">$db:</emphasis> Database name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$user (optional):</emphasis> User name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$pass (optional):</emphasis> Password to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$host (optional):</emphasis> Host name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$options (optional):</emphasis> Options to pass to the driver.</listitem>
+        </itemizedlist>
+
+        <para>The following database drivers can be specified:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">mysql:</emphasis> MySQL (requires the mysql PHP extension)</listitem>
+            <listitem><emphasis role="bold">oracle:</emphasis> Oracle (requires the oci8 PHP extension)</listitem>
+            <listitem><emphasis role="bold">sqlite:</emphasis> SQLite (requires the sqlite PHP extension)</listitem>
+            <listitem><emphasis role="bold">posgresql:</emphasis> PostgreSQL (requires the pgsql PHP extension)</listitem>
+        </itemizedlist>
+
+        <para>Only the driver and database name are required, but depending on the chosen database driver, you will need to add more parameters. Please refer to the documentation of the database driver or your database software for more details.</para>
+
+        <para>The connection is not automatically opened when you instantiate the YDDatabaseDriver class, but is only opened when needed. There is however a way to force that a database connection will be made. This can be done by invoking the connect function on the YDDatabaseDriver class. If you execute the connect function twice on the same instance, the first connection will be reused. To close the connection and disconnect from the database, the close function of the YDDatabaseDriver class can be used.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_getting_db_info">
+
+        <title>Getting information about the database software</title>
+
+        <para>Each database driver instance has a number of features to return information about the actual database backend. The getServerVersion function returns the name and version of the database engine it is connected to. This information is returned as a string. The getSqlCount function will return the number of queries this database instance has executed already.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_escaping_vars">
+
+        <title>Escaping variables in SQL statements</title>
+
+        <para>Since the YDDatabase libraries use native SQL statements in a lot of the function calls, there is a need to uniformly escape strings so that it's save to include them in an SQL statement. For this purpose, the YDDatabase library has two functions, called string and sqlString. Both functions do the same, but the string function doesn't put single quotes around the string, while the sqlString function does.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_executing_sql">
+
+        <title>Executing queries</title>
+
+        <para>To execute a query on the database, you can use the executeSql function from the YDDatabaseDriver class. This function will execute the specified SQL statement and will return the number of rows that were affected by this query.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_getting_data">
+
+        <title>Getting data from the database</title>
+
+        <para>To get information out of the database, there are a number of different get functions that each have their own way getting data from the database. Currently, the following get functions are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getRecord:</emphasis> gets a single record from the database</listitem>
+            <listitem><emphasis role="bold">getRecords:</emphasis> gets a list of records from the database</listitem>
+            <listitem><emphasis role="bold">getValue:</emphasis> gets a value from a field from a specific record from the database</listitem>
+            <listitem><emphasis role="bold">getValueByName:</emphasis> the same as the getValue function, but this one allows you to specify the column by it's name instead of by it's index.</listitem>
+            <listitem><emphasis role="bold">getValuesByName:</emphasis> get's the list of values from the specified colum of the records.</listitem>
+            <listitem><emphasis role="bold">getAsAssocArray:</emphasis> uses the given field values as key and value to construct an associative array.</listitem>
+        </itemizedlist>
+
+        <para>All these functions have a number of common characteristics:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Each function requires you to specify a SQL statement to execute.</listitem>
+            <listitem>Each function has 0 or more options you can specify.</listitem>
+            <listitem>The get functions always return the records as associative arrays with lowercase key names.</listitem>
+            <listitem>Column names are always case insensitive.</listitem>
+        </itemizedlist>
+
+        <para>Here are some samples that show you for what type of queries you can use each individual function:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    $result = $db->getRecord(
+        'select * from users where userid = 1'
+    );
+    $result = $db->getRecords(
+        'select * from users'
+    );
+    $result = $db->getValue(
+        'select count(*) from users'
+    );
+    $result = $db->getValueByName(
+        'select count(*) as usercount from users', 'usercount'
+    );
+    $result = $db->getValuesByName(
+        'select username from users', 'username'
+    );
+    $result = $db->getAsAssocArray(
+        'select configname, configvalue from configuration',
+        'configname', 'configvalue'
+    );
+
+?>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="yddatabase_insert">
+
+        <title>Inserting new information</title>
+
+        <para>To insert information in the database, there are a number of ways you can use. One way of working is to construct an insert SQL query and execute it using the executeSql function. This however has some drawbacks in that sense that you need to escape all the string values manually. A much easier is to use the executeInsert function which does most of the difficult work in the background.</para>
+
+        <para>This function takes two arguments, being the name of the table to insert the database into, and an associative array mapping the column names to their values. The following example demonstrates how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    $values = array();
+    $values['ConfigName'] = 'email';
+    $values['ConfigValue'] = 'pieter@yellowduck.be';
+
+    $db->executeInsert( 'configuration', $values );
+
+?>]]></programlisting>
+
+        <para>If the database supports auto increment values for the primary key, this function will return the ID of the last insert. Please note that unfortunately, not all database engines support this. Currently, SQLite and MySQL? support this. Oracle and PostgreSQL? rely on sequences and triggers to do this automatically.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_update">
+
+        <title>Updating existing information</title>
+
+        <para>Updating database information works in pretty much the same way as inserting data. Again, you can construct the query manually and use the executeSql function to get the data updated in the database. Much easier and much nicer is to use the executeUpdate function. This takes a table name, an associative array mapping the column names to the column values and optionally, you can specify a where clause to limit the number of updates.</para>
+
+        <para>Here's an example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    $values = array();
+    $values['ConfigName'] = 'email';
+    $values['ConfigValue'] = 'pieter@yellowduck.be';
+
+    $db->executeUpdate( 'configuration', $values, 'configname = ' . $db->sqlString( 'email' ) );
+    $db->executeUpdate( 'configuration', $values );
+
+?> ]]></programlisting>
+
+        <para>This function will return the number of rows that was affected by this query.</para>
+
+    </sect1>
+
+</chapter>

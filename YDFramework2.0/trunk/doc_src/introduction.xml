@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="introduction">
+
+    <title>Introduction</title>
+
+    <para>The Yellow Duck Framework takes care of all the difficult work you normally have to perform manually when developing a web application. It is based on the idea of requests that can perform actions. By encapsulating all the programming in an object-oriented environment, you get a framework that is easy to use and understand, easy to extend and doesn't limit you in any way.</para>
+
+    <sect1 id="introduction_features">
+
+        <title>Features</title>
+
+        <para>The Yellow Duck Framework supports the following items:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Clean separation of code and output</listitem>
+            <listitem>Templates for outputting HTML easily</listitem>
+            <listitem>Automatic action dispatching using URL parameters</listitem>
+            <listitem>Object oriented form construction and validation</listitem>
+            <listitem>Object oriented handling of authentication</listitem>
+            <listitem>Classes for creating "XML/RPC" clients and servers.</listitem>
+            <listitem>Classes for creating syndicated XML feeds such as RSS and Atom feeds.</listitem>
+            <listitem>Easy handling of files, directories and images. For images, there are some very straightforward functions that can create thumbnails of those images.</listitem>
+            <listitem>An object oriented interface for creating and sending email messages.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="introduction_flexibility">
+
+        <title>Flexibility</title>
+
+        <para>The Yellow Duck Framework tries to be as flexible as possible so that you can tailor it in such a way that it works according to the way you want it to work. It's definitely not the framework that will solve all your needs, but for most web application related functions, you will find the Yellow Duck Framework a very handig tool to get your work done faster and more reliably.</para>
+
+    </sect1>
+
+    <sect1 id="introduction_ideas_behind">
+
+        <title>The ideas behind the framework</title>
+
+        <para>The two main ideas behind the Yellow Duck Framework are simplicity and speed. Simplicity because I think most frameworks try to do too many without being good at what they are supposed to be doing. We feature only a limited set of things the framework can do, but we make sure that these are working as they should and in such a way that everybody can understand how they work.</para>
+
+        <para>Speed of the framework is important as the goal of a framework is to speed up your development time and getting more maintanable code which is easier to debug. On top of that, the framework should not be a bottleneck in the execution speed of your scripts. We try to make the framework as less overhead as possible to keep your scripts running at full speed. If you e.g. take advantage of the caching possibilities from the templates, you can easily make very scalable high performance websites.</para>
+
+    </sect1>
+
+</chapter>

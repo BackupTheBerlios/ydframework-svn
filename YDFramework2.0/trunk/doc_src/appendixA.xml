@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<appendix id="appendixA">
+
+    <title>Template engines background information</title>
+
+    <para>After following the recents threads in the Smarty template engine, I took the time to wrap up some of my remarks.</para>
+
+    <para>The discussion thread that got me started to think about was the following:</para>
+
+    <para>http://news.php.net/php.smarty.general/11566</para>
+
+    <sect1 id="appendixA_differences">
+
+        <title>The difference between templating engines</title>
+
+        <para>If you browse around on the internet, you will see that there are different types of template engines designed for PHP (and other languages). Each of them has it's own strong and weak points. Most of the template engines design their own syntax and force the user to use this syntax. Per se, this is not a bad thing and can actually be a good thing. Depending on the inner workings of the template engine, it's either a compiling or a non compiling template engine.</para>
+
+        <para>Non compiling template engines have to parse and execute the template on each request. Depending on the complexity of the syntax, this can be a nightmare in terms of performance. Most of these templating engines will keep the syntax very simple and the functionality very limited to allow the engine to parse the templates in a reasonable amount of time.</para>
+
+        <para>Compiling template engines work in a different way. Compiling template engines keep a copy of the parsed template and re-uses these parsed templates. This removes the overhead of having to reparse the templates on every request. Most of the compiling template engines convert the templates to a PHP script after parsing, and execute this. This adds a performance increase, but this way of working can be a little more difficult as you can need to manage the temporary files.</para>
+
+        <para>Let's have a look at the different stages the Yellow Duck Framework went through to get to it's current state.</para>
+
+    </sect1>
+
+    <sect1 id="appendixA_try_01">
+
+        <title>First try: Smarty</title>
+
+        <para>Homepage: http://smarty.php.net/</para>
+
+        <para>When I initially designed, I selected Smarty as the template engine. In the first release of the Yellow Duck Framework, version 1.0, we used Smarty already with great success but sometimes, performance was not as good as we wanted to have it. Smarty gave us a very comfortable syntax for creating templates and allowed us to very easily create even the most difficult templates.</para>
+
+    </sect1>
+
+    <sect1 id="appendixA_try_02">
+
+        <title>Second try: phpSavant</title>
+
+        <para>Homepage: http://phpsavant.com/</para>
+
+        <para>After initial testing with Yellow Duck Framework 2.0, I came accross phpSavant which is a very light template engine that uses PHP as it's template language. The big advantage was performance. Since the templates were pure PHP scripts, the performance was way better than Smarty.</para>
+
+    </sect1>
+
+    <sect1 id="appendixA_try_03">
+
+        <title>Third try: our own template engine</title>
+
+        <para>After a little while, I started to realize that even phpSavant had too much overhead. There were all kinds of features in phpSavant I did not need at all. I started looking around for options, and quickly came accross the following very easy template mechanism, which uses the same native PHP templates as phpSavant, but only needs 10 lines of code to implement:</para>
+
+        <programlisting><![CDATA[<?php
+
+    class Template {
+
+        var $vars;
+
+        function Template( $file = null ) {
+            $this->file = $file;
+        }
+
+        function set( $name, $value ) {
+            $this->vars[ $name ] = $value;
+        }
+
+        function fetch( $file = null ) {
+            if( ! $file ) {
+                $file = $this->file
+            };
+
+            extract( $this->vars );
+            ob_start();
+            include( $file );
+            $contents = ob_get_contents();
+            ob_end_clean();
+            return $contents;
+        }
+
+    }
+
+?>]]></programlisting>
+
+        <para>This template class had a number of advantages over phpSavant and Smarty. Performance wise, there is not much better you can get. If you want, you can very easily extend this class to make templates cacheable, which makes the whole process even faster (although, since this is native PHP, it doesn't matter that much). On top of that, this template class is an excellent example of simplicity. This is probably the most simple template class you will ever find.</para>
+
+        <para>After a while, I started to realize that this had some drawbacks as well, rather big ones actually.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>The template syntax is plain ugly. Especially when you start mixing variables in HTML tag attributes and so on, it can quickly get very complicated and very hard to read the template.</listitem>
+            <listitem>In order to save typing, you should allow the short open tag in PHP which exposes again a whole bunch of different problems which you rather would like to avoid.</listitem>
+        </itemizedlist>
+
+        <para>At this moment, I had to make a quite difficult discission.</para>
+
+    </sect1>
+
+    <sect1 id="appendixA_try_04">
+
+        <title>Fourth try: Smarty</title>
+
+        <para>Homepage: http://smarty.php.net/</para>
+
+        <para>After trying the different other template engines, I came back to my first choice, which is smarty. The big advantages of Smarty are again it's syntax. Switching back to Smarty definitely made the templates much more readable again. I also learned in the meantime that the performance problem can be improved by using cache.</para>
+
+        <para>Caching dynamic contents is and will never be an easy thing to do and there are a lot of things you have to keep in mind before using cache. After reading an excellent book on PHP, Advanced PHP Programming, I also realised that the performance of the template engine is one thing you should keep in mind, but additionally, database queries and connections are the biggest bottleneck in most web applications. You can easily do the test. Time the amount of time it takes to do all the database queries and compare it to the amount of time it takes to execute the templates. You will be surprised.</para>
+
+        <para>However, I'm still not entirely happy with Smarty yet. Since the class files from Smarty are actually the biggest ones in the Yellow Duck Framework, they take their time to load and be parsed.</para>
+
+    </sect1>
+
+    <sect1 id="appendixA_try_05">
+
+        <title>Fifth try: Smarty Light</title>
+
+        <para>Homepage: http://sourceforge.net/projects/smarty-light</para>
+
+        <para>After following the discussion on the Smarty mailing list, called Smarty Light, Paul Lockaby posted a fork of Smarty, called Smarty Light. Smarty Light is basically a rewrite of Smarty from the ground up, removing some of the more advanced features. Here's the list of things that Paul removed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>pre/post/output filters</listitem>
+            <listitem>include_php and php tag, smarty-light only processes php directives in if-then statements and nowhere else</listitem>
+            <listitem>section tag (Paul uses foreach for all his section needs)</listitem>
+            <listitem>security features</listitem>
+            <listitem>error handling, doesn't die very gracefully</listitem>
+            <listitem>no support for objects or classes</listitem>
+            <listitem>no support for template resources, templates must come from a file</listitem>
+        </itemizedlist>
+
+        <para>If you download this template class from the following url:</para>
+
+        <para><![CDATA[http://sourceforge.net/project/showfiles.php?group_id=85421&package_id=88390]]></para>
+
+        <para>The first thing you will notice is it's filesize. Here's what I have:</para>
+
+        <programlisting><![CDATA[07/15/2004  20:03       <DIR>          .
+07/15/2004  20:03       <DIR>          ..
+07/14/2004  19:54               27,364 class.compiler.php
+02/01/2004  00:59                4,530 class.config.php
+07/14/2004  19:35               14,093 class.template.php
+07/15/2004  20:03       <DIR>          plugins]]></programlisting>
+
+        <para>The complete source files, including the compiler and all the plugins, which are loaded on demand, is approximately 60 KB. This is even less than the Smarty class itself without the compiler and plugins. The complete install of Smarty with all the source classes is around 300 KB.</para>
+
+        <para>After doing some initial testing, the Smarty Light templates are quite a bit faster, and without caching, you can really notice this.</para>
+
+        <para>I also went through the different examples, and verified what would be needed to use Smarty Light instead of Smarty. Here's a list of things that would need to change:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>We will have to use different delimiters. The [ and ] we use up till now are reserved and cannot be used in Smarty Light. Using { and } like the standard Smarty delimiters can fix this.</listitem>
+            <listitem>Objects are not allowed in the templates, so we will need to change the YDBrowserInfo example (which was not really a good example anyway).</listitem>
+            <listitem>Using associative arrays is different due to a different syntax: $form.name.html now becomes $form[name][html].</listitem>
+        </itemizedlist>
+
+        <para>I only did a very brief bit of testing, but I will definitely do more testing later on.</para>
+
+        <para>One nice thing about Smarty Light is that the filenames of the compiled template files are much shorter. No longer a very long and cryptic name, but a straightforward md5 checksum. Also caching is implemented in a very easy way. Since the base classes are so small, we don't have to worry about big include files for just checking the cache status of a file. You can read more about the caching options of Smarty Light on the following page:</para>
+
+        <para>http://www.paullockaby.com/projects/smarty-light/docs/appendix.caching.html</para>
+
+        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf2/examples/index.php"
+This is ApacheBench, Version 2.0.40-dev <$Revision: 1.121.2.8 $> apache-2.0
+Copyright (c) 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Copyright (c) 1998-2002 The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        Apache/1.3.27
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /ydf2/examples/index.php
+Document Length:        9339 bytes
+
+Concurrency Level:      5
+Time taken for tests:   1.531250 seconds
+Complete requests:      50
+Failed requests:        0
+Write errors:           0
+Total transferred:      488200 bytes
+HTML transferred:       466950 bytes
+Requests per second:    32.65 [#/sec] (mean)
+Time per request:       153.125 [ms] (mean)
+Time per request:       30.625 [ms] (mean, across all concurrent requests)
+Transfer rate:          310.86 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       0
+Processing:    62  146  28.4    140     203
+Waiting:       46  133  29.0    140     187
+Total:         62  146  28.4    140     203
+
+Percentage of the requests served within a certain time (ms)
+  50%    140
+  66%    156
+  75%    156
+  80%    171
+  90%    187
+  95%    187
+  98%    203
+  99%    203
+100%    203 (longest request)]]></programlisting>
+
+        <para>The same page using Smarty Light and the Smarty Light syntax gives me the following:</para>
+
+        <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf2/examples/index.php"
+This is ApacheBench, Version 2.0.40-dev <$Revision: 1.121.2.8 $> apache-2.0
+Copyright (c) 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Copyright (c) 1998-2002 The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        Apache/1.3.27
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /ydf2/examples/index.php
+Document Length:        10342 bytes
+
+Concurrency Level:      5
+Time taken for tests:   0.937500 seconds
+Complete requests:      50
+Failed requests:        0
+Write errors:           0
+Total transferred:      538350 bytes
+HTML transferred:       517100 bytes
+Requests per second:    53.33 [#/sec] (mean)
+Time per request:       93.750 [ms] (mean)
+Time per request:       18.750 [ms] (mean, across all concurrent requests)
+Transfer rate:          560.00 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.0      0      15
+Processing:    62   90  11.6     93     109
+Waiting:       46   81  12.5     78     109
+Total:         62   91  11.3     93     109
+
+Percentage of the requests served within a certain time (ms)
+  50%     93
+  66%     93
+  75%     93
+  80%     93
+  90%    109
+  95%    109
+  98%    109
+  99%    109
+100%    109 (longest request)]]></programlisting>
+
+        <para>So as it looks now, I will probably decide to switch to Smarty Light for the next beta release of the Yellow Duck Framework, unless there are good reasons not to switch. All input is welcome of course.</para>
+
+        <note>Note: even if I make the switch, I can leave the old class in so that everybody can still use it. Another option is to remove Smarty completely, but if people need another template engine than the standard one, they can always build on themselves.</note>
+
+    </sect1>
+
+</appendix>
