@@ -14,8 +14,8 @@
 			</tr>
 			{foreach from=$books item=val}
 				<tr>
-					<td>{$val[author]}</td>
-					<td>{$val[title]}</td>
+					<td>{$val.author}</td>
+					<td>{$val.title}</td>
 				</tr>
 			{/foreach}
 		</table>

@@ -8,7 +8,7 @@
 
 <body>
 
-	Login name: <b>{$_TPL[SESSION][usrName]}</b>!
+	Login name: <b>{$smarty.session.usrName}</b>!
 	<p><a href="index.php">go back</a></p>
 
 </body>
