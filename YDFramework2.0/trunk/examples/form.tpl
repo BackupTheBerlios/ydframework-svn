@@ -6,7 +6,7 @@
 
 	{literal}<style>
 		.bbtextarea { width: 650px; height: 240px; }
-		a { color: darkred; text-decoration: none; }
+		a { color: darkred; text-decoration: none; cursor: pointer; }
 		.bbtoolbar { background-color: #DEDEDE; padding: 2px; }
 	</style>{/literal}
 

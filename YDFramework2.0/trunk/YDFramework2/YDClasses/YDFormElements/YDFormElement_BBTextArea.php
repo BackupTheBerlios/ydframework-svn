@@ -123,7 +123,7 @@
 				'id' => $this->_form . '_' . $this->_name,
 				'class' => 'bbtextarea',
 			);
-			if ( ! isset( $attribs['width'] ) ) { $attribs['width'] = '640'; }
+			//if ( ! isset( $attribs['width'] ) ) { $attribs['width'] = '640'; }
 			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Get the HTML
@@ -170,18 +170,22 @@
 				}
 				$out .= '	}';
 				$out .= '</script>';
-				$out .= '<table border="0" cellpadding="0" cellspacing="0" width="' . $attribs['width'] . '">';
+				if ( isset( $attribs['width'] ) ) {
+					$out .= '<table border="0" cellpadding="0" cellspacing="0" width="' . $attribs['width'] . '">';
+				} else {
+					$out .= '<table border="0" cellpadding="0" cellspacing="0">';
+				}
 				$out .= '<tr>';
 				$out .= '<td class="bbtoolbar">';
 				foreach ( $this->_buttons as $button ) {
 					if ( $button['type'] == 'modifier' )  {
-						$out .= '<a href="javascript:void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+						$out .= '<a onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
 					}
 					if ( $button['type'] == 'simplepopup' )  {
-						$out .= '<a href="javascript:void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+						$out .= '<a onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
 					}
 					if ( $button['type'] == 'popupwindow' )  {
-						$out .= '<a href="javascript:void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) );">[ ' . $button['label'] . ' ]</a> ';
+						$out .= '<a onClick="void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) );">[ ' . $button['label'] . ' ]</a> ';
 					}
 				}
 				$out .= '</td>';
