@@ -67,6 +67,9 @@
 	 *	@todo
 	 *		Improve error handling. If you try to instantiate the class with an invalid date, a fatal error should be
 	 *		raised.
+	 *
+	 *	@todo
+	 *		Any non numeric character should be allowed as a separator. The separator should be optional though.
 	 */
 	class YDDate extends YDBase {
 

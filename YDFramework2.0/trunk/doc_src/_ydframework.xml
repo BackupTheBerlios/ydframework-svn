@@ -27,6 +27,7 @@
     <!ENTITY appendixA SYSTEM "appendixA.xml">
     <!ENTITY appendixB SYSTEM "appendixB.xml">
     <!ENTITY appendixC SYSTEM "appendixC.xml">
+    <!ENTITY appendixD SYSTEM "appendixD.xml">
 ]>
 
 <book>
@@ -70,5 +71,6 @@
     &appendixA;
     &appendixB;
     &appendixC;
+    &appendixD;
 
 </book>
