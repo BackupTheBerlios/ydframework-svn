@@ -20,6 +20,14 @@
 			$this->basedir = dirname( YD_SELF_SCRIPT ) . '/';
 			$this->setVar( 'basedir', $this->basedir );
 
+			// Determine the base url
+			$this->baseurl = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+			if ( $_SERVER['SERVER_PORT'] != '80' ) {
+				$this->baseurl = $this->baseurl . ':' . $_SERVER['SERVER_PORT'];
+			}
+			$this->baseurl = $this->baseurl . $this->basedir;
+			$this->setVar( 'baseurl', $this->baseurl );
+
 			// Connect to the database
 			$this->_connectToDatabase();
 
@@ -296,8 +304,6 @@
 			foreach ( $this->items1 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
 					$this->items1[ $key ]['itemurl'] = $this->makeAliasUrl( $item['itemalias'] );
-				} else {
-					$this->items1[ $key ]['itemurl'] = $this->basedir . $this->items1[ $key ]['itemurl'];
 				}
 			}
 
@@ -431,8 +437,6 @@
 			foreach ( $this->items2 as $key=>$item ) { 
 				if ( empty( $item['itemurl'] ) ) {
 					$this->items2[ $key ]['itemurl'] = $this->makeAliasUrl( $item['itemalias'] );
-				} else {
-					$this->items2[ $key ]['itemurl'] = $this->basedir . $this->items2[ $key ]['itemurl'];
 				}
 			}
 
