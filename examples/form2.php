@@ -23,7 +23,13 @@
 			$form = new YDForm2( 'form1' );
 			$form->registerFilter( 'reverse', 'strrev' );
 			$form->setDefaults( 
-				array( 'txt2' => 'First text', 'txt3' => "two\nlines", 'hid1' => 'I am hidden', 'chk1' => 'x' )
+				array( 
+					'txt2' => 'First text', 
+					'txt3' => "two\nlines", 
+					'hid1' => 'I am hidden',
+					'chk1' => 'x',
+					'sel1' => 2,
+				)
 			);
 			$text = & $form->addElement( 'text', 'txt1', 'Enter text 1:' );
 			$text->_label = 'new label for txt1';
@@ -38,6 +44,7 @@
 			$form->addElement( 'bbtextarea', 'bbt1', 'Enter your BBCode' );
 			$form->addElement( 'checkbox', 'chk1', 'Select me please' );
 			$form->addElement( 'checkbox', 'chk2', 'Select me please' );
+			$form->addElement( 'select', 'sel1', 'Select an option', array(), array( 1 => 'een', 2=>'twee' ) );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
 			$form->addElement( 'reset', 'res1', 'Reset' );
 			$form->addFilter( '__ALL__', 'upper' );

@@ -83,6 +83,7 @@
 			$this->registerElement( 'password', 'YDFormElement_Password', 'YDFormElement_Password.php' );
 			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
 			$this->registerElement( 'reset', 'YDFormElement_Reset', 'YDFormElement_Reset.php' );
+			$this->registerElement( 'select', 'YDFormElement_Select', 'YDFormElement_Select.php' );
 			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
 			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
