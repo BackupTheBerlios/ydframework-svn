@@ -22,8 +22,9 @@
 	set_magic_quotes_runtime( 0 ); 
 
 	// Global framework constants
+	@define( 'YD_FW_REVISION', '$LastChangedRevision$' );
 	@define( 'YD_FW_NAME', 'Yellow Duck Framework' );
-	@define( 'YD_FW_VERSION', '2.0' );
+	@define( 'YD_FW_VERSION', '2.0 (build ' . trim( substr( YD_FW_REVISION, 22, -2 ) ) . ')' );
 	@define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
 	@define( 'YD_FW_HOMEPAGE', 'http://www.yellowduck.be/ydf2/' );
 
