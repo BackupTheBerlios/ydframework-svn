@@ -720,6 +720,23 @@
 		}
 
 		/**
+		 *	This function will create a new subdirectory in the given directory.
+		 *
+		 *	@param $directory	Directory to create.
+		 *	@param $mode		(optional) The mode for the directory. By default, this is 0777.
+		 *
+		 *	@returns	False on failure, otherwise, it will return a YDFSDirectory object for the new directory.
+		 */
+		function createDirectory( $directory, $mode=0700 ) {
+			$directory = $this->getAbsolutePath() . '/fda/' . basename( $directory );
+			if ( is_dir( $directory ) || mkdir( $directory, $mode ) ) {
+				return new YDFSDirectory( $directory );
+			} else {
+				return false;
+			}
+		}
+
+		/**
 		 *	Function to emulate the fnmatch function from UNIX which is not available on all servers.
 		 *
 		 *	@remark

@@ -46,6 +46,9 @@
 				'$dir->getContents( array( \'*.jpg\', \'*.txt\', \'!bbcode.*\' ) )'
 			);
 
+			// Create subdirectory
+			YDDebugUtil::dump( $dir->createDirectory( 'test' ), '$dir->createDirectory( \'test\' ) )' );
+
 		}
 
 	}
