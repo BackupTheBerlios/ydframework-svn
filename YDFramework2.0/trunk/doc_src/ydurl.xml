@@ -156,28 +156,52 @@
         <para>There is also a function called getPathSubdirectories. This function will return the list of directories that appear after the first occurence of the indicated directory in the path part of the string. The following code examples show you how this can be used:</para>
 
         <programlisting><![CDATA[$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
-$r = $url->getSubDirectories('ydf2');   // returns: ['forum'];
-$r = $url->getSubDirectories('forum');  // returns: [];
-$r = $url->getSubDirectories('test');   // returns: [];
+
+// returns: ['forum']
+$r = $url->getSubDirectories('ydf2');
+
+// returns: []
+$r = $url->getSubDirectories('forum');
+
+// returns: []
+$r = $url->getSubDirectories('test');
 
 // it gets the sub-directories of the first ocurrence:
 $url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
-$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
-$r = $url->getSubDirectories('forum');  // returns: ['ydf2', 'forum'];
-$r = $url->getSubDirectories('test');   // returns: [];]]></programlisting>
+
+// returns: ['forum', 'ydf2', 'forum']
+$r = $url->getSubDirectories('ydf2');
+
+// returns: ['ydf2', 'forum']
+$r = $url->getSubDirectories('forum');
+
+// returns: [];
+$r = $url->getSubDirectories('test');]]></programlisting>
 
         <para>There is a similar function for path segments, called getPathSubsegments. The following code examples show you how this can be used:</para>
 
         <programlisting><![CDATA[$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
-$r = $url->getPathSubsegments('ydf2');   // returns: ['forum', 'cool.html'];
-$r = $url->getPathSubsegments('forum');  // returns: ['cool.html'];
-$r = $url->getPathSubsegments('test');   // returns: [];
+
+// returns: ['forum', 'cool.html']
+$r = $url->getPathSubsegments('ydf2');
+
+// returns: ['cool.html']
+$r = $url->getPathSubsegments('forum');
+
+// returns: []
+$r = $url->getPathSubsegments('test');
 
 // it gets the sub-directories of the first ocurrence:
 $url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
-$r = $url->getPathSubsegments('ydf2');   // returns: ['forum', 'ydf2', 'forum', 'cool.html'];
-$r = $url->getPathSubsegments('forum');  // returns: ['ydf2', 'forum', 'cool.html'];
-$r = $url->getPathSubsegments('test');   // returns: [];]]></programlisting>
+
+// returns: ['forum', 'ydf2', 'forum', 'cool.html']
+$r = $url->getPathSubsegments('ydf2');
+
+// returns: ['ydf2', 'forum', 'cool.html']
+$r = $url->getPathSubsegments('forum');
+
+// returns: []
+$r = $url->getPathSubsegments('test');]]></programlisting>
 
     </sect1>
 

@@ -138,4 +138,17 @@
 
     </sect1>
 
+    <sect1 id="changelog_ydf_v1">
+
+        <title>Yellow Duck Framework 1.0</title>
+
+        <para>Released on: never</para>
+        <para>Build number: none</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Internal only version</listitem>
+        </itemizedlist>
+
+    </sect1>
+
 </chapter>

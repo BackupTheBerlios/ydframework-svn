@@ -118,7 +118,9 @@
          *	@param $attributes	(optional) The attributes for the form element.
          *	@param $options		(optional) The options for the elment.
          */
-        function YDFormElement( $form, $name, $label='', $attributes=array(), $options=array() ) {
+        function YDFormElement(
+            $form, $name, $label='', $attributes=array(), $options=array()
+        ) {
 
             // Initialize the parent
             $this->YDBase();
@@ -479,7 +481,11 @@
             $form1->addRule( 'txt1', 'numeric', 'txt1 should be numeric' );
             $form1->addRule( 'txt2', 'numeric', 'txt2 should be numeric' );
             $form1->addRule( 'txt3', 'numeric', 'txt2 should be numeric' );
-            $form1->addCompareRule( array( 'txt1', 'txt2', 'txt3' ), 'equal', 'txt1, txt2 and txt3 should be equal' );
+            $form1->addCompareRule(
+                array( 'txt1', 'txt2', 'txt3' ),
+                'equal',
+                'txt1, txt2 and txt3 should be equal'
+            );
 
             // Validate or show the form
             if ( $form1->validate() ) {

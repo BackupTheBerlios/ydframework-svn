@@ -305,25 +305,38 @@ $conv->addRule( "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i", '<a href="\\1">\\2</a>'
 $conv->addRule( "/\[url\]([^<> \n]+?)\[\/url\]/i", '<a href="\\1">\\1</a>' );
 
 // Replace [mail=][/mail]
-$conv->addRule( "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>' );
+$conv->addRule(
+    "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>'
+);
 
 // Replace [email][/email]
-$conv->addRule( "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>' );
+$conv->addRule(
+    "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>'
+);
 
 // Replace [email=][/email]
-$conv->addRule( "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>' );
+$conv->addRule(
+    "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>'
+);
 
 // Replace [mail][/mail]
-$conv->addRule( "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' );
+$conv->addRule(
+    "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' 
+);
 
 // Replace [img=][/img]
-$conv->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2"></a>' );
+$conv->addRule(
+    "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i",
+    '<a href="\\1"><img border="0" src="\\2"></a>'
+);
 
 // Replace [img][/img]
 $conv->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
 
 // Replace [color=][/color]
-$conv->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );]]></programlisting>
+$conv->addRule(
+    "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>'
+);]]></programlisting>
 
     </sect1>
 
