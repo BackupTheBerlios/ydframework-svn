@@ -140,6 +140,27 @@
 		}
 
 		/**
+		 *	This function will parse the template and will assign the parsed contents to the template.
+		 *
+		 *	You can specify the name of the template which should be in the template directory. If no name is specified,
+		 *	the basename of the PHP script with the extension '.tpl' will be used.
+		 *
+		 *	This function automatically adds some variables to the template, which you can use as well in the template:
+		 *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+		 *
+		 *	@param $name		Name you want to use for this fetched template for referencing it in the template.
+		 *	@param $file		The name of the template you want to parse and output.
+		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $compile_id	(optional) ID for the compilation of the template (must be unique).
+		 *
+		 *	@returns	This function returns the output of the parsed template.
+		 */
+		function assignFetchedTemplate( $name, $file, $cache_id=null, $compile_id=null ) {
+			$fetched = $this->fetch( $file, $cache_id, $compile_id, false );
+			$this->assign( $name, $fetched );
+		}
+
+		/**
 		 *	This function will add a YDForm object to the template. It will automatically convert the form to an array
 		 *	using the template object so that you don't have to do it manually.
 		 *
