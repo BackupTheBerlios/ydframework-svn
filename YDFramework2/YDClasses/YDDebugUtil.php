@@ -90,9 +90,6 @@
          */
         function r_dump( $obj ) {
 
-            // Include the Var_Dump package
-            require_once( YD_DIR_3RDP_PEAR . '/Var_Dump.php' );
-
             // We want to have HTML4 text returned
             Var_Dump::displayInit( array( 'display_mode' => 'HTML4_Text' ) );
 

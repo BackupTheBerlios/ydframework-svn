@@ -27,9 +27,6 @@
          */
         function YDTimer() {
 
-            // Include the PEAR timer class
-            require_once( YD_DIR_3RDP_PEAR . '/Benchmark/Timer.php' );
-
             // Initialize YDBase
             $this->YDBase();
 

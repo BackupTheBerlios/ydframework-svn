@@ -28,9 +28,6 @@
             // Initialize YDBase
             $this->YDBase();
 
-            // Include the feedcreator library
-            require_once( YD_DIR_3RDP . '/feedcreator/feedcreator.class.php' );
-
             // Instantiate the feed creator
             $this->_ufc = new UniversalFeedCreator();
 

@@ -259,7 +259,10 @@
 
         // Include the PEAR modules
         require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
+        require_once( YD_DIR_3RDP_PEAR . '/Var_Dump.php' );
         require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm.php' );
+        require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm/Renderer/ArraySmarty.php' );
+        require_once( YD_DIR_3RDP_PEAR . '/Benchmark/Timer.php' );
 
         // Include Smarty
         require_once( YD_DIR_3RDP_SMARTY . '/Smarty.class.php' );
@@ -267,6 +270,9 @@
         // Include the HTTP and XML/RPC library client
         require_once( YD_DIR_3RDP . '/HttpClient.class.php' );
         require_once( YD_DIR_3RDP . '/IXR_Library.inc.php' );
+
+        // Include the feedcreator library
+        require_once( YD_DIR_3RDP . '/feedcreator/feedcreator.class.php' );
 
         // Include the Yellow Duck framework
         require_once( YD_DIR_CLSS . '/YDBase.php' );

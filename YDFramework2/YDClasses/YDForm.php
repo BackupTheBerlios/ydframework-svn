@@ -126,9 +126,6 @@
          */
         function toArray( $template ) {
 
-            // Include the right renderer
-            require_once( YD_DIR_3RDP_PEAR . '/HTML/QuickForm/Renderer/ArraySmarty.php' );
-
             // Create the renderer object
             $renderer = & new HTML_QuickForm_Renderer_ArraySmarty( $template );
 
