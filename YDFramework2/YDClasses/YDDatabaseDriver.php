@@ -11,10 +11,6 @@
 
 	/**
 	 *	This class defines a database driver.
-	 *
-	 *	@todo
-	 *		The code for making the connection, executing and checking a query and then returning the result should be
-	 *		put into an internal function to promote code reuse.
 	 */
 	class YDDatabaseDriver extends YDBase {
 

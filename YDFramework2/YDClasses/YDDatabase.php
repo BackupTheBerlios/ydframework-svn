@@ -27,6 +27,7 @@
 
 			// Register the standard drives
 			$this->registerDriver( 'mysql', 'YDDatabaseDriver_mysql', 'YDDatabaseDriver_mysql.php' );
+			$this->registerDriver( 'postgres', 'YDDatabaseDriver_postgres', 'YDDatabaseDriver_postgres.php' );
 			$this->registerDriver( 'sqlite', 'YDDatabaseDriver_sqlite', 'YDDatabaseDriver_sqlite.php' );
 
 			// Check if the driver exists

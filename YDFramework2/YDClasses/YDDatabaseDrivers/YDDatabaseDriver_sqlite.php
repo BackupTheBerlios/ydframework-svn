@@ -11,10 +11,6 @@
 
 	/**
 	 *	This class defines a database driver for SQLite.
-	 *
-	 *	@todo
-	 *		The code for making the connection, executing and checking a query and then returning the result should be
-	 *		put into an internal function to promote code reuse.
 	 */
 	class YDDatabaseDriver_sqlite extends YDDatabaseDriver {
 
@@ -105,6 +101,8 @@
 		 *
 		 *	@param $table	The table to insert the data into.
 		 *	@param $values	Associative array with the field names and their values to insert.
+		 *
+		 *	@returns	The ID of the last insert.
 		 */
 		function executeInsert( $table, $values ) {
 			$sql = $this->_createSqlInsert( $table, $values );

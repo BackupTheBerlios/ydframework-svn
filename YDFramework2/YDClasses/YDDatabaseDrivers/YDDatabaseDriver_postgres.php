@@ -10,12 +10,12 @@
 	require_once( 'YDDatabaseDriver.php' );
 
 	/**
-	 *	This class defines a database driver for MySQL.
+	 *	This class defines a database driver for PostgreSQL.
 	 */
-	class YDDatabaseDriver_mysql extends YDDatabaseDriver {
+	class YDDatabaseDriver_postgres extends YDDatabaseDriver {
 
 		/**
-		 *	This is the class constructor for the YDDatabaseDriver_mysql class.
+		 *	This is the class constructor for the YDDatabaseDriver_postgres class.
 		 *
 		 *	@param $db		Name of the database.
 		 *	@param $user	(optional) User name to use for the connection.
@@ -24,7 +24,7 @@
 		 *	@param $host	(optional) Host name to use for the connection.
 		 *	@param $options	(optional) Options to pass to the driver.
 		 */
-		function YDDatabaseDriver_mysql( $db, $user='', $pass='', $host='', $options=array() ) {
+		function YDDatabaseDriver_postgres( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
 		}
 
@@ -34,7 +34,7 @@
 		 *	@returns	Boolean indicating if the database type is supported by the server.
 		 */
 		function isSupported() {
-			return extension_loaded( 'mysql' );
+			return extension_loaded( 'pgsql' );
 		}
 
 		/**
@@ -42,12 +42,11 @@
 		 */
 		function connect() {
 			if ( $this->_conn == null ) {
-				$conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-				if ( ! $conn ) { YDFatalError( mysql_error() ); }
-				if ( ! @mysql_select_db( $this->_db, $conn ) ) { YDFatalError( mysql_error( $conn ) ); }
+				//$attribs = $this->_options;
+				//$attribs[
+				$conn = @sqlite_open( $this->_db, 0666, $error );
+				if ( ! $conn ) { YDFatalError( $error ); }
 				$this->_conn = $conn;
-			} else {
-				@mysql_ping( $this->_conn );
 			}
 		}
 
@@ -60,9 +59,7 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			$record = mysql_fetch_assoc( $result );
-			mysql_free_result( $result );
-			return $record;
+			return pg_fetch_assoc( $result );
 		}
 
 		/**
@@ -75,10 +72,10 @@
 		function getRecords( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = mysql_fetch_assoc( $result ) ) {
+			while ( $line = pg_fetch_assoc( $result ) ) {
 				array_push( $dataset, $line );
 			}
-			mysql_free_result( $result );
+			pg_free_result( $result );
 			return $dataset;
 		}
 
@@ -91,7 +88,7 @@
 		 */
 		function executeSql( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_affected_rows( $this->_conn );
+			return pg_affected_rows( $this->_conn );
 		}
 
 		/**
@@ -103,7 +100,7 @@
 		 */
 		function getMatchedRowsNum( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_num_rows( $this->_conn );
+			return pg_num_rows( $this->_conn );
 		}
 
 		/**
@@ -112,12 +109,14 @@
 		 *	@param $table	The table to insert the data into.
 		 *	@param $values	Associative array with the field names and their values to insert.
 		 *
-		 *	@returns	The ID of the last insert.
+		 *	@remarks
+		 *		This function will not automatically return the ID of the last insert.
 		 */
 		function executeInsert( $table, $values ) {
 			$sql = $this->_createSqlInsert( $table, $values );
 			$result = & $this->_connectAndExec( $sql );
-			return mysql_insert_id( $this->_conn );
+			//return sqlite_last_insert_rowid( $this->_conn );
+			return true;
 		}
 
 		/**
@@ -126,7 +125,7 @@
 		function close() {
 			if ( $this->_conn != null ) {
 				$this->_conn = null;
-				@mysql_close( $this->_conn );
+				@pg_close( $this->_conn );
 			}
 		}
 
@@ -138,7 +137,7 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			return mysql_escape_string( $string );
+			return pg_escape_string( $string );
 		}
 
 		/**
@@ -152,8 +151,8 @@
 		 */
 		function & _connectAndExec( $sql ) {
 			$this->connect();
-			$result = mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			$result = pg_query( $sql, $this->_conn );
+			if ( ! $result ) { YDFatalError( pg_last_error( $conn ) ); }
 			return $result;
 		}
 
