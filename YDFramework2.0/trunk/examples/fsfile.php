@@ -42,6 +42,12 @@
 			$file = new YDFSFile( 'nofile.php' );
 
 		}
+		
+		// Download action
+		function actionDownload() {
+			$file = new YDFSFile( __FILE__ );
+			$file->download();
+		}
 
 	}
 

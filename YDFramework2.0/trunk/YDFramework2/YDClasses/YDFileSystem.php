@@ -204,6 +204,29 @@
 		function isWriteable() {
 			return is_writable( $this->getAbsolutePath() );
 		}
+		
+		/**
+		 *	This function will force the browser to download the file.
+		 */
+		function download() {
+		
+			// Get the name of the file
+			$name = $this->getBasename();
+            header( 'Content-Type: application/force-download; name="' . $name . '"');
+            header( 'Content-Disposition: attachment; filename="' . $name . ' "');
+
+            // Add the rest of the headers
+            header( 'Cache-Control: public' );
+            header( 'Content-Transfer-Encoding: binary' );
+            header( 'Content-length: ' . $this->getSize() );
+
+            // Send the file contents
+            readfile( $this->getAbsolutePath() );
+            
+            // Stop the execution
+            die();
+		
+		}
 
 		/**
 		 *	@internal
