@@ -1,35 +1,17 @@
 <?php
-//////////////////////////////////////////////////////////////
-///  phpThumb() by James Heinrich <info@silisoftware.com>   //
-//        available at http://phpthumb.sourceforge.net     ///
-//////////////////////////////////////////////////////////////
-///                                                         //
-// See: phpthumb.readme.txt for usage instructions          //
-//                                                         ///
-//////////////////////////////////////////////////////////////
 
 require_once('phpthumb.functions.php');
 
 class phpthumb {
 
-	// public:
-	// START CONFIGURATION OPTIONS
-	// See phpthumb.config.php for descriptions of what each of these settings do
-	// * Caching Configuration
 	var $config_cache_directory              = '';
-
-	// * Default output configuration:
 	var $config_output_format                = 'jpeg';
 	var $config_output_maxwidth              = 0;
 	var $config_output_maxheight             = 0;
-
-	// * Error message configuration
 	var $config_error_message_image_default  = '';
 	var $config_error_bgcolor                = 'CCCCFF';
 	var $config_error_textcolor              = 'FF0000';
 	var $config_error_fontsize               = 1;
-
-	// * Anti-Hotlink Configuration:
 	var $config_nohotlink_enabled            = true;
 	var $config_nohotlink_valid_domains      = array();
 	var $config_nohotlink_erase_image        = true;
@@ -37,27 +19,14 @@ class phpthumb {
 	var $config_nohotlink_text_hexcolor      = 'FF0000';
 	var $config_nohotlink_text_message       = 'Hotlinking is not allowed!';
 	var $config_nohotlink_text_fontsize      = 3;
-
-	// * Border & Background default colors
 	var $config_border_hexcolor              = '000000';
 	var $config_background_hexcolor          = 'FFFFFF';
-
 	var $config_max_source_pixels            = 0;
 	var $config_use_exif_thumbnail_for_speed = true;
 	var $config_output_allow_enlarging       = false;
-
 	var $config_imagemagick_path              = null;
-	// END CONFIGURATION OPTIONS
-
-
-	// public: data source
 	var $sourceFilename = null;
 	var $rawImageData   = null;
-
-
-	// public:
-	// START PARAMETERS
-	// See phpthumb.readme.txt for descriptions of what each of these values are
 	var $w    = null;
 	var $h    = null;
 	var $f    = 'jpeg';
@@ -86,42 +55,28 @@ class phpthumb {
 	var $iar  = false;
 	var $brx  = null;
 	var $bry  = null;
-	// END PARAMETERS
-
-
-	// private:
 	var $phpThumbDebug    = null;
 	var $thumbnailQuality = 75;
 	var $thumbnailFormat  = 'text';
-
 	var $gdimg_output     = null;
 	var $gdimg_source     = null;
-
 	var $getimagesizeinfo = null;
-
 	var $source_width  = null;
 	var $source_height = null;
-
 	var $thumbnailCropX = null;
 	var $thumbnailCropY = null;
 	var $thumbnailCropW = null;
 	var $thumbnailCropH = null;
-
 	var $exif_thumbnail_width  = null;
 	var $exif_thumbnail_height = null;
 	var $exif_thumbnail_type   = null;
 	var $exif_thumbnail_data   = null;
-
 	var $thumbnail_width        = null;
 	var $thumbnail_height       = null;
 	var $thumbnail_image_width  = null;
 	var $thumbnail_image_height = null;
 
-
-	//////////////////////////////////////////////////////////////////////
-
-	// public: constructor
-	function phpThumb() {
+    function phpThumb() {
 		if (!defined('PHPTHUMB_VERSION')) {
 			define('PHPTHUMB_VERSION', '1.4.0');
 
@@ -136,8 +91,6 @@ class phpthumb {
 
 	}
 
-
-	// public:
 	function GenerateThumbnail() {
 
 		$this->setOutputFormat();
@@ -175,7 +128,6 @@ class phpthumb {
 		$this->CreateGDoutput();
 		$this->ImageBorder();
 
-		// copy/resize image to appropriate dimensions (either nearest-neighbor or resample, depending on GD version)
 		$this->ImageResizeFunction(
 			$this->gdimg_output,
 			$this->gdimg_source,
@@ -200,10 +152,7 @@ class phpthumb {
 		return true;
 	}
 
-
-	// public:
 	function RenderToFile($filename) {
-		// render thumbnail to this file only, do not cache, do not output to browser
 		$ImageOutFunction = 'image'.$this->thumbnailFormat;
 		switch ($this->thumbnailFormat) {
 			case 'jpeg':
@@ -218,8 +167,6 @@ class phpthumb {
 		return true;
 	}
 
-
-	// public:
 	function OutputThumbnail() {
 		if (headers_sent()) {
 			die('OutputThumbnail() failed - headers already sent');
@@ -242,12 +189,7 @@ class phpthumb {
 		return true;
 	}
 
-
-	//////////////////////////////////////////////////////////////////////
-
-
 	function setOutputFormat() {
-		// Set default output format based on what image types are available
 		if (!function_exists('ImageTypes')) {
 			$this->ErrorImage('ImageTypes() does not exist - GD support might not be enabled?');
 		}
@@ -272,29 +214,22 @@ class phpthumb {
 			$AvailableImageOutputFormats[] = 'jpeg';
 		}
 		if (in_array($this->config_output_format, $AvailableImageOutputFormats)) {
-			// set output format to config default if that format is available
 			$this->thumbnailFormat = $this->config_output_format;
 		}
 		if (!empty($this->f) && (in_array($this->f, $AvailableImageOutputFormats))) {
-			// override output format if $this->f is set and that format is available
 			$this->thumbnailFormat = $this->f;
 		}
 
-		// for JPEG images, quality 0 (worst) to 100 (best)
-		// quality < 25 is nasty, with not much size savings - not recommended
-		// problems with 100 - invalid JPEG?
 		$this->thumbnailQuality = max(1, min(95, (!empty($this->q) ? $this->q : 75)));
 
 		return true;
 	}
 
 	function setCacheDirectory() {
-		// resolve cache directory to absolute pathname
 		if (PHPTHUMB_ISWINDOWS) {
 			$this->config_cache_directory = str_replace('/', PHPTHUMB_OSSLASH, $this->config_cache_directory);
 		}
 		if ((substr($this->config_cache_directory, 0, 1) == '.') && (substr($this->src, 0, 1) == '/')) {
-			// resolve relative cache directory to source image
 			$this->config_cache_directory = realpath(dirname($_SERVER['DOCUMENT_ROOT'].$this->src).'/'.$this->config_cache_directory);
 		}
 		if (substr($this->config_cache_directory, -1) == '/') {
@@ -307,9 +242,7 @@ class phpthumb {
 		return true;
 	}
 
-
 	function ImageMagickThumbnailToGD() {
-		// http://freealter.org/doc_distrib/ImageMagick-5.1.1/www/convert.html
 		if (ini_get('safe_mode')) {
 			return false;
 		}
@@ -404,12 +337,8 @@ class phpthumb {
 			if ($rotate_angle != 0) {
 
 				if (ImageColorTransparent($this->gdimg_source) >= 0) {
-					// ImageRotate() forgets all about an image's transparency and sets the transparent color to black
-					// To compensate, flood-fill the transparent color of the source image with the specified background color first
-					// then rotate and the colors should match
 
 					if (!function_exists('ImageIsTrueColor') || !ImageIsTrueColor($this->gdimg_source)) {
-						// convert paletted image to true-color before rotating to prevent nasty aliasing artifacts
 
 						$this->source_width  = ImageSX($this->gdimg_source);
 						$this->source_height = ImageSY($this->gdimg_source);
@@ -448,7 +377,6 @@ class phpthumb {
 
 
 	function FixedAspectRatio() {
-		// optional image border and fixed-dimension images (regardless of aspect ratio)
 		if (isset($this->bw)) {
 			if ($this->thumbnail_image_width >= $this->thumbnail_width) {
 				if (isset($this->w)) {
@@ -486,7 +414,6 @@ class phpthumb {
 
 	function ImageBorder() {
 		if (isset($this->bw)) {
-			// optional image border and fixed-dimension images (regardless of aspect ratio)
 			$this->config_background_hexcolor = (!empty($this->bg) ? $this->bg : $this->config_background_hexcolor);
 			$this->config_border_hexcolor     = (!empty($this->bc) ? $this->bc : $this->config_border_hexcolor);
 			if (!eregi('^[0-9A-F]{6}$', $this->config_background_hexcolor)) {
@@ -499,10 +426,7 @@ class phpthumb {
 			$border_color     = phpthumb_functions::ImageHexColorAllocate($this->gdimg_output, $this->config_border_hexcolor);
 			ImageFilledRectangle($this->gdimg_output, 0, 0, $this->thumbnail_width, $this->thumbnail_height, $background_color);
 			if ($this->bw > 0) {
-				// ImageRectangle() draws a rectangle centred on the coordinates given,
-				// so coordinates must be offset by half the line thickness
 				if (($this->bw > 1) && @ImageSetThickness($this->gdimg_output, $this->bw)) {
-					// better way (for lines > 1px thick), but requires GD v2.0.1+
 					ImageRectangle($this->gdimg_output, floor($this->bw / 2), floor($this->bw / 2), $this->thumbnail_width - ceil($this->bw / 2), $this->thumbnail_height - ceil($this->bw / 2), $border_color);
 				} else {
 					for ($i = 0; $i < $this->bw; $i++) {
@@ -512,25 +436,15 @@ class phpthumb {
 			}
 			if (!empty($this->brx) && !empty($this->bry) && ($this->bw > 0)) {
 
-				// if 'bw' > 0 then leave the image rectangular and have a rounded border line around the edges of the image
-				// if 'bw' == 0 then round off the corners of the image itself (see RoundedImageCorners())
-
 				ImageFilledRectangle($this->gdimg_output,                                   0,                                    0,             $this->brx,              $this->bry, $background_color);
 				ImageFilledRectangle($this->gdimg_output, $this->thumbnail_width - $this->brx,                                    0, $this->thumbnail_width,              $this->bry, $background_color);
 				ImageFilledRectangle($this->gdimg_output, $this->thumbnail_width - $this->brx, $this->thumbnail_height - $this->bry, $this->thumbnail_width, $this->thumbnail_height, $background_color);
 				ImageFilledRectangle($this->gdimg_output,                                   0, $this->thumbnail_height - $this->bry,             $this->brx, $this->thumbnail_height, $background_color);
 
-				// PHP bug: ImageArc() with thicknesses > 1 give bad/undesirable/unpredicatable results
-				// Solution: Draw multiple 1px arcs side-by-side.
 				if (phpthumb_functions::gd_version(false) >= 2) {
-					// imagesetthickness(): requires GD 2.0 or later
-					// GD1 always has line thickness of 1
 					ImageSetThickness($this->gdimg_output, 1);
 				}
 				for ($thickness_offset = 0; $thickness_offset < $this->bw; $thickness_offset++) {
-					// Problem: parallel arcs give strange/ugly antialiasing problems
-					// Solution: draw non-parallel arcs, from one side of the line thickness at the start angle
-					//   to the opposite edge of the line thickness at the terminating angle
 					if ($this->bw > 1) {
 						ImageArc($this->gdimg_output,                                              $this->brx,                       $thickness_offset - 1 + $this->bry, $this->brx * 2, $this->bry * 2, 180, 270, $border_color); // top-left
 						ImageArc($this->gdimg_output,                      $thickness_offset - 1 + $this->brx,                                               $this->bry, $this->brx * 2, $this->bry * 2, 180, 270, $border_color); // top-left
@@ -564,12 +478,9 @@ class phpthumb {
 
 
 	function AntiOffsiteLinking() {
-		////////////////////////////////////////////////////////////////
-		// Optional anti-offsite hijacking of the thumbnail script
 		if ($this->config_nohotlink_enabled && (substr(strtolower($this->src), 0, strlen('http://')) == 'http://')) {
 			$parsed_url = parse_url($this->src);
 			if (!in_array(@$parsed_url['host'], $this->config_nohotlink_valid_domains)) {
-				// This domain is not allowed
 				if (!eregi('^[0-9A-F]{6}$', $this->config_nohotlink_fill_hexcolor)) {
 					$this->ErrorImage('Invalid hex color string "'.$this->config_nohotlink_fill_hexcolor.'" for $this->config_nohotlink_fill_hexcolor');
 				}
@@ -626,10 +537,8 @@ class phpthumb {
 						switch (@$this->wma) {
 							case '*':
 								$gdimg_tiledwatermark = $this->ImageCreateFunction($this->thumbnail_width, $this->thumbnail_height);
-								// set the tiled image transparent color to whatever the untiled image transparency index is
 								ImageColorTransparent($gdimg_tiledwatermark, ImageColorTransparent($img_watermark));
 
-								// tile the image as many times as can fit
 								for ($x = round((1 - $watermark_margin_percent) * $this->thumbnail_width); $x < ($this->thumbnail_width + $watermark_source_width); $x += round($watermark_source_width + ((1 - $watermark_margin_percent) * $this->thumbnail_width))) {
 									for ($y = round((1 - $watermark_margin_percent) * $this->thumbnail_height); $y < ($this->thumbnail_height + $watermark_source_height); $y += round($watermark_source_height + ((1 - $watermark_margin_percent) * $this->thumbnail_height))) {
 										ImageCopy($gdimg_tiledwatermark, $img_watermark, $x, $y, 0, 0, $watermark_source_width, $watermark_source_height);
@@ -709,19 +618,15 @@ class phpthumb {
 			$background_color_cornermask  = phpthumb_functions::ImageHexColorAllocate($gdimg_cornermask, $this->config_background_hexcolor);
 			$border_color_cornermask      = phpthumb_functions::ImageHexColorAllocate($gdimg_cornermask, $this->config_border_hexcolor);
 
-			// Top Left
 			ImageArc($gdimg_cornermask, $this->brx, $this->bry, $this->brx * 2, $this->bry * 2, 180, 270, $background_color_cornermask);
 			ImageFillToBorder($gdimg_cornermask, 0, 0, $background_color_cornermask, $background_color_cornermask);
 
-			// Top Right
 			ImageArc($gdimg_cornermask, $this->thumbnail_width - $this->brx, $this->bry, $this->brx * 2, $this->bry * 2, 270, 360, $background_color_cornermask);
 			ImageFillToBorder($gdimg_cornermask, $this->thumbnail_width, 0, $background_color_cornermask, $background_color_cornermask);
 
-			// Bottom Right
 			ImageArc($gdimg_cornermask, $this->thumbnail_width - $this->brx, $this->thumbnail_height - $this->bry, $this->brx * 2, $this->bry * 2, 0, 90, $background_color_cornermask);
 			ImageFillToBorder($gdimg_cornermask, $this->thumbnail_width, $this->thumbnail_height, $background_color_cornermask, $background_color_cornermask);
 
-			// Bottom Left
 			ImageArc($gdimg_cornermask, $this->brx, $this->thumbnail_height - $this->bry, $this->brx * 2, $this->bry * 2, 90, 180, $background_color_cornermask);
 			ImageFillToBorder($gdimg_cornermask, 0, $this->thumbnail_height, $background_color_cornermask, $background_color_cornermask);
 
@@ -744,14 +649,11 @@ class phpthumb {
 		$this->thumbnailCropW = (!empty($this->sw) ? $this->sw : $this->source_width);
 		$this->thumbnailCropH = (!empty($this->sh) ? $this->sh : $this->source_height);
 
-		// limit source area to original image area
 		$this->thumbnailCropW = min($this->thumbnailCropW, $this->source_width  - $this->thumbnailCropX);
 		$this->thumbnailCropH = min($this->thumbnailCropH, $this->source_height - $this->thumbnailCropY);
 
 		if (!empty($this->iar) && !empty($this->w) && !empty($this->h)) {
 
-			// Ignore Aspect Ratio
-			// forget all the careful proportional resizing we did above, stretch image to fit 'w' && 'h'
 			$this->thumbnail_width  = $this->w;
 			$this->thumbnail_height = $this->h;
 			$this->thumbnail_image_width  = $this->thumbnail_width  - (@$this->bw * 2);
@@ -759,7 +661,6 @@ class phpthumb {
 
 		} else {
 
-			// default new width and height to source area
 			$this->thumbnail_image_width  = $this->thumbnailCropW;
 			$this->thumbnail_image_height = $this->thumbnailCropH;
 			if (($this->config_output_maxwidth > 0) && ($this->thumbnail_image_width > $this->config_output_maxwidth)) {
@@ -770,8 +671,6 @@ class phpthumb {
 				}
 			}
 
-			// if user sets width, save as max width
-			// and compute new height based on source area aspect ratio
 			if (!empty($this->w)) {
 				if (($this->w < $this->thumbnailCropW) || $this->config_output_allow_enlarging) {
 					$maxwidth = $this->w;
@@ -780,10 +679,6 @@ class phpthumb {
 				}
 			}
 
-			// if user sets height, save as max height
-			// if the max width has already been set and the new image is too tall,
-			// compute new width based on source area aspect ratio
-			// otherwise, use max height and compute new width
 			if (!empty($this->h) || ($this->config_output_maxheight > 0)) {
 				$maxheight = (!empty($this->h) ? $this->h : $this->config_output_maxheight);
 				if (($maxheight < $this->thumbnailCropH) || $this->config_output_allow_enlarging) {
@@ -817,12 +712,8 @@ class phpthumb {
 
 		$this->CalculateThumbnailDimensions();
 
-		// Create the GD image (either true-color or 256-color, depending on GD version)
 		$this->gdimg_output = $this->ImageCreateFunction($this->thumbnail_width, $this->thumbnail_height);
 
-
-		// Images that have transparency must have the background filled with the configured 'bg' color
-		// otherwise the transparent color will appear as black
 		$current_transparent_color = ImageColorTransparent($this->gdimg_source);
 		if ($current_transparent_color >= 0) {
 
@@ -837,14 +728,6 @@ class phpthumb {
 		return true;
 	}
 
-
-
-
-
-
-
-
-
 	function ExtractEXIFgetImageSize() {
 
 		if ($this->getimagesizeinfo = @GetImageSize($this->sourceFilename)) {
@@ -853,20 +736,17 @@ class phpthumb {
 			$this->source_height = $this->getimagesizeinfo[1];
 
 			if (function_exists('exif_thumbnail') && ($this->getimagesizeinfo[2] == 2)) {
-				// Extract EXIF info from JPEGs
 
 				$this->exif_thumbnail_width  = '';
 				$this->exif_thumbnail_height = '';
 				$this->exif_thumbnail_type   = '';
 
-				// The parameters width, height and imagetype are available since PHP v4.3.0
 				if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.0', '>=')) {
 
 					$this->exif_thumbnail_data = @exif_thumbnail($this->sourceFilename, $this->exif_thumbnail_width, $this->exif_thumbnail_height, $this->exif_thumbnail_type);
 
 				} else {
 
-					// older versions of exif_thumbnail output an error message but NOT return false on failure
 					ob_start();
 					$this->exif_thumbnail_data = exif_thumbnail($this->sourceFilename);
 					$exit_thumbnail_error = ob_get_contents();
@@ -876,7 +756,7 @@ class phpthumb {
 						if ($gdimg_exif_temp = phpthumb_functions::ImageCreateFromStringReplacement($this->exif_thumbnail_data, false)) {
 							$this->exif_thumbnail_width  = ImageSX($gdimg_exif_temp);
 							$this->exif_thumbnail_height = ImageSY($gdimg_exif_temp);
-							$this->exif_thumbnail_type   = 2; // (2 == JPEG) before PHP v4.3.0 only JPEG format EXIF thumbnails are returned
+							$this->exif_thumbnail_type   = 2;
 							unset($gdimg_exif_temp);
 						} else {
 							$this->ErrorImage('Failed - phpthumb_functions::ImageCreateFromStringReplacement($this->exif_thumbnail_data)');
@@ -888,7 +768,6 @@ class phpthumb {
 
 			}
 
-			// see if EXIF thumbnail can be used directly with no processing
 			if (!empty($this->exif_thumbnail_data)) {
 				while (true) {
 					if (!empty($this->xto)) {
@@ -909,8 +788,7 @@ class phpthumb {
 					}
 
 					if (!empty($this->xto) && empty($this->phpThumbDebug)) {
-						// write cached file
-						$ImageTypesLookup = array(2=>'jpeg'); // EXIF thumbnails are (currently?) only availble from JPEG source images
+						$ImageTypesLookup = array(2=>'jpeg');
 						if (is_dir($this->config_cache_directory) && is_writable($this->config_cache_directory) && isset($ImageTypesLookup[$this->exif_thumbnail_type])) {
 							$cache_filename = $this->GenerateCachedFilename($ImageTypesLookup[$this->exif_thumbnail_type]);
 							if (is_writable($cache_filename)) {
@@ -934,25 +812,17 @@ class phpthumb {
 			}
 
 			if (($this->config_max_source_pixels > 0) && (($this->source_width * $this->source_height) > $this->config_max_source_pixels)) {
-				// Source image is larger than would fit in available PHP memory
 				if (!empty($this->exif_thumbnail_data)) {
 
-					// EXIF thumbnail exists, and will be use as source image
 					$this->gdimg_source  = phpthumb_functions::ImageCreateFromStringReplacement($this->exif_thumbnail_data);
 					$this->source_width  = $this->exif_thumbnail_width;
 					$this->source_height = $this->exif_thumbnail_height;
 
-					// override allow-enlarging setting if EXIF thumbnail is the only source available
-					// otherwise thumbnails larger than the EXIF thumbnail will be created at EXIF size
 					$this->config_output_allow_enlarging = true;
 
 				} else {
 
-					// EXIF thumbnail is unavailable
-					// if ImageMagick is installed, use it to thumbnail,
-					// otherwise no choice but to abort
 					if ($this->ImageMagickThumbnailToGD()) {
-						// excellent, we have a thumbnail
 					} else {
 						$this->ErrorImage('Source image is more than '.sprintf('%1.1f', ($this->config_max_source_pixels / 1000000)).' megapixels - insufficient memory.'."\n".'EXIF thumbnail unavailable.');
 					}
@@ -988,8 +858,6 @@ class phpthumb {
 			if (($this->exif_thumbnail_width >= $this->thumbnail_image_width) && ($this->exif_thumbnail_height >= $this->thumbnail_image_height) &&
 				($this->thumbnailCropX == 0) && ($this->thumbnailCropY == 0) &&
 				($this->source_width == $this->thumbnailCropW) && ($this->source_height == $this->thumbnailCropH)) {
-					// EXIF thumbnail exists, and is equal to or larger than destination thumbnail, and will be use as source image
-					// Only benefit here is greater speed, not lower memory usage
 					if ($gdimg_exif_temp = phpthumb_functions::ImageCreateFromStringReplacement($this->exif_thumbnail_data, false)) {
 						$this->gdimg_source = $gdimg_exif_temp;
 						$this->source_width  = $this->exif_thumbnail_width;
@@ -1003,8 +871,6 @@ class phpthumb {
 		}
 
 		if (empty($this->gdimg_source)) {
-			// try to create GD image source directly via GD, if possible,
-			// rather than buffering to memory and creating with ImageCreateFromString
 			if (!file_exists($this->sourceFilename)) {
 				$this->ErrorImage('"'.$this->sourceFilename.'" does not exist');
 			} elseif (!is_file($this->sourceFilename)) {
@@ -1018,7 +884,6 @@ class phpthumb {
 			} elseif ((@$this->getimagesizeinfo[2] == 15) && function_exists('ImageCreateFromWBMP')) {
 				$this->gdimg_source = @ImageCreateFromWBMP($this->sourceFilename);
 			} else {
-				// cannot create from filename, attempt to create source image with ImageCreateFromString, if possible
 				if (empty($this->rawImageData)) {
 					if ($fp = @fopen($this->sourceFilename, 'rb')) {
 
@@ -1027,7 +892,6 @@ class phpthumb {
 						$blocksize = 16384;
 						$blockreads = ceil($filesize / $blocksize);
 						for ($i = 0; $i < $blockreads; $i++) {
-						//while (feof($fp) !== false) {
 							$this->rawImageData .= fread($fp, $blocksize);
 						}
 						fclose($fp);
@@ -1040,8 +904,6 @@ class phpthumb {
 			}
 
 			if (empty($this->gdimg_source)) {
-				// cannot create image for whatever reason,
-				// simply output original (not resized/modified) data and exit
 				switch (substr($this->rawImageData, 0, 3)) {
 					case 'GIF':
 						header('Content-type: image/gif');
@@ -1177,17 +1039,13 @@ class phpthumb {
 
 	function ErrorImage($text, $width=400, $height=100) {
 		if (!empty($this->err) || !empty($this->config_error_message_image_default)) {
-			// Show generic custom error image instead of error message
-			// for use on production sites where you don't want debug messages
 			if (@$this->err == 'showerror') {
-				// fall through and actually show error message even if default error image is set
 			} else {
 				header('Location: '.(!empty($this->err) ? $this->err : $this->config_error_message_image_default));
 				exit;
 			}
 		}
 		if (@$this->f == 'text') {
-			// bypass all GD functions and output text error message
 			die('<PRE>'.$text.'</PRE>');
 		}
 

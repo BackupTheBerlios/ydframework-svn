@@ -1,12 +1,4 @@
 <?php
-//////////////////////////////////////////////////////////////
-///  phpThumb() by James Heinrich <info@silisoftware.com>   //
-//        available at http://phpthumb.sourceforge.net     ///
-//////////////////////////////////////////////////////////////
-///                                                         //
-// See: phpthumb.readme.txt for usage instructions          //
-//                                                         ///
-//////////////////////////////////////////////////////////////
 
 class phpthumb_functions {
 
@@ -33,11 +25,6 @@ class phpthumb_functions {
 	}
 
 	function version_compare_replacement_sub($version1, $version2, $operator='') {
-		// If you specify the third optional operator argument, you can test for a particular relationship.
-		// The possible operators are: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne respectively.
-		// Using this argument, the function will return 1 if the relationship is the one specified by the operator, 0 otherwise.
-
-		// If a part contains special version strings these are handled in the following order: dev < (alpha = a) < (beta = b) < RC < pl
 		static $versiontype_lookup = array();
 		if (empty($versiontype_lookup)) {
 			$versiontype_lookup['dev']   = 10001;
@@ -93,16 +80,12 @@ class phpthumb_functions {
 
 	function version_compare_replacement($version1, $version2, $operator='') {
 		if (function_exists('version_compare')) {
-			// built into PHP v4.1.0+
 			return version_compare($version1, $version2, $operator='');
 		}
 
-		// The function first replaces _, - and + with a dot . in the version strings
 		$version1 = strtr($version1, '_-+', '...');
 		$version2 = strtr($version2, '_-+', '...');
 
-		// and also inserts dots . before and after any non number so that for example '4.3.2RC1' becomes '4.3.2.RC.1'.
-		// Then it splits the results like if you were using explode('.',$ver). Then it compares the parts starting from left to right.
 		$version1 = eregi_replace('([0-9]+)([A-Z]+)([0-9]+)', '\\1.\\2.\\3', $version1);
 		$version2 = eregi_replace('([0-9]+)([A-Z]+)([0-9]+)', '\\1.\\2.\\3', $version2);
 
@@ -132,14 +115,11 @@ class phpthumb_functions {
 
 	function gd_info() {
 		if (function_exists('gd_info')) {
-			// built into PHP v4.3.0+ (with bundled GD2 library)
 			return gd_info();
 		}
 
 		static $gd_info = array();
 		if (empty($gd_info)) {
-			// based on code by johnschaefer at gmx dot de
-			// from PHP help on gd_info()
 			$gd_info = array(
 				'GD Version'         => '',
 				'FreeType Support'   => false,
@@ -156,7 +136,6 @@ class phpthumb_functions {
 			foreach ($phpinfo_array as $line) {
 				$line = trim(strip_tags($line));
 				foreach ($gd_info as $key => $value) {
-					//if (strpos($line, $key) !== false) {
 					if (strpos($line, $key) === 0) {
 						$newvalue = trim(str_replace($key, '', $line));
 						$gd_info[$key] = $newvalue;
@@ -164,7 +143,6 @@ class phpthumb_functions {
 				}
 			}
 			if (empty($gd_info['GD Version'])) {
-				// probable cause: "phpinfo() disabled for security reasons"
 				if (function_exists('ImageTypes')) {
 					$imagetypes = ImageTypes();
 					if ($imagetypes & IMG_PNG) {
@@ -180,14 +158,11 @@ class phpthumb_functions {
 						$gd_info['WBMP Support'] = true;
 					}
 				}
-				// to determine capability of GIF creation, try to use ImageCreateFromGIF on a 1px GIF
 				if (function_exists('ImageCreateFromGIF')) {
 					if ($tempfilename = tempnam(null, '')) {
 						if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
-							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw==')); // very simple 1px GIF file base64-encoded as string
+							fwrite($fp_tempfile, base64_decode('R0lGODlhAQABAIAAAH//AP///ywAAAAAAQABAAACAUQAOw=='));
 							fclose($fp_tempfile);
-
-							// if we can convert the GIF file to a GD image then GIF create support must be enabled, otherwise it's not
 							$gd_info['GIF Read Support'] = (bool) @ImageCreateFromGIF($tempfilename);
 						}
 						unlink($tempfilename);
@@ -206,8 +181,6 @@ class phpthumb_functions {
 	function exif_info() {
 		static $exif_info = array();
 		if (empty($exif_info)) {
-			// based on code by johnschaefer at gmx dot de
-			// from PHP help on gd_info()
 			$exif_info = array(
 				'EXIF Support'           => '',
 				'EXIF Version'           => '',
@@ -233,11 +206,11 @@ class phpthumb_functions {
 		if (empty($cache_gd_version)) {
 			$gd_info = phpthumb_functions::gd_info();
 			if (substr($gd_info['GD Version'], 0, strlen('bundled (')) == 'bundled (') {
-				$cache_gd_version[1] = $gd_info['GD Version'];                                         // e.g. "bundled (2.0.15 compatible)"
-				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], strlen('bundled ('), 3); // e.g. "2.0" (not "bundled (2.0.15 compatible)")
+				$cache_gd_version[1] = $gd_info['GD Version'];
+				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], strlen('bundled ('), 3);
 			} else {
-				$cache_gd_version[1] = $gd_info['GD Version'];                       // e.g. "1.6.2 or higher"
-				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], 0, 3); // e.g. "1.6" (not "1.6.2 or higher")
+				$cache_gd_version[1] = $gd_info['GD Version'];
+				$cache_gd_version[0] = (float) substr($gd_info['GD Version'], 0, 3);
 			}
 		}
 		return $cache_gd_version[intval($fullstring)];
@@ -248,22 +221,22 @@ class phpthumb_functions {
 			return image_type_to_mime_type($imagetype);
 		}
 		static $image_type_to_mime_type = array(
-			1  => 'image/gif',                     // IMAGETYPE_GIF
-			2  => 'image/jpeg',                    // IMAGETYPE_JPEG
-			3  => 'image/png',                     // IMAGETYPE_PNG
-			4  => 'application/x-shockwave-flash', // IMAGETYPE_SWF
-			5  => 'image/psd',                     // IMAGETYPE_PSD
-			6  => 'image/bmp',                     // IMAGETYPE_BMP
-			7  => 'image/tiff',                    // IMAGETYPE_TIFF_II (intel byte order)
-			8  => 'image/tiff',                    // IMAGETYPE_TIFF_MM (motorola byte order)
-			9  => 'application/octet-stream',      // IMAGETYPE_JPC
-			10 => 'image/jp2',                     // IMAGETYPE_JP2
-			11 => 'application/octet-stream',      // IMAGETYPE_JPX
-			12 => 'application/octet-stream',      // IMAGETYPE_JB2
-			13 => 'application/x-shockwave-flash', // IMAGETYPE_SWC
-			14 => 'image/iff',                     // IMAGETYPE_IFF
-			15 => 'image/vnd.wap.wbmp',            // IMAGETYPE_WBMP
-			16 => 'image/xbm');                    // IMAGETYPE_XBM
+			1  => 'image/gif',
+			2  => 'image/jpeg',
+			3  => 'image/png',
+			4  => 'application/x-shockwave-flash',
+			5  => 'image/psd',
+			6  => 'image/bmp',
+			7  => 'image/tiff',
+			8  => 'image/tiff',
+			9  => 'application/octet-stream',
+			10 => 'image/jp2',
+			11 => 'application/octet-stream',
+			12 => 'application/octet-stream',
+			13 => 'application/x-shockwave-flash',
+			14 => 'image/iff',
+			15 => 'image/vnd.wap.wbmp',
+			16 => 'image/xbm');
 
 		return (isset($image_type_to_mime_type[$imagetype]) ? $image_type_to_mime_type[$imagetype] : false);
 	}
@@ -294,9 +267,6 @@ class phpthumb_functions {
 	}
 
 	function ImageCreateFromStringReplacement(&$RawImageData, $DieOnErrors=false) {
-		// there are serious bugs in the non-bundled versions of GD which may cause
-		// PHP to segfault when calling ImageCreateFromString() - avoid if at all possible
-		// when not using a bundled version of GD2
 		$gd_info = phpthumb_functions::gd_info();
 		if (strpos($gd_info['GD Version'], 'bundled') !== false) {
 			return @ImageCreateFromString($RawImageData);
@@ -321,10 +291,7 @@ class phpthumb_functions {
 				fwrite($fp_tempnam, $RawImageData);
 				fclose($fp_tempnam);
 				if (($ImageCreateFromStringReplacementFunction == 'ImageCreateFromGIF') && !function_exists($ImageCreateFromStringReplacementFunction)) {
-
-					// Need to create from GIF file, but ImageCreateFromGIF does not exist
 					if (@include_once('phpthumb.gif.php')) {
-						// gif_loadFileToGDimageResource() cannot read from raw data, write to file first
 						if ($tempfilename = tempnam(null, '')) {
 							if ($fp_tempfile = @fopen($tempfilename, 'wb')) {
 								fwrite($fp_tempfile, $RawImageData);
@@ -344,19 +311,13 @@ class phpthumb_functions {
 					}
 
 				} elseif (function_exists($ImageCreateFromStringReplacementFunction) && ($gdimg_source = $ImageCreateFromStringReplacementFunction($tempnam))) {
-
-					// great
 					unlink($tempnam);
 					return $gdimg_source;
-
-				} else { // GD functions not available
-
-					// base64-encoded error images in GIF format
+				} else {
 					$ERROR_NOGD = 'R0lGODlhIAAgALMAAAAAABQUFCQkJDY2NkZGRldXV2ZmZnJycoaGhpSUlKWlpbe3t8XFxdXV1eTk5P7+/iwAAAAAIAAgAAAE/vDJSau9WILtTAACUinDNijZtAHfCojS4W5H+qxD8xibIDE9h0OwWaRWDIljJSkUJYsN4bihMB8th3IToAKs1VtYM75cyV8sZ8vygtOE5yMKmGbO4jRdICQCjHdlZzwzNW4qZSQmKDaNjhUMBX4BBAlmMywFSRWEmAI6b5gAlhNxokGhooAIK5o/pi9vEw4Lfj4OLTAUpj6IabMtCwlSFw0DCKBoFqwAB04AjI54PyZ+yY3TD0ss2YcVmN/gvpcu4TOyFivWqYJlbAHPpOntvxNAACcmGHjZzAZqzSzcq5fNjxFmAFw9iFRunD1epU6tsIPmFCAJnWYE0FURk7wJDA0MTKpEzoWAAskiAAA7';
 					header('Content-type: image/gif');
 					echo base64_decode($ERROR_NOGD);
 					exit;
-
 				}
 			} else {
 				$ErrorMessage = 'Failed to fopen('.$tempnam.', "wb") in '.__FILE__.' on line '.__LINE__;
@@ -373,29 +334,22 @@ class phpthumb_functions {
 
 	function ResolveFilenameToAbsolute($filename) {
 		if ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') && (substr($filename, 1, 1) == ':')) {
-
-			// absolute pathname (Windows)
 			$AbsoluteFilename = $filename;
 
 		} elseif (substr($filename, 0, 1) == '/') {
 
 			if (!file_exists($_SERVER['DOCUMENT_ROOT'].$filename) && file_exists($filename)) {
-				// absolute filename (*nix)
 				$AbsoluteFilename = $filename;
 			} elseif (substr($filename, 1, 1) == '~') {
-				// /~user/path
 				$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].$filename;
 				if ($apache_lookup_uri_object = apache_lookup_uri($filename)) {
 					$AbsoluteFilename = $apache_lookup_uri_object->filename;
 				}
 			} else {
-				// relative filename (any OS)
 				$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].$filename;
 			}
 
 		} else {
-
-			// relative to current directory (any OS)
 			$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].dirname($_SERVER['PHP_SELF']).'/'.$filename;
 			if (substr(dirname($_SERVER['PHP_SELF']), 0, 2) == '/~') {
 				if ($apache_lookup_uri_object = apache_lookup_uri(dirname($_SERVER['PHP_SELF']))) {

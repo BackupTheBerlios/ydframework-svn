@@ -1,62 +1,18 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 3.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available through the world-wide-web at the following url:           |
-// | http://www.php.net/license/3_0.txt.                                  |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Silvano Girardi Jr. <silvano@php.net>                       |
-// +----------------------------------------------------------------------+
-//
-// $Id: ptBR.php,v 1.2 2004/02/03 23:34:53 neufeind Exp $
-// Specific validation methods for data used in pt_BR
-//
 
 class Validate_ptBR
 {
-    /**
-     * Validate CEP (Código de Endereçamento Postal, like postcode in US
-     * and other languages)
-     * format: xxxxx-xxx
-     *
-     * @param   string  $cep   pt_BR CEP to validate
-     * @return  bool           true if $cep is ok, false otherwise
-     */
+
     function cep($cep)
     {
         return (ereg('(^[0-9]{5})-([0-9]{3})$', $cep));
     }
 
-    /**
-     * validates a postcode; alias-function
-     *
-     * @access    public
-     * @param     string  the postcode to be validated
-     * @param     bool    optional; strong checks (e.g. against a list of postcodes)
-     * @return    bool
-     */
     function postcode($postcode, $strong=false)
     {
-        // $strong is not used here at the moment; added for API compatibility
-        // checks might be added at a later stage
-        
         return cep($postcode);
     }
 
-    /**
-     * Validade CPF (Cadastro de Pessoa Física)
-     *
-     * @param   string $cpf  CPF to validate
-     * @return  bool         true if $cpf is ok, false otherwise
-     */
     function cpf($cpf)
     {
         $cleaned = "";
@@ -120,12 +76,6 @@ class Validate_ptBR
         }
     }
 
-    /**
-     * Validade CNPJ (Cadastro Nacional de Pessoa Jurídica)
-     *
-     * @param   string $cnpj  CNPJ to validate
-     * @return  bool          true if $cnpj is ok, false otherwise
-     */
     function cnpj($cnpj)
     {
         $cleaned = "";

@@ -1,14 +1,5 @@
 <?php
 
-/* 
-   IXR - The Inutio XML-RPC Library - (c) Incutio Ltd 2002
-   Version 1.61 - Simon Willison, 11th July 2003 (htmlentities -> htmlspecialchars)
-   Site:   http://scripts.incutio.com/xmlrpc/
-   Manual: http://scripts.incutio.com/xmlrpc/manual.php
-   Made available under the Artistic License: http://www.opensource.org/licenses/artistic-license.php
-*/
-
-
 class IXR_Value {
     var $data;
     var $type;
@@ -19,7 +10,6 @@ class IXR_Value {
         }
         $this->type = $type;
         if ($type == 'struct') {
-            /* Turn all the values in the array in to new IXR_Value objects */
             foreach ($this->data as $key => $value) {
                 $this->data[$key] = new IXR_Value($value);
             }
@@ -40,14 +30,12 @@ class IXR_Value {
         if (is_double($this->data)) {
             return 'double';
         }
-        // Deal with IXR object types base64 and date
         if (is_object($this->data) && is_a($this->data, 'IXR_Date')) {
             return 'date';
         }
         if (is_object($this->data) && is_a($this->data, 'IXR_Base64')) {
             return 'base64';
         }
-        // If it is a normal PHP object convert it in to a struct
         if (is_object($this->data)) {
             
             $this->data = get_object_vars($this->data);
@@ -56,7 +44,6 @@ class IXR_Value {
         if (!is_array($this->data)) {
             return 'string';
         }
-        /* We have an array - is it an array or a struct ? */
         if ($this->isStruct($this->data)) {
             return 'struct';
         } else {
@@ -64,7 +51,6 @@ class IXR_Value {
         }
     }
     function getXml() {
-        /* Return XML for this value */
         switch ($this->type) {
             case 'boolean':
                 return '<boolean>'.(($this->data) ? '1' : '0').'</boolean>';
@@ -103,7 +89,6 @@ class IXR_Value {
         return false;
     }
     function isStruct($array) {
-        /* Nasty function to check if an array is a struct or not */
         $expected = 0;
         foreach ($array as $key => $value) {
             if ((string)$key != (string)$expected) {
@@ -118,45 +103,36 @@ class IXR_Value {
 
 class IXR_Message {
     var $message;
-    var $messageType;  // methodCall / methodResponse / fault
+    var $messageType;
     var $faultCode;
     var $faultString;
     var $methodName;
     var $params;
-    // Current variable stacks
-    var $_arraystructs = array();   // The stack used to keep track of the current array/struct
-    var $_arraystructstypes = array(); // Stack keeping track of if things are structs or array
-    var $_currentStructName = array();  // A stack as well
+    var $_arraystructs = array();
+    var $_arraystructstypes = array();
+    var $_currentStructName = array();
     var $_param;
     var $_value;
     var $_currentTag;
     var $_currentTagContents;
-    // The XML parser
     var $_parser;
     function IXR_Message ($message) {
         $this->message = $message;
     }
     function parse() {
-        // first remove the XML declaration
         $this->message = preg_replace('/<\?xml(.*)?\?'.'>/', '', $this->message);
         if (trim($this->message) == '') {
             return false;
         }
         $this->_parser = xml_parser_create();
-        // Set XML parser to take the case of tags in to account
         xml_parser_set_option($this->_parser, XML_OPTION_CASE_FOLDING, false);
-        // Set XML parser callback functions
         xml_set_object($this->_parser, $this);
         xml_set_element_handler($this->_parser, 'tag_open', 'tag_close');
         xml_set_character_data_handler($this->_parser, 'cdata');
         if (!xml_parse($this->_parser, $this->message)) {
-            /* die(sprintf('XML error: %s at line %d',
-                xml_error_string(xml_get_error_code($this->_parser)),
-                xml_get_current_line_number($this->_parser))); */
             return false;
         }
         xml_parser_free($this->_parser);
-        // Grab the error messages, if any
         if ($this->messageType == 'fault') {
             $this->faultCode = $this->params[0]['faultCode'];
             $this->faultString = $this->params[0]['faultString'];
@@ -171,8 +147,7 @@ class IXR_Message {
             case 'fault':
                 $this->messageType = $tag;
                 break;
-            /* Deal with stacks of arrays and structs */
-            case 'data':    // data is to all intents and puposes more interesting than array
+            case 'data':
                 $this->_arraystructstypes[] = 'array';
                 $this->_arraystructs[] = array();
                 break;
@@ -206,12 +181,10 @@ class IXR_Message {
                 break;
             case 'dateTime.iso8601':
                 $value = new IXR_Date(trim($this->_currentTagContents));
-                // $value = $iso->getTimestamp();
                 $this->_currentTagContents = '';
                 $valueFlag = true;
                 break;
             case 'value':
-                // "If no type is indicated, the type is string."
                 if (trim($this->_currentTagContents) != '') {
                     $value = (string)$this->_currentTagContents;
                     $this->_currentTagContents = '';
@@ -228,7 +201,6 @@ class IXR_Message {
                 $this->_currentTagContents = '';
                 $valueFlag = true;
                 break;
-            /* Deal with stacks of arrays and structs */
             case 'data':
             case 'struct':
                 $value = array_pop($this->_arraystructs);
@@ -248,22 +220,13 @@ class IXR_Message {
                 break;
         }
         if ($valueFlag) {
-            /*
-            if (!is_array($value) && !is_object($value)) {
-                $value = trim($value);
-            }
-            */
             if (count($this->_arraystructs) > 0) {
-                // Add value to struct or array
                 if ($this->_arraystructstypes[count($this->_arraystructstypes)-1] == 'struct') {
-                    // Add to struct
                     $this->_arraystructs[count($this->_arraystructs)-1][$this->_currentStructName[count($this->_currentStructName)-1]] = $value;
                 } else {
-                    // Add to array
                     $this->_arraystructs[count($this->_arraystructs)-1][] = $value;
                 }
             } else {
-                // Just add as a paramater
                 $this->params[] = $value;
             }
         }
@@ -300,14 +263,11 @@ class IXR_Server {
             $this->error(-32600, 'server error. invalid xml-rpc. not conforming to spec. Request must be a methodCall');
         }
         $result = $this->call($this->message->methodName, $this->message->params);
-        // Is the result an error?
         if (is_a($result, 'IXR_Error')) {
             $this->error($result);
         }
-        // Encode the result
         $r = new IXR_Value($result);
         $resultxml = $r->getXml();
-        // Create the XML
         $xml = <<<EOD
 <methodResponse>
   <params>
@@ -320,7 +280,6 @@ class IXR_Server {
 </methodResponse>
 
 EOD;
-        // Send it
         $this->output($xml);
     }
     function call($methodname, $args) {
@@ -328,33 +287,25 @@ EOD;
             return new IXR_Error(-32601, 'server error. requested method '.$methodname.' does not exist.');
         }
         $method = $this->callbacks[$methodname];
-        // Perform the callback and send the response
         if (count($args) == 1) {
-            // If only one paramater just send that instead of the whole array
             $args = $args[0];
         }
-        // Are we dealing with a function or a method?
         if (substr($method, 0, 5) == 'this:') {
-            // It's a class method - check it exists
             $method = substr($method, 5);
             if (!method_exists($this, $method)) {
                 return new IXR_Error(-32601, 'server error. requested class method "'.$method.'" does not exist.');
             }
-            // Call the method
             $result = $this->$method($args);
         } else {
-            // It's a function - does it exist?
             if (!function_exists($method)) {
                 return new IXR_Error(-32601, 'server error. requested function "'.$method.'" does not exist.');
             }
-            // Call the function
             $result = $method($args);
         }
         return $result;
     }
 
     function error($error, $message = false) {
-        // Accepts either an error object or an error code and message
         if ($message && !is_object($error)) {
             $error = new IXR_Error($error, $message);
         }
@@ -374,7 +325,6 @@ EOD;
         return in_array($method, array_keys($this->callbacks));
     }
     function setCapabilities() {
-        // Initialises capabilities array
         $this->capabilities = array(
             'xmlrpc' => array(
                 'specUrl' => 'http://www.xmlrpc.com/spec',
@@ -399,12 +349,9 @@ EOD;
         $this->callbacks['system.multicall'] = 'this:multiCall';
     }
     function listMethods($args) {
-        // Returns a list of methods - uses array_reverse to ensure user defined
-        // methods are listed before server defined methods
         return array_reverse(array_keys($this->callbacks));
     }
     function multiCall($methodcalls) {
-        // See http://www.xmlrpc.com/discuss/msgReader$1208
         $return = array();
         foreach ($methodcalls as $call) {
             $method = $call['methodName'];
@@ -466,16 +413,13 @@ class IXR_Client {
     var $response;
     var $message = false;
     var $debug = false;
-    // Storage place for an error message
     var $error = false;
     function IXR_Client($server, $path = false, $port = 80) {
         if (!$path) {
-            // Assume we have been given a URL instead
             $bits = parse_url($server);
             $this->server = $bits['host'];
             $this->port = isset($bits['port']) ? $bits['port'] : 80;
             $this->path = isset($bits['path']) ? $bits['path'] : '/';
-            // Make absolutely sure we have a path
             if (!$this->path) {
                 $this->path = '/';
             }
@@ -499,7 +443,6 @@ class IXR_Client {
         $request .= "User-Agent: {$this->useragent}$r";
         $request .= "Content-length: {$length}$r$r";
         $request .= $xml;
-        // Now send the request
         if ($this->debug) {
             echo '<pre>'.htmlspecialchars($request)."\n</pre>\n\n";
         }
@@ -515,7 +458,6 @@ class IXR_Client {
         while (!feof($fp)) {
             $line = fgets($fp, 4096);
             if (!$gotFirstLine) {
-                // Check line for '200'
                 if (strstr($line, '200') === false) {
                     $this->error = new IXR_Error(-32300, 'transport error - HTTP status code was not 200');
                     return false;
@@ -532,23 +474,18 @@ class IXR_Client {
         if ($this->debug) {
             echo '<pre>'.htmlspecialchars($contents)."\n</pre>\n\n";
         }
-        // Now parse what we've got back
         $this->message = new IXR_Message($contents);
         if (!$this->message->parse()) {
-            // XML error
             $this->error = new IXR_Error(-32700, 'parse error. not well formed');
             return false;
         }
-        // Is the message a fault?
         if ($this->message->messageType == 'fault') {
             $this->error = new IXR_Error($this->message->faultCode, $this->message->faultString);
             return false;
         }
-        // Message must be OK
         return true;
     }
     function getResponse() {
-        // methodResponses can only have one param - return that
         return $this->message->params[0];
     }
     function isError() {
@@ -603,7 +540,6 @@ class IXR_Date {
     var $minute;
     var $second;
     function IXR_Date($time) {
-        // $time can be a PHP timestamp or an ISO one
         if (is_numeric($time)) {
             $this->parseTimestamp($time);
         } else {
@@ -690,23 +626,18 @@ class IXR_IntrospectionServer extends IXR_Server {
         $this->help[$method] = $help;
     }
     function call($methodname, $args) {
-        // Make sure it's in an array
         if ($args && !is_array($args)) {
             $args = array($args);
         }
-        // Over-rides default call method, adds signature check
         if (!$this->hasMethod($methodname)) {
             return new IXR_Error(-32601, 'server error. requested method "'.$this->message->methodName.'" not specified.');
         }
         $method = $this->callbacks[$methodname];
         $signature = $this->signatures[$methodname];
         $returnType = array_shift($signature);
-        // Check the number of arguments
         if (count($args) != count($signature)) {
-            // print 'Num of args: '.count($args).' Num in signature: '.count($signature);
             return new IXR_Error(-32602, 'server error. wrong number of method parameters');
         }
-        // Check the argument types
         $ok = true;
         $argsbackup = $args;
         for ($i = 0, $j = count($args); $i < $j; $i++) {
@@ -747,14 +678,12 @@ class IXR_IntrospectionServer extends IXR_Server {
                 return new IXR_Error(-32602, 'server error. invalid method parameters');
             }
         }
-        // It passed the test - run the "real" method call
         return parent::call($methodname, $argsbackup);
     }
     function methodSignature($method) {
         if (!$this->hasMethod($method)) {
             return new IXR_Error(-32601, 'server error. requested method "'.$method.'" not specified.');
         }
-        // We should be returning an array of types
         $types = $this->signatures[$method];
         $return = array();
         foreach ($types as $type) {
