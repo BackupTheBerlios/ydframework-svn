@@ -212,20 +212,30 @@
 		
 			// Get the name of the file
 			$name = $this->getBasename();
-            header( 'Content-Type: application/force-download; name="' . $name . '"');
-            header( 'Content-Disposition: attachment; filename="' . $name . ' "');
+			header( 'Content-Type: application/force-download; name="' . $name . '"');
+			header( 'Content-Disposition: attachment; filename="' . $name . ' "');
 
-            // Add the rest of the headers
-            header( 'Cache-Control: public' );
-            header( 'Content-Transfer-Encoding: binary' );
-            header( 'Content-length: ' . $this->getSize() );
+			// Add the rest of the headers
+			header( 'Cache-Control: public' );
+			header( 'Content-Transfer-Encoding: binary' );
+			header( 'Content-length: ' . $this->getSize() );
 
-            // Send the file contents
-            readfile( $this->getAbsolutePath() );
-            
-            // Stop the execution
-            die();
+			// Send the file contents
+			readfile( $this->getAbsolutePath() );
+			
+			// Stop the execution
+			die();
 		
+		}
+
+		/**
+		 *	This function will return true if the filesystem object is a directory. In all other cases, it will return
+		 *	false.
+		 *
+		 *	@returns	Boolean indicating if the object is a directory or not.
+		 */
+		function isDirectory() {
+			return false;
 		}
 
 		/**
@@ -792,6 +802,26 @@
 			}
 			return YDFSDirectory::_delete( $directory );
 		}		 
+
+		/**
+		 *	This function will return true if the filesystem object is a directory. In all other cases, it will return
+		 *	false.
+		 *
+		 *	@returns	Boolean indicating if the object is a directory or not.
+		 */
+		function isDirectory() {
+			return true;
+		}
+
+		/**
+		 *	This function will return true if the filesystem object is an image. In all other cases, it will return
+		 *	false.
+		 *
+		 *	@returns	Boolean indicating if the object is an image or not.
+		 */
+		function isImage() {
+			return false;
+		}
 
 		/**
 		 *	Function to emulate the fnmatch function from UNIX which is not available on all servers.
