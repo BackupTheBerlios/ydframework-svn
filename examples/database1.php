@@ -19,7 +19,7 @@
 		function actionDefault() {
 
 			// Get the data
-			$db = new YDDatabase( 'mysql', 'test', 'root', '', 'localhost' );
+			$db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
 			$this->setVar( 'processList', $db->getRecords( 'show processlist' ) );
 			$this->setVar( 'status', $db->getRecords( 'show status' ) );
 			$this->setVar( 'variables', $db->getRecords( 'show variables' ) );

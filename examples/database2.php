@@ -19,7 +19,7 @@
 		function actionDefault() {
 
 			// Get the data
-			$db = new YDDatabase( 'sqlite', 'database2.db' );
+			$db = YDDatabase::getInstance( 'sqlite', 'database2.db' );
 
 			// Output the server version
 			YDDebugUtil::dump( $db->getServerVersion(), 'Version:' );

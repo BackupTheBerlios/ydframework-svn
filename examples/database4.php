@@ -19,7 +19,7 @@
 		function actionDefault() {
 
 			// Get the data
-			$db = new YDDatabase( 'postgres', 'template1', 'pieter', 'kermit', 'yellowduck' );
+			$db = YDDatabase::getInstance( 'postgres', 'template1', 'pieter', 'kermit', 'yellowduck' );
 
 			// Output the server version
 			YDDebugUtil::dump( $db->getServerVersion(), 'Version:' );

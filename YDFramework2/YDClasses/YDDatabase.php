@@ -13,7 +13,7 @@
 	class YDDatabase extends YDBase {
 
 		/**
-		 *	This is the class constructor for the YDDatabase class.
+		 *	Using this static function, you can get an instance of a YDDatabaseDriver class.
 		 *
 		 *	@param $driver	Name of the database driver.
 		 *	@param $db		Database name to use for the connection.
@@ -21,50 +21,44 @@
 		 *	@param $pass	(optional) Password to use for the connection.
 		 *	@param $host	(optional) Host name to use for the connection.
 		 */
-		function YDDatabase( $driver, $db, $user='', $pass='', $host='' ) {
-
-			// Initialize YDBase
-			$this->YDBase();
+		function getInstance( $driver, $db, $user='', $pass='', $host='' ) {
 
 			// The list of known drivers
-			$this->_regDrivers = array();
+			$regDrivers = array();
 
 			// Register the standard drives
-			$this->registerDriver( 'mysql', 'YDDatabaseDriver_mysql', 'YDDatabaseDriver_mysql.php' );
-			$this->registerDriver( 'oracle', 'YDDatabaseDriver_oracle', 'YDDatabaseDriver_oracle.php' );
-			$this->registerDriver( 'postgres', 'YDDatabaseDriver_postgres', 'YDDatabaseDriver_postgres.php' );
-			$this->registerDriver( 'sqlite', 'YDDatabaseDriver_sqlite', 'YDDatabaseDriver_sqlite.php' );
+			$regDrivers[ strtolower( 'mysql' ) ] = array(
+				'class' => 'YDDatabaseDriver_mysql', 'file' => 'YDDatabaseDriver_mysql.php'
+			);
+			$regDrivers[ strtolower( 'oracle' ) ] = array(
+				'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
+			);
+			$regDrivers[ strtolower( 'postgres' ) ] = array(
+				'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
+			);
+			$regDrivers[ strtolower( 'sqlite' ) ] = array( 
+				'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
+			);
 
 			// Check if the driver exists
-			if ( ! array_key_exists( strtolower( $driver ), $this->_regDrivers ) ) {
+			if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
 				trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
 			}
 
 			// Include the driver
-			if ( ! empty( $this->_regDrivers[ strtolower( $driver ) ]['file'] ) ) {
-				require_once( $this->_regDrivers[ strtolower( $driver ) ]['file'] );
+			if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
+				require_once( $regDrivers[ strtolower( $driver ) ]['file'] );
 			}
 
 			// Check if the driver is supported
-			if ( ! call_user_func( array( $this->_regDrivers[ strtolower( $driver ) ]['class'], 'isSupported' ) ) ) {
+			if ( ! call_user_func( array( $regDrivers[ strtolower( $driver ) ]['class'], 'isSupported' ) ) ) {
 				trigger_error( 'Unsupported database type: "' . $driver . '". Extension is not loaded.', YD_ERROR );
 			}
 
 			// Make a new connection object and return it
-			$className = $this->_regDrivers[ strtolower( $driver ) ]['class'];
-			$this = new $className( $db, $user, $pass, $host );
+			$className = $regDrivers[ strtolower( $driver ) ]['class'];
+			return new $className( $db, $user, $pass, $host );
 
-		}
-
-		/**
-		 *	This function will register a new database driver.
-		 *
-		 *	@param $name	Name of the driver.
-		 *	@param $class	The class name of the driver definition.
-		 *	@param $file	(optional) The file containing the class definition for this driver.
-		 */
-		function registerDriver( $name, $class, $file='' ) {
-			$this->_regDrivers[ strtolower( $name ) ] = array( 'class' => $class, 'file' => $file );
 		}
 
 	}

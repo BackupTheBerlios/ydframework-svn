@@ -19,7 +19,7 @@
 		function actionDefault() {
 
 			// Get the data
-			$db = new YDDatabase( 'oracle', 'CREODB_STATLER', 'prinergy_rpt', 'prinergy_rpt' );
+			$db = YDDatabase::getInstance( 'oracle', 'CREODB_STATLER', 'prinergy_rpt', 'prinergy_rpt' );
 
 			// Output the server version
 			YDDebugUtil::dump( $db->getServerVersion(), 'Version:' );
