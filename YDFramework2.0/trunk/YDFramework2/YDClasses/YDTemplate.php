@@ -186,6 +186,12 @@
 		 */
 		function _getTemplateName( $file='' ) {
 			if ( file_exists( $file ) ) {
+				if ( '.' . YDPath::getExtension( $file ) != YD_TPL_EXT ) {
+					trigger_error(
+						'The specified file ' . $file . ' is not a valid template file (wrong file extension)',
+						YD_ERROR
+					);
+				}
 				return realpath( $file );
 			}
 			$this->template_dir = YDPath::getFullPath( $this->template_dir );
