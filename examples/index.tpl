@@ -61,14 +61,6 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="fileutil1.php">File utilities</a>
-            </td>
-            <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=fileutil1.php">fileutil1.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top">
                 <a href="fsfile1.php">YDFSFile object</a>
             </td>
             <td valign="top">
