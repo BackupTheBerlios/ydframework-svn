@@ -80,14 +80,29 @@
 		/**
 		 *	This function will return a single value.
 		 *
-		 *	@param $sql	The SQL statement to use.
+		 *	@param $sql		The SQL statement to use.
+		 *	@param $index	(optional) The index of the column you want to use for getting the value.
 		 *
 		 *	@returns	A single value matching the SQL statement.
 		 */
-		function getValue( $sql ) {
+		function getValue( $sql, $index=0 ) {
 			$record = array_values( $this->getRecord( $sql ) );
 			if ( ! $record ) { return false; }
-			return $record[0];
+			return $record[ $index ];
+		}
+
+		/**
+		 *	This function will return a single value.
+		 *
+		 *	@param $sql		The SQL statement to use.
+		 *	@param $name	The field value to return.
+		 *
+		 *	@returns	A single value matching the SQL statement.
+		 */
+		function getValueByName( $sql, $name ) {
+			$record = array_values( $this->getRecord( $sql ) );
+			if ( ! $record ) { return false; }
+			return $record[ $name ];
 		}
 
 		/**

@@ -26,13 +26,18 @@
 			$this->setVar( 'variables', $db->getRecords( 'show variables' ) );
 			$this->setVar( 'version', $db->getServerVersion() );
 			$this->setVar( 'sqlcount', $db->getSqlCount() );
-			$db->close();
 
 			// Output the template
 			$this->outputTemplate();
 
 			// Test string escaping
 			YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
+
+			// Test errors
+			YDDebugUtil::dump( $db->getRecords( 'xx' ), 'should return error' );
+
+			// Close the database connection
+			$db->close();
 
 		}
 

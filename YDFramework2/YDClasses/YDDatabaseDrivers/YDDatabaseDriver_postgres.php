@@ -155,7 +155,7 @@
 		function & _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
-			$result = pg_query( $this->_conn, $sql );
+			$result = @pg_query( $this->_conn, $sql );
 			if ( ! $result ) { YDFatalError( pg_last_error( $this->_conn ) ); }
 			return $result;
 		}

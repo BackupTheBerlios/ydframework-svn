@@ -34,6 +34,9 @@
 			// Show number of queries
 			YDDebugUtil::dump( $db->getSqlCount(), 'Number of queries' );
 
+			// Test errors
+			YDDebugUtil::dump( $db->getRecords( 'xx' ), 'should return error' );
+
 			// Close the database connection
 			$db->close();
 

@@ -148,7 +148,8 @@
 			}
 			$result = @OCIExecute( $stmt );
 			if ( ! $result ) {
-				$error = ocierror( $result );
+				$error = ocierror( $stmt );
+				if ( ! empty( $error['sqltext'] ) ) { $error['message'] .= ' (SQL: ' . $error['sqltext'] . ')'; }
 				YDFatalError( $error['message'] );
 			}
 			return $stmt;

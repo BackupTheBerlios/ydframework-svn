@@ -28,14 +28,14 @@
 		</tr>
 		<?php foreach ( $processList as $row ) { ?>
 			<tr>
-				<td><?= $row['Id'] ?></td>
-				<td><?= $row['User'] ?></td>
-				<td><?= $row['Host'] ?></td>
+				<td><?= $row['id'] ?></td>
+				<td><?= $row['user'] ?></td>
+				<td><?= $row['host'] ?></td>
 				<td><?= $row['db'] ?>&nbsp;</td>
-				<td><?= $row['Command'] ?></td>
-				<td><?= $row['Time'] ?></td>
-				<td><?= $row['State'] ?>&nbsp;</td>
-				<td><?= $row['Info'] ?>&nbsp;</td>
+				<td><?= $row['command'] ?></td>
+				<td><?= $row['time'] ?></td>
+				<td><?= $row['state'] ?>&nbsp;</td>
+				<td><?= $row['info'] ?>&nbsp;</td>
 			</tr>
 		<?php } ?>
 		</table></p>
@@ -50,8 +50,8 @@
 		</tr>
 		<?php foreach ( $status as $row ) { ?>
 			<tr>
-				<td><?= $row['Variable_name'] ?></td>
-				<td><?= $row['Value'] ?>&nbsp;</td>
+				<td><?= $row['variable_name'] ?></td>
+				<td><?= $row['value'] ?>&nbsp;</td>
 			</tr>
 		<?php } ?>
 		</table></p>
@@ -66,8 +66,8 @@
 		</tr>
 		<?php foreach ( $variables as $row ) { ?>
 			<tr>
-				<td><?= $row['Variable_name'] ?></td>
-				<td><?= $row['Value'] ?>&nbsp;</td>
+				<td><?= $row['variable_name'] ?></td>
+				<td><?= $row['value'] ?>&nbsp;</td>
 			</tr>
 		<?php } ?>
 		</table></p>

@@ -164,7 +164,9 @@
 			$this->_logSql( $sql );
 			$this->connect();
 			$result = @mysql_query( $sql, $this->_conn );
-			if ( ! $result ) { YDFatalError( mysql_error( $conn ) ); }
+			if ( ! $result ) { 
+				YDFatalError( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ) );
+			}
 			return $result;
 		}
 
