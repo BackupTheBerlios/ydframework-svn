@@ -1,0 +1,861 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="yddatabase">
+
+    <title>Connecting to and using databases</title>
+
+    <para>The Yellow Duck Framework has a relatively simple but very effective and easy to use database connection layer. Even though there are already a lot of database connection layers available on the market, we found that there would be place for something more simple. The difference is that the library included in the Yellow Duck Framework doesn't try to support every feature available in every database, but tries to concentrate on a common set of functions that work across all major database engines.</para>
+
+    <para>Currently, the following database engines are supported:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">MySQL:</emphasis> <ulink url="http://www.mysql.com/" /></listitem>
+        <listitem><emphasis role="bold">Oracle:</emphasis> <ulink url="http://www.oracle.com/" /></listitem>
+        <listitem><emphasis role="bold">SQLite:</emphasis> <ulink url="http://www.sqlite.org/" /></listitem>
+        <listitem><emphasis role="bold">PostgreSQL:</emphasis> <ulink url="http://www.postgresql.org/" /></listitem>
+    </itemizedlist>
+
+    <para>More database engines will be added in the future depending on the requests from the users.</para>
+
+    <sect1 id="yddatabase_connecting">
+
+        <title>Connecting to a database</title>
+
+        <para>For establishing a database connection, you will use the YDDatabase class. Using the static method getInstance of the YDDatabase class, you can get an instance of a YDDatabaseDriver class which is used to interact with the database. The following code sample illustrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+    $db = YDDatabase::getInstance(
+        'mysql', 'test', 'root', '', 'localhost'
+    );
+
+?>]]></programlisting>
+
+        <para>The following options can be specified:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">$driver:</emphasis> Name of the database driver.</listitem>
+            <listitem><emphasis role="bold">$db:</emphasis> Database name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$user (optional):</emphasis> User name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$pass (optional):</emphasis> Password to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$host (optional):</emphasis> Host name to use for the connection.</listitem>
+            <listitem><emphasis role="bold">$options (optional):</emphasis> Options to pass to the driver.</listitem>
+        </itemizedlist>
+
+        <para>The following database drivers can be specified:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">mysql:</emphasis> MySQL (requires the mysql PHP extension)</listitem>
+            <listitem><emphasis role="bold">oracle:</emphasis> Oracle (requires the oci8 PHP extension)</listitem>
+            <listitem><emphasis role="bold">sqlite:</emphasis> SQLite (requires the sqlite PHP extension)</listitem>
+            <listitem><emphasis role="bold">posgresql:</emphasis> PostgreSQL (requires the pgsql PHP extension)</listitem>
+        </itemizedlist>
+
+        <para>Only the driver and database name are required, but depending on the chosen database driver, you will need to add more parameters. Please refer to the documentation of the database driver or your database software for more details.</para>
+
+        <para>The connection is not automatically opened when you instantiate the YDDatabaseDriver class, but is only opened when needed. There is however a way to force that a database connection will be made. This can be done by invoking the connect function on the YDDatabaseDriver class. If you execute the connect function twice on the same instance, the first connection will be reused. To close the connection and disconnect from the database, the close function of the YDDatabaseDriver class can be used.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_config">
+
+        <title>Configuring the YDDatabase class</title>
+
+        <para>There are two things you can configure in the YDDatabase class:</para>
+        
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">YD_DB_DEFAULTPAGESIZE:</emphasis> The default pagesize for the YDRecordSet class</listitem>
+            <listitem><emphasis role="bold">YD_DB_FETCHTYPE:</emphasis> The result type you want to get from the getRecord and getRecords functions. This can either be YD_DB_FETCH_ASSOC to get them as an associative array or YD_DB_FETCH_NUM to get the records as a numeric array.</listitem>
+        </itemizedlist>
+
+        <para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
+        
+        <programlisting><![CDATA[<?php
+
+    // Change the default pagesize
+    YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 10 );
+    
+    // Fetch as an associative array
+    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
+    
+    // Fetch as an numeric array
+    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
+
+?>]]></programlisting>    
+    </sect1>
+
+    <sect1 id="yddatabase_getting_db_info">
+
+        <title>Getting information about the database software</title>
+
+        <para>Each database driver instance has a number of features to return information about the actual database backend. The getServerVersion function returns the name and version of the database engine it is connected to. This information is returned as a string. The getSqlCount function will return the number of queries this database instance has executed already.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_escaping_vars">
+
+        <title>Escaping variables in SQL statements</title>
+
+        <para>Since the YDDatabase libraries use native SQL statements in a lot of the function calls, there is a need to uniformly escape strings so that it's save to include them in an SQL statement. For this purpose, the YDDatabase library has two functions, called string and sqlString. Both functions do the same, but the string function doesn't put single quotes around the string, while the sqlString function does.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_executing_sql">
+
+        <title>Executing queries</title>
+
+        <para>To execute a query on the database, you can use the executeSql function from the YDDatabaseDriver class. This function will execute the specified SQL statement and will return the number of rows that were affected by this query.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_getting_data">
+
+        <title>Getting data from the database</title>
+
+        <para>To get information out of the database, there are a number of different get functions that each have their own way getting data from the database. Currently, the following get functions are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getRecord:</emphasis> gets a single record from the database</listitem>
+            <listitem><emphasis role="bold">getRecords:</emphasis> gets a list of records from the database</listitem>
+            <listitem><emphasis role="bold">getValue:</emphasis> gets a value from a field from a specific record from the database</listitem>
+            <listitem><emphasis role="bold">getValueByName:</emphasis> the same as the getValue function, but this one allows you to specify the column by it's name instead of by it's index.</listitem>
+            <listitem><emphasis role="bold">getValuesByName:</emphasis> get's the list of values from the specified colum of the records.</listitem>
+            <listitem><emphasis role="bold">getAsAssocArray:</emphasis> uses the given field values as key and value to construct an associative array.</listitem>
+        </itemizedlist>
+
+        <para>All these functions have a number of common characteristics:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Each function requires you to specify a SQL statement to execute.</listitem>
+            <listitem>Each function has 0 or more options you can specify.</listitem>
+            <listitem>The get functions always return the records as associative arrays with lowercase key names.</listitem>
+            <listitem>Column names are always case insensitive.</listitem>
+        </itemizedlist>
+
+        <para>Here are some samples that show you for what type of queries you can use each individual function:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    // Get one record
+    $result = $db->getRecord(
+        'select * from users where userid = 1'
+    );
+
+    // Get a list of records
+    $result = $db->getRecords(
+        'select * from users'
+    );
+
+    // Get a specific value
+    $result = $db->getValue(
+        'select count(*) from users'
+    );
+
+    // Get a specific value by name
+    $result = $db->getValueByName(
+        'select count(*) as usercount from users', 'usercount'
+    );
+
+    // Get a list of values by name
+    $result = $db->getValuesByName(
+        'select username from users', 'username'
+    );
+
+    // Get the result as an associative array
+    $result = $db->getAsAssocArray(
+        'select configname, configvalue from configuration',
+        'configname', 'configvalue'
+    );
+
+?>]]></programlisting>
+
+        <para>The getRecords function gives you some options of limiting the data returned by this function. You can specify the maximum number of records that should be returned as well as the first record to start retrieving from. This functionality is natively supported for all database engines currently supported by the Yellow Duck Framework (MySQL, SQLite, PostgreSQL, Oracle). Here's a code example explaining how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    // Get maximum 10 records
+    $result = $db->getRecords(
+        'select * from users', 10
+    );
+
+    // Get maximum 10 records starting from record 5
+    $result = $db->getRecords(
+        'select * from users', 10, 5
+    );
+
+?>]]></programlisting>
+
+        <note>This function doesn't return any extra information about what is returned, and this should be calculated manually.</note>
+
+    </sect1>
+ 
+    <sect1 id="yddatabase_paged">
+
+        <title>Using paged recordsets</title>
+
+        <para>A lot of times, a table or query contains too many rows to be useful in a webpage. A common technique to get around this is to use "paged recordsets". These recordsets split up the result in pages and only show a part of the recordset with previous and next buttons. The following screenshot illustrates this technique:</para>
+
+        <para><mediaobject>
+            <imageobject>
+                <imagedata fileref="paged_recordset.gif"/>
+            </imageobject>
+        </mediaobject></para>
+
+        <para>In this screenshot, you can see that we only show part of the records and we also provide some navigational aids to make it easier to browse through the recordset.</para>
+
+        <para>The basic idea is that we split up the recordset in a number of pages each containing a maximum number of results.</para>
+
+        <para>To make this easier to use, you can use the function getRecordAsSet from the YDDatabaseDriver class. This function takes two (optional) arguments where you can specify the page and the page size:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>$sql: the SQL statement to execute</listitem>
+            <listitem>$page: the page to retrieve from the recordset</listitem>
+            <listitem>$pagesize: the maximum number of records allowed for each page</listitem>
+        </itemizedlist>
+
+        <para>This function returns a YDRecordSet object, which contains the records themselves, as well as a whole bunch of extra information about the recordset. Here's a lit of the extra items the YDRecordSet class contains</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">page:</emphasis> current page number</listitem>
+            <listitem><emphasis role="bold">pagesize:</emphasis> total size of each page</listitem>
+            <listitem><emphasis role="bold">pagePrevious:</emphasis> the number of the previous page</listitem>
+            <listitem><emphasis role="bold">pageNext:</emphasis> the number of the next page</listitem>
+            <listitem><emphasis role="bold">offset:</emphasis> the first record we started reading from</listitem>
+            <listitem><emphasis role="bold">totalPages:</emphasis> the total number of pages</listitem>
+            <listitem><emphasis role="bold">totalRows:</emphasis> the total number of rows in the unpaged recordset</listitem>
+            <listitem><emphasis role="bold">totalRowsOnPages:</emphasis> the total number of rows on the current page</listitem>
+            <listitem><emphasis role="bold">isFirstPage:</emphasis> boolean indicating if we are on the first page or not</listitem>
+            <listitem><emphasis role="bold">isLastPage:</emphasis> boolean indicating if we are on the last page or not</listitem>
+            <listitem><emphasis role="bold">pages:</emphasis> all the page numbers as a single-dimension array</listitem>
+        </itemizedlist>
+
+        <para>All these items are available as class variables from the YDRecordSet class.</para>
+
+        <para>The following example shows how this can be implemented in a real life example:</para>
+
+        <para>This is the code for the request class:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition
+    class database_paging extends YDRequest {
+
+        // Class constructor
+        function database_paging() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Get the pagesize and current page from the URL
+            // We use the @ mark to supress any error messsages
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
+
+            // Get the database connection
+            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
+
+            // Get the records
+            $recordset = $db->getRecordsAsSet( 'show status', $page, $size );
+            //$recordset->dump();
+
+            // Close the database connection
+            $db->close();
+
+            // Setup the template
+            $this->template->assign( 'recordset', $recordset );
+
+            // Display the template
+            $this->template->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>The template that goes along with this request class looks as follows:</para>
+
+        <programlisting><![CDATA[{capture assign="browsebar"}
+    {if $recordset->pages}
+        <p>
+        {if ! $recordset->isFirstPage}
+            <a href="{$recordset->getPreviousUrl()}">previous</a>
+        {else}
+            previous
+        {/if}
+        {foreach from=$recordset->pages item="page"}
+            {if $page == $recordset->page}
+                {$page}
+            {else}
+                <a href="{$recordset->getCurrentUrl()}">{$page}</a>
+            {/if}
+        {/foreach}
+        {if ! $recordset->isLastPage}
+            <a href="{$recordset->getNextUrl()}">next</a>
+        {else}
+            next
+        {/if}
+    {/if}
+{/capture}
+
+<html>
+
+<head>
+
+    <title>{$YD_FW_NAMEVERS}</title>
+
+</head>
+
+<body>
+
+    <h3>Database paging example</h3>
+
+    {if $recordset->set}
+        <p>
+            Showing page {$recordset->page} of {$recordset->totalPages} pages
+            ({$recordset->totalRowsOnPage} row(s))
+        </p>
+        {$browsebar}
+        <table border="1">
+        {foreach from=$recordset->set item="record"}
+            <tr>
+                {foreach from=$record item="val"}
+                    <td>{$val}</td>
+                {/foreach}
+            </tr>
+        {/foreach}
+        </table>
+        {$browsebar}
+    {else}
+        <p>No records were found.</p>
+    {/if}
+
+</body>
+
+</html>]]></programlisting>
+
+        <para>As you can see in the previous example, we use the different getter functions to get the URL to the current, next and previous pages. Sometimes, you want to add some extra information to the URL. You can do this by getting a reference to the YDUrl object associated with the YDRecordSet. You can then change the URL using the methods provided by the YDUrl object. These changes will be automatically reflected in the YDRecordSet object linked with it. This is demonstrated with the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition
+    class database_paging extends YDRequest {
+
+        // Class constructor
+        function database_paging() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Get the pagesize and current page from the URL
+            // We use the @ mark to supress any error messsages
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
+
+            // Get the database connection
+            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
+
+            // Get the records
+            $recordset = $db->getRecordsAsSet( 'show status', $page, $size );
+
+            // Get the reference to the URL object
+            // Make sure to add the & sign to get a reference instead of a copy
+            $url = & $recordset->getUrl();
+            $url->setQueryVar( 'test', 'val' );
+
+            // Close the database connection
+            $db->close();
+
+            // Setup the template
+            $this->template->assign( 'recordset', $recordset );
+
+            // Display the template
+            $this->template->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <note>Be careful with using very large recordsets with this method. With recordsets containing millions of rows, this way of working can be quite slow.</note>
+
+        <para>Since the YDRecordSet class is based on regular arrays, you can use it to page regular arrays as well. To page regular arrays, you need to instantiate the YDRecordSet class yourself, as illustrated by the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Define the default pagesize
+    define( 'YD_DB_DEFAULTPAGESIZE', 15 );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition
+    class array_paging extends YDRequest {
+
+        // Class constructor
+        function array_paging() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Get the pagesize and current page from the URL
+            // We use the @ mark to supress any error messsages
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
+
+            // Get the list of files in the current directory
+            $dir = new YDFSDirectory();
+            $files = $dir->getContents( '*.*', null, 'YDFSFile' );
+
+            // Create the YDRecordSet object
+            $recordset = new YDRecordSet( $files, $page, $size );
+
+            // Setup the template
+            $this->template->assign( 'recordset', $recordset );
+
+            // Display the template
+            $this->template->display();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>
+]]></programlisting>
+
+        <para>The template that goes along with this code sample looks as follows:</para>
+
+        <programlisting><![CDATA[{capture assign="browsebar"}
+    {if $recordset->pages}
+        <p>
+        {if ! $recordset->isFirstPage}
+            <a href="{$recordset->getPreviousUrl()}">previous</a>
+        {else}
+            previous
+        {/if}
+        {foreach from=$recordset->pages item="page"}
+            {if $page == $recordset->page}
+                {$page}
+            {else}
+                <a href="{$recordset->getPageUrl($page)}">{$page}</a>
+            {/if}
+        {/foreach}
+        {if ! $recordset->isLastPage}
+            <a href="{$recordset->getNextUrl()}">next</a>
+        {else}
+            next
+        {/if}
+        </p>
+    {/if}
+    {/capture}
+
+    <html>
+
+    <head>
+
+    <title>{$YD_FW_NAMEVERS}</title>
+
+    </head>
+
+    <body>
+
+    <h3>Array paging example</h3>
+
+    {if $recordset->set}
+        <p>
+            Showing page {$recordset->page} of {$recordset->totalPages} pages
+            ({$recordset->totalRowsOnPage} row(s))
+        </p>
+        {$browsebar}
+        <table border="1" width="400">
+        {foreach from=$recordset->set item="record"}
+            <tr>
+                <td width="200">
+                    <a href="{$record->getBasename()}">{$record->getBasename()}</a>
+                </td>
+            </tr>
+        {/foreach}
+        </table>
+        {$browsebar}
+    {else}
+        <p>No files were found.</p>
+    {/if}
+
+    </body>
+
+    </html>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="yddatabase_insert">
+
+        <title>Inserting new information</title>
+
+        <para>To insert information in the database, there are a number of ways you can use. One way of working is to construct an insert SQL query and execute it using the executeSql function. This however has some drawbacks in that sense that you need to escape all the string values manually. A much easier is to use the executeInsert function which does most of the difficult work in the background.</para>
+
+        <para>This function takes two arguments, being the name of the table to insert the data into, and an associative array mapping the column names to their values. The following example demonstrates how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // The new values
+    // These should be specified as an associative array, using the column name
+    // as the field name, and the value as the field value.
+    $values = array();
+    $values['ConfigName'] = 'email';
+    $values['ConfigValue'] = 'pieter@yellowduck.be';
+
+    // Insert the values into the database
+    $db->executeInsert( 'configuration', $values );
+
+?>]]></programlisting>
+
+        <para>If the database supports auto increment values for the primary key, this function will return the ID of the last insert. Please note that unfortunately, not all database engines support this. Currently, SQLite and MySQL? support this. Oracle and PostgreSQL? rely on sequences and triggers to do this automatically.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_update">
+
+        <title>Updating existing information</title>
+
+        <para>Updating database information works in pretty much the same way as inserting data. Again, you can construct the query manually and use the executeSql function to get the data updated in the database. Much easier and much nicer is to use the executeUpdate function. This takes a table name, an associative array mapping the column names to the column values and optionally, you can specify a where clause to limit the number of updates.</para>
+
+        <para>Here's an example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // The new values
+    // These should be specified as an associative array, using the column name
+    // as the field name, and the value as the field value.
+    $values = array();
+    $values['ConfigName'] = 'email';
+    $values['ConfigValue'] = 'pieter@yellowduck.be';
+
+    // Execute the update for all rows
+    $db->executeUpdate( 'configuration', $values );
+
+    // Execute the update for a specific row
+    $db->executeUpdate(
+        'configuration', $values, 'configname = ' . $db->sqlString( 'email' )
+    );
+
+?> ]]></programlisting>
+
+        <para>This function will return the number of rows that was affected by this query.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabase_delete">
+
+        <title>Deleting information</title>
+
+        <para>To delete information from the database, you can either manually issue an SQL statement which deletes the data, or you can use the executeDelete function from the YDDatabaseDriver class. </para>
+
+        <para>This function takes two arguments, being the name of the table to delete the data from, and an optional where statement limiting the number of rows being deleted. The following example demonstrates how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // Remove all rows
+    $db->executeDelete( 'configuration' );
+
+    // Remove a specific row
+    $db->executeDelete( 'configuration', 'id = 1' );
+
+?>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="yddatabase_sqlquery">
+
+        <title>Using objects to create SQL queries</title>
+
+        <para>The Yellow Duck Framework has a special object called YDSqlQuery that allows you to create SQL statements using an object. This makes it a lot easier to read the SQL statements and it's also easier to maintain them. This is a solution in between using plain SQL statements and using a object relational mapper such as YDDatabaseObject.</para>
+
+        <note>This class is specified in it's own include file, so you need to include it manually.</note>
+
+        <para>The following example shows you how you can use the YDSqlQuery object to create a SELECT SQL statement:</para>
+
+        <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the YDSqlQuery class
+        $q = new YDSqlQuery( 'SELECT', array( 'DISTINCT' ) );
+
+        // Add a table to the query
+        $u = $q->addTable( 'user' );
+
+        // Add the fields we want to select
+        $q->addSelect( "$u.id" ); 
+        $q->addSelect( "$u.name", 'user_name' );
+        $q->addSelect( "SUM( $u.value )", 'total' );
+
+        // Add a where statement
+        $q->openWhereGroup();
+        $q->addWhere( "$u.id = 144" );
+
+        // Add another where statement
+        $q->openWhereGroup( 'OR' );
+        $q->addWhere( "$u.name LIKE 'David%'" );
+        $q->addWhere( "$u.id > 13" );
+
+        // Add a group by clause
+        $q->addGroup( "$u.id", true ); // DESC
+
+        // Add ordering
+        $q->addOrder( "$u.name" );
+        $q->addOrder( "total", true ); // DESC
+
+        // Add a having clause
+        $q->addHaving( "total > 100" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getSql() );
+
+        // Reset the contents of the query (optional)
+        $q->reset();
+
+?>]]></programlisting>
+
+        <para>The output of this script would be:</para>
+
+        <programlisting><![CDATA[SELECT DISTINCT user.id, user.name AS "user_name", SUM( user.value ) AS "total"
+FROM user WHERE ( user.id = 144 OR ( user.name LIKE 'David%' AND user.id > 13 ) )
+GROUP BY user.id DESC HAVING total > 100 ORDER BY user.name, total DESC]]></programlisting>
+
+        <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
+
+        <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the YDSqlQuery class
+        $q = new YDSqlQuery( 'SELECT' );
+
+        // Add a table with an alias
+        $u = $q->addTable( 'user', 'u' );
+
+        // Add the fields for this table
+        $q->addSelect( 'id' ); 
+        $q->addSelect( 'name' );
+
+        // Add a left join
+        $g = $q->addJoin( 'LEFT', 'group', "g" );
+
+        // Specify the fields to use for the join
+        $q->addJoinOn( "$u.group_id = $g.id" );
+
+        // Add the joined fields
+        $q->addSelect( "$g.id", 'gid' );
+        $q->addSelect( "$g.name", 'group_name' );
+
+        // Add an inner join
+        $a = $q->addJoin( 'INNER', 'attach', "a" ); 
+
+        // Specify the fields to use for the join
+        $q->addJoinOn( "$g.attach_id = $a.id" );
+
+        // Add a join group
+        $q->openJoinOnGroup( 'OR' );
+
+        // Specify the field to use for the join group
+        $q->addJoinOn( "$a.size > 150" );
+        $q->addJoinOn( "$a.status = 3" );
+        
+        // Add some more fields
+        $q->addSelect( "$a.id", 'aid' );
+        $q->addSelect( "$a.name", 'attach_name' );
+
+        // Add a where clause
+        $q->addWhere( "$g.id = 144" );
+
+        // Add ordering
+        $q->addOrder( "name" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getSql() );
+
+?>]]></programlisting>
+
+        <para>This would output the following SQL statement:</para>
+
+        <programlisting><![CDATA[SELECT
+    id, name, g.id AS "gid",
+    g.name AS "group_name"
+    a.id AS "aid",
+    a.name AS "attach_name"
+FROM user AS "u"
+LEFT JOIN group AS "g" ON ( u.group_id = g.id )
+INNER JOIN attach AS "a" ON ( g.attach_id = a.id OR ( a.size > 150 AND a.status = 3 ) )
+WHERE g.id = 144 ORDER BY name]]></programlisting>
+
+        <para>Also SQL delete statements can be constructed with the YDSqlQuery class:</para>
+
+        <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the YDSqlQuery class
+        $q = new YDSqlQuery( 'DELETE' );
+
+        // Add a table
+        $q->addTable( 'user' );
+
+        // Specify the where clause
+        $q->addWhere( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getSql() );
+
+?>]]></programlisting>
+
+        <para>The output of this script would be:</para>
+
+        <programlisting><![CDATA[DELETE FROM user WHERE id = 144]]></programlisting>
+
+        <para>The following example illustrates how to create an insert statement:</para>
+
+        <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the YDSqlQuery class
+        $q = new YDSqlQuery( 'INSERT' );
+
+        // Add a table
+        $q->addTable( 'user' );
+
+        // Set the values
+        $q->setValues(
+            array(
+                'name' => 'David',
+                'email' => 'email@host.com', 
+                'admin' => 1, 
+                'purple' => null
+            )
+        );
+
+        // Add the where clause
+        $q->addWhere( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getSql() );
+
+?>]]></programlisting>
+
+        <para>The output of this script would be:</para>
+
+        <programlisting><![CDATA[INSERT INTO user ( name, email, admin, purple ) VALUES ( 'David', 'email@host.com', 1, NULL )]]></programlisting>
+
+        <para>You can also generate SQL update statements:</para>
+
+        <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the YDSqlQuery class
+        $q = new YDSqlQuery( 'UPDATE' );
+
+        // Add a table
+        $q->addTable( 'user' );
+
+        // Set the values
+        $q->setValues(
+            array(
+                'name' => 'David',
+                'email' => 'email@host.com', 
+                'admin' => 1, 
+                'purple' => null
+            )
+        );
+
+        // Add the where clause
+        $q->addWhere( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getSql() );
+
+?>]]></programlisting>
+
+        <para>The output of this script would be:</para>
+
+        <programlisting><![CDATA[UPDATE user SET name = 'David', email = 'email@host.com', admin = 1, purple = NULL WHERE id = 144]]></programlisting>
+
+    </sect1>
+
+</chapter>

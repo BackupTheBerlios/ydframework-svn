@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydauthentication">
+
+    <title>Handling authentication</title>
+
+    <para>The Yellow Duck Framework has integrated support for various ways of handling authentication. In this chapter, we will go over three common scenarios that indicate the way the authentication works. For some background information on how this fits in the request processing, please take a look at the chapter "How requests are processed".</para>
+
+    <sect1 id="ydauthentication_general">
+
+        <title>General idea behind authentication handling</title>
+
+        <para>In every request class, you can enable authentication. If you enable authentication for a request class, the framework will execute certain functions to check if the authentication before the request is processed.</para>
+
+        <para>You can enable authentication in a request class by using the following code:</para>
+
+        <programlisting><![CDATA[$this->setRequiresAuthentication( true );]]></programlisting>
+
+        <para>It will then use the function "isAuthenticated" from the request class to find out if the user is already authenticated. If not, the function "authenticationFailed" is executed which can e.g. redirect to the login. page which takes care of the rest. After executing the "authenticationFailed" function, the execution of the script is stopped.</para>
+
+        <para>If the "isAuthenticated" function returns true, the class function "authenticationSucceeded" is executed, after which the execution of the request continues. This function can for example set a session variable indicating that we are logged in or can add an entry to the database.</para>
+
+    </sect1>
+
+   <sect1 id="ydauthentication_example_01">
+
+        <title>Example 1 - Form based authentication</title>
+
+        <para>In this example, we use a form to allow the user to enter a username and password.</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
+
+    // Class definition
+    class MyLoginRequest extends YDRequest {
+
+        // Class constructor
+        function MyLoginRequest() {
+
+            // Initialize the parent class
+            $this->YDRequest();
+
+            // Initialize the template object
+            $this->template = new YDTemplate();
+
+            // Indicate we require login
+            $this->setRequiresAuthentication( true );
+
+        }
+
+        // Default action
+        function actionDefault() {
+            $this->template->display();
+        }
+
+        // Login function
+        function actionLogin() {
+
+            // Redirect to default action if already logged in
+            if ( $this->isAuthenticated() === true ) {
+                $this->forward( 'default' );
+                return;
+            }
+
+            // Create the login form
+            $form = new YDForm( 'loginForm' );
+            $form->setDefaults( array( 'name' => 'Joe User' ) );
+            $form->addElement( 'text', 'loginName', 'User name:' );
+            $form->addElement( 'password', 'loginPass', 'Password:' );
+            $form->addElement( 'submit', 'cmdSubmit', 'Login' );
+
+            // Add the rules
+            $form->addFormRule( array( & $this, 'checkLogin' ) );
+
+            // Process the form
+            if ( $form->validate() ) {
+
+                // Get username and password
+                $usrName = $form->getValue( 'loginName' );
+                $usrPass = $form->getValue( 'loginPass' );
+
+                // Mark the session that we are logged in
+                $_SESSION['usrName'] = 'pieter';
+                $_SESSION['isLoggedIn'] = true;
+
+                // Mark the form as valid
+                $this->forward( 'default' );
+                return;
+
+            }
+
+            // Add the form to the template
+            $this->template->assignForm( 'form', $form );
+
+            // Output the template
+            $this->template->display( 'login' );
+
+        }
+
+        // Check the authentication
+        function isAuthenticated() {
+
+            // Check the session variables
+            if ( isset( $_SESSION['usrName'] ) ) {
+
+                // Check if we are marked as being logged in
+                if ( $_SESSION['isLoggedIn'] == true ) {
+                    return true;
+                }
+
+            }
+
+            // Fails otherwise
+            return false;
+
+        }
+
+        // Redirect to the login if the authentication failed
+        function authenticationFailed() {
+            $this->forward( 'login' );
+            return;
+        }
+
+        // Function to check the login
+        function checkLogin( $fields ) {
+            if ( 
+                $fields['loginName'] == 'pieter'
+                &&
+                $fields['loginPass'] == 'kermit'
+            ) {
+                return true;
+            } else {
+                return array(
+                    'loginName' => 'Username and/or password incorrect'
+                );
+            }
+        }
+
+    }
+
+?>]]></programlisting>
+
+        <para>The way this class works is as follows. The isAuthenticated function will check if the user is currently logged in or not by checking a session variable and returns true or false indicating this. If the authentication failed, the authenticationFailed function will execute the login action by executing actionLogin.</para>
+
+        <para>The actionLogin function will be skipped if the user is already logged in. If not, a login form is shown with fields for entering the username and password.</para>
+
+        <para>Once this form gets submitted, it will check the username and password and setup the session variables. After that, the default action gets executed.</para>
+
+    </sect1>
+
+    <sect1 id="ydauthentication_example_02">
+
+        <title>Example 2 - Basic HTTP authentication</title>
+
+        <para>The following example demonstrates how you can implement a class that has support for basic HTTP authentication:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
+
+    class MyLoginRequest extends YDRequest {
+
+        function MyLoginRequest() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+            $this->setRequiresAuthentication( true );
+        }
+
+        function actionDefault() {
+            $this->template->display();
+        }
+
+        function isAuthenticated() {
+            if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
+                if (
+                    $_SERVER['PHP_AUTH_USER'] == 'pieter'
+                    &&
+                    $_SERVER['PHP_AUTH_PW'] == 'kermit'
+                ) {
+                    $_SESSION['usrName'] = $_SERVER['PHP_AUTH_USER'];
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function authenticationFailed() {
+            header( 'WWW-Authenticate: Basic realm="My Realm"' );
+            header( 'HTTP/1.0 401 Unauthorized');
+            echo( 'Text to send if user hits Cancel button' );
+            die();
+        }
+
+    }
+
+?>]]></programlisting>
+
+        <para>The isAuthenticated function will check the headers send by the server to see if there was a user name specified. PHP by default puts the username in the $_SERVER['PHP_AUTH_USER'] variable. In the example above, we have hardcoded the username and password, but this could e.g. be replaced by a database query. If the username and password match, true is returned indicating that the user is succesfully authenticated, otherwise false is returned.</para>
+
+        <para>When authentication fails, the authenticationFailed will return the headers that force a popup windows to appear which asks for a username and password. The realm is the name that will be shown in the dialog box.</para>
+
+        <para>For each request that needs HTTP authentication, you would subclass from this class instead of from the standard YDRequest class.</para>
+
+    </sect1>
+
+    <sect1 id="ydauthentication_example_03">
+
+        <title>Example 3 - IP based authentication</title>
+
+        <para>This third example checks the IP number of the client and only allows access if you are surfing from localhost.</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDTemplateSmarty.php' );
+
+    // Class definition
+    class auth_ipcheck extends YDRequest {
+
+        // Class constructor
+        function auth_ipcheck() {
+            $this->YDRequest();
+            $this->template = new YDTemplate();
+            $this->setRequiresAuthentication( true );
+        }
+
+        // Default action
+        function actionDefault() {
+            $this->template->display();
+        }
+
+        // Check the authentication
+        function isAuthenticated() {
+            if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        // Redirect to the login if the authentication failed
+        function authenticationFailed() {
+            echo( '<b>ACCESS DENIED</b><br>Only localhost access is allowed.' );
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+        <para>As you can see here, the isAuthenticated function will check the $_SERVER['REMOTE_ADDR'] variable for the IP address of the client, and returns true if it is 127.0.0.1, otherwise, it will return false.</para>
+
+        <para>If the authentication fails, the authenticationFailed function is executed which will just output a message indicating that localhost access only is allowed.</para>
+
+        <para>This example could be enhanced by having the isAuthenticated function check against a database table or DNS server.</para>
+
+        <para>For each request that is allowed from localhost only, you would subclass from this class instead of from the standard YDRequest class.</para>
+
+    </sect1>
+
+</chapter>

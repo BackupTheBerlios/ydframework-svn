@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydemail">
+
+    <title>Constructing and sending emails</title>
+
+    <para>In the Yellow Duck Framework, we provided a special class to easily send emails with all the possible options. It is possible with the framework to create emails that have both text and HTML contents, inline images are supported for HTML emails and also file attachments are fully supported.</para>
+
+    <para>The Yellow Duck Framework supports the following options for sending emails:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem>Specifying the from address</listitem>
+        <listitem>Specifying the reply-to address</listitem>
+        <listitem>Specifying one or more to addresses</listitem>
+        <listitem>Specifying one or more cc addresses</listitem>
+        <listitem>Specifying one or more bcc addresses</listitem>
+        <listitem>Specifying the plain text version of the email</listitem>
+        <listitem>Specifying the HTML version of the email</listitem>
+        <listitem>File attachments</listitem>
+        <listitem>Inline HTML images</listitem>
+    </itemizedlist>
+
+    <note>The emails outputted with the Yellow Duck Framework have been tested with a variety of email clients and servers to make sure they were all correctly supported.</note>
+
+    <sect1 id="ydemail_ydemail_class">
+
+        <title>The YDEmail class</title>
+
+        <para>The class YDEmail in the Yellow Duck Framework is the class that defines an email. You can use the different class methods to set the recipients, subject, contents and so on for your email.</para>
+
+        <para>Once the email object is set up, you can use the function send to send the actual email to the correct recipients. This function takes no arguments and is smart enough to figure out the list of recipients to send the email to.</para>
+
+        <para>Before sending the email, a number of conditions is checked which would prevent the email from being send properly. An error will be raised if you forgot to specify at least one recipient for your email. You will also be forced to specify the sender from the email.</para>
+
+        <para>Note: For the sending of the emails, the internal mail function is used to do the hard work. Depending on your computer platform, this might requires some setup. Please refer to the PHP Online Documentation for instructions on how to set this up.</para>
+
+        <note>Note: If you specify HTML text as the text only contents of your email, all HTML tags will be stripped from the text. We cannot guarantee that the layout of the text will be properly preserved.</note>
+
+    </sect1>
+
+    <sect1 id="ydemail_example">
+
+        <title>An example</title>
+
+        <para>The following sample demonstrates you how you can setup a YDEmail object, fill it and send it to the specified recipients.</para>
+
+        <programlisting><![CDATA[<?php
+
+    $eml = new YDEmail();
+    $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
+    $eml->addTo( 'pieter@yellowduck.be' );
+    $eml->setSubject( 'Hello from Pieter & Fiona!' );
+    $eml->setTxtBody( $body );
+    $eml->setHtmlBody( $body );
+    $eml->addAttachment( 'email1.tpl' );
+    $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
+    $eml->send();
+
+?>]]></programlisting>
+
+        <para>In this code sample, we first created a new instance of the YDEmail class to represent our email message.</para>
+
+        <para>After that, we set the correct from address. This is normally your own email address, and unless otherwise specified, it will be used as the address to reply to. Always make this a valid and existing address unless you do not want people to reply to your email.</para>
+
+        <para>Then we added a recipient using the addTo function. In this example, we only specified the email address. You can optionally specify a name as well which will be the name shown in the email client.</para>
+
+        <para>Then we defined the subject for the email. Remember that the subject of an email is not supposed to contain HTML data. If you happened to have HTML in there, the framework will automatically remove the HTML tags.</para>
+
+        <para>The following two lines specify the plain text and HTML body of our email message. You don't have to specify both. If you included HTML tags in the plain text version of your email, the HTML tags will be automatically removed.</para>
+
+        <para>Using the addAttachment function, we added a file attachment to the email. The only argument we specified was the path to the file we want to attach.</para>
+
+        <para>Then we used the addHtmlImage function to add an image which we can use as an inline image in the HTML version of our email. We specified both the path of the image as well as the image MIME type.</para>
+
+        <para>Then we invoked the send function to actually send the email to the different recipients.</para>
+
+    </sect1>
+
+    <sect1 id="ydemail_email_templates">
+
+        <title>Combining YDTemplate and YDEmail</title>
+
+        <para>To make it easier to construct the contents of your email, you can combine the YDTemplate class with the YDEmail class to create email messages based on templates.</para>
+
+        <para>The way this works is by first creating a YDTemplate instance which will be used to create the body of your email. After you setup the YDTemplate instance, you can use the getOutput function to get the parsed result of your template object. You will probably have to specify the name of a template as you will probably use a different template than the one from your script.</para>
+
+        <para>After you got the body of your email, you can assign this to the YDEmail class using the functions setTxtBody and setHtmlBody. The following example demonstrates this concept:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Parse the template for the email
+    $emlTpl = new YDTemplate();
+    $emlTpl->assign( 'email', $form->exportValue( 'email' ) );
+    $body = $emlTpl->fetch( 'email1_template' );
+
+    // Send the email
+    $eml = new YDEmail();
+    $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
+    $eml->addTo( $form->exportValue( 'email' ) );
+    $eml->setSubject( 'Hello from Pieter & Fiona!' );
+    $eml->setTxtBody( $body );
+    $eml->setHtmlBody( $body );
+    $eml->addAttachment( 'email1.tpl' );
+    $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
+    $eml->send();
+
+?>]]></programlisting>
+
+        <para>The template for this email will look like:</para>
+
+        <programlisting><![CDATA[<html>
+
+<head>
+    <title>{$YD_FW_NAMEVERS}</title>
+</head>
+
+<body>
+
+    <p>Hello from Pieter & Fiona</p>
+
+    <p><img src="fsimage1.jpg" border="1" alt="Pieter & Fiona"
+    width="320" height="213"></p>
+
+    <p>This email was sent to 
+    <a href="mailto:{$email}">{$email}</a>.</p>
+
+    <p>{$YD_FW_NAMEVERS}</p>
+
+</body>
+
+</html>]]></programlisting>
+
+        <note>If you look carefully at the example above, you will see that we referenced the image in the template by it's name given when you added the file to the YDEmail object. This src attribute should only contain the name of the image, and not a local path. An internet url is supported as well.</note>
+
+    </sect1>
+
+</chapter>

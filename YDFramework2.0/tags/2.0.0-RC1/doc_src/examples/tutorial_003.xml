@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: index.php (with the default action implemented)</title>
+    <programlisting>&lt;?php
+
+    // Initialize the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition for the index request
+    class index extends YDRequest {
+
+        // Class constructor
+        function index() {
+
+            // Initialize the parent class
+            $this->YDRequest();
+
+            // Initialize the template object
+            $this->template = new YDTemplate();
+
+            // Set the path to the data directory
+            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
+
+            // Check if the data directory is writeable
+            if ( ! $this->dataDir->isWriteable() ) {
+                trigger_error( 'Data directory must be writable!', YD_ERROR );
+            }
+
+        }
+
+        // Default action
+        function actionDefault() {
+
+            <emphasis role="bold">// Start with an empty list of entries
+            $entries = array();
+
+            // Loop over the data directory contents
+            foreach( $this->dataDir->getContents( '*.dat' ) as $entry ) {
+
+                // Get the contents
+                $entry = $entry->getContents();
+
+                // Unserialize
+                $entry = YDObjectUtil::unserialize( $entry );
+
+                // Add it to the list of entries
+                array_push( $entries, $entry );
+
+            }
+
+            // Add the entries to the template
+            $this->template->assign( 'entries', $entries );
+
+            // Output the template
+            $this->template->display();</emphasis>
+
+        }
+
+        // Add Note action
+        function actionAddNote() {
+        }
+
+        // Delete note action
+        function actionDeleteNote() {
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?&gt;</programlisting>
+</example>

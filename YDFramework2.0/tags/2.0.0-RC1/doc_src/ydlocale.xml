@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydlocale">
+
+    <title>YDLocale: internationalization</title>
+
+    <para>The YDLocale function is used for making sure that language aware functions in PHP (such as <ulink url="http://www.php.net/strftime">strftime</ulink>) are returning their values in the proper language.</para>
+
+    <para>On a standard PHP installation, you can use the <ulink url="http://www.php.net/setlocale">setlocale</ulink> function to do this, but this function is not really reliable as you need to know the correct naming for the locale to get it working. In the Yellow Duck Framework, the YDLocale module adds a compatibility layer on top of the setlocale function that makes it a lot easier to define the current locale.</para>
+
+    <para>The YDLocale module allows you to do two different things:</para>
+    
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">YDLocale::set:</emphasis> sets the locale setting</listitem>
+        <listitem><emphasis role="bold">YDLocale::get:</emphasis> gets the locale setting</listitem>
+    </itemizedlist>
+
+    <para>The default locale is always set to "en" (English) unless you override it using the YDLocale::set function. The following code sample demonstrates how the YDLocale function can be used:</para>
+
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+
+    // Class definition
+    class locale extends YDRequest {
+
+        // Class constructor
+        function locale() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Define the date format used for testing
+            $fmt = '%A, %d %B %Y';
+        
+            // Default locale is always en
+            YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
+            YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
+
+            // Set the locale to English
+            YDLocale::set( 'eng' );
+            YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
+            YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
+
+            // Set the locale to Dutch
+            YDLocale::set( 'nl' );
+            YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
+            YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
+
+            // Set the locale to Portugese
+            YDLocale::set( 'ptg' );
+            YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
+            YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
+
+            // Set the locale to Italian
+            YDLocale::set( 'ita' );
+            YDDebugUtil::dump( YDLocale::get(), 'Current locale:' );
+            YDDebugUtil::dump( strftime( $fmt ), 'strftime test' );
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+    <para>The output from this sample is as follows:</para>
+    
+    <programlisting><![CDATA[Current locale:
+'en'
+
+strftime test
+'Friday, 14 January 2005'
+
+Current locale:
+'eng'
+
+strftime test
+'Friday, 14 January 2005'
+
+Current locale:
+'nl'
+
+strftime test
+'vrijdag, 14 januari 2005'
+
+Current locale:
+'ptg'
+
+strftime test
+'sexta-feira, 14 Janeiro 2005'
+
+Current locale:
+'ita'
+
+strftime test
+'venerdì, 14 gennaio 2005']]></programlisting>
+
+    <para>The list of supported locale language strings that can be using with the YDLocale::set function can be found in the following table.</para>
+    
+    <informaltable frame="bottom" pgwide="1">
+        <tgroup cols="3" align="left" colsep="0" rowsep="1">
+            <colspec colname="Primary Language" />
+            <colspec colname="Sublanguage" />
+            <colspec colname="Language string" />
+            <thead>
+                <row>
+                    <entry>Primary Language</entry>
+                    <entry>Sublanguage</entry>
+                    <entry>Language string</entry>
+                </row>
+            </thead>
+            <tbody>
+                <row>
+                    <entry>Czech</entry>
+                    <entry>Czech</entry>
+                    <entry>"cs" or "czy"</entry>
+                </row>
+                <row>
+                    <entry>Danish</entry>
+                    <entry>Danish</entry>
+                    <entry>"da" or "dan"</entry>
+                </row>
+                <row>
+                    <entry>Dutch</entry>
+                    <entry>Dutch (default)</entry>
+                    <entry>"nl" or "nld"</entry>
+                </row>
+                <row>
+                    <entry>Dutch</entry>
+                    <entry>Dutch (Belgian)</entry>
+                    <entry>"nlb"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (default)</entry>
+                    <entry>"en" or "eng"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (Australian)</entry>
+                    <entry>"ena"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (Canadian)</entry>
+                    <entry>"enc"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (New Zealand)</entry>
+                    <entry>"enz"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (United Kingdom)</entry>
+                    <entry>"enu" or "uk"</entry>
+                </row>
+                <row>
+                    <entry>English</entry>
+                    <entry>English (United States)</entry>
+                    <entry>"us"</entry>
+                </row>
+                <row>
+                    <entry>Finnish</entry>
+                    <entry>Finnish</entry>
+                    <entry>"fi" or "fin"</entry>
+                </row>
+                <row>
+                    <entry>French</entry>
+                    <entry>French (default)</entry>
+                    <entry>"fr" or "fra"</entry>
+                </row>
+                <row>
+                    <entry>French</entry>
+                    <entry>French (Belgian)</entry>
+                    <entry>"frb"</entry>
+                </row>
+                <row>
+                    <entry>French</entry>
+                    <entry>French (Canadian)</entry>
+                    <entry>"frc"</entry>
+                </row>
+                <row>
+                    <entry>French</entry>
+                    <entry>French (Swiss)</entry>
+                    <entry>"frs"</entry>
+                </row>
+                <row>
+                    <entry>German</entry>
+                    <entry>German (default)</entry>
+                    <entry>"de" or "deu"</entry>
+                </row>
+                <row>
+                    <entry>German</entry>
+                    <entry>German (Austrian)</entry>
+                    <entry>"dea"</entry>
+                </row>
+                <row>
+                    <entry>German</entry>
+                    <entry>German (Swiss)</entry>
+                    <entry>"des"</entry>
+                </row>
+                <row>
+                    <entry>Greek</entry>
+                    <entry>Greek</entry>
+                    <entry>"el" or "ell"</entry>
+                </row>
+                <row>
+                    <entry>Hungarian</entry>
+                    <entry>Hungarian</entry>
+                    <entry>"hu" or "hun"</entry>
+                </row>
+                <row>
+                    <entry>Icelandic</entry>
+                    <entry>Icelandic</entry>
+                    <entry>"is" or "isl"</entry>
+                </row>
+                <row>
+                    <entry>Italian</entry>
+                    <entry>Italian (default)</entry>
+                    <entry>"it" or "ita"</entry>
+                </row>
+                <row>
+                    <entry>Italian</entry>
+                    <entry>Italian (Swiss)</entry>
+                    <entry>"its"</entry>
+                </row>
+                <row>
+                    <entry>Norwegian</entry>
+                    <entry>Norwegian (default)</entry>
+                    <entry>"no"</entry>
+                </row>
+                <row>
+                    <entry>Norwegian</entry>
+                    <entry>Norwegian (Bokmal)</entry>
+                    <entry>"nor"</entry>
+                </row>
+                <row>
+                    <entry>Norwegian</entry>
+                    <entry>Norwegian (Nyorsk)</entry>
+                    <entry>"non"</entry>
+                </row>
+                <row>
+                    <entry>Polish</entry>
+                    <entry>Polish</entry>
+                    <entry>"pl" or "plk"</entry>
+                </row>
+                <row>
+                    <entry>Portugese</entry>
+                    <entry>Portugese (default)</entry>
+                    <entry>"pt" or "ptg"</entry>
+                </row>
+                <row>
+                    <entry>Portugese</entry>
+                    <entry>Portugese (Brazil)</entry>
+                    <entry>"ptb"</entry>
+                </row>
+                <row>
+                    <entry>Russian</entry>
+                    <entry>Russian</entry>
+                    <entry>"ru" or "rus"</entry>
+                </row>
+                <row>
+                    <entry>Slovak</entry>
+                    <entry>Slovak</entry>
+                    <entry>"sk" or "sky"</entry>
+                </row>
+                <row>
+                    <entry>Spanish</entry>
+                    <entry>Spanish (default)</entry>
+                    <entry>"es" or "esp"</entry>
+                </row>
+                <row>
+                    <entry>Spanish</entry>
+                    <entry>Spanish (Mexican)</entry>
+                    <entry>"esm"</entry>
+                </row>
+                <row>
+                    <entry>Spanish</entry>
+                    <entry>Spanish (mordern)</entry>
+                    <entry>"esn"</entry>
+                </row>
+                <row>
+                    <entry>Swedish</entry>
+                    <entry>Swedish</entry>
+                    <entry>"sv" or "sve"</entry>
+                </row>
+                <row>
+                    <entry>Turkish</entry>
+                    <entry>Turkish</entry>
+                    <entry>"tr" or "trk"</entry>
+                </row>
+            </tbody>
+        </tgroup>
+    </informaltable>
+
+</chapter>

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<appendix id="appendixC">
+
+    <title>How to build the documentation</title>
+
+    <sect1 id="appendixC_intro">
+
+        <title>Introduction</title>
+
+        <para>The documentation for the Yellow Duck Framework is split up in two different parts:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>The API documentation</listitem>
+            <listitem>The user guide</listitem>
+        </itemizedlist>
+
+        <para>The API documentation is generated from the comments added in the source code. The source code comments are following the <ulink url="http://www.doxygen.org/">DoxyGen</ulink> syntax.</para>
+
+        <para>The user guide on the other hand is build from a whole bunch XML file following the <ulink url="http://www.docbook.org/">DocBook XML/XSL</ulink> standard.</para>
+
+    </sect1>
+
+    <sect1 id="appendixC_prereqs">
+
+        <title>Prerequisites</title>
+
+        <para>To build the documentation yourself, you need to have a number of specific applications and command line utilities installed on your system.</para>
+
+        <para>For building the API documentation, you need to have the following software installed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>DoxyGen: <ulink url="http://www.doxygen.org/" /></listitem>
+        </itemizedlist>
+
+        <para>For building the HTML version of the user guide, you need to have the following software installed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>xsltproc: <ulink url="http://xmlsoft.org/XSLT/xsltproc2.html" /></listitem>
+        </itemizedlist>
+
+        <para>For building the PDF version of the user guide, you need to have the following software installed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>xsltproc: <ulink url="http://xmlsoft.org/XSLT/xsltproc2.html" /></listitem>
+            <listitem>Apache FOP: <ulink url="http://xml.apache.org/fop/" /></listitem>
+        </itemizedlist>
+
+        <para>The documentation can be build on Windows and Unix/Linux computers. Currently, we only provide batch scripts for Windows based computers.</para>
+
+        <note>If you install the software mentioned above, make sure that the doxygen.exe, xsltproc.exe and fop.bat are in the system path so that you can reference them without specifying the directory in which they reside. If this is not the case, the batch files will not work.</note>
+
+    </sect1>
+
+    <sect1 id="appendixC_api_docs">
+
+        <title>Building the API documentation</title>
+
+        <para>The following transcript shows you how the API documentation can be build:</para>
+
+        <programlisting><![CDATA[C:\>cd YDFramework2.0-bld700
+C:\YDFramework2.0-bld700>cd doc
+C:\YDFramework2.0-bld700\doc>build_api.bat
+]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="appendixC_html_docs">
+
+        <title>Building the User Guide as HTML</title>
+
+        <para>The following transcript shows you how the HTML version of the userguide can be build:</para>
+
+        <programlisting><![CDATA[C:\>cd YDFramework2.0-bld700
+C:\YDFramework2.0-bld700>cd doc_src
+C:\YDFramework2.0-bld700\doc_src>build_html.bat
+]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="appendixC_pdf_docs">
+
+        <title>Building the User Guide as PDF</title>
+
+        <para>The following transcript shows you how the PDF version of the userguide can be build:</para>
+
+        <programlisting><![CDATA[C:\>cd YDFramework2.0-bld700
+C:\YDFramework2.0-bld700>cd doc_src
+C:\YDFramework2.0-bld700\doc_src>build_pdf.bat
+]]></programlisting>
+
+    </sect1>
+
+</appendix>

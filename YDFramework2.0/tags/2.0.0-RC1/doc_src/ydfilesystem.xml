@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydfilesystem">
+
+    <title>Using files, images and directories</title>
+
+    <para>In the Yellow Duck Framework, there are several classes that make it a lot easier to work with directories, files and images. By applying some very easy object oriented principles, we created some very powerful objects that will make using files faster and more efficient. All these classes are housed in the YDFileSystem module.</para>
+
+    <sect1 id="ydfilesystem_using_files">
+
+        <title>Using files</title>
+
+        <para>For using files, a class called YDFSFile was created. This class takes the path to a file as it's argument, and returns you an object that has some shortcuts to frequently used properties and actions related to files.</para>
+
+        <para>The following functions return property information from the file:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getBasename:</emphasis> the basename of the file path, which is the filename including it's file extension</listitem>
+            <listitem><emphasis role="bold">getExtension:</emphasis> returns the file's extension</listitem>
+            <listitem><emphasis role="bold">getPath:</emphasis> gets the complete directory in which the file is stored</listitem>
+            <listitem><emphasis role="bold">getAbsolutePath:</emphasis> gets the absolute file path for our file</listitem>
+            <listitem><emphasis role="bold">getLastModified:</emphasis> gets the datetime on when the file was last modified</listitem>
+            <listitem><emphasis role="bold">getSize:</emphasis> gets the size of the file in bytes</listitem>
+            <listitem><emphasis role="bold">isImage:</emphasis> boolean indicating if the file is a image the system can recognize. Currently, only GIF, JPEG and PNG images are recognized.</listitem>
+            <listitem><emphasis role="bold">isWriteable:</emphasis> boolean indicating if the file is read only or not (doesn't work reliably on Windows).</listitem>
+            <listitem><emphasis role="bold">download:</emphasis> forces the browser to download the file.</listitem>
+            <listitem><emphasis role="bold">getContents:</emphasis> reads the contents of the file</listitem>
+            <listitem><emphasis role="bold">setContents:</emphasis> sets the contents of the file (can also be used to append data to the file)</listitem>
+            <listitem><emphasis role="bold">delete:</emphasis> removes the file from disk</listitem>
+            <listitem><emphasis role="bold">move:</emphasis> moves the file to a different path</listitem>
+        </itemizedlist>
+
+        <para>To get the contents of the file, you can use the getContents function. This function is able to read in both textual and binary data. Optionally, you can define at which byte it should start reading, and you can also define how many bytes should be read. If no options are specified, the complete file will be read.</para>
+
+        <para>The following sample gives you an overview of some of the possibilities of the YDFSFile class:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $file = new YDFSFile( __FILE__ );
+
+    // Dump the object
+    echo( '<br>Basename: ' . $file->getBasename() );
+    echo( '<br>Extension: ' . $file->getExtension() );
+    echo( '<br>Path: ' . $file->getPath() );
+    echo( '<br>LastModified: ' . $file->getLastModified() );
+    echo( '<br>File size: ' . $file->getSize() );
+
+    // Contents
+    YDDebugUtil::dump(
+        $file->getContents(), '$file->getContents()'
+    );
+
+    // Contents
+    YDDebugUtil::dump(
+        $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )'
+    );
+
+    // Try to instantiate an object for a non existing file
+    $file = new YDFSFile( 'nofile.php' );
+
+?>]]></programlisting>
+
+        <para>To alter the contents of an existing file, you can use the setContents function. With this function, you can:</para>
+
+        <itemizedlist>
+            <listitem>replace the contents of the file</listitem>
+            <listitem>append contents to the existing contents of the file</listitem>
+        </itemizedlist>
+
+        <para>The parameter called "append" in the setContents function calls indicates if you want to append or replace the contents. This is demonstrated with the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Create a dummy file
+    $dir = new YDFSDirectory( '.' );
+    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+    // Update the contents
+    $file->setContents( 'new contents' );
+
+    // Append the contents
+    $file->setContents( '\nappended contents', true );
+
+?>]]></programlisting>
+
+        <para>The file associated with a YDFSFile object can also be deleted by calling it's "delete" function. This is demonstrated by the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Create a dummy file
+    $dir = new YDFSDirectory( '.' );
+    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+    // Delete the file
+    $file->delete();
+
+?>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="ydfilesystem_using_images">
+
+        <title>Using images</title>
+
+        <para>For images, we have a different class, the YDFSImage class which extends the YDFSFile class and add some functionality which is only applicable to images. All functionality of the YDFSFile class however is still available. For images, you can determine the following extra properties in addition to the ones covered by the YDFSFile class:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getImageSize:</emphasis> this will return the size of the image in pixels as an array of two elements</listitem>
+            <listitem><emphasis role="bold">getWidth:</emphasis> this will return the width of the image</listitem>
+            <listitem><emphasis role="bold">getHeight:</emphasis> this will return the height of the image</listitem>
+            <listitem><emphasis role="bold">getImageType:</emphasis> returns the image type of the image, which is either "jpg", "gif" or "png".</listitem>
+            <listitem><emphasis role="bold">getMimeType:</emphasis> this will return the mime type of the image</listitem>
+        </itemizedlist>
+
+        <para>The following code sample gives you an example of getting the properties of an image:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+
+    // Dump the object
+    YDDebugUtil::dump( $img, __FILE__ );
+
+    // Dump the object
+    echo( '<br>Basename: ' . $img->getBasename() );
+    echo( '<br>Extension: ' . $img->getExtension() );
+    echo( '<br>Path: ' . $img->getPath() );
+    echo( '<br>LastModified: ' . $img->getLastModified() );
+    echo( '<br>File size: ' . $img->getSize() );
+    echo( '<br>Width: ' . $img->getWidth() );
+    echo( '<br>Height: ' . $img->getHeight() );
+    echo( '<br>Image type: ' . $img->getImageType() );
+    echo( '<br>MIME type: ' . $img->getMimeType() );
+
+?>]]></programlisting>
+
+        <para>One of the most common things people creating web applications do with images is creating thumbnails. Creating thumbnails looks easy, but it can quickly get difficult. To help you with this, the Yellow Duck Framework has some built-in functions that take care of all the difficult work you normally have to perform to create thumbnails. Additionally, the Yellow Duck Framework allows you to create thumbnails from a GIF image, which the standard GD library included with PHP is not capable of.</para>
+
+        <para>To generate thumbnails, there are two functions from the YDFSImage class you can use. They use the algorithm, but only differ in what they do with the output.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">outputThumbnail:</emphasis> creates a thumbnail and outputs it directly to the browser</listitem>
+            <listitem><emphasis role="bold">saveThumbnail:</emphasis> creates a thumbnail and save it to the specified file</listitem>
+        </itemizedlist>
+
+        <para>For each of these two functions, you can specify a width and a height. This width and height specify the maximum size of the thumbnail. Also keep in mind that all scaling is done proportionally. Here's a code example that demonstrates this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+
+    // Create a thumbnail and save it to fsimage.thumb.jpg
+    $img->saveThumbnail( 150, 110, 'fsimage.thumb.jpg' );
+
+    //  Create a thumbnail and output it directly to the webbrowser
+    $img->outputThumbnail( 150, 110 );
+
+?>]]></programlisting>
+
+        <para>As creating thumbnails is quite a heavy task for the webserver and PHP (imagine 100 clients requesting the same thumbnail at the same time), the thumbnails are cached by default to increase performance. Caching is only happening of course with the outputThumbnail function and can be disabled by changing the way you call the outputThumbnail function. Here's an example:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+
+    //  Create a thumbnail and output it with caching
+    $img->outputThumbnail( 150, 110, true );
+
+    //  Create a thumbnail and output it without caching
+    $img->outputThumbnail( 150, 110, false );
+
+?>]]></programlisting>
+
+        <para>The image cache files are stored in the temp directory which is put in the YDFramework2 directory.</para>
+
+    </sect1>
+
+    <sect1 id="ydfilesystem_using_directories">
+
+        <title>Using directories</title>
+
+        <para>Directories are also a special kind of object, the YDFSDirectory object. This class is not based on the YDFSFile classes, but will use them internally. The YDFSDirectory class can return a number of properties from the directory it's pointing to:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getBaseName:</emphasis> returns the actual name of the directory</listitem>
+            <listitem><emphasis role="bold">getAbsolutePath:</emphasis> returns the complete path to the directory</listitem>
+            <listitem><emphasis role="bold">getContents:</emphasis> returns the contents of the directory</listitem>
+            <listitem><emphasis role="bold">getPath:</emphasis> returns the complete path to the directory</listitem>
+            <listitem><emphasis role="bold">isWriteable:</emphasis> boolean indicating if the directory is writeable or not (this is not working properly on Windows)</listitem>
+            <listitem><emphasis role="bold">createFile:</emphasis> creates a new file in the directory</listitem>
+            <listitem><emphasis role="bold">deleteFile:</emphasis> deletes a file from the directory</listitem>
+            <listitem><emphasis role="bold">createDirectory:</emphasis> create a new subdirectory in the directory</listitem>
+            <listitem><emphasis role="bold">deleteDirectory:</emphasis> deletes a subdirectory from the directory</listitem>
+            <listitem><emphasis role="bold">isDirectory:</emphasis> boolean indicating if the directory is acutally a directory</listitem>
+            <listitem><emphasis role="bold">isImage:</emphasis> oolean indicating if the directory is acutally an image</listitem>
+            <listitem><emphasis role="bold">moveDirectory:</emphasis> moves the directory to a different location</listitem>
+        </itemizedlist>
+
+        <para>In addition, there is a function called getContents that is able to return the contents of a directory as YDFS* objects. As it's argument, it takes a file pattern which is the same type of pattern you use in the shell (such as bash, terminal or the command prompt). Depending on the file type of each individual file, it will return a YDFSFile, YDFSImage or YDFSDirectory object. Here's an example illustrating this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the directory object for the current directory
+    $dir = new YDFSDirectory( dirname( __FILE__ ) );
+
+    // Dump the object
+    YDDebugUtil::dump( $dir, dirname( __FILE__ ) );
+
+    // All files in the directory
+    YDDebugUtil::dump( $dir->getContents() );
+
+    // TPL files in the directory
+    YDDebugUtil::dump( $dir->getContents( '*.tpl' ) );
+
+    // JPG and txt files in the directory
+    YDDebugUtil::dump(
+        $dir->getContents( array( '*.jpg', '*.txt' ) )
+    )
+
+?>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="ydfilesystem_path">
+
+        <title>Using file paths</title>
+
+        <para>A lot of times, there is a need to extract information from a path that doesn't neccesarily exist. For this, there is the YDPath class which contains a whole bunch of static functions that allow you to work easily with path information.</para>
+
+        <para>Currently, the following static methods are exposed:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getDirectorySeparator:</emphasis> Provides a platform-specific character used to separate directory levels in a path string that reflects a hierarchical file system organization.</listitem>
+            <listitem><emphasis role="bold">getPathSeparator:</emphasis> A platform-specific separator character used to separate path strings in environment variables.</listitem>
+            <listitem><emphasis role="bold">getVolumeSeparator:</emphasis> Provides a platform-specific volume separator character.</listitem>
+            <listitem><emphasis role="bold">changeExtension:</emphasis> Changes the extension of a path string.</listitem>
+            <listitem><emphasis role="bold">getDirectoryName:</emphasis> The directory information for the specified path string.</listitem>
+            <listitem><emphasis role="bold">getExtension:</emphasis> The extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFileName:</emphasis> The file name and extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFileNameWithoutExtension:</emphasis> The file name of the specified path string without the extension.</listitem>
+            <listitem><emphasis role="bold">getFilePath:</emphasis> The file path and extension of the specified path string.</listitem>
+            <listitem><emphasis role="bold">getFilePathWithoutExtension:</emphasis> The file path of the specified path string without the extension.</listitem>
+            <listitem><emphasis role="bold">getFullPath:</emphasis> The absolute path for the specified path string.</listitem>
+            <listitem><emphasis role="bold">getTempFileName:</emphasis> A uniquely named temporary file on disk and returns the full path to that file.</listitem>
+            <listitem><emphasis role="bold">getTempPath:</emphasis> The path of the current system's temporary folder.</listitem>
+            <listitem><emphasis role="bold">hasExtension:</emphasis> Determines whether a path includes a file name extension.</listitem>
+            <listitem><emphasis role="bold">isAbsolute:</emphasis> This function will check if the path is an absolute path or not.</listitem>
+            <listitem><emphasis role="bold">join:</emphasis> This function combines different file path elements to each other.</listitem>
+        </itemizedlist>
+
+        <para>Most of these functions are straightforward and self-explaining. However, the join function requires a little bit of explanation:</para>
+
+        <para>The YDPath::join function joins one or more path components intelligently. If any component is an absolute path, all previous components are thrown away, and joining continues. The return value is the concatenation of path1, and optionally path2, etc., with exactly one directory separator (YDPath::getDirectorySeparator()) inserted between components</para>
+
+    </sect1>
+
+</chapter>

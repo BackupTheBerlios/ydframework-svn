@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+          "./dtd/docbookx.dtd" [
+    <!ENTITY introduction SYSTEM "introduction.xml">
+    <!ENTITY firstsample SYSTEM "firstsample.xml">
+    <!ENTITY installing SYSTEM "installing.xml">
+    <!ENTITY tutorial SYSTEM "tutorial.xml">
+    <!ENTITY ydbase SYSTEM "ydbase.xml">
+    <!ENTITY ydconfig SYSTEM "ydconfig.xml">
+    <!ENTITY ydrequest SYSTEM "ydrequest.xml">
+    <!ENTITY ydtemplate SYSTEM "ydtemplate.xml">
+    <!ENTITY ydform SYSTEM "ydform.xml">
+    <!ENTITY yddebug SYSTEM "yddebug.xml">
+    <!ENTITY ydlog SYSTEM "ydlog.xml">
+    <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
+    <!ENTITY yddatabase SYSTEM "yddatabase.xml">
+    <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
+    <!ENTITY ydurl SYSTEM "ydurl.xml">
+    <!ENTITY ydxmlrpc SYSTEM "ydxmlrpc.xml">
+    <!ENTITY ydemail SYSTEM "ydemail.xml">
+    <!ENTITY ydfeedcreator SYSTEM "ydfeedcreator.xml">
+    <!ENTITY yderror SYSTEM "yderror.xml">
+    <!ENTITY ydtimer SYSTEM "ydtimer.xml">
+    <!ENTITY ydcart SYSTEM "ydcart.xml">
+    <!ENTITY ydlocale SYSTEM "ydlocale.xml">
+    <!ENTITY other SYSTEM "other.xml">
+    <!ENTITY bestpractices SYSTEM "bestpractices.xml">
+    <!ENTITY faq SYSTEM "faq.xml">
+    <!ENTITY changelog SYSTEM "changelog.xml">
+    <!ENTITY appendixA SYSTEM "appendixA.xml">
+    <!ENTITY appendixB SYSTEM "appendixB.xml">
+    <!ENTITY appendixC SYSTEM "appendixC.xml">
+    <!ENTITY appendixD SYSTEM "appendixD.xml">
+]>
+
+<book>
+
+    <bookinfo>
+        <title>Yellow Duck Framework 2.0</title>
+        <subtitle>User Guide</subtitle>
+        <authorgroup>
+            <author>
+                <firstname>Pieter</firstname><surname>Claerhout</surname>
+                <affiliation><address><email>pieter@yellowduck.be</email></address></affiliation>
+            </author>
+        </authorgroup>
+        <copyright>
+            <year>2004</year><year>2005</year>
+            <holder role="mailto:pieter@yellowduck.be">Pieter Claerhout</holder>
+        </copyright>
+        <abstract>
+            <para>This document contains the user guide for the Yellow Duck Framework version 2.0.</para>
+            <para>The Yellow Duck Framework is an object oriented framework written in <ulink url="http://www.php.net/">PHP</ulink> which makes it a lot easier and faster to create websites and web applications.</para>
+            <para>The Yellow Duck Framework is proudly sponsered by <ulink url="http://www.redcarpethost.com/">Red Carpet Host</ulink>.</para>
+            <para><mediaobject>
+                <imageobject role="html">
+                    <imagedata fileref="sponsored_by_rch.gif" />
+                </imageobject>
+                <imageobject role="fo">
+                    <imagedata fileref="sponsored_by_rch.gif" width="30mm" height="12.2mm" scalefit="0" />
+                </imageobject>
+            </mediaobject></para>
+        </abstract>
+    </bookinfo>
+
+    &introduction;
+    &firstsample;
+    &installing;
+    &tutorial;
+    &ydbase;
+    &ydconfig;
+    &ydrequest;
+    &ydtemplate;
+    &ydform;
+    &yddebug;
+    &ydlog;
+    &ydauthentication;
+    &yddatabase;
+    &ydfilesystem;
+    &ydurl;
+    &ydxmlrpc;
+    &ydemail;
+    &ydfeedcreator;
+    &yderror;
+    &ydtimer;
+    &ydcart;
+    &ydlocale;
+    &other;
+    &bestpractices;
+    &faq;
+    &changelog;
+    &appendixA;
+    &appendixB;
+    &appendixC;
+    &appendixD;
+
+</book>
