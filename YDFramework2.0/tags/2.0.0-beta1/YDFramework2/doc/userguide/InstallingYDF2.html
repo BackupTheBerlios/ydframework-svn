@@ -1,0 +1,167 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - InstallingYDF2</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Installing the Yellow Duck Framework </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+This chapter will explain you how the Yellow Duck Framework can be installed. It will give you a checklist style overview of all the things you need to do to install and configure the Yellow Duck Framework.<br />
+<br />
+<br />
+<h4> Prerequisites </h4>
+<br />
+To use the Yellow Duck Framework, you need to have the following prerequisites:<br />
+<br />
+<ul><li> PHP version 4.2 or newer (tested with PHP 4.3)
+</li><li> Webserver capable of running PHP scripts, such as Apache or Microsoft IIS</li></ul>
+<br />
+The Yellow Duck Framework was primarily tested on the Windows platformand also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. Support for PHP version 5 will be added in the future.<br />
+<br />
+<br />
+<h4> Examining the Yellow Duck Framework files </h4>
+<br />
+When you downloaded the latest release of the Yellow Duck Framework, you need to decompress it unzip e.g. winzip (Winzip) or the tar command (unix and linux). After decompressing, you will have the following directory structure:<br />
+<br />
+<div class="code"><xmp>+- YDFramework-2.0.0
+   +- index.php
+   +- index.tpl
+   +- …
+   +- YDFramework2
+      +- 3rdparty
+      +- docs
+      +- temp
+      +- YDClasses</xmp></div><br />
+The main directory of the framework, called "YDFramework-2.0.0" in this example, contains a number of sample files. In this directory, there is also a directory called "YDFramework2", which contains the actual framework files. There are a number of subdirectories in the YDFramework2 directory which each have a specific function:<br />
+<br />
+<ul><li> <strong>3rdparty:</strong> This directory contains the third party libraries that are needed for the Yellow Duck Framework to work properly.
+</li><li> <strong>docs:</strong> This directory contains the documentation at which you are currently looking. It also contains the complete API documentation. 
+</li><li> <strong>temp:</strong> This directory contains the temporary files created by the framework. In here, the cache files for the thumbnails and web downloads will be saved, as well as the temporary items from the template engine.
+</li><li> <strong>YDClasses:</strong> In here, you will find all the classes that make up the framework.</li></ul>
+<br />
+This directory structure is not really important for using the Yellow Duck Framework. The only thing you might need to do from time to time is to check the temp folder and empty it if it gets too big. You can safely delete it contents without affecting the actual Framework.<br />
+<br />
+<span class="notes"><em><strong>Note:</strong> You will never have to add or alter files in the YDFramework2 directory. It’s not even a good idea to put your own files in there as they might get overridden when you upgrade our framework to a newer version.</em></span><br />
+<br />
+<br />
+<h4> Installation overview </h4>
+<br />
+There are a number of steps we need to do to get the framework installed properly. The install instructions here apply to the Apache webserver, but similar techniques are available on other servers. These are the steps needed to install the framework:<br />
+<br />
+<ol type="1)"><li> Finding a place for the YDFramework2 directory
+</li><li> Assigning rights to the YDFramework2 directory
+</li><li> Configuring Apache to allow .htaccess files
+</li><li> Configuring the PHP options
+</li><li> Denying direct access to the templates
+</li><li> Using auto preprend and auto append
+</li><li> Configuring the samples
+</li><li> Testing the installation</li></ol>
+<br />
+The next sections describe these steps in detail.<br />
+<br />
+<br />
+<h4> Finding a place for the YDFramework2 directory </h4>
+<br />
+The YDFramework2 directory can be placed anywhere in the file system. For security reasons, we suggest you to put the YDFramework directory in a directory which is not viewable by the webserver. It’s not a good idea to put the YDFramework2 directory into the htdocs folders from Apache.<br />
+<br />
+The YDFramework2 directory can also be shared among multiple web applications. You only need one YDFramework2 directory on your system. You can if you want install a separate copy for each web application.<br />
+<br />
+<span class="notes"><em><strong>Note:</strong> If you plan to share the Yellow Duck Framework among multiple web applications, you need to think about how you will handle the temporary data from the Framework. A good idea is to write a sheduled task or a cron job that clears the temporary directory every hour to keep the size of this directory within reasonable sizes.</em></span><br />
+<br />
+<br />
+<h4> Assigning rights to the YDFramework2 directory </h4>
+<br />
+Since the framework needs to be able to write temporary data into it’s temp directory, we need to change the rights for this folder. On Windows, you normally don’t need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:<br />
+<br />
+<tt>/home/pieter # chmod 777 YDFramework2/temp</tt><br />
+<br />
+If you are uploading the framework using your FTP client, please check the documentation of your FTP client on how to do this.<br />
+<br />
+<br />
+<h4> Configuring Apache to allow .htaccess files </h4>
+<br />
+<span class="notes"><em><strong>Note:</strong> this is an optional setting and is already done on most systems. You only need to change this if you plan to use .htaccess files to change the PHP settings or if you want to deny access to the template files.</em></span><br />
+<br />
+In the Apache configuration file, you need to change the following for the web directory of your web application:<br />
+<br />
+<div class="code"><xmp><Directory "C:/Program Files/Apache/htdocs">
+    AllowOverride All
+</Directory></xmp></div><br />
+With configuring the directory like this in Apache, you indicate that .htaccess files can be used to override the settings.<br />
+<br />
+<br />
+<h4> Configuring the PHP options </h4>
+<br />
+Now that we configured Apache to accept .htaccess files, create a new file called ".htaccess" and save it in the root of your web application. The settings done in the .htaccess file apply to the directory in which the file is stored and to all the directories underneath that directory. I’ve added the following configuration values for PHP to the .htaccess file on my system:<br />
+<br />
+<div class="code"><xmp># Disable magic quotes
+php_value magic_quotes_gpc 0
+php_value magic_quotes_runtime 0
+php_value magic_quotes_sybase 0
+
+# Disabled registering of globals and arg*
+php_value register_globals 0
+php_value register_argc_argv 0
+
+# Disallow some security holes
+php_value allow_call_time_pass_reference 0
+php_value allow_url_fopen 0
+php_flag short_open_tag Off
+php_flag enable_dl Off
+
+# Gzip compress the output
+php_flag output_buffering Off
+php_flag zlib.output_compression On</xmp></div><br />
+With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts. By setting the expose_php flag to Off, PHP will not send it's version string in the headers.<br />
+<br />
+<span class="notes"><em><strong>Note:</strong> for the GZip compression of the output, you need to have the zlib extension loaded in PHP.</em></span><br />
+<br />
+In the installation download, there is a sample .htaccess file included which is called "_default.htaccess". Copy it to the root of your web directory and rename it to ".htaccess".<br />
+<br />
+<span class="notes"><em><strong>Note:</strong> In order to have the examples working, you need to allow short open tags. this can be done by add the following to the .htaccess file:<br />
+<br />
+<tt>php_flag short_open_tag On</tt><br />
+<br />
+This will enable the use of "&lt;?" as the open tag for PHP scripts instead of the standard "&lt;?php" tags.</em></span><br />
+<br />
+<br />
+<h4> Denying direct access to the templates </h4>
+<br />
+Since we do not want people to access the template files directly, we need to tell Apache to deny access to these files. This can be done by adding the following code to the .htaccess file:<br />
+<br />
+<div class="code"><xmp># Denying direct access to the templates
+<FilesMatch "(.tpl|config.php|includes)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch></xmp></div><br />
+In the example above, I also denied access to the config.php file, as I do not want people to access this file directly. Access to the YDFramework2 and include directories are also denied.<br />
+<br />
+<br />
+<h4> Using auto preprend and auto append </h4>
+<br />
+Instead of having to include the "YDF2_init.php" and "YDF2_process.php" files manually in each script, you can use the auto preprend and auto append options provided by the PHP interpreter.<br />
+<br />
+To enable this feature, add the following lines to the .htaccess file:<br />
+<br />
+<div class="code"><xmp># Auto include the Framework files
+php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
+php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</xmp></div><br />
+On Windows, you will have to use forward slashes instead of backslashes. Also make sure you use the complete path to the files.<br />
+<br />
+<br />
+<h4> Testing the installation </h4>
+<br />
+To test the installation, run the sample scripts provided with the downloads.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
+
+
+
+</body>
+
+</html>

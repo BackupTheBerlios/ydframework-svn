@@ -1,0 +1,148 @@
+<html>
+
+<head>
+    <title>Yellow Duck Framework 2.0 - YDOther</title>
+    <link rel="stylesheet" type="text/css" href="ydf2.css" />
+</head>
+
+<body>
+    <div class="page">
+<h3> Other classes and modules </h3>
+<br />
+<a href="Documentation.html">Documentation table of contents</a><br />
+<br />
+In this chapter, we will discuss some of the smaller classes and modules. There are a whole bunch of small extra things in the Yellow Duck Framework that take care of some very specific functions. Most of these classes are not rocket science, but they make that you don't have to reinvent the wheel every time you need them.<br />
+<br />
+<span class="notes"><em><strong>Note:</strong> All the classes ending with "Util" are stored in the YDUtil include file.</em></span><br />
+<br />
+<br />
+<h4> YDArrayUtil </h4>
+<br />
+The YDArrayUtil module houses all the different function related to handling of arrays. Currently, there is only one function in this module which converts a single-dimension array to a two-dimension array (table). Let's take a look at an example. <br />
+<br />
+The original array looked as follows:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; </font><font color="#0000BB">1</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">1 </font><font color="#007700">=&gt; </font><font color="#0000BB">2</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">2 </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">3 </font><font color="#007700">=&gt; </font><font color="#0000BB">4</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">4 </font><font color="#007700">=&gt; </font><font color="#0000BB">5</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">5 </font><font color="#007700">=&gt; </font><font color="#0000BB">6</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">6 </font><font color="#007700">=&gt; </font><font color="#0000BB">7</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;)<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+Let's say we want to convert it to a table with 3 columns, we can do the following:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;YDArrayUtil</font><font color="#007700">::</font><font color="#0000BB">convertToTable</font><font color="#007700">( </font><font color="#0000BB">$array</font><font color="#007700">, </font><font color="#0000BB">3 </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+The new array will look as follows:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; </font><font color="#0000BB">1</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">1 </font><font color="#007700">=&gt; </font><font color="#0000BB">2</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">2 </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">1 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; </font><font color="#0000BB">4</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">1 </font><font color="#007700">=&gt; </font><font color="#0000BB">5</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">2 </font><font color="#007700">=&gt; </font><font color="#0000BB">6</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">2 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; </font><font color="#0000BB">7</font><font color="#007700">,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;)<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+There is a switch for the convertToTable that can fill the last row with null values so that it matches the correct number of columns. <br />
+<br />
+This function was primarly made for use in things such as image galleries that need to display their contents in columns. It can of course be used for a lot more than just image galleries.<br />
+<br />
+The second function, convertToNested, converts the given array to a nested array using the values from the specified column name. Let's have a look at the following sample array:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$array </font><font color="#007700">= array(<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">1</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Pieter'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'admin' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">2</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Fiona'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'admin' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Bert'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'user' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Jan'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'guest' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+The array shown above has for each subarray a value named group. Let's say we want to use the value of the group column to create the nested array, we can use the following function call:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;YDArrayUtil</font><font color="#007700">::</font><font color="#0000BB">convertToNested</font><font color="#007700">( </font><font color="#0000BB">$array</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+This will give us the following result:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#007700">array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'admin' </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">1</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Pieter'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'admin' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">1 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">2</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Fiona'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'admin' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'user' </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Bert'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'user' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#DD0000">'guest' </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array (<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">0 </font><font color="#007700">=&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array( </font><font color="#DD0000">'id' </font><font color="#007700">=&gt; </font><font color="#0000BB">3</font><font color="#007700">, </font><font color="#DD0000">'name' </font><font color="#007700">=&gt; </font><font color="#DD0000">'Jan'</font><font color="#007700">, </font><font color="#DD0000">'group' </font><font color="#007700">=&gt; </font><font color="#DD0000">'guest' </font><font color="#007700">),<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),<br />&nbsp;&nbsp;&nbsp;&nbsp;)<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+<span class="notes"><em><strong>Note:</strong> the original column will not be stripped from the element. You can still reference it just like before.</em></span><br />
+<br />
+<br />
+<h4> YDBrowserInfo </h4>
+<br />
+The YDBrowserInfo object returns information about the browser that performed the request. The YDBrowserInfo will check the headers and extract information such as the version of the browser, the name of the browser and the platform on which the browser is running. <br />
+<br />
+The following code sample demonstrates how to use this class:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$browser </font><font color="#007700">= new </font><font color="#0000BB">YDBrowserInfo</font><font color="#007700">()<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getAgent</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowser</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getVersion</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getPlatform</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getDotNetRuntimes</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getBrowserLanguages</font><font color="#007700">() );<br />&nbsp;&nbsp;&nbsp;&nbsp;echo( </font><font color="#0000BB">$browser</font><font color="#007700">-&gt;</font><font color="#0000BB">getLanguage</font><font color="#007700">( array( </font><font color="#DD0000">'en'</font><font color="#007700">, </font><font color="#DD0000">'nl'</font><font color="#007700">, </font><font color="#DD0000">'fr' </font><font color="#007700">) ) );<br /> <br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+The getBrowser function will return one of the following values: ie, safari, opera, mozilla or other. The getPlatform function will return one of the following values: win, mac, linux, unix or other.<br />
+<br />
+The getAgent function will return the full HTTP user agent string as provided by the browser. <br />
+<br />
+This class is very handy to display specific contents based on the browser of the user. You might e.g. specify a different stylesheet for Macintosh users compared to the stylesheet used for Windows users.<br />
+<br />
+The getLanguage function helps you to choose a language from a list of supported languages based on the supported languages from the browser. The getLanguage function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that we gave as teh parameter to this function and will return the name of the most appropriate langauage. This function will also take into consideration the right priority of the languages specified by the browser. If no list of supported languages was specified, the framework will assume that only English is supported.<br />
+<br />
+<br />
+<h4> YDObjectUtil </h4>
+<br />
+The YDObjectUtil module provides you with some class and object related static functions. The following functions are available:<br />
+<br />
+<ul><li> <strong>isSubClass:</strong> This function will check if the specified object is subclassed from the specified class name or is an instance of the specified classgetAncestors. 
+</li><li> <strong>getAncestors:</strong> This function will list you the parent classes of a specific class. 
+</li><li> <strong>failOnMissingMethod:</strong> This function will raise a fatal exception if the specified object doens't contain the specified function. 
+</li><li> <strong>serialize:</strong> This function returns a gzipped stream containing a byte-stream representation of an object that can be stored anywhere. 
+</li><li> <strong>unserialize:</strong> This function takes a single gzipped serialized variable (the output from the YDObjectUtil::serialize() function) and converts it back into a PHP value. </li></ul>
+<br />
+<span class="notes"><em><strong>Note:</strong> all these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</em></span><br />
+<br />
+<br />
+<h4> YDTimer </h4>
+<br />
+The YDTimer class offers you with a very easy timer class. It will time the execution of whatever you want. The class starts counting when you instantiate it, will return you the elapsed time when you call it's getElapsed function. The result is returned in seconds. <br />
+<br />
+Let's have a look at a code example:<br />
+<br />
+<div class="code"><code><font color="#000000">
+<font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;$timer </font><font color="#007700">= new </font><font color="#0000BB">YDTimer</font><font color="#007700">();<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">$elapsed </font><font color="#007700">= </font><font color="#0000BB">$timer</font><font color="#007700">-&gt;</font><font color="#0000BB">getElapsed</font><font color="#007700">();<br /><br /></font><font color="#0000BB">?&gt;</font>
+</font>
+</code></div><br />
+This $elapsed variable will now contain the time it took from the instantiation of YDTimer class till the function call to the getElapsed function. <br />
+<br />
+This class is very handing for timing certains parts of your application. You can create multiple instances of the YDTimer class which takes care of timing once specific part.<br />
+<br />
+<br />
+<h4> YDBBCode </h4>
+<br />
+The YDBBCode class implements a class that helps convert BB style tags to HTML. It's not really designed to be easy to extend, but it's more geared towards speed and efficiency. BBCode is a specific way of adding markup tags to text to indicate the formatting and is very popular in forums.<br />
+<br />
+The following BBCode is understood by the YDBBCode class:<br />
+<br />
+<div class="code"><xmp>[img]http://elouai.com/images/star.gif[/img]
+[img=http://www.yellowduck.be/]http://elouai.com/images/star.gif[/img]
+[url=http://elouai.com]eLouai[/url]
+[url]http://elouai.com[/url]
+[url=index.php?YD_DEBUG=1]Yellow Duck Framework examples[/url]
+[url]index.php?YD_DEBUG=1[/url]
+[mail=webmaster@elouai.com]Webmaster[/mail]
+[mail]webmaster@elouai.com[/mail]
+[email=webmaster@elouai.com]Webmaster[/email]
+[email]webmaster@elouai.com[/email]
+[color=red]RED[/color]
+[b]bold[/b]
+[i]italic[/i]
+[u]underline[/u]
+[code]value="123";[/code]
+[quote]a quote[/quote]</xmp></div><br />
+The codes above will be converted to the following HTML code:<br />
+<br />
+<div class="code"><code><font color="#000000">
+&lt;img border="0" src="http://elouai.com/images/star.gif"&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://www.yellowduck.be/"&gt;&lt;img border="0" src="http://elouai.com/images/star.gif"&gt;&lt;/a&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://elouai.com"&gt;eLouai&lt;/a&gt;&lt;br /&gt;<br />&lt;a target="_blank" href="http://elouai.com"&gt;http://elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="index.php?YD_DEBUG=1"&gt;Yellow Duck Framework examples&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="index.php?YD_DEBUG=1"&gt;index.php?YD_DEBUG=1&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;Webmaster&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;webmaster@elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;Webmaster&lt;/a&gt;&lt;br /&gt;<br />&lt;a href="mailto:webmaster@elouai.com"&gt;webmaster@elouai.com&lt;/a&gt;&lt;br /&gt;<br />&lt;font color="red"&gt;RED&lt;/font&gt;&lt;br /&gt;<br />&lt;b&gt;bold&lt;/b&gt;&lt;br /&gt;<br />&lt;i&gt;italic&lt;/i&gt;&lt;br /&gt;<br />&lt;u&gt;underline&lt;/u&gt;&lt;br /&gt;<br />&lt;code&gt;value="123";&lt;/code&gt;&lt;br /&gt;<br />&lt;blockquote&gt;a quote&lt;/blockquote&gt;&lt;br /&gt;</font>
+</code></div><br />
+Additionally, as you can see, newlines are converted to &lt;br /&gt; tags. The class will also converted non ascii characters to HTML entities.<br />
+<br />
+<a href="Documentation.html">Documentation table of contents</a></div>
+
+
+
+</body>
+
+</html>
