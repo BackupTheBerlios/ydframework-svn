@@ -27,10 +27,15 @@
 			$form->addElement( 'radio', 'rad1', 'Select a value 1:', array(), array( 1 => 'een', 2=>'twee' ) );
 			$form->addElement( 'radio', 'rad2', 'Select a value 2:', array(), array( 1 => 'een<br/>', 2=>'twee' ) );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
-			YDDebugUtil::dump( $form->toArray(), '$form as array' );
-			YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
-			YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
-			YDDebugUtil::dump( $_POST );
+			if ( YD_DEBUG == 1 ) {
+				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
+				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
+				YDDebugUtil::dump( $form->_regFilters, 'Registered filters' );
+				YDDebugUtil::dump( $form->toArray(), '$form as array' );
+				YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
+				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
+				YDDebugUtil::dump( $_POST, '$_POST' );
+			}
 			$form->display();
 
 			// Create the form

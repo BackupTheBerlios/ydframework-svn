@@ -8,6 +8,7 @@
 	}
 
 	require_once( 'YDBase.php' );
+	require_once( 'YDValidateRules.php' );
 
 	/**
 	 *	This class defines an object oriented form.
@@ -60,9 +61,27 @@
 			}
 
 			// Add the standard elements
-			$this->registerElement( 'text', 'YDFormElement_Text' );
-			$this->registerElement( 'submit', 'YDFormElement_Submit' );
-			$this->registerElement( 'radio', 'YDFormElement_Radio' );
+			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
+			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
+			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
+
+			// Add the rules
+			$this->registerRule( 'required', array( 'YDValidatorRules', 'required' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'maxlength', array( 'YDValidatorRules', 'maxlength' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'minlength', array( 'YDValidatorRules', 'minlength' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'rangelength', array( 'YDValidatorRules', 'rangelength' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'regex', array( 'YDValidatorRules', 'regex' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'email', array( 'YDValidatorRules', 'email' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'lettersonly', array( 'YDValidatorRules', 'lettersonly' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'alphanumeric', array( 'YDValidatorRules', 'alphanumeric' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'numeric', array( 'YDValidatorRules', 'numeric' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'nopunctuation', array( 'YDValidatorRules', 'nopunctuation' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'nonzero', array( 'YDValidatorRules', 'nonzero' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'callback', array( 'YDValidatorRules', 'callback' ), 'YDValidatorRules.php' );
+			$this->registerRule( 'compare', array( 'YDValidatorRules', 'compare' ), 'YDValidatorRules.php' );
+
+			// Add the filters
+			$this->registerFilter( 'trim', 'trim' );
 
 		}
 
@@ -71,21 +90,39 @@
 		 *
 		 *	@param $name	Name of the element.
 		 *	@param $class	The class name of the element definition.
-		 *	@param $file	The file containing the class definition for this element.
+		 *	@param $file	(optional) The file containing the class definition for this element.
 		 */
 		function registerElement( $name, $class, $file='' ) {
-			if ( empty( $file ) ) {
-				$file = $class . '.php';
-			}
 			$this->_regElements[ $name ] = array( 'class' => $class, 'file' => $file );
 		}
 
-		function registerRule() {
+		/**
+		 *	This function will register a new validation rule.
+		 *
+		 *	@param $name		Name of the element.
+		 *	@param $callback	The function name of the rule definition.
+		 *	@param $file		(optional) The file containing the class definition for this validation rule.
+		 */
+		function registerRule( $name, $callback, $file='' ) {
+			$this->_regRules[ $name ] = array( 'callback' => $callback, 'file' => $file );
 		}
 
-		function registerValidator() {
+		/**
+		 *	This function will register a new filter.
+		 *
+		 *	@param $name		Name of the element.
+		 *	@param $callback	The function name of the filter.
+		 *	@param $file		(optional) The file containing the definition for this filter.
+		 */
+		function registerFilter( $name, $callback, $file='') {
+			$this->_regFilters[ $name ] = array( 'callback' => $callback, 'file' => $file );
 		}
 
+		/**
+		 *	This function will set the default values for the form.
+		 *
+		 *	@param $array	Associative array containing the default values.
+		 */
 		function setDefaults( $array ) {
 			$this->_defaults = $array;
 		}
@@ -106,7 +143,9 @@
 			}
 
 			// Include the element file
-			require_once( $this->_regElements[ $type ]['file'] );
+			if ( ! empty( $this->_regElements[ $type ]['file'] ) ) {
+				require_once( $this->_regElements[ $type ]['file'] );
+			}
 
 			// Check if the class exists
 			$class = $this->_regElements[ $type ]['class'];
@@ -151,7 +190,7 @@
 
 		}
 
-		function applyFilter() {
+		function addFilter() {
 		}
 
 		function addRule() {
