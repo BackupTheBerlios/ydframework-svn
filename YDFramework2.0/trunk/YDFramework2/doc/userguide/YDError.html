@@ -40,7 +40,7 @@ More information about this can be found in the <a href="http://www.php.net/manu
 <br />
 <h4> Raising errors </h4>
 <br />
-For raising errors, there are three different functions which you can use: YDFatalError, YDWarning and YDNotice.<br />
+For raising errors in the Yellow Duck Framework, you should always use the trigger_error function. This function takes two arguments, being the error message and the type of error to raise. Here's an example:<br />
 <br />
 <div class="code"><code><font color="#000000">
 <font color="#0000BB">&lt;?php<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;trigger_error</font><font color="#007700">( </font><font color="#DD0000">'Fatal error'</font><font color="#007700">, </font><font color="#0000BB">YD_ERROR </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A warning'</font><font color="#007700">, </font><font color="#0000BB">YD_WARNING </font><font color="#007700">);<br />&nbsp;&nbsp;&nbsp;&nbsp;</font><font color="#0000BB">trigger_error</font><font color="#007700">( </font><font color="#DD0000">'A notice'</font><font color="#007700">, </font><font color="#0000BB">YD_NOTICE </font><font color="#007700">);<br /><br /></font><font color="#0000BB">?&gt;</font>
