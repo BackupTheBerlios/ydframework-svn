@@ -148,6 +148,7 @@
 					$out .= '	}';
 					$out .= '	function openWin( url, name, opts ) {';
 					$out .= '		window.open( url, name, opts );';
+					$out .= '		win.focus();';
 					$out .= '	}';
 					$out .= '</script>';
 					define( 'YD_BBTA_MAINSCRIPT', 1 );
