@@ -13,7 +13,7 @@
     }
 
     /**
-     *  This class implements a database connection. To instantiate this object,
+     *  This class implements a database interface. To instantiate this object,
      *  you need to pass it a database URL which has the following syntax
      *  (the syntax is the same as the PEAR::DB syntax):
      *
@@ -48,7 +48,7 @@
      *      PHP documentation to find out which extensions are needed for which
      *      database types. More information can be found on http://www.php.net/
      */
-    class YDDbConn {
+    class YDDatabase {
 
         /**
          *  The class constructor for the YDDbConn class. When you instantiate
@@ -58,18 +58,16 @@
          *  @param $url The database url for this connection (see above for the
          *              syntax of the database url).
          */
-        function YDDbConn( $url ) {
+        function YDDatabase( $url ) {
     
             // Initialize the database URL
             $this->url = $url;
 
-            // Start with no connection
-            $this->conn = null;
-
         }
 
         /**
-         *  The "connect" function establishes the connection with the database.
+         *  The "getConnection" function establishes the connection with the 
+         *  database and returns the database connection object.
          *  
          *  By default, a non persistent database connection is established. Not
          *  all database drivers support persistent connections, so use this
@@ -77,7 +75,7 @@
          *  http://www.php.net/ to see if your database driver supports
          *  persistent connections or not.
          *
-         *  This function returns true if the database connection was
+         *  This function returns the connection if the database connection was
          *  succesfully established. If the database connection fails, a YDError
          *  object is returned which can be checked with the YDIsError function.
          *
@@ -85,38 +83,41 @@
          *  fetch mode to DB_FETCHMODE_ASSOC, which returns the database results
          *  as an associative array with the column names as the array keys .
          *
+         *  @param $dieOnError This paramater (true by default) will stop the
+         *                     execution if it fails to connect to the database.
          *  @param $persistent Indicates if a persistent database connection is
          *                     made or not. Not all database drivers support
          *                     this option so be careful in using this option.
          *
-         *  @return Returns true if the database connection was successfully
-         *          established. If something went wrong, a YDError object is
-         *          returned.
+         *  @return Returns a connection object if the database connection was 
+         *          successfully established. If something went wrong, a YDError 
+         *          object is returned.
          */
-        function connect( $persistent=false ) {
+        function getConnection( $dieOnError=true, $persistent=false ) {
 
             // Include the DB library
             require_once( YD_DIR_3RDP_PEAR . '/DB.php' );
 
             // Make the connection
-            $this->conn = DB::connect( $this->url, $persistent );
+            $conn = DB::connect( $this->url, $persistent );
 
             // Check for errors
-            if ( DB::isError( $this->conn ) ) {
+            if ( DB::isError( $conn ) ) {
                 
                 // Get the error message
-                $err = $this->conn->getMessage();
-
-                // Reset the connection object
-                $this->conn = null;
+                $err = $conn->getMessage();
 
                 // Return an error
-                return new YDError( $err );
-
+                if ( $dieOnError === true ) {
+                    return new YDFatalError( $err );
+                } else {
+                    return new YDError( $err );
+                }
+    
             }
 
             // Set the correct fetch mode
-            $this->conn->setFetchMode( DB_FETCHMODE_ASSOC );
+            $conn->setFetchMode( DB_FETCHMODE_ASSOC );
 
             // Keep counter
             if ( ! isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {
@@ -125,8 +126,60 @@
                 $GLOBALS['YD_DB_CONN_CNT'] = $GLOBALS['YD_DB_CONN_CNT'] + 1;
             }
 
-            // Return true
-            return true;
+            // Return the connection
+            return $conn;
+
+        }
+
+        /**
+         *  This function will execute the query and return the number of
+         *  affected rows.
+         *
+         *  @param $query The SQL query to execute.
+         *
+         *  @returns The number of affected row by the SQL query
+         */
+        function executeQuery( $query ) {
+
+            // Get a connection
+            $conn = $this->getConnection();
+
+            // Execute the query
+            $result = $conn->query( $sql );
+
+            // Check for errors
+            if ( DB::isError( $result ) ) {
+                return new YDFatalError( $result->getMessage() );
+            }
+
+            // Return the result
+            return $db->affectedRows();;
+
+        }
+
+        /**
+         *  This function will execute the query and return the result of
+         *  the query.
+         *
+         *  @param $query The SQL query to execute.
+         *
+         *  @returns The result of the SQL query
+         */
+        function executeSelect( $query ) {
+
+            // Get a connection
+            $conn = $this->getConnection();
+
+            // Execute the query
+            $result = $conn->getAll( $query );
+
+            // Check for errors
+            if ( DB::isError( $result ) ) {
+                return new YDFatalError( $result->getMessage() );
+            }
+
+            // Return the result
+            return $result;
 
         }
 

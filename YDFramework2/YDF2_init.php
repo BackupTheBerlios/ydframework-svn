@@ -261,7 +261,7 @@
         // Include the Yellow Duck framework
         require_once( YD_DIR_CLSS . '/YDArrayUtil.php' );
         require_once( YD_DIR_CLSS . '/YDBrowserInfo.php' );
-        require_once( YD_DIR_CLSS . '/YDDbConn.php' );
+        require_once( YD_DIR_CLSS . '/YDDatabase.php' );
         require_once( YD_DIR_CLSS . '/YDDebugUtil.php' );
         require_once( YD_DIR_CLSS . '/YDError.php' );
         require_once( YD_DIR_CLSS . '/YDFeedCreator.php' );
