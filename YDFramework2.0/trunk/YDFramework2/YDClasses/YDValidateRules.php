@@ -173,7 +173,7 @@
 		 *	@param $opts	The maximum file size in bytes.
 		 */
 		function maxfilesize( $val, $opts ) {
-			return ( $val['size'] <= intval( $opts ) );
+			return ( filesize( $val['tmp_name'] ) <= intval( $opts ) );
 		}
 
 		/** 

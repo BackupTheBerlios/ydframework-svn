@@ -538,9 +538,6 @@
 						// If the result is false, add the error
 						if ( $result == false ) { $this->_errors[ $element ] = $rule['error']; }
 
-						// Step out of the loop
-						break;
-
 					}
 
 				}
