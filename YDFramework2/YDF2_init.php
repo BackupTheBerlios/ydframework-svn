@@ -78,6 +78,14 @@
 	@define( 'YD_WARNING', E_USER_WARNING );
 	@define( 'YD_NOTICE', E_USER_NOTICE );
 
+	// For servers that do not send the request uri
+	if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
+		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+		if ( isset ( $_SERVER['QUERY_STRING'] ) ) {
+			$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+		}
+	}
+
 	// Keep some global variables
 	$GLOBALS['YD_SQL_QUERY'] = array();
 
