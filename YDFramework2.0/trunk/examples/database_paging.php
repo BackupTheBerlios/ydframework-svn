@@ -30,7 +30,7 @@
 
 			// Get the records
 			$recordset = $db->getRecordsAsSet( 'show status', $page, $size );
-			$recordset->dump();
+			//$recordset->dump();
 
 			// Close the database connection
 			$db->close();
