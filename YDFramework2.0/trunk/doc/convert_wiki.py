@@ -56,8 +56,6 @@ template = """<html>
 
     <div class="copyright">
         (c) Copyright 2003-2004 by <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>. All rights reserved.
-        <br />
-        $LastChangedRevision$
     </div>
 
 </body>
