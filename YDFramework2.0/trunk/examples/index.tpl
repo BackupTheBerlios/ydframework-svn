@@ -91,6 +91,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="path.php">YDPath module</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=path.php">path.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="fsfile.php">YDFSFile object</a>
 				<br>
 				<a href="fsfile.php?do=download">YDFSFile object - File download</a>

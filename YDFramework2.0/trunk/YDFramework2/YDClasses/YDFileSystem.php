@@ -26,6 +26,180 @@
 	}
 
 	/**
+	 *	This class houses all different path related functions.
+	 */
+	class YDPath extends YDBase {
+
+		/**
+		 *	Provides a platform-specific character used to separate directory levels in a path string that reflects a
+		 *	hierarchical file system organization.
+		 *
+		 *	@returns	String containing the directory separator
+		 *
+		 *	@static
+		 */
+		function getDirectorySeparator() {
+			return ( YD_PATHDELIM == ':' ) ? '/' : '\\';
+		}
+
+		/**
+		 *	A platform-specific separator character used to separate path strings in environment variables.
+		 *
+		 *	@returns	String containing the path separator
+		 *
+		 *	@static
+		 */
+		function getPathSeparator() {
+			return YD_PATHDELIM;
+		}
+
+		/**
+		 *	Provides a platform-specific volume separator character.
+		 *
+		 *	@returns	String containing the volume separator
+		 *
+		 *	@static
+		 */
+		function getVolumeSeparator() {
+			if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' || strtoupper( PHP_OS ) == 'DARWIN' ) {
+				return ':';
+			} else {
+				return '/';
+			}
+		}
+
+		/**
+		 *	Changes the extension of a path string.
+		 *
+		 *	@param $path	Path of the file or directory.
+		 *	@param $ext	The new extension.
+		 *
+		 *	@returns	String with the changed extension
+		 *
+		 *	@static
+		 */
+		function changeExtension( $path, $ext ) {
+			if ( ! empty( $ext ) && substr( $ext, 0, 1 ) != '.' ) {
+				$ext = '.' . $ext;
+			}
+			return YDPath::getFilePathWithoutExtension( $path ) . $ext;
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The directory information for the specified path string
+		 *
+		 *	@static
+		 */
+		function getDirectoryName( $path ) {
+			return dirname( $path );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The extension of the specified path string
+		 *
+		 *	@static
+		 */
+		function getExtension( $path ) {
+			ereg( ".*\.([a-zA-Z0-9]{0,5})$", $path, $regs );
+			return( $regs[1] );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The file name and extension of the specified path string
+		 *
+		 *	@static
+		 */
+		function getFileName( $path ) {
+			return basename( $path );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The file name of the specified path string without the extension
+		 *
+		 *	@static
+		 */
+		function getFileNameWithoutExtension( $path ) {
+			return basename( $path, '.' . YDPath::getExtension( $path ) );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The file path and extension of the specified path string
+		 *
+		 *	@static
+		 */
+		function getFilePath( $path ) {
+			return realpath( $path );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The file path of the specified path string without the extension
+		 *
+		 *	@static
+		 */
+		function getFilePathWithoutExtension( $path ) {
+			return YDPath::getDirectoryName( $path ) . YDPath::getDirectorySeparator() . YDPath::getFileNameWithoutExtension( $path );
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	The absolute path for the specified path string
+		 *
+		 *	@static
+		 */
+		function getFullPath( $path ) {
+			return realpath( $path );
+		}
+
+		/**
+		 *	@returns	A uniquely named zero-byte temporary file on disk and returns the full path to that file
+		 *
+		 *	@static
+		 */
+		function getTempFileName() {
+			$tmpName = '';
+			for ($i=0;$i<rand(0,50);$i++) {
+				$tmpName .= "&#" . rand(33,255) . ";";
+			}
+			return YDPath::getTempPath() . YDPath::getDirectorySeparator() . md5( $tmpName ) . '.temp';
+		}
+
+		/**
+		 *	@returns	The path of the current system's temporary folder.
+		 *
+		 *	@static
+		 */
+		function getTempPath() {
+			return YD_DIR_TEMP;
+		}
+
+		/**
+		 *	@param $path	Path of the file or directory.
+		 *
+		 *	@returns	Determines whether a path includes a file name extension
+		 *
+		 *	@static
+		 */
+		function hasExtension( $path ) {
+			$ext = YDPath::getExtension( $path );
+			return empty( $ext ) ? false : true;
+		}
+
+	}
+
+	/**
 	 *  This class defines a filesystem file.
 	 */
 	class YDFSFile extends YDBase {
