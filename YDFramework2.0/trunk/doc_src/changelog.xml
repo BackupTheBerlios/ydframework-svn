@@ -17,6 +17,7 @@
             <listitem>Brand new documentation based on DocBook XML/XSL. We now have HTML and PDF documentation.</listitem>
             <listitem>Completely reworked YDEmail class which is now powered by phpMailer.</listitem>
             <listitem>Added the possibility to do logging to a file using the YDLog module</listitem>
+            <listitem>Added the YDSqlQuery class which gives you an object oriented way of creating SQL queries</listitem>
             <listitem>Fixed a whole number of bugs in the validation rules and added quite a number of new validation rules. The following rules were added:
                 <itemizedlist spacing="compact">
                     <listitem>character</listitem>
@@ -46,7 +47,8 @@
             <listitem>Added a new feature to YDForm: compare rules.</listitem>
             <listitem>Added the executeDelete function to the YDDatabaseDriver class.</listitem>
             <listitem>Improved the scripts for building the documentation.</listitem>
-            <listitem>Added the FAQ and Appendix C to the documentation.</listitem>
+            <listitem>Added the FAQ and Appendix C (How to build documentation) to the user guide.</listitem>
+            <listitem>The YDBrowserInfo class now recognizes FireFox as a separate browser.</listitem>
             <listitem>TODO: Add the date rule to check dates.</listitem>
             <listitem>TODO: Add the YDDate class to make it easier to work with dates.</listitem>
             <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
