@@ -67,6 +67,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="base.php">Using the YDBase object</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=base.php">base.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="phpinfo.php">Showing the PHP information</a>
 			</td>
 			<td valign="top">
