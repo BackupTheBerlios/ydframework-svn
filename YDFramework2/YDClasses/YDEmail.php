@@ -192,11 +192,12 @@
 			}
 
 			// Set the header
-			$message->setHeader( 'To', implode( ', ', $this->to ) );
+			//$message->setHeader( 'To', implode( ', ', $this->to ) );
 			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
 			// Send the email
-			$result = $message->send( $this->to_plain );
+			//$result = $message->send( $this->to_plain );
+			$result = $message->send( $this->to );
 
 			// Return the result
 			return $result;
