@@ -106,10 +106,10 @@
          *
          *  @returns This function returns the output of the parsed template.
          *
-         *  @todo
-         *      We should only append the template extension is it's not done
-         *      yet by the user itself. Now, you always have to remember not to
-         *      specify the template extension.
+         *  @remark
+         *      We should be careful here as it might introduce a security hole
+         *      since you now can basically include every file that is readable
+         *      by the webserver process.
          */
         function getOutput( $name ) {
 
