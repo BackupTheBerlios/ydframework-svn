@@ -28,11 +28,6 @@
 				$this->_value = 'on';
 			}
 
-			// If options is a string, it overrides the value
-			if ( is_string( $options ) ) {
-				$this->_value = 'on';
-			}
-
 			// Indicate if filters need to be applied
 			$this->_applyFilters = false;
 

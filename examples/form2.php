@@ -36,7 +36,7 @@
 			$form->addElement( 'image', 'img1', '', array(), 'http://www.yellowduck.be/images/site_images/rss091.gif' );
 			$form->addElement( 'password', 'pas1', 'Enter your password' );
 			$form->addElement( 'bbtextarea', 'bbt1', 'Enter your BBCode' );
-			$form->addElement( 'checkbox', 'chk1', 'Select me please', array(), 'chk1 value' );
+			$form->addElement( 'checkbox', 'chk1', 'Select me please' );
 			$form->addElement( 'checkbox', 'chk2', 'Select me please' );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
 			$form->addElement( 'reset', 'res1', 'Reset' );
