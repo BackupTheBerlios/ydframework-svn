@@ -38,9 +38,24 @@
 
 	// Disable magic_quotes_runtime
 	set_magic_quotes_runtime( 0 );
-	
+
+	// Get the path delimiter and newline
+	if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
+		@define( 'YD_CRLF', "\r\n" );
+		@define( 'YD_PATHDELIM', ';' );
+		@define( 'YD_DIRDELIM', '\\' );
+		} elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
+		@define( 'YD_CRLF', "\r" );
+		@define( 'YD_PATHDELIM', ':' );
+		@define( 'YD_DIRDELIM', '/' );
+	} else {
+		@define( 'YD_CRLF', "\n" );
+		@define( 'YD_PATHDELIM', ':' );
+		@define( 'YD_DIRDELIM', '/' );
+	}
+
 	// Include the version file
-	@include( dirname( __FILE__ ) . '/YDF2_version.php' );
+	@include( dirname( __FILE__ ) . YD_DIRDELIM . 'YDF2_version.php' );
 
 	// Global framework constants
 	if ( ! defined( 'YD_FW_REVISION' ) ) {
@@ -53,10 +68,10 @@
 
 	// Directory paths
 	@define( 'YD_DIR_HOME', dirname( __FILE__ ) );
-	@define( 'YD_DIR_CLSS', YD_DIR_HOME . '/YDClasses' );
-	@define( 'YD_DIR_3RDP', YD_DIR_HOME . '/3rdparty' );
+	@define( 'YD_DIR_CLSS', YD_DIR_HOME . YD_DIRDELIM . 'YDClasses' );
+	@define( 'YD_DIR_3RDP', YD_DIR_HOME . YD_DIRDELIM . '3rdparty' );
 	if ( ! defined( 'YD_DIR_TEMP' ) ) {
-		define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
+		define( 'YD_DIR_TEMP', YD_DIR_HOME . YD_DIRDELIM . 'temp' );
 	}
 
 	// Action paths
@@ -106,18 +121,6 @@
 		} else {
 			define( 'YD_DEBUG', 0 );
 		}
-	}
-
-	// Get the path delimiter and newline
-	if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
-		@define( 'YD_CRLF', "\r\n" );
-		@define( 'YD_PATHDELIM', ';' );
-	} elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
-		@define( 'YD_CRLF', "\r" );
-		@define( 'YD_PATHDELIM', ':' );
-	} else {
-		@define( 'YD_CRLF', "\n" );
-		@define( 'YD_PATHDELIM', ':' );
 	}
 
 	// Error constants
