@@ -7,9 +7,7 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDFSFile.php' );
-	require_once( 'YDFSImage.php' );
-	require_once( 'YDObjectUtil.php' );
+	require_once( 'YDFileSystem.php' );
 	require_once( 'htmlMimeMail/htmlMimeMail.php' );
 
 	/**

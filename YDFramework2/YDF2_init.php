@@ -175,7 +175,7 @@
 	}
 
 	// Start the timer
-	require_once( 'YDTimer.php' );
+	require_once( 'YDUtil.php' );
 	$timer = new YDTimer();
 
 ?>

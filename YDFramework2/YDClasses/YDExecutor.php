@@ -7,9 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDDebugUtil.php' );
-	require_once( 'YDObjectUtil.php' );
-
 	/**
 	 *	This is the executor class that contains all the logic for executing requests. It will instantiate the request
 	 *	class and execute the right functions to get the request processed correctly.
@@ -91,9 +88,6 @@
 
 			// Mark that the request is processed
 			define( 'YD_REQ_PROCESSED', 1 );
-
-			// Include the string utilities
-			require_once( 'YDStringUtil.php' );
 
 			// Stop the timer
 			$elapsed = $GLOBALS['timer']->getElapsed();

@@ -2,12 +2,10 @@
 
 	// Includes
 	require_once( 'config.php' );
-	require_once( 'YDForm.php' );
-	require_once( 'YDFSFile.php' );
 	require_once( 'YDRequest.php' );
 	require_once( 'YDDatabase.php' );
+	require_once( 'YDFileSystem.php' );
 	require_once( 'YDBrowserInfo.php' );
-	require_once( 'YDStringUtil.php' );
 
 	// Class definition
 	class YDCmsBaseRequest extends YDRequest {
@@ -33,6 +31,7 @@
 			// Add the version
 			$this->setVar( 'YD_CMS_NAMEVERS', YD_FW_NAME . ' CMS 1.0' );
 			$this->setVar( 'YD_CMS_HOMEPAGE', YD_FW_HOMEPAGE . 'wiki/YDCms' );
+
 
 		}
 
@@ -112,6 +111,7 @@
 
 				// Make the connection
 				$this->db = new YDDatabase( $dbCfg['type'], $dbCfg['db'], $dbCfg['user'], $dbCfg['pass'], $dbCfg['host'] );
+				$this->db->connect();
 
 				// Set the prefix
 				$this->dbPrefix = $dbCfg['prefix'] . '_';
@@ -488,6 +488,9 @@
 
 			// Redirect to default action if already logged in
 			if ( $this->isAuthenticated() == true ) { $this->forward( 'default' ); return; }
+
+			// Include the form library
+			require_once( 'YDForm.php' );
 
 			// Create the login form
 			$form = new YDForm( 'loginForm' );

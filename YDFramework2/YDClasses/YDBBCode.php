@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDStringUtil.php' );
-
 	/**
 	 *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be 
 	 *	implemented. The following codes are supported by default: img, url. mail, email, color, b, i, u, code, quote, p
@@ -118,8 +116,7 @@
 
 			// Convert tags if needed
 			if ( $convertBr == true ) {
-				$data = trim( $data );
-				$data = nl2br( $data );
+				$data = nl2br( trim( $data ) );
 			}
 
 			// Encode the references

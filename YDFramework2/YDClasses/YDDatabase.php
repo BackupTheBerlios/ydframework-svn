@@ -200,8 +200,11 @@
 			$records = $this->getRecords( $sql );
 			if ( ! $records ) { return false; }
 			$result = array();
+			$key = strtolower( $key );
+			$val = strtolower( $val );
+			$prefix = strtolower( $prefix );
 			foreach ( $records as $record ) {
-				$result[ $prefix . $record[ strtolower( $key ) ] ] = $record[ strtolower( $val ) ];
+				$result[ $prefix . $record[ $key ] ] = $record[ $val ];
 			}
 			return $result;
 		}
@@ -481,7 +484,7 @@
 		 */
 		function _logSql( $sql ) {
 			$this->_sqlCount++;
-			YDDebugUtil::debug( 'SQL query #' . $this->_sqlCount . ':', $sql );
+			//YDDebugUtil::debug( 'SQL query #' . $this->_sqlCount . ':', $sql );
 		}
 
 	}

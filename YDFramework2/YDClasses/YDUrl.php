@@ -181,6 +181,9 @@
 
 			// Check the cache
 			if ( $cache == true ) {
+				
+				// Include the filesystem library
+				require_once( 'YDFileSystem.php' );
 
 				// Check if we need to use the HTTP HEAD function
 				if ( YD_HTTP_CACHE_USEHEAD == 1 ) {
@@ -213,7 +216,6 @@
 
 				// Use the cache file if any
 				if ( is_file( $cacheFName ) ) {
-					require_once( 'YDFSFile.php' );
 					$file = new YDFSFile( $cacheFName );
 					$cacheValidTime = $file->getLastModified() + YD_HTTP_CACHE_TIMEOUT;
 					if ( time() < $cacheValidTime ) {
@@ -243,7 +245,6 @@
 
 				// Save the cached data
 				if ( $cacheFName != null ) {
-					require_once( 'YDFSDirectory.php' );
 					$dir = new YDFSDirectory( YD_DIR_TEMP );
 					$dir->createFile( $cacheFName, $data );
 				}

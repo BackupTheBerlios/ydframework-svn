@@ -8,7 +8,6 @@
 	}
 
 	require_once( 'YDTemplate.php' );
-	require_once( 'YDObjectUtil.php' );
 
 	/**
 	 *	This class implements a request. The request is the base class you can use to base your scripts on. The request

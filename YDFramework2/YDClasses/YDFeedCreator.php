@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDStringUtil.php' );
-
 	/**
 	 *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and 
 	 *	straightforward way. If you set up your class instance, you can automatically output to the different versions 
