@@ -5,6 +5,7 @@
 
 	// Include all log messages
 	define( 'YD_LOG_LEVEL', 4 );
+	define( 'YD_LOG_WRAPLINES', true );
 
 	// Includes
 	YDInclude( 'YDLog.php' );

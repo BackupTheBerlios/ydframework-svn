@@ -146,14 +146,18 @@
 		 */
 		function _log( $level, $text ) {
 
+			// Get the maximum linesize
+			$maxlinesize = ( is_numeric( YD_LOG_MAX_LINESIZE ) ) ? intval( YD_LOG_MAX_LINESIZE ) : 80;
+			$wraplines = ( is_bool( YD_LOG_WRAPLINES ) ) ? YD_LOG_WRAPLINES : false;
+
 			// Split the text up in parts if longer than the maximum linesize
-			if ( strlen( $text ) > YD_LOG_MAX_LINESIZE && YD_LOG_WRAPLINES ) {
+			if ( strlen( $text ) > $maxlinesize && $wraplines ) {
 
 				// The break character we are going to use
 				$break = '__YD_LOG_BREAK__';
 
 				// Wrap the text
-				$text = YD_CRLF . "\t" . wordwrap( $text, YD_LOG_MAX_LINESIZE, YD_CRLF . "\t" );
+				$text = YD_CRLF . "\t" . wordwrap( $text, $maxlinesize, YD_CRLF . "\t" );
 
 			}
 

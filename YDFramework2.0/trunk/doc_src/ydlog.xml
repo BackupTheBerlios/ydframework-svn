@@ -102,6 +102,16 @@
             <listitem>%message%</listitem>
         </itemizedlist>
 
+        <para><emphasis role="bold">YD_LOG_WRAPLINES:</emphasis> boolean indicating if long lines should be wrapped in the logfiles so that it's easier to read them in e.g. a console application.</para>
+
+        <para><emphasis role="bold">YD_LOG_MAX_LINESIZE:</emphasis> a numeric value indicating the maximum linesize if you set YD_LOG_WRAPLINES to true. By default, this is set to 80.</para>
+
+        <para>If you wrap long lines, the log output will look as follows (for a text file):</para>
+
+        <programlisting><![CDATA[2005-01-08 17:15:10 | INFO | /examples/logging.php | logging.php:68 | logging->actiondefault | 
+    this is a very long info message and should break up over several lines in the logfile. Each
+    line should be a separate info message in the logfile if everything goes correctly.]]></programlisting>
+
         <para>These defaults should be set before including the YDLog.php file. If one or more options are not defined, it will revert to the defaults.</para>
 
     </sect1>
@@ -116,42 +126,53 @@
 
         <programlisting><![CDATA[<?php
 
-	// Standard include
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-	// Includes
-	YDInclude( 'YDLog.php' );
-	YDInclude( 'YDRequest.php' );
+    // Includes
+    YDInclude( 'YDLog.php' );
+    YDInclude( 'YDRequest.php' );
 
-	// Plain function
-	function PlainFunction() {
-		YDLog::info( 'Message from PlainFunction' );
-	}
+    // Plain function
+    function PlainFunction() {
+        YDLog::info( 'Message from PlainFunction' );
+    }
 
-	// Class definition
-	class logging extends YDRequest {
+    // Class definition
+    class logging extends YDRequest {
 
-		// Class constructor
-		function logging() {
-			$this->YDRequest();
-		}
+        // Class constructor
+        function logging() {
+            $this->YDRequest();
+        }
 
-		// Default action
-		function actionDefault() {
-			YDLog::clear();
-			YDLog::debug( 'debug message' );
-			YDLog::info( 'info message' );
-			YDLog::warning( 'warning message' );
-			YDLog::error( 'error message' );
-			PlainFunction();
-		}
+        // Default action
+        function actionDefault() {
+            YDLog::clear();
+            YDLog::debug( 'debug message' );
+            YDLog::info( 'info message' );
+            YDLog::warning( 'warning message' );
+            YDLog::error( 'error message' );
+            PlainFunction();
+        }
 
-	}
+    }
 
-	// Process the request
-	YDInclude( 'YDF2_process.php' );
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
 
 ?>]]></programlisting>
+
+        <para>Currently, the following messages are supported:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>debug</listitem>
+            <listitem>info</listitem>
+            <listitem>warning</listitem>
+            <listitem>error</listitem>
+        </itemizedlist>
+
+        <para>To empty the logfile, you can use the YDLog::clear function.</para>
 
     </sect1>
 
