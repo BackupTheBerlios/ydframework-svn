@@ -19,6 +19,9 @@
 			// Set the type
 			$this->_type = 'select';
 
+			// Indicate if filters need to be applied
+			$this->_applyFilters = false;
+
 		}
 
 		function toHtml() {
