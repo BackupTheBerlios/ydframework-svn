@@ -13,7 +13,6 @@
         <para>Build number: not released yet</para>
 
         <itemizedlist spacing="compact">
-            <listitem>Added the YDDatabaseObject class which implements a O/R Mapper.</listitem>
             <listitem>Replaced SmartyLight with the full blown Smarty template engine</listitem>
             <listitem>Brand new documentation based on DocBook XML/XSL. We now have HTML and PDF documentation.</listitem>
             <listitem>Completely reworked YDEmail class which is now powered by phpMailer.</listitem>
@@ -56,6 +55,11 @@
             <listitem>The logging functions are now able to wordwrap long lines if you define YD_LOG_WRAPLINES. This is off by default.</listitem>
             <listitem>Fixed some bugs in the defaults for the YDValidateRules functions.</listitem>
             <listitem>The YDForm::getValue and YDForm::getValues function now include a timestamp for date/time elements</listitem>
+            <listitem>The date/time form elements now can use an array as the default value as well as an integer.</listitem>
+            <listitem>Added the following methods to the YDBase class: getClassName, hasMethod, isSubClass, getAncestors, serialize</listitem>
+            <listitem>Added the YDConfig class that hold global configuration parameters.</listitem>
+			<listitem>The defaults for date/time elements can now be strings, integers, numeric values or integers</listitem>
+			<listitem>The setDefaults function can now be called before, during or after adding the elements</listitem>
         </itemizedlist>
 
     </sect1>
