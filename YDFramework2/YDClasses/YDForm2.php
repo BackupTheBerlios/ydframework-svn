@@ -184,7 +184,7 @@
 		 *	@param $attribs	The attributes for the element.
 		 *	@param $options	The options for the elment.
 		 */
-		function addElement( $type, $name, $label, $attribs=array(), $options=array() ) {
+		function & addElement( $type, $name, $label, $attribs=array(), $options=array() ) {
 
 			// Check if the element type is known
 			if ( ! array_key_exists( $type, $this->_regElements ) ) {
@@ -211,6 +211,9 @@
 
 			// Register the element in the class.
 			$this->_elements[ $name ] = $instance;
+
+			// Return the reference to the instance
+			return $this->_elements[ $name ];
 
 		}
 

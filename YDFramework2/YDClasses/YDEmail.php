@@ -13,6 +13,9 @@
 
 	/**
 	 *	This class defines an email message.
+	 *
+	 *	@todo
+	 *		Needs to be written without the PEAR libraries.
 	 */
 	class YDEmail extends YDBase {
 

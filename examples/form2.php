@@ -23,7 +23,8 @@
 			$form = new YDForm2( 'form1' );
 			$form->registerFilter( 'reverse', 'strrev' );
 			$form->setDefaults( array( 'txt1' => 'First text', 'txt3' => "two\nlines" ) );
-			$form->addElement( 'text', 'txt1', 'Enter text 1:' );
+			$text = & $form->addElement( 'text', 'txt1', 'Enter text 1:' );
+			$text->_label = 'new label for txt1';
 			$form->addElement( 'text', 'txt2', 'Enter text 2:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
 			$form->addElement( 'textarea', 'txt3', 'Enter text 2:' );
 			$form->addElement( 'radio', 'rad1', 'Select a value 1:', array(), array( 1 => 'een', 2=>'twee' ) );
