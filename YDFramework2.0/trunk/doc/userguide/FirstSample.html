@@ -40,8 +40,7 @@ The template file that goes along with this script looks as follows (sample1.tpl
 </body>
 
 </html></xmp></div><br />
-When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can<br />
-be changed to work exactly the way you want it to work.<br />
+When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can be changed to work exactly the way you want it to work.<br />
 <br />
 In the Yellow Duck Framework, all requests are always processed in the same way and order. Let's evaluate the sample above step by step to explain how the processing is happening.<br />
 <br />
@@ -52,17 +51,15 @@ The first line you see in the sample1.php script is the include of the file call
 </li><li> Reconfigures the PHP include path
 </li><li> Includes the different files from the rest of the framework</li></ul>
 <br />
-After that, we define a new class, called "sample1Request" which is based on the YDRequest class. For each script, you need to have 1 class which is named as the basename of the file (sample1in this case). This class should have the YDRequest class as one of it ancestors.<br />
+After that, we define a new class, called "sample1" which is based on the YDRequest class. For each script, you need to have 1 class which is named as the basename of the file (sample1 in this case). This class should have the YDRequest class as one of it ancestors.<br />
 <br />
-Since we are inheriting from the YDRequest class, we initialize the parent class in the class constructor of the "sample1" class.<br />
+Since we are inheriting from the YDRequest class, we initialize the parent class in the class constructor of the "sample1" class. In this example, we create a new instance of the YDTemplate class which we will need later on in the different actions.<br />
 <br />
-Then we see two functions that start with the text "action". All functions that implement actions start with "action". We will see later on how you can choose which one gets executed.<br />
+Then we see two functions that start with the text "action". All functions that implement actions start with "action". The action that is going to be executed is always defined via the parameter "do" in the URL. If the url would be "sample1.php?do=default", the function actionDefault will be executed. If the url would have been "sample1.php?do=edit", the function actionEdit would be executed. If no action is specified, the actionDefault function will be executed.<br />
 <br />
-The last part of the script is the include of the "YDF2_process.php" script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens.<br />
+Each one of the actions in the sample above link a variable to the template so that we can use this variable in the template. They both end with displaying the parsed template on the screen.<br />
 <br />
-The process function checks the URL to see if there was a parameter defined with the name "do". This parameter can indicate the action that needs to be executed. If the url looked as <a href="http://localhost/sample1.php?do=edit">http://localhost/sample1.php?do=edit</a>, the function called "actionEdit" will be executed.<br />
-<br />
-If no action is specified in the url, the default action, called "actionDefault" will be executed. In both actions, the functions in this script don't do a lot. They will set a template variable called "title" and they will output the template to the browser. The template contains special tags that are filled in on the fly with the right contents.<br />
+The last part of the script is the include of the "YDF2_process.php" script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens. Based on the class information, the complete request will be processed.<br />
 <br />
 <a href="Documentation.html">Documentation table of contents</a></div>
 

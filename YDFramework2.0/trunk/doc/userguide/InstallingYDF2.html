@@ -25,29 +25,29 @@ This chapter will explain you how the Yellow Duck Framework can be installed. It
 <br />
 To use the Yellow Duck Framework, you need to have the following prerequisites:<br />
 <br />
-<ul><li> PHP version 4.2 or newer (tested with PHP 4.3)
+<ul><li> PHP version 4.2 or newer (tested with PHP 4.3 and PHP 5)
 </li><li> Webserver capable of running PHP scripts, such as Apache or Microsoft IIS</li></ul>
 <br />
-The Yellow Duck Framework was primarily tested on the Windows platformand also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. Support for PHP version 5 will be added in the future.<br />
+The Yellow Duck Framework was primarily tested on the Windows platformand also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. PHP 5 works but the Yellow Duck Framework 2.0 will not take advantage of the new features provided with PHP 5).<br />
 <br />
 <br />
 <h4> Examining the Yellow Duck Framework files </h4>
 <br />
 When you downloaded the latest release of the Yellow Duck Framework, you need to decompress it unzip e.g. winzip (Winzip) or the tar command (unix and linux). After decompressing, you will have the following directory structure:<br />
 <br />
-<div class="code"><xmp>+- YDFramework-2.0.0
+<div class="code"><xmp>+- YDFramework-2.0-beta3
    +- index.php
    +- index.tpl
+   +- docs
+   +- examples
    +- …
    +- YDFramework2
       +- 3rdparty
-      +- docs
       +- temp
       +- YDClasses</xmp></div><br />
-The main directory of the framework, called "YDFramework-2.0.0" in this example, contains a number of sample files. In this directory, there is also a directory called "YDFramework2", which contains the actual framework files. There are a number of subdirectories in the YDFramework2 directory which each have a specific function:<br />
+The main directory of the framework, called "YDFramework-2.0-beta3" in this example, contains a number of sample files. In this directory, there is also a directory called "YDFramework2", which contains the actual framework files. There are a number of subdirectories in the YDFramework2 directory which each have a specific function:<br />
 <br />
 <ul><li> <strong>3rdparty:</strong> This directory contains the third party libraries that are needed for the Yellow Duck Framework to work properly.
-</li><li> <strong>docs:</strong> This directory contains the documentation at which you are currently looking. It also contains the complete API documentation. 
 </li><li> <strong>temp:</strong> This directory contains the temporary files created by the framework. In here, the cache files for the thumbnails and web downloads will be saved, as well as the temporary items from the template engine.
 </li><li> <strong>YDClasses:</strong> In here, you will find all the classes that make up the framework.</li></ul>
 <br />
@@ -124,17 +124,11 @@ php_flag enable_dl Off
 # Gzip compress the output
 php_flag output_buffering Off
 php_flag zlib.output_compression On</xmp></div><br />
-With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts. By setting the expose_php flag to Off, PHP will not send it's version string in the headers.<br />
+With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts.<br />
 <br />
 <span class="notes"><em><strong>Note:</strong> for the GZip compression of the output, you need to have the zlib extension loaded in PHP.</em></span><br />
 <br />
 In the installation download, there is a sample .htaccess file included which is called "_default.htaccess". Copy it to the root of your web directory and rename it to ".htaccess".<br />
-<br />
-<span class="notes"><em><strong>Note:</strong> In order to have the examples working, you need to allow short open tags. this can be done by add the following to the .htaccess file:<br />
-<br />
-<tt>php_flag short_open_tag On</tt><br />
-<br />
-This will enable the use of "&lt;?" as the open tag for PHP scripts instead of the standard "&lt;?php" tags.</em></span><br />
 <br />
 <br />
 <h4> Denying direct access to the templates </h4>

@@ -103,6 +103,8 @@ Both functions take one argument which defines which kind of XML needs to be out
 <br />
 There is also a little helper function called getColoredXml which will return a HTML version of the XML version of the feed with colored XML tags. This is mainly used for debugging purposes. This function takes the same arguments as the toXml and outputXml functions.<br />
 <br />
+<span class="notes"><em><strong>Note:</strong> when you use the outputXml function, conditional HTTP is supported. By using etags, the YDFeedCreator class makes sure it doesn't send unneccesary data over when it shouldn't. The getXml function does not have this ability.</em></span><br />
+<br />
 <a href="Documentation.html">Documentation table of contents</a></div>
 
 

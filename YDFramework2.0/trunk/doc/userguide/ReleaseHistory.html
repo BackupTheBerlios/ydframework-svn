@@ -32,9 +32,10 @@ This is the overview of the different releases.<br />
 </li><li> [done] YDDatabaseDriver_mysql is no longer a separate include file, which increases performance (as most people tend to use <span class="missingpage">MySQL</span><a href="http://www.yellowduck.be/ydf2/wiki/MySQL/edit">?</a> anyway).
 </li><li> [done] The API of YDBrowserInfo was updated and it's now part of the YDUtil.php include file.
 </li><li> [done] The function enableCache and disableCache were added to the YDTemplate class.
-</li><li> [in progress - docs need update] Template class and caching need rethinking. Currently, they don't really work together. On top of that, we should give the user the option to not automatically instantiate the template object when creating the request (e.g. when the user decides not to use the Smarty Light template engine). What I might come up with is that you need to instantiate the YDTemplate object manually when you instantiate your YDRequest based class. The template directory should also be fixed at that point, making caching a lot easier.
-</li><li> The Smarty Light libraries will probably be updated to 2.1.3 (when available).
-</li><li> Add conditional HTTP to the YDFeedCreator module (<a href="http://alexandre.alapetite.net/doc-alex/php-http-304/">description</a>)</li></ul>
+</li><li> [in progress - docs need update] The template class is refactored and is no longer automatically instantiated with each request. Also caching is working fine now. An example for caching was added as well.
+</li><li> [done] The Smarty Light libraries are updated to 2.2.0.
+</li><li> [done] Added conditional HTTP using etags to the YDFeedCreator module (<a href="http://alexandre.alapetite.net/doc-alex/php-http-304/">description</a>)
+</li><li> [done] Caching needs to be done with only a cache ID and not a filename (but both should be possible).</li></ul>
 <br />
 <br />
 <h4> 18 july 2004 - Yellow Duck Framework 2.0 beta 2 (build 450) </h4>

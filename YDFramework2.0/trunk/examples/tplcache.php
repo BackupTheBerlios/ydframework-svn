@@ -22,7 +22,6 @@
 
 			// Enable caching
 			$this->tpl->caching = true;
-			$this->tpl->cache_dir = YD_DIR_TEMP;
 
 		}
 
