@@ -53,6 +53,13 @@
          */
          function YDSqlQuery( $action='SELECT', $options=array() ) {
             $this->YDAddOnModule();
+
+            // Setup the module
+            $this->author = 'db';
+            $this->version = '1.0';
+            $this->copyright = '(c) 2005 db, muitocomplicado@hotmail.com';
+            $this->description = 'This class defines a YDSqlQuery object.';
+
             $this->reset();
             $this->setAction( $action );			
             $this->setOptions( $options );

@@ -88,7 +88,13 @@
         function YDDatabaseObject() {
     
             $this->YDAddOnModule();
-    
+
+            // Setup the module
+            $this->author = 'db';
+            $this->version = '1.0';
+            $this->copyright = '(c) 2005 db, muitocomplicado@hotmail.com';
+            $this->description = 'This class defines a YDDatabaseObject object.';
+
             $this->_fields    = new YDDatabaseObject_Properties();
             $this->_selects   = new YDDatabaseObject_Properties();
             $this->_relations = new YDDatabaseObject_Properties();
