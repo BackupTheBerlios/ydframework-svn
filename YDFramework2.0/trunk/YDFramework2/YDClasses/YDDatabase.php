@@ -253,27 +253,17 @@
 		}
 
 		/**
-		 *	This function will execute the SQL statement and return the records as an associative array.
+		 *	This function will execute the SQL statement and return the records as an associative array. Optionally, you
+		 *	can limit the number of records that are returned. Optionally, you can also specify which record to start
+		 *	from.
 		 *
 		 *	@param $sql	The SQL statement to use.
-		 *
-		 *	@returns	The records matching the SQL statement as an associative array.
-		 */
-		function getRecords( $sql ) {
-		}
-
-		/**
-		 *	This function will execute the SQL statement with the limit and offset parameters.
-		 *
-		 *	@param $sql	The SQL statement to prepare
 		 *	@param $limit	(optional) How many records to return
 		 *	@param $offset	(optional) Where to start from
 		 *
-		 *	@internal
+		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
-		function getRecordsLimit( $sql, $limit=-1, $offset=-1 ) {
-			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
-			return $this->getRecords( $sql );
+		function getRecords( $sql, $limit=-1, $offset=-1 ) {
 		}
 
 		/**
@@ -646,13 +636,18 @@
 		}
 
 		/**
-		 *	This function will execute the SQL statement and return the records as an associative array.
+		 *	This function will execute the SQL statement and return the records as an associative array. Optionally, you
+		 *	can limit the number of records that are returned. Optionally, you can also specify which record to start
+		 *	from.
 		 *
 		 *	@param $sql	The SQL statement to use.
+		 *	@param $limit	(optional) How many records to return
+		 *	@param $offset	(optional) Where to start from
 		 *
 		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
-		function getRecords( $sql ) {
+		function getRecords( $sql, $limit=-1, $offset=-1 ) {
+			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
 			$result = & $this->_connectAndExec( $sql );
 			$dataset = array();
 			while ( $line = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) ) ) {
