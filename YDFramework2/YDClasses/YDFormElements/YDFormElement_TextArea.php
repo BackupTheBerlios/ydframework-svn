@@ -11,35 +11,26 @@
 	require_once( 'YDForm2.php' );
 	require_once( 'YDFormElement.php' );
 
-	class YDFormElement_Submit extends YDFormElement {
+	class YDFormElement_TextArea extends YDFormElement {
 
-		function YDFormElement_Submit( $form, $name, $label, $attributes=array(), $options=array() ) {
+		function YDFormElement_TextArea( $form, $name, $label, $attributes=array(), $options=array() ) {
 
 			// Initialize the parent
 			$this->YDFormElement( $form, $name, $label, $attributes, $options );
 
 			// Set the type
-			$this->_type = 'submit';
-
-			// Set the value correctly
-			$this->_value = $label;
-			$this->_label = '';
-
-			// Indicate if filters need to be applied
-			$this->_applyFilters = false;
+			$this->_type = 'textarea';
 
 		}
 
 		function toHtml() {
 
 			// Create the list of attributes
-			$attribs = array(
-				'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value 
-			);
+			$attribs = array( 'name' => $this->_form . '_' . $this->_name );
 			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Get the HTML
-			return '<input' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>';
+			return '<textarea' . YDForm2::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea>';
 
 		}
 

@@ -38,6 +38,9 @@
 			$this->_type = '';
 			$this->_value = '';
 
+			// Indicate if filters need to be applied
+			$this->_applyFilters = true;
+
 		}
 
 		/**

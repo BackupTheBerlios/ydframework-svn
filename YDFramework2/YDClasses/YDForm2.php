@@ -12,6 +12,18 @@
 
 	/**
 	 *	This class defines an object oriented form.
+	 *
+	 *	@todo
+	 *		Implement the different rules in YDValidateRules.
+	 *
+	 *	@todo
+	 *		Implement the validate function.
+	 *
+	 *	@todo
+	 *		Implement the addRule function.
+	 *
+	 *	@todo
+	 *		Implement the rest of the form elements.
 	 */
 	class YDForm2 extends YDBase {
 
@@ -32,7 +44,7 @@
 			// Initialize the variables
 			$this->_name = $name;
 			$this->_method = ( strtoupper( $method ) == 'GET' ) ? 'get' : 'post';
-			$this->_action = empty( $action ) ? $_SERVER['PHP_SELF'] : $action;
+			$this->_action = empty( $action ) ? $_SERVER['REQUEST_URI'] : $action;
 			$this->_target = empty( $target ) ? '_self' : $target;
 			$this->_attributes = $attributes;
 
@@ -54,14 +66,15 @@
 			$this->_defaults = array();
 
 			// Check for post or get variables
-			if ( strtoupper( $this->_method ) == 'POST' ) {
-				$this->_formVars = $_POST;
-			} else {
+			if ( strtoupper( $this->_method ) == 'GET' ) {
 				$this->_formVars = $_GET;
+			} else {
+				$this->_formVars = $_POST;
 			}
 
 			// Add the standard elements
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
+			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
 			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
 			$this->registerElement( 'radio', 'YDFormElement_Radio', 'YDFormElement_Radio.php' );
 
@@ -82,6 +95,8 @@
 
 			// Add the filters
 			$this->registerFilter( 'trim', 'trim' );
+			$this->registerFilter( 'lower', 'strtolower' );
+			$this->registerFilter( 'upper', 'strtoupper' );
 
 		}
 
@@ -97,9 +112,20 @@
 		}
 
 		/**
+		 *	This function will unregister the element type.
+		 *
+		 *	@param $name	Name of the element.
+		 */
+		function unregisterElement( $name ) {
+			if ( array_key_exists( $name, $this->_regElements ) ) {
+				unset( $this->_regElements[ $name ] );
+			}
+		}
+
+		/**
 		 *	This function will register a new validation rule.
 		 *
-		 *	@param $name		Name of the element.
+		 *	@param $name		Name of the validation rule.
 		 *	@param $callback	The function name of the rule definition.
 		 *	@param $file		(optional) The file containing the class definition for this validation rule.
 		 */
@@ -108,14 +134,36 @@
 		}
 
 		/**
+		 *	This function will unregister the validation rule.
+		 *
+		 *	@param $name	Name of the validation rule.
+		 */
+		function unregisterRule( $name ) {
+			if ( array_key_exists( $name, $this->_regRules ) ) {
+				unset( $this->_regRules[ $name ] );
+			}
+		}
+
+		/**
 		 *	This function will register a new filter.
 		 *
-		 *	@param $name		Name of the element.
+		 *	@param $name		Name of the filter.
 		 *	@param $callback	The function name of the filter.
 		 *	@param $file		(optional) The file containing the definition for this filter.
 		 */
 		function registerFilter( $name, $callback, $file='') {
 			$this->_regFilters[ $name ] = array( 'callback' => $callback, 'file' => $file );
+		}
+
+		/**
+		 *	This function will unregister the filter.
+		 *
+		 *	@param $name	Name of the filter.
+		 */
+		function unregisterFilter( $name ) {
+			if ( array_key_exists( $name, $this->_regFilters ) ) {
+				unset( $this->_regFilters[ $name ] );
+			}
 		}
 
 		/**
@@ -150,9 +198,6 @@
 
 			// Check if the class exists
 			$class = $this->_regElements[ $type ]['class'];
-			if ( ! class_exists( $class ) ) {
-				YDFatalError( 'Class definition "' . $class . '" for the element type "' . $type . '" is missing' );
-			}
 
 			// Create the instance
 			$instance = new $class( $this->_name, $name, $label, $attribs, $options );
@@ -191,10 +236,89 @@
 
 		}
 
-		function addFilter() {
+		/**
+		 *	Add a filter to the form for the specified field.
+		 *
+		 *	@param	$element	The element to apply the filter on.
+		 *	@param	$filter		The name of the filter to apply.
+		 */
+		function addFilter( $element, $filter ) {
+
+			// Check if it's a known filter
+			if ( ! array_key_exists( $filter, $this->_regFilters ) ) {
+				YDFatalError( 'Unknown filter "' . $filter . '" for element "' . $element . '"' );
+			}
+
+			// Initialize the element
+			if ( ! is_array( $this->_filters[ $element ] ) ) {
+				$this->_filters[ $element ] = array();
+			}
+
+			// Add the filter
+			array_push( $this->_filters[ $element ], $filter );
+
 		}
 
+		/**
+		 *	This function will register a rule for the form.
+		 */
 		function addRule() {
+		}
+
+		/**
+		 *	This function will return the value of the specified form element.
+		 *
+		 *	@param $name	The name of the form element.
+		 *
+		 *	@returns	The value to the specified form element.
+		 */
+		function getValue( $name ) {
+
+			// Get the actual element value
+			$element = $this->getElement( $name );
+			$value = $element->_value;
+			$applyFilters = $element->_applyFilters;
+			unset( $element );
+
+			// Filters should only be applied if the form is submitted and if the element type supports it.
+			if ( $this->isSubmitted() ) {
+				if ( $applyFilters == true ) {
+					$value = $this->_applyFilter( '__ALL__', $value );
+					$value = $this->_applyFilter( $name, $value );
+				}
+			}
+
+			// Return the value
+			return $value;
+		
+		}
+
+		/**
+		 *	This function will check if the form was submitted or not.
+		 *
+		 *	@todo
+		 *		Check how it works with file uploads.
+		 *
+		 *	@returns	Boolean indicating if the form was submitted or not.
+		 */
+		function isSubmitted() {
+
+			// Loop over the post variables
+			foreach ( $_POST as $key=>$value ) {
+
+				// Remove the form name from the element name
+				$key = str_replace( $this->_name . '_', '', $key );
+
+				// Check if the key is a form element
+				if ( array_key_exists( $key, $this->_elements ) ) {
+					return true;
+				};
+
+			}
+
+			// Return false
+			return false;
+
 		}
 
 		/**
@@ -214,7 +338,15 @@
 			// If no rules and number of submitValues and submitFiles is 0, form is valid.
 			// Check if both number of submit values and submit files are 0, form is invalid
 
+			// Form should be submitted
+			if ( $this->isSubmitted() == false ) {
+				return false;
+			}
+
 			// Check if there are any rules, if not, form is valid and return true
+			if ( sizeof( $this->_regRules ) == 0 ) {
+				return true;
+			}
 			
 			// Check if we have any submit values or submitted files
 			// --> No, form valid, return true
@@ -225,27 +357,6 @@
 			// If errors, return false
 			// If no errors, return true
 			
-		}
-
-		/**
-		 *	This function will return the value of the specified form element.
-		 *
-		 *	@param $name	The name of the form element.
-		 *
-		 *	@returns	The value to the specified form element.
-		 */
-		function getValue( $name ) {
-
-			// Get the actual element value
-			$element = $this->getElement( $name );
-			$value = $element->_value;
-			unset( $element );
-
-			// Apply the filters
-
-			// Return the value
-			return $value;
-		
 		}
 
 		/**
@@ -273,6 +384,9 @@
 			// Loop over the list of element
 			foreach ( $this->_elements as $name => $element ) {
 				
+				// Update the value
+				$element->_value = $this->getValue( $name );
+
 				// Add the form element
 				$form[ $name ] = $element->toArray();
 
@@ -349,6 +463,23 @@
 			if ( sizeof( $array ) == 0 ) { return ''; }
 			foreach ( $array as $key=>$value ) { $out .= ' ' . strval( $key ) . '="' . strval( $value ) . '"'; }
 			return $out;
+		}
+
+		/**
+		 *	Function that will apply the actual filters to the named element.
+		 *
+		 *	@param	$name	The name of the field to apply the filter to.
+		 *	@param	$value	The value to apply the filter on.
+		 */
+		function _applyFilter( $name, $value ) {
+			if ( array_key_exists( $name, $this->_filters ) ) {
+				if ( is_array( $this->_filters[ $name ] ) ) {
+					foreach ( $this->_filters[ $name ] as $filter ) {
+						$value = call_user_func( $this->_regFilters[ $filter ]['callback'], $value );
+					}
+				}
+			}
+			return $value;
 		}
 
 	}

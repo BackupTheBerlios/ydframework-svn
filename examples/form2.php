@@ -21,16 +21,22 @@
 
 			// Create the form
 			$form = new YDForm2( 'form1' );
-			$form->setDefaults( array( 'txt1' => 'First text' ) );
+			$form->registerFilter( 'reverse', 'strrev' );
+			$form->setDefaults( array( 'txt1' => 'First text', 'txt3' => "two\nlines" ) );
 			$form->addElement( 'text', 'txt1', 'Enter text 1:' );
 			$form->addElement( 'text', 'txt2', 'Enter text 2:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
+			$form->addElement( 'textarea', 'txt3', 'Enter text 2:' );
 			$form->addElement( 'radio', 'rad1', 'Select a value 1:', array(), array( 1 => 'een', 2=>'twee' ) );
 			$form->addElement( 'radio', 'rad2', 'Select a value 2:', array(), array( 1 => 'een<br/>', 2=>'twee' ) );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
+			$form->addFilter( '__ALL__', 'upper' );
+			$form->addFilter( 'txt1', 'trim' );
+			$form->addFilter( 'txt2', 'reverse' );
 			if ( YD_DEBUG == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
 				YDDebugUtil::dump( $form->_regFilters, 'Registered filters' );
+				YDDebugUtil::dump( $form->_filters, 'Filters' );
 				YDDebugUtil::dump( $form->toArray(), '$form as array' );
 				YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
 				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );

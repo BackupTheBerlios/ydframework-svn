@@ -21,6 +21,9 @@
 			// Set the type
 			$this->_type = 'radio';
 
+			// Indicate if filters need to be applied
+			$this->_applyFilters = false;
+
 		}
 
 		function toHtml() {
