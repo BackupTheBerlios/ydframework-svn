@@ -294,33 +294,39 @@ class phpthumb_functions {
 	}
 
 	function ResolveFilenameToAbsolute($filename) {
-		if ((strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') && (substr($filename, 1, 1) == ':')) {
+		$IsWindows = (bool) (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN');
+		if ($IsWindows && (substr($filename, 1, 1) == ':')) {
+
+			// absolute pathname (Windows)
+			$AbsoluteFilename = $filename;
+
+		} elseif ($IsWindows && ((substr($filename, 0, 2) == '//') || (substr($filename, 0, 2) == '\\\\'))) {
 
 			// absolute pathname (Windows)
 			$AbsoluteFilename = $filename;
 
 		} elseif (substr($filename, 0, 1) == '/') {
 
-			if (!file_exists($_SERVER['DOCUMENT_ROOT'].$filename) && file_exists($filename)) {
+			if (!file_exists(@$_SERVER['DOCUMENT_ROOT'].$filename) && file_exists($filename)) {
 				// absolute filename (*nix)
 				$AbsoluteFilename = $filename;
 			} elseif (substr($filename, 1, 1) == '~') {
 				// /~user/path
-				$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].$filename;
+				$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].$filename;
 				if ($apache_lookup_uri_object = apache_lookup_uri($filename)) {
 					$AbsoluteFilename = $apache_lookup_uri_object->filename;
 				}
 			} else {
 				// relative filename (any OS)
-				$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].$filename;
+				$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].$filename;
 			}
 
 		} else {
 
 			// relative to current directory (any OS)
-			$AbsoluteFilename = $_SERVER['DOCUMENT_ROOT'].dirname($_SERVER['PHP_SELF']).'/'.$filename;
-			if (substr(dirname($_SERVER['PHP_SELF']), 0, 2) == '/~') {
-				if ($apache_lookup_uri_object = apache_lookup_uri(dirname($_SERVER['PHP_SELF']))) {
+			$AbsoluteFilename = @$_SERVER['DOCUMENT_ROOT'].dirname(@$_SERVER['PHP_SELF']).'/'.$filename;
+			if (substr(dirname(@$_SERVER['PHP_SELF']), 0, 2) == '/~') {
+				if ($apache_lookup_uri_object = apache_lookup_uri(dirname(@$_SERVER['PHP_SELF']))) {
 					$AbsoluteFilename = $apache_lookup_uri_object->filename.'/'.$filename;
 				}
 			}

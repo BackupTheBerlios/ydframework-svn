@@ -3,6 +3,22 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.4.4 - June 8, 2004
+  * Bugfix: network-share (Windows) source filenames were
+    not possible. Now works, but you must use the network
+    name and not a mapped drive name, for example:
+    \\othercomputer\file.jpg - good
+    \\192.168.2.1\file.jpg - good
+    z:\file.jpg - won't work
+    This is a PHP limitation (see www.php.net/file-exists)
+    Note: you may want to use "/" slashes instead of "\" if
+    you have magic_quotes_gpc enabled to avoid stripslashes
+    problems.
+    (thanks drÿrhodes360*com)
+  * Bugfix: missing "phpthumb_functions::" in
+    ImageCreateFromStringReplacement()
+    (thanks zapletalÿsoftwaremedia*cz)
+
 v1.4.3 - May 25, 2004
   * Added new configuration variable 'config_temp_directory'
     to allow you to specify a writable directory name for

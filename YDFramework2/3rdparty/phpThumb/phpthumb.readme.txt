@@ -30,31 +30,45 @@ configurable (can be larger or smaller than the source),
 and the source may be the entire image or only a portion
 of the original image. True color and resampling is used
 if GD v2.0+ is available, otherwise low-color and simple
-resizing is used.
-Source image can be a physical file on the server or can
-be retrieved from a database
-GIFs are supported on all versions of GD (even if GD
-does not have native GIF support) thanks to Fabien
-Ezber's GIF Util class.
-AntiHotlinking feature prevents other people from using
-your server to resize their thumbnails.
-Caching feature reduces server load.
+resizing is used. Source image can be a physical file on
+the server or can be retrieved from a database. GIFs are
+supported on all versions of GD even if GD does not have
+native GIF support thanks to the GIFutil class by Fabien
+Ezber. AntiHotlinking feature prevents other people from
+using your server to resize their thumbnails.  The cache
+feature reduces server load.
 
 
 Usage:
 
 Call phpThumb() just like you would a normal image.
 Examples:
-<IMG SRC="phpThumb.php?src=/image.jpg&w=100">
-<IMG SRC="phpThumb.php?src=http://example.com/foo.jpg">
-(see the "demo" link on http://phpthumb.sourceforge.net
-for more usage examples)
+ <IMG SRC="phpThumb.php?src=/image.jpg&w=100">
+ <IMG SRC="phpThumb.php?src=http://example.com/foo.jpg">
+See the "demo" link on http://phpthumb.sourceforge.net
+for more usage examples). Parameters that can be passed
+are listed below under "URL Parameters".
 
 NOTE: It's recommended you use the local image filename
 wherever possible (rather than http://) because performance
 is much better, less (or no) use of temp files, and the
 last-modified check for cached files doesn't work for
 remote files.
+
+To access files over a LAN with Windows share names you
+must use the network name (or IP) and not a mapped drive
+name, for example:
+  //othercomputer/file.jpg - good
+  //192.168.2.1/file.jpg - good
+  z:/file.jpg - won't work
+This is a PHP limitation (see www.php.net/file-exists)
+Note: you may want to use "/" slashes instead of "\" if
+you have magic_quotes_gpc enabled to avoid stripslashes
+problems, although either slash should work if
+magic_quotes_gpc is disabled
+
+
+Configuration:
 
 There are some configuration options you may (but are
 not required to) change. Most configuration options can
@@ -75,6 +89,8 @@ The configuration options you should maybe modify are:
     max_source_pixels allows, but ImageMagick is available
     phpThumb() will use it to generate the thumbnail.
 
+
+Calling as an object (not using phpThumb.php):
 
 To use a database rather than physical files, or to
 render output to a file instead of the browser, you
@@ -100,13 +116,12 @@ phpThumb() object as follows:
     // do something with error message
     echo 'Failed: '.$phpThumb->error;
   }
-  
+
 If you want to change any of the configuration parameters
 you can change them like this:
     $phpThumb->config_<variable_name> = <value>
 for example:
     $phpThumb->config_output_format = 'jpeg';
-
 
 Note: If you want to loop through and create multiple
   thumbnails from different image sources, you should
@@ -187,31 +202,38 @@ Additional Object-only configuration variables:
 
 
 
-Notes:
+General Notes:
+
 * Thumbnails will be scaled proportionately to fit in a
   box of at most (width * height) pixels
   (unless 'iar' is set)
+
 * Thumbnail caching for URL or database sources requires
   an absolute directory name for $config_cache_directory
   Physical file cached thumbnails will be recreated if
   the source file changes, but remote/database files
   cannot (modification time isn't readily available)
+
 * If you need a GUI interface for a user to specify crop
   settings you can investigate 12cropimage:
   http://one-two.net/12cropimage
+
 * phpThumb() should work with PHP v4.0.6+, but seems to
    have a few quirks before v4.1.0
   EXIF thumbnail extraction requires PHP v4.2.0+
   Image rotation requires PHP v4.3.0+. There have been
     reports of problems with PHP older than v4.3.3
+
 * phpThumb() may have tempfile access issues on servers
   where Safe Mode is enabled, specificly when accessing
   a file over HTTP, or when a non-bundled version of GD
   is in use. Specifying 'config_temp_directory' may help
+
 * Transparent PNG output is buggy with true-color images
   and some software (Internet Explorer, Photoshop). Output
   can be forced to 256-color mode for compatability by
   setting the 'bgt' parameter to '256'
+
 * phpThumb() works fine with GD v1.x, but works better
    with GD v2.0+ because of the true-color image support
    and ImageCopyResampled(). Also, there appears to be a

@@ -135,7 +135,7 @@ class phpthumb {
 	// public: constructor
 	function phpThumb() {
 		if (!defined('PHPTHUMB_VERSION')) {
-			define('PHPTHUMB_VERSION', '1.4.3-alpha200405251114');
+			define('PHPTHUMB_VERSION', '1.4.4');
 
 			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 				define('PHPTHUMB_ISWINDOWS', true);
@@ -1115,7 +1115,12 @@ class phpthumb {
 			// try to create GD image source directly via GD, if possible,
 			// rather than buffering to memory and creating with ImageCreateFromString
 			if (!file_exists($this->sourceFilename)) {
-				$this->ErrorImage('"'.$this->sourceFilename.'" does not exist');
+				if (substr($this->sourceFilename, 0, 2) == '//') {
+					header('Location: '.$this->sourceFilename);
+					exit;
+				} else {
+					$this->ErrorImage('"'.$this->sourceFilename.'" does not exist');
+				}
 			} elseif (!is_file($this->sourceFilename)) {
 				$this->ErrorImage('"'.$this->sourceFilename.'" is not a file');
 			} elseif ((@$this->getimagesizeinfo[2] == 1) && function_exists('ImageCreateFromGIF')) {
@@ -1213,12 +1218,14 @@ class phpthumb {
 		$DebugOutput[] = 'phpThumb() version          = '.PHPTHUMB_VERSION;
 		$DebugOutput[] = 'phpversion()                = '.@phpversion();
 		$DebugOutput[] = 'PHP_OS                      = '.PHP_OS;
-		$DebugOutput[] = '$_SERVER[PHP_SELF] = '.@$_SERVER['PHP_SELF'];
+		$DebugOutput[] = '$_SERVER[PHP_SELF]          = '.@$_SERVER['PHP_SELF'];
 		$DebugOutput[] = 'realpath(.)                 = '.@realpath('.');
 		$DebugOutput[] = 'get_magic_quotes_gpc()      = '.@get_magic_quotes_gpc();
-		$DebugOutput[] = 'error_reporting()           = '.@error_reporting();
+		$DebugOutput[] = 'get_magic_quotes_runtime()  = '.@get_magic_quotes_runtime();
+		$DebugOutput[] = 'ini_get(error_reporting)    = '.@ini_get('error_reporting');
 		$DebugOutput[] = 'ini_get(allow_url_fopen)    = '.@ini_get('allow_url_fopen');
 		$DebugOutput[] = 'ini_get(safe_mode)          = '.@ini_get('safe_mode');
+		$DebugOutput[] = 'ini_get(open_basedir)       = '.@ini_get('open_basedir');
 		$DebugOutput[] = 'ini_get(memory_limit)       = '.@ini_get('memory_limit');
 		$DebugOutput[] = 'get_cfg_var(memory_limit)   = '.@get_cfg_var('memory_limit');
 		$DebugOutput[] = 'memory_get_usage()          = '.(function_exists('memory_get_usage') ? @memory_get_usage() : 'n/a');
@@ -1377,7 +1384,7 @@ class phpthumb {
 				$ICFSreplacementFunctionName = 'ImageCreateFromPNG';
 				break;
 			default:
-				die('Unknown image type identified by "'.substr($RawImageData, 0, 3).'" ('.HexCharDisplay(substr($RawImageData, 0, 3)).') in ImageCreateFromStringReplacement()');
+				$this->ErrorImage('Unknown image type identified by "'.substr($this->rawImageData, 0, 3).'" ('.phpthumb_functions::HexCharDisplay(substr($this->rawImageData, 0, 3)).') in ImageCreateFromStringReplacement()');
 				break;
 		}
 		if ($tempnam = tempnam($this->config_temp_directory, 'pThumb')) {
