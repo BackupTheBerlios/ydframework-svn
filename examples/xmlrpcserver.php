@@ -4,7 +4,7 @@
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
 	// Includes
-	require_once( 'YDXmlRpcServer.php' );
+	require_once( 'YDXmlRpc.php' );
 
 	// Class definition
 	class xmlrpcserver extends YDXmlRpcServer {
