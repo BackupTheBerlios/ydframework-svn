@@ -232,11 +232,18 @@
      *        This indicates if the YDHttpClient used in e.g. the YDUrl class
      *        should try to use GZip compression if available or not. By
      *        default, this is set to true.
-     * 
-     *  @internal
      */
     if ( ! defined( 'YD_HTTP_USES_GZIP' ) ) {
         define( 'YD_HTTP_USES_GZIP', 1 );
+    }
+
+    /**
+     *  @enum YD_HTTP_CACHETIMEOUT
+     *        This is the cache timeout for HTTP caches. This value is in 
+     *        seconds and defaults to 3600 seconds (1 hour).
+     */
+    if ( ! defined( 'YD_HTTP_CACHETIMEOUT' ) ) {
+        define( 'YD_HTTP_CACHETIMEOUT', 3600 );
     }
 
     // Get debugging mode

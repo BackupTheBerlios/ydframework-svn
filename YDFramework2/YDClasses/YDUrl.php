@@ -196,11 +196,6 @@
          *                cached or not. By default, caching is turned on.
          *
          *  @returns Returns the contents of the URL.
-         *
-         *  @todo
-         *      If no etag of last modified, we should cache the data for a
-         *      predefined time and refetch afterwards (pbase). We can use the
-         *      checksum of the URL to construct the filename?
          */
         function getContents( $cache=true ) {
 
@@ -237,8 +232,6 @@
                     // Create the cache filename
                     $cacheFName = YD_DIR_TEMP . '/' . YD_TMP_PRE . md5( $this->getUrl() ) . '.wch';
 
-                    // Check if it is still valid
-
                 }
 
                 // Use the cache file if any
@@ -250,8 +243,14 @@
                     // Create a file object for the cache file
                     $file = new YDFSFile( $cacheFName );
 
-                    // Output the contents
-                    return gzuncompress( $file->getContents() );
+                    // Check if the cache is still valid
+                    $cacheValidTime = $file->getLastModified() + YD_HTTP_CACHETIMEOUT;
+                    if ( time() < $cacheValidTime ) {
+
+                        // Output the contents
+                        return gzuncompress( $file->getContents() );
+
+                    }
 
                 };
 
@@ -317,15 +316,15 @@
          *  @param $regex The regular expression you want to apply to the
          *                the contents of the URL.
          *
-         *  @returns Array with the regex matches from the URL contents.
+         *  @param $cache (optional) Indicate if the web content should be
+         *                cached or not. By default, caching is turned on.
          *
-         *  @todo
-         *      Add optional parameter indicating if we want to cache or not.
+         *  @returns Array with the regex matches from the URL contents.
          */
-        function getContentsWithRegex( $regex ) {
+        function getContentsWithRegex( $regex, $cache=true ) {
 
             // Get the contents
-            $contents = $this->getContents();
+            $contents = $this->getContents( $cache );
 
             // Apply the regular expression
             preg_match_all( $regex, $contents, $matches );

@@ -94,6 +94,7 @@
          *  @returns String containing the last modification date of the object.
          */
         function getLastModified() {
+            clearstatcache();
             return filemtime( $this->getAbsolutePath() );
         }
 
@@ -103,6 +104,7 @@
          *  @returns Double containing the length of the file.
          */
         function getSize() {
+            clearstatcache();
             return filesize( $this->getAbsolutePath() );
         }
 
