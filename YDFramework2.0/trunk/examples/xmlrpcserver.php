@@ -16,7 +16,9 @@
 			$this->YDXmlRpcServer();
 			
 			// Register the methods
-			$this->registerMethod( 'echo', 'this:xmlrpcEcho', array( 'string', 'string' ) );
+			$this->registerMethod(
+				'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' ), 'Echoes a string'
+			);
 
 		}
 

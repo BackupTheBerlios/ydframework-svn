@@ -130,6 +130,63 @@
 	}
 
 	/**
+	 *	This class implements the actual XML/RPC server.
+	 *
+	 *	@internal
+	 */
+	class YDXmlRpcServerImpl extends IXR_IntrospectionServer {
+
+		/**
+		 *	This is the class constructor of the YDXmlRpcServerImpl class.
+		 */
+		function YDXmlRpcServerImpl() {
+
+			// Initialize parent
+			$this->IXR_IntrospectionServer();
+
+		}
+
+		/**
+		 *	This function will execute the actual method.
+		 *
+		 *	@param $methodname	Name of the method to execute.
+		 *	@param $args		The arguments for executing the method.
+		 *
+		 *	@returns	The results of the method.
+		 *
+		 *	@internal
+		 */
+		function call( $methodname, $args ) {
+			if ( ! $this->hasMethod( $methodname ) ) {
+				return new IXR_Error( -32601, 'server error. requested method ' . $methodname . ' does not exist.' );
+			}
+			$method = $this->callbacks[ $methodname ];
+			if ( count( $args ) == 1 ) {
+				$args = $args[0];
+			}
+			if ( is_array( $method ) ) {
+				if ( ! method_exists( $method[0], $method[1] ) ) {
+					return new IXR_Error( -32601, 'server error. requested class method "'.$method.'" does not exist.' );
+				}
+				$result = call_user_func( $method, $args );
+			} elseif ( substr( $method, 0, 5 ) == 'this:' ) {
+				$method = substr( $method, 5 );
+				if ( ! method_exists( $this, $method ) ) {
+					return new IXR_Error( -32601, 'server error. requested class method "' . $method . '" does not exist.' );
+				}
+				$result = $this->$method( $args );
+			} else {
+				if ( ! function_exists( $method ) ) {
+					return new IXR_Error( -32601, 'server error. requested function "'.$method.'" does not exist.' );
+				}
+				$result = $method( $args );
+			}
+			return $result;
+		}
+
+	}
+
+	/**
 	 *	This class defines an XML/RPC server. This XML/RPC server supports introspection and is also able to handle 
 	 *	HTTP GET requests. In case of a HTTP GET request, it will display a page describing the service. This page will
 	 *	list methods with their parameters and help message. It will also list the capabilities of the XML/RPC server.
@@ -153,9 +210,8 @@
 			// Initialize YDRequest
 			$this->YDRequest();
 
-			// Aggregate the functions from the IXR_IntrospectionServer class
-			aggregate( $this, 'IXR_IntrospectionServer' );
-			IXR_IntrospectionServer::IXR_IntrospectionServer();
+			// Instantiate the server object
+			$this->_server = new YDXmlRpcServerImpl();
 
 		}
 
@@ -182,7 +238,7 @@
 				$this->requestNotXmlRpc();
 				return;
 			}
-			$this->serve();
+			$this->_server->serve();
 		}
 
 		/**
@@ -194,7 +250,7 @@
 		 *	@param $help		(optional) The help text describing this method.
 		 */
 		function registerMethod( $method, $function, $signature, $help='' ) {
-			$this->addCallback( $method, $function, $signature, $help );
+			$this->_server->addCallback( $method, $function, $signature, $help );
 		}
 
 		/**
@@ -205,16 +261,16 @@
 
 			// Get the list of methods
 			$methods = array();
-			$methodNames = $this->listMethods( null );
+			$methodNames = $this->_server->listMethods( null );
 
 			// Loop over the methods
 			foreach( $methodNames as $method ) {
-				if ( isset( $this->signatures[ $method ] ) ) {
-					if ( sizeof( $this->signatures[ $method ] ) == 1 ) {
+				if ( isset( $this->_server->signatures[ $method ] ) ) {
+					if ( sizeof( $this->_server->signatures[ $method ] ) == 1 ) {
 						$paramsIn = null;
-						$paramsOut = $this->signatures[ $method ];
+						$paramsOut = $this->_server->signatures[ $method ];
 					} else {
-						$paramsIn = $this->signatures[ $method ];
+						$paramsIn = $this->_server->signatures[ $method ];
 						$paramsOut = array_shift( $paramsIn );
 					}
 				} else {
@@ -222,10 +278,10 @@
 					$paramsOut = null;
 				}
 				$methodInfo = array();
-				$methodInfo['signature'] = @ $this->signatures[ $method ];
+				$methodInfo['signature'] = @ $this->_server->signatures[ $method ];
 				$methodInfo['paramsIn'] = $paramsIn;
 				$methodInfo['paramsOut'] = $paramsOut;
-				$methodInfo['help'] = @ $this->help[ $method ];
+				$methodInfo['help'] = @ $this->_server->help[ $method ];
 				$methods[ $method ] = $methodInfo;
 			}
 
@@ -234,7 +290,7 @@
 			$template = new YDTemplate();
 			$template->setVar( 'methods', $methods );
 			$template->setVar( 'xmlRpcUrl', $this->getCurrentUrl() );
-			$template->setVar( 'capabilities', $this->getCapabilities( null ) );
+			$template->setVar( 'capabilities', $this->_server->getCapabilities( null ) );
 			$template->setVar( 'rowcolor', '#EEEEEE' );
 			echo( $template->getOutput( dirname( __FILE__ ) . '/YDXmlRpcServer.tpl' ) );
 
