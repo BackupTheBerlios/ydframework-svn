@@ -177,12 +177,12 @@
 		}
 
 		/**
-		 *	This function will return a single value.
+		 *	This function will return an array of single values.
 		 *
 		 *	@param $sql		The SQL statement to use.
 		 *	@param $name	The field value to return.
 		 *
-		 *	@returns	A single value matching the SQL statement.
+		 *	@returns	An array of single values matching the SQL statement.
 		 */
 		function getValuesByName( $sql, $name ) {
 			$records = $this->getRecords( $sql );
