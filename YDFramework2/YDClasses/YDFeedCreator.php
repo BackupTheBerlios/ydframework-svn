@@ -66,7 +66,7 @@
         /**
          *  Function to set the link of the feed.
          *
-         *  @param $desc The link of the feed.
+         *  @param $link The link of the feed.
          */
         function setLink( $link ) {
             $this->ufc->link = $link;
