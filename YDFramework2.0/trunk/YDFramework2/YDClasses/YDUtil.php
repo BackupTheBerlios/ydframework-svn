@@ -85,6 +85,25 @@
 			return intval( ( $endTime - $this->startTime ) * 1000 );
 		}
 
+		/**
+		 *	This function returns a report as an array, with each row containing the following info: elapsed time,
+		 *	difference with previous marker and marker name.
+		 *
+		 *	@returns	Array with the elapsed times, differences and marker names.
+		 */
+		function getReport() {
+			$report = array( array( 0, 0, '-- Start' ) );
+			$previous = 0;
+			foreach ( $this->markers as $marker ) {
+				foreach ( $marker as $key=>$val ) {
+					$diff = $val - $previous;
+					$previous = $val;
+					array_push( $report, array( $val, $diff, $key ) );
+				}
+			}
+			return $report;
+		}
+
 	}
 
 	/**
