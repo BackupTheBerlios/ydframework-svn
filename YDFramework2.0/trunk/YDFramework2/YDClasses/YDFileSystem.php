@@ -1015,6 +1015,53 @@
         }
 
         /**
+         *  This function will list all the files in this directory, but will also recurse into the subdirectories.
+         *
+         *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
+         *					pass them as an array. If the pattern is prefixed with an exclamation mark, the files that
+         *					match this pattern will not be included in the result.
+         *	@param $class	(optional) If you specify a not null value for this option, this function will return the 
+         *					items in the directory as the indicated class. If an empty string is given, it will return
+         *					the list of filenames instead of objects.
+         *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage and
+         *					YDFSFile classes. If you only need a single class, you can also specify it as a string.
+         *
+         *	@returns	Array of YDFile objects for the files that match the pattern.
+         */
+        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ) ) {
+            $files = array();
+            foreach ( $this->_getSubdirectories( $this->_path ) as $dir ) {
+                $dir = new YDFSDirectory( $dir );
+                $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes ) );
+            }
+            return $files;
+        }
+
+        /**
+         *	Helper function to get the contents of a directory recursively.
+         *
+         *  @param  $path   The path to get the subdirectories from.
+         *
+         *  @returns    The list of subdirectories of the given path.
+         *
+         *  @internal
+         */
+        function _getSubdirectories( $path ) {
+            $dirlist = array( $path );
+            $dirHandle = opendir( $path );
+            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
+                if ( $file != '.' && $file != '..' ) {
+                    if ( is_dir( $path . '/' . $file ) ) {
+                        array_push( $dirlist, $path . '/' . $file );
+                        $dirlist = array_merge( $dirlist, $this->_getSubdirectories( $path . '/' . $file ) );
+                    }
+                }
+            }
+            sort( $dirlist );
+            return array_unique( $dirlist );
+        }
+
+        /**
          *	Function to get the full path of the directory.
          *
          *	@returns	String containing the full path of the directory.

@@ -206,6 +206,7 @@
             <listitem><emphasis role="bold">getBaseName:</emphasis> returns the actual name of the directory</listitem>
             <listitem><emphasis role="bold">getAbsolutePath:</emphasis> returns the complete path to the directory</listitem>
             <listitem><emphasis role="bold">getContents:</emphasis> returns the contents of the directory</listitem>
+            <listitem><emphasis role="bold">getFilesRecursively:</emphasis> will list all the files in this directory, but will also recurse into the subdirectories</listitem>
             <listitem><emphasis role="bold">getPath:</emphasis> returns the complete path to the directory</listitem>
             <listitem><emphasis role="bold">isWriteable:</emphasis> boolean indicating if the directory is writeable or not (this is not working properly on Windows)</listitem>
             <listitem><emphasis role="bold">createFile:</emphasis> creates a new file in the directory</listitem>
@@ -239,6 +240,11 @@
     // JPG and txt files in the directory
     YDDebugUtil::dump(
         $dir->getContents( array( '*.jpg', '*.txt' ) )
+    )
+
+    // JPG and txt files in the directory and subdirectories
+    YDDebugUtil::dump(
+        $dir->getFilesRecursively( array( '*.jpg', '*.txt' ) )
     )
 
 ?>]]></programlisting>

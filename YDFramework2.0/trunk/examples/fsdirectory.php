@@ -40,6 +40,9 @@
                 $dir->getContents( array( '*.jpg', '*.txt' ) ), '$dir->getContents( array( \'*.jpg\', \'*.txt\' ) )'
             );
 
+            // Getting files recursively
+            YDDebugUtil::dump( $dir->getFilesRecursively( '*.tpl' ), '$dir->getFilesRecursively( \'*.tpl\' )' );
+
             // PHP files in the directory
             YDDebugUtil::dump(
                 $dir->getContents(array( '*.jpg', '*.txt', '!bbcode.*' ) ),
