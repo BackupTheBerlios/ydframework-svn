@@ -18,11 +18,11 @@
 
 			{foreach from=$entries item=entry}
 				<p>
-				<b>{$entry[notetitle]}</b>
-				<a href="{$YD_SELF_SCRIPT}?do=EditNote&id={$entry[noteid]}">edit</a> | 
-				<a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry[noteid]}">delete</a>
+				<b>{$entry.notetitle}</b>
+				<a href="{$YD_SELF_SCRIPT}?do=EditNote&id={$entry.noteid}">edit</a> | 
+				<a href="{$YD_SELF_SCRIPT}?do=DeleteNote&id={$entry.noteid}">delete</a>
 				<br>
-				{$entry[notecontents]}
+				{$entry.notecontents}
 				</p>
 			{/foreach}
 

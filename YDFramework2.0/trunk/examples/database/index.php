@@ -7,7 +7,7 @@
 	// Includes
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 	YDInclude( 'YDDatabase.php' );
 
 	// Class definition for the index request
