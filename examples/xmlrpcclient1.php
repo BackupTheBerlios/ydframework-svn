@@ -33,7 +33,9 @@
 
             // tide.getTideForDay
             echo( '<p>tide.getTideForDay( 11/05/2004 )</p>' );
-            $result = $client->execute( 'tide.getTideForDay', '2004-05-11' );
+            $result = $client->execute(
+                'tide.getTideForDay', array( '2004-05-11' )
+            );
             YDDebugUtil::dump( $result );
 
         }

@@ -135,15 +135,16 @@
          *  This function will execute the specified XML/RPC call on the server.
          *
          *  @param $method Name of the XML/RPC method.
-         *  @param $params The parameters for this method.
+         *  @param $args   (optional) An array specifying the parameters for 
+         *                 this method.
          *
          *  @returns Returns the result of the query. If something went wrong, a
          *           YDFatalError is raised.
          */
-        function execute() {
+        function execute( $method, $args=array() ) {
 
-            // Get the function arguments
-            $args = func_get_args();
+            // Combine the method with the params
+            array_unshift( $args, $method );
 
             // Execute the function
             $result = call_user_func_array( 
