@@ -222,6 +222,45 @@
 
         }
 
+        /**
+         *  This function will output the feed in the specified format and will
+         *  color the XML elements using HTML code. The following formats are 
+         *  recognized:
+         *
+         *  - RSS0.91
+         *  - RSS1.0
+         *  - RSS2.0
+         *  - ATOM
+         *
+         *  @remark
+         *      The default format is "RSS2.0". If you specify no argument
+         *      indicating the requested format, the "RSS2.0" format will be
+         *      used.
+         *
+         *  @param $format (optional) The format in which the items should be 
+         *                 converted.
+         *
+         *  @returns HTML colored XML data.
+         */
+        function getColoredXml( $format='RSS2.0', $color='darkred' ) {
+
+            // Create the feed as XML
+            $xml = $this->toXml( $format );
+
+            // Convert to pre and HTML entities
+            $xml = '<pre>' . htmlentities( $xml ) . '</pre>';
+
+            // Color code the xml
+            $xml = str_replace(
+                '&lt;', '<font color="' . $color . '">&lt;', $xml
+            );
+            $xml = str_replace( '&gt;', '&gt;</font>', $xml );
+
+            // Return the colored XML
+            return $xml;
+
+        }
+
     }
 
 ?>

@@ -45,19 +45,19 @@
 
             // Output the feed in RSS0.91
             echo( '<h3>RSS 0.91</h3>' );
-            echo( $this->formatXml( $this->fc->toXml( 'RSS0.91' ) ) );
+            echo( $this->fc->getColoredXml( 'RSS0.91' ) );
 
             // Output the feed in RSS1.0
             echo( '<h3>RSS 1.0</h3>' );
-            echo( $this->formatXml( $this->fc->toXml( 'RSS1.0' ) ) );
+            echo( $this->fc->getColoredXml( 'RSS1.0' ) );
 
             // Output the feed in the default format (RSS2.0)
             echo( '<h3>RSS 2.0 (default)</h3>' );
-            echo( $this->formatXml( $this->fc->toXml() ) );
+            echo( $this->fc->getColoredXml() );
 
             // Output the feed in ATOM
             echo( '<h3>ATOM</h3>' );
-            echo( $this->formatXml( $this->fc->toXml( 'ATOM' ) ) );
+            echo( $this->fc->getColoredXml( 'ATOM' ) );
 
         }
 
@@ -79,21 +79,6 @@
         // Output the feed in ATOM
         function actionAtom() {
             $this->fc->outputXml( 'ATOM' );
-        }
-
-        // Function to output preformatted XML
-        function formatXml( $xml ) {
-
-            // Convert to pre and HTML entities
-            $xml = '<pre>' . htmlentities( $xml ) . '</pre>';
-
-            // Color code the xml
-            $xml = str_replace( '&lt;', '<font color="darkred">&lt;', $xml );
-            $xml = str_replace( '&gt;', '&gt;</font>', $xml );
-            
-            // Return the XML
-            return $xml;
-
         }
 
     }
