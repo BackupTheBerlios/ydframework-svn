@@ -1,35 +1,35 @@
 <?php
 
-	// Standard include
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-	// Includes
-	YDInclude( 'YDXmlRpc.php' );
+    // Includes
+    YDInclude( 'YDXmlRpc.php' );
 
-	// Class definition
-	class xmlrpcserver extends YDXmlRpcServer {
+    // Class definition
+    class xmlrpcserver extends YDXmlRpcServer {
 
-		// Class constructor
-		function xmlrpcserver() {
+        // Class constructor
+        function xmlrpcserver() {
 
-			// Initialize the parent class
-			$this->YDXmlRpcServer();
-			
-			// Register the methods
-			$this->registerMethod(
-				'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' ), 'Echoes a string'
-			);
+            // Initialize the parent class
+            $this->YDXmlRpcServer();
+            
+            // Register the methods
+            $this->registerMethod(
+                'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' ), 'Echoes a string'
+            );
 
-		}
+        }
 
-		// The method which just echoes a string
-		function xmlrpcEcho( $var ) {
-			return $var;
-		}
+        // The method which just echoes a string
+        function xmlrpcEcho( $var ) {
+            return $var;
+        }
 
-	}
+    }
 
-	// Process the request
-	YDInclude( 'YDF2_process.php' );
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
 
 ?>

@@ -1,68 +1,68 @@
 <?php
 
-	// Standard include
-	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-	// Includes
-	YDInclude( 'YDRequest.php' );
-	
-	// Class definition
-	class config extends YDRequest {
+    // Includes
+    YDInclude( 'YDRequest.php' );
 
-		// Class constructor
-		function config() {
-			$this->YDRequest();
-		}
+    // Class definition
+    class config extends YDRequest {
 
-		// Default action
-		function actionDefault() {
+        // Class constructor
+        function config() {
+            $this->YDRequest();
+        }
 
-			// Set some variables
-			YDConfig::set( 'MyConfigVar1', 'value cfg1' );
-			YDConfig::set( 'MyConfigVar2', 'value cfg2' );
-			YDConfig::set( 'MyConfigVar3', 'value cfg3' );
+        // Default action
+        function actionDefault() {
 
-			// Get the values
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3' );
+            // Set some variables
+            YDConfig::set( 'MyConfigVar1', 'value cfg1' );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2' );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3' );
 
-			// Check if the variables exist or not
-			YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar1' ), 'exists - MyConfigVar1' );
-			YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar2' ), 'exists - MyConfigVar2' );
-			YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar3' ), 'exists - MyConfigVar3' );
+            // Get the values
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3' );
 
-			// Check an unexisting variable
-			YDDebugUtil::dump( YDConfig::exists( 'xx' ), 'exists - xx' );
+            // Check if the variables exist or not
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar1' ), 'exists - MyConfigVar1' );
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar2' ), 'exists - MyConfigVar2' );
+            YDDebugUtil::dump( YDConfig::exists( 'MyConfigVar3' ), 'exists - MyConfigVar3' );
 
-			// Set some variables, not overriding existing values
-			YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', false );
-			YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', false );
-			YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', false );
+            // Check an unexisting variable
+            YDDebugUtil::dump( YDConfig::exists( 'xx' ), 'exists - xx' );
 
-			// Get the values (should be unchanged)
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed1' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed1' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed1' );
+            // Set some variables, not overriding existing values
+            YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', false );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', false );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', false );
 
-			// Set some variables, overriding existing values
-			YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', true );
-			YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', true );
-			YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', true );
+            // Get the values (should be unchanged)
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed1' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed1' );
 
-			// Get the values (should be changed)
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed2' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed2' );
-			YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed2' );
-			
-			// Dump the contents of YDConfig
-			YDConfig::dump();
-			
-		}
+            // Set some variables, overriding existing values
+            YDConfig::set( 'MyConfigVar1', 'value cfg1 changed', true );
+            YDConfig::set( 'MyConfigVar2', 'value cfg2 changed', true );
+            YDConfig::set( 'MyConfigVar3', 'value cfg3 changed', true );
 
-	}
+            // Get the values (should be changed)
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar1' ), 'get - MyConfigVar1 - changed2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar2' ), 'get - MyConfigVar2 - changed2' );
+            YDDebugUtil::dump( YDConfig::get( 'MyConfigVar3' ), 'get - MyConfigVar3 - changed2' );
+            
+            // Dump the contents of YDConfig
+            YDConfig::dump();
+            
+        }
 
-	// Process the request
-	YDInclude( 'YDF2_process.php' );
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
 
 ?>

@@ -57,32 +57,32 @@
 
     </sect1>
 
-	<sect1 id="yddatabase_config">
-	
-		<title>Configuring the YDDatabase class</title>
-	
-		<para>There are two things you can configure in the YDDatabase class:</para>
-		
+    <sect1 id="yddatabase_config">
+
+        <title>Configuring the YDDatabase class</title>
+
+        <para>There are two things you can configure in the YDDatabase class:</para>
+        
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">YD_DB_DEFAULTPAGESIZE:</emphasis> The default pagesize for the YDRecordSet class</listitem>
             <listitem><emphasis role="bold">YD_DB_FETCHTYPE:</emphasis> The result type you want to get from the getRecord and getRecords functions. This can either be YD_DB_FETCH_ASSOC to get them as an associative array or YD_DB_FETCH_NUM to get the records as a numeric array.</listitem>
         </itemizedlist>
-		
-		<para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
-		
+
+        <para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
+        
         <programlisting><![CDATA[<?php
 
     // Change the default pagesize
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 10 );
-	
+    
     // Fetch as an associative array
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
-	
+    
     // Fetch as an numeric array
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
 
-?>]]></programlisting>	
-	</sect1>
+?>]]></programlisting>    
+    </sect1>
 
     <sect1 id="yddatabase_getting_db_info">
 

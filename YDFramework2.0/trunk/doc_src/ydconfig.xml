@@ -5,17 +5,17 @@
 
     <para>The YDConfig class is a way to configure things in the Yellow Duck Framework. You can compare it with setting a global variable, but it's much more versatile as it's doing some more chechking.</para>
 
-	<para>The YDConfig class has different methods, which are all implemented as static methods. This means that you don't have to make a instance of the YDConfig class to use it. The following methods are available:</para>
+    <para>The YDConfig class has different methods, which are all implemented as static methods. This means that you don't have to make a instance of the YDConfig class to use it. The following methods are available:</para>
 
-	<itemizedlist spacing="compact">
-		<listitem><emphasis role="bold">YDConfig::get():</emphasis> gets the value for the specified configuration variable.</listitem>
-		<listitem><emphasis role="bold">YDConfig::set():</emphasis> sets the value for the specified configuration variable, optionally overriding any value that was set already.</listitem>
-		<listitem><emphasis role="bold">YDConfig::exists():</emphasis> checks if the specified configuration variable is set or not.</listitem>
-		<listitem><emphasis role="bold">YDConfig::dump():</emphasis> this functions uses the YDDebugUtil::dump function to dump the contents of the YDConfig object.</listitem>
-	</itemizedlist>
-	
-	<para>The following example shows you how you can use the YDConfig object:</para>
-	
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">YDConfig::get():</emphasis> gets the value for the specified configuration variable.</listitem>
+        <listitem><emphasis role="bold">YDConfig::set():</emphasis> sets the value for the specified configuration variable, optionally overriding any value that was set already.</listitem>
+        <listitem><emphasis role="bold">YDConfig::exists():</emphasis> checks if the specified configuration variable is set or not.</listitem>
+        <listitem><emphasis role="bold">YDConfig::dump():</emphasis> this functions uses the YDDebugUtil::dump function to dump the contents of the YDConfig object.</listitem>
+    </itemizedlist>
+    
+    <para>The following example shows you how you can use the YDConfig object:</para>
+    
     <programlisting><![CDATA[<?php
 
     // Standard include
@@ -85,8 +85,8 @@
 
 ?>]]></programlisting>
 
-	<para>The output from this example should be the following:</para>
-	
+    <para>The output from this example should be the following:</para>
+    
     <programlisting><![CDATA[get - MyConfigVar1
 'value cfg1'
 
@@ -135,6 +135,6 @@ array (
   'MyConfigVar3' => 'value cfg3 changed',
 )]]></programlisting>
 
-	<note>A lot of the classes in the Yellow Duck Framework use the YDConfig object to be configured. Examples of classes that use the YDConfig object to get their configuration from are the <link linkend="ydlog">YDLog</link>, <link linkend="ydurl_raw_http">YDHttpClient</link>, <link linkend="ydurl_ydurl_class">YDUrl</link> and <link linkend="yddatabase_paged">YDRecordSet</link> classes.</note> 
+    <note>A lot of the classes in the Yellow Duck Framework use the YDConfig object to be configured. Examples of classes that use the YDConfig object to get their configuration from are the <link linkend="ydlog">YDLog</link>, <link linkend="ydurl_raw_http">YDHttpClient</link>, <link linkend="ydurl_ydurl_class">YDUrl</link> and <link linkend="yddatabase_paged">YDRecordSet</link> classes.</note> 
 
 </chapter>

@@ -53,26 +53,26 @@
 
 Processing time(s):
 
-	Elapsed	  Diff	  Marker
-	0 ms	  0 ms	  -- Start
-	13 ms	  13 ms	  Reading file
-	14 ms	  1 ms	  Finished reading file
-	14 ms	  0 ms	  YDBBCode object
-	14 ms	  0 ms	  Start of conversion
-	25 ms	  11 ms	  -- Finish
+    Elapsed   Diff    Marker
+    0 ms      0 ms    -- Start
+    13 ms     13 ms   Reading file
+    14 ms     1 ms    Finished reading file
+    14 ms     0 ms    YDBBCode object
+    14 ms     0 ms    Start of conversion
+    25 ms     11 ms   -- Finish
 
 Total size include files: 74.9 KB
 
 Included files: 
 
-	26.5 KB	  c:\ydf\YDFramework2\YDClasses\YDFileSystem.php
-	18.3 KB	  c:\ydf\YDFramework2\YDClasses\YDUtil.php
-	9.6 KB	  c:\ydf\YDFramework2\YDClasses\YDRequest.php
-	7.2 KB	  c:\ydf\YDFramework2\YDF2_init.php
-	5.6 KB	  c:\ydf\YDFramework2\YDClasses\YDBBCode.php
-	5.5 KB	  c:\ydf\YDFramework2\YDClasses\YDExecutor.php
-	1.2 KB	  c:\ydf\YDFramework2\YDF2_process.php
-	1.1 KB	  c:\ydf\examples\timer.php
+    26.5 KB   c:\ydf\YDFramework2\YDClasses\YDFileSystem.php
+    18.3 KB   c:\ydf\YDFramework2\YDClasses\YDUtil.php
+    9.6 KB    c:\ydf\YDFramework2\YDClasses\YDRequest.php
+    7.2 KB    c:\ydf\YDFramework2\YDF2_init.php
+    5.6 KB    c:\ydf\YDFramework2\YDClasses\YDBBCode.php
+    5.5 KB    c:\ydf\YDFramework2\YDClasses\YDExecutor.php
+    1.2 KB    c:\ydf\YDFramework2\YDF2_process.php
+    1.1 KB    c:\ydf\examples\timer.php
 
 Number of SQL queries: 0
 

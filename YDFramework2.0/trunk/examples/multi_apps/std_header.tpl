@@ -2,11 +2,10 @@
 
 <head>
 
-	<title>Mulitple applications</title>
+    <title>Mulitple applications</title>
 
 </head>
 
 <body>
 
-	<p>This is the standard header</p>
-
+    <p>This is the standard header</p>

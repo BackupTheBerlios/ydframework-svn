@@ -1,33 +1,33 @@
 <?php
 
-	// Include our custom init file
-	require_once( dirname( __FILE__ ) . '/../_includes/YDF2_include.php' );
+    // Include our custom init file
+    require_once( dirname( __FILE__ ) . '/../_includes/YDF2_include.php' );
 
-	// Define the request class
-	class index extends MyAppRequest {
+    // Define the request class
+    class index extends MyAppRequest {
 
-		// Class constructor
-		function index() {
+        // Class constructor
+        function index() {
 
-			// Initialize the parent
-			$this->MyAppRequest();
+            // Initialize the parent
+            $this->MyAppRequest();
 
-		}
+        }
 
-		// The default action
-		function actionDefault() {
+        // The default action
+        function actionDefault() {
 
-			// Assign a variable to the template
-			$this->tpl->assign( 'title', __FILE__ );
+            // Assign a variable to the template
+            $this->tpl->assign( 'title', __FILE__ );
 
-			// Display the template
-			$this->tpl->display();
+            // Display the template
+            $this->tpl->display();
 
-		}
+        }
 
-	}
+    }
 
-	// Process the request
-	YDInclude( 'YDF2_process.php' );
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
 
 ?>

@@ -107,18 +107,18 @@
         <programlisting><![CDATA[<?php
 
     /**
-     *	This is the base class for all form elements.
+     *  This is the base class for all form elements.
      */
     class YDFormElement extends YDBase {
 
         /**
-         *	This is the class constructor for the YDFormElement class.
+         *  This is the class constructor for the YDFormElement class.
          *
-         *	@param $form		The name of the form to which this element is connected.
-         *	@param $name		The name of the form element.
-         *	@param $label		(optional) The label for the form element.
-         *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *  @param $form        The name of the form to which this element is connected.
+         *  @param $name        The name of the form element.
+         *  @param $label       (optional) The label for the form element.
+         *  @param $attributes  (optional) The attributes for the form element.
+         *  @param $options     (optional) The options for the elment.
          */
         function YDFormElement(
             $form, $name, $label='', $attributes=array(), $options=array()
@@ -136,7 +136,7 @@
             $this->_type = '';
             $this->_value = '';
             $this->_isButton = false;
-			
+
             // Indicate where the label should be
             $this->_labelPlace = 'before';
 
@@ -146,9 +146,9 @@
         }
 
         /**
-         *	Indicates if the element is a button or not.
+         *  Indicates if the element is a button or not.
          *
-         *	@returns	Boolean indicating if the element is a button or not.
+         *  @returns    Boolean indicating if the element is a button or not.
          */
         function isButton() {
             if ( $this->_isButton === true ) {
@@ -159,17 +159,17 @@
         }
 
         /**
-         *	This function will return the element as an array.
+         *  This function will return the element as an array.
          *
-         *	@returns	The form element as an array.
+         *  @returns    The form element as an array.
          */
         function toArray() {
         }
 
         /**
-         *	This function will return the element as HTML.
+         *  This function will return the element as HTML.
          *
-         *	@returns	The form element as HTML text.
+         *  @returns    The form element as HTML text.
          */
         function toHtml() {
         }
@@ -535,14 +535,14 @@
     YDInclude( 'YDForm.php' );
 
     /**
-     *	This is the class that is able to render a form object to HTML.
+     *  This is the class that is able to render a form object to HTML.
      */
     class YDFormRenderer_html extends YDFormRenderer {
 
         /**
-         *	This is the class constructor for the YDFormRenderer_html class.
+         *  This is the class constructor for the YDFormRenderer_html class.
          *
-         *	@param $form		The form that needs to be rendered.
+         *  @param $form        The form that needs to be rendered.
          */
         function YDFormRenderer_html( $form ) {
 
@@ -552,9 +552,9 @@
         }
 
         /**
-         *	This function will render the form.
+         *  This function will render the form.
          *
-         *	@returns	The rendered form.
+         *  @returns    The rendered form.
          */
         function render() {
 
