@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.0
+ * Version:	2.2.1
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -51,7 +51,6 @@ class compiler extends template {
 	var $_switch_stack		=	array();
 	var $_tag_stack			=	array();
 	var $_require_stack		=	array();	// stores all files that are "required" inside of the template
-	var $_include_stack		=	array();	// all files that are "include"d, used to check for template changes
 	var $_error_level		=	null;
 	var $_sl_md5			=	'39fc70570b8b60cbc1b85839bf242aff';
 
@@ -163,13 +162,6 @@ class compiler extends template {
 		while($add = array_pop($this->_require_stack))
 			$compiled_text = '<?php require_once(\''. $this->_get_plugin_dir() . $add[0] . '\'); $this->register_' . $add[1] . '("' . $add[2] . '", "' . $add[3] . '"); ?>' . $compiled_text;
 
-		// add the includes
-		if (count($this->_include_stack) > 0)
-			$compiled_text = serialize($this->_include_stack) . "\n\n$compiled_text";
-		else
-			$compiled_text = "\n\n$compiled_text";
-		$this->_include_stack = array();
-
 		// remove unnecessary close/open tags
 		$compiled_text = preg_replace('!\?>\n?<\?php!', '', $compiled_text);
 
@@ -202,7 +194,6 @@ class compiler extends template {
 				$_args = $this->_parse_arguments($arguments);
 				if (!isset($_args['file']))
 					$this->trigger_error("missing 'file' attribute in 'include'", E_USER_ERROR, __FILE__, __LINE__);
-				array_push($this->_include_stack, $this->_dequote($_args['file']));
 				if (!isset($_args['assign']))
 					return '<?php echo $this->_fetch_compile(' . $_args['file'] . '); ?>';
 				else

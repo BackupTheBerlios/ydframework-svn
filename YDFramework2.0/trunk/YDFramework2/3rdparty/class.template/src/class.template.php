@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.template.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.0
+ * Version:	2.2.1
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -59,6 +59,7 @@ class template {
 	var $_compile_obj	= null;
 	var $_cache_id		= null;
 	var $_cache_dir		= "";		// stores where this specific file is going to be cached
+	var $_cache_info	= array('config' => array(), 'template' => array());
 	var $_sl_md5		= '39fc70570b8b60cbc1b85839bf242aff';
 
 	function assign($key, $value = null) {
@@ -146,13 +147,7 @@ class template {
 	}
 
 	function is_cached($file, $cache_id = null) {
-		if (!$this->cache)
-			return false;
-		$name = md5($file).'.php';
-		$this->template_dir = $this->_get_dir($this->template_dir);
-		$this->_cache_dir = $this->_get_dir($this->cache_dir, $cache_id);
-
-		if (!$this->force_compile && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)) && $this->_is_cached($file, $cache_id)) {
+		if (!$this->force_compile && $this->cache && $this->_is_cached($file, $cache_id)) {
 			return true;
 		} else {
 			return false;
@@ -209,16 +204,17 @@ class template {
 		// don't display any errors
 		$this->_error_level = error_reporting(error_reporting() & ~E_NOTICE);
 
-		if (!$this->force_compile && $this->cache && file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file)) && $this->_is_cached($file, $cache_id)) {
+		if (!$this->force_compile && $this->cache && $this->_is_cached($file, $cache_id)) {
 			ob_start();
 			include($this->_cache_dir.$name);
 			$output = ob_get_contents();
 			ob_end_clean();
+			$output = substr($output, strpos($output, "\n") + 1);
 		} else {
 			$output = $this->_fetch_compile($file, $cache_id);
 			if ($this->cache) {
 				$f = fopen($this->_cache_dir.$name, "w");
-				fwrite($f, $output);
+				fwrite($f, serialize($this->_cache_info) . "\n$output");
 				fclose($f);
 			}
 		}
@@ -232,8 +228,6 @@ class template {
 		}
 
 		error_reporting($this->_error_level);
-
-		$output = substr($output, strpos($output, "\n\n"));
 		if ($display)
 			echo $output;
 		else
@@ -245,6 +239,11 @@ class template {
 		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file.$section_name.$var_name ) ) ).'.php';
 		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->compile_dir = $this->_get_dir($this->compile_dir);
+
+		if ($this->cache) {
+			array_push($this->_cache_info['config'], $file);
+		}
+
 		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->config_dir.$file))) {
 			include($this->compile_dir.$name);
 			return true;
@@ -281,25 +280,24 @@ class template {
 
 	function _is_cached($file, $cache_id) {
 		$name = md5($file).'.php';
-		$this->_cache_dir = $this->_get_dir($this->_cache_dir);
-		$this->compile_dir = $this->_get_dir($this->compile_dir);
+		$this->_cache_dir = $this->_get_dir($this->_cache_dir, $cache_id);
+		$this->config_dir = $this->_get_dir($this->config_dir);
 		$this->template_dir = $this->_get_dir($this->template_dir);
-		if (file_exists($this->compile_dir.$name) && file_exists($this->template_dir.$file) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
-			if (file_exists($this->_cache_dir.$name)) {
-				// open file to get includes
-				$fp = fopen($this->_cache_dir.$name, "r");
-				$includes = fscanf($fp, "%s\n\n");
-				fclose($fp);
-				$_includes = unserialize($includes[0]);
 
-				// call this function on each included file
-				foreach ($_includes as $value)
-					if (!$this->_is_cached($value, $cache_id))
-						return false;
+		if (file_exists($this->_cache_dir.$name) && (((time() - filemtime($this->_cache_dir.$name)) < $this->cache_lifetime) || $this->cache_lifetime == -1) && (filemtime($this->_cache_dir.$name) > filemtime($this->template_dir.$file))) {
+			$fh = fopen($this->_cache_dir.$name, "r");
+			if (!feof($fh) && ($line = fgets($fh, filesize($this->_cache_dir.$name)))) {
+				$includes = unserialize($line);
+				if (isset($includes['template']))
+					foreach($includes['template'] as $value)
+						if (!file_exists($this->template_dir.$value) || (filemtime($this->_cache_dir.$name) < filemtime($this->template_dir.$file)))
+							return false;
+				if (isset($includes['config']))
+					foreach($includes['config'] as $value)
+						if (!file_exists($this->config_dir.$value) || (filemtime($this->_cache_dir.$name) < filemtime($this->config_dir.$file)))
+							return false;
 			}
-
-			// finally return true
-			return true;
+			fclose($fh);
 		} else {
 			return false;
 		}
@@ -308,6 +306,10 @@ class template {
 	function _fetch_compile($file) {
 		//$name = md5($file).'.php';
 		$name = md5( realpath( $this->_build_dir( $this->template_dir, $file ) ) ).'.php';
+
+		if ($this->cache) {
+			array_push($this->_cache_info['template'], $file);
+		}
 
 		if (!$this->force_compile && file_exists($this->compile_dir.$name) && (filemtime($this->compile_dir.$name) > filemtime($this->template_dir.$file))) {
 			ob_start();
