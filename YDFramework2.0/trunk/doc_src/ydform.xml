@@ -264,10 +264,14 @@
             <listitem><emphasis role="bold">regex:</emphasis> value must pass the regular expression</listitem>
             <listitem><emphasis role="bold">email:</emphasis> value is a correctly formatted email</listitem>
             <listitem><emphasis role="bold">lettersonly:</emphasis> value must contain only letters</listitem>
+            <listitem><emphasis role="bold">character</emphasis> value must contain only one single character, and no numbers</listitem>
             <listitem><emphasis role="bold">alphanumeric:</emphasis> value must contain only letters and numbers</listitem>
             <listitem><emphasis role="bold">numeric:</emphasis> value must be a number</listitem>
+            <listitem><emphasis role="bold">digit:</emphasis> value must be a digit (0-9)</listitem>
             <listitem><emphasis role="bold">nopunctuation:</emphasis> value must not contain punctuation characters</listitem>
             <listitem><emphasis role="bold">nonzero:</emphasis> value must be a number not starting with 0</listitem>
+            <listitem><emphasis role="bold">in_array:</emphasis> value must be part of the array specified as the rule option</listitem>
+            <listitem><emphasis role="bold">not_in_array:</emphasis> value must not be part of the array specified as the rule option</listitem>
             <listitem><emphasis role="bold">callback:</emphasis> This rule allows to use an external function/method for validation, either by registering it or by passing a callback as a format parameter.</listitem>
         </itemizedlist>
 

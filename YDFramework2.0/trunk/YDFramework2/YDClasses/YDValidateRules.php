@@ -120,12 +120,21 @@
 		 *	@param $opts	(not required)
 		 */
 		function lettersonly( $val, $opts ) {
-			//return YDValidateRules::regex( $val, '/^[a-zA-Z]+$/' );
 			$result = YDValidateRules::regex( $val, '/([\D^ ]+)$/' );
 			if ( $result === true ) {
 				$result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
 			}
 			return $result;
+		}
+
+		/** 
+		 *	This function returns true if the variable contains only single character.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function character( $val, $opts ) {
+			return ( strlen( strval( $val ) ) == 1 ) && YDValidateRules::lettersonly( $val, array() );
 		}
 
 		/** 
@@ -135,7 +144,6 @@
 		 *	@param $opts	(not required)
 		 */
 		function alphanumeric( $val, $opts ) {
-			//return YDValidateRules::regex( $val, '/^[a-zA-Z0-9]+$/' );
 			$result = YDValidateRules::regex( $val, '/([\w^ ]+)$/' );
 			if ( $result === true ) {
 				$result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
@@ -151,6 +159,16 @@
 		 */
 		function numeric( $val, $opts ) {
 			return YDValidateRules::regex( $val, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
+		}
+
+		/** 
+		 *	This function returns true if the variable contains only contains one digit (0-9).
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function digit( $val, $opts ) {
+			return ( strlen( strval( $val ) ) == 1 ) && YDValidateRules::numeric( $val, array() );
 		}
 
 		/** 
@@ -178,6 +196,26 @@
 				$result = YDValidateRules::numeric( $val, array() ) ? true : false;
 			}
 			return $result;
+		}
+
+		/** 
+		 *	This function returns true if the variable is in the array specified in the options.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function in_array( $val, $opts ) {
+			return in_array( $val, $opts, true );
+		}
+
+		/** 
+		 *	This function returns true if the variable is not in the array specified in the options.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function not_in_array( $val, $opts ) {
+			return ! in_array( $val, $opts, true );
 		}
 
 		/** 
