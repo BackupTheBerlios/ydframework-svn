@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-
 	/**
 	 *	This class contains abstract functions implementing the validation rules.
 	 */

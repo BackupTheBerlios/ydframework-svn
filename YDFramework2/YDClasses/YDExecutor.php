@@ -7,7 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
 	require_once( 'YDDebugUtil.php' );
 	require_once( 'YDObjectUtil.php' );
 

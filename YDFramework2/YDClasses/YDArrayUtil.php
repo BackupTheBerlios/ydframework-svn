@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-
 	/**
 	 *  This class houses all the array related utility functions. All the methods are implemented as static methods and
 	 *	do not require you to create a class instance in order to use them.

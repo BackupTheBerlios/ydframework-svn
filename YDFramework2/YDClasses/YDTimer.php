@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-
 	/**
 	 *	This is a general timer class that starts counting when it's instantiated, and which returns the elapsed time as
 	 *	soon as the finish method is called.

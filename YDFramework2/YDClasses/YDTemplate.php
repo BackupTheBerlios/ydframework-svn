@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-
 	/**
 	 *	This class implements an template object. Unless changed manually, the template engine will look in the same
 	 *	directory as your script to find the template. The templates all share the same file extension, which is '.tpl'.

@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDBase.php' );
-
 	/**
 	 *	This class defines an object oriented HTML form.
 	 */

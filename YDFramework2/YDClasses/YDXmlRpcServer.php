@@ -10,7 +10,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	// Includes
 	require_once( 'YDRequest.php' );
 	require_once( 'IXR_Library.inc.php' );
 

@@ -7,8 +7,6 @@
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
 
-	require_once( 'YDFSFile.php' );
-
 	/**
 	 *	This class defines an image file.
 	 */
