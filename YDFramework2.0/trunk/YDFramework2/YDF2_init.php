@@ -106,13 +106,13 @@
 
 	// Get the path delimiter and newline
 	if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
-		@define( 'YD_CRLF', '\r\n' );
+		@define( 'YD_CRLF', "\r\n" );
 		@define( 'YD_PATHDELIM', ';' );
 	} elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
-		@define( 'YD_CRLF', '\r' );
+		@define( 'YD_CRLF', "\r" );
 		@define( 'YD_PATHDELIM', ':' );
 	} else {
-		@define( 'YD_CRLF', '\n' );
+		@define( 'YD_CRLF', "\n" );
 		@define( 'YD_PATHDELIM', ':' );
 	}
 
