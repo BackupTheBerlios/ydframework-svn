@@ -196,7 +196,7 @@
 			$message->setHeader( 'X-Mailer', YD_FW_NAMEVERS );
 
 			// Send the email
-			$result = @ $message->send( $this->to_plain );
+			$result = $message->send( $this->to_plain );
 
 			// Return the result
 			return $result;

@@ -12,6 +12,10 @@
 
 	/**
 	 *	This is the base class for all form elements.
+	 *
+	 *	@todo
+	 *		Add isButton parameter which changes the way the element works. Buttons are grouped at the bottom of the
+	 *		form and only return a value if they are clicked.
 	 */
 	class YDFormElement extends YDBase {
 
