@@ -83,6 +83,14 @@
 		</tr>
 		<tr>
 			<td valign="top">
+				<a href="locale.php">Using the YDLocale object</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=locale.php">locale.php</a>
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">
 				<a href="phpinfo.php">Showing the PHP information</a>
 			</td>
 			<td valign="top">

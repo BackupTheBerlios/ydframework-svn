@@ -135,8 +135,12 @@
 	// Include the standard functions
 	require_once( 'YDBase.php' );
 	require_once( 'YDConfig.php' );
+	require_once( 'YDLocale.php' );
 	require_once( 'YDF2_functions.php' );
 
+	// Default the locale to English
+	YDConfig::set( 'YD_LOCALE', 'en', false );
+	
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
 		if ( get_magic_quotes_gpc() == 1 ) {

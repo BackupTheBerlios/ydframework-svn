@@ -22,6 +22,7 @@
     <!ENTITY yderror SYSTEM "yderror.xml">
     <!ENTITY ydtimer SYSTEM "ydtimer.xml">
     <!ENTITY ydcart SYSTEM "ydcart.xml">
+    <!ENTITY ydlocale SYSTEM "ydlocale.xml">
     <!ENTITY other SYSTEM "other.xml">
     <!ENTITY bestpractices SYSTEM "bestpractices.xml">
     <!ENTITY faq SYSTEM "faq.xml">
@@ -80,6 +81,7 @@
     &yderror;
     &ydtimer;
     &ydcart;
+    &ydlocale;
     &other;
     &bestpractices;
     &faq;
