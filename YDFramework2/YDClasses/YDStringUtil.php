@@ -100,41 +100,6 @@
         }
 
         /**
-         *  This function will decode an email address from HTML entities.
-         *
-         *  @param $email Email address to decode.
-         *
-         *  @returns Decoded email address.
-         */
-        function decodeEmail( $email ) {
-
-            // Check if the email is encoded correctly
-            if (
-                ( substr( $email, 0, 2 ) == '&#' )
-                &&
-                ( substr( $email, -1 ) == ';' ) )
-            {
-
-                // Decode the email
-                $decodedEmail = '';
-                $charList = explode( ';&#', substr( $email, 2, -1 ) );
-                foreach( $charList as $char ) {
-                    $decodedEmail = $decodedEmail . chr( $char );
-                }
-                
-                // Return the decode email
-                return $decodedEmail;
-
-            } else {
-
-                // Return the original
-                return $email;
-
-            }
-
-        }
-
-        /**
          *  Function to format a date. This function follows the syntax of the
          *  strftime function from PHP. More info on this function can be found
          *  on the following URL:
