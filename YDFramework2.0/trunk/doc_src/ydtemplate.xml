@@ -252,13 +252,15 @@
 
         <title>Using Smarty templates</title>
 
-        <para>In some cases, you will need a more advanced template engine. For these cases, there is a class called "YDTemplateSmarty" that enables you to use the full blown Smarty template engine in your templates. The API for this class is the same as for the SmartyLight based YDTemplate class, but nevertheless features some small differences:</para>
+        <para>In some cases, you will need a more advanced template engine. For these cases, there is an include file called "YDTemplateSmarty.php" that enables you to use the full blown Smarty template engine in your templates. The API and class name for this class is the same as for the SmartyLight based YDTemplate class, but nevertheless features some small differences:</para>
 
         <itemizedlist spacing="compact">
             <listitem>The syntax you need to use in the templates is the Smarty syntax, which is described on http://smarty.php.net/.</listitem>
             <listitem>The assignObject function is the same as the assign function, basically keeping objects as objects instead of converting them to an array using the objects toArray() function.</listitem>
             <listitem>The assignForm function still converts the form to an array.</listitem>
         </itemizedlist>
+
+        <para>Simply replacing the YDInclude function call to include the "YDTemplateSmarty.php" file instead of the "YDTemplate.php" file is sufficient to make your templates Smarty aware.</para>
 
         <para>As you can see in the following example, there are some subtle differences:</para>
 
@@ -286,7 +288,7 @@
         function actionDefault() {
 
             // Create the template object
-            $tpl = new YDTemplateSmarty();
+            $tpl = new YDTemplate();
 
             // Assign some stuff
             $browser = new YDBrowserInfo();
@@ -348,6 +350,8 @@
         <warning>As Smarty is a much bigger library than Smarty Light, you might have a penalty in performance if you compare both template engines.</warning>
 
         <para>For more information about the Smarty template engine, you can check the following website: http://smarty.php.net/</para>
+
+        <warning>The Smarty Light library is going to disappear in the next beta build, and will be replaced by Smarty. If you have to do any new development, make sure you use the Smarty based template class.</warning>
 
     </sect1>
 

@@ -24,7 +24,7 @@
 		function actionDefault() {
 
 			// Create the template object
-			$tpl = new YDTemplateSmarty();
+			$tpl = new YDTemplate();
 		
 			// Assign some stuff
 			$browser = new YDBrowserInfo();
@@ -40,7 +40,7 @@
 		function actionCaching() {
 
 			// Create the template object
-			$tpl = new YDTemplateSmarty();
+			$tpl = new YDTemplate();
 			$tpl->caching = true;
 			
 			// Check if the template is cached

@@ -27,16 +27,18 @@
 	
 	define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
 
+	YDInclude( SMARTY_DIR . '/Smarty.class.php' );
+
 	/**
 	 *	This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/
 	 */
-	class YDTemplateSmarty extends Smarty {
+	class YDTemplate extends Smarty {
 
 		/**
-		 *	This is the class constructor for the YDTemplateSmarty class. By default, it looks in the same directory as 
+		 *	This is the class constructor for the YDTemplate class. By default, it looks in the same directory as 
 		 *	the current script to find the templates.
 		 */
-		function YDTemplateSmarty() {
+		function YDTemplate() {
 
 			// Initialize the parent
 			$this->Smarty();
