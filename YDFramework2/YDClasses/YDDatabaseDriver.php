@@ -174,6 +174,9 @@
 		/**
 		 *	This function will create an SQL insert statement from the specified array and table name.
 		 *
+		 *	@remarks
+		 *		All the field names that start with an underscore will not be used.
+		 *
 		 *	@param $table	The table to insert the data into.
 		 *	@param $values	Associative array with the field names and their values to insert.
 		 *
@@ -187,27 +190,32 @@
 			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
 
 			// Get the list of field names and values
-			$fields = array();
-			$values = array();
+			$ifields = array();
+			$ivalues = array();
 			foreach ( $values as $key=>$value ) {
-				array_push( $fields, $key );
-				array_push( $values, "'" . $this->string( $value ) . "'" );
+				if ( substr( $key, 0, 1 ) != '_' ) {
+					array_push( $ifields, $key );
+					array_push( $ivalues, "'" . $this->string( $value ) . "'" );
+				}
 			}
 
 			// Check if there are values
-			if ( sizeof( $fields ) == 0 ) { YDFatalError( 'No values were submitted for the INSERT statement.' ); }
+			if ( sizeof( $ifields ) == 0 ) { YDFatalError( 'No values were submitted for the INSERT statement.' ); }
 
 			// Convert the fields and values to a string
-			$fields = implode( ',', $fields );
-			$values = implode( ',', $values );
+			$ifields = implode( ',', $ifields );
+			$ivalues = implode( ',', $ivalues );
 
 			// Create the SQL statement
-			return 'INSERT INTO ' . $table . ' (' . $fields . ') VALUES (' . $values . ')';
+			return 'INSERT INTO ' . $table . ' (' . $ifields . ') VALUES (' . $ivalues . ')';
 
 		}
 
 		/**
 		 *	This function will create an SQL update statement from the specified array, table name and where clause.
+		 *
+		 *	@remarks
+		 *		All the field names that start with an underscore will not be used.
 		 *
 		 *	@param $table	The table to insert the data into.
 		 *	@param $values	Associative array with the field names and their values to insert.
@@ -223,19 +231,21 @@
 			if ( empty( $table ) ) { YDFatalError( 'No table specified for the INSERT statement.' ); }
 
 			// Get the list of field names and values
-			$values = array();
+			$uvalues = array();
 			foreach ( $values as $key=>$value ) {
-				array_push( $values, $key . "='" . $this->string( $value ) . "'" );
+				if ( substr( $key, 0, 1 ) != '_' ) {
+					array_push( $uvalues, $key . "='" . $this->string( $value ) . "'" );
+				}
 			}
 
 			// Check if there are values
-			if ( sizeof( $values ) == 0 ) { YDFatalError( 'No values were submitted for the UPDATE statement.' ); }
+			if ( sizeof( $uvalues ) == 0 ) { YDFatalError( 'No values were submitted for the UPDATE statement.' ); }
 
 			// Convert the fields and values to a string
-			$values = implode( ',', $values );
+			$uvalues = implode( ',', $uvalues );
 
 			// Create the SQL statement
-			$sql =  'UPDATE ' . $table . 'SET ' . $fields;
+			$sql =  'UPDATE ' . $table . ' SET ' . $uvalues;
 			if ( ! empty( $where ) ) { $sql .= ' WHERE ' . $where; }
 
 			// Return the SQL
