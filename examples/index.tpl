@@ -285,9 +285,8 @@
 
 		<p>&nbsp;<br><b>Documentation</b></p>
 
-		<p>The documentation for the <?= $YD_FW_NAME ?> can be found in the
-		<a href="../YDFramework2/doc/index.html">YDFramework2/docs</a> directory
-		of the download.</p>
+		<p>View the <a href="../YDFramework2/doc/api/index.html">API documentation</a> or read the
+		<a href="http://www.yellowduck.be/ydf2/ydf2_userguide.pdf">user guide</a> (online PDF).</p>
 	
 	<?php } ?>
 

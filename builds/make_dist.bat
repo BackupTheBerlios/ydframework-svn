@@ -35,7 +35,7 @@ del /Q "%BLDDIR%\YDFramework2\images\*.psd"
 del /Q "%BLDDIR%\YDFramework2\doc\*.gif"
 del /Q "%BLDDIR%\YDFramework2\doc\*.doc"
 copy /Y "%BLDDIR%\YDFramework2\doc\changelog.txt" "changelog.txt" > NUL
-copy /Y "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf" > NUL
+move "%BLDDIR%\YDFramework2\doc\ydf2_userguide.pdf" "ydf2_userguide.pdf"
 move "%BLDDIR%\YDFramework2\doc" "%BLDDIR%\doc" > NUL
 
 rem Compressing the build archive

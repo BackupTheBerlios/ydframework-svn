@@ -6,11 +6,11 @@
 	/*! \mainpage Yellow Duck Framework
 	 *
 	 *	The Yellow Duck framework is web application framework created by Pieter Claerhout. More information can be 
-	 *	found on http://www.yellowduck.be/.
+	 *	found on http://www.yellowduck.be/ydf2/.
 	 *
 	 *	(c) 2002-2004 Pieter Claerhout, pieter@yellowduck.be
 	 *
-	 *	Webpage: http://www.yellowduck.be/
+	 *	Webpage: http://www.yellowduck.be/ydf2/
 	 *
 	 *	Author: Pieter Claerhout, pieter@yellowduck.be
 	 *
