@@ -54,13 +54,13 @@
 		 *	@param $height	The maximum height of the thumbnail.
 		 *	@param $file	The filename to save the thumbnail to.
 		 */
-		function saveThumbnail( $width, $height, $filename ) {
+		function saveThumbnail( $width, $height, $file ) {
 
 			// Create the thumbnail
 			$thumb = & $this->_createThumbnail( $width, $height, false );
 
 			// Save the thumbnail
-			$thumb->RenderToFile( $filename );
+			$thumb->RenderToFile( $file );
 
 		}
 
