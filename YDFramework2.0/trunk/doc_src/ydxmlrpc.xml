@@ -133,7 +133,7 @@
             
             // Register the methods
             $this->registerMethod(
-                'echo', 'this:xmlrpcEcho', array( 'string', 'string' )
+                'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' )
             );
 
         }
