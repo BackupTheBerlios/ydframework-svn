@@ -57,12 +57,12 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses" \
-                         "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDF2_init.php"
+INPUT                  = "C:/Program Files/Apache/htdocs/ydframework/YDFramework2/YDClasses" \
+                         "C:/Program Files/Apache/htdocs/ydframework/YDFramework2/YDF2_init.php"
 FILE_PATTERNS          = *.php
 RECURSIVE              = YES
-EXCLUDE                = "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses/sql" \
-                         "C:/Program Files/Apache/htdocs/ydf2/YDFramework2/YDClasses/Quickform"
+EXCLUDE                = "C:/Program Files/Apache/htdocs/ydframework/YDFramework2/YDClasses/sql" \
+                         "C:/Program Files/Apache/htdocs/ydframework/YDFramework2/YDClasses/Quickform"
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
