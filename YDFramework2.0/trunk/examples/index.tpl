@@ -467,6 +467,14 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=logging.php">logging.php</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="validaterules.php">Validation rules</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=validaterules.php">validaterules.php</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}

@@ -52,7 +52,7 @@
 		 *	@param $opts	The maximum length of the variable.
 		 */
 		function maxlength( $val, $opts ) {
-			if ( strlen( $val ) <= $opts ) {
+			if ( strlen( $val ) <= intval( $opts ) ) {
 				return true;
 			} else {
 				return false;
@@ -81,7 +81,7 @@
 		 *	@param $opts	Array containing the minimum and maximum length.
 		 */
 		function rangelength( $val, $opts ) {
-			if ( ( strlen( $val ) >= $opts[0] ) && ( strlen( $val ) <= $opts[1] ) ) {
+			if ( ( strlen( $val ) >= intval( $opts[0] ) ) && ( strlen( $val ) <= intval( $opts[1] ) ) ) {
 				return true;
 			} else {
 				return false;
@@ -120,7 +120,12 @@
 		 *	@param $opts	(not required)
 		 */
 		function lettersonly( $val, $opts ) {
-			return YDValidateRules::regex( $val, '/^[a-zA-Z]+$/' );
+			//return YDValidateRules::regex( $val, '/^[a-zA-Z]+$/' );
+			$result = YDValidateRules::regex( $val, '/([\D^ ]+)$/' );
+			if ( $result === true ) {
+				$result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
+			}
+			return $result;
 		}
 
 		/** 
@@ -130,7 +135,12 @@
 		 *	@param $opts	(not required)
 		 */
 		function alphanumeric( $val, $opts ) {
-			return YDValidateRules::regex( $val, '/^[a-zA-Z0-9]+$/' );
+			//return YDValidateRules::regex( $val, '/^[a-zA-Z0-9]+$/' );
+			$result = YDValidateRules::regex( $val, '/([\w^ ]+)$/' );
+			if ( $result === true ) {
+				$result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
+			}
+			return $result;
 		}
 
 		/** 
@@ -158,9 +168,16 @@
 		 *
 		 *	@param $val		The value to test.
 		 *	@param $opts	(not required)
+		 *
+		 *	@todo
+		 *		Allows things other than digits
 		 */
 		function nonzero( $val, $opts ) {
-			return YDValidateRules::regex( $val, '/^-?[1-9][0-9]*/' );
+			$result = YDValidateRules::regex( $val, '/^-?[1-9][0-9]*/' );
+			if ( $result === true ) {
+				$result = YDValidateRules::numeric( $val, array() ) ? true : false;
+			}
+			return $result;
 		}
 
 		/** 
@@ -205,7 +222,6 @@
 				$opts = array( $opts );
 			}
 			return in_array( $val['type'], $opts );
-			//return ( $val['type'] == $opts );
 		}
 
 		/** 
