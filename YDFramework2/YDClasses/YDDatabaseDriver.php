@@ -244,7 +244,7 @@
 		/**
 		 *	This function will convert the argument to a date or timestamp.
 		 *
-		 *	@param $time	The argument to convert.
+		 *	@param $arg	The argument to convert.
 		 *	@param $fmt		The format to return the argument in.
 		 *
 		 *	@returns	The argument as date or time.
