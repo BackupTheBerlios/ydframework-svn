@@ -50,6 +50,12 @@ These are things that I should have done before I released it, but that I put of
 <h2><a name="history">History</a></h2>
 <p>
 <ul>
+	<li>December 11, 2004 - Version 2.2.6
+		<ul>
+			<li>Fixed a bug where variables of 1 character were being misinterpreted as function calls and thus throwing errors when the function was not found. (Thanks to Ara Anjargolian.)</li>
+			<li>Added more special cases to <tt>if-then</tt> statements to accomodate for errors introduced in 2.2.5 and 2.2.4 with the template function changes. Specifically, the changes were adding the case-insensitive values "true", "false" and "null". (Thanks to Ara Anjargolian.)</li>
+		</ul>
+	</li>
 	<li>October 30, 2004 - Version 2.2.5
 		<ul>
 			<li>Fixed a typo in the <tt>for</tt> function that resulted in the <tt>stop</tt> condition being changed if the <tt>step</tt> condition was not present.</li>

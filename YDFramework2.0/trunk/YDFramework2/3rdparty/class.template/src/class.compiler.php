@@ -3,7 +3,7 @@
  * Project:	Smarty-Light, a smarter template engine
  * File:	class.compiler.php
  * Author:	Paul Lockaby <paul@paullockaby.com>
- * Version:	2.2.5
+ * Version:	2.2.6
  * Copyright:	2003,2004 by Paul Lockaby
  * Credit:	This work is a light version of Smarty: the PHP compiling
  *		template engine, v2.5.0-CVS. Smarty was originally
@@ -91,12 +91,12 @@ class compiler extends template {
 		// $foo[0]
 		// $foo[$bar]
 		// $foo[5][blah]
-		$this->_dvar_regexp = '\$[a-zA-Z_]\w+(?:' . $this->_var_bracket_regexp . ')*(?:' . $this->_var_bracket_regexp . ')*';
+		$this->_dvar_regexp = '\$[a-zA-Z_]{1,}(?:' . $this->_var_bracket_regexp . ')*(?:' . $this->_var_bracket_regexp . ')*';
 
 		// matches config vars:
 		// #foo#
 		// #foobar123_foo#
-		$this->_cvar_regexp = '\#[a-zA-Z_]\w+(?:' . $this->_var_bracket_regexp . ')*(?:' . $this->_var_bracket_regexp . ')*\#';
+		$this->_cvar_regexp = '\#[a-zA-Z_]{1,}(?:' . $this->_var_bracket_regexp . ')*(?:' . $this->_var_bracket_regexp . ')*\#';
 
 		// matches valid variable syntax:
 		// $foo
@@ -111,7 +111,7 @@ class compiler extends template {
 		// |foo:$bar
 		// |foo:"bar":$foobar
 		// |foo|bar
-		$this->_mod_regexp = '(?:\|@?[a-zA-Z_]\w+(?::(?>-?\w+|' . $this->_dvar_regexp . '|' . $this->_qstr_regexp .'))*)';		
+		$this->_mod_regexp = '(?:\|@?[a-zA-Z_]{1,}(?::(?>-?\w+|' . $this->_dvar_regexp . '|' . $this->_qstr_regexp .'))*)';		
 
 		// matches valid function name:
 		// foo123
@@ -482,7 +482,7 @@ class compiler extends template {
 						$_arg = $this->_parse_variables(array($_match[1]), array($_match[2]));
 					} elseif (is_numeric($_arg)) {
 						// pass the number through
-					} elseif (function_exists($_match[0]) || $_match[0] == "empty" || $_match[0] == "isset" || $_match[0] == "unset") {
+					} elseif (function_exists($_match[0]) || $_match[0] == "empty" || $_match[0] == "isset" || $_match[0] == "unset" || strtolower($_match[0]) == "true" || strtolower($_match[0]) == "false" || strtolower($_match[0]) == "null") {
 						// pass the function through
 					} else {
 						$this->trigger_error("unidentified token '$_arg'", E_USER_ERROR, __FILE__, __LINE__);
