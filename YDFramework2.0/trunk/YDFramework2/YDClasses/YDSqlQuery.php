@@ -34,14 +34,13 @@
 		var $options = array();
 		var $select  = array();
 		var $tables  = array();
-		var $join   = array();
+		var $join    = array();
 		var $where   = array();
-		var $group  = array();
+		var $group   = array();
 		var $having  = array();
-		var $order  = array();
+		var $order   = array();
 		var $values  = array();
-		var $limit   = -1;
-		var $offset  = -1;
+		var $joinon  = array();
 	
 		/**
 		 *	The class constructor can be used to set the action and optional options.
@@ -107,30 +106,61 @@
 		 *
 		 *	@param $type        Should be one of these: LEFT, LEFT OUTER, RIGHT, RIGHT OUTER, INNER, CROSS
 		 *  @param $table       The joining table name.
-		 *  @param $conditions  The conditions for the join (the ON part).
 		 *  @param $alias       (optional) The joining table alias.
 		 *
 		 *  @returns   The alias for the joining table.
 		 */			
-		function addJoin( $type, $table, $conditions, $alias='' ) {
+		function addJoin( $type, $table, $alias='' ) {
 
 			if ( ! sizeof( $this->tables ) ) {
 				trigger_error( 'No tables defined to join.', YD_ERROR );
 			}
 			
-			// Get last table added
-			$arr = end( $this->tables );
+			end( $this->tables );
 						
 			$alias = ( $alias == $table ) ? '' : $alias;
-			$this->join[ $arr['name'] ] = array( 'type' => $type, 
-											     'table' => $table, 
-											     'alias' => $alias,
-											     'conditions' => $conditions );
+			
+			$this->join[ key( $this->tables ) ] = array( 'type' => $type, 
+														 'table' => $table, 
+														 'alias' => $alias );
+
+			$this->joinon[ key( $this->tables ) ] = array();
 
 			return $this->addTable( $table, $alias );
 		}
 
-				
+		/**
+		 *	Opens a group of JOIN conditions.
+		 *
+		 *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
+		 */				
+		function openJoinOnGroup( $logic='AND' ) {
+			end( $this->tables );
+			array_push( $this->joinon[ key( $this->tables )-1 ], 
+									   array( 'logic' => strtoupper( $logic ) ) );
+		}
+		
+		/**
+		 *	Adds a join condition for the last join defined. 
+		 *
+		 *	@param $expr        The expression.
+		 *  @param $logic       (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
+		 */					
+		function addJoinOn( $expr, $logic='AND' ) {
+			end( $this->tables );
+			array_push( $this->joinon[ key( $this->tables )-1 ], 
+									   array( 'expr' => $expr,
+											  'logic' => strtoupper( $logic ) ) );
+		}
+
+		/**
+		 *	Closes a group of JOIN conditions. This method is optional as the class
+		 *  will automatically close all groups that weren't closed.
+		 */			
+		function closeJoinOnGroup() {
+			end( $this->tables );
+			array_push( $this->joinon[ key( $this->tables )-1 ], array() );
+		}
 		
 		/**
 		 *	Adds a select expression. 
@@ -183,7 +213,7 @@
 		}
 		
 		/**
-		 *	Opens a group of conditions.
+		 *	Opens a group of WHERE conditions.
 		 *
 		 *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
 		 */		
@@ -204,23 +234,12 @@
 		}
 
 		/**
-		 *	Closes a group of conditions. This method is optional as the class
+		 *	Closes a group of WHERE conditions. This method is optional as the class
 		 *  will automatically close all groups that weren't closed.
 		 */			
 		function closeWhereGroup() {
 			array_push( $this->where, array() );
 		}		
-
-		/**
-		 *	Sets the limit and offset for the query.
-		 *
-		 *  @param $limit   The limit.
-		 *  @param $offset  (optional) The offset. Default: -1.
-		 */		
-		function setLimit( $limit, $offset=-1 ) {
-			$this->limit = $limit;
-			$this->offset = $offset;
-		}
 
 		/**
 		 *	Adds a column and it's value to be used in a 
@@ -256,7 +275,7 @@
 			$from = array();
 			$done = array();
 			
-			foreach ( $this->tables as $arr ) {	
+			foreach ( $this->tables as $index => $arr ) {	
 			
 				$table = $arr['name'];
 				$alias = $arr['alias'];
@@ -269,11 +288,16 @@
 					array_push( $done, $table );
 				}
 				
-				if ( array_key_exists( $table, $this->join ) ) {
-					$join = $this->join[ $table ];					
+				if ( array_key_exists( $index, $this->join ) ) {
+					
+					$join = $this->join[ $index ];					
 					$sql .= ' ' . $join['type'] . ' JOIN `' . $join['table'] . '`';
 					$sql .= strlen( $join['alias'] ) ? ' AS "' . $join['alias'] . '"' : '';
-					$sql .= ' ON ( ' . $join['conditions'] . ' ) ';
+					
+					if ( array_key_exists( $index, $this->joinon ) ) {	
+						$sql .= $this->getJoinOn( $index );	
+					}
+					
 					array_push( $done, $join[ 'table' ] );
 				}
 				
@@ -283,57 +307,42 @@
 			return ( $title ? ' FROM ' : '' ) . trim( implode( '', $from ) );
 			
 		}
+		
+		/**
+		 *	This function builds the ON expression and returns it.
+		 *
+		 *  @param $index  The index of the JOIN.
+		 *  @param $title  (optional) If true, returns the WHERE string. Default: true.
+		 *
+		 *  @returns  The conditions expression.
+		 */					
+		function getJoinOn( $index, $title=true ) {
+		
+			$sql = $this->_getConditions( $this->joinon[ $index ] );
+			
+			if ( strlen( trim( $sql ) ) ) {
+				return ( $title ? ' ON ' : '' ) . '( ' . $sql . ' )';
+			}
+			return '';
+						
+		}
 
 		/**
-		 *	This function builds the conditions expression and returns it.
+		 *	This function builds the WHERE expression and returns it.
 		 *
 		 *  @param $title  (optional) If true, returns the WHERE string. Default: true.
 		 *
 		 *  @returns  The conditions expression.
 		 */			
-		function getWhere( $title=true ) {			
+		function getWhere( $title=true ) {
 		
-			if ( ! sizeof( $this->where ) ) {
-				return '';
-			}
+			$sql = $this->_getConditions( $this->where );
 
-			$where = array();
-			$open = array();
-			$exists = false;
-			$start = true;
-			
-			foreach ( $this->where as $arr ) {
-			
-				$arr['expr']  = ! isset( $arr['expr'] )  ? '' : $arr['expr'];
-				$arr['logic'] = ! isset( $arr['logic'] ) ? '' : $arr['logic'];
-				
-				if ( ! $arr['expr'] ) {
-					if ( ! $arr['logic'] && ! sizeof( $open ) ) {
-						continue;
-					}
-					if ( $arr['logic'] ) {
-						$sql = $start ? '( ' : $arr['logic'] . ' ( ';
-						array_push( $open, $sql );						
-						$start = true;
-					} else {
-						$sql = ') ';
-						array_pop ( $open );
-						$start = false;
-					}
-				} else {
-					$sql  = ( $start ? '' : $arr['logic'] . ' ' ) . $arr['expr'] . ' ';
-					$exists = true;
-					$start = false;
-				}
-				array_push( $where, $sql );
-			}
-			if ( $exists ) {
-				foreach ( $open as $op ) {
-					array_push( $where, ') ');
-				}
-				return ( $title ? ' WHERE ' : '' ) . trim( implode( '', $where ) );
+			if ( strlen( trim( $sql ) ) ) {
+				return ( $title ? ' WHERE ' : '' ) . $sql;
 			}
 			return '';
+
 		}
 
 		/**
@@ -396,21 +405,6 @@
 			
 		}		
 
-		/**
-		 *	This functions builds the LIMIT expression and returns it.
-		 *
-		 *  @param $title  (optional) If true, returns the LIMIT string. Default: true.
-		 *
-		 *  @returns  The LIMIT expression.
-		 */				
-		function getLimit( $title=true ) {
-			if ( $this->limit > -1 ) {
-				$sql = ( $this->offset >= 0 ) ? $this->offset . ',' . $this->limit : $this->limit;
-				return ( $title ? ' LIMIT ' : '' ) . $sql;
-			}
-			return '';
-		}
-		
 		/**
 		 *	This functions builds the SELECT expression and returns it.
 		 *
@@ -506,7 +500,7 @@
 				case 'SELECT':
 					$sql =  'SELECT ' . $this->getOptions() . $this->getSelect()
 									  . $this->getFrom() . $this->getWhere() . $this->getGroup()
-							          . $this->getHaving() . $this->getOrder() . $this->getLimit();
+							          . $this->getHaving() . $this->getOrder();
 					break;
 
 				case 'INSERT':
@@ -516,16 +510,16 @@
 
 				case 'UPDATE':
 					$sql =  'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
-									  . $this->getWhere() . $this->getOrder() . $this->getLimit();
+									  . $this->getWhere() . $this->getOrder();
 					break;
 
 				case 'DELETE':
 					$sql =  'DELETE ' . $this->getOptions() . trim( $this->getFrom( true ) ) . $this->getWhere() 
-									  . $this->getOrder() . $this->getLimit();	
+									  . $this->getOrder();	
 					break;
 			}
 			
-			if ( ! $sql ) {
+			if ( ! isset( $sql ) ) {
 				trigger_error( 'Action not defined correctly.', YD_ERROR );
 				return;
 			}
@@ -580,13 +574,12 @@
 			$this->resetAction();
 			$this->resetOptions();
 			$this->resetSelect();
-			$this->resetTables();
+			$this->resetFrom();
 			$this->resetValues();
 			$this->resetWhere();
 			$this->resetGroup();
 			$this->resetHaving();
 			$this->resetOrder();
-			$this->resetLimit();
 		}
 
 		/**
@@ -620,9 +613,10 @@
 		/**
 		 *	This function resets the tables defined in the object.
 		 */		
-		function resetTables() {
+		function resetFrom() {
 			$this->tables = array();
 			$this->join = array();
+			$this->joinon = array();
 		}
 		
 		/**
@@ -651,14 +645,61 @@
 		 */			
 		function resetOrder() {
 			$this->order = array();
-		}
+		}		
 
 		/**
-		 *	This function resets the LIMIT defined in the object.
-		 */					
-		function resetLimit() {
-			$this->limit   = -1;
-			$this->offset  = -1;
+		 *	This function builds the JOIN and WHERE conditions expressions.
+		 *
+		 *  @param $array  The array of expressions and logical operators.
+		 *
+		 *  @returns  The complete expression.
+		 *
+		 *  @internal
+		 */			
+		function _getConditions( $array ) {
+			
+			if ( ! sizeof( $array ) ) {
+				return '';
+			}
+
+			$cond = array();
+			$open = array();
+			$exists = false;
+			$start = true;
+			
+			foreach ( $array as $arr ) {
+			
+				$arr['expr']  = ! isset( $arr['expr'] )  ? '' : $arr['expr'];
+				$arr['logic'] = ! isset( $arr['logic'] ) ? '' : $arr['logic'];
+				
+				if ( ! $arr['expr'] ) {
+					if ( ! $arr['logic'] && ! sizeof( $open ) ) {
+						continue;
+					}
+					if ( $arr['logic'] ) {
+						$sql = $start ? '( ' : $arr['logic'] . ' ( ';
+						array_push( $open, $sql );						
+						$start = true;
+					} else {
+						$sql = ') ';
+						array_pop ( $open );
+						$start = false;
+					}
+				} else {
+					$sql  = ( $start ? '' : $arr['logic'] . ' ' ) . $arr['expr'] . ' ';
+					$exists = true;
+					$start = false;
+				}
+				array_push( $cond, $sql );
+			}
+			if ( $exists ) {
+				foreach ( $open as $op ) {
+					array_push( $cond, ') ');
+				}
+				return trim( implode( '', $cond ) );
+			}
+			return '';		
+		
 		}		
 	
 	}

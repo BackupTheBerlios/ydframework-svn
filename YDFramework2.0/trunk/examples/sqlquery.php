@@ -43,8 +43,6 @@
 			
 			$q->addHaving( "total > 100" );
 			
-			$q->setLimit( 10, 50 );
-			
 			YDDebugUtil::dump( $q->getBrokenSql() );
 			
 			$q->reset();
@@ -56,11 +54,17 @@
 			$q->addSelect( 'id' ); 
 			$q->addSelect( 'name' );
 			
-			$g = $q->addJoin( 'LEFT', 'group', "$u.group_id = g.id", "g" ); 
+			$g = $q->addJoin( 'LEFT', 'group', "g" ); 
+			$q->addJoinOn( "$u.group_id = $g.id" );
 			$q->addSelect( "$g.id", 'gid' );
 			$q->addSelect( "$g.name", 'group_name' );
 
-			$a = $q->addJoin( 'RIGHT', 'attach', "$g.attach_id = a.id", "a" ); 
+			$a = $q->addJoin( 'INNER', 'attach', "a" ); 
+			$q->addJoinOn( "$g.attach_id = $a.id" );
+				$q->openJoinOnGroup( 'OR' );
+				$q->addJoinOn( "$a.size > 150" );
+				$q->addJoinOn( "$a.status = 3" );
+				
 			$q->addSelect( "$a.id", 'aid' );
 			$q->addSelect( "$a.name", 'attach_name' );
 
@@ -75,7 +79,6 @@
 			$q->setAction( 'DELETE' );
 			$q->addTable( 'user' );
 			$q->addWhere( "id = 144" );
-			$q->setLimit( 1 );
 
 			YDDebugUtil::dump( $q->getBrokenSql() );
 			
@@ -86,7 +89,6 @@
 			$q->addTable( 'user' );
 			$q->setValues( array( 'name' => 'David', 'email' => 'email@host.com', 'admin' => 1, 'purple' => null ) );
 			$q->addWhere( "id = 144" );
-			$q->setLimit( 1 );			
 
 			YDDebugUtil::dump( $q->getBrokenSql() );
 			
