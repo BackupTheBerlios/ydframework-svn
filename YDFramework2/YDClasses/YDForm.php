@@ -12,6 +12,11 @@
     require_once( 'HTML/QuickForm.php' );
     require_once( 'HTML/QuickForm/Renderer/Array.php' );
 
+    // Register our custom form elements
+    $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']['wysiwygarea'] = array(
+        'QuickForm/wysiwygarea.php', 'HTML_QuickForm_wysiwygarea'
+    );
+
     /**
      *  This class implements an HTML form. This class is based on the
      *  HTML_QuickForm from the PEAR library. To instantiate the form, you need
