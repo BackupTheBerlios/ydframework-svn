@@ -50,6 +50,7 @@
             <listitem>Added the FAQ and Appendix C (How to build documentation) to the user guide.</listitem>
             <listitem>The YDBrowserInfo class now recognizes FireFox as a separate browser.</listitem>
             <listitem>Added an autorules option to the YDFormElement class.</listitem>
+            <listitem>Added an option to specify a template outside the template directory (as smarty supports it).</listitem>
             <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
         </itemizedlist>
 

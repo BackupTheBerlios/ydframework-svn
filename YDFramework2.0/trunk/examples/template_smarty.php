@@ -29,8 +29,8 @@
 			// Assign some stuff
 			$browser = new YDBrowserInfo();
 			$tpl->assign( 'browser', $browser );
-			$tpl->assign( 'array', $browser->toArray() );
-		
+			//$tpl->assign( 'array', $browser->toArray() );
+
 			// Display the template
 			$tpl->display();
 

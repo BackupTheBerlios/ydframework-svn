@@ -20,15 +20,6 @@
 		<li>{$browser->getBrowserLanguages()|@dump}</li>
 		<li>{$browser->getLanguage()}</li>
 	</ul>
-		
-	<p><b>Using an array</b></p>
-	<ul>
-		<li>{$array.agent}</li>
-		<li>{$array.browser}</li>
-		<li>{$array.version}</li>
-		<li>{$array.platform}</li>
-		<li>{$array.dotnet|@dump}</li>
-	</ul>
 
 </body>
 

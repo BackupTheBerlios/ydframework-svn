@@ -185,6 +185,9 @@
 		 *	@internal
 		 */
 		function _getTemplateName( $file='' ) {
+			if ( file_exists( $file ) ) {
+				return realpath( $file );
+			}
 			$this->template_dir = YDPath::getFullPath( $this->template_dir );
 			if ( empty( $file ) ) {
 				$file = YDPath::getFileNameWithoutExtension( YD_SELF_FILE );
