@@ -135,6 +135,28 @@
 
 ?>]]></programlisting>
 
+        <para>The getRecords function gives you some options of limiting the data returned by this function. You can specify the maximum number of records that should be returned as well as the first record to start retrieving from. This functionality is natively supported for all database engines currently supported by the Yellow Duck Framework (MySQL, SQLite, PostgreSQL, Oracle). Here's a code example explaining how this works:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    // Get maximum 10 records
+    $result = $db->getRecords(
+        'select * from users', 10
+    );
+
+    // Get maximum 10 records starting from record 5
+    $result = $db->getRecords(
+        'select * from users', 10, 5
+    );
+
+?>]]></programlisting>
+
+        <note>This function doesn't return any extra information about what is returned, and this should be calculated manually.</note>
+
     </sect1>
 
     <sect1 id="yddatabase_insert">
