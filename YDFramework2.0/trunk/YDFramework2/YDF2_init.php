@@ -120,7 +120,11 @@
     $includePath = YD_DIR_ADDO;
     if ( $handle = opendir( YD_DIR_ADDO ) ) {
         while ( false !== ( $file = readdir( $handle ) ) ) {
-           if ( $file != '.' && $file != '..' && is_dir( YD_DIR_ADDO . YD_DIRDELIM . $file ) ) {
+           if (
+               //$file != '.' && $file != '..' && 
+               substr( $file, 0, 1 ) != '.' &&
+               is_dir( YD_DIR_ADDO . YD_DIRDELIM . $file )
+           ) {
                 $includePath .= YD_PATHDELIM . YD_DIR_ADDO . YD_DIRDELIM . $file;
            }
         }
