@@ -32,6 +32,7 @@
 
 			// Keep track of custom modifiers
 			$this->_modifiers = array();
+			$this->_functions = array();
 
 		}
 
@@ -55,6 +56,26 @@
 		}
 
 		/**
+		 *	This function registers a new modifier with the specified name pointing to the specified function.
+		 *
+		 *	@param $name		Name of the modifier.
+		 *	@param $function	Function implementing the modifier.
+		 */
+		function registerModifier( $name, $function ) {
+			$this->_modifiers[ $name ] = $function;
+		}
+
+		/**
+		 *	This function registers a new function with the specified name pointing to the specified function.
+		 *
+		 *	@param $name		Name of the function.
+		 *	@param $function	Function implementing the function.
+		 */
+		function registerFunction( $name, $function ) {
+			$this->_functions[ $name ] = $function;
+		}
+
+		/**
 		 *	This function will parse the template and will return the parsed contents. The name of the template you need
 		 *	to specify is the basename of the template without the file extension. This function automatically adds some
 		 *	variables to the template, which you can use as well in the template: YD_FW_NAME, YD_FW_VERSION, 
@@ -64,6 +85,9 @@
 		 *	@param $name	The name of the template you want to parse and output.
 		 *
 		 *	@returns	This function returns the output of the parsed template.
+		 *
+		 *	@todo
+		 *		We should add options here to cache the output.
 		 */
 		function getOutput( $name ) {
 
@@ -75,17 +99,6 @@
 			$this->setVar( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
 			$this->setVar( 'YD_SELF_URI', YD_SELF_URI );
 			$this->setVar( 'YD_ACTION_PARAM', YD_ACTION_PARAM );
-
-			// Add PHP variables
-			$this->setVar( 'YD_ENV', $_ENV );
-			$this->setVar( 'YD_COOKIE', $_COOKIE );
-			$this->setVar( 'YD_GET', $_GET );
-			$this->setVar( 'YD_POST', $_POST );
-			$this->setVar( 'YD_FILES', $_FILES );
-			$this->setVar( 'YD_REQUEST', $_REQUEST );
-			$this->setVar( 'YD_SESSION', $_SESSION );
-			$this->setVar( 'YD_GLOBALS', $GLOBALS );
-			$this->setVar( 'YD_SERVER', $_SERVER );
 
 			// Get the path to the template
 			if ( is_file( $this->_templateDir . '/' . $name . YD_TPL_EXT ) ) {
@@ -127,6 +140,11 @@
 			// Add the other modifiers
 			foreach ( $this->_modifiers as $name=>$function ) {
 				$tpl->register_modifier( $name, $function );
+			}
+
+			// Add the functions
+			foreach ( $this->_functions as $name=>$function ) {
+				$tpl->register_function( $name, $function );
 			}
 
 			// Assign the variables
