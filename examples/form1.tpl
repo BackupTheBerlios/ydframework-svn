@@ -12,7 +12,11 @@
 
     {if $formValid}
     
-        Welcome to <b>{$form.name.value}</b>!
+        <p>Welcome to <b>{$form.name.value}</b>!</p>
+
+        <p>Description: {$form.desc.value}</p>
+
+        <p>Date {$form.date.value.d.0}/{$form.date.value.M.0}/{$form.date.value.Y.0}</p>
 
     {else}
     
@@ -29,6 +33,16 @@
                 {$form.name.label}
                 <br>
                 {$form.name.html}
+            </p>
+            <p>
+                {$form.desc.label}
+                <br>
+                {$form.desc.html}
+            </p>
+            <p>
+                {$form.date.label}
+                <br>
+                {$form.date.html}
             </p>
             <p>
                 {$form.cmdSubmit.html}

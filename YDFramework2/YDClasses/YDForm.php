@@ -126,6 +126,11 @@
             // Connect the form to the renderer
             $this->accept( $renderer );
 
+            // If debugging, show contents
+            if ( YD_DEBUG ) {
+                YDDebugUtil::dump( $renderer->toArray() );
+            }
+
             // Return the array
             return $renderer->toArray();
 

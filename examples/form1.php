@@ -43,6 +43,12 @@
             $form->addElement(
                 'text', 'name', 'Enter your name:', array( 'size' => 50 )
             );
+            $form->addElement(
+                'textarea', 'desc', 'Enter the description:'
+            );
+            $form->addElement(
+                'date', 'date', 'Enter the date:'
+            );
             $form->addElement( 'submit', 'cmdSubmit', 'Send' );
 
             // Apply a filter
