@@ -117,7 +117,7 @@ php_flag enable_dl Off
 # Gzip compress the output
 php_flag output_buffering Off
 php_flag zlib.output_compression On</xmp></div><br />
-With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts.<br />
+With these options turned on, you will have Gzip compressed output from the PHP scripts which helps you save bandwith. Registering of global variables and friends are also turned off, and magic quotes are disabled which improves the security of your PHP scripts. By setting the expose_php flag to Off, PHP will not send it's version string in the headers.<br />
 <br />
 <span class="notes"><em><strong>Note:</strong> for the GZip compression of the output, you need to have the zlib extension loaded in PHP.</em></span><br />
 <br />
