@@ -10,9 +10,13 @@
 
 	<h3>IP authentication check</h3>
 
-	<p>Welcome!</p>
+	<p>Your IP number is: {$smarty.server.REMOTE_ADDR}</p>
 
-	<p>Your IP number is: {$_TPL[SERVER][REMOTE_ADDR]}</p>
+	{if $allowed}
+		<p style="color: green;">You are allowed to see this page.</p>
+	{else}
+		<p style="color: red;">You are NOT allowed to see this page.</p>
+	{/if}
 
 	<p>Tip: try accessing this page once with your computername as the hostname,
 	and see the difference if you use localhost.</p>

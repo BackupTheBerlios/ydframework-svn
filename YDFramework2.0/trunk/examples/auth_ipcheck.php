@@ -5,7 +5,7 @@
 
 	// Includes
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class auth_ipcheck extends YDRequest {
@@ -23,11 +23,6 @@
 			$this->template->display();
 		}
 
-		// Default action
-		function actionTest() {
-			$this->template->display();
-		}
-
 		// Check the authentication
 		function isAuthenticated() {
 			if ( $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ) {
@@ -39,7 +34,8 @@
 
 		// Redirect to the login if the authentication failed
 		function authenticationFailed() {
-			echo( '<b>ACCESS DENIED</b><br>Only localhost access is allowed.' );
+			$this->template->assign( 'allowed', false );
+			$this->template->display();
 		}
 
 	}
