@@ -447,6 +447,18 @@
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=objects_to_arrays.php">objects_to_arrays.php</a>
 			</td>
 		</tr>
+		<tr>
+			<td valign="top">
+				<a href="template_smarty.php">Using Smarty templates</a>
+				<br/>
+				<a href="template_smarty.php?do=caching">Using Smarty templates with caching</a>
+			</td>
+			<td valign="top">
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_smarty.php">template_smarty.php</a>
+				<br/>
+				<a href="{$YD_SELF_SCRIPT}?do=source&id=template_smarty.tpl">template_smarty.tpl</a>
+			</td>
+		</tr>
 		</table>
 
 	{/if}
