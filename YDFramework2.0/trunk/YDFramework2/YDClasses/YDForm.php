@@ -74,6 +74,7 @@
 			$this->registerElement( 'button', 'YDFormElement_Button', 'YDFormElement_Button.php' );
 			$this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
 			$this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
+			$this->registerElement( 'datetimeselect', 'YDFormElement_DateTimeSelect', 'YDFormElement_DateTimeSelect.php' );
 			$this->registerElement( 'file', 'YDFormElement_File', 'YDFormElement_File.php' );
 			$this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
 			$this->registerElement( 'image', 'YDFormElement_Image', 'YDFormElement_Image.php' );
@@ -84,6 +85,7 @@
 			$this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
 			$this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
 			$this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
+			$this->registerElement( 'timeselect', 'YDFormElement_TimeSelect', 'YDFormElement_TimeSelect.php' );
 
 			// Add the rules
 			$this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );

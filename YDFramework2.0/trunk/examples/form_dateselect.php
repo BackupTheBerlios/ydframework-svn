@@ -20,10 +20,12 @@
 
 			// Create the form
 			$form = new YDForm( 'form1' );
-			$element = $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
-			$form->addRule( 'dateSelect1', 'required', 'dateSelect1 required' );
-			$form->setDefaults( array( 'dateSelect1' => array( 'm'=>4, 'd'=>4, 'y'=>2002 ) ) );
+			$elementDate = $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
+			$elementDate = $form->addElement( 'dateselect', 'dateSelect2', 'Enter data:' );
+			$elementTime = $form->addElement( 'timeselect', 'timeSelect1', 'Enter data:' );
+			$elementDateTime = $form->addElement( 'datetimeselect', 'datetimeSelect1', 'Enter data:' );
 			$form->addElement( 'submit', 'cmd1', 'Send' );
+			$form->setDefaults( array( 'dateSelect1' => array( 'month'=>4, 'day'=>4, 'year'=>2002 ) ) );
 			if ( YD_DEBUG == 1 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
@@ -37,10 +39,13 @@
 				YDDebugUtil::dump( $_FILES, '$_FILES' );
 			}
 			if ( $form->validate() ) {
-				YDDebugUtil::dump( $form->getValues(), 'Form values' );
-				YDDebugUtil::dump( $element->getTimeStamp(), 'getTimeStamp()' );
-				YDDebugUtil::dump( $element->getTimeStamp( '%d/%m/%Y' ), 'getTimeStamp( "%d/%m/%Y" )' );
-				YDDebugUtil::dump( date( 'M-d-Y', $element->getTimeStamp() ), 'date( getTimeStamp() )' );
+				YDDebugUtil::dump( $elementDate->getTimeStamp(), '$elementDate->getTimeStamp()' );
+				YDDebugUtil::dump( $elementDate->getTimeStamp( '%d/%m/%Y' ), '$elementDate->getTimeStamp( "%d/%m/%Y" )' );
+				YDDebugUtil::dump( date( 'M-d-Y', $elementDate->getTimeStamp() ), '$elementDate->gdate( getTimeStamp() )' );
+				YDDebugUtil::dump( $elementTime->getTimeStamp(), '$elementTime->getTimeStamp()' );
+				YDDebugUtil::dump( $elementTime->getTimeStamp( '%H:%M' ), '$elementTime->getTimeStamp( "%H:%M" )' );
+				YDDebugUtil::dump( $elementDateTime->getTimeStamp(), '$elementDateTime->getTimeStamp()' );
+				YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%H:%M" )' );
 			}
 			$form->display();
 
