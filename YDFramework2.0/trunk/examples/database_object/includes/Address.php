@@ -1,40 +1,33 @@
 <?php
 
-YDInclude('YDDatabaseObject.php');
-
-class Address extends YDDatabaseObject {
-
-	function Address() {
-		$this->YDDatabaseObject();
-	}
+	YDInclude('YDDatabaseObject.php');
 	
-	function setDatabase() {
-		$this->__db = YDDatabase::getInstance(  'mysql', 'test', 'root', '', 'localhost' );
-	}
+	class Address extends YDDatabaseObject {
 	
-	function setTable() {
-		$this->__table = 'address';
-	}
+		function Address() {
+		
+			$this->YDDatabaseObject();
+		
+			$this->registerDatabase( YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' ) );
+			$this->registerTable( 'address' );
+		
+			// Fields
+			$this->registerNumericKey( 'user_id', false );
+			
+			$this->registerStringField( 'address' );
+			$this->registerStringField( 'city' );
+			$this->registerStringField( 'state' );
+			
+			$country = & $this->registerStringField( 'country' );
+			$country->setDefault( 'Brazil' );
 	
-	function setFields() {
-		$this->__fields['user_id'] = array( 'type' => YD_DATABASEOBJECT_NUM );
-		$this->__fields['address'] = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['city']    = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['state']   = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['country'] = array( 'type' => YD_DATABASEOBJECT_STR, 'default' => 'Brazil' );
+			// Relations
+			$user = & $this->registerRelation( 'user' );
+			$user->setForeignJoin( 'LEFT' );
+						
+		}
+		
 	}
-
-	function setKeys() {
-		$this->__keys = array( 'user_id' );		
-	}
-	
-	function setRelations() {
-		$this->__relations['user'] = array(  'type'  => YD_DATABASEOBJECT_ONETOONE, 
-											 'foreign_type_join'  => 'LEFT',
-											 'foreign_dataobject' => 'User' );
-	}
-
-}
 
 
 ?>

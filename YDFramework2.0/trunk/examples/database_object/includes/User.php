@@ -1,61 +1,56 @@
 <?php
+	
+	YDInclude('YDDatabaseObject.php');
+	
+	class User extends YDDatabaseObject {
+	
+		function User() {	
 
-YDInclude('YDDatabaseObject.php');
+			$this->YDDatabaseObject();
 
-class User extends YDDatabaseObject {
+			$this->registerDatabase( YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' ) );
+			$this->registerTable( 'users' );
+			
+			// Fields
+			$this->registerNumericKey( 'id', true );		
 
-	function User() {	
-		$this->YDDatabaseObject();
-	}
-	
-	function setDatabase() {
-		$this->__db = YDDatabase::getInstance(  'mysql', 'test', 'root', '', 'localhost' );
-	}
-	
-	function setTable() {
-		$this->__table = 'users';
-	}
-	
-	function setFields() {
-		$this->__fields['id']         = array( 'type' => YD_DATABASEOBJECT_NUM, 'auto' => true );
-		$this->__fields['name']       = array( 'type' => YD_DATABASEOBJECT_STR, 'default' => 'John Doe' );
-		$this->__fields['email']      = array( 'type' => YD_DATABASEOBJECT_STR );
-		$this->__fields['is_admin']   = array( 'type' => YD_DATABASEOBJECT_NUM, 'column' => 'admin' );	
-		$this->__fields['birthday']   = array( 'type' => YD_DATABASEOBJECT_NUM, 'null' => true, 'callback' => 'getAge' );
-											   
-		$this->registerSelect( 'birth_year', 'YEAR( users.birthday )' );
-	}
+			$name = & $this->registerStringField( 'name' );
+			$name->setDefault( 'John Doe' );
+			
+			$this->registerStringField( 'email' );
 
-	function setKeys() {
-		$this->__keys = array( 'id' );		
-	}
-	
-	function setRelations() {
-		$this->__relations['address'] = array(  'type'  => YD_DATABASEOBJECT_ONETOONE, 
-												'foreign_type_join'  => 'LEFT',
-												'foreign_dataobject' => 'Address' );
-
-		$this->__relations['groups']  = array(  'type'  => YD_DATABASEOBJECT_MANYTOMANY, 
-												'join_local_key'     => 'user_id',
-												'join_foreign_key'   => 'group_id',
-												'foreign_dataobject' => 'Group',
-												'join_dataobject'    => 'UserGroup' );
-	}
-	
-	function getAge( $birthday ) {
-	
-		if ( ! $birthday ) {
-			unset( $this->age );
-			return;
+			$is_admin = & $this->registerNumericField( 'is_admin' );
+			$is_admin->setColumn( 'admin' );
+			
+			$birthday = & $this->registerNumericField( 'birthday', true );
+			$birthday->setCallback( 'getAge' );
+			
+			$this->registerSelect( 'birth_year', 'YEAR( users.birthday )' );
+			
+			// Relations
+			$group = & $this->registerRelation( 'group', true, 'group', 'usergroup' );
+			$group->setCrossLocalField( 'user_id' );
+			$group->setCrossForeignField( 'group_id' );
+			
+			$address = & $this->registerRelation( 'address' );
+			$address->setForeignJoin( 'LEFT' ); 
+			
+		}		
+		
+		function getAge( $birthday ) {
+		
+			if ( ! $birthday ) {
+				unset( $this->age );
+				return;
+			}
+			
+			$year  = substr( $birthday, 0, 4 );
+			
+			// not really correct, but just to get the idea
+			$this->set( 'age', date('Y') - $year );
+			
 		}
-		
-		$year  = substr( $birthday, 0, 4 );
-		
-		// not really correct, but just to get the idea
-		$this->set( 'age', date('Y') - $year );
-		
 	}
-}
-
+	
 
 ?>
