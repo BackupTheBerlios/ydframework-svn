@@ -13,9 +13,9 @@
 	{if $formValid}
 
 		{if $result}
-			<p>The email to <b>{$form[email][value]}</b> was sent successfully!</p>
+			<p>The email to <b>{$form.email.value}</b> was sent successfully!</p>
 		{else}
-			<p style="color: red">The email to <b>{$form[email][value]}</b> was NOT sent successfully!</p>
+			<p style="color: red">The email to <b>{$form.email.value}</b> was NOT sent successfully!</p>
 		{/if}
 
 	{else}

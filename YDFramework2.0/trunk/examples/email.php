@@ -7,7 +7,7 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDEmail.php' );
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplate.php' );
+	YDInclude( 'YDTemplateSmarty.php' );
 
 	// Class definition
 	class email extends YDRequest {
