@@ -13,6 +13,7 @@
         <para>Build number: not released yet</para>
 
         <itemizedlist spacing="compact">
+            <listitem>Added the YDDatabaseObject class which implements a O/R Mapper.</listitem>
             <listitem>Replaced SmartyLight with the full blown Smarty template engine</listitem>
             <listitem>Brand new documentation based on DocBook XML/XSL. We now have HTML and PDF documentation.</listitem>
             <listitem>Completely reworked YDEmail class which is now powered by phpMailer.</listitem>
@@ -53,7 +54,8 @@
             <listitem>Added an option to specify a template outside the template directory (as smarty supports it).</listitem>
             <listitem>The debug function now use YD_CRLF instead of \n for the newline characters.</listitem>
             <listitem>The logging functions are now able to wordwrap long lines if you define YD_LOG_WRAPLINES. This is off by default.</listitem>
-            <listitem>TODO: Add the YDDatabaseObject class which implements a O/R Mapper.</listitem>
+            <listitem>Fixed some bugs in the defaults for the YDValidateRules functions.</listitem>
+            <listitem>The YDForm::getValue and YDForm::getValues function now include a timestamp for date/time elements</listitem>
         </itemizedlist>
 
     </sect1>
