@@ -50,7 +50,7 @@
 				$this->galleries[ $i ]['title'] = $contents[3][$i];
 				$this->galleries[ $i ]['url'] = $this->homeUrl . $contents[1][$i] . '&page=all';
 				$this->galleries[ $i ]['thumbnail'] = $this->homeUrl . 'image/' . $contents[2][$i] . '/small.jpg';
-				$this->galleries[ $i ]['id'] = md5( $this->galleries[ $i ]['url'] );
+				$this->galleries[ $i ]['id'] = sprintf( "%u", crc32( $this->galleries[ $i ]['url'] ) );
 
 				// Get the contents of the URL
 				$pGallery = '/www\.pbase\.com\/beachshop\/image\/([0-9]+)/ism';
