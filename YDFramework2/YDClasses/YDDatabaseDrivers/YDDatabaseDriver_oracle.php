@@ -72,8 +72,8 @@
 		 *	@returns	A single record matching the SQL statement.
 		 */
 		function getRecord( $sql ) {
-			$result = & $this->_connectAndExec( $sql );
-			$record = oci_fetch_assoc( $result );
+			$result = $this->_connectAndExec( $sql );
+			ocifetchinto( $result, $record, OCI_ASSOC );
 			OCIFreeStatement( $result );
 			return $record;
 		}
@@ -86,9 +86,9 @@
 		 *	@returns	The records matching the SQL statement as an associative array.
 		 */
 		function getRecords( $sql ) {
-			$result = & $this->_connectAndExec( $sql );
+			$result = $this->_connectAndExec( $sql );
 			$dataset = array();
-			while ( $line = oci_fetch_assoc( $result ) ) {
+			while ( ocifetchinto( $result, $line, OCI_ASSOC ) ) {
 				array_push( $dataset, $line );
 			}
 			OCIFreeStatement( $result );
@@ -103,7 +103,7 @@
 		 *	@returns	The number of affected rows.
 		 */
 		function executeSql( $sql ) {
-			$result = & $this->_connectAndExec( $sql );
+			$result = $this->_connectAndExec( $sql );
 			return ocirowcount( $this->_conn );
 		}
 
@@ -115,7 +115,7 @@
 		 *	@returns	The number of rows matched by the SQL query.
 		 */
 		function getMatchedRowsNum( $sql ) {
-			$result = & $this->_connectAndExec( $sql );
+			$result = $this->_connectAndExec( $sql );
 			return ocirowcount( $this->_conn );
 		}
 
@@ -138,7 +138,7 @@
 		 *
 		 *	@internal
 		 */
-		function & _connectAndExec( $sql ) {
+		function _connectAndExec( $sql ) {
 			$this->_logSql( $sql );
 			$this->connect();
 			$stmt = OCIParse( $this->_conn, $sql );
