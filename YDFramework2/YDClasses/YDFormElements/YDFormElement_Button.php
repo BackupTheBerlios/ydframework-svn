@@ -38,6 +38,9 @@
 			// Indicate if filters need to be applied
 			$this->_applyFilters = false;
 
+			// Indicate we are a button type
+			$this->_isButton = true;
+
 		}
 
 		/**

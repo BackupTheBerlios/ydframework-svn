@@ -12,10 +12,6 @@
 
 	/**
 	 *	This is the base class for all form elements.
-	 *
-	 *	@todo
-	 *		Add isButton parameter which changes the way the element works. Buttons are grouped at the bottom of the
-	 *		form and only return a value if they are clicked.
 	 */
 	class YDFormElement extends YDBase {
 
@@ -41,6 +37,7 @@
 			$this->_options = $options;
 			$this->_type = '';
 			$this->_value = '';
+			$this->_isButton = false;
 
 			// Indicate where the label should be
 			$this->_labelPlace = 'before';
@@ -48,6 +45,19 @@
 			// Indicate if filters need to be applied
 			$this->_applyFilters = true;
 
+		}
+
+		/**
+		 *	Indicates if the element is a button or not.
+		 *
+		 *	@returns	Boolean indicating if the element is a button or not.
+		 */
+		function isButton() {
+			if ( $this->_isButton === true ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		/**
@@ -65,6 +75,7 @@
 				'options' => $this->_options,
 				'placeLabel' => $this->_labelPlace,
 				'html'	=> $this->toHtml(),
+				'isButton' => $this->isButton(),
 			);
 		}
 

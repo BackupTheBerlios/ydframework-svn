@@ -371,10 +371,6 @@
 		 *	@param $name	The name of the form element.
 		 *
 		 *	@returns	The value to the specified form element.
-		 *
-		 *	@todo
-		 *		Buttons should only return a value if clicked (all other elements as well?). Maybe we should have this
-		 *		as a special property for an element?
 		 */
 		function getValue( $name ) {
 
@@ -402,16 +398,6 @@
 					return $_FILES[ $this->_name . '_' . $name ];
 				}
 			}
-
-			// Buttons should only return a value if clicked
-			// we can check $_formVars for this.
-			//var $_formVars = 
-			//array (
-			//	'contactForm_contactName' => 'te',
-			//	'contactForm_contactEmail' => 'te@test.info',
-			//	'contactForm_contactBody' => 'te',
-			//	'contactForm_cmdPreview' => 'preview',
-			//);
 
 			// Unset the element
 			unset( $element );
@@ -455,6 +441,33 @@
 			// Return false
 			return false;
 
+		}
+
+		/**
+		 *	This function will check if the specified button was clicked or not.
+		 *
+		 *	@param $button	The name of the button.
+		 *
+		 *	@returns	Boolean indicating if the button was clicked or not.
+		 */
+		function isClicked( $button ) {
+		
+			// Get the element.
+			$element = $this->getElement( $button );
+
+			// Check if it's a button
+			if ( $element->isButton() === true ) {
+				
+				// Check the post variables
+				if ( array_key_exists( $this->_name . '_' . $element->_name, $this->_formVars ) ) {
+					return true;
+				}
+
+			}
+
+			// Return false in all other cases
+			return false;
+	
 		}
 
 		/**
@@ -646,7 +659,7 @@
 
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
-				if ( $element['type'] != 'submit' && $element['type'] != 'reset' ) {
+				if ( $element['isButton'] === false ) {
 					$html .= '<p>';
 					if ( $element['placeLabel'] == 'after' ) {
 						$html .= $element['html'];
@@ -673,11 +686,13 @@
 			// Add the buttons
 			$buttons = array();
 			foreach ( $form as $name=>$element ) {
-				if ( $element['type'] == 'submit' || $element['type'] == 'reset' ) {
+				if ( $element['isButton'] === true ) {
 					array_push( $buttons, $element['html'] );
 				}
 			}
-			if ( sizeof( $buttons ) > 0 ) { $html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>'; }
+			if ( sizeof( $buttons ) > 0 ) {
+				$html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>';
+			}
 
 			// Close the form tag
 			$html .= '</form>';
