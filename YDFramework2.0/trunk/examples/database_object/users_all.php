@@ -5,7 +5,7 @@
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
-    YDInclude( 'User.php' );
+    YDInclude( 'YDDatabaseObject.php' );
     
     echo "<h1>Loading and finding all relations</h1>";
     echo "<p>There is way of loading all relations and making a single query to all relations.</p>";
@@ -14,7 +14,8 @@
     
     echo "<p>Let's do that with my user.</p>";
 
-    $user = new User();
+    $user = YDDatabaseObject::getInstance( 'User' );
+    
     $user->loadAllRelations();
     $user->id = 1;
     

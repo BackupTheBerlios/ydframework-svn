@@ -5,7 +5,7 @@
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
-    YDInclude( 'User.php' );
+    YDInclude( 'YDDatabaseObject.php' );
     YDInclude( 'YDTemplate.php' );
     
     echo "<h1>YDRecordSet pagination</h1>";
@@ -13,7 +13,7 @@
     echo "<p>For that we have the getResults and getRelationResults methods.</p>";
     echo "<p>Let's load our groups and users relation with 3 records per page.</p>";
 
-    $user = new User();
+    $user = YDDatabaseObject::getInstance( 'User' );
     $user->loadAllRelations();
     
     $user->findRelation( 'group' );

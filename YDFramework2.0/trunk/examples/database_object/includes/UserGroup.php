@@ -1,7 +1,5 @@
 <?php
 	
-	YDInclude('YDDatabaseObject.php');
-	
 	class UserGroup extends YDDatabaseObject {
 	
 		function UserGroup() {

@@ -4,10 +4,10 @@
     require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
-
-    YDInclude( 'User.php' );
+	
+    YDInclude( 'YDDatabaseObject.php' );
     
-    $user = new User();
+    $user = YDDatabaseObject::getInstance( 'User' );
     
     // Let's truncate the table first
     $user->executeSql( 'TRUNCATE ' . $user->getTable() );

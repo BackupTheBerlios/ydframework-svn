@@ -1,7 +1,5 @@
 <?php
 	
-	YDInclude('YDDatabaseObject.php');
-	
 	class User extends YDDatabaseObject {
 	
 		function User() {	

@@ -97,6 +97,37 @@
         }
 
         /**
+         *  This function returns an instance of a YDDatabaseObject class.
+         *
+         *  @param $class  (optional) The class name.
+         *
+         *  @returns    An instance of a YDDatabaseObject class.
+         *
+         *  @static
+         */          
+        function getInstance( $class='' ) {
+        
+            $path     = YDConfig::get( 'YD_DBOBJECT_PATH' ) . YD_DIRDELIM;
+            $ext      = YDConfig::get( 'YD_DBOBJECT_EXT' );
+            $prefix   = YDConfig::get( 'YD_DBOBJECT_PREFIX' );
+            $sufix    = YDConfig::get( 'YD_DBOBJECT_SUFIX' );
+            
+			if ( ! strlen( $class ) ) {
+				$class = $this->getClassName();
+			}
+			
+            $path  = $path . $class . $ext;
+            $class = $prefix . $class . $sufix;
+            
+            if ( ! class_exists( $class ) ) {
+                require_once $path;
+            }
+            
+            return new $class();
+            
+        }
+
+        /**
          *  This function register the database connection.
          *
          *  @param $db  Reference to the database abstraction layer.
@@ -457,21 +488,12 @@
             
             $this->_last = array( $relation );
             
-            $path     = YDConfig::get( 'YD_DBOBJECT_PATH' ) . YD_DIRDELIM;
-            $ext      = YDConfig::get( 'YD_DBOBJECT_EXT' );
-            $prefix   = YDConfig::get( 'YD_DBOBJECT_PREFIX' );
-            $sufix    = YDConfig::get( 'YD_DBOBJECT_SUFIX' );
-            
             $relation = & $this->getRelation( $relation );
             $f_var    = $relation->getForeignVar();
             $f_class  = $relation->getForeignClass();
             
             if ( ! $this->exists( $f_var ) ) {
-                
-                require_once $path . $f_class . $ext;
-
-                $class = $prefix . $f_class . $sufix;
-                $this->set( $f_var, new $class );
+                $this->set( $f_var, YDDatabaseObject::getInstance( $f_class ) );
             }
             
             if ( $relation->isManyToMany() ) {
@@ -480,11 +502,7 @@
                 $c_class  = $relation->getCrossClass();
                 
                 if ( ! $this->exists( $c_var ) ) {
-
-                    require_once $path . $c_class . $ext;
-
-                    $class = $prefix . $c_class . $sufix;
-                    $this->set( $c_var, new $class );
+                    $this->set( $c_var, YDDatabaseObject::getInstance( $c_class ) );
                 }
             
             }

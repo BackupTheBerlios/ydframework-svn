@@ -5,9 +5,9 @@
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
     
-    YDInclude( 'Group.php' );
+    YDInclude( 'YDDatabaseObject.php' );
     
-    $group = new Group();
+    $group = YDDatabaseObject::getInstance( 'Group' );
     
     // Let's truncate the table before
     $group->executeSql( 'TRUNCATE ' . $group->getTable() );

@@ -5,9 +5,9 @@
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
-    YDInclude( 'Admin.php' );
+    YDInclude( 'YDDatabaseObject.php' );
     
-    $adm = new Admin();
+    $adm = YDDatabaseObject::getInstance( 'Admin' );
     
     // Let's begin
     echo "<h1>Let's see who are the admins</h1>";

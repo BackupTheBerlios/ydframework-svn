@@ -5,9 +5,9 @@
 
     YDConfig::set( 'YD_DBOBJECT_PATH', YD_SELF_DIR . YD_DIRDELIM . 'includes' );
 
-    YDInclude( 'User.php' );
+    YDInclude( 'YDDatabaseObject.php' );
     
-    $user = new User();
+    $user = YDDatabaseObject::getInstance( 'User' );
     
     // Let's begin
     echo "<h1>We have a Many-to-Many relation</h1>";
