@@ -56,6 +56,35 @@
 			return method_exists( $this, $name );
 		}
 
+		/**
+		 *	This function checks if this object instance is of a specific class or is based on a derived class of the
+		 *	given class. The class name is case insensitive.
+		 *
+		 *	@param $class	The object type you want to check against.
+		 *
+		 *	@returns	Boolean indicating if this object is of the specified class.
+		 */
+		function isSubClass( $class ) {
+			return YDObjectUtil::isSubClass( $this, $class );
+		}
+
+		/**
+		 *	Function to get all the ancestors of this class. The list will contain the parent class first, and then it's
+		 *	parent class, etc. You can pass both the name of the class or an object instance to this function
+		 *
+		 *	@returns	Array with all the ancestors.
+		 */
+		function getAncestors() {
+			return YDObjectUtil::getAncestors( $this->getClassName() );
+		}
+
+		/**
+		 *	This function will serialize the object.
+		 */
+		function serialize( $obj ) {
+			return YDObjectUtil::serialize( $this );
+		}
+
 	}
 
 ?>
