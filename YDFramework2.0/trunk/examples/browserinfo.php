@@ -25,6 +25,7 @@
             YDDebugUtil::dump( $browser->platform, 'Platform' );
             YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
             YDDebugUtil::dump( $browser->getBrowserLanguages(), 'Languages supported by the browser' );
+            YDDebugUtil::dump( $browser->getBrowserLanguagesAndCountries(), 'Languages and countries supported by the browser' );
             YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
         }
 

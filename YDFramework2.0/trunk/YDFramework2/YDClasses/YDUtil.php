@@ -701,6 +701,35 @@
         }
 
         /**
+         *  This function returns an array with the languages that are supported by the browser and also interprets the
+         *  country information that the browser sends over.. This is done by using the HTTP_ACCEPT_LANGUAGE server
+         *  variable that gets send with the HTTP headers.
+         *
+         *  @return Array containing the list of supported languages
+         */
+        function getBrowserLanguagesAndCountries() {
+
+            // We parse the language headers sent by the browser
+            if ( !isset( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+                return array();
+            }
+            $browserCountries = explode( ',', $_SERVER['HTTP_ACCEPT_LANGUAGE'] );
+            $languagesAndCountries = array();
+
+            // Loop over the languages and normalize them
+            foreach( $browserCountries as $value ) { 
+                $lang = explode( ';', $value );
+                $lang = explode( '-', $lang[0] );
+                $lang[1] = ( isset( $lang[1] ) && $lang[1] != '' ? $lang[1] : $lang[0] );
+                $languagesAndCountries[][ $lang[1] ] = $lang[0];
+            }
+
+            // Return the normalized list
+            return $languagesAndCountries;
+
+        }
+
+        /**
          *	This function will get the most appropriate language for the browser, considering the list of supported
          *	languages by both the browser and the web application.
          *
