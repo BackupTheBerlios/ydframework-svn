@@ -188,13 +188,41 @@
 		}
 	}
 
+	/**
+	 *	This function will fix magic quotes.
+	 *
+	 *	@param $value	The value to fix.
+	 *
+	 *	@returns	The fixed value.
+	 */
+	if ( ! function_exists( 'YDRemoveMagicQuotes' ) ) {
+		function YDRemoveMagicQuotes( & $value ) {
+			if ( get_magic_quotes_gpc() == 1 ) {
+				if ( is_array( $value ) ) {
+					$result = array();
+					foreach ( $value as $key=>$val) {
+						if ( is_array( $val ) ) {
+							$result[ $key ] = YDRemoveMagicQuotes( $val );
+						} else {
+							$result[ $key ] = stripslashes( $val );
+						}
+					}
+					return $result;
+				} else {
+					return stripslashes( $value );
+				}
+			}
+			return $value;
+		}
+	}
+
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
 	if ( ! defined( 'YD_FIXED_MAGIC_QUOTES' ) ) {
 		if ( get_magic_quotes_gpc() == 1 ) {
-			$_GET = @array_map( 'stripslashes', $_GET );
-			$_POST = @array_map( 'stripslashes', $_POST );
-			$_COOKIE = @array_map( 'stripslashes', $_COOKIE );
-			$_REQUEST = @array_map( 'stripslashes', $_REQUEST );
+			$_GET = @YDRemoveMagicQuotes( $_GET );
+			$_POST = @YDRemoveMagicQuotes( $_POST );
+			$_COOKIE = @YDRemoveMagicQuotes( $_COOKIE );
+			$_REQUEST = @YDRemoveMagicQuotes( $_REQUEST );
 		}
 		define( 'YD_FIXED_MAGIC_QUOTES', true );
 	}
