@@ -83,6 +83,16 @@
 		}
 
 		/**
+		 *	This function will set the named part to the new contents.
+		 *
+		 *	@param $name	The name of the part to update
+		 *	@param $value	The new value for the part
+		 */
+		function setNamedPart( $name, $val ) {
+			$this->_url_parsed[$name] = $val;
+		}
+
+		/**
 		 *	This function will return the scheme of the URL.
 		 *
 		 *	@returns	The scheme of the URL (http, ftp, ...).
