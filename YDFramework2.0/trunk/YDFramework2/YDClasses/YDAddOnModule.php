@@ -37,10 +37,10 @@
         function YDAddOnModule() {
 
             // The variables that should always be there
-            $this->author = 'unknown author';
-            $this->version = '1.0';
-            $this->copyright = 'no copyright';
-            $this->description = 'no description';
+            $this->_author = 'unknown author';
+            $this->_version = '1.0';
+            $this->_copyright = 'no copyright';
+            $this->_description = 'no description';
 
         }
 

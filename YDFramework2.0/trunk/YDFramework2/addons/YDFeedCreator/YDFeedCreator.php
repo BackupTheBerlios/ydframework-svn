@@ -45,10 +45,10 @@
             $this->YDAddOnModule();
 
             // Setup the module
-            $this->author = 'Pieter Claerhout';
-            $this->version = '1.0';
-            $this->copyright = '(c) 2005 Pieter Claerhout, pieter@yellowduck.be';
-            $this->description = 'This addon class defines a RSS/ATOM feed. You can use this class to create RSS and '
+            $this->_author = 'Pieter Claerhout';
+            $this->_version = '1.0';
+            $this->_copyright = '(c) 2005 Pieter Claerhout, pieter@yellowduck.be';
+            $this->_description = 'This addon class defines a RSS/ATOM feed. You can use this class to create RSS and '
                                . 'Atom feeds in a very easy and straightforward way. If you set up your class instance, '
                                . 'you can automatically output to the different versions of RSS and ATOM with the same '
                                . 'source data.';

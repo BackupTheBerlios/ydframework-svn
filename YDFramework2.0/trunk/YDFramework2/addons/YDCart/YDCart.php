@@ -47,10 +47,10 @@
             $this->YDAddOnModule();
 
             // Setup the module
-            $this->author = 'David Bittencourt';
-            $this->version = '1.0';
-            $this->copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
-            $this->description = 'This class defines a shopping cart object.';
+            $this->_author = 'David Bittencourt';
+            $this->_version = '1.0';
+            $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
+            $this->_description = 'This class defines a shopping cart object.';
 
             if ( ! isset( $_SESSION[$session_var] ) ) {
                 $_SESSION[$session_var] = & $this->item;	
