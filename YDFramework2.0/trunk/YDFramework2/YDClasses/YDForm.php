@@ -1048,6 +1048,16 @@
         }
 
         /**
+         *  Function to set the attribute of a form element
+         *
+         *  @param  $key    The name of the attribute
+         *  @param  $val    The value of the attribute
+         */
+        function setAttribute( $key, $val ) {
+            $this->_attributes[$key] = $val;
+        }
+
+        /**
          *	This function sets the value for the date element.
          *
          *	@param	$val	(optional) The value for this object.
