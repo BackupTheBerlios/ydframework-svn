@@ -35,8 +35,10 @@
 
 		/**
 		 *	This function initializes the global configuration.
+		 *
+		 *	@internal
 		 */
-		function init() {
+		function _init() {
 			if ( ! isset( $GLOBALS[ YD_CONFIG_VAR ] ) ) {
 				$GLOBALS[ YD_CONFIG_VAR ] = array();
 			}
@@ -90,11 +92,24 @@
 		function exists( $name ) {
 
 			// Initialize the global configuration if needed
-			YDConfig::init();
+			YDConfig::_init();
 
 			// Return true or false
 			return isset( $GLOBALS[ YD_CONFIG_VAR ][ $name ] );
 
+		}
+		
+		/**
+		 *	This function dumps the contents of the configuration.
+		 */
+		function dump() {
+
+			// Initialize the global configuration if needed
+			YDConfig::_init();
+
+			// Dump the configuration
+			YDDebugUtil::dump( $GLOBALS[ YD_CONFIG_VAR ], 'YDConfig contents' );
+		
 		}
 
 	}
