@@ -187,7 +187,7 @@
 		}
 
 		/** 
-		 *	This rule checks if a file upload had the right mime type.
+		 *	This rule checks if a file upload had the filename based on a regular expression.
 		 *
 		 *	@param $val		The value to test.
 		 *	@param $opts	The regex to which the filename should match.
