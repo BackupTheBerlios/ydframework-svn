@@ -11,10 +11,6 @@
      *  This class defines an error using an error message. Each error object
      *  has just one error message. The class is also the base class for al
      *  other error classes.
-     *
-     *  @todo
-     *      This class should know about database errors and be able to extract
-     *      all the needed information from the error objects.
      */
     class YDError extends YDBase {
 
