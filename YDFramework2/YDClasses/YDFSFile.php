@@ -1,242 +1,192 @@
 <?php
 
-    /*
-     *  Yellow Duck Framework version 2.0
-     *  (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
-     */
+	// Yellow Duck Framework version 2.0
+	// (c) copyright 2004 Pieter Claerhout, pieter@yellowduck.be
 
-    // Check if the YDFramework is loaded.
-    if ( ! defined( 'YD_FW_NAME' ) ) {
-        die(  'Yellow Duck Framework is not loaded.' );
-    }
+	if ( ! defined( 'YD_FW_NAME' ) ) {
+		die(  'Yellow Duck Framework is not loaded.' );
+	}
 
-    // Includes
-    require_once( 'YDBase.php' );
+	require_once( 'YDBase.php' );
 
-    /**
-     *  This class defines a filesystem file.
-     */
-    class YDFSFile extends YDBase {
+	/**
+	 *  This class defines a filesystem file.
+	 */
+	class YDFSFile extends YDBase {
 
-        /**
-         *  The class constructor of the YDFSFile class takes the path to the
-         *  file as it's only argument. It will then provide you with a number
-         *  of functions to get the properties of the file.
-         *
-         *  @param $path Path of the file.
-         */
-        function YDFSFile( $path ) {
+		/**
+		 *	The class constructor of the YDFSFile class takes the path to the file as it's only argument. It will then
+		 *	provide you with a number of functions to get the properties of the file.
+		 *
+		 *	@param $path	Path of the file.
+		 */
+		function YDFSFile( $path ) {
 
-            // Initialize YDBase
-            $this->YDBase();
+			// Initialize YDBase
+			$this->YDBase();
 
-            // Check if the file exists
-            if ( ! file_exists( $path ) ) {
-                YDFatalError(
-                    'The file with path "' . $path . '" does not exist.'
-                );
-            }
+			// Fail if directory
+			if ( ! is_file( $path ) ) {
+				YDFatalError( 'The file with path "' . $path . '" does not exist.' );
+			}
 
-            // Fail if directory
-            if ( ! is_file( $path ) ) {
-                YDFatalError(
-                    'The path "' . $path . '" is not a file and can not be '
-                    . 'converted into YDFSFile object.'
-                );
-            }
+			// Save the path
+			$this->_path = realpath( $path );
 
-            // Save the path
-            $this->_path = realpath( $path );
+		}
 
-        }
+		/**
+		 *	Function to get the filename of the object. This does not include the path information.
+		 *
+		 *	@returns	String containing the name of the object.
+		 */
+		function getBasename() {
+			return basename( $this->getAbsolutePath() );
+		}
 
-        /**
-         *  Function to get the filename of the object. This does not include
-         *  the path information.
-         *
-         *  @returns String containing the name of the object.
-         */
-        function getBasename() {
-            return basename( $this->getAbsolutePath() );
-        }
+		/**
+		 *	Function to get the extension of the file.
+		 *
+		 *	@returns	String containing the extension of the file.
+		 */
+		function getExtension() {
+			ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
+			return( $regs[1] );
+		}
 
-        /**
-         *  Function to get the extension of the file.
-         *
-         *  @returns String containing the extension of the file.
-         */
-        function getExtension() {
-            ereg( ".*\.([a-zA-z0-9]{0,5})$", $this->getAbsolutePath(), $regs );
-            return( $regs[1] );
-        }
+		/**
+		 *	Function to get the full path of the object.
+		 *
+		 *	@returns	String containing the full path of the object.
+		 */
+		function getPath() {
+			return realpath( dirname( $this->_path ) );
+		}
 
-        /**
-         *  Function to get the full path of the object.
-         *
-         *  @returns String containing the full path of the object.
-         */
-        function getPath() {
-            return realpath( dirname( $this->_path ) );
-        }
+		/**
+		 *	Function to get the full absolute path of the object.
+		 *
+		 *	@returns	String containing the full absolute path of the object.
+		 */
+		function getAbsolutePath() {
+			return realpath( $this->_path );
+		}
 
-        /**
-         *  Function to get the full absolute path of the object.
-         *
-         *  @returns String containing the full absolute path of the object.
-         */
-        function getAbsolutePath() {
-            return realpath( $this->_path );
-        }
+		/**
+		 *	Function to get the last modification date of the object.
+		 *
+		 *	@returns	String containing the last modification date of the object.
+		 */
+		function getLastModified() {
+			clearstatcache();
+			return filemtime( $this->getAbsolutePath() );
+		}
 
-        /**
-         *  Function to get the last modification date of the object.
-         *
-         *  @returns String containing the last modification date of the object.
-         */
-        function getLastModified() {
-            clearstatcache();
-            return filemtime( $this->getAbsolutePath() );
-        }
+		/**
+		 *	Function to get the size of the file.
+		 *
+		 *	@returns	Double containing the length of the file.
+		 */
+		function getSize() {
+			clearstatcache();
+			return filesize( $this->getAbsolutePath() );
+		}
 
-        /**
-         *  Function to get the size of the file.
-         *
-         *  @returns Double containing the length of the file.
-         */
-        function getSize() {
-            clearstatcache();
-            return filesize( $this->getAbsolutePath() );
-        }
+		/**
+		 *	Function to get the contents of the file. Depending on the file contents, this will be returned as binary or
+		 *	textual data.
+		 *
+		 *	@param $start	(optional) Byte to start reading from.
+		 *	@param $length	(optional) Number of bytes to read.
+		 *
+		 *	@returns	String containing the contents of the file.
+		 */
+		function getContents( $start=null, $length=null ) {
 
-        /**
-         *  Function to get the contents of the file. Depending on the file
-         *  contents, this will be returned as binary or textual data.
-         *
-         *  If no start byte is given, it will start reading from the beginning
-         *  of the file.
-         *
-         *  If the length is not given, it will read the rest of  the file
-         *  starting from the start byte.
-         *
-         *  @param $start  (optional) Byte to start reading from.
-         *  @param $length (optional) Number of bytes to read.
-         *
-         *  @returns String containing the contents of the file.
-         */
-        function getContents( $start=null, $length=null ) {
+			// Check the start byte
+			if ( $start == null ) {
+				$start = 0;
+			}
 
-            // No start given
-            if ( $start == null ) {
+			// No length given
+			if ( $length == null ) {
+				$length = filesize( $this->getAbsolutePath() ) - $start;
+			}
 
-                // Start from the first byte
-                $start = 0;
+			// Check that length is a positive integer
+			if ( $length < 1 ) {
+				YDFatalError( 'getContents: Length should be a positive integer.' );
+			}
 
-            } else {
+			// Variable to hold the return data
+			$result = '';
 
-                // Check if the start is an integer
-                if ( ! is_int( $start ) ) {
-                    YDFatalError(
-                        'getContents: Start byte should be an integer.'
-                    );
-                }
+			// Open the file in read binary mode
+			$file = fopen( $this->getAbsolutePath(), 'rb' );
 
-            }
+			// Check if we were able to open the file
+			if ( $file == false ) {
+				YDFatalError( 'The file with path "' . $path . '" could not be read.' );
+			}
 
-            // No length given
-            if ( $length == null ) {
+			// Find the start position
+			fseek( $file, $start );
 
-                // Take the length of the file starting from the start byte
-                $length = filesize( $this->getAbsolutePath() ) - $start;
+			// Get the contents of the file
+			$result = fread( $file, $length );
 
-            }
+			// Close the file handle
+			fclose( $file );
 
-            // Check that length is a positive integer
-            if ( ! is_int( $length ) ) {
-                YDFatalError( 
-                    'getContents: Length should be an integer.'
-                );
-            }
-            if ( $length < 1 ) {
-                YDFatalError(
-                    'getContents: Length should be a positive integer.'
-                );
-            }
+			// Return the result
+			return $result;
 
-            // Variable to hold the return data
-            $result = '';
+		}
 
-            // Open the file in read binary mode
-            $file = fopen( $this->getAbsolutePath(), 'rb' );
+		/**
+		 *	Function to determine if the file is an image or not. This function will read the header of the file to
+		 *	find out if it's an image or not.
+		 *
+		 *	@remarks
+		 *		You need to have the GD library enabled in PHP in order to use this function.
+		 *
+		 *	@returns	Boolean indicating if the file is an image or not.
+		 */
+		function isImage() {
 
-            // Check if we were able to open the file
-            if ( $file == false ) {
-                YDFatalError(
-                    'The file with path "' . $path . '" could not be read.'
-                );
-            }
+			// Check for the getimagesize function
+			if ( ! function_exists( 'getimagesize' ) ) {
+				YDFatalError(
+					'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
+					. 'using the YDFSImage::getImageSize function.'
+				);
+			}
 
-            // Find the start position
-            fseek( $file, $start );
+			// Get the parameters
+			$params = getimagesize( $this->getAbsolutePath() );
 
-            // Get the contents of the file
-            $result = fread( $file, $length );
+			// Return false if not an image
+			if ( $params == false ) {
+				return false;
+			}
 
-            // Close the file handle
-            fclose( $file );
+			// Check if it's a supported image
+			return in_array( $params[2], array( 1, 2, 3 ) );
 
-            // Return the result
-            return $result;
+		}
 
-        }
+		/**
+		 *	This function will return true if the directory is writeable, otherwise, it will return false.
+		 *
+		 *	@remarks
+		 *		This only works correctly on Unix based systems.
+		 *
+		 *	@returns	Boolean indicating if the directory is writeable or not.
+		 */
+		function isWriteable() {
+			return is_writable( $this->getAbsolutePath() );
+		}
 
-        /**
-         *  Function to determine if the file is an image or not. This function
-         *  will read the header of the file to find out if it's an image or
-         *  not.
-         *
-         *  @remarks
-         *      You need to have the GD library enabled in PHP in order to use
-         *      this function.
-         *
-         *  @returns Boolean indicating if the file is an image or not.
-         */
-        function isImage() {
-
-            // Check for the getimagesize function
-            if ( ! function_exists( 'getimagesize' ) ) {
-                YDFatalError(
-                    'The "getimagesize" function does not exists. Make sure '
-                    . 'that the GD libraries are loaded before using the '
-                    . 'YDFSImage::getImageSize function.'
-                );
-            }
-
-            // Get the parameters
-            $params = getimagesize( $this->getAbsolutePath() );
-
-            // Return false if not an image
-            if ( $params == false ) {
-                return false;
-            }
-
-            // Check if it's a supported image
-            return in_array( $params[2], array( 1, 2, 3 ) );
-
-        }
-
-        /**
-         *  This function will return true if the directory is writeable,
-         *  otherwise, it will return false.
-         *
-         *  @remarks
-         *      This only works correctly on Unix based systems.
-         *
-         *  @returns Boolean indicating if the directory is writeable or not.
-         */
-        function isWriteable() {
-            return is_writable( $this->getAbsolutePath() );
-        }
-
-    }
+	}
 
 ?>

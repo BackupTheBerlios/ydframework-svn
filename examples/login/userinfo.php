@@ -1,27 +1,27 @@
 <?php
 
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
+	// Standard include
+	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_init.php' );
 
-    // Include our own request
-    require_once( 'MyLoginRequest.php' );
+	// Include our own request
+	require_once( 'MyLoginRequest.php' );
 
-    // Class definition
-    class userinfoRequest extends MyLoginRequest {
+	// Class definition
+	class userinfoRequest extends MyLoginRequest {
 
-        // Class constructor
-        function userinfoRequest() {
-            $this->MyLoginRequest();
-        }
+		// Class constructor
+		function userinfoRequest() {
+			$this->MyLoginRequest();
+		}
 
-        // Default action
-        function actionDefault() {
-            $this->outputTemplate();
-        }
+		// Default action
+		function actionDefault() {
+			$this->outputTemplate();
+		}
 
-    }
+	}
 
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_process.php' );
+	// Standard include
+	require_once( dirname( __FILE__ ) . '/../../YDFramework2/YDF2_process.php' );
 
 ?>
