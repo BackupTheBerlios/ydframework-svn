@@ -79,9 +79,6 @@
             // Initialize the database URL
             $this->_url = $url;
 
-            // Placeholder for the connection object
-            $this->_conn = null;
-
         }
 
         /**
@@ -124,11 +121,6 @@
          */
         function getConnection( $dieOnError=true, $persistent=false ) {
 
-            // Check if there is already a connection
-            if ( $this->_conn ) {
-                return $this->_conn;
-            }
-
             // Make the connection
             $conn = DB::connect( $this->getUrl(), $persistent );
 
@@ -152,9 +144,6 @@
 
             // Set the options
             $conn->setOption( 'portability', DB_PORTABILITY_LOWERCASE );
-
-            // Save the connection
-            $this->_conn = $conn;
 
             // Return the connection
             return $conn;
@@ -190,8 +179,14 @@
                 return new YDFatalError( $result );
             }
 
+            // Get the results
+            $result = $db->affectedRows();
+
+            // Close the database connection
+            $conn->disconnect();
+
             // Return the result
-            return $db->affectedRows();;
+            return $result;
 
         }
 
@@ -223,6 +218,9 @@
             if ( DB::isError( $result ) ) {
                 return new YDFatalError( $result );
             }
+
+            // Close the database connection
+            $conn->disconnect();
 
             // Return the result
             return $result;
@@ -261,6 +259,9 @@
                 return new YDFatalError( $result );
             }
 
+            // Close the database connection
+            $conn->disconnect();
+
             // Return the result
             return $result;
 
@@ -295,8 +296,14 @@
                 return new YDFatalError( $result );
             }
 
+            // Get the result
+            $result = $result->fetchRow();
+
+            // Close the database connection
+            $conn->disconnect();
+
             // Return the result
-            return $result->fetchRow();
+            return $result;
 
         }
 
