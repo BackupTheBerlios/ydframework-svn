@@ -205,6 +205,14 @@
         </tr>
         <tr>
             <td valign="top">
+                <a href="xmlrpcserver1.php">XML/RPC server</a>
+            </td>
+            <td valign="top">
+                <a href="<?= $YD_SELF_SCRIPT ?>?do=source&id=xmlrpcserver1.php">xmlrpcserver1.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
                 <a href="language1.php">Language negotiator</a>
             </td>
             <td valign="top">
