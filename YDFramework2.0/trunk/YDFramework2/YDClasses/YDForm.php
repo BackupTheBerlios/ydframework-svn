@@ -144,6 +144,7 @@
             $this->registerFilter( 'upper', 'strtoupper' );
 
             // Add the renderers
+            $this->registerRenderer( 'array', 'YDFormRenderer_array', 'YDFormRenderer_array.php' );
             $this->registerRenderer( 'html', 'YDFormRenderer_html', 'YDFormRenderer_html.php' );
 
         }
@@ -842,88 +843,42 @@
         }
 
         /**
+         *	This function will render a form and return the rendered contents.
+         *
+         *	@param	$type	The renderer to use.
+         *
+         *	@returns	The rendered form.
+         */
+        function render( $type ) {
+
+            // Check if the renderer is known
+            if ( ! array_key_exists( $type, $this->_regRenderers ) ) {
+                trigger_error( 'Unknown for renderer type "' . $type . '".', YD_ERROR );
+            }
+
+            // Include the renderer file
+            if ( ! empty( $this->_regRenderers[ $type ]['file'] ) ) {
+                YDInclude( $this->_regRenderers[ $type ]['file'] );
+            }
+
+            // Check if the class exists
+            $class = $this->_regRenderers[ $type ]['class'];
+
+            // Create the instance
+            $instance = new $class( $this );
+
+            // Return the rendered form
+            return $instance->render();
+
+        }
+
+        /**
          *	This function will return the form as an array.
          *
          *	@returns	The form as an array.
          */
         function toArray() {
-
-            // Start with an empty array
-            $form = array();
-
-            // Add the list of attributes
-            $attribs = array(
-                'name'		=> $this->_name, 'id'		=> $this->_name, 'method' => strtoupper( $this->_method ),
-                'action'	=> $this->_action, 'target'	=> $this->_target
-            );
-            $attribs = array_merge( $this->_attributes, $attribs );
-            $form['attribs'] = $this->_convertToHtmlAttrib( $attribs );
-            $form['tag'] = '<form' . $form['attribs'] . '>';
-            $form['requirednote'] = $this->_requiredNote;
-            $form['endtag'] = '</form>';
-
-            // Add the errors
-            $form['errors'] = $this->_errors;
-            $form['errors_unique_messages' ] = array_unique( array_values( $this->_errors ) );
-
-            // Loop over the list of elements
-            foreach ( $this->_elements as $name => $element ) {
-                
-                // Update the value
-                $element->_value = $this->getValue( $name );
-
-                // Add the form element
-                $form[ $name ] = $element->toArray();
-
-                // Add errors if any
-                if ( array_key_exists( $name, $this->_errors ) ) {
-                    $form[ $name ]['error'] = $this->_errors[ $name ];
-                } else {
-                    $form[ $name ]['error'] = '';
-                }
-
-                // Check if the field is required
-                if ( array_key_exists( $name, $this->_rules ) ) {
-                    $form[ $name ]['required'] = true;
-                } else {
-                    $form[ $name ]['required'] = false;
-                }
-
-                // Add the HTML labels
-                if ( $form[ $name ]['isButton'] === false && $form[ $name ]['type'] != 'hidden' ) {
-                    $form[ $name ]['label_html'] = '';
-                    if ( ! empty( $form[ $name ]['label'] ) ) {
-                        $form[ $name ]['label_html'] .= $form[ $name ]['label'];
-                    }
-                    $obj = $this->getElement( $name );
-                    if ( $form[ $name ]['required'] && ( ! isset( $obj->_options['mandatory'] ) OR $obj->_options['mandatory'] == true ) ) {
-                        $form[ $name ]['label_html'] = $this->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_htmlRequiredEnd;
-                    }
-                    if ( ! empty( $form[ $name ]['error'] ) ) {
-                        $form[ $name ]['error_html'] = $this->_htmlErrorStart . $form[ $name ]['error'] . $this->_htmlErrorEnd;
-                    }
-                }
-
-            }
-
-            // Add the do parameter if it's a get form
-            if ( $this->_method == 'get' ) {
-                $form[YD_ACTION_PARAM] = array();
-                $form[YD_ACTION_PARAM]['name'] = YD_ACTION_PARAM;
-                $form[YD_ACTION_PARAM]['value'] = YDRequest::getActionName();
-                $form[YD_ACTION_PARAM]['type'] = 'hidden';
-                $form[YD_ACTION_PARAM]['label'] = '';
-                $form[YD_ACTION_PARAM]['options'] = array();
-                $form[YD_ACTION_PARAM]['placeLabel'] = 'before';
-                $form[YD_ACTION_PARAM]['html'] = '<input type="hidden" name="' . YD_ACTION_PARAM . '" value="' . YDRequest::getActionName() . '">';
-                $form[YD_ACTION_PARAM]['isButton'] = false;
-                $form[YD_ACTION_PARAM]['error'] = '';
-                $form[YD_ACTION_PARAM]['required'] = false;
-            }
-
-            // Return the form array
-            return $form;
-
+            return $this->render( 'array' );
         }
 
         /**
@@ -988,36 +943,6 @@
                 }
             }
             return $value;
-        }
-
-        /**
-         *	This function will render a form and return the rendered contents.
-         *
-         *	@param	$type	The renderer to use.
-         *
-         *	@returns	The rendered form.
-         */
-        function render( $type ) {
-
-            // Check if the renderer is known
-            if ( ! array_key_exists( $type, $this->_regRenderers ) ) {
-                trigger_error( 'Unknown for renderer type "' . $type . '".', YD_ERROR );
-            }
-
-            // Include the renderer file
-            if ( ! empty( $this->_regRenderers[ $type ]['file'] ) ) {
-                YDInclude( $this->_regRenderers[ $type ]['file'] );
-            }
-
-            // Check if the class exists
-            $class = $this->_regRenderers[ $type ]['class'];
-
-            // Create the instance
-            $instance = new $class( $this );
-
-            // Return the rendered form
-            return $instance->render();
-
         }
 
         /** 
