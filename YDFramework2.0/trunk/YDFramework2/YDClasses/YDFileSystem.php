@@ -207,11 +207,16 @@
 		
 		/**
 		 *	This function will force the browser to download the file.
+		 *
+		 *	@param $name	(optional) The name of the file download should show in the browser. By default, this is the
+		 *					same as the filename.
 		 */
-		function download() {
+		function download( $name=null ) {
 		
 			// Get the name of the file
-			$name = $this->getBasename();
+			if ( is_null( $name ) ) {
+				$name = $this->getBasename();
+			}
 			header( 'Content-Type: application/force-download; name="' . $name . '"');
 			header( 'Content-Disposition: attachment; filename="' . $name . ' "');
 

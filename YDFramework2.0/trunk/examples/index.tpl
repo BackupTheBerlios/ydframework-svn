@@ -74,7 +74,9 @@
 			<td valign="top">
 				<a href="fsfile.php">YDFSFile object</a>
 				<br>
-				<a href="fsfile.php?do=download">YDFSFile object - Force file download</a>
+				<a href="fsfile.php?do=download">YDFSFile object - File download</a>
+				<br>
+				<a href="fsfile.php?do=download2">YDFSFile object - File download with changed name</a>
 			</td>
 			<td valign="top">
 				<a href="{$YD_SELF_SCRIPT}?do=source&id=fsfile.php">fsfile.php</a>
