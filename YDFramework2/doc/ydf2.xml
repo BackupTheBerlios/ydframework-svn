@@ -8,19 +8,20 @@
 <document>
 
     <document-meta-info>
-        <title>Yellow Duck Framework 2.0.0</title>
+        <title>Yellow Duck Framework - User Guide</title>
         <attribute name="Author">
             <a href="mailto:pieter@yellowduck.be">Pieter Claerhout</a>
         </attribute>
+        <attribute name="Version">2.0.0</attribute>
     </document-meta-info>
 
     <document-formatting-info>
         <stylesheet url="style.css" />
         <stylesheet-fo url="style.css" />
-        <left-margin>40pt</left-margin>
+        <left-margin>50pt</left-margin>
         <right-margin>40pt</right-margin>
         <top-margin>20pt</top-margin>
-        <bottom-margin>30pt</bottom-margin>
+        <bottom-margin>20pt</bottom-margin>
         <generate-toc-page>yes</generate-toc-page>
         <header-height>60pt</header-height>
         <footer-height>30pt</footer-height>
@@ -29,8 +30,11 @@
     <document-header>
         <table width="100%">
             <tr>
-                <td valign="middle" align="right">
-                    <b>Yellow Duck Framework 2.0.0</b>
+                <td valign="middle" align="left" width="50%">
+                    Yellow Duck Framework - User Guide
+                </td>
+                <td valign="middle" align="right" width="50%">
+                    <b><page-number /></b>
                 </td>
             </tr>
         </table>
@@ -99,7 +103,14 @@
                 <link href="#ch06_08">Processing forms</link>
                 <link href="#ch06_09">More information</link>
             </link>
-            <link href="#ch07">Accessing database contents</link>
+            <link href="#ch07">Accessing database contents
+                <link href="#ch07_01">Introduction</link>
+                <link href="#ch07_02">Supported database engines</link>
+                <link href="#ch07_03">DSN - Data Source Names</link>
+                <link href="#ch07_04">The YDDatabase and YDSql classes</link>
+                <link href="#ch07_05">Specifying variables in SQL queries</link>
+                <link href="#ch07_06">Getting and sending data to a data source</link>
+            </link>
             <link href="#ch08">How to handle authentication</link>
             <link href="#ch09">Using files, directories and images</link>
             <link href="#ch10">Using URLs and downloading data</link>
@@ -2715,57 +2726,551 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
             </section>
 
-        <section name="ch07" label="Accessing database contents">
-            <br/>
-            Not written yet
+        <section name="ch07" label="Accessing database contents" />
+
+            <section name="ch07_01" label="Introduction">
+
+                <br/>
+
+                The standard functions in PHP do not provide a straightforward
+                way of interfacing with database contents. Each database type
+                has it's own specific set of functions to query the database and
+                get to it's contents. This is not necessarily a problem if you
+                stick to one database engine, but if you ever need to switch to
+                a different database backend, or even worse, if you want to
+                combine different database backends in the same web application,
+                you are facing a big problem.
+
+                <br/><br/>
+
+                In the Yellow Duck Framework, we have built a wrapper around the
+                PEAR::DB classes, which provide a standardized way of connecting
+                to different database backends. In the background, it makes sure
+                that the right native PHP database functions are called and also
+                make sure the data from each database engine is returned in a
+                standardized way. As such, there is no difference anymore in
+                connecting to a MySQL, SQLite, Oracle or SQL Server database.
+                
+                <br/><br/>
+
+                In the Yellow Duck Framework database classes, we also provide
+                you with an easy way to safely put variables in SQL statements.
+                There is no need anymore to manually escape all the different
+                variables. By using some small tricks, this is all being taken
+                care of for you, transparantly.
+
+            </section>
+
+            <section name="ch07_02" label="Supported database engines">
+
+                <br/>
+
+                In the Yellow Duck Framework version 2.0.0, there is support for
+                the following database engines (and versions):
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Short name</b></td>
+                        <td width="75%"><b>Full name and version</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">dbase</td>
+                        <td>dBase</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">fbsql</td>
+                        <td>FrontBase</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">ibase</td>
+                        <td>InterBase</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">ifx</td>
+                        <td>Informix</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">msql</td>
+                        <td>Mini SQL</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">mssql</td>
+                        <td>Microsoft SQL Server</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">mysql</td>
+                        <td>MySQL (for MySQL &lt;= 4.0)</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">mysqli</td>
+                        <td>MySQL MySQL (for MySQL &gt;= 4.1)</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">oci8</td>
+                        <td>Oracle 7/8/9</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">odbc</td>
+                        <td>ODBC (Open Database Connectivity)</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">pgsql</td>
+                        <td>PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">sqlite</td>
+                        <td>SQLite</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">sybase</td>
+                        <td>SyBase</td>
+                    </tr>
+                </table></p>
+
+                Depending on the database type you use, not all features may be
+                supported. 
+
+                <i><b>Note</b>: For some database types, you will need some
+                specific PHP configuration. For some database types, you will
+                also have to install additional software on the webserver to  
+                enable communication with that database engine. Please refer to
+                the <a target="_blank" href="http://www.php.net/manual/en/">PHP
+                Online Manual</a> for more information about the database engine
+                you want to use with the Yellow Duck Framework.</i>
+
+            </section>
+
+            <section name="ch07_03" label="DSN - Data Source Names">
+
+                <br/>
+
+                The data sources (also called database connection strings or 
+                DSN) are specified in an URL-like syntax. Each DSN supports the
+                following options:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Option</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">phptype</td>
+                        <td>Database backend used in PHP (i.e. mysql , odbc 
+                        etc.)</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">dbsyntax</td>
+                        <td>Database used with regards to SQL syntax etc. When
+                        using ODBC as the phptype, set this to the DBMS type the
+                        ODBC driver is connecting to. Examples: access, db2, 
+                        mssql, navision, solid, etc.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">protocol</td>
+                        <td>Communication protocol to use ( i.e. tcp, unix 
+                        etc.)</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">hostspec</td>
+                        <td>Host specification (hostname[:port])</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">database</td>
+                        <td>Database to use on the DBMS server</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">username</td>
+                        <td>User name for login</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">password</td>
+                        <td>Password for login</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">proto_opts</td>
+                        <td>Maybe used with protocol</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">option</td>
+                        <td>Additional connection options in URI query string 
+                        format. Options get separated by &#38;.</td>
+                    </tr>
+                </table></p>
+
+                The format of the supplied DSN is in its fullest form:
+
+                <pre>phptype(dbsyntax)://username:password@protocol+hostspec/database?option=value</pre>
+
+                Most variations are allowed:
+                
+                <pre>phptype://username:password@protocol+hostspec:110//usr/db_file.db
+phptype://username:password@hostspec/database
+phptype://username:password@hostspec
+phptype://username@hostspec
+phptype://hostspec/database
+phptype://hostspec
+phptype:///database
+phptype:///database?option=value&#38;anotheroption=anothervalue
+phptype(dbsyntax)
+phptype</pre>
+
+                There is also an alternative syntax you can use:
+
+                <pre>phptype(syntax)://user:pass@protocol(proto_opts)/database</pre>
+
+                If your username or password contain characters used to 
+                delineate DSN parts, you can escape them via URI hex encodings:
+                
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Character</b></td>
+                        <td width="75%"><b>Hex encoding</b></td>
+                    </tr>
+                    <tr>
+                        <td>:</td>
+                        <td>%3a</td>
+                    </tr>
+                    <tr>
+                        <td>/</td>
+                        <td>%2f</td>
+                    </tr>
+                    <tr>
+                        <td>@</td>
+                        <td>%40</td>
+                    </tr>
+                    <tr>
+                        <td>+</td>
+                        <td>%2b</td>
+                    </tr>
+                    <tr>
+                        <td>(</td>
+                        <td>%28</td>
+                    </tr>
+                    <tr>
+                        <td>)</td>
+                        <td>%29</td>
+                    </tr>
+                    <tr>
+                        <td>?</td>
+                        <td>%3f</td>
+                    </tr>
+                    <tr>
+                        <td>=</td>
+                        <td>%3d</td>
+                    </tr>
+                    <tr>
+                        <td>&#38;</td>
+                        <td>%26</td>
+                    </tr>
+                </table></p>
+
+                Let's have a look at some samples:
+
+                <br/><br/>
+
+                Connect to database through a socket
+                <pre>mysql://user@unix(/path/to/socket)/pear</pre>
+
+                Connect to database on a non standard port
+                <pre>pgsql://user:pass@tcp(localhost:5555)/pear</pre>
+
+                Connect to SQLite on a Unix machine using options
+                <pre>sqlite:////full/unix/path/to/file.db?mode=0666</pre>
+
+                Connect to SQLite on a Windows machine using options
+                <pre>sqlite:///c:/full/windows/path/to/file.db?mode=0666</pre>
+
+                Connect to MySQLi using SSL
+                <pre>mysqli://user:pass@localhost/pear?key=client-key.pem&#38;cert=client-cert.pem</pre>
+
+                Connecting to MS Access sometimes requires admin as the user name
+                <pre>odbc(access)://admin@/datasourcename</pre>
+
+                <i><b>Note</b>: The extra options which can be specified depends
+                on the chosen database engine. Please refer to the documentation
+                for your database engine for more information about which
+                options can be specified.</i>
+
+            </section>
+
+            <section name="ch07_04" label="The YDDatabase and YDSql classes">
+
+                <br/>
+
+                There are two classes in the Yellow Duck Framework that enable
+                you to interact with a database. They do the same, but they look
+                at the database from a different point of view.
+
+                <br/><br/>
+
+                The YDDatabase class allows you to connect to a database and
+                execute queries on the database. An instance of this class is
+                always linked to a specified DSN. Once you instantiated the
+                object, you cannot change the DSN anymore.
+
+                <br/><br/>
+
+                The YDSqlQuery is an abstract class around an SQL statement.
+                The big difference with the YDDatabase class is that the DSN
+                in this case is only specified at time of execution of the
+                query. This gives you the opportunity to decide at the very last
+                moment which data source is going to execute this query.
+
+                <br/><br/>
+
+                Most people will use the YDDatabase class to connect to a
+                database. For the YDDatabase class, the url to the database is
+                specified when instantiating the YDDatabase class. An example:
+
+                <pre><font color="#00007F">$db</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDDatabase</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'mysql://root:@localhost/test'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                At this point, the actual database connection is not made yet.
+                It's only when a query is performed that a database connection
+                is physically made. The framework also provides you a way of
+                remembering if a connection is made already and will try to
+                reuse that connection if possible.
+
+                <br/><br/>
+
+                <i><b>Note</b>: By default, no persistent database connections
+                are made, as not all database engines support them by default. 
+                Unless you have specific requirements, we suggest you to not use
+                persistent database connections as they are not always 
+                reliable.</i>
+
+                <br/><br/>
+
+                Working with the YDSql class is a little different. When you
+                instantiate a YDSqlQuery class, you need to pass the SQL query
+                to the class constructor. This is illustrated with the following
+                code sample
+
+                <pre><font color="#00007F">$db</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDSqlQuery</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'select * from test;'</font><font color="#000033"> </font><font color="#000000">);</font></pre>
+
+                Choosing between using the YDDatabase and YDSqlQuery classes is
+                generally very easy. Most of the time, the YDDatabase class will
+                do just fine for you. Just in case you need to be able to send
+                the same query to different database backends, you should have a
+                look at using the YDSqlQuery class instead.
+
+            </section>
+
+            <section name="ch07_05" label="Specifying variables in SQL queries">
+
+                <br/>
+
+                A problem faced by a lot of web developers is how to encode
+                variables properly so that they can safely be included in an
+                SQL statement. PHP provides standard functions for the different
+                database engines to do this, but this requires a lot of manual
+                work and is pretty error-prone.
+
+                <br/><br/>
+
+                In the Yellow Duck Framework, this is done in a totally
+                different way. By using placeholders in the SQL statement and
+                passing the variables for the SQL statement as an array, the
+                framework will encode the variables properly for you according
+                to the database engine and make sure every single one of them is
+                properly escaped.
+
+                <br/><br/>
+
+                Let's have a look at a small example. Have a look at the 
+                following SQL statement, which is properly escaped:
+
+                <pre>SELECT * FROM test WHERE user = 'pieter' and title = 'A lot of hello''s';</pre>
+
+                We can now rewrite the query as follows:
+
+                <pre>SELECT * FROM test WHERE user = ? and title = ?;</pre>
+
+                If we then pass the two variables as an array:
+
+                <pre>array( "pieter", "A lot of hello's" )</pre>
+
+                The framework will know how to properly escape the different
+                parameters in the SQL query. The framework can handle different
+                types of placeholders (a.k.a. wildcards). Here is a list of the
+                placeholders that are supported:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Placeholder</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">?</td>
+                        <td>(recommended) stands for a scalar value like strings 
+                        or numbers, the value will be quoted depending of the 
+                        database</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">!</td>
+                        <td>stands for a scalar value and will inserted into the 
+                        statement "as is".</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">&#38;</td>
+                        <td>requires an existing filename, the content of this
+                        file will be included into the statement (i.e. for 
+                        saving binary data of a graphic file in a database)</td>
+                    </tr>
+                </table></p>
+
+                <i><b>Note</b>: you can still escape the variables yourself and
+                just pass the SQL statement with an empty array of variables to
+                the framework. However, we strongly suggest you to use the
+                placeholders as you code will be a lot more flexible and 
+                reliable. It's also a lot less work to use the placeholders.</i>
+
+            </section>
+
+            <section name="ch07_06" label="Getting and sending data to a data source">
+
+                <br/>
+
+                Both the YDDatabase and YDSqlQuery classes support the same
+                methods of actually querying the database and retrieving the
+                information from the database. There is however a slight
+                difference in the way you need to make the function call for the
+                YDSqlQuery class in comparison to the way you make the function
+                call for the YDDatabase class.
+
+                <br/><br/>
+
+                Let's have a look at the different methods and describe their
+                functionality.
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Function</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><code>executeQuery</code></td>
+                        <td>This function will execute the query and will return
+                        the number of affected rows. Use this for insert, update
+                        and delete statements.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><code>executeSelect</code></td>
+                        <td>This function will retrieve all the rows matching 
+                        the query as an associative array. This will return 0
+                        or more rows.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top"><code>executeSelectRow</code></td>
+                        <td>This function will do the same of the executeSelect
+                        query, but will only return the first row if there is
+                        one.</td>
+                    </tr>
+                </table></p>
+
+                If you use these functions together with the YDDatabase class,
+                the arguments you need to pass to the function call are always
+                the same. Here are the arguments you need to specify:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Argument</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$query</td>
+                        <td>The SQL query or the statement to execute.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$params</td>
+                        <td>Array, string or numeric data to be added to the 
+                        prepared statement. Quantity of items passed must match 
+                        quantity of placeholders in the prepared statement:
+                        meaning 1 placeholder for non-array parameters or 1 
+                        placeholder per array element.</td>
+                    </tr>
+                </table></p>
+
+                Using these function calls with the YDSqlQuery class is pretty
+                much the same, but the arguments are a little different:
+
+                <p><table width="100%" border="1" cellspacing="0" cellpadding="2">
+                    <tr>
+                        <td width="25%"><b>Argument</b></td>
+                        <td width="75%"><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$url</td>
+                        <td>The database url for this query.</td>
+                    </tr>
+                    <tr>
+                        <td valign="top">$params</td>
+                        <td>Array, string or numeric data to be added to the 
+                        prepared statement. Quantity of items passed must match 
+                        quantity of placeholders in the prepared statement:
+                        meaning 1 placeholder for non-array parameters or 1 
+                        placeholder per array element.</td>
+                    </tr>
+                </table></p>
+
+                There is one function for both the YDDatabase and YDSqlQuery
+                classes which is just a little different. The 
+                <code>executeSelectLimit</code> takes 4 instead of two arguments
+                (for both classes). The additional two parameters you need to
+                specify are the row from which to start fetching from and the
+                number of rows you want to have returned. Please refer to the
+                API documentation for the full details on how to call this
+                function.
+
                 <page-break />
-        </section>
+
+            </section>
 
         <section name="ch08" label="How to handle authentication">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
         <section name="ch09" label="Using files, directories and images">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
         <section name="ch10" label="Using URLs and downloading data">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
         <section name="ch11" label="Using XML/RPC clients and servers">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
         <section name="ch12" label="Sending emails">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
         <section name="ch13" label="Other classes and modules">
-            <br/>
-            Not written yet
+                <br/>
+                Not written yet
                 <page-break />
         </section>
 
     </document-body>
 
-    <document-footer>
+    <!--document-header>
+        <hr size="1" color="red" noshade="true" />
         <table width="100%">
             <tr>
-                <td align="left"></td>
+                <td align="left"><b>Yellow Duck Framework version 2.0.0 - User Guide</b></td>
                 <td align="right"><page-number /></td>
             </tr>
         </table>
-    </document-footer>
+    </document-footer-->
 
 </document>
