@@ -3,6 +3,9 @@
     // Standard include
     require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
 
+    // Includes
+    require_once( 'YDRequest.php' );
+
     // Class definition
     class indexRequest extends YDRequest {
 
