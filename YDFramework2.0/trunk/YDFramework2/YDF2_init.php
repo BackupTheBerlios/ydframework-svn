@@ -19,12 +19,17 @@
 	error_reporting( E_ALL );
 
 	// Disable magic_quotes_runtime
-	set_magic_quotes_runtime( 0 ); 
+	set_magic_quotes_runtime( 0 );
+	
+	// Include the version file
+	@include( dirname( __FILE__ ) . '/YDF2_version.php' );
 
 	// Global framework constants
-	@define( 'YD_FW_REVISION', '$LastChangedRevision$' );
+	if ( ! defined( 'YD_FW_REVISION' ) ) {
+		@define( 'YD_FW_REVISION', 'unknown' );
+	}
 	@define( 'YD_FW_NAME', 'Yellow Duck Framework' );
-	@define( 'YD_FW_VERSION', '2.0 (build ' . trim( substr( YD_FW_REVISION, 22, -2 ) ) . ')' );
+	@define( 'YD_FW_VERSION', '2.0 (build ' . YD_FW_REVISION . ')' );
 	@define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
 	@define( 'YD_FW_HOMEPAGE', 'http://www.yellowduck.be/ydf2/' );
 
