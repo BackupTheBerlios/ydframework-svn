@@ -32,10 +32,6 @@
      *  information and documentation on the PEAR library can be found on
      *  http://pear.php.net/ .
      *
-     *  The template engine that is used is Smarty, also provided by the PHP
-     *  project. More information and documentation on the Smarty template
-     *  engine can found on http://smarty.php.net/ .
-     *
      *  (c) 2002-2004 Pieter Claerhout, pieter@yellowduck.be
      *
      *  Webpage: http://www.yellowduck.be/
@@ -43,7 +39,7 @@
      *  Author: Pieter Claerhout, pieter@yellowduck.be
      *
      *  @todo
-     *      Add the needed markers for timing purposes using the YDTimer class.
+     *      Keep track of the number of SQL queries that were executed.
      */
 
     // Only execute this once
