@@ -735,6 +735,22 @@
 				return false;
 			}
 		}
+		
+		/**
+		 *	This function will recursively delete a directory. It will delete the directory and the complete
+		 *	contents of that directory! Be careful I would say!
+		 *
+		 *	@param $directory	Directory to be removed.
+		 *
+		 *	@return	Boolean indicating if the directory could be deleted or not.
+		 */
+		function deleteDirectory( $directory ) {
+			$directory = $this->getAbsolutePath() . '/' . basename( $directory );
+			if ( ! is_dir( $directory ) ) {
+				return false;
+			}
+			return YDFSDirectory::_delete( $directory );
+		}		 
 
 		/**
 		 *	Function to emulate the fnmatch function from UNIX which is not available on all servers.
@@ -798,6 +814,45 @@
 			// All the rest returns positive
 			return true;
 
+		}
+		
+		/**
+		 *	Function to recursively delete a directory.
+		 *
+		 *	@param $dirname	Directory to be removed.
+		 *
+		 *	@return	Boolean indicating if the directory could be deleted or not.
+		 *
+		 *	@internal
+		 */
+		function _delete( $dirname ) {
+		
+		    // Simple delete for a file 
+    		if ( is_file( $dirname ) ) { 
+        		return unlink( $dirname ); 
+    		} 
+
+    		// Loop through the folder 
+    		$dir = dir( $dirname ); 
+			while ( false !== $entry = $dir->read() ) {
+			
+        		// Skip pointers 
+        		if ( $entry == '.' || $entry == '..' ) { 
+            		continue; 
+        		} 
+
+        		// Deep delete directories      
+        		if ( is_dir( "$dirname/$entry" ) ) { 
+        		    YDFSDirectory::_delete( "$dirname/$entry" ); 
+        		} else { 
+        		    unlink( "$dirname/$entry" ); 
+        		} 
+    		} 
+
+    		// Clean up 
+    		$dir->close(); 
+    		return rmdir( $dirname ); 
+		
 		}
 
 	}

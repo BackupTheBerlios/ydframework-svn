@@ -49,6 +49,10 @@
 			// Create subdirectory
 			YDDebugUtil::dump( $dir->createDirectory( 'test' ), '$dir->createDirectory( \'test\' ) )' );
 
+			// Delete a directory tree
+			YDDebugUtil::dump( $dir->deleteDirectory( 'test' ), '$dir->deleteDirectory( \'test\' )' );
+			YDDebugUtil::dump( $dir->deleteDirectory( 'xxx' ), '$dir->deleteDirectory( \'xxx\' )' );
+
 		}
 
 	}
