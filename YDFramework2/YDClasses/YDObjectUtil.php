@@ -64,7 +64,9 @@
 		 *	@param $obj	Object to serialize.
 		 */
 		function serialize( $obj ) {
-			return gzcompress( serialize( $obj ) );
+			$obj = gzcompress( serialize( $obj ) );
+			if ( ! $obj ) { YDFatalError( 'Failed serializing the object' ); }
+			return $obj;
 		}
 
 		/**
@@ -73,7 +75,11 @@
 		 *	@param $obj	Object to unserialize.
 		 */
 		function unserialize( $obj ) {
-			return unserialize( gzuncompress( $obj ) );
+			$obj = gzuncompress( $obj );
+			if ( ! $obj ) { YDFatalError( 'Failed unserializing the object' ); }
+			$obj = unserialize( $obj );
+			if ( ! $obj ) { YDFatalError( 'Failed unserializing the object' ); }
+			return $obj;
 		}
 
 	}
