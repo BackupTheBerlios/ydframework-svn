@@ -8,10 +8,10 @@
     <para>Currently, the following database engines are supported:</para>
 
     <itemizedlist spacing="compact">
-        <listitem><emphasis role="bold">MySQL:</emphasis> http://www.mysql.com/</listitem>
-        <listitem><emphasis role="bold">Oracle:</emphasis> http://www.oracle.com/</listitem>
-        <listitem><emphasis role="bold">SQLite:</emphasis> http://www.sqlite.org/</listitem>
-        <listitem><emphasis role="bold">PostgreSQL:</emphasis> http://www.postgresql.org/</listitem>
+        <listitem><emphasis role="bold">MySQL:</emphasis> <ulink url="http://www.mysql.com/" /></listitem>
+        <listitem><emphasis role="bold">Oracle:</emphasis> <ulink url="http://www.oracle.com/" /></listitem>
+        <listitem><emphasis role="bold">SQLite:</emphasis> <ulink url="http://www.sqlite.org/" /></listitem>
+        <listitem><emphasis role="bold">PostgreSQL:</emphasis> <ulink url="http://www.postgresql.org/" /></listitem>
     </itemizedlist>
 
     <para>More database engines will be added in the future depending on the requests from the users.</para>

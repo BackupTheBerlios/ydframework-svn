@@ -20,10 +20,10 @@
     <!ENTITY yderror SYSTEM "yderror.xml">
     <!ENTITY ydtimer SYSTEM "ydtimer.xml">
     <!ENTITY ydcart SYSTEM "ydcart.xml">
-    <!ENTITY ydother SYSTEM "ydother.xml">
-    <!ENTITY ydbestpractices SYSTEM "ydbestpractices.xml">
-    <!ENTITY ydfaq SYSTEM "ydfaq.xml">
-    <!ENTITY ydchangelog SYSTEM "ydchangelog.xml">
+    <!ENTITY other SYSTEM "other.xml">
+    <!ENTITY bestpractices SYSTEM "bestpractices.xml">
+    <!ENTITY faq SYSTEM "faq.xml">
+    <!ENTITY changelog SYSTEM "changelog.xml">
     <!ENTITY appendixA SYSTEM "appendixA.xml">
     <!ENTITY appendixB SYSTEM "appendixB.xml">
     <!ENTITY appendixC SYSTEM "appendixC.xml">
@@ -63,10 +63,10 @@
     &yderror;
     &ydtimer;
     &ydcart;
-    &ydother;
-    &ydbestpractices;
-    &ydfaq;
-    &ydchangelog;
+    &other;
+    &bestpractices;
+    &faq;
+    &changelog;
     &appendixA;
     &appendixB;
     &appendixC;

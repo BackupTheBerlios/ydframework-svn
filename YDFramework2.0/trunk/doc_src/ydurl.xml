@@ -52,11 +52,11 @@
 
         <para>As the API is the same as the HttpClient class, you can refer to the documentation of the HttpClient class to find out how to use this class. This documentation can be found on the following website:</para>
 
-        <para>http://scripts.incutio.com/httpclient/manual.php</para>
+        <para><ulink url="http://scripts.incutio.com/httpclient/manual.php" /></para>
 
         <para>Samples scripts can be found here.</para>
 
-        <para>http://scripts.incutio.com/httpclient/examples.php</para>
+        <para><ulink url="http://scripts.incutio.com/httpclient/examples.php" /></para>
 
     </sect1>
 

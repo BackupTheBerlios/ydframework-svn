@@ -7,7 +7,7 @@
 
     <para>The discussion thread that got me started to think about was the following:</para>
 
-    <para>http://news.php.net/php.smarty.general/11566</para>
+    <para><ulink url="http://news.php.net/php.smarty.general/11566" /></para>
 
     <sect1 id="appendixA_differences">
 
@@ -27,7 +27,7 @@
 
         <title>First try: Smarty</title>
 
-        <para>Homepage: http://smarty.php.net/</para>
+        <para>Homepage: <ulink url="http://smarty.php.net/" /></para>
 
         <para>When I initially designed, I selected Smarty as the template engine. In the first release of the Yellow Duck Framework, version 1.0, we used Smarty already with great success but sometimes, performance was not as good as we wanted to have it. Smarty gave us a very comfortable syntax for creating templates and allowed us to very easily create even the most difficult templates.</para>
 
@@ -37,7 +37,7 @@
 
         <title>Second try: phpSavant</title>
 
-        <para>Homepage: http://phpsavant.com/</para>
+        <para>Homepage: <ulink url="http://phpsavant.com/" /></para>
 
         <para>After initial testing with Yellow Duck Framework 2.0, I came accross phpSavant which is a very light template engine that uses PHP as it's template language. The big advantage was performance. Since the templates were pure PHP scripts, the performance was way better than Smarty.</para>
 
@@ -97,7 +97,7 @@
 
         <title>Fourth try: Smarty</title>
 
-        <para>Homepage: http://smarty.php.net/</para>
+        <para>Homepage: <ulink url="http://smarty.php.net/" /></para>
 
         <para>After trying the different other template engines, I came back to my first choice, which is smarty. The big advantages of Smarty are again it's syntax. Switching back to Smarty definitely made the templates much more readable again. I also learned in the meantime that the performance problem can be improved by using cache.</para>
 
@@ -111,7 +111,7 @@
 
         <title>Fifth try: Smarty Light</title>
 
-        <para>Homepage: http://sourceforge.net/projects/smarty-light</para>
+        <para>Homepage: <ulink url="http://sourceforge.net/projects/smarty-light" /></para>
 
         <para>After following the discussion on the Smarty mailing list, called Smarty Light, Paul Lockaby posted a fork of Smarty, called Smarty Light. Smarty Light is basically a rewrite of Smarty from the ground up, removing some of the more advanced features. Here's the list of things that Paul removed:</para>
 
@@ -127,7 +127,7 @@
 
         <para>If you download this template class from the following url:</para>
 
-        <para><![CDATA[http://sourceforge.net/project/showfiles.php?group_id=85421&package_id=88390]]></para>
+        <para><ulink url="http://sourceforge.net/project/showfiles.php?group_id=85421&amp;package_id=88390" /></para>
 
         <para>The first thing you will notice is it's filesize. Here's what I have:</para>
 
@@ -154,7 +154,7 @@
 
         <para>One nice thing about Smarty Light is that the filenames of the compiled template files are much shorter. No longer a very long and cryptic name, but a straightforward md5 checksum. Also caching is implemented in a very easy way. Since the base classes are so small, we don't have to worry about big include files for just checking the cache status of a file. You can read more about the caching options of Smarty Light on the following page:</para>
 
-        <para>http://www.paullockaby.com/projects/smarty-light/docs/appendix.caching.html</para>
+        <para><ulink url="http://www.paullockaby.com/projects/smarty-light/docs/appendix.caching.html" /></para>
 
         <programlisting><![CDATA[C:\>ab -c 5 -n 50 "http://localhost/ydf2/examples/index.php"
 This is ApacheBench, Version 2.0.40-dev <$Revision: 1.121.2.8 $> apache-2.0
@@ -258,7 +258,7 @@ Percentage of the requests served within a certain time (ms)
 
         <title>Sixth try: Smarty</title>
 
-        <para>Homepage: http://smarty.php.net/</para>
+        <para>Homepage: <ulink url="http://smarty.php.net/" /></para>
 
         <para>After a lot of discussion on the forum for the Yellow Duck Framework, the descision was made to move again to Smarty, and keep the framework bundled with Smarty (final now). There were a good number of arguments for the move to Smarty again.</para>
 

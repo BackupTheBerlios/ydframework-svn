@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<chapter id="ydchangelog">
+<chapter id="changelog">
 
     <title>Release History</title>
 
     <para>This is the overview of the different releases.</para>
 
-    <sect1 id="ydchangelog_ydf_v2_0rc1">
+    <sect1 id="changelog_ydf_v2_0rc1">
 
         <title>Yellow Duck Framework 2.0 Release Candidate 1</title>
 
@@ -50,7 +50,7 @@
 
     </sect1>
 
-    <sect1 id="ydchangelog_ydf_v2_0b4">
+    <sect1 id="changelog_ydf_v2_0b4">
 
         <title>Yellow Duck Framework 2.0 beta 4</title>
 
@@ -76,7 +76,7 @@
 
     </sect1>
 
-    <sect1 id="ydchangelog_ydf_v2_0b3">
+    <sect1 id="changelog_ydf_v2_0b3">
 
         <title>Yellow Duck Framework 2.0 beta 3</title>
 
@@ -102,7 +102,7 @@
 
     </sect1>
 
-    <sect1 id="ydchangelog_ydf_v2_0b2">
+    <sect1 id="changelog_ydf_v2_0b2">
 
         <title>Yellow Duck Framework 2.0 beta 2</title>
 
@@ -118,7 +118,7 @@
 
     </sect1>
 
-    <sect1 id="ydchangelog_ydf_v2_0b1">
+    <sect1 id="changelog_ydf_v2_0b1">
 
         <title>Yellow Duck Framework 2.0 beta 1</title>
 

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<chapter id="ydbestpractices">
+<chapter id="bestpractices">
 
     <title>Best practices</title>
 
     <para>This chapter will give you an overview of common design patterns and best practices for using the Yellow Duck Framework.</para>
 
-    <sect1 id="ydbestpractices_custom_includes">
+    <sect1 id="bestpractices_custom_includes">
 
         <title>Configuration using custom includes </title>
 
@@ -43,7 +43,7 @@
 
     </sect1>
 
-    <sect1 id="ydbestpractices_subclassing_ydrequest">
+    <sect1 id="bestpractices_subclassing_ydrequest">
 
         <title>Subclassing YDRequest</title>
 
@@ -51,7 +51,7 @@
 
     </sect1>
 
-    <sect1 id="ydbestpractices_subclassing_form_elmnts">
+    <sect1 id="bestpractices_subclassing_form_elmnts">
 
         <title>Subclassing form elements</title>
 

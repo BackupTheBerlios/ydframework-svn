@@ -151,10 +151,10 @@
         <para>With this implemented, you can already surf to the index.php page, but nothing will be shown. You can try the following URLs:</para>
 
         <itemizedlist spacing="compact">
-            <listitem>http://localhost/firstapp/index.php</listitem>
-            <listitem>http://localhost/firstapp/index.php?do=addnote</listitem>
-            <listitem>http://localhost/firstapp/index.php?do=deletenote</listitem>
-            <listitem>http://localhost/firstapp/index.php?do=oops</listitem>
+            <listitem><ulink url="http://localhost/firstapp/index.php" /></listitem>
+            <listitem><ulink url="http://localhost/firstapp/index.php?do=addnote" /></listitem>
+            <listitem><ulink url="http://localhost/firstapp/index.php?do=deletenote" /></listitem>
+            <listitem><ulink url="http://localhost/firstapp/index.php?do=oops" /></listitem>
         </itemizedlist>
 
         <para>If you typed in everything correctly, only the last URL should return an error because it's pointing to an undefined action in our class.</para>

@@ -5,11 +5,11 @@
 
     <para>In this chapter, we will have a closer look at how the template engine in the Yellow Duck Framework is working and how it's implemented. The template engine in the framework is based on Smarty and follows the same syntax as any normal Smarty template file. The homepage for the Smarty library is:</para>
 
-    <para>http://smarty.php.net/</para>
+    <para><ulink url="http://smarty.php.net/" /></para>
 
     <para>The documentation for the Smarty template engine can be found on the following website:</para>
 
-    <para>http://smarty.php.net/manual/en/</para>
+    <para><ulink url="http://smarty.php.net/manual/en/" /></para>
 
     <para>The API of the YDTemplate class is exactly the same as the standard Smarty class. You can think of the YDTemplate class as a preconfigured Smarty template class.</para>
 

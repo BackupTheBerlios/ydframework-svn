@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<chapter id="ydother">
+<chapter id="other">
 
     <title>Other classes and modules</title>
 
@@ -7,7 +7,7 @@
 
     <note>All the classes ending with "Util" are stored in the YDUtil include file.</note>
 
-    <sect1 id="ydother_ydarrayutil">
+    <sect1 id="other_ydarrayutil">
 
         <title>YDArrayUtil</title>
 
@@ -125,7 +125,7 @@
 
     </sect1>
 
-    <sect1 id="ydother_ydbrowserinfo">
+    <sect1 id="other_ydbrowserinfo">
 
         <title>YDBrowserInfo</title>
 
@@ -156,7 +156,7 @@
 
     </sect1>
 
-    <sect1 id="ydother_ydobjectutil">
+    <sect1 id="other_ydobjectutil">
 
         <title>YDObjectUtil</title>
 
@@ -174,7 +174,7 @@
 
     </sect1>
 
-    <sect1 id="ydother_ydbbcode">
+    <sect1 id="other_ydbbcode">
 
         <title>YDBBCode</title>
 
@@ -221,9 +221,17 @@
 
         <para>Additionally, as you can see, newlines are converted to <![CDATA[<br />]]> tags. The class will also converted non ascii characters to HTML entities.</para>
 
+        <para>The following code sample illustrates the code behind the conversion shown above:</para>
+
+        <programlisting><![CDATA[// The converter
+$conv = new YDBBCode();
+echo( $conv->toHtml( $data ) );]]></programlisting>
+
+        <para>The YDBBCode class also contains a static function that highlights ordinary links such as email links and web links and converts them into clickable links. For this purpose, you can use the YDBBCode::convertLinks method. This function can be used statically.</para>
+
     </sect1>
 
-    <sect1 id="ydother_ydstringutil">
+    <sect1 id="other_ydstringutil">
 
         <title>YDStringUtil</title>
 

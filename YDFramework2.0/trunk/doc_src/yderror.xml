@@ -55,7 +55,7 @@
 
         <para>More information about this can be found in the PHP manual:</para>
 
-        <para>http://www.php.net/manual/en/function.error-reporting.php</para>
+        <para><ulink url="http://www.php.net/manual/en/function.error-reporting.php" /></para>
 
     </sect1>
 
