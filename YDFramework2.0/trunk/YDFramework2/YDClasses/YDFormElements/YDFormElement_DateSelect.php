@@ -125,7 +125,7 @@
 				if ( is_int( $this->_value ) ) {
 					$value = getdate( $this->_value );
 				} else {
-					$value = getdate( strtotime( $this->_value ), time() );
+					$value = getdate( strtotime( $this->_value, time() ) );
 				}
 				$this->_value = array();
 				$this->_value['day'] = $value['mday'];
