@@ -57,13 +57,9 @@
 		 */
 		function getRecords( $sql ) {
 			$this->connect();
-			$dataset = array();
 			$result = sqlite_query( $sql, $this->_conn );
 			if ( ! $result ) { YDFatalError( sqlite_error_string( sqlite_last_error( $conn ) ) ); }
-			while ( $line = sqlite_fetch_array ( $result, SQLITE_ASSOC  ) ) {
-				array_push( $dataset, $line );
-			}
-			return $dataset;
+			return sqlite_fetch_all( $result, SQLITE_ASSOC );
 		}
 
 		/**
