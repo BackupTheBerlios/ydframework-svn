@@ -50,10 +50,13 @@
 		 *	@returns	Boolean indicating if the move was succesful or not.
 		 */
 		function moveUpload( $dir='.' ) {
-			return move_uploaded_file(
+			$result = move_uploaded_file(
 				$_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'],
 				realpath( $dir ) . '/' . $_FILES[ $this->_form . '_' . $this->_name ]['name']
 			);
+			@chmod( realpath( $dir ), 0777 );
+			@chmod( realpath( $dir ) . '/' . $_FILES[ $this->_form . '_' . $this->_name ]['name'], 0666 );
+			return $result;
 		}
 
 		/**
