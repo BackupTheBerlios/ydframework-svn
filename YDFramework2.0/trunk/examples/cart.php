@@ -5,7 +5,7 @@
 
 	// Includes
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplateSmarty.php' );
+	YDInclude( 'YDTemplate.php' );
 	YDInclude( 'YDCart.php' );
 
 	// The global array with the different products

@@ -7,7 +7,7 @@
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDUtil.php' );
 	YDInclude( 'YDDatabase.php' );
-	YDInclude( 'YDTemplateSmarty.php' );
+	YDInclude( 'YDTemplate.php' );
 
 	// Class definition
 	class template_smarty extends YDRequest {

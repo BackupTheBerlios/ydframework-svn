@@ -9,7 +9,7 @@
 	// Includes
 	YDInclude( 'YDUrl.php' );
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplateSmarty.php' );
+	YDInclude( 'YDTemplate.php' );
 	YDInclude( 'YDFeedCreator.php' );
 
 	// Class definition

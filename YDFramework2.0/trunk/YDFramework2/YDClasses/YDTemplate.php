@@ -24,32 +24,38 @@
 	if ( ! defined( 'YD_FW_NAME' ) ) {
 		die( 'Yellow Duck Framework is not loaded.' );
 	}
+	
+	define( 'SMARTY_DIR', dirname( __FILE__ ) . '/../3rdparty/smarty/libs/' );
 
-	YDInclude( 'YDRequest.php' );
-	YDInclude( 'class.template/src/class.template.php' );
+	YDInclude( SMARTY_DIR . '/Smarty.class.php' );
 
 	/**
-	 *	This class is a wrapper around Smarty Light. Documentation can be found on:
-	 *	http://www.paullockaby.com/projects/smarty-light/docs/
+	 *	This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/
 	 */
-	class YDTemplate extends template {
+	class YDTemplate extends Smarty {
 
 		/**
-		 *	This is the class constructor for the YDTemplate class. By default, it looks in the same directory as the
-		 *	current script to find the templates.
+		 *	This is the class constructor for the YDTemplate class. By default, it looks in the same directory as 
+		 *	the current script to find the templates.
 		 */
 		function YDTemplate() {
 
+			// Initialize the parent
+			$this->Smarty();
+		
 			// Set the default template directory
 			$this->template_dir = YD_SELF_DIR;
 
 			$this->compile_dir = YD_DIR_TEMP;
-			$this->left_tag = '{';
-			$this->right_tag = '}';
-			$this->cache = false;
+			$this->use_sub_dirs = false;
+			$this->caching = false;
 			$this->cache_lifetime = 3600;
-			$this->cache_dir = YD_DIR_TEMP;
 			$this->cache_dir = YD_DIR_TEMP . '/cache';
+
+			// Create the cache dir if it doesn't exist
+			if ( $this->caching && ! is_dir( $this->cache_dir ) ) {
+				@mkdir( $this->cache_dir );
+			}
 
 			// Register the custom modifiers
 			$this->register_modifier( 'sizeof', 'sizeof' );
@@ -72,9 +78,10 @@
 		 *
 		 *	@param $file		(optional) The name of the template you want to parse and output.
 		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $compile_id	(optional) ID for the compilation of the template (must be unique).
 		 */
-		function display( $file='', $cache_id=null ) {
-			$this->fetch( $file, $cache_id, true );
+		function display( $file='', $cache_id=null, $compile_id=null ) {
+			$this->fetch( $file, $cache_id, $compile_id, true );
 		}
 
 		/**
@@ -88,14 +95,15 @@
 		 *
 		 *	@param $file		(optional) The name of the template you want to parse and output.
 		 *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
+		 *	@param $compile_id	(optional) ID for the compilation of the template (must be unique).
 		 *	@param $display		(optional) Whether the output should be displayed or returned.
 		 *
 		 *	@returns	This function returns the output of the parsed template.
 		 */
-		function fetch( $file='', $cache_id=null, $display=false ) {
+		function fetch( $file='', $cache_id=null, $compile_id=null, $display=false ) {
 
 			// Create the cache dir if it doesn't exist
-			if ( $this->cache && ! is_dir( $this->cache_dir ) ) {
+			if ( $this->caching && ! is_dir( $this->cache_dir ) ) {
 				@mkdir( $this->cache_dir );
 			}
 
@@ -113,8 +121,13 @@
 			// Get the template name
 			$tplName = $this->_getTemplateName( $file );
 
+			// Add pseudo compile id
+			if ( is_null( $compile_id ) ) {
+				$compile_id = sprintf( '%u', crc32( realpath( $this->template_dir ) . '/' . $tplName ) );
+			}
+
 			// Output the template
-			$result = parent::fetch( $tplName, $cache_id, false );
+			$result = parent::fetch( $tplName, $cache_id, $compile_id );
 
 			// Display the template or return the result
 			if ( $display == true ) {
@@ -141,26 +154,17 @@
 					'The form you have tried to add to the template is not a subclass of the YDForm class.', YD_ERROR
 				);
 			}
-			$this->assignObject( $name, $form );
+			$this->assignObject( $name, $form->toArray() );
 		}
 
 		/**
-		 *	This function will add a YDBase-based object to the template. It will automatically convert the form to an
-		 *	array using the object's toArray function.
-		 *
-		 *	If the object specified when calling this function is not a class derived from the YDBase class, a fatal
-		 *	error will be thrown.
+		 *	This function will add an object to the template.
 		 *
 		 *	@param $name	Name you want to use for this object for referencing it in the template.
 		 *	@param $obj		The object you want to add.
 		 */
 		function assignObject( $name, $obj ) {
-			if ( ! YDObjectUtil::isSubclass( $obj, 'YDBase' ) ) {
-				trigger_error(
-					'The object you have tried to add to the template is not a subclass of the YDBase class.', YD_ERROR
-				);
-			}
-			$this->assign( $name, $obj->toArray() );
+			$this->assign( $name, $obj );
 		}
 
 		/**
@@ -228,7 +232,7 @@
 	/**
 	 *	@internal
 	 */
-	function YDTemplate_modifier_date_format( $string, $format='%b %d, %Y', $default_date=null ) {
+	function YDTemplate_modifier_date_format( $string, $format='%b %e, %Y', $default_date=null ) {
 		if( $string != '' ) {
 			return strftime( $format, YDTemplate_make_timestamp( $string ) );
 		} elseif ( isset( $default_date ) && $default_date != '' ) {

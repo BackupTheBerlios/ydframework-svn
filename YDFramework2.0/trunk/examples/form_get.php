@@ -6,7 +6,7 @@
 	// Includes
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplateSmarty.php' );
+	YDInclude( 'YDTemplate.php' );
 
 	// Class definition
 	class form_get extends YDRequest {

@@ -142,7 +142,6 @@
 			array_unshift( $args, $method );
 			$result = call_user_func_array( array( & $this->_client, 'query' ), $args );
 			if ( $result == false ) {
-				//trigger_error( $this->_client->getErrorMessage(), YD_ERROR );
 				return false;
 			}
 			return $this->_client->getResponse();
@@ -154,13 +153,6 @@
 		 *	@returns	Array with the error code and error message.
 		 */
 		function getErrorMsg() {
-			//YDDebugUtil::dump( $this->_client->error );
-			/*
-			return array(
-				'code' => $this->_client->error->code,
-				'message' => $this->_client->error->message,
-			);
-			*/
 			return $this->_client->error->code . '  ' . $this->_client->error->message;
 		}
 
@@ -323,7 +315,7 @@
 			}
 
 			// Create a new template
-			YDInclude( 'YDTemplateSmarty.php' );
+			YDInclude( 'YDTemplate.php' );
 			$template = new YDTemplate();
 			$template->template_dir = dirname( __FILE__ );
 			$template->assign( 'methods', $methods );

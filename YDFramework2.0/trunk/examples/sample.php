@@ -5,7 +5,7 @@
 
 	// Includes
 	YDInclude( 'YDRequest.php' );
-	YDInclude( 'YDTemplateSmarty.php' );
+	YDInclude( 'YDTemplate.php' );
 
 	// Class definition
 	class sample extends YDRequest {
