@@ -52,8 +52,8 @@
 
         /**
          *  The class constructor for the YDDbConn class. When you instantiate
-         *  this class, no connection is made yet. This has to be done manually
-         *  using the "connect" function.
+         *  this class, no connection is made yet. This is done when you use 
+         *  one of the methods of the class.
          *
          *  @param $url The database url for this connection (see above for the
          *              syntax of the database url).
@@ -103,7 +103,7 @@
 
             // Check for errors
             if ( DB::isError( $conn ) ) {
-                
+
                 // Get the error message
                 $err = $conn->getMessage();
 
@@ -118,6 +118,9 @@
 
             // Set the correct fetch mode
             $conn->setFetchMode( DB_FETCHMODE_ASSOC );
+
+            // Set the options
+            $conn->setOption( 'portability', DB_PORTABILITY_LOWERCASE );
 
             // Keep counter
             if ( ! isset( $GLOBALS['YD_DB_CONN_CNT'] ) ) {

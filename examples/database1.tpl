@@ -21,25 +21,25 @@
             {if $result}
                 <table border="1">
                 <tr>
-                    <td><b>Id</b></td>
-                    <td><b>User</b></td>
-                    <td><b>Host</b></td>
+                    <td><b>id</b></td>
+                    <td><b>user</b></td>
+                    <td><b>host</b></td>
                     <td><b>db</b></td>
-                    <td><b>Command</b></td>
-                    <td><b>Time</b></td>
-                    <td><b>State</b></td>
-                    <td><b>Info</b></td>
+                    <td><b>command</b></td>
+                    <td><b>time</b></td>
+                    <td><b>state</b></td>
+                    <td><b>info</b></td>
                 </tr>
                 {foreach from=$result item="row"}
                     <tr>
-                        <td>{$row.Id}</td>
-                        <td>{$row.User}</td>
-                        <td>{$row.Host}</td>
+                        <td>{$row.id}</td>
+                        <td>{$row.user}</td>
+                        <td>{$row.host}</td>
                         <td>{$row.db}</td>
-                        <td>{$row.Command}</td>
-                        <td>{$row.Time}</td>
-                        <td>{$row.State}</td>
-                        <td>{$row.Info}</td>
+                        <td>{$row.command}</td>
+                        <td>{$row.time}</td>
+                        <td>{$row.state}&nbsp;</td>
+                        <td>{$row.info}</td>
                     </tr>
                 {/foreach}
                 </table>
