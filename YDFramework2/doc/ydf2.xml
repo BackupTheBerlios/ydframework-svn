@@ -59,8 +59,9 @@
                 <link href="#ch02_07">Configuring the PHP options</link>
                 <link href="#ch02_08">Denying direct access to the templates</link>
                 <link href="#ch02_09">Using auto preprend and auto append</link>
-                <link href="#ch02_10">Configuring the samples (advised)</link>
-                <link href="#ch02_11">Testing the installation</link>
+                <link href="#ch02_10">Configuring the WYSIWYG HTML editor</link>
+                <link href="#ch02_11">Configuring the samples (advised)</link>
+                <link href="#ch02_12">Testing the installation</link>
             </link>
             <link href="#ch03">Writing your first application
                 <link href="#ch03_01">Description of the application</link>
@@ -102,7 +103,8 @@
                 <link href="#ch06_06">Displaying the form</link>
                 <link href="#ch06_07">Validating forms</link>
                 <link href="#ch06_08">Processing forms</link>
-                <link href="#ch06_09">More information</link>
+                <link href="#ch06_09">Using the WYSIWYG HTML Editor</link>
+                <link href="#ch06_10">More information</link>
             </link>
             <link href="#ch07">Accessing database contents
                 <link href="#ch07_01">Introduction</link>
@@ -660,7 +662,25 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
 
             </section>
 
-            <section name="ch02_10" label="Configuring the samples">
+            <section name="ch02_10" label="Configuring the WYSIWYG HTML editor">
+
+                <br/>
+
+                In order to use the WYSIWYG HTML editor in the forms, you need 
+                to make it publicly available. To do this, you need to move the
+                folder called "htmlarea", which is under the 
+                "YDFramework2/3rdparty" directory to a place which is visible on
+                the webserver.
+
+                <br/><br/>
+
+                Most people will move the "htmlarea" folder to either the root 
+                of their website or to the same directory as the scripts in
+                which they are going to use it.
+
+            </section>
+
+            <section name="ch02_11" label="Configuring the samples">
 
                 <br/>
 
@@ -691,7 +711,7 @@ php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</pre>
 
             </section>
 
-            <section name="ch02_11" label="Testing the installation">
+            <section name="ch02_12" label="Testing the installation">
 
                 <br/>
 
@@ -2397,6 +2417,13 @@ http://localhost/firstapp/index.php?do=oops</pre>
                         <td>Class for static data.</td>
                         <td valign="top"><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-static.php">docs</a></td>
                     </tr>
+                    <tr>
+                        <td valign="top">htmlarea</td>
+                        <td>The htmlarea element is an element specifically for
+                        the Yellow Duck Framework. If you add this element, it
+                        will create a WYSIWYG HTML editor.</td>
+                        <td valign="top">no docs</td>
+                    </tr>
                 </table></p>
 
                 <i><b>Note</b>: it is possible to make your own widgets as well.
@@ -2801,6 +2828,89 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/>
 
+                The WYSIWYG editor form control is an advanced component that
+                enables you to easily edit HTML contents without having to write
+                actual HTML. The following code sample demonstrates how this
+                control can be used:
+
+                <pre><font color="#0000FF">&lt;?php</font>
+
+<font color="#000033">    </font><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/../YDFramework2/YDF2_init.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDRequest.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">    </font><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'YDForm.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">    </font><font color="#7F007F">class</font><font color="#000033"> htmlareaRequest </font><font color="#7F007F">extends</font><font color="#000033"> YDRequest </font><font color="#000000">{</font>
+
+<font color="#000033">        </font><font color="#7F007F">function</font><font color="#000033"> htmlareaRequest</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">            </font><font color="#00007F">$this</font><font color="#000000">-&gt;</font><font color="#000033">YDRequest</font><font color="#000000">();</font>
+<font color="#000033">        </font><font color="#000000">}</font>
+
+<font color="#000033">        </font><font color="#7F007F">function</font><font color="#000033"> actionDefault</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">{</font>
+
+<font color="#000033">            </font><font color="#00007F">$options</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'url'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'/htmlarea/'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'lang'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'en'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#00007F">$config</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'width'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'600px'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'height'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'300px'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">            </font><font color="#00007F">$form</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#7F007F">new</font><font color="#000033"> YDForm</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'wysiwygForm'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">setDefaults</font><font color="#000000">(</font><font color="#000033"> array</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'txtBody'</font><font color="#000033"> </font><font color="#000000">=&gt;</font><font color="#000033"> </font><font color="#009F00">'hello world'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'htmlarea'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'txtBody'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'text'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#00007F">$options</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">addElement</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'submit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'cmdSubmit'</font><font color="#000000">,</font><font color="#000033"> </font><font color="#009F00">'Send'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">            </font><font color="#00007F">$htmlarea</font><font color="#000033"> </font><font color="#000000">=</font><font color="#000033"> </font><font color="#000000">&amp;</font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">getElement</font><font color="#000000">(</font><font color="#009F00">'txtBody'</font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#00007F">$htmlarea</font><font color="#000000">-&gt;</font><font color="#000033">setConfig</font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$config</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#000033">            </font><font color="#7F007F">if</font><font color="#000033"> </font><font color="#000000">(</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">validate</font><font color="#000000">()</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">{</font>
+<font color="#000033">                </font><font color="#7F007F">echo</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'&lt;hr&gt;'</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">exportValue</font><font color="#000000">(</font><font color="#000033"> </font><font color="#009F00">'txtBody'</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'&lt;hr&gt;'</font><font color="#000033"> </font><font color="#000000">);</font>
+<font color="#000033">            </font><font color="#000000">}</font>
+
+<font color="#000033">            </font><font color="#00007F">$form</font><font color="#000000">-&gt;</font><font color="#000033">display</font><font color="#000000">();</font>
+
+<font color="#000033">        </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#000000">}</font>
+
+<font color="#000033">    </font><font color="#7F007F">require_once</font><font color="#000000">(</font><font color="#000033"> dirname</font><font color="#000000">(</font><font color="#000033"> </font><font color="#7F007F">__FILE__</font><font color="#000033"> </font><font color="#000000">)</font><font color="#000033"> </font><font color="#000000">.</font><font color="#000033"> </font><font color="#009F00">'/../YDFramework2/YDF2_process.php'</font><font color="#000033"> </font><font color="#000000">);</font>
+
+<font color="#0000FF">?&gt;</font></pre>
+
+                In the default action, we first setup the options and the
+                configuration of our HTML area element. Important in the options
+                is to specify the URL to the htmlarea directory. In this case,
+                it was placed in the root of the webserver.
+
+                <br/><br/>
+
+                The we setup the form and added the different elements. In the 
+                <code>addElement</code> function call that adds the htmlarea
+                element, we passed along the options.
+
+                <br/><br/>
+
+                Since we cannot directly pass the configuration through the
+                <code>addElement</code> function, we need to use the special
+                method <code>getElement</code> from the YDForm object to get the
+                original element for the htmlarea. With the 
+                <code>setConfig</code> function of this object, we can change
+                the configuration of the object.
+
+                <br/><br/>
+
+                The rest of the sample code shows that this elements works and
+                reacts exactly the same as any other form element. We can use
+                the <code>exportValue</code> function to get the contents of the
+                element.
+
+                <br/><br/>
+
+                For more information about this control, please refer to
+                <a target="_blank" href="http://dynarch.com/mishoo/htmlarea.epl">http://dynarch.com/mishoo/htmlarea.epl</a>.
+
+            </section>
+
+            <section name="ch06_10" label="More information">
+
+                <br/>
+
                 For more information about using the HTML_QuickForm package from
                 the PEAR project, you can visit the following websites:
 
@@ -2808,9 +2918,6 @@ http://localhost/firstapp/index.php?do=oops</pre>
                     <li><a target="_blank" href="http://www.thelinuxconsultancy.co.uk/quickform.html">http://www.thelinuxconsultancy.co.uk/quickform.html</a></li>
                     <li><a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.php">http://pear.php.net/manual/en/package.html.html-quickform.php</a></li>
                 </ul></div>
-
-                The YDForm class is an extension of the HTML_QuickForm package
-                and provides all the functionality and more.
 
                 <page-break />
 

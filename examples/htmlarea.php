@@ -1,26 +1,19 @@
 <?php
 
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../ydf2/YDFramework2/YDF2_init.php' );
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
-    // Includes
     require_once( 'YDRequest.php' );
     require_once( 'YDForm.php' );
 
-    // Class definition
-    class indexRequest extends YDRequest {
+    class htmlareaRequest extends YDRequest {
 
-        // Class constructor
-        function indexRequest() {
+        function htmlareaRequest() {
             $this->YDRequest();
         }
 
-        // Default action
         function actionDefault() {
 
-            // The options for the html area
             $options = array( 'url' => '/htmlarea/', 'lang' => 'en' );
-            //$attributes = array( 'rows' => 25, 'cols' => 80, 'style' => 'border-width: 1px' );
             $config = array( 'width' => '600px', 'height' => '300px' );
 
             $form = new YDForm( 'wysiwygForm' );
@@ -31,10 +24,8 @@
             $htmlarea = &$form->getElement('txtBody');
             $htmlarea->setConfig( $config );
 
-
             if ( $form->validate() ) {
-                echo( $form->exportValue( 'txtBody' ) );
-
+                echo( '<hr>' . $form->exportValue( 'txtBody' ) . '<hr>' );
             }
 
             $form->display();
@@ -43,7 +34,6 @@
 
     }
 
-    // Process the request
-    require_once( dirname( __FILE__ ) . '/../ydf2/YDFramework2/YDF2_process.php' );
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_process.php' );
 
 ?>
