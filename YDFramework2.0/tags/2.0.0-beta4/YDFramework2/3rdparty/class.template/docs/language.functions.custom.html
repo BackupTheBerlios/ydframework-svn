@@ -1,0 +1,306 @@
+<html>
+<head>
+	<title>Custom Functions :: Smarty-Light</title>
+</head>
+<body>
+<h4>Smarty-Light - the faster compiling PHP template engine</h4>
+<h1>Custom Functions</h1>
+<hr>
+
+<h2><a name="capture"><code>capture</code></a></h2>
+<p>
+	<h4>Description</h4>
+	This block function will collect the output it encases and store it in a variable instead of displaying it. The variable can then be modified and manipulated.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>assign</b><br>This is the name of the variable that the output will be assigned into.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	EXAMPLE
+	=============================
+	&lt;% capture assign=variable %&gt;
+	&lt;% $variable|upper %&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="strip"><code>strip</code></a></h2>
+<p>
+	<h4>Description</h4>
+	This function will remove all repeated spaces, new lines, and tabs with a single instance.
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;%* the following will be all run into one line upon output *%&gt;
+	&lt;% strip%&gt;
+		&lt;A HREF="&lt;% $url %&gt;"&gt;
+			&lt;font color="red"&gt;This is a test&lt;/font&gt;
+		&lt;/A&gt;
+	&lt;% /strip %&gt;
+
+	OUTPUT
+	=============================
+	&lt;A HREF="http://my.domain.com"&gt;&lt;font color="red"&gt;This is a test&lt;/font&gt;&lt;/A&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="counter"><code>counter</code></a></h2>
+<p>
+	<h4>Description</h4>
+	This function is an incremental counter that will increase by the specified amount each time it is called, or not, depending on how it is called.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b> (optional)<br>The name of the counter.</li>
+		<li><b>start</b> (optional)<br>The number to start counting from. Default is 1.</li>
+		<li><b>skip</b> (optional)<br>The interval to count by. Default is 1.</li>
+		<li><b>direction</b> (optional)<br>The direction to count in. Either <code>up</code> or <code>down</code>.</li>
+		<li><b>print</b> (optional)<br>Whether or not to print the value. Default is true.</li>
+		<li><b>assign</b> (optional)<br>The template variable that the value will be assigned to.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;%* initialize the count *%&gt;
+	&lt;%counter start=0 skip=2 print=false%&gt;
+
+	&lt;%counter%&gt;&lt;br&gt;
+	&lt;%counter%&gt;&lt;br&gt;
+	&lt;%counter%&gt;&lt;br&gt;
+	&lt;%counter%&gt;&lt;br&gt;
+
+	OUTPUT
+	=============================
+	2&lt;br&gt;
+	4&lt;br&gt;
+	6&lt;br&gt;
+	8&lt;br&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="cycle"><code>cycle</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Cycle will alternate between multiple values on each recurring call.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b> (optional)<br>The name of the cycle.</li>
+		<li><b>values</b><br>The values to cycle through. This can be either a comma separated list or an array of values.</li>
+		<li><b>print</b> (optional)<br>Whether to print the value or not. The default is to print the value.</li>
+		<li><b>advance</b> (optional)<br>Whether to advance to the next value or not. The default is to advance the value.</li>
+		<li><b>delimiter</b> (optional)<br>The delimiter to use in separating the values in the <code>values</code> argument. The default is a comma.</li>
+		<li><b>assign</b> (optional)<br>The template variable that the value will be assigned to.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	&lt;% foreach value=value from=$data %&gt;
+	&lt;tr bgcolor="&lt;% cycle values="#eeeeee,#d0d0d0" %&gt;"&gt;
+		&lt;td&gt;&lt;% $value[rows] %&gt;&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;% /foreach %&gt;
+
+	OUTPUT
+	=============================
+	&lt;tr bgcolor="#eeeeee"&gt;
+		&lt;td&gt;1&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr bgcolor="#d0d0d0"&gt;
+		&lt;td&gt;2&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr bgcolor="#eeeeee"&gt;
+		&lt;td&gt;3&lt;/td&gt;
+	&lt;/tr&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_checkbox"><code>html_checkbox</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will insert a checkbox into the template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b><br>The name of the checkbox.</li>
+		<li><b>value</b> (optional)<br>The value for the checkbox.</li>
+		<li><b>checked</b> (optional)<br>Whether or not the checkbox is checked. Must equal <code>value</code> to be considered true.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;% html_checkbox name="test" %&gt;
+
+	OUTPUT
+	=============================
+	&lt;INPUT TYPE="CHECKBOX" NAME="test"&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_image"><code>html_image</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will insert an image (optionally resized) into the template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>url</b><br>The URL of the image.</li>
+		<li><b>width</b> (optional)<br>The desired width of the image.</li>
+		<li><b>height</b> (optional)<br>The desired height of the image.</li>
+		<li><b>border</b> (optional)<br>The desired border width of the image.</li>
+		<li><b>alt</b> (optional)<br>Alternate text for the image.</li>
+		<li><b>limit</b> (optional)<br>If set to true, this will cause the image to be resized to the above height and width if the above height and width are smaller than the real height and width.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;% html_image url="http://www.yoursite.com/image.jpg" %&gt;
+	&lt;% html_image url="images/me.gif" alt="A picture of me!" %&gt;
+	&lt;% html_image url="picture.gif" width=500 height=400 %&gt;
+
+	OUTPUT
+	=============================
+	&lt;IMG SRC="http://www.yoursite.com/image.jpg" BORDER="0" ALT="http://www.yoursite.com/image.jpg" WIDTH="174" HEIGHT="350"&gt;
+	&lt;IMG SRC="images.me.gif" BORDER="0" ALT="A picture of me!" WIDTH="200" HEIGHT="400"&gt;
+	&lt;IMG SRC="picture.gif" BORDER="0" ALT="picture.gif" WIDTH="500" HEIGHT="400"&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_input"><code>html_input</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will insert a text box (or optionally a password box) into the template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b><br>The name of the input box.</li>
+		<li><b>value</b> (optional)<br>The value of the input box.</li>
+		<li><b>size</b> (optional)<br>The visible size of the input box.</li>
+		<li><b>length</b> (optional)<br>The maximum length of the input box.</li>
+		<li><b>password</b> (optional)<br>Whether or not to be a password input box.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;% html_input name="test" %&gt;
+
+	OUTPUT
+	=============================
+	&lt;INPUT TYPE="TEXT" VALUE="" NAME="test"&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_options"><code>html_options</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will create a list of options for a <code>select</code> in the HTML template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>options</b><br>The array of values used to generate the options from.</li>
+		<li><b>selected</b> (optional)<br>The default value to be selected.</li>
+		<li><b>name</b> (optional)<br>The name of the select. If present, the plugin will create the <code>select</code> in the template as well as the <code>options</code>.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	PHP
+	=============================
+	$tpl->assign('cust_options', array(
+			1001 => 'Joe Schmoe',
+			1002 => 'Jack Smith',
+			1003 => 'Jane Johnson',
+		1004 => 'Charlie Brown'));
+	$tpl->assign('customer_id', 1001);
+
+	TEMPLATE
+	=============================
+	&lt;select name=customer_id&gt;
+		&lt;% html_options options=$cust_options selected=$customer_id %&gt;
+	&lt;/select&gt;
+
+	OUTPUT
+	=============================
+	&lt;select name=customer_id&gt;
+		&lt;option value="1000"&gt;Joe Schmoe&lt;/option&gt;
+		&lt;option value="1001" selected="selected"&gt;Jack Smith&lt;/option&gt;
+		&lt;option value="1002"&gt;Jane Johnson&lt;/option&gt;
+		&lt;option value="1003"&gt;Charlie Brown&lt;/option&gt;
+	&lt;/select&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_radio"><code>html_radio</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will insert a radio button into the template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b><br>The name of the radio button.</li>
+		<li><b>value</b> (optional)<br>The value of the radio button.</li>
+		<li><b>checked</b> (optional)<br>Whether the box is checked or not. Must equal <code>value</code> to be considered true.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;% html_radio name="test" %&gt;
+
+	OUTPUT
+	=============================
+	&lt;INPUT TYPE="RADIO" NAME="test"&gt;
+	</pre>
+</p>
+<hr>
+
+<h2><a name="html_textbox"><code>html_textbox</code></a></h2>
+<p>
+	<h4>Description</h4>
+	Will insert a textbox into the template.
+
+	<h4>Arguments</h4>
+	<ul>
+		<li><b>name</b><br>The name of the textbox.</li>
+		<li><b>rows</b> (optional)<br>The number of rows in the textbox.</li>
+		<li><b>columns</b> (optional)<br>The number of columns in the textbox.</li>
+		<li><b>value</b> (optional)<br>The value of the textbox.</li>
+	</ul>
+
+	<h4>Example</h4>
+	<pre>
+	TEMPLATE
+	=============================
+	&lt;% html_textbox name="test" rows="4" columns="60" %&gt;
+
+	OUTPUT
+	=============================
+	&lt;TEXTAREA NAME="test" ROWS="4" COLS="60"&gt;&lt;/TEXTAREA&gt;
+	</pre>
+</p>
+<hr>
+
+<a href="index.html">Home</a>
+</body>
+</html>
