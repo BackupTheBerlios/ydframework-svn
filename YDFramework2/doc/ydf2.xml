@@ -2040,11 +2040,179 @@ http://localhost/firstapp/index.php?do=oops</pre>
 
                 <br/>
 
+                Adding form elements is done using the addElement function from
+                the YDForm class. Depending on the element you want to add, you
+                need to specify a different number of parameters.
+
+                <br/><br/>
+
+                The syntax for the addElement function looks as follows:
+
+                <pre>object HTML_QuickForm::addElement( mixed $element )</pre>
+
+                If $element is a string representing an element type, then this
+                method accepts variable number of parameters, their meaning and 
+                count depending on element type.
+
+                <br/><br/>
+
+                Parameters starting from second will be passed to the element's 
+                constructor, consult the <a target="_blank"
+                href="http://pear.php.net/manual/en/package.html.html-quickform.intro-elements.php">docs</a>
+                for the appropriate element to find out which parameters to pass.
+
+                <br/><br/>
+
+                You can add as many elements to the form as you like. The YDForm
+                class is smart enough to preserve the values of the different
+                form elements between requests, so you don't have to worry about
+                this. The Yellow Duck Framework takes care of this for you.
+
+                <br/><br/>
+
+                The next section will give you an overview of the different
+                element types you can add to the YDForm class.
+
             </section>
 
             <section name="ch06_05" label="The different form elements">
 
                 <br/>
+
+                There are a whole number of standard form elements (sometimes
+                called widgets) that can be added to a form. Here's an overview
+                of the different elements together with the HTML element they
+                represent.
+
+                <br/><br/>
+
+                First, let's have a look at the standard HTML elements.
+
+                <br/><br/>
+
+                <b>button</b>: Class for &lt;input type="button" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-button.php">more information</a>)
+
+                <br/><br/>
+
+                <b>checkbox</b>: Class for &lt;input type="checkbox" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-checkbox.php">more information</a>)
+
+                <br/><br/>
+
+                <b>file</b>: Class for &lt;input type="file" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-file.php">more information</a>)
+
+                <br/><br/>
+
+                <b>hidden</b>: Class for &lt;input type="hidden" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hidden.php">more information</a>)
+
+                <br/><br/>
+
+                <b>image</b>: Class for &lt;input type="image" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-image.php">more information</a>)
+
+                <br/><br/>
+
+                <b>password</b>: Class for &lt;input type="password" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-password.php">more information</a>)
+
+                <br/><br/>
+
+                <b>radio</b>: Class for &lt;input type="radio" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-radio.php">more information</a>)
+
+                <br/><br/>
+
+                <b>reset</b>: Class for &lt;input type="reset" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-reset.php">more information</a>)
+
+                <br/><br/>
+
+                <b>select</b>: Class for &lt;input type="select" /&gt; elements.
+                The class allows loading of &lt;option&gt; elements from array 
+                or database.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-select.php">more information</a>)
+
+                <br/><br/>
+
+                <b>submit</b>: Class for &lt;input type="submit" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-submit.php">more information</a>)
+
+                <br/><br/>
+
+                <b>text</b>: Class for &lt;input type="text" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-text.php">more information</a>)
+
+                <br/><br/>
+
+                <b>textarea</b>: Class for &lt;input type="textarea" /&gt; elements. 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-textarea.php">more information</a>)
+
+                <br/><br/>
+
+                There are also some custom element types. These are generally a
+                bit more complex but are able to do things which would otherwise
+                require a lot of manual work.
+
+                <br/><br/>
+
+                <b>advcheckbox</b>: Class for an advanced checkbox type field. 
+                Basically this fixes a problem that HTML has had where 
+                checkboxes can only pass a single value (the value of the 
+                checkbox when checked).
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-advcheckbox.php">more information</a>)
+
+                <br/><br/>
+
+                <b>autocomplete</b>: Class for a text field with autocompletion 
+                feature. The element looks like a normal HTML input text element
+                that at every keypressed javascript event, searches the array of
+                options for a match and autocompletes the text in case of match.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-autocomplete.php">more information</a>)
+
+                <br/><br/>
+
+                <b>date</b>: Class for a group of elements used to input dates 
+                (and times).
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-date.php">more information</a>)
+
+                <br/><br/>
+
+                <b>group</b>: Class for a form element group. QuickForm (and 
+                also YDForm)  allows grouping of several elements into one 
+                entity and using this entity as a new element.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-group.php">more information</a>)
+
+                <br/><br/>
+
+                <b>header</b>: Class for adding headers to the form.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-header.php">more information</a>)
+
+                <br/><br/>
+
+                <b>hiddenselect</b>: This class behaves as a select element, but 
+                instead of creating a &lt;select&gt; it creates hidden elements for 
+                all values already selected with setDefaults() or setConstants(). 
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hiddenselect.php">more information</a>)
+
+                <br/><br/>
+
+                <b>hierselect</b>: Class to dynamically create two HTML 
+                &lt;select&gt; elements. The first select changes the content of 
+                the second select.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-hierselect.php">more information</a>)
+
+                <br/><br/>
+
+                <b>link</b>: Class for a link type field.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-link.php">more information</a>)
+
+                <br/><br/>
+
+                <b>static</b>: Class for static data.
+                (<a target="_blank" href="http://pear.php.net/manual/en/package.html.html-quickform.html-quickform-static.php">more information</a>)
 
             </section>
 
