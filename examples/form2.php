@@ -58,17 +58,7 @@
 				YDDebugUtil::dump( $_POST, '$_POST' );
 			}
 			if ( $form->validate() ) {
-				YDDebugUtil::dump( $form->getValue( 'txt1' ), 'txt1' );
-				YDDebugUtil::dump( $form->getValue( 'txt2' ), 'txt2' );
-				YDDebugUtil::dump( $form->getValue( 'txt3' ), 'txt3' );
-				YDDebugUtil::dump( $form->getValue( 'rad1' ), 'rad1' );
-				YDDebugUtil::dump( $form->getValue( 'rad2' ), 'rad2' );
-				YDDebugUtil::dump( $form->getValue( 'hid1' ), 'hid1' );
-				YDDebugUtil::dump( $form->getValue( 'hid2' ), 'hid2' );
-				YDDebugUtil::dump( $form->getValue( 'pas1' ), 'pas1' );
-				YDDebugUtil::dump( $form->getValue( 'bbt1' ), 'bbt1' );
-				YDDebugUtil::dump( $form->getValue( 'chk1' ), 'chk1' );
-				YDDebugUtil::dump( $form->getValue( 'chk2' ), 'chk2' );
+				YDDebugUtil::dump( $form->getValues(), 'Form values' );
 			} else {
 				$form->display();
 			}

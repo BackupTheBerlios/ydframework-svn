@@ -349,6 +349,19 @@
 		}
 
 		/**
+		 *	This function will return all the values for the form as an associative array.
+		 *
+		 *	@returns	The values for the form as an associative array.
+		 */
+		function getValues() {
+			$vars = array();
+			foreach ( $this->_elements as $name => $element ) {
+				$vars[ $name ] = $this->getValue( $name );
+			}
+			return $vars;
+		}
+
+		/**
 		 *	This function will check if the form was submitted or not.
 		 *
 		 *	@todo
@@ -484,7 +497,7 @@
 			// Add the errors
 			$form['errors'] = $this->_errors;
 
-			// Loop over the list of element
+			// Loop over the list of elements
 			foreach ( $this->_elements as $name => $element ) {
 				
 				// Update the value
