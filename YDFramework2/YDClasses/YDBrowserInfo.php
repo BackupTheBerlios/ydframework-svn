@@ -12,6 +12,7 @@
 
     // Includes
     require_once( 'YDBase.php' );
+    require_once( 'YDLanguage.php' );
 
     /**
      *  This class uses the HTTP_USER_AGENT varaible to get information about
@@ -38,6 +39,7 @@
                 $this->_browser = 'unknown';
                 $this->_version = 'unknown';
                 $this->_platform = 'unknown';
+                $this->_dotnet = 'unknown';
 
             } else {
 
@@ -46,22 +48,22 @@
 
                 // Determine the browser name
                 if (
-                    ereg( 'MSIE ([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                    preg_match( '/MSIE ([0-9].[0-9]{1,2})/', $this->_agent, $ver )
                 ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'ie';
                 } elseif (
-                    ereg( 'Safari\/([0-9]+)', $this->_agent, $ver
+                    preg_match( '/Safari\/([0-9]+)/', $this->_agent, $ver
                 ) ) {
                     $this->_version = '1.0b' . $ver[1];
                     $this->_browser = 'safari';
                 } elseif (
-                    ereg( 'Opera ([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                    preg_match( '/Opera ([0-9].[0-9]{1,2})/', $this->_agent, $ver )
                 ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'opera';
                 } elseif (
-                    ereg( 'Mozilla/([0-9].[0-9]{1,2})', $this->_agent, $ver )
+                    preg_match( '/Mozilla/([0-9].[0-9]{1,2})/', $this->_agent, $ver )
                 ) {
                     $this->_version = $ver[1];
                     $this->_browser = 'mozilla';
@@ -83,11 +85,16 @@
                     $this->_platform = 'other';
                 }
 
+                // Get the .NET runtime version
+                preg_match_all( '/.NET CLR ([0-9][.][0-9])/i', $this->_agent, $ver );
+                $this->_dotnet = $ver[1];
+
             }
 
         }
 
-        /** Function to get the complete HTTP_USER_AGENT contents.
+        /**
+         *  Function to get the complete HTTP_USER_AGENT contents.
          *
          *  @returns String containing the HTTP_USER_AGENT contents.
          */
@@ -95,28 +102,58 @@
             return $this->_agent;
         }
 
-        /** Function to get the name of the browser.
+        /** 
+         *  Function to get the name of the browser.
          *
-         * @returns String containing the name of the browser.
+         *  @returns String containing the name of the browser.
          */
         function getBrowser() {
             return $this->_browser;
         }
 
-        /** Function to get the version of the browser.
+        /** 
+         *  Function to get the version of the browser.
          *
-         * @returns String containing the version of the browser.
+         *  @returns String containing the version of the browser.
          */
         function getVersion() {
             return $this->_version;
         }
 
-        /** Function to get the platform of the browser.
+        /** 
+         *  Function to get the platform of the browser.
          *
-         * @returns String containing the platform of the browser.
+         *  @returns String containing the platform of the browser.
          */
         function getPlatform() {
             return $this->_platform;
+        }
+
+        /** 
+         *  Function to get the list of supported Microsoft.NET runtimes.
+         *
+         *  @returns Array containing the list of supported Microsoft.NET
+         *           runtimes.
+         */
+        function getDotNetRuntimes() {
+            return $this->_dotnet;
+        }
+
+        /**
+         *  This function returns an array with the languages that are supported
+         *  by the browser. This is done by using the HTTP_ACCEPT_LANGUAGE
+         *  server variable that gets send with the HTTP headers.
+         *
+         *  @return Array containing the list of supported languages
+         */
+        function getBrowserLanguages() {
+
+            // Instantiate the YDLanguage object
+            $lang = new YDLanguage();
+
+            // Return the list of languages
+            return $lang->getBrowserLanguages();
+
         }
 
     }

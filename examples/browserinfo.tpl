@@ -17,6 +17,10 @@
     Version: <?= $browser->getVersion() ?>
     <br>
     Platform: <?= $browser->getPlatform() ?>
+    <br>
+    Supported .NET runtimes: <?= implode( ', ',  $browser->getDotNetRuntimes() ); ?>
+    <br>
+    Supported languages: <?= implode( ', ',  $browser->getBrowserLanguages() ); ?>
 
     <p>[
         <a href="index.php">other samples</a>
