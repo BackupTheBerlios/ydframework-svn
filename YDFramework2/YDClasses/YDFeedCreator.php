@@ -127,9 +127,7 @@
          *  - RSS0.91
          *  - RSS1.0
          *  - RSS2.0
-         *  - PIE0.1
-         *  - MBOX
-         *  - OPML
+         *  - ATOM
          *
          *  The default format is RSS2.0.
          *
@@ -138,6 +136,25 @@
          *  @returns String with the data in the requested format.
          */
         function toXml( $format='RSS2.0' ) {
+
+            // Convert the format to uppercase
+            $format = strtoupper( $format );
+
+            // Check if the format is an allowed one
+            if ( ! in_array(
+                $format, array( 'RSS0.91', 'RSS1.0', 'RSS2.0', 'ATOM' )
+            ) ) {
+                new YDFatalError(
+                    'The YDFeedCreator does not support the format called '
+                    . '"' . $format . '". Only the formats "RSS0.91", "RSS1.0", '
+                    , '"RSS2.0" and "ATOM" are supported.'
+                );
+            }
+
+            // The Universal Feed Creator has a different name for ATOM feeds
+            if ( $format == 'ATOM' ) {
+                $format = 'PIE0.1';
+            }
 
             // Create the feed and return it
             return $this->ufc->createFeed( strtoupper( $format ) );
@@ -152,9 +169,7 @@
          *  - RSS0.91
          *  - RSS1.0
          *  - RSS2.0
-         *  - PIE0.1
-         *  - MBOX
-         *  - OPML
+         *  - ATOM
          *
          *  The default format is RSS2.0.
          *
@@ -166,7 +181,7 @@
             header( 'Content-type: text/xml' );
 
             // Create the feed and return it
-            echo( $this->ufc->createFeed( strtoupper( $format ) ) );
+            echo( $this->toXml( $format ) );
 
         }
 

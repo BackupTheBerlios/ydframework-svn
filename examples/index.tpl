@@ -165,6 +165,22 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=ydurl1.php">ydurl1.php</a>
             </td>
         </tr>
+        <tr>
+            <td valign="top">
+                <a href="feedcreator1.php">YDFeedCreator object</a>
+                <br>
+                <a href="feedcreator1.php?do=rss091">YDFeedCreator object - RSS 0.91 output</a>
+                <br>
+                <a href="feedcreator1.php?do=rss10">YDFeedCreator object - RSS 1.0 output</a>
+                <br>
+                <a href="feedcreator1.php?do=rss20">YDFeedCreator object - RSS 2.0 output</a>
+                <br>
+                <a href="feedcreator1.php?do=atom">YDFeedCreator object - Atom output</a>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=feedcreator1.php">feedcreator1.php</a>
+            </td>
+        </tr>
         </table>
 
         <p>&nbsp;<br><b>Documentation</b></p>
