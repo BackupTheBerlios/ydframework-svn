@@ -26,7 +26,6 @@ cd "%BLDDIR%\YDFramework2\doc"
 call make_docs.bat > NUL
 cd "..\..\.."
 echo Creating changelog files
-svn log -v -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.txt"
 svn log -v --xml -r %BLDREV%:1 "file:///C:/_SVNRepos/YDF2/" > "%BLDDIR%\YDFramework2\doc\changelog.xml"
 call xsltproc --output "%BLDDIR%\YDFramework2\doc\changelog.html" "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl" "%BLDDIR%\YDFramework2\doc\changelog.xml"
 del /Q "%BLDDIR%\YDFramework2\doc\docs_api.dxy"
@@ -34,6 +33,7 @@ del /Q "%BLDDIR%\YDFramework2\doc\docs_api_footer.html"
 del /Q "%BLDDIR%\YDFramework2\doc\make_docs.bat"
 del /Q "%BLDDIR%\YDFramework2\doc\RequestProcessing.vsd"
 del /Q "%BLDDIR%\YDFramework2\doc\svnlog2html.xsl"
+del /Q "%BLDDIR%\YDFramework2\doc\changelog.xml"
 
 rem Zip up the build to an archive
 del /Q /S %BLDDIR%\builds
