@@ -92,6 +92,7 @@
 		var $__results      = array();
 		var $__limit        = -1;
 		var $__offset       = -1;
+		var $__count        = 0;
 
 		/**
 		 *  The class constructor loads all the configuration defined and validates it.
@@ -107,7 +108,6 @@
 			$this->setKeys();
 			$this->setRelations();
 			$this->setProtected();
-			$this->setDefaults();
 		
 			// Check if the table is set
 			if ( empty( $this->__table ) ) {
@@ -246,14 +246,48 @@
 					$this->set( $field, $value );
 				}
 			}
-		}				
+		}
+		
+		/**
+		 *  This function registers a SELECT expression.
+		 *
+		 *  @param $alias     The alias for the expression.
+		 *  @param $expr      The SQL expression.
+		 *  @param $callback  (optional) The callback method when this field is set.
+		 */		
+		function registerSelect( $alias, $expr, $callback='' ) {
+			if ( array_key_exists( $alias, $this->__fields ) ) {
+				trigger_error( 'YDDatabaseObject ' . strtoupper( get_class( $this ) ) . ' - 
+								The alias "' . $alias . '" is already defined.', YD_ERROR );
+			}
+			$this->__fields[ $alias ] = array( 'type' => YD_DATABASEOBJECT_SQL, 
+											   'column' => $expr, 
+											   'callback' => $callback );
+		}
+
+		/**
+		 *  This function unregisters a SELECT expression.
+		 *
+		 *  @param $alias     The alias name.
+		 */		
+		function unregisterSelect( $alias ) {
+			if ( ! array_key_exists( $alias, $this->__fields ) ) {
+				trigger_error( 'YDDatabaseObject ' . strtoupper( get_class( $this ) ) . ' - 
+								The alias "' . $alias . '" doesn\'t exist.', YD_ERROR );
+			}
+			if ( $this->__fields[ $alias ]['type'] != YD_DATABASEOBJECT_SQL ) {
+				trigger_error( 'YDDatabaseObject ' . strtoupper( get_class( $this ) ) . ' - 
+								The field "' . $alias . '" can not be unregistered.', YD_ERROR );
+			}
+			unset( $this->__fields[ $alias ] );
+		}
 
 		/**
 		 *  This function returns the table name defined.
 		 *
 		 *  @returns  The table name.
 		 */
-		function getTable() {			
+		function getTable() {
 			return $this->__table;
 		}
 
@@ -291,6 +325,11 @@
 			if ( ! $protected && array_key_exists( $field, $this->__protected ) ) {
 				return;
 			}
+			$type = $this->_getFieldSpec( $field, 'type' );
+			if ( is_null( $value ) && ! in_array( YD_DATABASEOBJECT_NULL, $this->_getTypes( $type ) ) ) {
+				unset( $this->$field );
+				return;
+			} 
 			$this->$field = $value;
 			
 			if ( $callback = $this->_getFieldSpec( $field, 'callback' ) ) {
@@ -305,7 +344,7 @@
 		 *  @param $values  The associative array of values.
 		 */					
 		function setValues( $values=array() ) {
-				
+			
 			$current = $this->getValues();
 			
 			foreach ( $current as $field => $value ) {
@@ -323,22 +362,25 @@
 		 *  This function retrieves all the object's fields values.
 		 *
 		 *  @param $only_fields  Returns only defined fields. Default: false.
+		 *  @param $prefix       (optional) Adds a prefix to all field names. Default: (empty)
 		 *
 		 *  @returns  An associative array with the values.
 		 */					
-		function getValues( $only_fields=false ) {
+		function getValues( $only_fields=false, $prefix='' ) {
 				
 			$this->_resetProtected();
 			$values = get_object_vars( $this );
 			
+			$new = array();
 			foreach ( $values as $field => $value ) {
-				if ( is_object( $value ) || substr( $field, 0, 1 ) == '_' || 					
-				   ( $only_fields && ! $this->_isFieldAndColumn( $field ) ) ) {
-					unset( $values[ $field ] );
-				} 
+				if ( ! is_object( $value ) && substr( $field, 0, 1 ) != '_' ) {
+					if( ( $only_fields && $this->_isFieldAndColumn( $field ) ) || ! $only_fields ) {
+						$new[ $prefix . $field ] = $value;
+					}
+				}
 			}
 			
-			return $values;	
+			return $new;	
 		}		
 
 		/**
@@ -352,12 +394,12 @@
 			$foreign_var = $this->_getRelationSpec( $relation, 'foreign_var' );				
 			
 			$this->_loadDatabaseObject( $this->_getRelationSpec( $relation, 'foreign_dataobject' ), $foreign_var );
-			
+
 			if ( $this->_getRelationSpec( $relation, 'type' ) == YD_DATABASEOBJECT_MANYTOMANY ) {
 	
 				$join_var = $this->_getRelationSpec( $relation, 'join_var' );
 				$this->_loadDatabaseObject( $this->_getRelationSpec( $relation, 'join_dataobject' ), $join_var );
-
+				
 			} 
 			
 			$this->__last = $relation;
@@ -382,7 +424,7 @@
 		 *  
 		 *  @returns  The number of records found.
 		 */		
-		function getRelation( $relation='', $limit=-1, $offset=-1 ) {
+		function findRelation( $relation='', $limit=-1, $offset=-1 ) {
 			
 			$relation = $this->_checkRelation( $relation );
 			
@@ -411,7 +453,7 @@
 			$results = array();
 			foreach ( $this->__relations as $relation => $specs ) {
 				$this->setValues( $original );
-				$results[ $relation ] = $this->getRelation( $relation );				
+				$results[ $relation ] = $this->findRelation( $relation );				
 			}
 						
 			return $results;
@@ -420,26 +462,29 @@
 		
 		/**
 		 *  This function returns all the relation objects getValues arrays in
-		 *  a single array. Risk: if you have same field names the values
-		 *  will be overriden.
+		 *  a single array.
 		 *
 		 *  @param $relation  (optional) The relation id. If empty, the last relation id loaded.
+		 *  @param $prefix    (optional) If true all foreign values will be prefixed with the foreign_var.
+		 *					             Default: true.
 		 *
 		 *  @returns  A single array with all the relation values.
 		 */		
-		function getRelationValues( $relation='' ) {
+		function getRelationValues( $relation='', $prefix=true ) {
 			
 			$relation    = $this->_checkRelation( $relation );
 			$foreign_var = $this->_getRelationSpec( $relation, 'foreign_var' );
 			
 			$l_values = $this->getValues();
-			$f_values = $this->$foreign_var->getValues();
+			$f_prefix = $prefix ? $foreign_var . '_' : '';
+			$f_values = $this->$foreign_var->getValues( false, $f_prefix );
 			
 			$result = array_merge( $l_values, $f_values );
 						
 			if ( $this->_getRelationSpec( $relation, 'type' ) == YD_DATABASEOBJECT_MANYTOMANY ) {
 				$join_var = $this->_getRelationSpec( $relation, 'join_var' );
-				$j_values = $this->$join_var->getValues();
+				$j_prefix = $prefix ? $join_var . '_' : '';
+				$j_values = $this->$join_var->getValues( false, $j_prefix );
 				$result = array_merge( $result, $j_values );
 			}
 			
@@ -479,21 +524,14 @@
 			$relation    = $this->_checkRelation( $relation );
 			$foreign_var = $this->_getRelationSpec( $relation, 'foreign_var' );
 			
-			$fetch['join'] = false;
 			if ( $this->_getRelationSpec( $relation, 'type' ) == YD_DATABASEOBJECT_MANYTOMANY ) {
 				$join_var = $this->_getRelationSpec( $relation, 'join_var' );
-				$fetch['join'] = $this->$join_var->fetch();
+				$this->$join_var->fetch();
 			}
 			
-			$fetch['local']   = $this->fetch();
-			$fetch['foreign'] = $this->$foreign_var->fetch();
+			$this->$foreign_var->fetch();
 			
-			$fetch = array_unique( $fetch );
-			
-			if ( sizeof( $fetch ) == 1 && ! current( $fetch ) ) {
-				return false;
-			}
-			return true;
+			return $this->fetch();
 
 		} 
 
@@ -527,10 +565,10 @@
 				}
 				
 				$this->__sql->resetWhere();
-				$this->_addFieldsToWhere( true );
+				$this->_prepareQuery( $this, true );
 				
 			} else {
-				$this->_addFieldsToWhere();
+				$this->_prepareQuery( $this );
 			}
 			
 			YDDebugUtil::debug( 'YDDatabaseObject find - ' . strtoupper( get_class( $this ) ) . 
@@ -557,30 +595,31 @@
 			YDDebugUtil::debug( 'YDDatabaseObject find - ' . strtoupper( get_class( $this ) ) . YD_CRLF .
 								 YD_CRLF . YDStringUtil::removeWhiteSpace( $sql ) );
 
-			if ( $limit == -1 && $offset == -1 ) {
+			if ( $limit != -1 || $offset != -1 ) {
 				$this->setLimit( $limit, $offset );
 			}
 
 			$result = $this->__db->getRecords( $sql, $this->__limit, $this->__offset );			
 
 			$this->__results = array();			
-			
-			$this->resetQuery();
+			$this->__count   = $result ? sizeof( $result ) : 0;
+						
+			$this->resetQuery();			
 			
 			if ( ! $result ) {
 				YDDebugUtil::debug( 'YDDatabaseObject find: no records found.' );
-				return 0;
+				return $this->__count;
 			}
 
-			YDDebugUtil::debug( 'YDDatabaseObject find: ' . (int) sizeof( $result ) . ' record(s) found.' );
+			YDDebugUtil::debug( 'YDDatabaseObject find: ' . $this->__count . ' record(s) found.' );
 
 			$this->__results = $result;
 			
-			if ( sizeof( $result ) == 1 ) {
+			if ( $this->__count == 1 ) {
 				$this->fetch();
 			}
 			
-			return sizeof( $result );
+			return $this->__count;
 			
 		}		
 		
@@ -601,7 +640,7 @@
 		 *  @returns  The number of rows to be fetch.
 		 */				
 		function count() {				
-			return sizeof( $this->__results );
+			return $this->__count;
 		}
 
 		/**
@@ -609,7 +648,7 @@
 		 *  
 		 *  @returns  True if any result has been fetched, otherwise false.
 		 */				
-		function fetch() {				
+		function fetch() {
 			$values = array_shift( $this->__results );
 			if ( ! is_null( $values ) ) {
 				$this->setValues( $values );
@@ -650,6 +689,8 @@
 					unset( $values[ $auto_field ] );
 				}
 			}
+			
+			$this->resetQuery();
 
 			if ( sizeof( $values ) ) {
 			
@@ -704,8 +745,9 @@
 				$values = $new;
 				unset( $new );
 				
-				$this->_addFieldsToWhere( true );
-				$where = $this->__sql->getWhere( false );
+				$this->_prepareQuery( $this, true );
+				$where = $this->__sql->getWhere( false );				
+				$this->resetQuery();
 
 				YDDebugUtil::debug( 'YDDatabaseObject update - ' . strtoupper( get_class( $this ) ) . 
 									YD_CRLF . YDDebugUtil::r_dump( $values ) );
@@ -719,14 +761,14 @@
 					
 					return false;
 				}
-				$this->resetQuery();
 			
 				$result = $this->__db->executeUpdate( $this->__table, $values, $where );
+				$this->__count = (int) $result;
 				
 				YDDebugUtil::debug( 'YDDatabaseObject update', YD_CRLF . YD_CRLF . end( $GLOBALS['YD_SQL_QUERY'] ) );	
-				YDDebugUtil::debug( 'YDDatabaseObject update: ' . (int) $result . ' record(s) affected.' );
+				YDDebugUtil::debug( 'YDDatabaseObject update: ' . $this->__count . ' record(s) affected.' );
 				
-				return $result;
+				return $this->__count;
 			}
 			return false;
 		}
@@ -743,7 +785,7 @@
 			$this->__sql->resetFrom();
 			$this->__sql->addTable( $this->__table );
 			
-			$this->_addFieldsToWhere( true );
+			$this->_prepareQuery( $this, true );
 
 			$where = $this->__sql->getWhere( false );
 			$order = $this->__sql->getOrder();
@@ -764,11 +806,12 @@
 			}			
 			
 			$result = $this->__db->executeDelete( $this->__table, $where . $order ); 
+			$this->__count = (int) $result;
 			
 			YDDebugUtil::debug( 'YDDatabaseObject delete', YD_CRLF . YD_CRLF . end( $GLOBALS['YD_SQL_QUERY'] ) );
-			YDDebugUtil::debug( 'YDDatabaseObject delete: ' . (int) $result . ' record(s) affected.' );
+			YDDebugUtil::debug( 'YDDatabaseObject delete: ' . $this->__count . ' record(s) affected.' );
 			
-			return $result;
+			return $this->__count;
 			
 		}
 
@@ -787,8 +830,31 @@
 		 *	@param $expr   The expression.
 		 *  @param $alias  (optional) The alias for the expression.
 		 */
-		function addSelect( $expr, $alias='' ) {
-			$this->__sql->addSelect( $expr, $alias );
+		function addSelect() {
+		
+			$args = func_get_args();
+			
+			if ( sizeof( $args ) ) {
+			
+				foreach ( $args as $field ) {
+				
+					if ( ! array_key_exists( $field, $this->__fields ) ) {
+						trigger_error( 'YDDatabaseObject ' . strtoupper( get_class( $this ) ) . ' - 
+										Field "' . $field . '" is not registered.', YD_ERROR );
+					}
+				
+					$column = $this->_getFieldSpec( $field, 'column' );
+				
+					if ( $this->_isFieldAndColumn( $field ) ) {
+						$column = $this->__table . '.' . $column;
+					}
+	
+					$this->__sql->addSelect( $column, $field );
+				
+				}
+			
+			}
+			
 		}
 
 		/**
@@ -844,13 +910,6 @@
 		}
 
 		/**
-		 *	This function resets only the SELECT statements of the query.
-		 */					
-		function resetSelect() {
-			$this->__sql->resetSelect();
-		}
-
-		/**
 		 *	This function resets all the query information and adds
 		 *  the fields columns to the SELECT statement as default.
 		 */					
@@ -858,63 +917,7 @@
 			$this->__sql->reset();
 			$this->__limit  = -1;
 			$this->__offset = -1;
-			
-			foreach ( $this->__fields as $field => $specs ) {
-
-				if ( ! $this->_isFieldAndColumn( $field ) && ! isset( $specs['column'] ) ) {
-					continue;
-				}
-				
-				$column = $this->_getFieldSpec( $field, 'column' );
-				if ( $this->_isFieldAndColumn( $field ) ) {
-					$column = $this->__table . '.' . $column;
-				}
-
-				$this->__sql->addSelect( $column, $field );
-			}
-			
 		}				
-
-		/**
-		 *	This function adds the object fields values to the WHERE clause.
-		 *
-		 *  @param $only_keys  If true, only adds the keys values.
-		 *
-		 *  @internal
-		 */					
-		function _addFieldsToWhere( $only_keys=false ) {
-					
-			// We have no keys, so we get all fields always
-			if ( ! sizeof( $this->__keys ) ) {
-				$only_keys = false;
-			}
-			
-			$values = $this->getValues( true );
-			
-			foreach ( $values as $field => $value ) {
-				
-				if ( $only_keys && ! in_array( $field, $this->__keys ) ) {
-					continue;
-				}
-				
-				$sql_field = $this->__table . '.' . $this->_getFieldSpec( $field, 'column' );
-				
-				$value = $this->get( $field );
-				if ( is_null( $value ) ) {
-					$sql_value = ' IS NULL';
-				} else { 
-					$types = $this->_getTypes( $this->_getFieldSpec( $field, 'type' ) );
-					if ( ! in_array( YD_DATABASEOBJECT_NUM, $types ) ) {
-						$sql_value = ' = ' . $this->__db->sqlString( $this->get( $field ) );
-					} else {
-						$sql_value = ' = ' . $value;
-					}
-				}
-								
-				$this->__sql->addWhere( $sql_field . $sql_value );				
-				
-			}
-		}		
 
 		/**
 		 *	This function resets all protected fields to it's protected value.
@@ -995,32 +998,79 @@
 				if ( array_key_exists( $spec, $this->__fields[ $field ] ) ) {
 					return $this->__fields[ $field ][ $spec ];
 				}
+				return ( $spec == 'column' ) ? $field : null;
 			} 
-			return ( $spec == 'column' ) ? $field : null;
+			return null;
+			
 		}
 
 		/**
 		 *  This function prepares the SQL query based on the fields of the object.
 		 *
 		 *  @param $dataobject  A reference to the YDDatabaseObject.
-		 *  @param $prefix		(optional)
+		 *  @param $only_keys   (optional) Adds only the keys to the WHERE clause.
+		 *  @param $prefix		(optional) The fields prefix.
 		 *
 		 *  @internal
 		 */
-		function _prepareQuery( & $dataobject, $prefix='' ) {				
+		function _prepareQuery( & $dataobject, $only_keys=false, $prefix='' ) {				
 			
 			$table = $dataobject->getTable();
 			
 			$dataobject->_resetProtected();
+
+			// Prepare the SELECT statement
+			
+			if ( $dataobject->__sql->getSelect() == '*' ) {
+				
+				foreach ( $dataobject->__fields as $field => $specs ) {
+					$dataobject->addSelect( $field );
+				}
+				
+			}
+
 			$select = & $dataobject->__sql->select;
 			
-			foreach ( $dataobject->__sql->select as $num => $arr ){
-				if ( array_key_exists( $arr['alias'], $dataobject->__fields ) ) {
-					$select[ $num ]['alias'] = $prefix . $arr['alias'];
+			if ( strlen( $prefix ) ) {
+				foreach ( $dataobject->__sql->select as $num => $arr ){
+					if ( array_key_exists( $arr['alias'], $dataobject->__fields ) ) {
+						$select[ $num ]['alias'] = $prefix . $arr['alias'];
+					}
 				}
 			}
 			
-			$dataobject->_addFieldsToWhere( false );
+			// We have no keys, so we get all fields always
+			if ( ! sizeof( $dataobject->__keys ) ) {
+				$only_keys = false;
+			}
+			
+			// Prepare the WHERE statement
+			
+			$values = $dataobject->getValues( true );
+
+			foreach ( $values as $field => $value ) {
+				
+				if ( $only_keys && ! in_array( $field, $dataobject->__keys ) ) {
+					continue;
+				}
+				
+				$sql_field = $dataobject->__table . '.' . $dataobject->_getFieldSpec( $field, 'column' );
+				
+				$value = $dataobject->get( $field );
+				if ( is_null( $value ) ) {
+					$sql_value = ' IS NULL';
+				} else { 
+					$types = $dataobject->_getTypes( $dataobject->_getFieldSpec( $field, 'type' ) );
+					if ( ! in_array( YD_DATABASEOBJECT_NUM, $types ) ) {
+						$sql_value = ' = ' . $dataobject->__db->sqlString( $dataobject->get( $field ) );
+					} else {
+						$sql_value = ' = ' . $value;
+					}
+				}
+								
+				$dataobject->__sql->addWhere( $sql_field . $sql_value );				
+				
+			}
 			
 			return $table;
 			
@@ -1148,8 +1198,8 @@
 			
 			$foreign = & $this->$foreign_var;
 			
-			$l_table = $this->_prepareQuery( $this, '1_' );
-			$f_table = $this->_prepareQuery( $foreign, '2_' );
+			$l_table = $this->_prepareQuery( $this, false, '1_' );
+			$f_table = $this->_prepareQuery( $foreign, false, '2_' );
 			
 			YDDebugUtil::debug( 'YDDatabaseObject - ' . strtoupper( get_class( $this ) ) . 
 								YD_CRLF . YDDebugUtil::r_dump( $this->getValues() ) );
@@ -1167,7 +1217,7 @@
 				$join_var = $this->_getRelationSpec( $relation, 'join_var' );
 				$join = & $this->$join_var;
 
-				$j_table = $this->_prepareQuery( $join, '3_' );
+				$j_table = $this->_prepareQuery( $join, false, '3_' );
 
 				YDDebugUtil::debug( 'YDDatabaseObject - ' . strtoupper( get_class( $join ) ) . 
 									YD_CRLF . YDDebugUtil::r_dump( $join->getValues() ) );
@@ -1209,25 +1259,23 @@
 			YDDebugUtil::debug( 'YDDatabaseObject - getRelation "' . $relation . '"' . 
 								YD_CRLF . YD_CRLF . YDStringUtil::removeWhiteSpace( $sql ) );
 
-			if ( $type == YD_DATABASEOBJECT_ONETOONE ) {
-				$results = $this->__db->getRecord( $sql, $this->__limit, $this->__offset );
-				if ( $results ) {
-					$results = array( $results );
-				}
-			} else {
-				$results = $this->__db->getRecords( $sql, $this->__limit, $this->__offset );
+			$results = $this->__db->getRecords( $sql, $this->__limit, $this->__offset );		
+			
+			$this->__count = $results ? sizeof( $results ) : 0;
+			
+			if ( $this->__count > 1 && $this->_getRelationSpec( $relation, 'type' ) == YD_DATABASEOBJECT_ONETOONE ) {
+				trigger_error( 'YDDatabaseObject ' . strtoupper( get_class( $this ) ) . ' - 
+								The One-to-One relation "' . $relation . '" has returned more than one row.', YD_NOTICE );
 			}
 			
 			$this->resetQuery();
 			
 			if ( ! $results ) {			
 				YDDebugUtil::debug( 'YDDatabaseObject - getRelation: no records found.' );			
-				return 0;
+				return $this->__count;
 			}
 				
-			$total = (int) sizeof( $results );
-			
-			YDDebugUtil::debug( 'YDDatabaseObject - getRelation: ' . $total . ' record(s) found.' );
+			YDDebugUtil::debug( 'YDDatabaseObject - getRelation: ' . $this->__count . ' record(s) found.' );
 
 			if ( $type == YD_DATABASEOBJECT_MANYTOMANY ) {
 				$this->_loadRelationResults( $results, $foreign, $join );
@@ -1235,11 +1283,11 @@
 				$this->_loadRelationResults( $results, $foreign, $foreign );
 			}
 			
-			if ( $total == 1 ) {
+			if ( $this->__count == 1 ) {
 				return $this->fetchRelation( $relation );
 			}
 		
-			return $total;
+			return $this->__count;
 			
 		}
 		
