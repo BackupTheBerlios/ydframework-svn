@@ -395,7 +395,6 @@
 			foreach ( $values as $key=>$value ) {
 				if ( substr( $key, 0, 1 ) != '_' ) {
 					array_push( $ifields, $key );
-					array_push( $ivalues, $this->sqlString( $value ) );
 					if ( is_null( $value ) ) {
 						array_push( $ivalues, 'NULL' );
 					} else {
