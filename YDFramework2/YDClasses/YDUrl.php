@@ -203,7 +203,7 @@
 						if ( isset( $headers['content-length'] ) ) {
 							$cacheFName .= $headers['content-length'];
 						}
-						$cacheFName = YD_TMP_PRE . md5( $cacheFName ) . '.wch';
+						$cacheFName = YD_TMP_PRE . 'W_' . md5( $cacheFName ) . '.wch';
 						$cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
 					}
 
