@@ -124,6 +124,8 @@
             $this->registerRule( 'exact', array( 'YDValidateRules', 'exact' ), 'YDValidateRules.php' );
             $this->registerRule( 'in_array', array( 'YDValidateRules', 'in_array' ), 'YDValidateRules.php' );
             $this->registerRule( 'not_in_array', array( 'YDValidateRules', 'not_in_array' ), 'YDValidateRules.php' );
+            $this->registerRule( 'maxwords', array( 'YDValidateRules', 'maxwords' ), 'YDValidateRules.php' );
+            $this->registerRule( 'minwords', array( 'YDValidateRules', 'minwords' ), 'YDValidateRules.php' );
             $this->registerRule( 'callback', array( 'YDValidateRules', 'callback' ), 'YDValidateRules.php' );
             $this->registerRule( 'uploadedfile', array( 'YDValidateRules', 'uploadedfile' ), 'YDValidateRules.php' );
             $this->registerRule( 'maxfilesize', array( 'YDValidateRules', 'maxfilesize' ), 'YDValidateRules.php' );

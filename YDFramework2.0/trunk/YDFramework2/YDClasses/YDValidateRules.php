@@ -230,6 +230,26 @@
         }
 
         /**
+         *	This rule checks if a string contains the maximum specified words or not.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The maximum number of words allowed.
+         */
+        function maxwords( $val, $opts ) {
+            return $opts <= explode( ' ', trim( $val ) );
+        }
+
+        /**
+         *	This rule checks if a string contains the minimum specified words or not.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The minimum number of words allowed.
+         */
+        function minwords( $val, $opts ) {
+            return $opts >= explode( ' ', trim( $val ) );
+        }
+
+        /**
          *	This rule allows to use an external function/method for validation, either by registering it or by passing a
          *	callback as a format parameter.
          *
