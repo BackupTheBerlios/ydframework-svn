@@ -133,6 +133,8 @@
 	@ini_set( 'include_path', $includePath );
 
 	// Include the standard functions
+	require_once( 'YDBase.php' );
+	require_once( 'YDConfig.php' );
 	require_once( 'YDF2_functions.php' );
 
 	// Fix the PHP variables affected by magic_quotes_gpc (which is evil if you ask me ;-)
@@ -179,7 +181,6 @@
 	}
 
 	// Include the base classes
-	YDInclude( 'YDBase.php' );
 	YDInclude( 'YDUtil.php' );
 
 	// Start the global timer
