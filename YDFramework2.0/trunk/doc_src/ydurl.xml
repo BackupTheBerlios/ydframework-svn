@@ -109,6 +109,8 @@
             echo( '<br>User: ' . $url->getUser() );
             echo( '<br>Password: ' . $url->getPassword() );
             echo( '<br>Path: ' . $url->getPath() );
+            echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+            echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
             echo( '<br>Query: ' . $url->getQuery() );
             echo( '<br>Fragment: ' . $url->getFragment() );
 
