@@ -7,7 +7,7 @@
     */
 
     $dbAliasses = array(
-        'localhost_mysql' => 'mysql://pieter:kermit@localhost/test'
+        'localhost_mysql' => 'mysql://root:@localhost/test'
     );
 
 ?>
