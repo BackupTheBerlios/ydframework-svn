@@ -871,11 +871,8 @@
 		 */
 		function getRecord( $sql ) {
 			$result = & $this->_connectAndExec( $sql );
-			if ( YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ) {
-				$record = $this->_lowerKeyNames( mysql_fetch_array( $result ) );
-			} else {
-				$record = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) );
-			}
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? MYSQL_NUM : MYSQL_ASSOC;
+			$record = $this->_lowerKeyNames( mysql_fetch_array( $result, $type ) );
 			mysql_free_result( $result );
 			return $record;
 		}
@@ -894,15 +891,10 @@
 		function getRecords( $sql, $limit=-1, $offset=-1 ) {
 			$sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
 			$result = & $this->_connectAndExec( $sql );
+			$type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? MYSQL_NUM : MYSQL_ASSOC;
 			$dataset = array();
-			if ( YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ) {
-				while ( $line = $this->_lowerKeyNames( mysql_fetch_array( $result ) ) ) {
-					array_push( $dataset, $line );
-				}
-			} else {
-				while ( $line = $this->_lowerKeyNames( mysql_fetch_assoc( $result ) ) ) {
-					array_push( $dataset, $line );
-				}
+			while ( $line = $this->_lowerKeyNames( mysql_fetch_array( $result, $type ) ) ) {
+				array_push( $dataset, $line );
 			}
 			mysql_free_result( $result );
 			return $dataset;
