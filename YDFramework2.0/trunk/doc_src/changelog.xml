@@ -5,12 +5,42 @@
 
     <para>This is the overview of the different releases.</para>
 
+    <sect1 id="changelog_ydf_v2_final">
+
+        <title>Yellow Duck Framework 2.0 Final</title>
+
+        <para>Released on: not yet released</para>
+        <para>Build number: not yet released</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>YDDatabaseObject has a lot of new features and bugfixes</listitem>
+            <listitem>Reworked the examples index</listitem>
+            <listitem>The date/time form elements had a number of bug fixes and feature enhancements</listitem>
+            <listitem>Added the YDFSDirectory::has function</listitem>
+            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function</listitem>
+            <listitem>Added a way to implement Yellow Duck Framework addons (plugins)</listitem>
+            <listitem>Added the list of include paths to the debugging output</listitem>
+            <listitem>Added the maxwords and minwords rules</listitem>
+            <listitem>Added the setAttribute function to the YDFormElement class</listitem>
+            <listitem>Added an option to mark fields as mandatory</listitem>
+            <listitem>Added support for raw values for compound form elements</listitem>
+            <listitem>Added the i_in_array and i_not_in_array validation rules</listitem>
+            <listitem>Added the errors_unique_messages property to the array version of a form</listitem>
+            <listitem>You can now override the SMARTY_DIR constant from YDTemplate</listitem>
+            <listitem>Made some performance improvements for PHP5</listitem>
+            <listitem>Updated Smarty to version 2.6.9</listitem>
+            <listitem>Converted the toArray function to the Array renderer</listitem>
+            <listitem>Added the YDFSDirectory::getFilesRecursively function</listitem>
+        </itemizedlist>
+
+    </sect1>
+
     <sect1 id="changelog_ydf_v2_0rc1">
 
         <title>Yellow Duck Framework 2.0 Release Candidate 1</title>
 
-        <para>Released on: not released yet</para>
-        <para>Build number: not released yet</para>
+        <para>Released on: 25 january 2005</para>
+        <para>Build number: 864</para>
 
         <itemizedlist spacing="compact">
             <listitem>Replaced SmartyLight with the full blown Smarty template engine</listitem>
