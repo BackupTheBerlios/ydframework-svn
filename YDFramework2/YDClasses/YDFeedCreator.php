@@ -19,13 +19,6 @@
      *  @todo
      *      Make sure all the different RSS formats and items are supported. If
      *      there are possible variations, make sure we support these as well.
-     *
-     *  @todo
-     *      Add an option to add a feed image.
-     *
-     *  @todo
-     *      Remove the support for MBOX files. We also need some checking of
-     *      the type that was selected and raise errors accordingly.
      */
     class YDFeedCreator {
 
@@ -73,6 +66,41 @@
         }
 
         /**
+         *  This function will set the image properties for the feed. It 
+         *  requires you to specify a title, url and link for the image. The
+         *  description is an optional element.
+         *
+         *  @remark
+         *      Feed images are only supported for RSS feeds. ATOM feeds do not
+         *      support a feed image. If you decide to output the feed to ATOM,
+         *      the information set with this function will be discarded.
+         *  
+         *  @param $title The title of the feed image.
+         *  @param $link  The link to the feed image.
+         *  @param $url   The URL of the feed image.
+         *  @param $descr The description for the feed image (optional).
+         */
+        function setImage( $title, $link, $url, $desc=null ) {
+
+            // Instantiate the FeedImage object
+            $img = new FeedImage();
+
+            // Add the required properties
+            $img->title = $title;
+            $img->link = $link;
+            $img->url = $url;
+
+            // Add the optional properties
+            if ( $desc != null ) {
+                $img->desc = $desc;
+            }
+
+            // Add the image to the feed
+            $this->ufc->image = $img;
+
+        }
+
+        /**
          *  This function will add a new item to the feed. You need to at least
          *  give in a title, link. A description is advised but optional. Also
          *  a GUID is optional. If no GUID is given, an automatic one will be
@@ -80,8 +108,8 @@
          *
          *  @param $title The title of the feed item.
          *  @param $link  The link to the feed item.
-         *  @param $desc  The description for the feed item.
-         *  @param $guid  The guid for the feed item.
+         *  @param $desc  The description for the feed item (optional).
+         *  @param $guid  The guid for the feed item (optional).
          */
         function addItem( $title, $link, $desc=null, $guid=null ) {
 

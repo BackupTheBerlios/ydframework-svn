@@ -17,6 +17,11 @@
             $this->fc->setTitle( 'Yellow Duck Framework' );
             $this->fc->setDescription( 'News about the Yellow Duck Framework' );
             $this->fc->setLink( 'http://www.yellowduck.be/ydf2/' );
+            $this->fc->setImage(
+                'Pieter & Fiona',
+                'http://www.yellowduck.be/ydf2/',
+                'http://www.yellowduck.be/images/site_images/YellowDuckEendje.gif'
+            );
             $this->fc->addItem(
                 'Title 1',
                 'http://www.yellowduck.be/ydf2/#1',
