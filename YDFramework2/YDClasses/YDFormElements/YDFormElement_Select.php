@@ -45,6 +45,7 @@
 
 			// Create the list of attributes
 			$attribs = array( 'name' => $this->_form . '_' . $this->_name );
+			$attribs = array_merge( $this->_attributes, $attribs );
 
 			// Get the HTML
 			$html = '';
