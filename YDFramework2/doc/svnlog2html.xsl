@@ -24,18 +24,33 @@
                     <xsl:value-of select="msg" />
                 </code></p>
                 <p><b>Affected Files</b></p>
-                <ul>
+                <blockquote>
+                <table border="0" width="80%" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td width="15%" style="border-bottom: 1px dashed #333333;">
+                            <b>Action</b>
+                        </td>
+                        <td style="border-bottom: 1px dashed #333333;">
+                            <b>File</b>
+                        </td>
+                    </tr>
                 <xsl:for-each select="paths/path">
-                    <li>[
-                        <xsl:choose>
-                            <xsl:when test="@action = 'A'">add</xsl:when>
-                            <xsl:when test="@action = 'M'">modify</xsl:when>
-                            <xsl:when test="@action = 'D'">delete</xsl:when>
-                            <xsl:otherwise>unknown</xsl:otherwise>
-                        </xsl:choose>
-                    ] <xsl:value-of select="text()" /></li>
+                    <tr>
+                        <td width="10%" style="border-bottom: 1px dashed #333333;">
+                            <xsl:choose>
+                                <xsl:when test="@action = 'A'">add</xsl:when>
+                                <xsl:when test="@action = 'M'">modify</xsl:when>
+                                <xsl:when test="@action = 'D'">delete</xsl:when>
+                                <xsl:otherwise>unknown</xsl:otherwise>
+                            </xsl:choose>
+                        </td>
+                        <td style="border-bottom: 1px dashed #333333;">
+                            <xsl:value-of select="text()" />
+                        </td>
+                    </tr>
                 </xsl:for-each>
-                </ul>
+                </table>
+                </blockquote>
             </xsl:for-each>
 
         </body>
