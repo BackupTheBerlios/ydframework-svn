@@ -210,7 +210,7 @@
 
 				// If the cache filename is null, use the default one
 				if ( $cacheFName == null ) {
-					$cacheFName = YD_DIR_TEMP . '/' . YD_TMP_PRE . md5( $this->getUrl() ) . '.wch';
+					$cacheFName = YD_DIR_TEMP . '/' . YD_TMP_PRE . 'W_' . md5( $this->getUrl() ) . '.wch';
 				}
 
 				// Use the cache file if any
@@ -219,7 +219,7 @@
 					$file = new YDFSFile( $cacheFName );
 					$cacheValidTime = $file->getLastModified() + YD_HTTP_CACHE_TIMEOUT;
 					if ( time() < $cacheValidTime ) {
-						return gzuncompress( $file->getContents() );
+						return $file->getContents();
 					}
 				};
 
@@ -247,7 +247,7 @@
 				if ( $cacheFName != null ) {
 					require_once( 'YDFSDirectory.php' );
 					$dir = new YDFSDirectory( YD_DIR_TEMP );
-					$dir->createFile( $cacheFName, gzcompress( $data ) );
+					$dir->createFile( $cacheFName, $data );
 				}
 
 			}
