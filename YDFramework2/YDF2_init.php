@@ -273,7 +273,6 @@
         require_once( YD_DIR_CLSS . '/YDDebugUtil.php' );
         require_once( YD_DIR_CLSS . '/YDError.php' );
         require_once( YD_DIR_CLSS . '/YDFeedCreator.php' );
-        require_once( YD_DIR_CLSS . '/YDFileUtil.php' );
         require_once( YD_DIR_CLSS . '/YDForm.php' );
         require_once( YD_DIR_CLSS . '/YDFSDirectory.php' );
         require_once( YD_DIR_CLSS . '/YDFSFile.php' );
