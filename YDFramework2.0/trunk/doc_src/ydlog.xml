@@ -7,7 +7,9 @@
 
     <sect1 id="ydlog_types">
 
-        <para>In the logging system of the Yellow Duck Framework, there are different levels of messages. We make a differentiation between the following types of log messages:</para>
+        <title>The different types of logging information</title>
+    
+        <para>In the logging system of the Yellow Duck Framework, there are different levels of log messages. We make a differentiation between the following types of log messages:</para>
 
         <itemizedlist spacing="compact">
             <listitem>debug messages (level 4 - YD_LOG_DEBUG)</listitem>
