@@ -205,6 +205,18 @@
          */
         define( 'YD_TMP_PRE', 'YDF_' );
 
+        /**
+         *  @enum YD_EXECUTOR
+         *        This is the name of the class that will be used to process the
+         *        requests. You can change this to whatever class you want as
+         *        long at that class has a "execute" function. The class
+         *        constructor for this class gets the full path of the current
+         *        request as it's argument.
+         */
+        if ( ! defined( 'YD_EXECUTOR' ) ) {
+            define( 'YD_EXECUTOR', 'YDExecutor' );
+        }
+
         // Get debugging mode
         if ( ! defined( 'YD_DEBUG' ) ) {
             if ( $_GET['YD_DEBUG'] == 1 ) {
@@ -237,7 +249,7 @@
         // Include the basis of Yellow Duck framework
         require_once( 'YDBase.php' );
         require_once( 'YDError.php' );
-        require_once( 'YDObjectUtil.php' );
+        //require_once( 'YDObjectUtil.php' );
 
         /**
          *  This function will return true if the current version is lower than
