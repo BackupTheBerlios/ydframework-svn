@@ -34,7 +34,7 @@
 			$form->addElement( 'radio', 'rad2', 'Select a value 2:', array(), array( 1 => 'een<br/>', 2=>'twee' ) );
 			$form->addElement( 'hidden', 'hid1', '' );
 			$form->addElement( 'hidden', 'hid2', '', array(), 'i am also hidden' );
-			$form->addElement( 'image', 'img1', '', array(), 'http://www.yellowduck.be/images/site_images/rss091.gif' );
+			$form->addElement( 'image', 'img1', '', array(), 'http://www.scripting.com/images/xml.gif' );
 			$form->addElement( 'password', 'pas1', 'Enter your password' );
 			$form->addElement( 'bbtextarea', 'bbt1', 'Enter your BBCode' );
 			$form->addElement( 'checkbox', 'chk1', 'Select me please' );
@@ -49,7 +49,7 @@
 			$form->addRule( 'txt1', 'required', 'txt1 is required' );
 			$form->addRule( 'chk2', 'required', 'chk2 is required' );
 			$form->addFormRule( array( & $this, 'formrule' ), 'txt1 is required' );
-			if ( YD_DEBUG == 1 || YD_DEBUG == 2 ) {
+			if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 				YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
 				YDDebugUtil::dump( $form->_regRules, 'Registered rules' );
 				YDDebugUtil::dump( $form->_regFilters, 'Registered filters' );
