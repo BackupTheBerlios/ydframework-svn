@@ -22,7 +22,9 @@
 			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/index.xml' );
 
 			// The different parts
+			echo( '<br>Original URL: ' . $url->_url );
 			echo( '<br>URL: ' . $url->getUrl() );
+			echo( '<br>URI: ' . $url->getUri() );
 			echo( '<br>Scheme: ' . $url->getScheme() );
 			echo( '<br>Host: ' . $url->getHost() );
 			echo( '<br>Port: ' . $url->getPort() );
@@ -33,14 +35,16 @@
 			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
 			echo( '<br>isDirectory( test ): ' . var_export( $url->isDirectory( 'test' ), 1 ) );
 			echo( '<br>isDirectory( xx ): ' . var_export( $url->isDirectory( 'xx' ), 1 ) );
-			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Query: ' . var_export( $url->getQuery(), 1 ) );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
 			// Create the URL object
-			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/index' );
+			$url = new YDUrl( 'http://pieter@www.yellowduck.be/directory/test/index?x[]=22&x[]=23#22' );
 
 			// The different parts
-			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br><br>Original URL: ' . $url->_url );
+			echo( '<br>URL: ' . $url->getUrl() );
+			echo( '<br>URI: ' . $url->getUri() );
 			echo( '<br>Scheme: ' . $url->getScheme() );
 			echo( '<br>Host: ' . $url->getHost() );
 			echo( '<br>Port: ' . $url->getPort() );
@@ -49,14 +53,16 @@
 			echo( '<br>Path: ' . $url->getPath() );
 			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
 			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
-			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Query: ' . var_export( $url->getQuery(), 1 ) );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
 			// Create the URL object
-			$url = new YDUrl( 'http://www.yellowduck.be/directory/test/' );
+			$url = new YDUrl( 'http://pieter:yellowduck@www.yellowduck.be:8080/directory/test/?do=x&id=1#10' );
 
 			// The different parts
-			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br><br>Original URL: ' . $url->_url );
+			echo( '<br>URL: ' . $url->getUrl() );
+			echo( '<br>URI: ' . $url->getUri() );
 			echo( '<br>Scheme: ' . $url->getScheme() );
 			echo( '<br>Host: ' . $url->getHost() );
 			echo( '<br>Port: ' . $url->getPort() );
@@ -65,14 +71,21 @@
 			echo( '<br>Path: ' . $url->getPath() );
 			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
 			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
-			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Query: ' . var_export( $url->getQuery(), 1 ) );
 			echo( '<br>Fragment: ' . $url->getFragment() );
+			echo( '<br>Getting query variable do: ' . $url->getQueryVar( 'do' ) );
+			echo( '<br>Setting query variable do to y: ' . $url->setQueryVar( 'do', 'y' ) );
+			echo( '<br>New URL: ' . $url->getUrl() );
+			echo( '<br>Deleting query variable do: ' . $url->deleteQueryVar( 'do' ) );
+			echo( '<br>New URL: ' . $url->getUrl() );
 
 			// Create the URL object
-			$url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+			$url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
 
 			// The different parts
-			echo( '<br><br>URL: ' . $url->getUrl() );
+			echo( '<br><br>Original URL: ' . $url->_url );
+			echo( '<br>URL: ' . $url->getUrl() );
+			echo( '<br>URI: ' . $url->getUri() );
 			echo( '<br>Scheme: ' . $url->getScheme() );
 			echo( '<br>Host: ' . $url->getHost() );
 			echo( '<br>Port: ' . $url->getPort() );
@@ -81,7 +94,7 @@
 			echo( '<br>Path: ' . $url->getPath() );
 			echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
 			echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
-			echo( '<br>Query: ' . $url->getQuery() );
+			echo( '<br>Query: ' . var_export( $url->getQuery(), 1 ) );
 			echo( '<br>Fragment: ' . $url->getFragment() );
 
 			// Get the contents

@@ -44,13 +44,16 @@
 			$this->_url = $url;
 
 			// Set the defaults
-			$defaults = array(
-				'scheme'   => '', 'host'	 => '', 'port'	 => '', 'user'	 => '', 'pass'	 => '', 'path'	 => '',
-				'query'	=> '', 'fragment' => ''
+			$this->defaults = array(
+				'scheme' => '', 'host' => '', 'port' => '', 'user' => '', 'pass' => '', 'path' => '',
+				'query' => '', 'fragment' => ''
 			);
 
 			// Parse the URL
-			$this->_url_parsed = array_merge( $defaults, parse_url( $url ) );
+			$this->_url_parsed = array_merge( $this->defaults, parse_url( $url ) );
+
+			// Parse the query string
+			parse_str( $this->_url_parsed['query'], $this->_url_parsed['query'] );
 
 		}
 
@@ -72,7 +75,33 @@
 		 *	@returns	The original URL.
 		 */
 		function getUrl() {
-			return $this->_url;
+
+			// Add the scheme
+			$url = $this->getNamedPart( 'scheme' ) . '://';
+
+			// Add the user information
+			if ( $this->getNamedPart( 'user' ) != '' ) {
+				$url .= $this->getNamedPart( 'user' );
+				if ( $this->getNamedPart( 'pass' ) != '' ) {
+					$url .= ':' . $this->getNamedPart( 'pass' );
+				}
+				$url .= '@';
+			}
+
+			// Add the host information
+			$url .= $this->getNamedPart( 'host' ) . '://';
+
+			// Add the port information
+			if ( $this->getNamedPart( 'port' ) != '' ) {
+				$url .= ':' . $this->getNamedPart( 'port' );
+			}
+
+			// Add the URI
+			$url .= $this->getUri();
+
+			// Return the URL
+			return $url;
+
 		}
 
 		/**
@@ -101,7 +130,10 @@
 		 *	@param $value	The new value for the part
 		 */
 		function setNamedPart( $name, $val ) {
-			$this->_url_parsed[$name] = $val;
+			$name = strtolower( $name );
+			if ( in_array( $name, array_keys( $this->defaults ) ) {
+				$this->_url_parsed[$name] = $val;
+			}
 		}
 
 		/**
@@ -208,10 +240,79 @@
 		 *	@returns The URI parts of the URL.
 		 */
 		function getUri() {
-			$uri = $this->_url_parsed['path'] ? $this->_url_parsed['path'] : '';
-			$uri .= $this->_url_parsed['query'] ? '?'.$this->_url_parsed['query'] : '';
-			$uri .= $this->_url_parsed['fragment'] ? '#'.$this->_url_parsed['fragment'] : '';
-			return $uri; 
+
+			// Build the query string
+			$querystr = '';
+			foreach ( $this->getNamedPart( 'query' ) as $key=>$value ) {
+				if ( is_array( $value ) ) {
+					foreach ( $value as $key1=>$val ) {
+						$querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
+						$querystr .= $key . '[]=' . rawurlencode( $val );
+					}
+				} else {
+					$querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
+					$querystr .= $key . '=' . rawurlencode( $value );
+				}
+			}
+
+			// Build the URI
+			$uri = $this->getNamedPart( 'path' ) ? $this->getNamedPart( 'path' ) : '';
+			$uri .= $querystr ? '?'.$querystr : '';
+			$uri .= $this->getNamedPart( 'fragment' ) ? '#'.$this->getNamedPart( 'fragment' ) : '';
+
+			// Return the URI
+			return $uri;
+
+		}
+
+		/**
+		 *	This function will retrieve the contents of a named query string variable. It will return an empty string if
+		 *	the named query variable is not existing. If the name of the query variable indicates that it should be an
+		 *	array, it will makes sure an array is returned.
+		 *
+		 *	@param	$name	The name of the query variable to retrieve.
+		 *
+		 *	@returns	The contents of the query variable.
+		 */
+		function getQueryVar( $name ) {
+			if ( isset( $this->_url_parsed['query'][$name] ) ) {
+				if ( substr( $name, -2, 2 ) == '[]' ) {
+					if ( ! is_array( $this->_url_parsed['query'][$name] ) ) {
+						$this->_url_parsed['query'][$name] = array( $this->_url_parsed['query'][$name] );
+					}
+				}
+				return $this->_url_parsed['query'][$name];
+			} else {
+				return ( substr( $name, -2, 2 ) == '[]' ) ? array() : '';
+			}
+		}
+
+		/**
+		 *	This function will set the indicated query variable to the new value. If the name of the variable indicates
+		 *	that the value is an array, this function will convert it to an array if it's not an array.
+		 *
+		 *	If the query variable is already existing, it's value will be updated. If it's not existing yet, the query
+		 *	variable will be created.
+		 *
+		 *	@param	$name	The name of the query variable to update or set.
+		 *	@param	$val	The value for the query variable.
+		 */
+		function setQueryVar( $name, $val ) {
+			if ( substr( $name, -2, 2 ) == '[]' ) {
+				$val = is_array( $val ) ? $val : array( $val );
+			}
+			$this->_url_parsed['query'][$name] = $val;
+		}
+
+		/**
+		 *	This function will delete the indicated query variable if it exists.
+		 *
+		 *	@param	$name	The name of the query variable to delete.
+		 */
+		function deleteQueryVar( $name ) {
+			if ( isset( $this->_url_parsed['query'][$name] ) ) {
+				unset( $this->_url_parsed['query'][$name] );
+			}
 		}
 
 		/**

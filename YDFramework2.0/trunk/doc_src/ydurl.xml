@@ -68,12 +68,12 @@
 
         <para>The YDUrl class allows you to:</para>
 
-
         <itemizedlist spacing="compact">
             <listitem>Parse an URL and get the specific parts from the URL (such as scheme, host, port, path, query and fragment).</listitem>
             <listitem>Easily get the contents of an URL (optionally applying a regular expression to the result).</listitem>
             <listitem>Easily get the headers for an URL</listitem>
             <listitem>Easily get the status code for an URL.</listitem>
+            <listitem>Easily change parts of the URL</listitem>
         </itemizedlist>
 
         <para>Here's an example that shows you what is possible:</para>
@@ -99,7 +99,7 @@
         function actionDefault() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+            $url = new YDUrl( 'http://usr:pass@yellowduck.be:81/dir/test/?do=x&id=1#10' );
 
             // The different parts
             echo( '<br>URL: ' . $url->getUrl() );
@@ -113,6 +113,11 @@
             echo( '<br>Path directories: ' . implode( ', ', $url->getPathDirectories() ) );
             echo( '<br>Query: ' . $url->getQuery() );
             echo( '<br>Fragment: ' . $url->getFragment() );
+            echo( '<br>Getting query variable do: ' . $url->getQueryVar( 'do' ) );
+            echo( '<br>Setting query variable do to y: ' . $url->setQueryVar( 'do', 'y' ) );
+            echo( '<br>New URL: ' . $url->getUrl() );
+            echo( '<br>Deleting query variable do: ' . $url->deleteQueryVar( 'do' ) );
+            echo( '<br>New URL: ' . $url->getUrl() );
 
             // Get the contents
             YDDebugUtil::dump( $url->getContents(), 'URL contents' );
@@ -147,6 +152,22 @@
     YDInclude( 'YDF2_process.php' );
 
 ?>]]></programlisting>
+
+    </sect1>
+
+    <sect1 id="ydurl_altering">
+
+        <title>Changing the contents of an URL</title>
+
+        <para>Sometimes, you will need to alter an YDUrl object and get the updated URL. Therefor, we provide the following methods:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">setNamedPart:</emphasis> set the value of a named part. The allowed parts are: scheme, host, port, user, pass, path, query and fragment.</listitem>
+            <listitem><emphasis role="bold">setQueryVar:</emphasis> set the value of a query variable.</listitem>
+            <listitem><emphasis role="bold">deleteQueryVar:</emphasis> removes the query variable.</listitem>
+        </itemizedlist>
+
+        <para>After changing the URL, you can use the YDUrl::getURL() function to retrieve the updated url.</para>
 
     </sect1>
 
