@@ -11,9 +11,6 @@
 
 	/**
 	 *	This class defines an object oriented HTML form.
-	 *
-	 *	@todo
-	 *		All registering functions should use lowercase element names.
 	 */
 	class YDForm extends YDBase {
 
@@ -425,9 +422,6 @@
 		/**
 		 *	This function will check if the form was submitted or not.
 		 *
-		 *	@todo
-		 *		Check how it works with file uploads.
-		 *
 		 *	@returns	Boolean indicating if the form was submitted or not.
 		 */
 		function isSubmitted() {
@@ -634,27 +628,38 @@
 
 			// Add the elements
 			foreach ( $form as $name=>$element ) {
-				$html .= '<p>';
-				if ( $element['placeLabel'] == 'after' ) {
-					$html .= $element['html'];
-					if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
-					if ( ! empty( $element['label'] ) ) { $html .= $element['label'] ; }
-					if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
-					if ( ! empty( $element['error'] ) ) {
-						$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+				if ( $element['type'] != 'submit' && $element['type'] != 'reset' ) {
+					$html .= '<p>';
+					if ( $element['placeLabel'] == 'after' ) {
+						$html .= $element['html'];
+						if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
+						if ( ! empty( $element['label'] ) ) { $html .= $element['label'] ; }
+						if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
+						if ( ! empty( $element['error'] ) ) {
+							$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+						}
+					} else {
+						if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
+						if ( ! empty( $element['label'] ) ) { $html .= $element['label']; }
+						if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
+						if ( ! empty( $element['label'] ) ) { $html .= '<br>'; }
+						$html .= $element['html'];
+						if ( ! empty( $element['error'] ) ) {
+							$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
+						}
 					}
-				} else {
-					if ( $element['required'] ) { $html .= $this->_htmlRequiredStart; }
-					if ( ! empty( $element['label'] ) ) { $html .= $element['label']; }
-					if ( $element['required'] ) { $html .= $this->_htmlRequiredEnd; }
-					if ( ! empty( $element['label'] ) ) { $html .= '<br>'; }
-					$html .= $element['html'];
-					if ( ! empty( $element['error'] ) ) {
-						$html .= '<br>' . $this->_htmlErrorStart . $element['error'] . $this->_htmlErrorEnd;
-					}
+					$html .= '</p>';
 				}
-				$html .= '</p>';
 			}
+
+			// Add the buttons
+			$buttons = array();
+			foreach ( $form as $name=>$element ) {
+				if ( $element['type'] == 'submit' || $element['type'] == 'reset' ) {
+					array_push( $buttons, $element['html'] );
+				}
+			}
+			if ( sizeof( $buttons ) > 0 ) { $html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>'; }
 
 			// Close the form tag
 			$html .= '</form>';
