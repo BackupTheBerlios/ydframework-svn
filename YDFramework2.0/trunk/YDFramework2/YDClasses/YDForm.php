@@ -526,10 +526,14 @@
 		function validate() {
 
 			// Form should be submitted
-			if ( $this->isSubmitted() == false ) { return false; }
+			if ( $this->isSubmitted() == false ) {
+				return false; 
+			}
 
 			// Check if there are any rules, if not, form is valid and return true
-			if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 ) { return true; }
+			if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 ) {
+				return true;
+			}
 
 			// Apply the element rules
 			foreach ( $this->_rules as $element=>$rules ) {
@@ -562,7 +566,11 @@
 						);
 
 						// If the result is false, add the error
-						if ( $result == false ) { $this->_errors[ $element ] = $rule['error']; }
+						if ( $result == false ) {
+							if ( ! isset( $this->_errors[ $element ] ) ) {
+								$this->_errors[ $element ] = $rule['error'];
+							}
+						}
 
 					}
 
