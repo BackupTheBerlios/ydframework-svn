@@ -559,10 +559,18 @@
 							);
 						}
 
+						// Get the value of a form element
+						$value = $this->getValue( $element );
+						if ( is_array( $value ) && isset( $value['name'] ) ) {
+							if ( ! in_array( $rule['rule'], array( 'uploadedfile', 'maxfilesize', 'mimetype', 'filename', 'extension' ) ) ) {
+								$value = $value['name'];
+							}
+						}
+
 						// Check the rule
 						// @todo Are we able to handle arrays?
 						$result = call_user_func( 
-							$ruleDetails['callback'], $this->getValue( $element ), $rule['options'] 
+							$ruleDetails['callback'], $value, $rule['options'] 
 						);
 
 						// If the result is false, add the error
