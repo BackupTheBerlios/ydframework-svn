@@ -22,6 +22,7 @@
 		 *	@param $name		The name of the form element.
 		 *	@param $label		The label for the form element.
 		 *	@param $attributes	(optional) The attributes for the form element.
+		 *	@param $options	The options for the elment.
 		 */
 		function YDFormElement( $form, $name, $label, $attributes=array(), $options=array() ) {
 

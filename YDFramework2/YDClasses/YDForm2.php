@@ -134,6 +134,7 @@
 		 *	@param $name	The HTML name for the element.
 		 *	@param $label	The label for the element.
 		 *	@param $attribs	The attributes for the element.
+		 *	@param $options	The options for the elment.
 		 */
 		function addElement( $type, $name, $label, $attribs=array(), $options=array() ) {
 
