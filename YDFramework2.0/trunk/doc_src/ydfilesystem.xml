@@ -22,7 +22,10 @@
             <listitem><emphasis role="bold">getSize:</emphasis> gets the size of the file in bytes</listitem>
             <listitem><emphasis role="bold">isImage:</emphasis> boolean indicating if the file is a image the system can recognize. Currently, only GIF, JPEG and PNG images are recognized.</listitem>
             <listitem><emphasis role="bold">isWriteable:</emphasis> boolean indicating if the file is read only or not (doesn't work reliably on Windows).</listitem>
-            <listitem><emphasis role="bold">downoad:</emphasis> forces the browser to download the file.</listitem>
+            <listitem><emphasis role="bold">download:</emphasis> forces the browser to download the file.</listitem>
+            <listitem><emphasis role="bold">getContents:</emphasis> reads the contents of the file</listitem>
+            <listitem><emphasis role="bold">setContents:</emphasis> sets the contents of the file (can also be used to append data to the file)</listitem>
+            <listitem><emphasis role="bold">delete:</emphasis> removes the file from disk</listitem>
         </itemizedlist>
 
         <para>To get the contents of the file, you can use the getContents function. This function is able to read in both textual and binary data. Optionally, you can define at which byte it should start reading, and you can also define how many bytes should be read. If no options are specified, the complete file will be read.</para>
@@ -56,6 +59,48 @@
 
     // Try to instantiate an object for a non existing file
     $file = new YDFSFile( 'nofile.php' );
+
+?>]]></programlisting>
+
+        <para>To alter the contents of an existing file, you can use the setContents function. With this function, you can:</para>
+
+        <itemizedlist>
+            <listitem>replace the contents of the file</listitem>
+            <listitem>append contents to the existing contents of the file</listitem>
+        </itemizedlist>
+
+        <para>The parameter called "append" in the setContents function calls indicates if you want to append or replace the contents. This is demonstrated with the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Create a dummy file
+    $dir = new YDFSDirectory( '.' );
+    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+    // Update the contents
+    $file->setContents( 'new contents' );
+
+    // Append the contents
+    $file->setContents( '\nappended contents', true );
+
+?>]]></programlisting>
+
+        <para>The file associated with a YDFSFile object can also be deleted by calling it's "delete" function. This is demonstrated by the following code sample:</para>
+
+        <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Create a dummy file
+    $dir = new YDFSDirectory( '.' );
+    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+    // Delete the file
+    $file->delete();
 
 ?>]]></programlisting>
 
@@ -226,6 +271,10 @@
             <listitem><emphasis role="bold">isAbsolute:</emphasis> This function will check if the path is an absolute path or not.</listitem>
             <listitem><emphasis role="bold">join:</emphasis> This function combines different file path elements to each other.</listitem>
         </itemizedlist>
+
+        <para>Most of these functions are straightforward and self-explaining. However, the join function requires a little bit of explanation:</para>
+
+        <para>The YDPath::join function joins one or more path components intelligently. If any component is an absolute path, all previous components are thrown away, and joining continues. The return value is the concatenation of path1, and optionally path2, etc., with exactly one directory separator (YDPath::getDirectorySeparator()) inserted between components</para>
 
     </sect1>
 

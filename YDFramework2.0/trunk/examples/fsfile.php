@@ -32,11 +32,30 @@
 			echo( '<br>LastModified: ' . $file->getLastModified() );
 			echo( '<br>File size: ' . $file->getSize() );
 
-			// Contents
+			// Get the contents
 			YDDebugUtil::dump( $file->getContents(), '$file->getContents()' );
 
-			// Contents
+			// Get the partial contents
 			YDDebugUtil::dump( $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )' );
+
+			// Create a dummy file
+			$dir = new YDFSDirectory( '.' );
+			$file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+			// Update the contents
+			$file->setContents( 'new contents' );
+
+			// Get the contents
+			YDDebugUtil::dump( $file->getContents(), '$file->getContents() after update' );
+
+			// Append the contents
+			$file->setContents( '\nappended contents', true );
+
+			// Get the contents
+			YDDebugUtil::dump( $file->getContents(), '$file->getContents() after append' );
+
+			// Delete the file
+			$file->delete();
 
 			// Get the file object for the current file
 			$file = new YDFSFile( 'nofile.php' );
@@ -60,4 +79,4 @@
 	// Process the request
 	YDInclude( 'YDF2_process.php' );
 
-?>
+?>new contents

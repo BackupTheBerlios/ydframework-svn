@@ -350,7 +350,6 @@
 		 *	@returns	String containing the last modification date of the object.
 		 */
 		function getLastModified() {
-			//clearstatcache();
 			return filemtime( $this->getAbsolutePath() );
 		}
 
@@ -360,7 +359,6 @@
 		 *	@returns	Double containing the length of the file.
 		 */
 		function getSize() {
-			//clearstatcache();
 			return filesize( $this->getAbsolutePath() );
 		}
 
@@ -374,6 +372,9 @@
 		 *	@returns	String containing the contents of the file.
 		 */
 		function getContents( $start=null, $length=null ) {
+
+			// Clear the stat cache
+			clearstatcache();
 
 			// Check the start byte
 			if ( $start == null ) {
@@ -412,6 +413,42 @@
 
 			// Return the result
 			return $result;
+
+		}
+
+		/**
+		 *	This function will create a new file in the current directory, and will write the specified contents to the
+		 *	file. Once finished, it will return a new YDFSFile object pointing to the file. All directory paths are 
+		 *	relative to the current directory.
+		 *
+		 *	@param $contents	The contents of the new file.
+		 *	@param $append		Boolean indicating if the content should be appended to the file or if the file contents
+		 *						should be replaced.
+		 */
+		function setContents( $contents, $append=false ) {
+
+			// Set the mode
+			$mode = ( $append === true ) ? 'ab' : 'wb';
+
+			// Open the file
+			$fp = fopen( $this->getAbsolutePath(), $mode );
+
+			// Save the contents to the file
+			$result = fwrite( $fp, $contents );
+
+			// Check for errors
+			if ( $result == false ) {
+				trigger_error(
+					'Failed writing to the file "' . $this->getAbsolutePath() . '" in the directory called "' . $this->getPath() . '".',
+					YD_ERROR
+				);
+			}
+
+			// Close the file
+			fclose( $fp );
+
+			// Clear the stat cache
+			clearstatcache();
 
 		}
 
@@ -484,6 +521,53 @@
 			// Stop the execution
 			die();
 		
+		}
+
+		/**
+		 *	This function will delete a file from the current directory.
+		 *
+		 *	@param $failOnError	(optional) Indicate if a fatal error needs to be raised if deleting the file failed.
+		 *
+		 *	@return	There are three possible return values for this function. True indicates that the file exists and
+		 *			is deleted successfully. False indicates the file exists but could not be deleted. Null indicates
+		 *			the file didn't exist and therefor could not be deleted.
+		 */
+		function delete( $failOnError=false ) {
+
+			// Set the filename
+			$filename = $this->getAbsolutePath();
+
+			// Set the directory of this object as the working directory
+			chdir( $this->getPath() );
+
+			// Check if the file exists
+			if ( file_exists( $filename ) ) {
+
+				// Try to delete the file
+				$result = unlink( $filename );
+
+				// Check for errors
+				if ( $result == false ) {
+
+					// Check if we need to raise an error
+					if ( $failOnError == true ) {
+						trigger_error(
+							'Failed deleting the file "' . $file . '" from the directory "' . $this->getPath() . '".',
+							YD_ERROR
+						);
+					}
+
+				}
+
+				
+				// Return if the file was deleted or not
+				return $result;
+				
+			}
+			
+			// Return null if the file doesn't exist
+			return null;
+
 		}
 
 		/**
@@ -964,7 +1048,6 @@
 		 */
 		function getPath() {
 			return YDPath::getFullPath( $this->_path );
-			//return realpath( $this->_path );
 		}
 
 		/**
@@ -1003,7 +1086,7 @@
 			// Check for errors
 			if ( $result == false ) {
 				trigger_error(
-					'Failed writing to the file "' . $file . '" in the directory called "' . $this->getPath() . '".',
+					'Failed writing to the file "' . $filename . '" in the directory called "' . $this->getPath() . '".',
 					YD_ERROR
 				);
 			}
@@ -1213,31 +1296,31 @@
 		 */
 		function _delete( $dirname ) {
 		
-		    // Simple delete for a file 
-    		if ( is_file( $dirname ) ) { 
-        		return unlink( $dirname ); 
-    		} 
+			// Simple delete for a file 
+			if ( is_file( $dirname ) ) { 
+				return unlink( $dirname ); 
+			} 
 
-    		// Loop through the folder 
-    		$dir = dir( $dirname ); 
+			// Loop through the folder 
+			$dir = dir( $dirname ); 
 			while ( false !== $entry = $dir->read() ) {
 			
-        		// Skip pointers 
-        		if ( $entry == '.' || $entry == '..' ) { 
-            		continue; 
-        		} 
+				// Skip pointers 
+				if ( $entry == '.' || $entry == '..' ) { 
+					continue; 
+				} 
 
-        		// Deep delete directories      
-        		if ( is_dir( "$dirname/$entry" ) ) { 
-        		    YDFSDirectory::_delete( "$dirname/$entry" ); 
-        		} else { 
-        		    unlink( "$dirname/$entry" ); 
-        		} 
-    		} 
+				// Deep delete directories      
+				if ( is_dir( "$dirname/$entry" ) ) { 
+					YDFSDirectory::_delete( "$dirname/$entry" ); 
+				} else { 
+					unlink( "$dirname/$entry" ); 
+				} 
+			} 
 
-    		// Clean up 
-    		$dir->close(); 
-    		return rmdir( $dirname ); 
+			// Clean up 
+			$dir->close(); 
+			return rmdir( $dirname ); 
 		
 		}
 
