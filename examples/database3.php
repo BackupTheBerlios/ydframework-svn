@@ -37,6 +37,18 @@
 			// Show number of queries
 			YDDebugUtil::dump( $db->getSqlCount(), 'Number of queries' );
 
+			// Test timestamps
+			YDDebugUtil::dump( $db->getDate(), 'getDate()' );
+			YDDebugUtil::dump( $db->getTime(), 'getTime()' );
+			YDDebugUtil::dump( $db->getDate( '__NOW__' ), 'getDate( \'__NOW__\' )' );
+			YDDebugUtil::dump( $db->getTime( '__NOW__' ), 'getTime( \'__NOW__\' )' );
+			YDDebugUtil::dump( $db->getDate( '28-FEB-1977' ), 'getDate( \'28-FEB-1977\' )' );
+			YDDebugUtil::dump( $db->getTime( '28-FEB-1977' ), 'getTime( \'28-FEB-1977\' )' );
+			YDDebugUtil::dump( $db->sqlString( $db->getDate() ), 'sqlString( getDate() )' );
+			YDDebugUtil::dump( $db->sqlString( $db->getTime() ), 'sqlString( getTime() )' );
+			YDDebugUtil::dump( $db->sqlString( $db->getDate( '__NOW__' ) ), 'sqlString( getDate( \'__NOW__\' ) )' );
+			YDDebugUtil::dump( $db->sqlString( $db->getTime( '__NOW__' ) ), 'sqlString( getTime( \'__NOW__\' ) )' );
+
 			// Test errors
 			YDDebugUtil::dump( $db->getRecords( 'xx' ), 'should return error' );
 

@@ -142,11 +142,12 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			if ( is_string( $string ) {
-				return sqlite_escape_string( $string );
-			} else {
-				return $string;
+			if ( is_string( $string ) ) {
+				if ( strtolower( $string ) != 'null' ) {
+					return sqlite_escape_string( $string );
+				}
 			}
+			return $string;
 		}
 
 		/**

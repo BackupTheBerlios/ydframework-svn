@@ -26,6 +26,7 @@
 		 */
 		function YDDatabaseDriver_postgres( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
+			$this->_fmtTimeStamp = 'Y-m-d G:i:s';
 		}
 
 		/**
@@ -140,11 +141,12 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			if ( is_string( $string ) {
-				return pg_escape_string( $string );
-			} else {
-				return $string;
+			if ( is_string( $string ) ) {
+				if ( strtolower( $string ) != 'null' ) {
+					return pg_escape_string( $string );
+				}
 			}
+			return $string;
 		}
 
 		/**

@@ -11,9 +11,6 @@
 
 	/**
 	 *	This class defines a database driver for Oracle8i using the OCI8 interface.
-	 *
-	 *	@remark
-	 *		This class is by no means stable and still very experimental. Use it at your own risk only!
 	 */
 	class YDDatabaseDriver_oracle extends YDDatabaseDriver {
 
@@ -29,6 +26,9 @@
 		 */
 		function YDDatabaseDriver_oracle( $db, $user='', $pass='', $host='', $options=array() ) {
 			$this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
+			$this->_NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS';
+			$this->_fmtDate = 'Y-m-d';
+			$this->_fmtTimeStamp = 'Y-m-d, h:i:s A';
 		}
 
 		/**
@@ -61,6 +61,10 @@
 					YDFatalError( $error['message'] );
 				}
 				$this->_conn = $conn;
+				$stmt = OCIParse(
+					$this->_conn, 'ALTER SESSION SET NLS_DATE_FORMAT=\'' . $this->_NLS_DATE_FORMAT . '\''
+				);
+				@OCIExecute( $stmt );
 			}
 		}
 
@@ -126,6 +130,78 @@
 			if ( $this->_conn != null ) {
 				$this->_conn = null;
 				@OCILogoff( $this->_conn );
+			}
+		}
+
+		/**
+		 *	This function will escape a string so that it's safe to include it in an SQL statement.
+		 *
+		 *	@param $string	The string to escape.
+		 *
+		 *	@returns	The escaped string.
+		 */
+		function string( $string ) {
+			if ( is_string( $string ) ) {
+				if ( strtolower( $string ) != 'null' ) {
+					return str_replace( "'", "''", $string );
+				}
+			}
+			return $string;
+		}
+
+		/**
+		 *	This function will escape a string so that it's safe to include it in an SQL statement and will surround it
+		 *	with the quotes appropriate for the database backend.
+		 *
+		 *	@param $string	The string to escape.
+		 *
+		 *	@returns	The escaped string surrounded by quotes.
+		 */
+		function sqlString( $string ) {
+			if ( strtolower( $string ) == 'null' ) {
+				return 'null';
+			}
+			if ( strtolower( substr( $string, 0, 7 ) ) == 'to_date' ) {
+				return $string;
+			}
+			return $this->_fmtQuote . $this->string( $string ) . $this->_fmtQuote;
+		}
+
+		/**
+		 *	Format the $date in the format the database accepts. The $date parameter can be a Unix integer timestamp or
+		 *	an ISO format Y-m-d. Uses the fmtDate field, which holds the format to use. If null or false or '' is passed
+		 *	in, it will be converted to an SQL null.
+		 *
+		 *	@param $date	(optional) Unix integer timestamp or an ISO format Y-m-d. If you give it the string value
+		 *					__NOW__, the current time will be used.
+		 *
+		 *	@returns	The properly formatted date for the database.
+		 */
+		function getDate( $date='' ) {
+			$date = $this->_getDateOrTime( $date, $this->_fmtDate );
+			if ( $date == 'null' ) {
+				return $date;
+			} else {
+				return 'TO_DATE ( \'' . $date . '\', \'YYYY-MM-DD\' )';
+			}
+		}
+
+		/**
+		 *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO 
+		 *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is 
+		 *	passed in, it will be converted to an SQL null.
+		 *
+		 *	@param $time	(optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
+		 *					value __NOW__, the current time will be used.
+		 *
+		 *	@returns	The properly formatted timestamp for the database.
+		 */
+		function getTime( $time='' ) {
+			$time = $this->_getDateOrTime( $time, $this->_fmtTimeStamp );
+			if ( $time == 'null' ) {
+				return $time;
+			} else {
+				return 'TO_DATE ( \'' . $time . '\', \'RRRR-MM-DD, HH:MI:SS AM\')';
 			}
 		}
 

@@ -42,6 +42,11 @@
 			// Keep count of the number of executed SQL statements
 			$this->_sqlCount = 0;
 
+			// Date and timestamp, and quote styles
+			$this->_fmtDate = 'Y-m-d';
+			$this->_fmtTimeStamp = 'Y-m-d H:i:s';
+			$this->_fmtQuote = "'";
+
 		}
 
 		/**
@@ -183,11 +188,80 @@
 		 *	@returns	The escaped string.
 		 */
 		function string( $string ) {
-			if ( is_string( $string ) {
-				return str_replace( "'", "''", $string );
-			} else {
-				return $string;
+			if ( is_string( $string ) ) {
+				if ( strtolower( $string ) != 'null' ) {
+					return str_replace( "'", "''", $string );
+				}
 			}
+			return $string;
+		}
+
+		/**
+		 *	This function will escape a string so that it's safe to include it in an SQL statement and will surround it
+		 *	with the quotes appropriate for the database backend.
+		 *
+		 *	@param $string	The string to escape.
+		 *
+		 *	@returns	The escaped string surrounded by quotes.
+		 */
+		function sqlString( $string ) {
+			if ( is_string( $string ) ) {
+				if ( strtolower( $string ) != 'null' ) {
+					return $this->_fmtQuote . $this->string( $string ) . $this->_fmtQuote;
+				}
+			}
+			return $string;
+		}
+
+		/**
+		 *	Format the $date in the format the database accepts. The $date parameter can be a Unix integer timestamp or
+		 *	an ISO format Y-m-d. Uses the fmtDate field, which holds the format to use. If null or false or '' is passed
+		 *	in, it will be converted to an SQL null.
+		 *
+		 *	@param $date	(optional) Unix integer timestamp or an ISO format Y-m-d. If you give it the string value
+		 *					__NOW__, the current time will be used.
+		 *
+		 *	@returns	The properly formatted date for the database.
+		 */
+		function getDate( $date='' ) {
+			return $this->_getDateOrTime( $date, $this->_fmtDate );
+		}
+
+		/**
+		 *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO 
+		 *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is 
+		 *	passed in, it will be converted to an SQL null.
+		 *
+		 *	@param $time	(optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
+		 *					value __NOW__, the current time will be used.
+		 *
+		 *	@returns	The properly formatted timestamp for the database.
+		 */
+		function getTime( $time='' ) {
+			return $this->_getDateOrTime( $time, $this->_fmtTimeStamp );
+		}
+
+		/**
+		 *	This function will convert the argument to a date or timestamp.
+		 *
+		 *	@param $time	The argument to convert.
+		 *	@param $fmt		The format to return the argument in.
+		 *
+		 *	@returns	The argument as date or time.
+		 *
+		 *	@internal
+		 */
+		function _getDateOrTime( $arg='', $fmt='' ) {
+			if ( empty( $arg ) || $arg == false || $arg == null ) {
+				return 'null';
+			}
+			if ( $arg == '__NOW__' ) {
+				$arg = time();
+			}
+			if ( is_string( $arg ) ) {
+				$arg = strtotime( $arg );
+			}
+			return date( $fmt, $arg );
 		}
 
 		/**
@@ -214,7 +288,7 @@
 			foreach ( $values as $key=>$value ) {
 				if ( substr( $key, 0, 1 ) != '_' ) {
 					array_push( $ifields, $key );
-					array_push( $ivalues, "'" . $this->string( $value ) . "'" );
+					array_push( $ivalues, $this->sqlString( $value ) );
 				}
 			}
 
@@ -253,7 +327,7 @@
 			$uvalues = array();
 			foreach ( $values as $key=>$value ) {
 				if ( substr( $key, 0, 1 ) != '_' ) {
-					array_push( $uvalues, $key . "='" . $this->string( $value ) . "'" );
+					array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
 				}
 			}
 
