@@ -51,11 +51,11 @@
 			$this->_errors = array();
 			
 			// Some static HTML things
-			$this->_htmlRequiredStart = '<font color="red">(required)</font> <b>';
-			$this->_htmlRequiredEnd = '</b></font>';
+			$this->_htmlRequiredStart =  '';
+			$this->_htmlRequiredEnd = ' <font color="red">(required)</font>';
 			$this->_htmlErrorStart = '<font color="red">Error: ';
 			$this->_htmlErrorEnd = '</font>';
-			$this->_requiredNote = 'Items in bold are required';
+			$this->_requiredNote = '';
 
 			// The list of default values
 			$this->_defaults = array();
@@ -137,7 +137,7 @@
 		 *	@param $text	The text to show.
 		 */
 		function setRequiredNote( $text ) {
-			$this->_requiredNote = 'text';
+			$this->_requiredNote = $text;
 		}
 
 		/**
