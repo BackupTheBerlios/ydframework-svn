@@ -43,8 +43,8 @@ xsltproc --output pdf\YDFramework2.fo xsl_fo.xsl _ydframework.xml
 
 rem Fix the FO document
 echo Fixing fontsizes
-python fixfo.py pdf\YDFramework2.fo
-if not "%ERRORLEVEL%" == "0" cscript //nologo fixfont.vbs pdf\YDFramework2.fo
+python fixfont.py pdf\YDFramework2.fo
+if not "%ERRORLEVEL%" == "0" cscript //nologo fixfo.vbs pdf\YDFramework2.fo
 
 rem Create the PDF
 echo Converting YDFramework2.fo to PDF
