@@ -7,6 +7,38 @@
 
     <sect1 id="ydchangelog_ydf_v2_0b4">
 
+        <title>Yellow Duck Framework 2.0 Release Candidate 1</title>
+
+        <para>Released on: not released yet</para>
+        <para>Build number: not released yet</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Replaced SmartyLight with the full blown Smarty template engine</listitem>
+            <listitem>Brand new documentation based on DocBook XML/XSL. We now have HTML and PDF documentation.</listitem>
+            <listitem>Completely reworked YDEmail class which is now powered by phpMailer.</listitem>
+            <listitem>Added the possibility to do logging to a file using the YDLog module</listitem>
+            <listitem>Fixed a whole number of bugs in the validation rules and added quite a number of new validation rules. The following rules were added:
+                <itemizedlist spacing="compact">
+                    <listitem>character</listitem>
+                    <listitem>digit</listitem>
+                    <listitem>in_array</listitem>
+                    <listitem>not_in_array</listitem>
+                    <listitem>exact</listitem>
+                </itemizedlist>
+            </listitem>
+            <listitem>Implemented recordset paging using the YDDatabaseDriver::getRecordsAsSet function returning a YDDatabaseSet object.</listitem>
+            <listitem>Added the possibility to change URLs with the YDUrl class.</listitem>
+            <listitem>Added the YDPath module containing a whole number of frequently-used path operations.</listitem>
+            <listitem>Improved YDFSFile, YDFSImage YDFSDirectory classes.</listitem>
+            <listitem>YDDebugUtil can now output as HTML</listitem>
+            <listitem>The YDTimer class now supports markers</listitem>
+            <listitem>Removed our custom template caching in favor of the Smarty caching functions</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydchangelog_ydf_v2_0b4">
+
         <title>Yellow Duck Framework 2.0 beta 4</title>
 
         <para>Released on: 22 october 2004</para>
