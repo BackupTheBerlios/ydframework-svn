@@ -205,7 +205,7 @@
 		 *	This returns the URL to the previous page. If there is no previous page, it will return false.
 		 *
 		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
 		 *						"size"
 		 *
 		 *	@returns	The URL to the previous page or false if no previous page.
@@ -226,7 +226,7 @@
 		 *	This returns the URL to the current page.
 		 *
 		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
 		 *						"size"
 		 *
 		 *	@returns	The URL to the current page.
@@ -242,7 +242,7 @@
 		 *	This returns the URL to the next page. If there is no next page, it will return false.
 		 *
 		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
 		 *						"size"
 		 *
 		 *	@returns	The URL to the next page or false if no next page.
@@ -264,7 +264,7 @@
 		 *
 		 *	@param	$page		The page number.
 		 *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-		 *	@param	$sizeevar	(optional) The name of the query string variable indicating the page size. Defaults to
+		 *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
 		 *						"size"
 		 *
 		 *	@returns	The updated URL.
