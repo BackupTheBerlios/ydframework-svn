@@ -341,6 +341,9 @@
             if ( intval( $val['minutes'] ) < 0 || intval( $val['minutes'] ) > 59 ) {
                 return false;
             }
+            if ( isset( $val['seconds'] ) && intval( $val['seconds'] ) < 0 || intval( $val['seconds'] ) > 59 ) {
+                return false;
+            }
             return true;
         }
 
