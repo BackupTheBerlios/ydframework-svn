@@ -7,10 +7,10 @@
 	require_once( 'YDRequest.php' );
 
 	// Class definition
-	class sampleRequest extends YDRequest {
+	class sample extends YDRequest {
 
 		// Class constructor
-		function sampleRequest() {
+		function sample() {
 			$this->YDRequest();
 		}
 

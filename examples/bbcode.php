@@ -9,10 +9,10 @@
 	require_once( 'YDFSFile.php' );
 
 	// Class definition
-	class bbcodeRequest extends YDRequest {
+	class bbcode extends YDRequest {
 
 		// Class constructor
-		function bbcodeRequest() {
+		function bbcode() {
 			$this->YDRequest();
 		}
 

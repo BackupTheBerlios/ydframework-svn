@@ -37,7 +37,7 @@
 			}
 
 			// Construct the name of the request class
-			$clsName = basename( $this->_file, YD_SCR_EXT ) . 'Request';
+			$clsName = basename( $this->_file, YD_SCR_EXT );
 			$clsInst = new $clsName();
 
 			// Check if the object a YDRequest object

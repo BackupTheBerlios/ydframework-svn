@@ -7,10 +7,10 @@
 	require_once( 'YDRequest.php' );
 
 	// Class definition
-	class indexRequest extends YDRequest {
+	class index extends YDRequest {
 
 		// Class constructor
-		function indexRequest() {
+		function index() {
 			$this->YDRequest();
 		}
 

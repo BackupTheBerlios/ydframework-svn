@@ -18,10 +18,10 @@
 	}
 
 	// Class definition (handles the actual request)
-	class extendingRequest extends customBaseRequest {
+	class extending extends customBaseRequest {
 
 		// Class constructor
-		function extendingRequest() {
+		function extending() {
 			$this->customBaseRequest();
 		}
 

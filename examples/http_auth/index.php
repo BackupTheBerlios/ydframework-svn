@@ -4,9 +4,9 @@
 
 	require_once( 'MyLoginRequest.php' );
 
-	class indexRequest extends MyLoginRequest {
+	class index extends MyLoginRequest {
 
-		function indexRequest() {
+		function index() {
 			$this->MyLoginRequest();
 		}
 

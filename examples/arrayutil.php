@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class arrayutilRequest extends YDRequest {
+	class arrayutil extends YDRequest {
 
 		// Class constructor
-		function arrayutilRequest() {
+		function arrayutil() {
 			$this->YDRequest();
 		}
 

@@ -14,10 +14,10 @@
 	require_once( 'YDFeedCreator.php' );
 
 	// Class definition
-	class pbaseRequest extends YDRequest {
+	class pbase extends YDRequest {
 
 		// Class constructor
-		function pbaseRequest() {
+		function pbase() {
 
 			// Initialize the parent
 			$this->YDRequest();

@@ -7,10 +7,10 @@
 	require_once( 'YDRequest.php' );
 
 	// Class definition
-	class constantsRequest extends YDRequest {
+	class constants extends YDRequest {
 
 		// Class constructor
-		function constantsRequest() {
+		function constants() {
 			$this->YDRequest();
 		}
 

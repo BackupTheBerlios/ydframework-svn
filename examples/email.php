@@ -10,10 +10,10 @@
 	require_once( 'YDTemplate.php' );
 
 	// Class definition
-	class emailRequest extends YDRequest {
+	class email extends YDRequest {
 
 		// Class constructor
-		function emailRequest() {
+		function email() {
 			$this->YDRequest();
 		}
 

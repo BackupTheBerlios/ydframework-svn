@@ -7,10 +7,10 @@
 	require_once( 'YDRequest.php' );
 
 	// Class definition
-	class phpinforequest extends YDRequest {
+	class phpinfo extends YDRequest {
 
 		// Class constructor
-		function phpinforequest() {
+		function phpinfo() {
 			$this->YDRequest();
 		}
 

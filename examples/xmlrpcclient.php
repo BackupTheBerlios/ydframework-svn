@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class xmlrpcclientRequest extends YDRequest {
+	class xmlrpcclient extends YDRequest {
 
 		// Class constructor
-		function xmlrpcclientRequest() {
+		function xmlrpcclient() {
 			$this->YDRequest();
 		}
 

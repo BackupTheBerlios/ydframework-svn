@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class urlRequest extends YDRequest {
+	class url extends YDRequest {
 
 		// Class constructor
-		function urlRequest() {
+		function url() {
 			$this->YDRequest();
 		}
 

@@ -9,7 +9,7 @@
 	require_once( 'YDFSDirectory.php' );
 
 	// Class definition
-	class formRequest extends YDRequest {
+	class form extends YDRequest {
 
 		// Class constructor
 		function formRequest() {
@@ -17,7 +17,7 @@
 		}
 
 		// Default action
-		function actionDefault() {
+		function action() {
 
 			// Set the title of the form
 			$this->setVar( 'title', 'Sample form' );

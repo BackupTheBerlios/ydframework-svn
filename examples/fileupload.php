@@ -10,10 +10,10 @@
 	require_once( 'YDStringUtil.php' );
 
 	// Class definition
-	class fileuploadRequest extends YDRequest {
+	class fileupload extends YDRequest {
 
 		// Class constructor
-		function fileuploadRequest() {
+		function fileupload() {
 			$this->YDRequest();
 		}
 

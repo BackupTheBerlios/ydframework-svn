@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class database2Request extends YDRequest {
+	class database2 extends YDRequest {
 
 		// Class constructor
-		function database2Request() {
+		function database2() {
 			$this->YDRequest();
 		}
 

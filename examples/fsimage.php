@@ -10,10 +10,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class fsimageRequest extends YDRequest {
+	class fsimage extends YDRequest {
 
 		// Class constructor
-		function fsimageRequest() {
+		function fsimage() {
 			$this->YDRequest();
 		}
 

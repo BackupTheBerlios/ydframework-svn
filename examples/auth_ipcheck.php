@@ -7,10 +7,10 @@
 	require_once( 'YDRequest.php' );
 
 	// Class definition
-	class auth_ipcheckRequest extends YDRequest {
+	class auth_ipcheck extends YDRequest {
 
 		// Class constructor
-		function auth_ipcheckRequest() {
+		function auth_ipcheck() {
 			$this->YDRequest();
 			$this->setRequiresAuthentication( true );
 		}

@@ -9,10 +9,10 @@
 	require_once( 'YDDebugUtil.php' );
 
 	// Class definition
-	class fsdirectoryRequest extends YDRequest {
+	class fsdirectory extends YDRequest {
 
 		// Class constructor
-		function fsdirectoryRequest() {
+		function fsdirectory() {
 			$this->YDRequest();
 		}
 

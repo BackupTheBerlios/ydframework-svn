@@ -7,10 +7,10 @@
 	require_once( 'MyLoginRequest.php' );
 
 	// Class definition
-	class userinfoRequest extends MyLoginRequest {
+	class userinfo extends MyLoginRequest {
 
 		// Class constructor
-		function userinfoRequest() {
+		function userinfo() {
 			$this->MyLoginRequest();
 		}
 

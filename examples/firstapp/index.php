@@ -10,10 +10,10 @@
 	require_once( 'YDForm.php' );
 
 	// Class definition for the index request
-	class indexRequest extends YDRequest {
+	class index extends YDRequest {
 
 		// Class constructor
-		function indexRequest() {
+		function index() {
 
 			// Initialize the parent class
 			$this->YDRequest();

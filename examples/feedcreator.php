@@ -8,10 +8,10 @@
 	require_once( 'YDFeedCreator.php' );
 
 	// Class definition
-	class feedcreatorRequest extends YDRequest {
+	class feedcreator extends YDRequest {
 
 		// Class constructor
-		function feedcreatorRequest() {
+		function feedcreator() {
 
 			// Initialize the parent class
 			$this->YDRequest();

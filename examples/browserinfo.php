@@ -8,10 +8,10 @@
 	require_once( 'YDBrowserInfo.php' );
 
 	// Class definition
-	class browserinfoRequest extends YDRequest {
+	class browserinfo extends YDRequest {
 
 		// Class constructor
-		function browserinfoRequest() {
+		function browserinfo() {
 			$this->YDRequest();
 		}
 

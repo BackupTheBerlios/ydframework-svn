@@ -7,10 +7,10 @@
 	require_once( 'MyLoginRequest.php' );
 
 	// Class definition
-	class indexRequest extends MyLoginRequest {
+	class index extends MyLoginRequest {
 
 		// Class constructor
-		function indexRequest() {
+		function index() {
 			$this->MyLoginRequest();
 		}
 
