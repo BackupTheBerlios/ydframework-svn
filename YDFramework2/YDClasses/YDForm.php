@@ -69,6 +69,7 @@
 
 			// Add the standard elements
 			$this->registerElement( 'bbtextarea', 'YDFormElement_BBTextArea', 'YDFormElement_BBTextArea.php' );
+			$this->registerElement( 'button', 'YDFormElement_Button', 'YDFormElement_Button.php' );
 			$this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
 			$this->registerElement( 'file', 'YDFormElement_File', 'YDFormElement_File.php' );
 			$this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
@@ -370,6 +371,10 @@
 		 *	@param $name	The name of the form element.
 		 *
 		 *	@returns	The value to the specified form element.
+		 *
+		 *	@todo
+		 *		Buttons should only return a value if clicked (all other elements as well?). Maybe we should have this
+		 *		as a special property for an element?
 		 */
 		function getValue( $name ) {
 
@@ -397,6 +402,16 @@
 					return $_FILES[ $this->_name . '_' . $name ];
 				}
 			}
+
+			// Buttons should only return a value if clicked
+			// we can check $_formVars for this.
+			//var $_formVars = 
+			//array (
+			//	'contactForm_contactName' => 'te',
+			//	'contactForm_contactEmail' => 'te@test.info',
+			//	'contactForm_contactBody' => 'te',
+			//	'contactForm_cmdPreview' => 'preview',
+			//);
 
 			// Unset the element
 			unset( $element );
@@ -595,6 +610,9 @@
 		 *	This function will return the form as HTML.
 		 *
 		 *	@returns	The form as HTML text.
+		 *
+		 *	@todo
+		 *		Error should be placed between element label and element itself.
 		 */
 		function toHtml() {
 
