@@ -70,6 +70,7 @@
 
             // Output the template
             $this->outputTemplate();
+
         }
 
     }

@@ -68,9 +68,6 @@
      *      </form>
      *  {/if}
      *  @endcode
-     *
-     *  @todo
-     *      Needs to extend YDBase instead of HTML_QuickForm directly.
      */
     class YDForm extends HTML_QuickForm {
 
@@ -110,6 +107,10 @@
             $this->HTML_QuickForm(
                 $name, $method, YD_SELF_URI, $target, $attributes
             );
+
+            // Aggregate the functions from the YDBase class
+            aggregate( $this, 'YDBase' );
+            YDBase::YDBase();
 
         }
 
