@@ -472,26 +472,31 @@
 						foreach ( $pattern as $patternitem ) {
 							if ( ! empty( $patternitem ) ) {
 								if ( YDFSDirectory::_match( $patternitem, $file ) ) {
-									array_push( $fileList, $file );
+									$fileList[ strtolower( $file ) ] = $file;
+									//array_push( $fileList, $file );
 								}
 							} else {
-								array_push( $fileList, $file );
+								$fileList[ strtolower( $file ) ] = $file;
+								//array_push( $fileList, $file );
 							}
 						}
 					} else {
 						if ( ! empty( $pattern ) ) {
 							if ( YDFSDirectory::_match( $pattern, $file ) ) {
-								array_push( $fileList, $file );
+								$fileList[ strtolower( $file ) ] = $file;
+								//array_push( $fileList, $file );
 							}
 						} else {
-							array_push( $fileList, $file );
+							$fileList[ strtolower( $file ) ] = $file;
+							//array_push( $fileList, $file );
 						}
 					}
 				}
 			}
 
 			// Sort the list of files
-			sort( $fileList );
+			ksort( $fileList );
+			$fileList = array_values( $fileList );
 
 			// Convert the list of a list of YDFile objects
 			$fileList2 = array();
