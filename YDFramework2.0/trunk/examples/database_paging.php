@@ -3,6 +3,9 @@
 	// Standard include
 	require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
+	// Define the default pagesize
+	define( 'YD_DB_DEFAULTPAGESIZE', 15 );
+
 	// Includes
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDDatabase.php' );
