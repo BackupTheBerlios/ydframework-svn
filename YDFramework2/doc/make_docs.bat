@@ -4,3 +4,5 @@ rem Generate the API documentation
 rmdir /Q /S api
 mkdir api
 doxygen docs_api.dxy
+
+python convert_wiki.py

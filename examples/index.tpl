@@ -320,7 +320,7 @@
 		<p>&nbsp;<br><b>Documentation</b></p>
 
 		<p>View the <a href="../YDFramework2/doc/api/index.html">API documentation</a> or read the
-		<a href="http://www.yellowduck.be/ydf2/ydf2_userguide.pdf">user guide</a> (online PDF).</p>
+		<a href="../YDFramework2/doc/userguide/index.html">user guide</a> (online PDF).</p>
 	
 	<?php } ?>
 
