@@ -199,6 +199,16 @@
 		}
 
 		/** 
+		 *	This function returns true if the variable is exactly as specified in the options.
+		 *
+		 *	@param $val		The value to test.
+		 *	@param $opts	(not required)
+		 */
+		function exact( $val, $opts ) {
+			return $val === $opts;;
+		}
+
+		/** 
 		 *	This function returns true if the variable is in the array specified in the options.
 		 *
 		 *	@param $val		The value to test.

@@ -117,6 +117,7 @@
 			$this->registerRule( 'digit', array( 'YDValidateRules', 'digit' ), 'YDValidateRules.php' );
 			$this->registerRule( 'nopunctuation', array( 'YDValidateRules', 'nopunctuation' ), 'YDValidateRules.php' );
 			$this->registerRule( 'nonzero', array( 'YDValidateRules', 'nonzero' ), 'YDValidateRules.php' );
+			$this->registerRule( 'exact', array( 'YDValidateRules', 'exact' ), 'YDValidateRules.php' );
 			$this->registerRule( 'in_array', array( 'YDValidateRules', 'in_array' ), 'YDValidateRules.php' );
 			$this->registerRule( 'not_in_array', array( 'YDValidateRules', 'not_in_array' ), 'YDValidateRules.php' );
 			$this->registerRule( 'callback', array( 'YDValidateRules', 'callback' ), 'YDValidateRules.php' );

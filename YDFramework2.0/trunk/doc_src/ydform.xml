@@ -270,6 +270,7 @@
             <listitem><emphasis role="bold">digit:</emphasis> value must be a digit (0-9)</listitem>
             <listitem><emphasis role="bold">nopunctuation:</emphasis> value must not contain punctuation characters</listitem>
             <listitem><emphasis role="bold">nonzero:</emphasis> value must be a number not starting with 0</listitem>
+            <listitem><emphasis role="bold">exact:</emphasis> value must be exactly the same as the rule option</listitem>
             <listitem><emphasis role="bold">in_array:</emphasis> value must be part of the array specified as the rule option</listitem>
             <listitem><emphasis role="bold">not_in_array:</emphasis> value must not be part of the array specified as the rule option</listitem>
             <listitem><emphasis role="bold">callback:</emphasis> This rule allows to use an external function/method for validation, either by registering it or by passing a callback as a format parameter.</listitem>
