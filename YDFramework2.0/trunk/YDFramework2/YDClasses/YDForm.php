@@ -880,11 +880,6 @@
 				$form[YD_ACTION_PARAM]['required'] = false;
 			}
 
-			// If debugging, show contents
-			//if ( YD_DEBUG ) {
-			//	YDDebugUtil::debug( YDDebugUtil::r_dump( $form ) );
-			//}
-
 			// Return the form array
 			return $form;
 
