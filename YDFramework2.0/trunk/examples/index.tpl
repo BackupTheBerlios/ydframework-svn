@@ -182,7 +182,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="7" valign="top">&nbsp;</td>
+            <td rowspan="8" valign="top">&nbsp;</td>
             <td valign="top"><a href="form.php">Form handling and validation</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.php">form.php</a>
@@ -228,6 +228,12 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fileupload.php">fileupload.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fileupload.tpl">fileupload.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="validaterules.php">Validation rules</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=validaterules.php">validaterules.php</a>
             </td>
         </tr>
         <tr>
@@ -476,6 +482,33 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDDatabaseObject</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top" rowspan="2">&nbsp;</td>
+            <td valign="top"><a href="database_object/index.php">YDDatabaseObjects</a></td>
+            <td valign="top">step by step tutorial</td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="sqlquery.php">YDSqlQuery class</a></td>
+            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=sqlquery.php">sqlquery.php</a></td>
+        </tr>
+        <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDTimer</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top" rowspan="1">&nbsp;</td>
+            <td valign="top"><a href="timer.php">Using timers/markers</a> <br/>
+              <a href="timer.php?YD_DEBUG=1">Using timers/markers (debug 1)</a> <br/>
+              <a href="timer.php?YD_DEBUG=2">Using timers/markers (debug 2)</a> <br/>
+              <a href="timer.php?do=standaloneTimer">Using a standalone timers</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=timer.php">timer.php</a>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
@@ -515,31 +548,12 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="timer.php">Using timers/markers</a> <br/>
-              <a href="timer.php?YD_DEBUG=1">Using timers/markers (debug 1)</a> <br/>
-              <a href="timer.php?YD_DEBUG=2">Using timers/markers (debug 2)</a> <br/>
-              <a href="timer.php?do=standaloneTimer">Using a standalone timers</a> </td>
-            <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=timer.php">timer.php</a>
-            </td>
-        </tr>
-        <tr>
             <td valign="top"><a href="stringutil.php">StringUtil class</a> </td>
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
         </tr>
         <tr>
-            <td valign="top"><a href="database_object/index.php">YDDatabaseObjects</a></td>
-            <td valign="top">step by step tutorial</td>
-        </tr>
-        <tr>
-            <td valign="top"><a href="validaterules.php">Validation rules</a> </td>
-            <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=validaterules.php">validaterules.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><a href="sqlquery.php">YDSqlQuery class</a></td>
-            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=sqlquery.php">sqlquery.php</a></td>
+            <td valign="top"><a href="graph.php">YDGraph addon</a> </td>
+            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=graph.php">graph.php</a> </td>
         </tr>
         </table>
 
