@@ -525,8 +525,7 @@
          */
         function executeInsert( $table, $values ) {
             $sql = $this->_createSqlInsert( $table, $values );
-            $result = & $this->_connectAndExec( $sql );
-            return true;
+            return & $this->_connectAndExec( $sql );
         }
 
         /**
@@ -985,7 +984,7 @@
             $this->_logSql( $sql );
             $this->connect();
             $result = @mysql_query( $sql, $this->_conn );
-            if ( ! $result ) { 
+            if ( $result === false ) { 
                 trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
             }
             return $result;
