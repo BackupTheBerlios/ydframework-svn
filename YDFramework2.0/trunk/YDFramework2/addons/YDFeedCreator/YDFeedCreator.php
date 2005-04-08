@@ -27,11 +27,12 @@
     }
 
     // Includes
+    YDInclude( 'YDUrl.php' );
     YDInclude( 'YDFileSystem.php' );
 
     /**
-     *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and 
-     *	straightforward way. If you set up your class instance, you can automatically output to the different versions 
+     *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and
+     *	straightforward way. If you set up your class instance, you can automatically output to the different versions
      *	of RSS and ATOM with the same source data.
      */
     class YDFeedCreator extends YDAddOnModule {
@@ -57,7 +58,7 @@
             $this->_encoding = 'ISO-8859-1';
             $this->_title = '';
             $this->_description = '';
-            $this->_link = '';
+            $this->_link = YDRequest::getCurrentUrl();
             $this->_items = array();
             $this->_generator = YD_FW_NAMEVERS . ' - YDFeedCreator';
 
@@ -87,6 +88,7 @@
          *	@param $desc	The description of the feed.
          */
         function setDescription( $desc ) {
+            $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
             $this->_description = YDStringUtil::encodeString( $desc, true );
         }
 
@@ -96,19 +98,12 @@
          *	@param $link	The link of the feed.
          */
         function setLink( $link ) {
-            if ( substr( $link, 0, 1 ) == '/' ) {
-                $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
-                if ( $_SERVER['SERVER_PORT'] != '80' ) {
-                    $url = $url . ':' . $_SERVER['SERVER_PORT'];
-                }
-                $link = $url . $link;
-            }
-            $this->_link = htmlentities( $link );
+            $this->_link = YDUrl::makeLinkAbsolute( $link );
         }
 
         /**
          *	This function will add a new item to the feed. You need to at least give in a title, link. A description is
-         *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which 
+         *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which
          *	is the md5 checksum of the different elememts.
          *
          *	@param $title	The title of the feed item.
@@ -118,18 +113,13 @@
          */
         function addItem( $title, $link, $desc=null, $guid=null ) {
 
+            $link = YDUrl::makeLinkAbsolute( $link, $this->_link );
+            $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
+
             if ( empty( $guid  ) ) {
                 $checkSum = $this->_link . $title . $link;
                 if ( $desc != null ) { $checkSum .= $desc; }
                 $guid = md5( $checkSum );
-            }
-
-            if ( substr( $link, 0, 1 ) == '/' ) {
-                $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
-                if ( $_SERVER['SERVER_PORT'] != '80' ) {
-                    $url = $url . ':' . $_SERVER['SERVER_PORT'];
-                }
-                $link = $url . $link;
             }
 
             $item = array(
@@ -170,7 +160,7 @@
 
             // Start with the first XML line
             $xml = '<?xml version="1.0" encoding="' . $this->_encoding . '"?>';
-      
+
             // Formatter for RSS 0.91
             if ( $format == 'RSS0.91' || $format == 'RSS2.0' ) {
                 if ( $format == 'RSS0.91' ) {
@@ -183,7 +173,7 @@
                 if ( ! empty( $this->_description ) ) {
                     $xml .= '<description>' . $this->_description . '</description>';
                 }
-                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<link>' . htmlentities( $this->_link ) . '</link>';
                 $xml .= '<generator>' . $this->_generator . '</generator>';
                 foreach ( $this->_items as $item ) {
                     $item['description'] = YDStringUtil::encodeString( $item['description'], true );
@@ -209,7 +199,7 @@
                 $xml .= '<channel rdf:about="">';
                 $xml .= '<title>' . $this->_title . '</title>';
                 $xml .= '<description>' . $this->_description . '</description>';
-                $xml .= '<link>' . $this->_link . '</link>';
+                $xml .= '<link>' . htmlentities( $this->_link ) . '</link>';
                 $xml .= '<items>';
                 $xml .= '<rdf:Seq>';
                 foreach ( $this->_items as $item ) {
@@ -240,16 +230,16 @@
                 if ( ! empty( $this->_description ) ) {
                     $xml .= '<tagline>' . $this->_description . '</tagline>';
                 }
-                $xml .= '<link rel="alternate" type="text/html" href="' . $this->_link . '"/>';
-                $xml .= '<id>' . $this->_link . '</id>';
+                $xml .= '<link rel="alternate" type="text/html" href="' . htmlentities( $this->_link ) . '"/>';
+                $xml .= '<id>' . htmlentities( $this->_link ) . '</id>';
                 $xml .= '<generator>' . $this->_generator . '</generator>';
-                foreach ( $this->_items as $item ) {				
+                foreach ( $this->_items as $item ) {
                     $xml .= '<entry>';
                     $xml .= '<title>' . $item['title'] . '</title>';
                     $xml .= '<link rel="alternate" type="text/html" href="' . $item['link'] . '"/>';
                     $xml .= '<id>' . $item['guid'] . '</id>';
                     if ( ! empty( $item['description'] ) ) {
-                        $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ '; 
+                        $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ ';
                         $xml .= $item['description'];
                         $xml .= ' ]]></content>';
                     }
