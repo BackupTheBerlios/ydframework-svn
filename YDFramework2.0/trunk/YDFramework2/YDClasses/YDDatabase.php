@@ -525,7 +525,8 @@
          */
         function executeInsert( $table, $values ) {
             $sql = $this->_createSqlInsert( $table, $values );
-            return & $this->_connectAndExec( $sql );
+            $result = & $this->_connectAndExec( $sql );
+            return $result;
         }
 
         /**
