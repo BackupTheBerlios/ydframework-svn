@@ -69,15 +69,24 @@
          *	This function returns a variable from the configuration. If the configuration variable doesn't exist, it
          *	returns a fatal error.
          *
-         *	@param	$name	The name of the configuration variable to retrieve.
+         *	@param	$name       The name of the configuration variable to retrieve.
+         *  @param  $default    (optional) If not null, this value will be returned if the configuration setting doesn't
+         *                      exist in the configuration.
          *
          *	@returns	The value of the configuration variable.
          */
-        function get( $name ) {
+        function get( $name, $default=null ) {
 
-            // Raise an error if an invalid configuration setting
+            // Check if the key exists
             if ( ! YDConfig::exists( $name ) ) {
-                trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
+
+                // Check if we have a default, if not, raise an error
+                if ( ! is_null( $default ) ) {
+                    return $default;
+                } else {
+                    trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
+                }
+
             }
 
             // Return the value
@@ -99,7 +108,7 @@
             return isset( $GLOBALS[ YD_CONFIG_VAR ][ $name ] );
 
         }
-        
+
         /**
          *	This function dumps the contents of the configuration.
          */
@@ -110,7 +119,7 @@
 
             // Dump the configuration
             YDDebugUtil::dump( $GLOBALS[ YD_CONFIG_VAR ], 'YDConfig contents' );
-        
+
         }
 
     }
