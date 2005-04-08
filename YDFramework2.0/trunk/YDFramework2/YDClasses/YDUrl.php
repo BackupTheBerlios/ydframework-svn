@@ -220,7 +220,7 @@
          *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'cool.html'];
          *	$r = $url->getSubDirectories('forum');  // returns: ['cool.html'];
          *	$r = $url->getSubDirectories('test');   // returns: [];
-         *	
+         *
          *	// it gets the sub-directories of the first ocurrence:
          *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
          *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum', 'cool.html'];
@@ -271,7 +271,7 @@
          *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum'];
          *	$r = $url->getSubDirectories('forum');  // returns: [];
          *	$r = $url->getSubDirectories('test');   // returns: [];
-         *	
+         *
          *	// it gets the sub-directories of the first ocurrence:
          *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
          *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
@@ -409,15 +409,15 @@
          *
          *	If it fails to retrieve the data, it will raise a fatal error.
          *
-         *	By default, it will cache the downloaded data based on the etag and last-modified headers. The cache files 
-         *	are stored in the temp directory of the Yellow Duck framework and have the extension "wch". You can delete 
+         *	By default, it will cache the downloaded data based on the etag and last-modified headers. The cache files
+         *	are stored in the temp directory of the Yellow Duck framework and have the extension "wch". You can delete
          *	these automatically as they will be recreated on the fly if needed.
          *
          *	For configuring the cache, there are two configuration variables you can redefine if needed:
          *	YD_HTTP_CACHE_TIMEOUT: the lifetime of the cache in seconds (default: 3600).
          *	YD_HTTP_CACHE_USEHEAD: if a HEAD HTTP request should be used to verify the cache validity (default: 1).
          *
-         *	@param $cache	(optional) Indicate if the web content should be cached or not. By default, caching is 
+         *	@param $cache	(optional) Indicate if the web content should be cached or not. By default, caching is
          *					turned on.
          *
          *	@returns	Returns the contents of the URL.
@@ -429,7 +429,7 @@
 
             // Check the cache
             if ( $cache == true ) {
-                
+
                 // Include the filesystem library
                 YDInclude( 'YDFileSystem.php' );
 
@@ -559,6 +559,84 @@
             } else {
                 return intval( $client->status );
             }
+        }
+
+        /**
+         *  This function will convert all relative URLs to absolute ones using the given base.
+         *
+         *  @param  $text   The text in which you want to have the links converted to absolute ones.
+         *  @param  $base   (optional) The base url. By default, it uses the current url.
+         *
+         *  @returns    The text with all links converted to absolute ones.
+         *
+         *  @static
+         */
+        function makeLinksAbsolute( $text, $base=null ) {
+            while ( eregi( "(href|src|action)=\"(([^/])[[:alnum:]/+=%&_.~?-]*)\"", $text, $regs ) ) {
+                $input_uri = $regs[2];
+                $output_uri = @ YDUrl::makeLinkAbsolute( $input_uri, $base );
+                $text = eregi_replace( "((href|src|action)=\")$input_uri(\")", "\\1$output_uri\\3", $text );
+            }
+            return $text;
+        }
+
+        /**
+         *  Helper function for the makeLinksAbsolute function.
+         *
+         *  @param  $rel_uri    The uri to convert to an absolute one.
+         *  @param  $base       (optional) The base url. By default, it uses the current url.
+         *
+         *  @returns    The link converted to an absolute one.
+         *
+         *  @static
+         *
+         *  @internal
+         */
+         function makeLinkAbsolute( $rel_uri, $base=null ) {
+             if ( substr( strtolower( $rel_uri ), 0, 7 ) == 'http://' ) {
+                 return $rel_uri;
+             }
+             if ( is_null( $base ) ) {
+                 $base = YDRequest::getCurrentUrl();
+             }
+             preg_match( "'^([^:]+://[^/]+)/'", $base, $m );
+             $base_start = $m[1];
+             if ( preg_match( "'^/'", $rel_uri ) ) {
+                 return $base_start . $rel_uri;
+             }
+             $base = preg_replace( "{[^/]+$}", '', $base );
+             $base .= $rel_uri;
+             $base = preg_replace( "{^[^:]+://[^/]+}", '', $base );
+             $base_array = explode( '/', $base );
+             if ( count( $base_array ) && ! strlen( $base_array[0] ) ) {
+                 array_shift( $base_array );
+             }
+             $i = 1;
+             while ( $i < count( $base_array ) ) {
+                 if ( $base_array[$i-1] == "." ) {
+                     array_splice( $base_array, $i - 1, 1 );
+                     if ( $i > 1 ) {
+                         $i--;
+                     }
+                 } elseif ( $base_array[$i] == ".." && $base_array[$i - 1]!= ".." ) {
+                     array_splice( $base_array, $i - 1, 2 );
+                     if ( $i > 1 ) {
+                         $i--;
+                         if ( $i == count( $base_array ) ) {
+                             array_push( $base_array, "" );
+                         }
+                     }
+                 } else {
+                     $i++;
+                 }
+             }
+             if ( count( $base_array ) && isset( $base_array[-1] ) && $base_array[-1] == "." ) {
+                 $base_array[-1] = "";
+             }
+             while ( count( $base_array ) && preg_match( "/^\.\.?$/", $base_array[0] ) ) {
+                 array_shift( $base_array );
+             }
+             return $base_start . '/' . implode( "/", $base_array );
         }
 
         /**
