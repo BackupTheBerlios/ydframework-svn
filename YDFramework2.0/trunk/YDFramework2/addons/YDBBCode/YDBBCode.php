@@ -27,7 +27,7 @@
     }
 
     /**
-     *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be 
+     *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be
      *	implemented. The following codes are supported by default: img, url, mail, email, color, b, i, u, code, quote, p
      */
     class YDBBCode extends YDAddOnModule {
@@ -104,21 +104,23 @@
         }
 
         /**
-         *	This function will take a piece of text and convert the BBCode tags to their HTML equivalents. You can 
+         *	This function will take a piece of text and convert the BBCode tags to their HTML equivalents. You can
          *	optionally convert line breaks as well as convert the remaining HTML tags to their entities.
          *
          *	@param $data			The data you want to convert.
-         *	@param $convertBr		(optional) Boolean to indicate that new lines should be converted to <br/> tags. 
+         *	@param $convertBr		(optional) Boolean to indicate that new lines should be converted to <br/> tags.
          *							This is turned on by default.
          *	@param $convertTags		(optional) Boolean to indicate that tags should be converted to HTML. This is turned
          *							on by default.
          *	@param $convertLinks	(optional) Boolean to indicate if links should be automatically highlighted or not.
          *							This is turned on by default.
+         *  @param $baseUrl         (optional) If you give this a non-null value, it will convert all links to absolute
+         *                          links using this url as the base url.
          *
          *	@returns	The HTML equivalent of the string with all the BBCode's converted according to the conversion table
          *				of this class.
          */
-        function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true ) {
+        function toHtml( $data, $convertBr=true, $convertTags=true, $convertLinks=true, $baseUrl=null ) {
 
             // Encode the references
             $data = YDStringUtil::encodeString( $data );
@@ -143,6 +145,12 @@
             // Convert tags if needed
             if ( $convertBr === true ) {
                 $data = nl2br( trim( $data ) );
+            }
+
+            // Make links absolute if needed
+            if ( ! is_null( $baseUrl ) ) {
+                YDInclude( 'YDUrl.php' );
+                $data = YDUrl::makeLinksAbsolute( $data, $baseUrl );
             }
 
             // Return the data
