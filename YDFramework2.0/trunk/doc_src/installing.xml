@@ -20,6 +20,8 @@
 
         <warning>The Yellow Duck Framework is only working correctly when PHP is running as an Apache module. If you run PHP as a CGI process, the Yellow Duck Framework will not work correctly. It is preferred to run PHP as an Apache module or as an Microsft IIS ISAPI module for achieving the best performance.</warning>
 
+        <warning>If you are using PHP5 on Windows, the performance may be really bad. Several users have tried this configuration, and PHP5 seems to be 3 to 4 times slower on Windows. On Linux, PHP5 is a little bit slower, but it's not as dramatic as on Windows.</warning>
+
     </sect1>
 
     <sect1 id="installing_framework_files">
@@ -29,7 +31,7 @@
         <para>When you downloaded the latest release of the Yellow Duck Framework, you need to decompress it unzip e.g. <ulink url="http://www.winzip.com/">WinZip</ulink> (Windows) or the <literal>gzip</literal> and <literal>tar</literal> commands (unix and linux). After decompressing, you will have the following directory structure:</para>
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/installing_001.xml" />
-      
+
         <para>The main directory of the framework, called <literal>YDFramework-2.0</literal> in this example, contains all the different files for the framework, including documentation, examples and license information. In this directory, there is a directory called <literal>YDFramework2</literal>, which contains the core framework files. There are a number of subdirectories in the <literal>YDFramework2</literal> directory which each have a specific function:</para>
 
         <itemizedlist spacing="compact">
@@ -70,7 +72,7 @@
         <title>Finding a place for the <literal>YDFramework2</literal> directory</title>
 
         <para>The <literal>YDFramework2</literal> directory can be placed anywhere in the file system.</para>
-        
+
         <para>For security reasons, we suggest you to put the <literal>YDFramework2</literal> directory in a directory which is not viewable by the webserver. It's not a good idea to put the <literal>YDFramework2</literal> directory into the htdocs folders from Apache as you might expose information to hackers you don't want to expose and which can compromise the security on your server.</para>
 
         <para>The <literal>YDFramework2</literal> directory can also be shared among multiple web applications. You only need one <literal>YDFramework2</literal> directory on your system. You can if you want install a separate copy for each web application. Having separate copies for the different web applications might be easier to maintain when you need to update the framework.</para>
@@ -82,7 +84,7 @@
     <sect1 id="installing_user_rights">
 
         <title>Assigning rights to the <literal>YDFramework2</literal> directory</title>
-        
+
         <para>Since the framework needs to be able to write temporary data into it's temp directory, we need to change the rights for this folder. On Windows, you normally don't need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:</para>
 
         <programlisting>/home/pieter # <emphasis role="bold">chmod 777 YDFramework2/temp</emphasis></programlisting>
@@ -98,13 +100,13 @@
         <note>This is an optional setting and is already done on most systems. You only need to change this if you plan to use <literal>.htaccess</literal> files to change the PHP settings or if you want to deny access to the template files. If you are unsure if you can use these files, please, check with your hosting provider.</note>
 
         <para>In the Apache configuration file (<literal>httpd.conf</literal>), you need to add the following entry for the web directory of your web application:</para>
-        
+
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/installing_002.xml" />
 
         <para>With configuring the directory like this in Apache, you indicate that <literal>.htaccess</literal> files can be used to override the settings. If not, the Apache webserver will return an error if you are not allowed to override the settings.</para>
 
         <note>For optimal security, you should configure the <ulink url="http://be.php.net/features.safe-mode">open_basedir</ulink> PHP variable that defines which directories are accessible by the website. Without setting this variable, you might expose a lot more directories and files than you want to expose.</note>
-        
+
     </sect1>
 
     <sect1 id="installing_php_config">
@@ -134,7 +136,7 @@
         <para>In the example above, I also denied access to the <literal>config.php</literal> file, as I do not want people to access this file directly. Directory browsing in the folder is also prehibited to improve security.</para>
 
     </sect1>
-        
+
     <sect1 id="installing_auto_prepend_append">
 
         <title>Using auto preprend and auto append</title>
@@ -144,17 +146,17 @@
         <para>To enable this feature, add the following lines to the <literal>.htaccess</literal> file:</para>
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/installing_005.xml" />
-    
+
         <note>On Windows, you will have to use forward slashes instead of backslashes. Also make sure you use the complete path to the files.</note>
-    
+
     </sect1>
-        
+
     <sect1 id="installing_testing">
-    
+
         <title>Testing the installation</title>
-    
+
         <para>To test the installation, run the sample scripts provided with the downloads. These can be found in the <literal>examples</literal> directory.</para>
-    
+
     </sect1>
 
 </chapter>
