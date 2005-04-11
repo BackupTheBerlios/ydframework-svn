@@ -14,6 +14,7 @@
     <!ENTITY ydlog SYSTEM "ydlog.xml">
     <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
     <!ENTITY yddatabase SYSTEM "yddatabase.xml">
+    <!ENTITY yddatabaseobject SYSTEM "yddatabaseobject.xml">
     <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
     <!ENTITY ydurl SYSTEM "ydurl.xml">
     <!ENTITY ydxmlrpc SYSTEM "ydxmlrpc.xml">
@@ -76,6 +77,7 @@
     &ydlog;
     &ydauthentication;
     &yddatabase;
+    &yddatabaseobject;
     &ydfilesystem;
     &ydurl;
     &ydxmlrpc;
