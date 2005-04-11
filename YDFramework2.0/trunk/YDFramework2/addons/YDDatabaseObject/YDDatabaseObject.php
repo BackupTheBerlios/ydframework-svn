@@ -652,17 +652,17 @@
                 // Additional conditions
                 if ( $where = $rel->getWhere() ) {
                     $this->_sql->resetWhere();
-                    $this->_sql->addSelect( $where );
+                    $this->_sql->addWhere( $where );
                 }
 
                 if ( $group = $rel->getGroup() ) {
                     $this->_sql->resetGroup();
-                    $this->_sql->addSelect( $group );
+                    $this->_sql->addGroup( $group );
                 }
 
                 if ( $having = $rel->getHaving() ) {
                     $this->_sql->resetHaving();
-                    $this->_sql->addSelect( $having );
+                    $this->_sql->addHaving( $having );
                 }
 
                 if ( $order = $rel->getOrder() ) {
@@ -1747,7 +1747,7 @@
         }
 
         /**
-         *  This funciton set the foreign class.
+         *  This function set the foreign class.
          *
          *  @param $name  The class name.
          */
@@ -1763,7 +1763,7 @@
         }
 
         /**
-         *  This funciton set the foreign field name.
+         *  This function set the foreign field name.
          *
          *  @param $name  The field name.
          */
@@ -1779,7 +1779,7 @@
         }
 
         /**
-         *  This funciton set the foreign join type.
+         *  This function set the foreign join type.
          *
          *  @param $type  The foreign join type. E.g. INNER, LEFT, RIGHT, etc.
          */
@@ -1795,7 +1795,7 @@
         }
 
         /**
-         *  This funciton set the foreign var.
+         *  This function set the foreign var.
          *
          *  @param $name  The variable name.
          */
@@ -1811,7 +1811,7 @@
         }
 
         /**
-         *  This funciton set the foreign conditions.
+         *  This function set the foreign conditions.
          *
          *  @param $expr  The expression.
          */
@@ -1837,7 +1837,7 @@
         }
 
         /**
-         *  This funciton set the cross class.
+         *  This function set the cross class.
          *
          *  @param $name  The class name.
          */
@@ -1853,7 +1853,7 @@
         }
 
         /**
-         *  This funciton set the cross local field.
+         *  This function set the cross local field.
          *
          *  @param $name  The field name.
          */
@@ -1869,7 +1869,7 @@
         }
 
         /**
-         *  This funciton set the cross foreign field.
+         *  This function set the cross foreign field.
          *
          *  @param $name  The field name.
          */
@@ -1885,7 +1885,7 @@
         }
 
         /**
-         *  This funciton set the cross join type.
+         *  This function set the cross join type.
          *
          *  @param $type  The join type. E.g. INNER, LEFT, RIGHT, etc.
          */
@@ -1901,7 +1901,7 @@
         }
 
         /**
-         *  This funciton set the cross variable.
+         *  This function set the cross variable.
          *
          *  @param $name  The variable name.
          */
@@ -1917,7 +1917,7 @@
         }
 
         /**
-         *  This funciton set the cross conditions.
+         *  This function set the cross conditions.
          *
          *  @param $expr  The expression.
          */
@@ -1933,7 +1933,7 @@
         }
 
         /**
-         *  This funciton set the relation WHERE clause.
+         *  This function set the relation WHERE clause.
          *
          *  @param $expr  The expression.
          */
@@ -1949,7 +1949,7 @@
         }
 
         /**
-         *  This funciton set the relation GROUP BY clause.
+         *  This function set the relation GROUP BY clause.
          *
          *  @param $expr  The expression.
          */
@@ -1965,7 +1965,7 @@
         }
 
         /**
-         *  This funciton set the relation HAVING clause.
+         *  This function set the relation HAVING clause.
          *
          *  @param $expr  The expression.
          */
@@ -1981,7 +1981,7 @@
         }
 
         /**
-         *  This funciton set the relation ORDER BY clause.
+         *  This function set the relation ORDER BY clause.
          *
          *  @param $expr  The expression.
          */
