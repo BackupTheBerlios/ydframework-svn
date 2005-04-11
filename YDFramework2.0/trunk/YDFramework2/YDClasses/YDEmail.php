@@ -51,6 +51,9 @@
             // Intialize a new mime message
             $this->_msg = new PHPMailer();
 
+            // Set the language
+            $this->_msg->SetLanguage( 'en', YD_DIR_HOME . '/3rdparty/phpmailer/language/' );
+
             // Start with empty variables
             $this->sender = '';
             $this->to_plain = array();
@@ -126,6 +129,7 @@
          */
         function addCc( $email, $name='' ) {
             $this->_msg->AddCC( $email, $name );
+            array_push( $this->to_plain, $email );
         }
 
         /**
@@ -136,6 +140,7 @@
          */
         function addBcc( $email, $name='' ) {
             $this->_msg->AddBCC( $email, $name );
+            array_push( $this->to_plain, $email );
         }
 
         /**
