@@ -298,7 +298,7 @@
 
             // Check if the element type is known
             if ( ! array_key_exists( $type, $this->_regElements ) ) {
-                trigger_error( 'Unknown for element type "' . $type . '" for element "' . $name . '".', YD_ERROR );
+                trigger_error( 'Unknown form element type "' . $type . '" for element "' . $name . '".', YD_ERROR );
             }
 
             // Include the element file
