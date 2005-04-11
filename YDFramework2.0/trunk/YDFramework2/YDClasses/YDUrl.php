@@ -573,8 +573,8 @@
          */
         function makeLinksAbsolute( $text, $base=null ) {
             while ( eregi( "(href|src|action)=\"(([^/])[[:alnum:]/+=%&_.~?-]*)\"", $text, $regs ) ) {
-                $input_uri = $regs[2];
-                $output_uri = @ YDUrl::makeLinkAbsolute( $input_uri, $base );
+                $input_uri = str_replace( '?', '\?', $regs[2] );
+                $output_uri = YDUrl::makeLinkAbsolute( $regs[2], $base );
                 $text = eregi_replace( "((href|src|action)=\")$input_uri(\")", "\\1$output_uri\\3", $text );
             }
             return $text;
