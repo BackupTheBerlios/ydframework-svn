@@ -1671,9 +1671,9 @@
          *  @param $local_class    The local class name.
          *  @param $manytomany     (optional) Is a many-to-many relationship? Default: false.
          *  @param $foreign_class  (optional) The foreign class name.
-         *                           If empty, the $name parameter will be used.
+         *                         If empty, the $name parameter will be used.
          *  @param $cross_class    (optional) For many-to-many relations, the cross class name.
-         *                            If empty, "cross_" . $name will be used.
+         *                         If empty, $local_class . "_" . $foreign_class will be used.
          */
         function YDDatabaseObject_Relation( $name, $local_class, $manytomany=false, $foreign_class='', $cross_class='' ) {
 
@@ -1682,14 +1682,12 @@
             $this->cross   = new YDDatabaseObject_Properties();
 
             $this->setName( $name );
-
+            $this->setLocalClass( $local_class );
+            
             if ( $manytomany ) { $this->setManyToMany(); }
 
-            if ( ! strlen( $foreign_class ) ) { $foreign_class = $this->getName();    }
-            if ( ! strlen( $cross_class   ) ) { $cross_class   = $local_class . '_' . $foreign_class; }
-
-            $this->setForeignClass( $foreign_class );
-            $this->setCrossClass( $cross_class );
+            if ( strlen( $foreign_class ) ) { $this->setForeignClass( $foreign_class ); }
+            if ( strlen( $cross_class   ) ) { $this->setCrossClass( $cross_class ); }
 
         }
 
@@ -1721,6 +1719,22 @@
          */
         function setManyToMany() {
             $this->set( 'manytomany', true );
+        }
+
+        /**
+         *  This function set the local class name.
+         *
+         *  @param $name  The class name.
+         */
+        function setLocalClass( $name ) {
+            $this->local->set( 'class', $name );
+        }
+        
+        /**
+         *  @returns  The local class name.
+         */
+        function getLocalClass() {
+            $this->local->get( 'class' );
         }
 
         /**
@@ -1759,7 +1773,10 @@
          *  @returns  The foreign class name.
          */
         function getForeignClass() {
-            return $this->foreign->get( 'class' );
+            if ( $class = $this->foreign->get( 'class' ) ) {
+                return $class;
+            }
+            return $this->getName();
         }
 
         /**
@@ -1849,7 +1866,10 @@
          *  @returns  The cross class name.
          */
         function getCrossClass() {
-            return $this->cross->get( 'class' );
+            if ( $cross_class = $this->cross->get( 'class' ) ) {
+                return $cross_class;
+            }
+            return $this->getLocalClass() . '_' . $this->getForeignClass();
         }
 
         /**
