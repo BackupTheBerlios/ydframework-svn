@@ -65,6 +65,11 @@
                 'action'	=> $this->_form->_action, 'target'	=> $this->_form->_target
             );
             $attribs = array_merge( $attribs, $this->_form->_attributes );
+            if ( $attribs['target'] == '_self' ) {
+                unset( $attribs['target'] );
+            }
+
+            // Add the rest of the form attributes
             $form['attribs'] = $this->_form->_convertToHtmlAttrib( $attribs );
             $form['tag'] = '<form' . $form['attribs'] . '>';
             $form['requirednote'] = $this->_form->_requiredNote;
