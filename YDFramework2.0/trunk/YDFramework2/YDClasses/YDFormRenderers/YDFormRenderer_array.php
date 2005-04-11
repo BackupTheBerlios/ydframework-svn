@@ -64,7 +64,7 @@
                 'name'		=> $this->_form->_name, 'id'		=> $this->_form->_name, 'method' => strtoupper( $this->_form->_method ),
                 'action'	=> $this->_form->_action, 'target'	=> $this->_form->_target
             );
-            $attribs = array_merge( $this->_form->_attributes, $attribs );
+            $attribs = array_merge( $attribs, $this->_form->_attributes );
             $form['attribs'] = $this->_form->_convertToHtmlAttrib( $attribs );
             $form['tag'] = '<form' . $form['attribs'] . '>';
             $form['requirednote'] = $this->_form->_requiredNote;
@@ -76,7 +76,7 @@
 
             // Loop over the list of elements
             foreach ( $this->_form->_elements as $name => $element ) {
-                
+
                 // Update the value
                 $element->_value = $this->_form->getValue( $name );
 
