@@ -312,7 +312,7 @@
             <listitem><emphasis role="bold">html:</emphasis> The HTML representation of the form element.</listitem>
         </itemizedlist>
 
-        <para>Instead of first having to convert the form object to an array for assigning it to the template, there is a shortcut function called addForm in the YDTemplate class which automatically converts the form object to an array and assigns it to the template object.</para>
+        <para>Instead of first having to convert the form object to an array for assigning it to the template, there is a shortcut function called assignForm in the YDTemplate class which automatically converts the form object to an array and assigns it to the template object.</para>
 
         <para>By using the elements of this array in the template, you can pretty much layout the field exactly as you wish. It looks like a lot of work, but it's a lot easier than handcoding every single part of the form.</para>
 
