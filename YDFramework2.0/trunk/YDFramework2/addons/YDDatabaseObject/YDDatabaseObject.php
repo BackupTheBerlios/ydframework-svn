@@ -1133,7 +1133,7 @@
          *  @param $desc  (optional) If true adds a DESC string to the column. Default: false.
          */
         function addOrder( $expr, $desc=false ) {
-            $this->_sql->addGroup( $expr, $desc );
+            $this->_sql->addOrder( $expr, $desc );
         }
 
         /**
