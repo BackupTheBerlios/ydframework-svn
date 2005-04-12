@@ -35,6 +35,7 @@
     class YDForm extends YDBase {
 
         /**
+         *	This is the class constructor for the YDForm class.
          *
          *	@param $name		The name of the form.
          *	@param $method		(optional) Method used for submitting the form. Normally, this is either POST or GET.

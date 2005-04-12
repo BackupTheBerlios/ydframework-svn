@@ -534,6 +534,19 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDXMLForm</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top" rowspan="1">&nbsp;</td>
+            <td valign="top">
+                <a href="form_xml.php">Creating forms using XML</a> <br/>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=form_xml.php">form_xml.php</a>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
