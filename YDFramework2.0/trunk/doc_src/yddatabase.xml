@@ -22,14 +22,7 @@
 
         <para>For establishing a database connection, you will use the YDDatabase class. Using the static method getInstance of the YDDatabase class, you can get an instance of a YDDatabaseDriver class which is used to interact with the database. The following code sample illustrates this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDDatabase.php' );
-    $db = YDDatabase::getInstance(
-        'mysql', 'test', 'root', '', 'localhost'
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_001.xml" />
 
         <para>The following options can be specified:</para>
 
@@ -70,18 +63,8 @@
 
         <para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_002.xml" />
 
-    // Change the default pagesize
-    YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 10 );
-
-    // Fetch as an associative array
-    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
-
-    // Fetch as an numeric array
-    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
-
-?>]]></programlisting>
     </sect1>
 
     <sect1 id="yddatabase_getting_db_info">
@@ -134,68 +117,11 @@
 
         <para>Here are some samples that show you for what type of queries you can use each individual function:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Includes
-    YDInclude( 'YDDatabase.php' );
-
-    // Get the database connection
-    $db = new YDDatabase( 'sqlite', 'mydb.db' );
-
-    // Get one record
-    $result = $db->getRecord(
-        'select * from users where userid = 1'
-    );
-
-    // Get a list of records
-    $result = $db->getRecords(
-        'select * from users'
-    );
-
-    // Get a specific value
-    $result = $db->getValue(
-        'select count(*) from users'
-    );
-
-    // Get a specific value by name
-    $result = $db->getValueByName(
-        'select count(*) as usercount from users', 'usercount'
-    );
-
-    // Get a list of values by name
-    $result = $db->getValuesByName(
-        'select username from users', 'username'
-    );
-
-    // Get the result as an associative array
-    $result = $db->getAsAssocArray(
-        'select configname, configvalue from configuration',
-        'configname', 'configvalue'
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_003.xml" />
 
         <para>The getRecords function gives you some options of limiting the data returned by this function. You can specify the maximum number of records that should be returned as well as the first record to start retrieving from. This functionality is natively supported for all database engines currently supported by the Yellow Duck Framework (MySQL, SQLite, PostgreSQL, Oracle). Here's a code example explaining how this works:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Includes
-    YDInclude( 'YDDatabase.php' );
-
-    // Get the database connection
-    $db = new YDDatabase( 'sqlite', 'mydb.db' );
-
-    // Get maximum 10 records
-    $result = $db->getRecords(
-        'select * from users', 10
-    );
-
-    // Get maximum 10 records starting from record 5
-    $result = $db->getRecords(
-        'select * from users', 10, 5
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_004.xml" />
 
         <note>This function doesn't return any extra information about what is returned, and this should be calculated manually.</note>
 
@@ -247,296 +173,25 @@
 
         <para>This is the code for the request class:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDTemplate.php' );
-
-    // Class definition
-    class database_paging extends YDRequest {
-
-        // Class constructor
-        function database_paging() {
-            $this->YDRequest();
-            $this->template = new YDTemplate();
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Get the pagesize and current page from the URL
-            // We use the @ mark to supress any error messsages
-            $page = @ $_GET['page'];
-            $size = @ $_GET['size'];
-
-            // Get the database connection
-            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
-
-            // Get the records
-            $recordset = $db->getRecordsAsSet( 'show status', $page, $size );
-            //$recordset->dump();
-
-            // Close the database connection
-            $db->close();
-
-            // Setup the template
-            $this->template->assign( 'recordset', $recordset );
-
-            // Display the template
-            $this->template->display();
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_005.xml" />
 
         <para>The template that goes along with this request class looks as follows:</para>
 
-        <programlisting><![CDATA[{capture assign="browsebar"}
-    {if $recordset->pages}
-        <p>
-        {if ! $recordset->isFirstPage}
-            <a href="{$recordset->getPreviousUrl()}">previous</a>
-        {else}
-            previous
-        {/if}
-        {foreach from=$recordset->pages item="page"}
-            {if $page == $recordset->page}
-                {$page}
-            {else}
-                <a href="{$recordset->getCurrentUrl()}">{$page}</a>
-            {/if}
-        {/foreach}
-        {if ! $recordset->isLastPage}
-            <a href="{$recordset->getNextUrl()}">next</a>
-        {else}
-            next
-        {/if}
-    {/if}
-{/capture}
-
-<html>
-
-<head>
-
-    <title>{$YD_FW_NAMEVERS}</title>
-
-</head>
-
-<body>
-
-    <h3>Database paging example</h3>
-
-    {if $recordset->set}
-        <p>
-            Showing page {$recordset->page} of {$recordset->totalPages} pages
-            ({$recordset->totalRowsOnPage} row(s))
-        </p>
-        {$browsebar}
-        <table border="1">
-        {foreach from=$recordset->set item="record"}
-            <tr>
-                {foreach from=$record item="val"}
-                    <td>{$val}</td>
-                {/foreach}
-            </tr>
-        {/foreach}
-        </table>
-        {$browsebar}
-    {else}
-        <p>No records were found.</p>
-    {/if}
-
-</body>
-
-</html>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_006.xml" />
 
         <para>As you can see in the previous example, we use the different getter functions to get the URL to the current, next and previous pages. Sometimes, you want to add some extra information to the URL. You can do this by getting a reference to the YDUrl object associated with the YDRecordSet. You can then change the URL using the methods provided by the YDUrl object. These changes will be automatically reflected in the YDRecordSet object linked with it. This is demonstrated with the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDTemplate.php' );
-
-    // Class definition
-    class database_paging extends YDRequest {
-
-        // Class constructor
-        function database_paging() {
-            $this->YDRequest();
-            $this->template = new YDTemplate();
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Get the pagesize and current page from the URL
-            // We use the @ mark to supress any error messsages
-            $page = @ $_GET['page'];
-            $size = @ $_GET['size'];
-
-            // Get the database connection
-            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
-
-            // Get the records
-            $recordset = $db->getRecordsAsSet( 'show status', $page, $size );
-
-            // Get the reference to the URL object
-            // Make sure to add the & sign to get a reference instead of a copy
-            $url = & $recordset->getUrl();
-            $url->setQueryVar( 'test', 'val' );
-
-            // Close the database connection
-            $db->close();
-
-            // Setup the template
-            $this->template->assign( 'recordset', $recordset );
-
-            // Display the template
-            $this->template->display();
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_007.xml" />
 
         <note>Be careful with using very large recordsets with this method. With recordsets containing millions of rows, this way of working can be quite slow.</note>
 
         <para>Since the YDRecordSet class is based on regular arrays, you can use it to page regular arrays as well. To page regular arrays, you need to instantiate the YDRecordSet class yourself, as illustrated by the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Define the default pagesize
-    define( 'YD_DB_DEFAULTPAGESIZE', 15 );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDTemplate.php' );
-
-    // Class definition
-    class array_paging extends YDRequest {
-
-        // Class constructor
-        function array_paging() {
-            $this->YDRequest();
-            $this->template = new YDTemplate();
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Get the pagesize and current page from the URL
-            // We use the @ mark to supress any error messsages
-            $page = @ $_GET['page'];
-            $size = @ $_GET['size'];
-
-            // Get the list of files in the current directory
-            $dir = new YDFSDirectory();
-            $files = $dir->getContents( '*.*', null, 'YDFSFile' );
-
-            // Create the YDRecordSet object
-            $recordset = new YDRecordSet( $files, $page, $size );
-
-            // Setup the template
-            $this->template->assign( 'recordset', $recordset );
-
-            // Display the template
-            $this->template->display();
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_008.xml" />
 
         <para>The template that goes along with this code sample looks as follows:</para>
 
-        <programlisting><![CDATA[{capture assign="browsebar"}
-    {if $recordset->pages}
-        <p>
-        {if ! $recordset->isFirstPage}
-            <a href="{$recordset->getPreviousUrl()}">previous</a>
-        {else}
-            previous
-        {/if}
-        {foreach from=$recordset->pages item="page"}
-            {if $page == $recordset->page}
-                {$page}
-            {else}
-                <a href="{$recordset->getPageUrl($page)}">{$page}</a>
-            {/if}
-        {/foreach}
-        {if ! $recordset->isLastPage}
-            <a href="{$recordset->getNextUrl()}">next</a>
-        {else}
-            next
-        {/if}
-        </p>
-    {/if}
-    {/capture}
-
-    <html>
-
-    <head>
-
-    <title>{$YD_FW_NAMEVERS}</title>
-
-    </head>
-
-    <body>
-
-    <h3>Array paging example</h3>
-
-    {if $recordset->set}
-        <p>
-            Showing page {$recordset->page} of {$recordset->totalPages} pages
-            ({$recordset->totalRowsOnPage} row(s))
-        </p>
-        {$browsebar}
-        <table border="1" width="400">
-        {foreach from=$recordset->set item="record"}
-            <tr>
-                <td width="200">
-                    <a href="{$record->getBasename()}">{$record->getBasename()}</a>
-                </td>
-            </tr>
-        {/foreach}
-        </table>
-        {$browsebar}
-    {else}
-        <p>No files were found.</p>
-    {/if}
-
-    </body>
-
-    </html>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_009.xml" />
 
     </sect1>
 
@@ -548,25 +203,7 @@
 
         <para>This function takes two arguments, being the name of the table to insert the data into, and an associative array mapping the column names to their values. The following example demonstrates how this works:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Includes
-    YDInclude( 'YDDatabase.php' );
-
-    // Get the database connection
-    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
-
-    // The new values
-    // These should be specified as an associative array, using the column name
-    // as the field name, and the value as the field value.
-    $values = array();
-    $values['ConfigName'] = 'email';
-    $values['ConfigValue'] = 'pieter@yellowduck.be';
-
-    // Insert the values into the database
-    $db->executeInsert( 'configuration', $values );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_010.xml" />
 
         <para>If the database supports auto increment values for the primary key, this function will return the ID of the last insert. Please note that unfortunately, not all database engines support this. Currently, SQLite and MySQL? support this. Oracle and PostgreSQL? rely on sequences and triggers to do this automatically.</para>
 
@@ -580,30 +217,7 @@
 
         <para>Here's an example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Includes
-    YDInclude( 'YDDatabase.php' );
-
-    // Get the database connection
-    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
-
-    // The new values
-    // These should be specified as an associative array, using the column name
-    // as the field name, and the value as the field value.
-    $values = array();
-    $values['ConfigName'] = 'email';
-    $values['ConfigValue'] = 'pieter@yellowduck.be';
-
-    // Execute the update for all rows
-    $db->executeUpdate( 'configuration', $values );
-
-    // Execute the update for a specific row
-    $db->executeUpdate(
-        'configuration', $values, 'configname = ' . $db->sqlString( 'email' )
-    );
-
-?> ]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_011.xml" />
 
         <para>This function will return the number of rows that was affected by this query.</para>
 
@@ -617,21 +231,7 @@
 
         <para>This function takes two arguments, being the name of the table to delete the data from, and an optional where statement limiting the number of rows being deleted. The following example demonstrates how this works:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Includes
-    YDInclude( 'YDDatabase.php' );
-
-    // Get the database connection
-    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
-
-    // Remove all rows
-    $db->executeDelete( 'configuration' );
-
-    // Remove a specific row
-    $db->executeDelete( 'configuration', 'id = 1' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabase_012.xml" />
 
     </sect1>
 

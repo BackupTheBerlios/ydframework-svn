@@ -23,12 +23,7 @@
 
         <para>Creating a new form is done in two steps. First, you need to include the class definition, and then you need to create an instance of the YDForm class. The following code sample will illustrate this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDForm.php' );
-    $form = new YDForm( 'myForm' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_001.xml" />
 
         <para>The first line will include the correct class definition, while the second one will create an instance of the form class. The class constructor takes a number of arguments, but only one is required, the rest is optional. Here's the list of parameters that you can pass when instantiating the form object.</para>
 
@@ -52,18 +47,7 @@
 
         <para>Adding form elements</para>
 
-        <programlisting><![CDATA[<?php
-
-    function & addElement(
-        $type,
-        $name,
-        $label='',
-        $attributes=array(),
-        $options=array()
-    ) {
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_002.xml" />
 
         <para>If $element is a string representing an element type, then this method accepts variable number of parameters, their meaning and count depending on element type.</para>
 
@@ -109,77 +93,7 @@
 
         <para>You can also easily create your own form elements. Each form element needs to implement the following API:</para>
 
-        <programlisting><![CDATA[<?php
-
-    /**
-     *  This is the base class for all form elements.
-     */
-    class YDFormElement extends YDBase {
-
-        /**
-         *  This is the class constructor for the YDFormElement class.
-         *
-         *  @param $form        The name of the form to which this element is connected.
-         *  @param $name        The name of the form element.
-         *  @param $label       (optional) The label for the form element.
-         *  @param $attributes  (optional) The attributes for the form element.
-         *  @param $options     (optional) The options for the elment.
-         */
-        function YDFormElement(
-            $form, $name, $label='', $attributes=array(), $options=array()
-        ) {
-
-            // Initialize the parent
-            $this->YDBase();
-
-            // Initialize the variables
-            $this->_form = $form;
-            $this->_name = $name;
-            $this->_label = $label;
-            $this->_attributes = $attributes;
-            $this->_options = $options;
-            $this->_type = '';
-            $this->_value = '';
-            $this->_isButton = false;
-
-            // Indicate where the label should be
-            $this->_labelPlace = 'before';
-
-            // Indicate if filters need to be applied
-            $this->_applyFilters = true;
-
-        }
-
-        /**
-         *  Indicates if the element is a button or not.
-         *
-         *  @returns    Boolean indicating if the element is a button or not.
-         */
-        function isButton() {
-            if ( $this->_isButton === true ) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         *  This function will return the element as an array.
-         *
-         *  @returns    The form element as an array.
-         */
-        function toArray() {
-        }
-
-        /**
-         *  This function will return the element as HTML.
-         *
-         *  @returns    The form element as HTML text.
-         */
-        function toHtml() {
-        }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_003.xml" />
 
     </sect1>
 
@@ -195,102 +109,11 @@
 
         <para>If you want full control and you will be using templates (which is the advised way of working), you can use the class function toArray to get an array representation of your form which is very easy to use in your code. Let's take a look at how the following form code is converted to an array:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDForm.php' );    
-    $form = new YDForm( 'firstForm' );
-    $form->setDefaults( array( 'name' => 'Joe User' ) );
-    $form->addElement( 'text', 'name', 'Name:', array( 'size' => 50 ) );
-    $form->addElement( 'textarea', 'desc', 'Description:' );
-    $form->addElement( 'submit', 'cmdSubmit', 'Send' );
-    $form->toArray();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_004.xml" />
 
         <para>The code above results in the following array structure:</para>
 
-        <programlisting><![CDATA[array(7) {
-  ["attribs"]=>
-  string(94) " name="firstForm" id="firstForm"
-    method="POST" action="/ydf/examples/test.php" target="_self""
-  ["tag"]=>
-  string(100) "<form name="firstForm" id="firstForm" method="POST"
-    action="/ydf/examples/test.php" target="_self"><input type="hidden"
-    name="PHPSESSID" value="d37da78c130376040a99404758f333c6" />"
-  ["requirednote"]=>
-  string(26) "Items in bold are required"
-  ["errors"]=>
-  array(0) {
-  }
-  ["name"]=>
-  array(9) {
-    ["name"]=>
-    string(4) "name"
-    ["value"]=>
-    string(8) "Joe User"
-    ["type"]=>
-    string(4) "text"
-    ["label"]=>
-    string(16) "Name:"
-    ["options"]=>
-    array(0) {
-    }
-    ["placeLabel"]=>
-    string(6) "before"
-    ["html"]=>
-    string(68) "<input size="50" type="text" name="firstForm_name"
-        value="Joe User">"
-    ["error"]=>
-    string(0) ""
-    ["required"]=>
-    bool(false)
-  }
-  ["desc"]=>
-  array(9) {
-    ["name"]=>
-    string(4) "desc"
-    ["value"]=>
-    string(0) ""
-    ["type"]=>
-    string(8) "textarea"
-    ["label"]=>
-    string(22) "Description:"
-    ["options"]=>
-    array(0) {
-    }
-    ["placeLabel"]=>
-    string(6) "before"
-    ["html"]=>
-    string(43) "<textarea name="firstForm_desc"></textarea>"
-    ["error"]=>
-    string(0) ""
-    ["required"]=>
-    bool(false)
-  }
-  ["cmdSubmit"]=>
-  array(9) {
-    ["name"]=>
-    string(9) "cmdSubmit"
-    ["value"]=>
-    string(4) "Send"
-    ["type"]=>
-    string(6) "submit"
-    ["label"]=>
-    string(0) ""
-    ["options"]=>
-    array(0) {
-    }
-    ["placeLabel"]=>
-    string(6) "before"
-    ["html"]=>
-    string(61) "<input type="submit" name="firstForm_cmdSubmit"
-        value="Send">"
-    ["error"]=>
-    string(0) ""
-    ["required"]=>
-    bool(false)
-  }
-}]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_005.xml" />
 
         <para>The structure of this array is really easy. Every form array always contains a number of standard elements of which only a few are important for us right now. Let's go over them:</para>
 
@@ -388,63 +211,7 @@
 
         <para>Form rules can be added using the addFormRule function. This function call takes one argument, which is a callback function. When the form rule get's executed, it will execute the indicated function passing the form values as an associative array. If the function returns true, the validation is passed, otherwise, the validation fails. This is demonstrated by the following code sample:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Includes
-    require_once( 'YDForm.php' );
-    require_once( 'YDRequest.php' );
-
-    // Class definition
-    class form_rule extends YDRequest {
-
-        // Class constructor
-        function form_rule() {
-
-            // Initialize the parent class
-            $this->YDRequest();
-
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Create the form
-            $form = new YDForm( 'myForm' );
-            $form->setDefaults( array( 'name' => 'Joe User' ) );
-            $form->addElement( 'text', 'loginName', 'User name:' );
-            $form->addElement( 'password', 'loginPass', 'Password:' );
-            $form->addElement( 'submit', 'cmdSubmit', 'Login' );
-
-            // Add the form rule
-            $form->addFormRule( array( & $this, 'checkLogin' ) );
-
-            // Process the form
-            if ( $form->validate() ) {
-                YDDebugUtil::dump( $form->getValues() );
-            } else {
-                $form->display();
-            }
-
-        }
-
-        // Function to check the login. This is the callback for the form rule.
-        function checkLogin( $fields ) {
-            if ( $fields['loginName'] == 'pieter' && $fields['loginPass'] == 'kermit' ) {
-                return true;
-            } else {
-                return array( 'loginName' => 'Username and/or password incorrect' );
-            }
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_006.xml" />
 
         <para>There are also what we call compare rules, which are used to compare the values of form elements with each other. The compare rules are added using the addCompareRule function. This function takes the following arguments:</para>
 
@@ -460,58 +227,7 @@
 
         <para>The following code listing gives you an example on how to use the compare rules:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDRequest.php' );
-
-    // Class definition
-    class form_compare extends YDRequest {
-
-        // Class constructor
-        function form_compare() {
-            $this->YDRequest();
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Create the form
-            $form1 = new YDForm( 'form_equal' );
-            $form1->addElement( 'text', 'txt1', 'Enter text 1:' );
-            $form1->addElement( 'text', 'txt2', 'Enter text 2:' );
-            $form1->addElement( 'text', 'txt3', 'Enter text 3:' );
-            $form1->addElement( 'submit', 'cmd1', 'equal' );
-
-            // Add the rules
-            $form1->addRule( 'txt1', 'numeric', 'txt1 should be numeric' );
-            $form1->addRule( 'txt2', 'numeric', 'txt2 should be numeric' );
-            $form1->addRule( 'txt3', 'numeric', 'txt2 should be numeric' );
-            $form1->addCompareRule(
-                array( 'txt1', 'txt2', 'txt3' ),
-                'equal',
-                'txt1, txt2 and txt3 should be equal'
-            );
-
-            // Validate or show the form
-            if ( $form1->validate() ) {
-                YDDebugUtil::dump( $form1->getValues(), 'Form1 values' );
-            } else {
-                $form1->display();
-            }
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_007.xml" />
 
         <para>Now that we assigned all the rules and filters to the form, we can use the validate function to check if the input from our form was validated succesfully. Only if this condition is met, we will do something with the data of the form. This is also called "processing the form" which is discussed in the next section.</para>
 
@@ -539,50 +255,15 @@
 
         <para>You can easily create your own form renderer by implementing the following API:</para>
 
-    <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDForm.php' );
-
-    /**
-     *  This is the class that is able to render a form object to HTML.
-     */
-    class YDFormRenderer_html extends YDFormRenderer {
-
-        /**
-         *  This is the class constructor for the YDFormRenderer_html class.
-         *
-         *  @param $form        The form that needs to be rendered.
-         */
-        function YDFormRenderer_html( $form ) {
-
-            // Initialize the parent
-            $this->YDFormRenderer( $form );
-
-        }
-
-        /**
-         *  This function will render the form.
-         *
-         *  @returns    The rendered form.
-         */
-        function render() {
-
-            // Return the form as an array
-            return $this->_form->toArray();
-
-        }
-
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_008.xml" />
 
         <para>Before you can use the form renderer, you need to register it with the form class. This is done with the following function call:</para>
 
-        <programlisting><![CDATA[YDForm::registerRenderer( $name, $class, $file );]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_009.xml" />
 
         <para>To get the rendered output of a form with a named renderer, you can use the render function from the YDForm object:</para>
 
-        <programlisting><![CDATA[YDForm::render( 'html' );]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_010.xml" />
 
         <para>Form renderers are an excellent tool to automate the layout of your forms, and it makes sure that all the forms in your web application have a consistent look.</para>
 

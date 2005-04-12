@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the literal tag</title>
+        <programlisting><![CDATA[{literal}
+    Here is an example: {config_load file="config.conf"}
+{/literal}]]></programlisting>
+</example>

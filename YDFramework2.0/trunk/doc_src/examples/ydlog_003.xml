@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: default YD_LOG_TEXTFORMAT</title>
+    <programlisting><![CDATA[%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%]]></programlisting>
+</example>

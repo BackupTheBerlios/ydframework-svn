@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: wrapping long lines</title>
+    <programlisting><![CDATA[2005-01-08 17:15:10 | INFO | /examples/logging.php | logging.php:68 | logging->actiondefault |
+    this is a very long info message and should break up over several lines in the logfile. Each
+    line should be a separate info message in the logfile if everything goes correctly.]]></programlisting>
+</example>

@@ -105,13 +105,11 @@
 
         <para>Here's an example:</para>
 
-        <programlisting><![CDATA[{literal}
-    Here is an example: {config_load file="config.conf"}
-{/literal}]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtemplate_003.xml" />
 
         <para>This will output the following:</para>
 
-        <programlisting><![CDATA[Here is an example: {config_load file="config.conf"}]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtemplate_004.xml" />
 
     </sect1>
 

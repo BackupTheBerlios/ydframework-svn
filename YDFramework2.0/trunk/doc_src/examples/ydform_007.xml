@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using form compare rules</title>
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDRequest.php' );
+
+    // Class definition
+    class form_compare extends YDRequest {
+
+        // Class constructor
+        function form_compare() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Create the form
+            $form1 = new YDForm( 'form_equal' );
+            $form1->addElement( 'text', 'txt1', 'Enter text 1:' );
+            $form1->addElement( 'text', 'txt2', 'Enter text 2:' );
+            $form1->addElement( 'text', 'txt3', 'Enter text 3:' );
+            $form1->addElement( 'submit', 'cmd1', 'equal' );
+
+            // Add the rules
+            $form1->addRule( 'txt1', 'numeric', 'txt1 should be numeric' );
+            $form1->addRule( 'txt2', 'numeric', 'txt2 should be numeric' );
+            $form1->addRule( 'txt3', 'numeric', 'txt2 should be numeric' );
+            $form1->addCompareRule(
+                array( 'txt1', 'txt2', 'txt3' ),
+                'equal',
+                'txt1, txt2 and txt3 should be equal'
+            );
+
+            // Validate or show the form
+            if ( $form1->validate() ) {
+                YDDebugUtil::dump( $form1->getValues(), 'Form1 values' );
+            } else {
+                $form1->display();
+            }
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+
+</example>
