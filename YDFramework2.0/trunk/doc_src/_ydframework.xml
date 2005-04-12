@@ -28,6 +28,7 @@
     <!ENTITY addon_ydfeedcreator SYSTEM "ydfeedcreator.xml">
     <!ENTITY addon_ydgraph SYSTEM "ydgraph.xml">
     <!ENTITY addon_ydsqlquery SYSTEM "ydsqlquery.xml">
+    <!ENTITY addon_ydxmlform SYSTEM "ydxmlform.xml">
     <!ENTITY bestpractices SYSTEM "bestpractices.xml">
     <!ENTITY faq SYSTEM "faq.xml">
     <!ENTITY changelog SYSTEM "changelog.xml">
@@ -94,6 +95,7 @@
     &addon_ydfeedcreator;
     &addon_ydgraph;
     &addon_ydsqlquery;
+    &addon_ydxmlform;
     &faq;
     &changelog;
     &appendixA;
