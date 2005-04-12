@@ -509,6 +509,31 @@
             </td>
         </tr>
         <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDGraph</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top" rowspan="1">&nbsp;</td>
+            <td valign="top">
+                <a href="graph.php">Sample graph</a> <br/>
+                <a href="graph.php?do=demo1">Area chart</a> <br/>
+                <a href="graph.php?do=demo2">Area and line chart</a> <br/>
+                <a href="graph.php?do=demo3">Bar chart</a> <br/>
+                <a href="graph.php?do=demo4">Multiple bar chart</a> <br/>
+                <a href="graph.php?do=demo5">Bar and line chart</a> <br/>
+                <a href="graph.php?do=demo6">Step and dot chart</a> <br/>
+                <a href="graph.php?do=demo7">Line chart</a> <br/>
+                <a href="graph.php?do=demo8">Line and dot chart</a> <br/>
+                <a href="graph.php?do=demo9">Multiple lines chart</a> <br/>
+                <a href="graph.php?do=demo10">Impuls chart</a> <br/>
+                <a href="graph.php?do=demo11">Impuls and dots chart</a> <br/>
+                <a href="graph.php?do=demo12">Impuls, dots and lines chart</a> <br/>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=graph.php">graph.php</a>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
@@ -550,10 +575,6 @@
         <tr>
             <td valign="top"><a href="stringutil.php">StringUtil class</a> </td>
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
-        </tr>
-        <tr>
-            <td valign="top"><a href="graph.php">YDGraph addon</a> </td>
-            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=graph.php">graph.php</a> </td>
         </tr>
         </table>
 
