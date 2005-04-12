@@ -64,7 +64,8 @@
     $user->name  = 'John Foe';
     $user->email = 'john@anotherhost.com';
 
-    // Update the user data based on the object values and return the number of rows affected by the update
+    // Update the user data based on the object values and return the number
+    // of rows affected by the update
     $rows = $user->update();
 
 ?>]]></programlisting>
@@ -150,7 +151,9 @@
             $this->YDDatabaseObject();
 
             // Register the database connection
-            $this->registerDatabase( YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' ) );
+            $this->registerDatabase(
+                YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
+            );
 
             // Register the table name
             $this->registerTable( 'users' );
@@ -191,7 +194,9 @@
             <programlisting><![CDATA[<?php
 
     // Register the database connection
-    $this->registerDatabase( YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' ) );
+    $this->registerDatabase(
+        YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
+    );
 
 ?>]]></programlisting>
 
@@ -241,7 +246,7 @@
     // The second parameter defines that the key is auto-increment
     $this->registerNumericKey( 'id', true );
 
-    // Register a numeric field
+    // Register a string key
     $this->registerStringKey( 'date' );
 
 ?>]]></programlisting>
@@ -299,7 +304,8 @@
 
             <para>The above example will add the following piece of SQL code when you execute a find:</para>
 
-            <programlisting><![CDATA[SELECT ..., YEAR( birthday ) AS 'birth_year', SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlisting>
+            <programlisting><![CDATA[SELECT ..., YEAR( birthday ) AS 'birth_year',
+SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlisting>
 
             <para>These values will be available as object variables but will not be included in INSERT, UPDATE or DELETE calls as they are not defined fields of the table.</para>
 
@@ -333,7 +339,7 @@
 
             <title>Register protected fields</title>
 
-            <para>The registerProtected method defines fields that have protected values that can't be changed. This values will remain for all actions of the object (find, insert, update, etc).</para>
+            <para>The registerProtected method defines fields that have protected values that can't be changed. These values will remain for all actions of the object (find, insert, update, etc).</para>
 
             <programlisting><![CDATA[<?php
 
@@ -422,7 +428,7 @@
 
         <title>Instantiating the classes</title>
 
-        <para>There are two ways of instantiating a YDDatabaseObject class: using the getInstance static method or calling directly the class. The getInstance static method uses four YDDatabaseObject configurations that can be changed using the YDConfig module.</para>
+        <para>There are two ways of instantiating a YDDatabaseObject class: using the getInstance static method or calling the class directly. The getInstance static method uses four YDDatabaseObject configurations that can be changed using the YDConfig module.</para>
 
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">YD_DBOBJECT_PATH:</emphasis> the path to all YDDatabaseObject classes to be instantiated. Default: current directory.</listitem>
@@ -597,7 +603,7 @@
 
         <para>The idea behind YDDatabaseObject is to use the defined object variables values to build SQL queries such as SELECT, UPDATE, INSERT and DELETE. To find information in the database we have the find and findSql methods.</para>
 
-        <para>The difference between find and findSql is that find uses the object variables to build the query and findSql must have a SQL query passed as an argument. Both these methods will add it's values to the object variables. We also have a executeSql method that calls the executeSql defined in YDDatabase and can execute any SQL query you want and return the number of affected rows.</para>
+        <para>The difference between find and findSql is that find uses the object variables to build the query and findSql must have a SQL query passed as an argument. Both these methods will add their values to the object variables. We also have a executeSql method that calls the executeSql defined in YDDatabase and can execute any SQL query you want and return the number of affected rows.</para>
 
         <programlisting><![CDATA[<?php
 
