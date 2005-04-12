@@ -200,13 +200,13 @@
                 $out .= '<td class="bbtoolbar">';
                 foreach ( $this->_buttons as $button ) {
                     if ( $button['type'] == 'modifier' )  {
-                        $out .= '<a href="#" onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+                        $out .= '<a href="#" onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
                     }
                     if ( $button['type'] == 'simplepopup' )  {
-                        $out .= '<a href="#" onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') );">[ ' . $button['label'] . ' ]</a> ';
+                        $out .= '<a href="#" onClick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
                     }
                     if ( $button['type'] == 'popupwindow' )  {
-                        $out .= '<a href="#" onClick="void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) );">[ ' . $button['label'] . ' ]</a> ';
+                        $out .= '<a href="#" onClick="void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) ); return false;">[ ' . $button['label'] . ' ]</a> ';
                     }
                 }
                 $out .= '</td>';
