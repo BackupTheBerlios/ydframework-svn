@@ -3,6 +3,6 @@
 
     <title>Addon: YDGraph, a graphing module</title>
 
-    <para>Not documented yet</para>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydgraph_001.xml" />
 
 </chapter>
