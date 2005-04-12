@@ -71,7 +71,7 @@
 
             // The list of errors
             $this->_errors = array();
-            
+
             // Some static HTML things
             $this->_htmlRequiredStart =  '';
             $this->_htmlRequiredEnd = ' <font color="red">(required)</font>';
@@ -150,7 +150,7 @@
         }
 
         /**
-         *	This function will set the HTML that is added before and after the element label to indicate that the 
+         *	This function will set the HTML that is added before and after the element label to indicate that the
          *	element is required. This only has affect if you use the default toHtml function.
          *
          *	@param $start	The HTML that should be added before the label.
@@ -162,7 +162,7 @@
         }
 
         /**
-         *	This function will set the HTML that is added before and after the element label to indicate that the 
+         *	This function will set the HTML that is added before and after the element label to indicate that the
          *	element has an errir. This only has affect if you use the default toHtml function.
          *
          *	@param $start	The HTML that should be added before the label.
@@ -272,7 +272,7 @@
 
             // Will be used for new elements
             $this->_defaults = $array;
-            
+
             // Update the values for the existing elements
             if ( ! $this->isSubmitted() ) {
                 foreach ( $this->_elements as $name=>$element ) {
@@ -282,7 +282,7 @@
                     }
                 }
             }
-            
+
         }
 
         /**
@@ -544,7 +544,7 @@
 
             // Special treatment for uploads
             if ( $type == 'file' ) {
-                if ( array_key_exists( $this->_name . '_' . $name, $_FILES ) ) { 
+                if ( array_key_exists( $this->_name . '_' . $name, $_FILES ) ) {
                     return $_FILES[ $this->_name . '_' . $name ];
                 }
             }
@@ -565,10 +565,10 @@
             if ( is_array( $value ) ) {
                 ksort( $value );
             }
-            
+
             // Return the value
             return $value;
-        
+
         }
 
         /**
@@ -622,13 +622,13 @@
          *	@returns	Boolean indicating if the button was clicked or not.
          */
         function isClicked( $button ) {
-        
+
             // Get the element.
             $element = $this->getElement( $button );
 
             // Check if it's a button
             if ( $element->isButton() === true ) {
-                
+
                 // Check the post variables
                 if ( array_key_exists( $this->_name . '_' . $element->_name, $this->_formVars ) ) {
                     return true;
@@ -656,7 +656,7 @@
 
             // Form should be submitted
             if ( $this->isSubmitted() == false ) {
-                return false; 
+                return false;
             }
 
             // Check if there are any rules, if not, form is valid and return true
@@ -697,7 +697,7 @@
                         }
 
                         // If field has been marked NOT mandatory, and field is empty, don't check for validity
-                        $obj = $this->getElement( $element );
+                        $obj = & $this->getElement( $element );
                         if (
                             ! isset($obj->_options['mandatory'] )
                             OR $obj->_options['mandatory'] == true
@@ -706,10 +706,10 @@
 
                             // Check the rule
                             // @todo Are we able to handle arrays?
-                            $result = call_user_func( 
-                                $ruleDetails['callback'], $value, $rule['options'] 
+                            $result = call_user_func(
+                                $ruleDetails['callback'], $value, $rule['options']
                             );
-  
+
                             // If the result is false, add the error
                             if ( $result == false ) {
                                 if ( ! isset( $this->_errors[ $element ] ) ) {
@@ -834,12 +834,22 @@
 
             // Check for errors
             if ( sizeof( $this->_errors ) > 0 ) {
+
+                // Check all elements
+                foreach ( $this->_elements as $key => $val ) {
+                    if ( $val->_type == 'password' ) {
+                        $this->_elements[$key]->setValue( '' );
+                    }
+                }
+
+                // Return false
                 return false;
+
             }
 
             // All went fine, return true
             return true;
-            
+
         }
 
         /**
@@ -945,41 +955,41 @@
             return $value;
         }
 
-        /** 
-         *      This function will set raw default values for the form. 
-         * 
-         *      @param $array   Associative array containing the default values. 
-         */ 
-        function setRawDefaults( $array ) { 
+        /**
+         *      This function will set raw default values for the form.
+         *
+         *      @param $array   Associative array containing the default values.
+         */
+        function setRawDefaults( $array ) {
 
-            // Will be used for new elements 
-            $this->_defaults = $array; 
+            // Will be used for new elements
+            $this->_defaults = $array;
 
-            // Update the values for the existing elements 
-            if ( ! $this->isSubmitted() ) { 
-                foreach ( $this->_elements as $name=>$element ) { 
-                    if ( isset( $this->_defaults[ $element->_name ] ) ) { 
-                        $element->setRawValue( $this->_defaults[ $element->_name ] ); 
-                        unset( $this->_defaults[ $element->_name ] ); 
-                        $this->_elements[ $name ] = $element; 
-                    } 
-                } 
-            } 
-            
-        } 
+            // Update the values for the existing elements
+            if ( ! $this->isSubmitted() ) {
+                foreach ( $this->_elements as $name=>$element ) {
+                    if ( isset( $this->_defaults[ $element->_name ] ) ) {
+                        $element->setRawValue( $this->_defaults[ $element->_name ] );
+                        unset( $this->_defaults[ $element->_name ] );
+                        $this->_elements[ $name ] = $element;
+                    }
+                }
+            }
 
-        /** 
-         *      This function will return all raw values for the form as an associative array. 
-         * 
-         *      @returns        The values for the form as an associative array. 
-         */ 
-        function getRawValues() { 
-            $vars = array(); 
-            foreach ( $this->_elements as $name => $element ) { 
-                $vars[ $name ] = $element->getRawValue(); 
-            } 
-            return $vars; 
-        } 
+        }
+
+        /**
+         *      This function will return all raw values for the form as an associative array.
+         *
+         *      @returns        The values for the form as an associative array.
+         */
+        function getRawValues() {
+            $vars = array();
+            foreach ( $this->_elements as $name => $element ) {
+                $vars[ $name ] = $element->getRawValue();
+            }
+            return $vars;
+        }
 
     }
 
@@ -1035,7 +1045,7 @@
          *	This function sets the value for the date element.
          *
          *	@param	$val	(optional) The value for this object.
-         */		
+         */
         function setValue( $val='' ) {
             $this->_value = $val;
         }
@@ -1081,23 +1091,23 @@
         function toHtml() {
         }
 
-        /** 
-         *      This function sets raw value for the date element. 
-         * 
-         *      @param  $val    (optional) The value for this object. 
-         */ 
-        function setRawValue( $val='' ) { 
-            $this->_value = $val; 
-        } 
+        /**
+         *      This function sets raw value for the date element.
+         *
+         *      @param  $val    (optional) The value for this object.
+         */
+        function setRawValue( $val='' ) {
+            $this->_value = $val;
+        }
 
-        /** 
-         *      This function will return raw value of the date element. 
-         * 
-         *      @returns        Raw value of this object. 
-         */ 
-        function getRawValue() { 
-            return $this->_value; 
-        } 
+        /**
+         *      This function will return raw value of the date element.
+         *
+         *      @returns        Raw value of this object.
+         */
+        function getRawValue() {
+            return $this->_value;
+        }
 
     }
 
