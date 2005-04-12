@@ -43,19 +43,19 @@
         <programlisting><![CDATA[<?php
 
     array (
-        0 => 
+        0 =>
         array (
             0 => 1,
             1 => 2,
             2 => 3,
         ),
-        1 => 
+        1 =>
         array (
             0 => 4,
             1 => 5,
             2 => 6,
         ),
-        2 => 
+        2 =>
         array (
             0 => 7,
         ),
@@ -94,27 +94,27 @@
         <programlisting><![CDATA[<?php
 
     array (
-        'admin' => 
+        'admin' =>
         array (
-            0 => 
+            0 =>
             array(
                 'id' => 1, 'name' => 'Pieter', 'group' => 'admin'
             ),
-            1 => 
+            1 =>
             array(
                 'id' => 2, 'name' => 'Fiona', 'group' => 'admin'
             ),
         ),
-        'user' => 
+        'user' =>
         array (
-            0 => 
+            0 =>
             array(
                 'id' => 3, 'name' => 'Bert', 'group' => 'user'
             ),
         ),
-        'guest' => 
+        'guest' =>
         array (
-            0 => 
+            0 =>
             array(
                 'id' => 3, 'name' => 'Jan', 'group' => 'guest'
             ),
@@ -141,14 +141,14 @@
     $browser = new YDBrowserInfo();
 
     // Dump the different properties
-    YDDebugUtil::dump( $browser->agent, 'Agent' ); 
-    YDDebugUtil::dump( $browser->browser, 'Browser name' ); 
-    YDDebugUtil::dump( $browser->version, 'Version' ); 
-    YDDebugUtil::dump( $browser->platform, 'Platform' ); 
-    YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' ); 
+    YDDebugUtil::dump( $browser->agent, 'Agent' );
+    YDDebugUtil::dump( $browser->browser, 'Browser name' );
+    YDDebugUtil::dump( $browser->version, 'Version' );
+    YDDebugUtil::dump( $browser->platform, 'Platform' );
+    YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
     YDDebugUtil::dump(
         $browser->getBrowserLanguages(), 'Languages supported by the browser'
-    ); 
+    );
     YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
 
 ?>]]></programlisting>
@@ -215,128 +215,6 @@ Negotiated language
         </itemizedlist>
 
         <note>All these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</note>
-
-    </sect1>
-
-    <sect1 id="other_ydbbcode">
-
-        <title>YDBBCode</title>
-
-        <para>The YDBBCode class implements a class that helps convert BB style tags to HTML. It's not really designed to be easy to extend, but it's more geared towards speed and efficiency. BBCode is a specific way of adding markup tags to text to indicate the formatting and is very popular in forums.</para>
-
-        <para>The following BBCode is understood by the YDBBCode class:</para>
-
-        <programlisting><![CDATA[[img]http://elouai.com/images/star.gif[/img]
-[img=http://www.yellowduck.be/]http://elouai.com/images/star.gif[/img]
-[url=http://elouai.com]eLouai[/url]
-[url]http://elouai.com[/url]
-[url=index.php?YD_DEBUG=1]Yellow Duck Framework examples[/url]
-[url]index.php?YD_DEBUG=1[/url]
-[mail=webmaster@elouai.com]Webmaster[/mail]
-[mail]webmaster@elouai.com[/mail]
-[email=webmaster@elouai.com]Webmaster[/email]
-[email]webmaster@elouai.com[/email]
-[color=red]RED[/color]
-[b]bold[/b]
-[i]italic[/i]
-[u]underline[/u]
-[code]value="123";[/code]
-[quote]a quote[/quote]]]></programlisting>
-
-        <para>The codes above will be converted to the following HTML code:</para>
-
-        <programlisting><![CDATA[<img border="0" src="http://elouai.com/images/star.gif"><br />
-<a target="_blank" href="http://www.yellowduck.be/"><img
-    border="0" src="http://elouai.com/images/star.gif"></a><br />
-<a target="_blank" href="http://elouai.com">eLouai</a><br />
-<a target="_blank" href="http://elouai.com">http://elouai.com</a><br />
-<a href="index.php?YD_DEBUG=1">Yellow Duck Framework examples</a><br />
-<a href="index.php?YD_DEBUG=1">index.php?YD_DEBUG=1</a><br />
-<a href="mailto:webmaster@elouai.com">Webmaster</a><br />
-<a href="mailto:webmaster@elouai.com">webmaster@elouai.com</a><br />
-<a href="mailto:webmaster@elouai.com">Webmaster</a><br />
-<a href="mailto:webmaster@elouai.com">webmaster@elouai.com</a><br />
-<font color="red">RED</font><br />
-<b>bold</b><br />
-<i>italic</i><br />
-<u>underline</u><br />
-<code>value="123";</code><br />
-<blockquote>a quote</blockquote><br />]]></programlisting>
-
-        <para>Additionally, as you can see, newlines are converted to <![CDATA[<br />]]> tags. The class will also converted non ascii characters to HTML entities.</para>
-
-        <para>The following code sample illustrates the code behind the conversion shown above:</para>
-
-        <programlisting><![CDATA[// The converter
-$conv = new YDBBCode();
-
-// Show the code converted to HTML
-echo( $conv->toHtml( $data ) );]]></programlisting>
-
-        <para>The YDBBCode class also contains a static function that highlights ordinary links such as email links and web links and converts them into clickable links. For this purpose, you can use the YDBBCode::convertLinks method. This function can be used statically.</para>
-
-        <para>If you want to add your own BBCode tags, you can use the addRule function to add them. The add rule function takes two arguments, one which is the regular expression defining the BBCode tags, the other one the replacement string. The following code sample shows you have the standard tags are defined:</para>
-
-        <programlisting><![CDATA[// The converter
-$conv = new YDBBCode();
-
-// Replace [b][/b] and [B][/B]
-$conv->addRule( "/\[[bB]\](.+?)\[\/[bB]\]/s", '<b>\\1</b>' );
-
-// Replace [i][/i] and [I][/I]
-$conv->addRule( "/\[[iI]\](.+?)\[\/[iI]\]/s", '<i>\\1</i>' );
-
-// Replace [u][/u] and [U][/U]
-$conv->addRule( "/\[[uU]\](.+?)\[\/[uU]\]/s", '<u>\\1</u>' );
-
-// Replace [p][/p] and [P][/P]
-$conv->addRule( "/\[[pP]\](.+?)\[\/[pP]\]/s", '<p>\\1</p>' );
-
-// Replace [code][/code]
-$conv->addRule( "/\[code\](.+?)\[\/code\]/s", '<code>\\1</code>' );
-
-// Replace [quote][/quote]
-$conv->addRule( "/\[quote\](.+?)\[\/quote\]/s", '<blockquote>\\1</blockquote>' );
-
-// Replace [url=][/url]
-$conv->addRule( "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i", '<a href="\\1">\\2</a>' );
-
-// Replace [url][/url]
-$conv->addRule( "/\[url\]([^<> \n]+?)\[\/url\]/i", '<a href="\\1">\\1</a>' );
-
-// Replace [mail=][/mail]
-$conv->addRule(
-    "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>'
-);
-
-// Replace [email][/email]
-$conv->addRule(
-    "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>'
-);
-
-// Replace [email=][/email]
-$conv->addRule(
-    "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>'
-);
-
-// Replace [mail][/mail]
-$conv->addRule(
-    "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' 
-);
-
-// Replace [img=][/img]
-$conv->addRule(
-    "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i",
-    '<a href="\\1"><img border="0" src="\\2"></a>'
-);
-
-// Replace [img][/img]
-$conv->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
-
-// Replace [color=][/color]
-$conv->addRule(
-    "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>'
-);]]></programlisting>
 
     </sect1>
 
@@ -431,7 +309,7 @@ $conv->addRule(
                 'Truncate (20): ' . $string
             );
             YDDebugUtil::dump(
-                YDStringUtil::truncate( $string, 20, ' [more]' ), 
+                YDStringUtil::truncate( $string, 20, ' [more]' ),
                 'Truncate (20/more): ' . $string
             );
             YDDebugUtil::dump(

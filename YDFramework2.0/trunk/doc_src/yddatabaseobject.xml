@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <chapter id="yddatabaseobject">
 
-    <title>The YDDatabaseObject addon</title>
+    <title>Addon: YDDatabaseObject, an object-relational manager</title>
 
     <para>The main objective of YDDatabaseObject is to use objects to:</para>
 

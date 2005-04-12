@@ -62,26 +62,26 @@
         <title>Configuring the YDDatabase class</title>
 
         <para>There are two things you can configure in the YDDatabase class:</para>
-        
+
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">YD_DB_DEFAULTPAGESIZE:</emphasis> The default pagesize for the YDRecordSet class</listitem>
             <listitem><emphasis role="bold">YD_DB_FETCHTYPE:</emphasis> The result type you want to get from the getRecord and getRecords functions. This can either be YD_DB_FETCH_ASSOC to get them as an associative array or YD_DB_FETCH_NUM to get the records as a numeric array.</listitem>
         </itemizedlist>
 
         <para>Both options can be set using the YDConfig object, as demonstrated with the following code sample:</para>
-        
+
         <programlisting><![CDATA[<?php
 
     // Change the default pagesize
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 10 );
-    
+
     // Fetch as an associative array
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
-    
+
     // Fetch as an numeric array
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
 
-?>]]></programlisting>    
+?>]]></programlisting>
     </sect1>
 
     <sect1 id="yddatabase_getting_db_info">
@@ -200,7 +200,7 @@
         <note>This function doesn't return any extra information about what is returned, and this should be calculated manually.</note>
 
     </sect1>
- 
+
     <sect1 id="yddatabase_paged">
 
         <title>Using paged recordsets</title>
@@ -632,229 +632,6 @@
     $db->executeDelete( 'configuration', 'id = 1' );
 
 ?>]]></programlisting>
-
-    </sect1>
-
-    <sect1 id="yddatabase_sqlquery">
-
-        <title>Using objects to create SQL queries</title>
-
-        <para>The Yellow Duck Framework has a special object called YDSqlQuery that allows you to create SQL statements using an object. This makes it a lot easier to read the SQL statements and it's also easier to maintain them. This is a solution in between using plain SQL statements and using a object relational mapper such as YDDatabaseObject.</para>
-
-        <note>This class is specified in it's own include file, so you need to include it manually.</note>
-
-        <para>The following example shows you how you can use the YDSqlQuery object to create a SELECT SQL statement:</para>
-
-        <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
-
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'SELECT', array( 'DISTINCT' ) );
-
-        // Add a table to the query
-        $u = $q->addTable( 'user' );
-
-        // Add the fields we want to select
-        $q->addSelect( "$u.id" ); 
-        $q->addSelect( "$u.name", 'user_name' );
-        $q->addSelect( "SUM( $u.value )", 'total' );
-
-        // Add a where statement
-        $q->openWhereGroup();
-        $q->addWhere( "$u.id = 144" );
-
-        // Add another where statement
-        $q->openWhereGroup( 'OR' );
-        $q->addWhere( "$u.name LIKE 'David%'" );
-        $q->addWhere( "$u.id > 13" );
-
-        // Add a group by clause
-        $q->addGroup( "$u.id", true ); // DESC
-
-        // Add ordering
-        $q->addOrder( "$u.name" );
-        $q->addOrder( "total", true ); // DESC
-
-        // Add a having clause
-        $q->addHaving( "total > 100" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
-
-        // Reset the contents of the query (optional)
-        $q->reset();
-
-?>]]></programlisting>
-
-        <para>The output of this script would be:</para>
-
-        <programlisting><![CDATA[SELECT DISTINCT user.id, user.name AS "user_name", SUM( user.value ) AS "total"
-FROM user WHERE ( user.id = 144 OR ( user.name LIKE 'David%' AND user.id > 13 ) )
-GROUP BY user.id DESC HAVING total > 100 ORDER BY user.name, total DESC]]></programlisting>
-
-        <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
-
-        <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
-
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'SELECT' );
-
-        // Add a table with an alias
-        $u = $q->addTable( 'user', 'u' );
-
-        // Add the fields for this table
-        $q->addSelect( 'id' ); 
-        $q->addSelect( 'name' );
-
-        // Add a left join
-        $g = $q->addJoin( 'LEFT', 'group', "g" );
-
-        // Specify the fields to use for the join
-        $q->addJoinOn( "$u.group_id = $g.id" );
-
-        // Add the joined fields
-        $q->addSelect( "$g.id", 'gid' );
-        $q->addSelect( "$g.name", 'group_name' );
-
-        // Add an inner join
-        $a = $q->addJoin( 'INNER', 'attach', "a" ); 
-
-        // Specify the fields to use for the join
-        $q->addJoinOn( "$g.attach_id = $a.id" );
-
-        // Add a join group
-        $q->openJoinOnGroup( 'OR' );
-
-        // Specify the field to use for the join group
-        $q->addJoinOn( "$a.size > 150" );
-        $q->addJoinOn( "$a.status = 3" );
-        
-        // Add some more fields
-        $q->addSelect( "$a.id", 'aid' );
-        $q->addSelect( "$a.name", 'attach_name' );
-
-        // Add a where clause
-        $q->addWhere( "$g.id = 144" );
-
-        // Add ordering
-        $q->addOrder( "name" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
-
-?>]]></programlisting>
-
-        <para>This would output the following SQL statement:</para>
-
-        <programlisting><![CDATA[SELECT
-    id, name, g.id AS "gid",
-    g.name AS "group_name"
-    a.id AS "aid",
-    a.name AS "attach_name"
-FROM user AS "u"
-LEFT JOIN group AS "g" ON ( u.group_id = g.id )
-INNER JOIN attach AS "a" ON ( g.attach_id = a.id OR ( a.size > 150 AND a.status = 3 ) )
-WHERE g.id = 144 ORDER BY name]]></programlisting>
-
-        <para>Also SQL delete statements can be constructed with the YDSqlQuery class:</para>
-
-        <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
-
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'DELETE' );
-
-        // Add a table
-        $q->addTable( 'user' );
-
-        // Specify the where clause
-        $q->addWhere( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
-
-?>]]></programlisting>
-
-        <para>The output of this script would be:</para>
-
-        <programlisting><![CDATA[DELETE FROM user WHERE id = 144]]></programlisting>
-
-        <para>The following example illustrates how to create an insert statement:</para>
-
-        <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
-
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'INSERT' );
-
-        // Add a table
-        $q->addTable( 'user' );
-
-        // Set the values
-        $q->setValues(
-            array(
-                'name' => 'David',
-                'email' => 'email@host.com', 
-                'admin' => 1, 
-                'purple' => null
-            )
-        );
-
-        // Add the where clause
-        $q->addWhere( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
-
-?>]]></programlisting>
-
-        <para>The output of this script would be:</para>
-
-        <programlisting><![CDATA[INSERT INTO user ( name, email, admin, purple ) VALUES ( 'David', 'email@host.com', 1, NULL )]]></programlisting>
-
-        <para>You can also generate SQL update statements:</para>
-
-        <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
-
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'UPDATE' );
-
-        // Add a table
-        $q->addTable( 'user' );
-
-        // Set the values
-        $q->setValues(
-            array(
-                'name' => 'David',
-                'email' => 'email@host.com', 
-                'admin' => 1, 
-                'purple' => null
-            )
-        );
-
-        // Add the where clause
-        $q->addWhere( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
-
-?>]]></programlisting>
-
-        <para>The output of this script would be:</para>
-
-        <programlisting><![CDATA[UPDATE user SET name = 'David', email = 'email@host.com', admin = 1, purple = NULL WHERE id = 144]]></programlisting>
 
     </sect1>
 

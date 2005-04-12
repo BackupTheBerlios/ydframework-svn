@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <chapter id="ydfeedcreator">
 
-    <title>Creating RSS and ATOM feeds</title>
+    <title>Addon: YDFeedCreator, creating RSS and ATOM feeds</title>
 
     <para>RSS and ATOM are XML-based file formats intended to allow lists of information, known as "feeds", to be synchronised between publishers and consumers. Feeds are composed of a number of items, known as "entries", each with an extensible set of attached metadata. For example, each entry has a title.</para>
 

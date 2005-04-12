@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <chapter id="ydcart">
 
-    <title>YDCart: a shopping cart</title>
+    <title>Addon: YDCart, a shopping cart</title>
 
     <para>The YDCart class implements a shopping cart. Each shopping cart can contain a number of products (specified by name or ID), and each product has a certain quantity in the cart.</para>
 

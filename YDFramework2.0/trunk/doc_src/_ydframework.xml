@@ -14,17 +14,20 @@
     <!ENTITY ydlog SYSTEM "ydlog.xml">
     <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
     <!ENTITY yddatabase SYSTEM "yddatabase.xml">
-    <!ENTITY yddatabaseobject SYSTEM "yddatabaseobject.xml">
     <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
     <!ENTITY ydurl SYSTEM "ydurl.xml">
     <!ENTITY ydxmlrpc SYSTEM "ydxmlrpc.xml">
     <!ENTITY ydemail SYSTEM "ydemail.xml">
-    <!ENTITY ydfeedcreator SYSTEM "ydfeedcreator.xml">
     <!ENTITY yderror SYSTEM "yderror.xml">
     <!ENTITY ydtimer SYSTEM "ydtimer.xml">
-    <!ENTITY ydcart SYSTEM "ydcart.xml">
     <!ENTITY ydlocale SYSTEM "ydlocale.xml">
     <!ENTITY other SYSTEM "other.xml">
+    <!ENTITY addon_ydbbcode SYSTEM "ydbbcode.xml">
+    <!ENTITY addon_ydcart SYSTEM "ydcart.xml">
+    <!ENTITY addon_yddatabaseobject SYSTEM "yddatabaseobject.xml">
+    <!ENTITY addon_ydfeedcreator SYSTEM "ydfeedcreator.xml">
+    <!ENTITY addon_ydgraph SYSTEM "ydgraph.xml">
+    <!ENTITY addon_ydsqlquery SYSTEM "ydsqlquery.xml">
     <!ENTITY bestpractices SYSTEM "bestpractices.xml">
     <!ENTITY faq SYSTEM "faq.xml">
     <!ENTITY changelog SYSTEM "changelog.xml">
@@ -77,18 +80,20 @@
     &ydlog;
     &ydauthentication;
     &yddatabase;
-    &yddatabaseobject;
     &ydfilesystem;
     &ydurl;
     &ydxmlrpc;
     &ydemail;
-    &ydfeedcreator;
     &yderror;
     &ydtimer;
-    &ydcart;
     &ydlocale;
     &other;
-    &bestpractices;
+    &addon_ydbbcode;
+    &addon_ydcart;
+    &addon_yddatabaseobject;
+    &addon_ydfeedcreator;
+    &addon_ydgraph;
+    &addon_ydsqlquery;
     &faq;
     &changelog;
     &appendixA;
