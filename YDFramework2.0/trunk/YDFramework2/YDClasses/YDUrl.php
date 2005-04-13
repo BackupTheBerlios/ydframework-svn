@@ -396,7 +396,7 @@
          *	@param	$name	The name of the query variable to delete.
          */
         function deleteQueryVar( $name ) {
-            @unset( $this->_url_parsed['query'][$name] );
+            unset( $this->_url_parsed['query'][$name] );
         }
 
         /**
