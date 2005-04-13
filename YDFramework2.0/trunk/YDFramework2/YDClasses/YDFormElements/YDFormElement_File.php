@@ -60,6 +60,9 @@
          *	@returns	Boolean indicating if the file was uploaded or not.
          */
         function isUploaded() {
+            if ( ! isset( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) ) {
+                return false;
+            }
             return is_uploaded_file( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] )
                     && ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) > 0 );
         }
