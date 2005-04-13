@@ -23,7 +23,7 @@
 
     /*! \mainpage Yellow Duck Framework
      *
-     *	The Yellow Duck Framework is web application framework created by Pieter Claerhout. More information can be 
+     *	The Yellow Duck Framework is web application framework created by Pieter Claerhout. More information can be
      *	found on http://www.yellowduck.be/ydf/.
      *
      *	(c) 2002-2004 Pieter Claerhout, pieter@yellowduck.be
@@ -68,6 +68,7 @@
     @define( 'YD_FW_VERSION', '2.0 (build ' . YD_FW_REVISION . ')' );
     @define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
     @define( 'YD_FW_HOMEPAGE', 'http://www.yellowduck.be/ydf/' );
+    @define( 'YD_FW_COPYRIGHT', '(c) 2002-2005 Pieter Claerhout, pieter@yellowduck.be' );
 
     // Directory paths
     @define( 'YD_DIR_HOME', dirname( __FILE__ ) );
@@ -121,7 +122,7 @@
     if ( $handle = opendir( YD_DIR_ADDO ) ) {
         while ( false !== ( $file = readdir( $handle ) ) ) {
            if (
-               //$file != '.' && $file != '..' && 
+               //$file != '.' && $file != '..' &&
                substr( $file, 0, 1 ) != '.' &&
                is_dir( YD_DIR_ADDO . YD_DIRDELIM . $file )
            ) {

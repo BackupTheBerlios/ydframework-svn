@@ -42,14 +42,14 @@
     class YDTemplate extends Smarty {
 
         /**
-         *	This is the class constructor for the YDTemplate class. By default, it looks in the same directory as 
+         *	This is the class constructor for the YDTemplate class. By default, it looks in the same directory as
          *	the current script to find the templates.
          */
         function YDTemplate() {
 
             // Initialize the parent
             $this->Smarty();
-        
+
             // Set the default template directory
             $this->template_dir = YD_SELF_DIR;
 
@@ -119,12 +119,13 @@
             $this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
             $this->assign( 'YD_FW_NAMEVERS', YD_FW_NAMEVERS );
             $this->assign( 'YD_FW_HOMEPAGE', YD_FW_HOMEPAGE );
+            $this->assign( 'YD_FW_COPYRIGHT', YD_FW_COPYRIGHT );
             $this->assign( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
             $this->assign( 'YD_SELF_FILE', YD_SELF_FILE );
             $this->assign( 'YD_SELF_URI', YD_SELF_URI );
             $this->assign( 'YD_ACTION_PARAM', YD_ACTION_PARAM );
             $this->assign( 'YD_ACTION', YDRequest::getActionName() );
-            
+
             // Get the template name
             $tplName = $this->_getTemplateName( $file );
 

@@ -76,6 +76,7 @@
             <listitem><emphasis role="bold"><literal>YD_FW_VERSION</literal>:</emphasis> version of the framework</listitem>
             <listitem><emphasis role="bold"><literal>YD_FW_NAMEVERS</literal>:</emphasis> the combination of the two items above</listitem>
             <listitem><emphasis role="bold"><literal>YD_FW_HOMEPAGE</literal>:</emphasis> the homepage of the Yellow Duck Framework</listitem>
+            <listitem><emphasis role="bold"><literal>YD_FW_COPYRIGHT</literal>:</emphasis> the copyright statement for the Yellow Duck Framework</listitem>
             <listitem><emphasis role="bold"><literal>YD_SELF_SCRIPT</literal>:</emphasis> the current script's path, e.g. <literal>/myapp/index.php</literal></listitem>
             <listitem><emphasis role="bold"><literal>YD_SELF_URI</literal>:</emphasis> the URI which was given in order to access this page, e.g. <literal>/myapp/index.php?do=edit</literal></listitem>
             <listitem><emphasis role="bold"><literal>YD_ACTION_PARAM</literal>:</emphasis> the name of the <literal>$_GET</literal> parameter that specifies which action needs to be executed. This is <literal>do</literal> by convention.</listitem>
