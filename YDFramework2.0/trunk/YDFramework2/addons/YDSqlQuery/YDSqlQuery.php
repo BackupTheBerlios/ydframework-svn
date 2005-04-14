@@ -292,7 +292,7 @@
                 if ( ! in_array( $table, $done ) ) {
                     $sql  = sizeof( $from ) ? ', ' : '';
                     $sql .= $table;
-                    $sql .= strlen( $alias ) ? ' AS "' . $alias . '"' : '';
+                    $sql .= strlen( $alias ) ? ' AS ' . $alias : '';
                     array_push( $done, $table );
                 }
                 
@@ -300,7 +300,7 @@
                     
                     $join = $this->join[ $index ];					
                     $sql .= ' ' . $join['type'] . ' JOIN ' . $join['table'];
-                    $sql .= strlen( $join['alias'] ) ? ' AS "' . $join['alias'] . '"' : '';
+                    $sql .= strlen( $join['alias'] ) ? ' AS ' . $join['alias'] : '';
                     
                     if ( array_key_exists( $index, $this->joinon ) ) {	
                         $sql .= $this->getJoinOn( $index );	
