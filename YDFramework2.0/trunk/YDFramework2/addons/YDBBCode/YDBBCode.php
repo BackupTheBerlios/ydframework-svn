@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@
             // Setup the module
             $this->_author = 'Pieter Claerhout';
             $this->_version = '1.0';
-            $this->_copyright = '(c) 2005 Pieter Claerhout, pieter@yellowduck.be';
+            $this->_copyright = '(c) Copyright 2002-2005 Pieter Claerhout';
             $this->_description = 'This class implements a BBCode parser. By default, it supports a number of standard '
                                . 'codes that can be implemented. The following codes are supported by default: img, '
                                . 'url, mail, email, color, b, i, u, code, quote, p';

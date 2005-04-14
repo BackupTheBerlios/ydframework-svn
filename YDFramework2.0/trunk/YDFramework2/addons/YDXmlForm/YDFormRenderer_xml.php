@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -53,137 +53,137 @@
          */
         function render() {
 
-			// form string
-			$xml = "<form name=\"". $this->_form->_name ."\" method=\"". $this->_form->_method ."\" action=\"". $this->_form->_action ."\" target=\"". $this->_form->_target ."\">\n";
+            // form string
+            $xml = "<form name=\"". $this->_form->_name ."\" method=\"". $this->_form->_method ."\" action=\"". $this->_form->_action ."\" target=\"". $this->_form->_target ."\">\n";
 
-			// add ATTRIBUTES
-			$xml .= "\t<attributes>\n";
+            // add ATTRIBUTES
+            $xml .= "\t<attributes>\n";
 
-			// loop attributes
-			foreach ($this->_form->_attributes as $name => $value)
-				$xml .= "\t\t<attribute name=\"". $name ."\" value=\"". $value ."\" />\n";
-		
-			$xml .= "\t</attributes>\n";
-			
-			// add ELEMENTS
-			$xml .= "\t<elements>\n";
+            // loop attributes
+            foreach ($this->_form->_attributes as $name => $value)
+                $xml .= "\t\t<attribute name=\"". $name ."\" value=\"". $value ."\" />\n";
+
+            $xml .= "\t</attributes>\n";
+
+            // add ELEMENTS
+            $xml .= "\t<elements>\n";
 
             // Get elements from form
-			$elements = $this->_form->_elements;
+            $elements = $this->_form->_elements;
 
-			foreach ( $elements as $name => $elementobj ) {
-				$element = $elementobj->toArray();
-					
-				// add element name and type
-				$xml .= "\t\t<element name=\"". $element['name'] ."\" type=\"". $element['type'] ."\">\n";
-				
-				// add labels (this form export support only default labels)
-				$xml .= "\t\t\t<labels>\n";
-				$xml .= "\t\t\t\t<label id=\"default\" value=\"". $element['labelname'] ."\" />\n";
-				$xml .= "\t\t\t</labels>\n";
+            foreach ( $elements as $name => $elementobj ) {
+                $element = $elementobj->toArray();
 
-				// add element values (this form export support only default values)
-				$xml .= "\t\t\t<values>\n";
-				$xml .= "\t\t\t\t<value id=\"default\" value=\"". $element['value'] ."\" />\n";
-				$xml .= "\t\t\t</values>\n";				
-				
-				// add attributes
-				$xml .= "\t\t\t<attributes>\n";
-				
-				foreach ($element['attributes'] as $name=>$value)
-					$xml .= "\t\t\t\t<attribute name=\"". $name ."\" value=\"". $value ."\" />\n";
-				
-				$xml .= "\t\t\t</attributes>\n";				
+                // add element name and type
+                $xml .= "\t\t<element name=\"". $element['name'] ."\" type=\"". $element['type'] ."\">\n";
 
-				// add options
-				$xml .= "\t\t\t<options>\n";
-				
-				foreach ($element['options'] as $name=>$value)
-					$xml .= "\t\t\t\t<option name=\"". $name ."\" value=\"". $value ."\" />\n";
-				
-				$xml .= "\t\t\t</options>\n";				
+                // add labels (this form export support only default labels)
+                $xml .= "\t\t\t<labels>\n";
+                $xml .= "\t\t\t\t<label id=\"default\" value=\"". $element['labelname'] ."\" />\n";
+                $xml .= "\t\t\t</labels>\n";
 
-				// end element
-				$xml .= "\t\t</element>\n";
-			}
-			$xml .= "\t</elements>\n";
+                // add element values (this form export support only default values)
+                $xml .= "\t\t\t<values>\n";
+                $xml .= "\t\t\t\t<value id=\"default\" value=\"". $element['value'] ."\" />\n";
+                $xml .= "\t\t\t</values>\n";
+
+                // add attributes
+                $xml .= "\t\t\t<attributes>\n";
+
+                foreach ($element['attributes'] as $name=>$value)
+                    $xml .= "\t\t\t\t<attribute name=\"". $name ."\" value=\"". $value ."\" />\n";
+
+                $xml .= "\t\t\t</attributes>\n";
+
+                // add options
+                $xml .= "\t\t\t<options>\n";
+
+                foreach ($element['options'] as $name=>$value)
+                    $xml .= "\t\t\t\t<option name=\"". $name ."\" value=\"". $value ."\" />\n";
+
+                $xml .= "\t\t\t</options>\n";
+
+                // end element
+                $xml .= "\t\t</element>\n";
+            }
+            $xml .= "\t</elements>\n";
 
 
-			// add RULES
-			$xml .= "\t<rules>\n";
-			
-			// Get rules from form
-			$rules_element = $this->_form->_rules;
+            // add RULES
+            $xml .= "\t<rules>\n";
 
-			foreach($rules_element as $element => $rules)
-				foreach($rules as $rule){
+            // Get rules from form
+            $rules_element = $this->_form->_rules;
 
-					// add element name and type
-					$xml .= "\t\t<rule element=\"". $element ."\" type=\"". $rule['rule'] ."\">\n";
+            foreach($rules_element as $element => $rules)
+                foreach($rules as $rule){
 
-					// add errors (this form export support only default values)
-					$xml .= "\t\t\t<errors>\n";
-					$xml .= "\t\t\t\t<error id=\"default\" value=\"". $rule['error'] ."\" />\n";
-					$xml .= "\t\t\t</errors>\n";
-					
-					// add options
-					$xml .= "\t\t\t<options>\n";
+                    // add element name and type
+                    $xml .= "\t\t<rule element=\"". $element ."\" type=\"". $rule['rule'] ."\">\n";
 
-					// if is a integer, float or string create just one option with id = ""
-					if (is_scalar($rule['options']))
-						$xml .= "\t\t\t\t<option id=\"\" value=\"". $rule['options'] ."\" />\n";
-						
-					// if is a array create all options
-					if (is_array($rule['options']))
-						foreach ($rule['options'] as $id => $value)
-							$xml .= "\t\t\t\t<option id=\"". $id ."\" value=\"". $value ."\" />\n";
+                    // add errors (this form export support only default values)
+                    $xml .= "\t\t\t<errors>\n";
+                    $xml .= "\t\t\t\t<error id=\"default\" value=\"". $rule['error'] ."\" />\n";
+                    $xml .= "\t\t\t</errors>\n";
 
-					// end options
-					$xml .= "\t\t\t</options>\n";
-					
-					$xml .= "\t\t</rule>\n";
-				}
-			
-			$xml .= "\t</rules>\n";
+                    // add options
+                    $xml .= "\t\t\t<options>\n";
 
-			// add COMPARE RULES
-			$xml .= "\t<comparerules>\n";
+                    // if is a integer, float or string create just one option with id = ""
+                    if (is_scalar($rule['options']))
+                        $xml .= "\t\t\t\t<option id=\"\" value=\"". $rule['options'] ."\" />\n";
 
-			// loop compare rules
-			foreach($this->_form->_comparerules as $rule){
+                    // if is a array create all options
+                    if (is_array($rule['options']))
+                        foreach ($rule['options'] as $id => $value)
+                            $xml .= "\t\t\t\t<option id=\"". $id ."\" value=\"". $value ."\" />\n";
 
-				// add rule type
-				$xml .= "\t\t<rule type=\"". $rule['rule'] ."\">\n";
-			
-				// add elements
-				$xml .= "\t\t\t<elements>\n";
-				foreach($rule['elements'] as $element)
-					$xml .= "\t\t\t\t<element name=\"". $element ."\" />\n";
-				$xml .= "\t\t\t</elements>\n";
+                    // end options
+                    $xml .= "\t\t\t</options>\n";
 
-				// add errors (this form export support only default values)
-				$xml .= "\t\t\t<errors>\n";
-				$xml .= "\t\t\t\t<error id=\"default\" value=\"". $rule['error'] ."\" />\n";
-				$xml .= "\t\t\t</errors>\n";
+                    $xml .= "\t\t</rule>\n";
+                }
 
-				$xml .= "\t\t</rule>\n";				
-			}
+            $xml .= "\t</rules>\n";
 
-			$xml .= "\t</comparerules>\n";
+            // add COMPARE RULES
+            $xml .= "\t<comparerules>\n";
 
-			// add FILTERS
-			$xml .= "\t<filters>\n";
+            // loop compare rules
+            foreach($this->_form->_comparerules as $rule){
 
-			// loop filters
-			foreach($this->_form->_filters as $element => $filters)
-				foreach ($filters as $filter)
-					$xml .= "\t\t<element name=\"". $element ."\" filter=\"". $filter ."\" />\n";
-			
-			$xml .= "\t</filters>\n";
+                // add rule type
+                $xml .= "\t\t<rule type=\"". $rule['rule'] ."\">\n";
 
-			$xml .= "</form>";
+                // add elements
+                $xml .= "\t\t\t<elements>\n";
+                foreach($rule['elements'] as $element)
+                    $xml .= "\t\t\t\t<element name=\"". $element ."\" />\n";
+                $xml .= "\t\t\t</elements>\n";
 
-		return $xml;
+                // add errors (this form export support only default values)
+                $xml .= "\t\t\t<errors>\n";
+                $xml .= "\t\t\t\t<error id=\"default\" value=\"". $rule['error'] ."\" />\n";
+                $xml .= "\t\t\t</errors>\n";
+
+                $xml .= "\t\t</rule>\n";
+            }
+
+            $xml .= "\t</comparerules>\n";
+
+            // add FILTERS
+            $xml .= "\t<filters>\n";
+
+            // loop filters
+            foreach($this->_form->_filters as $element => $filters)
+                foreach ($filters as $filter)
+                    $xml .= "\t\t<element name=\"". $element ."\" filter=\"". $filter ."\" />\n";
+
+            $xml .= "\t</filters>\n";
+
+            $xml .= "</form>";
+
+        return $xml;
         }
 
     }

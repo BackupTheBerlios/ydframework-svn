@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -32,7 +32,7 @@
     YDInclude( 'IXR_Library.inc.php' );
 
     /**
-     *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support 
+     *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support
      *	for GZip compressed communications based on the YDHttpClient class.
      */
     class YDXmlRpcClientCore extends IXR_Client {
@@ -47,7 +47,7 @@
         }
 
         /**
-         *	This is our implementation of the query function from the IXR_Client class so that we can use the 
+         *	This is our implementation of the query function from the IXR_Client class so that we can use the
          *	YDHttpClient class to do the HTTP stuff.
          */
         function query() {
@@ -218,16 +218,16 @@
     }
 
     /**
-     *	This class defines an XML/RPC server. This XML/RPC server supports introspection and is also able to handle 
+     *	This class defines an XML/RPC server. This XML/RPC server supports introspection and is also able to handle
      *	HTTP GET requests. In case of a HTTP GET request, it will display a page describing the service. This page will
      *	list methods with their parameters and help message. It will also list the capabilities of the XML/RPC server.
      *
-     *	This class supports the same actions as a normal YDRequest, so you can use all the normal functions to restrict 
-     *	access etc. Make sure you do not override the process function, or no XML/RPC requests will be served anymore 
+     *	This class supports the same actions as a normal YDRequest, so you can use all the normal functions to restrict
+     *	access etc. Make sure you do not override the process function, or no XML/RPC requests will be served anymore
      *	(unless you know what you are doing).
      *
      *	@remark
-     *		When raising errors in this class, make sure you raise the right kind or error. If you have an XML/RPC 
+     *		When raising errors in this class, make sure you raise the right kind or error. If you have an XML/RPC
      *		request that needs to return an error, you need to return an IXR_Error. If you are not serving an XML/RPC
      *		request, you need to return a YDError or YDFatalError.
      */
@@ -346,7 +346,7 @@
         }
 
         /**
-         *	If the authentication was unsuccesful, this function is execute just before the actual processing of the 
+         *	If the authentication was unsuccesful, this function is execute just before the actual processing of the
          *	request. You will need to override this function in the classes that implement the YDRequest class.
          */
         function authenticationFailed() {

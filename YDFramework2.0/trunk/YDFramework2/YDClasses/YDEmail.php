@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -93,7 +93,7 @@
          *	@param $email	Email address to use as return receipt address
          *	@param $name	Name to use as the return receipt address
          */
-        function setReturnReceipt ($email, $name = '') { 
+        function setReturnReceipt ($email, $name = '') {
             $this->_msg->AddCustomHeader( 'Return-Receipt-To:' . $this->_mergeEmailName( $email, $name ) );
         }
 
@@ -103,7 +103,7 @@
          *
          *	@param $priority	(optional) The priority of the email. Default is YD_EMAIL_PRIORITY_NORMAL.
          */
-        function setPriority( $priority=YD_EMAIL_PRIORITY_NORMAL ) { 
+        function setPriority( $priority=YD_EMAIL_PRIORITY_NORMAL ) {
             if ( ! in_array( $priority, array( 1, 3, 5 ) ) ) {
                 $priority = YD_EMAIL_PRIORITY_NORMAL;
             }
@@ -205,7 +205,7 @@
             if ( ! YDObjectUtil::isSubClass( $file, 'YDFSFile' ) ) {
                 $file = new YDFSFile( $file );
             }
-            if ( empty( $name ) ) { 
+            if ( empty( $name ) ) {
                 $name = $file->getBaseName();
             }
             $this->_msg->AddAttachment( $file->getAbsolutePath(), $name, 'base64', $c_type );
@@ -223,17 +223,17 @@
             if ( ! YDObjectUtil::isSubClass( $file, 'YDFSImage' ) ) {
                 $file = new YDFSImage( $file );
             }
-            if ( empty( $name ) ) { 
+            if ( empty( $name ) ) {
                 $name = $file->getBaseName();
             }
-            if ( empty( $c_type ) ) { 
+            if ( empty( $c_type ) ) {
                 $c_type = $file->getMimeType();
             }
             $this->_msg->AddEmbeddedImage( $file->getAbsolutePath(), $name, $name, 'base64', $c_type );
         }
 
         /**
-         *	This function will send the actual email. It accepts a list of recipients which should be defined as an 
+         *	This function will send the actual email. It accepts a list of recipients which should be defined as an
          *	array. If no recipients are defined, it will use the one setup in the email message using addTo.
          *
          *	If the SMTP parameters were set, it will try to send the message with SMTP, otherwise the mail function from

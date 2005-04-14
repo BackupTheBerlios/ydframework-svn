@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -26,7 +26,7 @@
      *	The Yellow Duck Framework is web application framework created by Pieter Claerhout. More information can be
      *	found on http://www.yellowduck.be/ydf/.
      *
-     *	(c) 2002-2004 Pieter Claerhout, pieter@yellowduck.be
+     *	(c) Copyright 2002-2005 Pieter Claerhout
      *
      *	Webpage: http://www.yellowduck.be/ydf/
      *

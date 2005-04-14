@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -67,8 +67,8 @@
         function toHtml() {
 
             // Create the list of attributes
-            $attribs = array( 
-                'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'src' => $this->_value 
+            $attribs = array(
+                'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'src' => $this->_value
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 

@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -131,7 +131,7 @@
          *  This function will convert a single dimension array to a multi dimension array with the indicated number of
          *	colums. If the number of columns is 1, it will return the original array.
          *
-         *  If you enable the $fillLastRow option, it will fill the last row with null values to match the number of 
+         *  If you enable the $fillLastRow option, it will fill the last row with null values to match the number of
          *	columns.
          *
          *  @param $array		The single dimension array you want to convert.
@@ -139,7 +139,7 @@
          *  @param $fillLastRow	(optional) If true, the last row will be filled with null values so that it matches the
          *						number of columns.
          *
-         *  @returns	A multi-dimension array with the contents of the original array converted to a table with the 
+         *  @returns	A multi-dimension array with the contents of the original array converted to a table with the
          *				indicated number of colums.
          *
          *	@static
@@ -208,7 +208,7 @@
     class YDDebugUtil extends YDBase {
 
         /**
-         *	Function to output a debug message. These message are only shown if the constant YD_DEBUG is set to 1. You 
+         *	Function to output a debug message. These message are only shown if the constant YD_DEBUG is set to 1. You
          *	can turn on debugging by specifying the YD_DEBUG parameter in the url and assigning it the value 1.
          *
          *	Example url with debugging turned on: http://localhost/index.php?YD_DEBUG=1
@@ -283,13 +283,13 @@
                 $err .= 'URI: ' . YD_SELF_URI . YD_CRLF;
                 $err .= 'Debug backtrace:' . YD_CRLF;
                 foreach( debug_backtrace() as $t ) {
-                    $err .= '    @ '; 
+                    $err .= '    @ ';
                     if ( isset( $t['file'] ) ) {
-                        $err .= basename( $t['file'] ) . ':' . $t['line']; 
+                        $err .= basename( $t['file'] ) . ':' . $t['line'];
                     } else {
                         $err .= basename( YD_SELF_FILE );
-                    } 
-                    $err .= ' -- '; 
+                    }
+                    $err .= ' -- ';
                     if ( isset( $t['class'] ) ) {
                         $err .= $t['class'] . $t['type'];
                     }
@@ -299,7 +299,7 @@
                     } else {
                         $err .= '()';
                     }
-                    $err .= YD_CRLF; 
+                    $err .= YD_CRLF;
                 }
                 if ( ini_get( 'display_errors' ) == 1 ) {
                     echo( '<pre>' . YD_CRLF . htmlentities( $err ) . '</pre>' );
@@ -372,7 +372,7 @@
          */
         function serialize( $obj ) {
             $obj = serialize( $obj );
-            if ( ! $obj ) { 
+            if ( ! $obj ) {
                 trigger_error( 'Failed serializing the object', YD_ERROR );
             }
             return $obj;
@@ -396,7 +396,7 @@
     }
 
     /**
-     *	This class houses all the string related utility functions. All the methods are implemented as static methods 
+     *	This class houses all the string related utility functions. All the methods are implemented as static methods
      *	and do not require you to create a class instance in order to use them.
      */
     class YDStringUtil extends YDBase {
@@ -439,12 +439,12 @@
             }
 
         }
-        
+
         /**
          *  This function will format a timestamp using the strftime function.
          *
          *  @param  $timestamp  The timestamp to format. It can also be a date/time form object.
-         *  @param  $format     The strftime format to use. You can also use the predefined options date, time and 
+         *  @param  $format     The strftime format to use. You can also use the predefined options date, time and
          *                      datetime.
          *  @param  $locale     (optional) The locale to use to format the date.
          *
@@ -453,22 +453,22 @@
          *  @static
          */
         function formatDate( $timestamp, $format, $locale=null ) {
-        
+
             // Check if the timestamp is an object and has the getTimeStamp function
             if ( is_object( $timestamp ) && method_exists( $timestamp, 'getTimeStamp' ) ) {
                 $timestamp = $timestamp->getTimeStamp();
             }
-            
+
             // Convert to an integer
             if ( is_numeric( $timestamp ) ) {
                 $timestamp = intval( $timestamp );
             }
-            
+
             // If text, convert to number
             if ( is_string( $timestamp ) ) {
                 $timestamp = strtotime( $timestamp );
             }
-            
+
             // Check the standard formats
             if ( strtolower( $format ) == 'date' ) {
                 $format = '%d %B %Y';
@@ -479,24 +479,24 @@
             if ( strtolower( $format ) == 'time' ) {
                 $format = '%H:%M';
             }
-            
+
             // Set the new locale
             if ( ! is_null( $locale ) ) {
                 $currentLocale = YDLocale::get();
                 YDLocale::set( $locale );
             }
-            
+
             // Return the formatted date
             $timestamp = strftime( $format, $timestamp );
-        
+
             // Reset the old locale
             if ( ! is_null( $locale ) ) {
                 YDLocale::set( $currentLocale );
             }
-        
+
             // Return the timestamp
             return $timestamp;
-        
+
         }
 
         /**
@@ -717,7 +717,7 @@
             $languagesAndCountries = array();
 
             // Loop over the languages and normalize them
-            foreach( $browserCountries as $value ) { 
+            foreach( $browserCountries as $value ) {
                 $lang = explode( ';', $value );
                 $lang = explode( '-', $lang[0] );
                 $lang[1] = ( isset( $lang[1] ) && $lang[1] != '' ? $lang[1] : $lang[0] );

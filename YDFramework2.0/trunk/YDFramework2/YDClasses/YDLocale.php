@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -97,7 +97,7 @@
          *	@param	$locale	Sets the current locale
          */
         function set( $locale ) {
-        
+
             // Check if the locale exists or not
             if ( ! array_key_exists( strtolower( $locale ), $GLOBALS[ 'YD_LANGUAGES' ] ) ) {
                 trigger_error( 'You specified an invalid locale: "' . strtolower( $locale ) . '"', YD_ERROR );
@@ -105,35 +105,35 @@
 
             // Get the locales
             $locales = $GLOBALS[ 'YD_LANGUAGES' ][ $locale ];
-            
+
             // Add the current locale
             array_unshift( $locales, $locale );
             array_unshift( $locales, LC_ALL );
-            
+
             // Add another one
             array_push( $locales, substr( $locale, 0, 2 ) . '_' . strtoupper( substr( $locale, 0, 2 ) ) );
 
             // Set the locale
-            if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) { 
+            if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) {
                 trigger_error( 'Your platform does not support the locale "' . strtolower( $locale ) . '"', YD_ERROR );
             }
-            
+
             // Set the locale
             YDConfig::set( YD_LOCALE_KEY, $locale );
-        
+
         }
 
         /**
          *	@returns	The current locale.
          */
         function get() {
-        
+
             // Set the default locale
             YDConfig::set( YD_LOCALE_KEY, 'en', false );
-        
+
             // Return the setting
             return strtolower( YDConfig::get( YD_LOCALE_KEY ) );
-        
+
         }
 
     }

@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -57,7 +57,7 @@
             // The list of known drivers
             $regDrivers = array();
 
-            // Register new driver 
+            // Register new driver
             if(is_array($driver) AND isset($driver['drivername'])) {
               $regDrivers[ strtolower( $driver['drivername'] ) ] = $driver;
               $driver = $driver[ 'drivername' ];
@@ -72,10 +72,10 @@
               $regDrivers[ strtolower( 'postgres' ) ] = array(
                   'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
               );
-              $regDrivers[ strtolower( 'sqlite' ) ] = array( 
+              $regDrivers[ strtolower( 'sqlite' ) ] = array(
                   'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
               );
-              
+
               // Check if the driver exists
               if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
                   trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
@@ -101,7 +101,7 @@
     }
 
     /**
-     *	This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is 
+     *	This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
      *	not available if you return the database results as an array. This object is really handy if you want to work
      *	with paged recordsets.
      *
@@ -131,7 +131,7 @@
     class YDRecordSet extends YDBase {
 
         /**
-         * This is the class constructor for the YDRecordSet class. 
+         * This is the class constructor for the YDRecordSet class.
          *
          *	@param	$records	The list of records as an array (as returned by the YDDatabaseDriver::getRecords
          *						function.
@@ -613,8 +613,8 @@
         }
 
         /**
-         *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO 
-         *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is 
+         *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO
+         *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is
          *	passed in, it will be converted to an SQL null.
          *
          *	@param $time	(optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
@@ -985,7 +985,7 @@
             $this->_logSql( $sql );
             $this->connect();
             $result = @mysql_query( $sql, $this->_conn );
-            if ( $result === false ) { 
+            if ( $result === false ) {
                 trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
             }
             return $result;

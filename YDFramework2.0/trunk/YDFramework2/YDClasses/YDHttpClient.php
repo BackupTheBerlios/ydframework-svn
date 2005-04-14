@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -39,7 +39,7 @@
      *	type.
      *
      *	@todo
-     *		Redirects to different sites are not supported, and make retrieving of images from pbase fail. This might 
+     *		Redirects to different sites are not supported, and make retrieving of images from pbase fail. This might
      *		result in the fact that we need to move to a different HTTP library. Another option is to rewrite the ]
      *		library completely.
      */

@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -1683,7 +1683,7 @@
 
             $this->setName( $name );
             $this->setLocalClass( $local_class );
-            
+
             if ( $manytomany ) { $this->setManyToMany(); }
 
             if ( strlen( $foreign_class ) ) { $this->setForeignClass( $foreign_class ); }
@@ -1729,7 +1729,7 @@
         function setLocalClass( $name ) {
             $this->local->set( 'class', $name );
         }
-        
+
         /**
          *  @returns  The local class name.
          */

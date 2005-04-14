@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -79,29 +79,29 @@
             if ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) == 0 ) {
                 return false;
             }
-            
+
             // Fetch extension if it is to be retained, set empty if otherwise
             $retainExt AND $ext = '.' . YDPath::getExtension( $_FILES[ $this->_form . '_' . $this->_name ]['name'] ) OR $ext='';
-            
+
             // Create (new) file name
             $fname = ($fname=='' ? $_FILES[ $this->_form . '_' . $this->_name ]['name'] : $fname . $ext );
-            
+
             // Compile path
             $path = realpath( $dir ) . '/' . $fname;
-  
+
             // Move file to temp location
-            // plz point out in the docs this dir is _temporary_, as it is automatically made 0777!          
+            // plz point out in the docs this dir is _temporary_, as it is automatically made 0777!
             $result = move_uploaded_file(
                 $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'],
                 $path
             );
-            
+
             @chmod( realpath( $dir ), 0700 );
             @chmod( $path, 0700 );
 
             // Provide an interface to some more useful information on the file
             $this->fileo = new YDFSFile( $path );
-            
+
             return $result;
         }
 
@@ -113,7 +113,7 @@
         function getSize() {
             return is_object($this->fileo) ? $this->fileo->getSize() : '';
         }
-        
+
         /**
          *  This function will return the actual path of the uploaded file.
          *
@@ -122,7 +122,7 @@
         function getPath() {
             return is_object($this->fileo) ? $this->fileo->getPath() : '';
         }
-        
+
         /**
          *	This function will return the actual name of the uploaded file.
          *  In case there is no fileo object, fetch the name from $_FILES
@@ -132,7 +132,7 @@
         function getBasename() {
             return is_object($this->fileo) ? $this->fileo->getBasename() : $_FILES[ $this->_form . '_' . $this->_name ]['name'];
         }
-        
+
         /**
          *  This function will return the actual extension of the uploaded file.
          *
@@ -141,7 +141,7 @@
         function getExtension() {
           return is_object($this->fileo) ? $this->fileo->getExtension() : '';
         }
-        
+
         /**
          *	This function will return the element as HTML.
          *

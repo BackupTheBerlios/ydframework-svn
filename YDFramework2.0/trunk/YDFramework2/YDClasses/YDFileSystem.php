@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -419,7 +419,7 @@
 
         /**
          *	This function will create a new file in the current directory, and will write the specified contents to the
-         *	file. Once finished, it will return a new YDFSFile object pointing to the file. All directory paths are 
+         *	file. Once finished, it will return a new YDFSFile object pointing to the file. All directory paths are
          *	relative to the current directory.
          *
          *	@param $contents	The contents of the new file.
@@ -495,7 +495,7 @@
         function isWriteable() {
             return is_writable( $this->getAbsolutePath() );
         }
-        
+
         /**
          *	This function will force the browser to download the file.
          *
@@ -503,7 +503,7 @@
          *					same as the filename.
          */
         function download( $name=null ) {
-        
+
             // Get the name of the file
             if ( is_null( $name ) ) {
                 $name = $this->getBasename();
@@ -518,10 +518,10 @@
 
             // Send the file contents
             readfile( $this->getAbsolutePath() );
-            
+
             // Stop the execution
             die();
-        
+
         }
 
         /**
@@ -560,12 +560,12 @@
 
                 }
 
-                
+
                 // Return if the file was deleted or not
                 return $result;
-                
+
             }
-            
+
             // Return null if the file doesn't exist
             return null;
 
@@ -623,8 +623,8 @@
     class YDFSImage extends YDFSFile {
 
         /**
-         *	The class constructor of the YDImage class takes the path to the image as it's only argument. It will then 
-         *	provide you with a number of functions to get the properties of the image and also provides some actions 
+         *	The class constructor of the YDImage class takes the path to the image as it's only argument. It will then
+         *	provide you with a number of functions to get the properties of the image and also provides some actions
          *	like generating thumbnails.
          *
          *	@param $path	Path of the image.
@@ -634,7 +634,7 @@
         }
 
         /**
-         *	Function to output the thumbnail of an image. The function directly outputs the thumbnail to the client 
+         *	Function to output the thumbnail of an image. The function directly outputs the thumbnail to the client
          *	including the right headers needed to display the image.
          *
          *	This function can cache the thumbnails and regenerate them on the fly if needed. The cached thumbnails are
@@ -754,7 +754,7 @@
         /**
          *	This function is used to output an error image.
          *
-         *	@param $name	(optional) Name of the error image. Default image that is shown is the generic 
+         *	@param $name	(optional) Name of the error image. Default image that is shown is the generic
          *					"YD_ydfsimage_fatal_error".
          *
          *	@internal
@@ -887,7 +887,7 @@
         }
 
         /**
-         *	This function will get a file list using a pattern. You can compare this function with the dir command from 
+         *	This function will get a file list using a pattern. You can compare this function with the dir command from
          *	DOS or the ls command from Unix. The pattern syntax is the same as well.
          *
          *	@remarks
@@ -896,12 +896,12 @@
          *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
          *					pass them as an array. If the pattern is prefixed with an exclamation mark, the files that
          *					match this pattern will not be included in the result.
-         *	@param $class	(optional) If you specify a not null value for this option, this function will return the 
+         *	@param $class	(optional) If you specify a not null value for this option, this function will return the
          *					items in the directory as the indicated class. If an empty string is given, it will return
          *					the list of filenames instead of objects.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
          *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
-         *					string. 
+         *					string.
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
@@ -995,15 +995,15 @@
 
             // Return a simple list if needed
             if ( $class === '' ) {
-            
+
                 // Initialize a list for the files only
                 $fileOnlyList = array();
-                
+
                 // Add the files
                 foreach ( $fileList2 as $file ) {
                     array_push( $fileOnlyList, basename( $file->_path ) );
                 }
-            
+
                 // Return the fileOnlyList array
                 return $fileOnlyList;
 
@@ -1020,7 +1020,7 @@
          *	@param $pattern	(optional) Pattern to which the files should match. If you want multiple items, you can also
          *					pass them as an array. If the pattern is prefixed with an exclamation mark, the files that
          *					match this pattern will not be included in the result.
-         *	@param $class	(optional) If you specify a not null value for this option, this function will return the 
+         *	@param $class	(optional) If you specify a not null value for this option, this function will return the
          *					items in the directory as the indicated class. If an empty string is given, it will return
          *					the list of filenames instead of objects.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage and
@@ -1084,7 +1084,7 @@
 
         /**
          *	This function will create a new file in the current directory, and will write the specified contents to the
-         *	file. Once finished, it will return a new YDFSFile object pointing to the file. All directory paths are 
+         *	file. Once finished, it will return a new YDFSFile object pointing to the file. All directory paths are
          *	relative to the current directory.
          *
          *	@param $filename	The filename of the new file.
@@ -1161,12 +1161,12 @@
 
                 }
 
-                
+
                 // Return if the file was deleted or not
                 return $result;
-                
+
             }
-            
+
             // Return null if the file doesn't exist
             return null;
 
@@ -1188,7 +1188,7 @@
                 return false;
             }
         }
-        
+
         /**
          *	This function will recursively delete a directory. It will delete the directory and the complete
          *	contents of that directory! Be careful I would say!
@@ -1203,7 +1203,7 @@
                 return false;
             }
             return YDFSDirectory::_delete( $directory );
-        }		 
+        }
 
         /**
          *	This function will return true if the filesystem object is a directory. In all other cases, it will return
@@ -1246,7 +1246,7 @@
          *  @param $obj     The file or directory you are looking for.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
          *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
-         *					string. 
+         *					string.
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
@@ -1323,7 +1323,7 @@
             return true;
 
         }
-        
+
         /**
          *	Function to recursively delete a directory.
          *
@@ -1334,33 +1334,33 @@
          *	@internal
          */
         function _delete( $dirname ) {
-        
-            // Simple delete for a file 
-            if ( is_file( $dirname ) ) { 
-                return unlink( $dirname ); 
-            } 
 
-            // Loop through the folder 
-            $dir = dir( $dirname ); 
+            // Simple delete for a file
+            if ( is_file( $dirname ) ) {
+                return unlink( $dirname );
+            }
+
+            // Loop through the folder
+            $dir = dir( $dirname );
             while ( false !== $entry = $dir->read() ) {
-            
-                // Skip pointers 
-                if ( $entry == '.' || $entry == '..' ) { 
-                    continue; 
-                } 
 
-                // Deep delete directories      
-                if ( is_dir( "$dirname/$entry" ) ) { 
-                    YDFSDirectory::_delete( "$dirname/$entry" ); 
-                } else { 
-                    unlink( "$dirname/$entry" ); 
-                } 
-            } 
+                // Skip pointers
+                if ( $entry == '.' || $entry == '..' ) {
+                    continue;
+                }
 
-            // Clean up 
-            $dir->close(); 
-            return rmdir( $dirname ); 
-        
+                // Deep delete directories
+                if ( is_dir( "$dirname/$entry" ) ) {
+                    YDFSDirectory::_delete( "$dirname/$entry" );
+                } else {
+                    unlink( "$dirname/$entry" );
+                }
+            }
+
+            // Clean up
+            $dir->close();
+            return rmdir( $dirname );
+
         }
 
     }

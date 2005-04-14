@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -68,7 +68,7 @@
             }
 
             // Add the different elements
-            $this->hours = new YDFormElement_Select( 
+            $this->hours = new YDFormElement_Select(
                 $this->_form, $this->_name . '[hours]', '', $this->_attributes, $hours
             );
             $this->minutes = new YDFormElement_Select(
@@ -81,7 +81,7 @@
          *	This function sets the value for the date element.
          *
          *	@param	$val	(optional) The value for this object.
-         */		
+         */
         function setValue( $val=array() ) {
             if ( is_numeric( $val ) ) {
                 if ( ! is_int( $val ) ) {
@@ -137,7 +137,7 @@
          *	@returns	The form element as HTML text.
          */
         function toHtml() {
-        
+
             // Update the value
             $this->setValue( $this->_value );
 

@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -41,7 +41,7 @@
          *
          *	@param $session_var		(optional) Name to use in the session var - $_SESSION[ $session_var ]
          */
-        function YDCart( $session_var='YDCart' ) {			
+        function YDCart( $session_var='YDCart' ) {
 
             // Initializes YDBase
             $this->YDAddOnModule();
@@ -53,8 +53,8 @@
             $this->_description = 'This class defines a shopping cart object.';
 
             if ( ! isset( $_SESSION[$session_var] ) ) {
-                $_SESSION[$session_var] = & $this->item;	
-            } else {			
+                $_SESSION[$session_var] = & $this->item;
+            } else {
                 $this->item = & $_SESSION[$session_var];
             }
 
@@ -152,7 +152,7 @@
          *  @param $id	Product ID.
          *
          *  @returns	Boolean indicating if the product is already in the cart.
-         */					
+         */
         function inCart( $id ) {
             return array_key_exists( $id, $this->item );
         }
@@ -161,7 +161,7 @@
          *	This function will return the number of distinct items in the cart.
          *
          *  @returns	Number of distinct items in the cart.
-         */				
+         */
         function getCount() {
             return sizeof( $this->item );
         }
@@ -172,7 +172,7 @@
          *  @param $id	Product ID.
          *
          *  @returns	The item's quantity in the cart.
-         */				
+         */
         function getItemCount( $id ) {
             if ( $this->inCart( $id ) ) {
                 return $this->item[$id];

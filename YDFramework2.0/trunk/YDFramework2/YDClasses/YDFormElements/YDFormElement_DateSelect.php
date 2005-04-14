@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -54,7 +54,7 @@
 
             // Set the type
             $this->_type = 'dateselect';
-            
+
             // Get the names of the days
             $days = array();
             for ( $i = 1; $i <= 31; $i++ ) {
@@ -109,7 +109,7 @@
          *	This function sets the value for the date element.
          *
          *	@param	$val	(optional) The value for this object.
-         */		
+         */
         function setValue( $val=array() ) {
             if ( is_numeric( $val ) ) {
                 if ( ! is_int( $val ) ) {
@@ -142,7 +142,7 @@
                                               . $this->_value['month_with_zero']
                                               . $this->_value['day_with_zero'];
         }
-        
+
         /**
          *	This will return a unix timestamp of the selected date/time.
          *
@@ -167,7 +167,7 @@
          *	@returns	The form element as HTML text.
          */
         function toHtml() {
-        
+
             // Update the value
             $this->setValue( $this->_value );
 

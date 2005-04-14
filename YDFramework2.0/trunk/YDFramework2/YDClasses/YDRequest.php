@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -49,7 +49,7 @@
         }
 
         /**
-         *	This function returns the name of the action that was specified by the do parameter specified in the URL. 
+         *	This function returns the name of the action that was specified by the do parameter specified in the URL.
          *	This does NOT include the action prefix.
          *
          *	@static
@@ -163,9 +163,9 @@
             }
             $this->redirect( $url );
         }
-        
+
         /**
-         *	This function will redirect the current request to a new URL. This does an HTTP redirect. If you want to 
+         *	This function will redirect the current request to a new URL. This does an HTTP redirect. If you want to
          *	forward to a different action in the same request, please use the forward function instead.
          *
          *	@param $url	The URL to redirect to.
@@ -250,7 +250,7 @@
 
         /**
          *	This function performs the actual authentication and returns either true or false. By default, this function
-         *	is not implemented and simply returns true. You will need to override this function in your own class to 
+         *	is not implemented and simply returns true. You will need to override this function in your own class to
          *	define how you want the authentication to happen.
          *
          *	@returns	Boolean indicating is the client is authenticated or not.
@@ -260,14 +260,14 @@
         }
 
         /**
-         *	If the authentication was succesful, this function is execute just before the actual processing of the 
+         *	If the authentication was succesful, this function is execute just before the actual processing of the
          *	request. You will need to override this function in the classes that implement the YDRequest class.
          */
         function authenticationSucceeded() {
         }
 
         /**
-         *	If the authentication was unsuccesful, this function is execute just before the actual processing of the 
+         *	If the authentication was unsuccesful, this function is execute just before the actual processing of the
          *	request. You will need to override this function in the classes that implement the YDRequest class.
          */
         function authenticationFailed() {
@@ -277,7 +277,7 @@
         /**
          *	You can use this function to check wether the current request is allowed to access the specified action or
          *	not. This check is performed just before the actual processing of the request and just after the
-         *	authentication if any authentication was needed. If this check fails, the code in the errorActionNotAllowed 
+         *	authentication if any authentication was needed. If this check fails, the code in the errorActionNotAllowed
          *	method is performed. You will need to override this function in the classes that implement the YDRequest
          *	class.
          *
@@ -288,7 +288,7 @@
         }
 
         /**
-         *	If the current request is not allowed to execute the specified action, the code in this function gets 
+         *	If the current request is not allowed to execute the specified action, the code in this function gets
          *	executed. You will need to override this function in the classes that implement the YDRequest class.
          */
         function errorActionNotAllowed() {

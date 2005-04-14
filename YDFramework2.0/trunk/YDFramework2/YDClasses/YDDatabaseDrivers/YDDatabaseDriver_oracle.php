@@ -3,7 +3,7 @@
     /*
 
         Yellow Duck Framework version 2.0
-        Copyright (C) (c) copyright 2004 Pieter Claerhout
+        (c) Copyright 2002-2005 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -76,7 +76,7 @@
         function connect() {
             if ( $this->_conn == null ) {
                 $conn = @OCILogon( $this->_user, $this->_pass, $this->_db );
-                if ( ! $conn ) { 
+                if ( ! $conn ) {
                     $error = ocierror( $conn );
                     trigger_error( $error['message'], YD_ERROR );
                 }
@@ -214,8 +214,8 @@
         }
 
         /**
-         *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO 
-         *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is 
+         *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO
+         *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is
          *	passed in, it will be converted to an SQL null.
          *
          *	@param $time	(optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
