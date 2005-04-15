@@ -34,6 +34,9 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    // Define the default image type for the resulting graphs
+    YDConfig::set( 'YD_GRAPH_TYPE', IMG_PNG, false );
+
     // Define the constants we are going to use
     define('HORIZONTAL', 0);
     define('VERTICAL', 1);
@@ -667,13 +670,46 @@
                 }
             }
 
+            /*
             if(strlen($file) > 0){
                 imagepng($this->m_image, $file);
             }else{
                 header( 'Content-type: image/png' );
                 imagepng($this->m_image);
             }
+            */
 
+            if( strlen($file) > 0 ){
+                switch ( YDConfig::get( 'YD_GRAPH_TYPE' ) ) {
+                    case IMG_GIF:
+                        imagegif( $this->m_image, $file );
+                        break;
+                    case IMG_JPG:
+                    case IMG_JPEG:
+                        imagejpeg( $this->m_image, $file );
+                        break;
+                    default:
+                        imagepng( $this->m_image, $file );
+                        break;
+                }
+            } else{
+                switch ( YDConfig::get( 'YD_GRAPH_TYPE' ) ) {
+                    case IMG_GIF:
+                        header( 'Content-type: image/gif' );
+                        imagegif( $this->m_image );
+                        break;
+                    case IMG_JPG:
+                    case IMG_JPEG:
+                        header( 'Content-type: image/jpeg' );
+                        imagejpeg( $this->m_image );
+                        break;
+                    default:
+                        header( 'Content-type: image/png' );
+                        imagepng( $this->m_image );
+                        break;
+                }
+
+            }
 
         }
 
