@@ -126,10 +126,16 @@
             $class = $prefix . $class . $sufix;
 
             if ( ! class_exists( $class ) ) {
-                require_once $path;
+                YDInclude( $path );
             }
 
-            return new $class();
+            $obj = new $class();
+            
+            if ( ! $obj->_fields || ! $obj->_table || ! $obj->_db ) {
+                trigger_error(  'The "' . $class . '" class is not correctly configured.', YD_ERROR );
+            }
+            
+            return $obj;
 
         }
 
@@ -228,7 +234,7 @@
          *  @param $foreign_class  (optional) The foreign class name.
          *                           If empty, the $name parameter will be used.
          *  @param $cross_class    (optional) For many-to-many relations, the cross class name.
-         *                            If empty, "cross_" . $name will be used.
+         *                            If empty, $local_table . '_' . $foreign_table
          *
          *  @returns      A reference to the relation object.
          */
@@ -238,7 +244,7 @@
                 trigger_error(  $this->getClassName() . ' -
                                 The relation name "' . $name . '" is already defined.', YD_ERROR );
             }
-
+            
             $rel_obj = new YDDatabaseObject_Relation( $name, $this->getClassName(), $manytomany,
                                                       $foreign_class, $cross_class );
 
