@@ -158,6 +158,15 @@
             return $this->_client->error->code . '  ' . $this->_client->error->message;
         }
 
+        /**
+         *  Sets the timeout for the HTTP connection.
+         *
+         *  @param  $timeout    Timeout in seconds.
+         */
+        function setTimeout( $timeout ) {
+             $this->client->timeout = $timeout;
+        }
+
     }
 
     /**

@@ -67,6 +67,15 @@
         }
 
         /**
+         *  Sets the timeout for the HTTP connection.
+         *
+         *  @param  $timeout    Timeout in seconds.
+         */
+        function setTimeout( $timeout ) {
+             $this->timeout = $timeout;
+        }
+
+        /**
          *	This function will build the actual HTTP request and return it as plain text.
          *
          *	@returns	Plain text version of the HTTP request.
