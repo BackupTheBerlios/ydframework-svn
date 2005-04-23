@@ -51,7 +51,7 @@
 
             // Set the defaults
             $this->defaults = array(
-                'scheme' => '', 'host' => '', 'port' => '', 'user' => '', 'pass' => '', 'path' => '',
+                'scheme' => 'http', 'host' => 'localhost', 'port' => '', 'user' => '', 'pass' => '', 'path' => '',
                 'query' => '', 'fragment' => ''
             );
 
@@ -635,6 +635,13 @@
                  array_shift( $base_array );
              }
              return $base_start . '/' . implode( "/", $base_array );
+        }
+
+        /**
+         *  This function redirects to the URL
+         */
+        function redirect() {
+            header( 'Location: ' . $this->getUrl() );
         }
 
         /**
