@@ -20,9 +20,10 @@
 			$country->setDefault( 'Brazil' );
 	
 			// Relations
-			$user = & $this->registerRelation( 'user' );
+			$user = & $this->registerRelation( 'user', false, 'User' );
 			$user->setForeignJoin( 'LEFT' );
-						
+			$user->setForeignVar( 'user' );
+			
 		}
 		
 	}

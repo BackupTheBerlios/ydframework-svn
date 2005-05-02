@@ -17,9 +17,11 @@
 			$this->registerNumericField( 'date', true );
 			
 			// Relations
-			$users = & $this->registerRelation( 'user', true, 'user', 'usergroup' );
+			$users = & $this->registerRelation( 'user', true, 'User', 'UserGroup' );
 			$users->setCrossLocalField( 'group_id' );
 			$users->setCrossForeignField( 'user_id' );
+			$users->setForeignVar( 'user' );
+			$users->setCrossVar( 'usergroup' );
 		}
 		
 	}

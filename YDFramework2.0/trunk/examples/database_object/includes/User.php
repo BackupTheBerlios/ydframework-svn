@@ -26,12 +26,15 @@
 			$this->registerSelect( 'birth_year', 'YEAR( users.birthday )' );
 			
 			// Relations
-			$group = & $this->registerRelation( 'group', true, 'group', 'usergroup' );
+			$group = & $this->registerRelation( 'group', true, 'Group', 'UserGroup' );
 			$group->setCrossLocalField( 'user_id' );
 			$group->setCrossForeignField( 'group_id' );
+			$group->setForeignVar( 'group' );
+			$group->setCrossVar( 'usergroup' );
 			
-			$address = & $this->registerRelation( 'address' );
-			$address->setForeignJoin( 'LEFT' ); 
+			$address = & $this->registerRelation( 'address', false, 'Address' );
+			$address->setForeignJoin( 'LEFT' );
+			$address->setForeignVar( 'address' );
 			
 		}		
 		

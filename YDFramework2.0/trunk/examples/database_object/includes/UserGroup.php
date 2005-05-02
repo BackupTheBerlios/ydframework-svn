@@ -16,11 +16,13 @@
 			$this->registerNumericField( 'active' );
 
 			// Relations
-			$groups = & $this->registerRelation( 'groups', false, 'group' );
+			$groups = & $this->registerRelation( 'groups', false, 'Group' );
 			$groups->setLocalField( 'group_id' );
+			$groups->setForeignVar( 'groups' );
 
-			$users = & $this->registerRelation( 'users', false, 'user' );
+			$users = & $this->registerRelation( 'users', false, 'User' );
 			$users->setLocalField( 'user_id' );
+			$users->setForeignVar( 'users' );
 			
 		}
 
