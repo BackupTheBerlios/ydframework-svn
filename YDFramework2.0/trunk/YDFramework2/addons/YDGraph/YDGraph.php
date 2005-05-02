@@ -313,6 +313,9 @@
          *  @internal
          */
         function _min(&$vvalues){
+            if ( ! isset( $vvalues[0] ) ) {
+                return 0;
+            }
             $min = $vvalues[0];
             foreach($vvalues as $value){
                 if ($min > $value){
@@ -326,6 +329,9 @@
          *  @internal
          */
         function _max(&$vvalues){
+            if ( ! isset( $vvalues[0] ) ) {
+                return 0;
+            }
             $max = $vvalues[0];
             foreach($vvalues as $value){
                 if ($max < $value){
@@ -339,6 +345,9 @@
          *  @internal
          */
         function _maxlen(&$vvalues){
+            if ( ! isset( $vvalues[0] ) ) {
+                return 0;
+            }
             $max = strlen($vvalues[0]);
             foreach($vvalues as $value){
                 if ($max < strlen($value)){
