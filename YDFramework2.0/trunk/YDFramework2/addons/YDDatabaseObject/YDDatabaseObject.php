@@ -580,6 +580,9 @@
                 if ( $rel->getLocalField() ) {
                     $l_key = $rel->getLocalField();
                 }
+                
+                $l_field = & $this->getField( $l_key );
+                $l_column = $l_field->getColumn();
 
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
@@ -590,6 +593,9 @@
                 if ( $rel->getForeignField() ) {
                     $f_key = $rel->getForeignField();
                 }
+                
+                $f_field = & $this->$f_var->getField( $f_key );
+                $f_column = $f_field->getColumn();
 
                 $this->$f_var->_prepareQuery( false );
 
@@ -601,8 +607,8 @@
                 if ( ! $rel->isManyToMany() ) {
 
                     $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_key . ' = ' .
-                                            $f_table . '.' . $f_key );
+                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
+                                            $f_table . '.' . $f_column );
 
                 } else {
 
@@ -621,6 +627,12 @@
                     if ( $rel->getCrossLocalField() ) {
                         $c_lkey = $rel->getCrossLocalField();
                     }
+                    
+                    $c_ffield = & $this->$c_var->getField( $c_fkey );
+                    $c_fcolumn = $c_ffield->getColumn();
+                    
+                    $c_lfield = & $this->$c_var->getField( $c_lkey );
+                    $c_lcolumn = $c_lfield->getColumn();
 
                     $this->$c_var->_prepareQuery( false );
 
@@ -630,8 +642,8 @@
                     $this->_sql->select = array_merge( $this->_sql->select, $this->$c_var->_sql->select );
 
                     $this->_sql->addJoin( $rel->getCrossJoin(), $c_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_key . ' = ' .
-                                            $c_table . '.' . $c_lkey );
+                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
+                                            $c_table . '.' . $c_lcolumn );
 
                     if ( $where = $rel->getCrossConditions() ) {
                         $this->_sql->addJoinOn( $where );
@@ -642,8 +654,8 @@
                     }
 
                     $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $c_table . '.' . $c_fkey . ' = ' .
-                                            $f_table . '.' . $f_key );
+                    $this->_sql->addJoinOn( $c_table . '.' . $c_fcolumn . ' = ' .
+                                            $f_table . '.' . $f_column );
 
                 }
 
