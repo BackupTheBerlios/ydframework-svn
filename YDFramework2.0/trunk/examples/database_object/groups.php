@@ -93,6 +93,22 @@
         }
     }
     
+    echo "<p>We can also dump the results as an associative array with single values:</p>";
+    
+    $group->reset();
+    $group->addSelect( 'id', 'name' );
+    $group->find();
+    $results = $group->getResultsAsAssocArray( 'id', 'name' );
+    YDDebugUtil::dump( $results );
+    
+    echo "<p>Or as an associative array with multiple values:</p>";
+    
+    $group->reset();
+    $group->find();
+    $results = $group->getResultsAsAssocArray( 'id', array( 'name', 'updated' ) );
+    YDDebugUtil::dump( $results );
+
+
     echo "<p>&nbsp;</p>";
     echo "<p>Let's add some Users! <a href=\"users.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
     echo "<p></p><p>&nbsp;</p>";

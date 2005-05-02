@@ -747,7 +747,7 @@
          *
          *  @param $only_fields  (optional) Returns only defined fields. Default: false.
          *  @param $columns      (optional) Returns the columns names instead of the fields names.
-         *  @param $prefix       (optional) Adds a prefix to the array keys. Default: (empty)
+         *  @param $prefix       (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *  @param $relation     (optional) The relation name. If empty, the last relations loaded.
          *
          *  @returns  An array with the results.
@@ -1256,6 +1256,58 @@
             $results = array();
             while( $this->fetch() ) {
                 $results[] = $this->getValues( $only_fields, $columns, $prefix );
+            }
+
+            return $results;
+
+        }
+        
+        /**
+         *  This function retrieves all the results that weren't fetched as an
+         *  associative array using the indicated fields for keys and values
+         *
+         *  @param $key      The field to use for the keys.
+         *  @param $val      The field to use for the values.
+         *  @param $prefix   (optional) The text to prepend to the key name.
+         *  @param $columns  (optional) Returns the columns names instead of the fields names.
+         *
+         *  @returns  An associative array with the results.
+         */
+        function getResultsAsAssocArray( $key, $val, $prefix='', $columns=false ) {
+
+            if ( ! $this->_fields->exists( $key ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                The key field name "' . $key . '" is not a defined field.', YD_ERROR );
+            }
+            
+            $one_value = true;
+            if ( ! is_array( $val ) ) {
+                $val = array( $val );
+            }
+            if ( sizeof( $val ) > 1 ) {
+                $one_value = false;
+            }
+            
+            foreach ( $val as $field_val ) {
+                if ( ! $this->_fields->exists( $field_val ) ) {
+                    trigger_error(  $this->getClassName() . ' -
+                                    The value field name "' . $field_val . '" is not a defined field.', YD_ERROR );
+                }
+            }
+
+            $results = array();
+            while( $this->fetch() ) {
+                
+                if ( $one_value ) {
+                    $values = $this->get( $val[0] );
+                } else {
+                    $values = array();
+                    foreach ( $val as $field_val ) {
+                        $values[ $field_val ] = $this->get( $field_val );
+                    }
+                }
+                
+                $results[ $prefix . $this->get( $key ) ] = $values;
             }
 
             return $results;
