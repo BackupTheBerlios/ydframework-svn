@@ -42,7 +42,8 @@
          *
          *	@param $url	The URL of the XML/RPC server.
          */
-        function YDXmlRpcClientCore( $url ) {
+        function YDXmlRpcClientCore( $url, $port ) {
+            $this->port = $port;
             $this->IXR_Client( $url );
         }
 
@@ -123,8 +124,8 @@
          *
          *	@param $url	The URL of the XML/RPC server.
          */
-        function YDXmlRpcClient( $url ) {
-            $this->_client = new YDXmlRpcClientCore( $url );
+        function YDXmlRpcClient( $url, $port=80 ) {
+            $this->_client = new YDXmlRpcClientCore( $url, $port );
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
                 $this->_client->debug = true;
             } else {
