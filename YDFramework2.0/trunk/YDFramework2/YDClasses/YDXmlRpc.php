@@ -63,6 +63,9 @@
 
             // Create a new HTTP client
             $client = new YDHttpClient( $this->server, $this->port );
+            if ( isset( $this->timeout ) ) {
+                $client->setTimeout( $this->timeout );
+            }
             $client->useGzip( true );
             $client->setDebug( YDConfig::get( 'YD_DEBUG' ) );
             $client->path = $this->path;
@@ -167,7 +170,7 @@
          *  @param  $timeout    Timeout in seconds.
          */
         function setTimeout( $timeout ) {
-             $this->client->timeout = $timeout;
+             $this->_client->timeout = $timeout;
         }
 
     }
