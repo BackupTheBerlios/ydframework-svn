@@ -40,7 +40,8 @@
         /**
          *	This is the class constructor for the YDXmlRpcClientCore class.
          *
-         *	@param $url	The URL of the XML/RPC server.
+         *	@param $url  The URL of the XML/RPC server.
+         *	@param $port The PORT of the XML/RPC server.
          */
         function YDXmlRpcClientCore( $url, $port ) {
             $this->port = $port;
@@ -122,7 +123,8 @@
         /**
          *	This is the class constructor of the YDXmlRpcClient class.
          *
-         *	@param $url	The URL of the XML/RPC server.
+         *	@param $url  The URL of the XML/RPC server.
+         *	@param $port The PORT of the XML/RPC server.
          */
         function YDXmlRpcClient( $url, $port=80 ) {
             $this->_client = new YDXmlRpcClientCore( $url, $port );
