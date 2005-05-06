@@ -793,12 +793,18 @@
                 $rel = & $this->getRelation( $relation );
 
                 $f_var = $rel->getForeignVar();
-                $this->$f_var->reset();
+                
+                if ( isset( $this->$f_var ) ) {
+                    $this->$f_var->reset();
+                }
 
                 if ( $rel->isManyToMany() ) {
 
                     $c_var = $rel->getCrossVar();
-                    $this->$c_var->reset();
+                    
+                    if ( isset( $this->$c_var ) ) {
+                        $this->$c_var->reset();
+                    }
 
                 }
             }
