@@ -776,7 +776,7 @@
         }
 
         /**
-         *  This function resets the information defined in all the relation objects.
+         *  This function resets the information defined in relation objects.
          *
          *  @param $relation  (optional) The relation name. If empty, the last relations loaded.
          */
@@ -803,7 +803,16 @@
                 }
             }
 
-            $this->reset();
+        }
+        
+        /**
+         *  This function resets the information defined in all relation objects.
+         */
+        function resetAllRelations() {
+
+            $this->_last = array_keys( get_object_vars( $this->_relations ) );
+
+            $this->resetRelation();
 
         }
 
@@ -1178,6 +1187,14 @@
             }
             return false;
 
+        }
+
+        /**
+         *  This function resets all information in the object and relation objects.
+         */
+        function resetAll() {
+            $this->reset();
+            $this->resetAllRelations();
         }
 
         /**
