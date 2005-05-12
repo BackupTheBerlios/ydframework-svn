@@ -125,6 +125,61 @@
 
         <note>The original column will not be stripped from the element. You can still reference it just like before.</note>
 
+        <para>Another function of YDArrayUtil is map which rearranges arrays in a custom way – according to a given map. Imagine having an array that could result from a YDDatabaseObject query, for instance the one you know already:</para>
+
+        <programlisting><![CDATA[<?php
+
+    $array = array(
+        array('id' => 1, 'name' => 'Pieter', 'group' => 'admin'),
+        array('id' => 2, 'name' => 'Fiona', 'group' => 'admin'),
+        array('id' => 3, 'name' => 'Bert', 'group' => 'user'),
+        array('id' => 4, 'name' => 'Jan'),
+    );
+
+?>]]></programlisting>
+
+        <para>Sometimes it would be useful to simplify or rearrange that structure according to your needs. The function map allows you to restructure such an array, for example the following way:</para>
+
+        <programlisting><![CDATA[<?php
+
+    $array = array(
+        'admin' => array(1 => 'Pieter', 2 => 'Fiona'),
+        'user' => array(3 => 'Bert'),
+    );
+
+?>]]></programlisting>
+
+        <para>Or:</para>
+
+        <programlisting><![CDATA[<?php
+
+    $array = array(
+        1 => 'Pieter',
+        2 => 'Fiona',
+        3 => 'Bert',
+        4 => 'Jan',
+    );
+
+?>]]></programlisting>
+
+        <para>The map function takes three arguments: the original array, the key to group by and a map that defines the structure of the result. This map variable can be an array or a string, depending on how complex or simple the resulting array needs to be. In any case, the resulting array will only consist of what is defined by the map variable. So in the case of the first example, the function call would look like this:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Convert to a customly mapped array
+    YDArrayUtil::map( $array, 'group', array( 'id' => 'name' ) );
+
+?>]]></programlisting>
+
+        <para>Note that the map variable is an array, whereas to get the result of the second example you need to call the function with a simple string as map variable:</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Convert to a customly mapped array
+    YDArrayUtil::map( $array, 'id', 'name' );
+
+?>]]></programlisting>
+
     </sect1>
 
     <sect1 id="other_ydbrowserinfo">

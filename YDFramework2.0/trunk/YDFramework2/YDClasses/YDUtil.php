@@ -199,6 +199,49 @@
 
         }
 
+        /**
+         *	This function will create a new array which is grouped by a given key and mapped according to a given array.
+         *
+         *	@param $input	The array to convert.
+         *	@param $key		The column to use as the key name.
+         *	@param $map		The array or string which indicates how values of the children arrays should be mapped in 
+         *                  the parent array.
+         *
+         *	@returns		The array resulting from the mapping.
+         *
+         *	@static
+         */
+        function map( $input, $key, $map ) {
+
+            // Starting with new array
+            $output = array();
+
+            // Loop over the original array
+            foreach ( $input as $inputFragment ) {
+                if ( isset( $inputFragment[ $key ] ) ) {
+                    if ( is_array($map)) {
+                        foreach ( $map as $mapKey => $mapValue ) {
+                            if ( ! array_key_exists( $key, $inputFragment ) ) {
+                                trigger_error( 'YDArrayUtil::map: key "' . $key . '" not found', YD_ERROR );
+                            }
+                            if ( isset( $inputFragment[ $mapKey ] ) && isset( $inputFragment[ $mapValue ] ) ) {
+                                $output[ $inputFragment[ $key ] ][ $inputFragment[ $mapKey ] ] = $inputFragment[ $mapValue ];
+                            }
+                            else {
+                                $output[ $inputFragment[ $key ] ][ $inputFragment[ $mapKey ] ] = NULL;
+                            }
+                        }
+                    }
+                    else {
+                        $output[ $inputFragment[ $key ] ] = $inputFragment[ $map ];
+                    }
+                }
+            }
+
+            // Return the new array
+            return $output;
+        } 
+
     }
 
     /**
