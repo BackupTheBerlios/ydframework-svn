@@ -442,7 +442,6 @@
                 }
             }
 
-
             // prepare order by
             $orders = & $this->_sql->order;
             foreach ( $orders as $n => $order ) {
@@ -452,7 +451,6 @@
                 }
             }
 
-
             // prepare where
             if ( $only_keys && ! sizeof( $keys ) ) {
                 $only_keys = false;
@@ -461,7 +459,7 @@
             if ( $only_keys ) {
                 $fields = $keys;
             }
-
+            
             foreach ( $fields as $field ) {
 
                 if ( ! $this->exists( $field->getName() ) ) {
@@ -491,14 +489,12 @@
          *
          *  @param $relation  The relation name.
          */
-        function loadRelation( $relation ) {
+        function load( $relation ) {
 
             if ( ! $this->_relations->exists( $relation ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The relation "' . $relation . '" is not defined.', YD_ERROR );
             }
-
-            $this->_last = array( $relation );
 
             $relation = & $this->getRelation( $relation );
             $f_var    = $relation->getForeignVar();
@@ -524,175 +520,13 @@
         /**
          *  This function loads all relations objects into the YDDatabaseObject.
          */
-        function loadAllRelations() {
+        function loadAll() {
 
-            $relations = get_object_vars( $this->_relations );
-
-            foreach ( $relations as $relation ) {
-                $this->loadRelation( $relation->getName() );
-            }
-
-            $this->_last = array_keys( $relations );
-
-        }
-
-        /**
-         *  This function loads and finds the records for relations defined.
-         *
-         *  @returns  The total rows retrieved.
-         */
-        function findRelation() {
-
-            $args = func_get_args();
-
-            $relations = $this->_last;
-            if ( sizeof( $args ) ) {
-                $relations = $args;
-            }
-
-            if ( ! sizeof( $relations ) ) {
-                return $this->findAllRelations();
-            }
-
-            $this->_sql->setAction( 'SELECT' );
-            $this->_sql->resetFrom();
-
-            $pos = 0;
-            $slices = array();
+            $relations = array_keys( get_object_vars( $this->_relations ) );
 
             foreach ( $relations as $relation ) {
-
-                $this->loadRelation( $relation );
-
-                if ( $pos == 0 ) {
-                    $this->_sql->addTable( $this->getTable() );
-                    $this->_prepareQuery( false );
-                    $slices[ $pos ] = '';
-                    $pos = $pos + sizeof( $this->_sql->select );
-                }
-
-                $rel = & $this->getRelation( $relation );
-
-                // Local table
-                $l_table = $this->getTable();
-                $l_key   = current( $this->_getFieldsByMethod( 'isKey', false ) );
-
-                if ( $rel->getLocalField() ) {
-                    $l_key = $rel->getLocalField();
-                }
-                
-                $l_field = & $this->getField( $l_key );
-                $l_column = $l_field->getColumn();
-
-                // Foreign table
-                $f_var   = $rel->getForeignVar();
-                $f_class = $rel->getForeignClass();
-                $f_table = $this->$f_var->getTable();
-                $f_key   = current( $this->$f_var->_getFieldsByMethod( 'isKey', false ) );
-
-                if ( $rel->getForeignField() ) {
-                    $f_key = $rel->getForeignField();
-                }
-                
-                $f_field = & $this->$f_var->getField( $f_key );
-                $f_column = $f_field->getColumn();
-
-                $this->$f_var->_prepareQuery( false );
-
-                $slices[ $pos ] = $f_var;
-                $pos = $pos + sizeof( $this->$f_var->_sql->select );
-
-                $this->_sql->select = array_merge( $this->_sql->select, $this->$f_var->_sql->select );
-
-                if ( ! $rel->isManyToMany() ) {
-
-                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
-                                            $f_table . '.' . $f_column );
-
-                } else {
-
-                    // Cross-table
-                    $c_var   = $rel->getCrossVar();
-                    $c_class = $rel->getCrossClass();
-
-                    $c_table = $this->$c_var->getTable();
-
-                    $c_fkey  = $f_table . '_' . $f_key;
-                    $c_lkey  = $l_table . '_' . $l_key;
-
-                    if ( $rel->getCrossForeignField() ) {
-                        $c_fkey = $rel->getCrossForeignField();
-                    }
-                    if ( $rel->getCrossLocalField() ) {
-                        $c_lkey = $rel->getCrossLocalField();
-                    }
-                    
-                    $c_ffield = & $this->$c_var->getField( $c_fkey );
-                    $c_fcolumn = $c_ffield->getColumn();
-                    
-                    $c_lfield = & $this->$c_var->getField( $c_lkey );
-                    $c_lcolumn = $c_lfield->getColumn();
-
-                    $this->$c_var->_prepareQuery( false );
-
-                    $slices[ $pos ] = $c_var;
-                    $pos = $pos + sizeof( $this->$c_var->_sql->select );
-
-                    $this->_sql->select = array_merge( $this->_sql->select, $this->$c_var->_sql->select );
-
-                    $this->_sql->addJoin( $rel->getCrossJoin(), $c_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
-                                            $c_table . '.' . $c_lcolumn );
-
-                    if ( $where = $rel->getCrossConditions() ) {
-                        $this->_sql->addJoinOn( $where );
-                    }
-
-                    if ( $where = $this->$c_var->_sql->getWhere( false ) ) {
-                        $this->_sql->addJoinOn( $where );
-                    }
-
-                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $c_table . '.' . $c_fcolumn . ' = ' .
-                                            $f_table . '.' . $f_column );
-
-                }
-
-                if ( $where = $rel->getForeignConditions() ) {
-                    $this->_sql->addJoinOn( $where );
-                }
-
-                if ( $where = $this->$f_var->_sql->getWhere( false ) ) {
-                    $this->_sql->addJoinOn( $where );
-                }
-
-                // Additional conditions
-                if ( $where = $rel->getWhere() ) {
-                    $this->_sql->resetWhere();
-                    $this->_sql->addWhere( $where );
-                }
-
-                if ( $group = $rel->getGroup() ) {
-                    $this->_sql->resetGroup();
-                    $this->_sql->addGroup( $group );
-                }
-
-                if ( $having = $rel->getHaving() ) {
-                    $this->_sql->resetHaving();
-                    $this->_sql->addHaving( $having );
-                }
-
-                if ( $order = $rel->getOrder() ) {
-                    $this->_sql->resetOrder();
-                    $this->_sql->addOrder( $order );
-                }
-
+                $this->load( $relation );
             }
-
-            $this->_last = $relations;
-
-            return $this->findSql( $this->_sql->getSql(), $slices );
 
         }
 
@@ -702,54 +536,55 @@
          *
          *  @returns  The number of rows found.
          */
-        function findAllRelations() {
+        function findAll() {
 
-            $this->_last = array_keys( get_object_vars( $this->_relations ) );
+            $relations = array_keys( get_object_vars( $this->_relations ) );
 
-            return $this->findRelation();
+            return call_user_func_array( array ( & $this, 'find' ), $relations );
+        
         }
 
         /**
-         *  This function returns all the relation objects getValues arrays in
+         *  This function returns all the relation objects values arrays in
          *  a single array.
          *
+         *  @param $only_current (optional) Returns only the current object values. Default: false.
          *  @param $only_fields  (optional) Returns only defined fields. Default: false.
          *  @param $columns      (optional) Returns the columns names instead of the fields names.
-          *  @param $prefix       (optional) If true all foreign values will be prefixed with the foreign and cross var.
-         *                                    Default: true.
-         *  @param $relation     (optional) The relation name. If empty, the last relations loaded.
+         *  @param $prefix       (optional) If true all foreign values will be prefixed with
+         *                                  the foreign and cross var. Default: true.
          *
          *  @returns  The single array with all values.
          */
-        function getRelationValues( $only_fields=false, $columns=false, $prefix=true, $relation='' ) {
+        function getValues( $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
 
-            $relations = $this->_last;
+            $results = $this->_getValues( $only_fields, $columns );
+            
+            if ( ! $only_current ) {
+            
+                $relations = $this->_last;
 
-            if ( strlen( $relation ) ) {
-                $relations = array( $relation );
-            }
-
-            $results = $this->getValues( $only_fields, $columns );
-
-            foreach ( $relations as $relation ) {
-
-                $rel = & $this->getRelation( $relation );
-
-                $f_var = $rel->getForeignVar();
-                $values = $this->$f_var->getValues( $only_fields, $columns, $prefix ? $f_var . '_' : '' );
-
-                $results = array_merge( $results, $values );
-
-                if ( $rel->isManyToMany() ) {
-
-                    $c_var = $rel->getCrossVar();
-                    $values = $this->$c_var->getValues( $only_fields, $columns, $prefix ? $c_var . '_' : '' );
-
+                foreach ( $relations as $relation ) {
+    
+                    $rel = & $this->getRelation( $relation );
+    
+                    $f_var = $rel->getForeignVar();
+                    $values = $this->$f_var->_getValues( $only_fields, $columns, $prefix ? $f_var . '_' : '' );
+    
                     $results = array_merge( $results, $values );
+    
+                    if ( $rel->isManyToMany() ) {
+    
+                        $c_var = $rel->getCrossVar();
+                        $values = $this->$c_var->_getValues( $only_fields, $columns, $prefix ? $c_var . '_' : '' );
+    
+                        $results = array_merge( $results, $values );
+                    }
+    
                 }
 
             }
-
+            
             return $results;
 
         }
@@ -757,18 +592,18 @@
         /**
          *  This function retrieves all the relation results that weren't fetched.
          *
+         *  @param $only_current (optional) Returns only the current object results. Default: false.
          *  @param $only_fields  (optional) Returns only defined fields. Default: false.
          *  @param $columns      (optional) Returns the columns names instead of the fields names.
          *  @param $prefix       (optional) Adds the relation's vars as prefixes to the keys. Default: false.
-         *  @param $relation     (optional) The relation name. If empty, the last relations loaded.
          *
          *  @returns  An array with the results.
          */
-        function getRelationResults( $only_fields=false, $columns=false, $prefix=true, $relation='' ) {
+        function getResults( $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
 
             $results = array();
-            while( $this->fetchRelation( $relation ) ) {
-                $results[] = $this->getRelationValues( $only_fields, $columns, $prefix, $relation );
+            while( $this->fetch() ) {
+                $results[] = $this->getValues( $only_current, $only_fields, $columns, $prefix );
             }
 
             return $results;
@@ -810,52 +645,6 @@
             }
 
         }
-        
-        /**
-         *  This function resets the information defined in all relation objects.
-         */
-        function resetAllRelations() {
-
-            $this->_last = array_keys( get_object_vars( $this->_relations ) );
-
-            $this->resetRelation();
-
-        }
-
-        /**
-         *  This function fetch the results of all the objects of the relation.
-         *
-         *  @param $relation  (optional) The relation name. If empty, the last relations loaded.
-         *
-         *  @returns  True if we still have records, otherwise false.
-         */
-        function fetchRelation( $relation='' ) {
-
-            $relations = $this->_last;
-
-            if ( strlen( $relation ) ) {
-                $relations = array( $relation );
-            }
-
-            foreach ( $relations as $relation ) {
-
-                $rel = & $this->getRelation( $relation );
-
-                $f_var = $rel->getForeignVar();
-                $this->$f_var->fetch();
-
-                if ( $rel->isManyToMany() ) {
-
-                    $c_var = $rel->getCrossVar();
-                    $this->$c_var->fetch();
-
-                }
-
-            }
-
-            return $this->fetch();
-
-        }
 
         /**
          *  This function executes an INSERT query based on the values of the object.
@@ -867,7 +656,7 @@
          */
         function insert( $auto=true ) {
 
-            $values = $this->getValues( true, true );
+            $values = $this->getValues( true, true, true );
 
             $auto_field = current( $this->_getFieldsByMethod( 'isAutoIncrement' ) );
 
@@ -906,7 +695,7 @@
 
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
-            $values = $this->getValues( true, true );
+            $values = $this->getValues( true, true, true );
             $where = $this->_sql->getWhere( false );
 
             $this->resetQuery();
@@ -963,8 +752,7 @@
          *  This function finds the rows that match the object field's values
          *  an any other condition added with addWhere, addGroup, addHaving, etc.
          *
-         *  You can add values to the method's parameters to search by keys values.
-         *  The parameters should set in the same order as the keys were defined.
+         *  You can add values to the method's parameters to search the relations.
          *
          *  If you want to limit this query, use the setLimit method.
          *
@@ -972,33 +760,167 @@
          */
         function find() {
 
-            $keys = $this->_getFieldsByMethod( 'isKey' );
+            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
             $args = func_get_args();
 
-            if ( sizeof( $args ) && sizeof( $keys ) ) {
-
-                // Set the keys values
-                for ( $i=0; $i < count( $args ); $i++ ) {
-                    if ( array_key_exists( $i, $keys ) ) {
-                        $this->set( $keys[ $i ]->getName(), $args[ $i ] );
-                    }
-                }
-
-                $this->_sql->resetWhere();
-                $this->_prepareQuery( true );
-
-            } else {
-                $this->_prepareQuery( false );
+            $relations = array();
+            if ( sizeof( $args ) ) {
+                $relations = $args;
             }
-
-            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
+            
+            $this->_last = $relations;
 
             $this->_sql->setAction( 'SELECT' );
             $this->_sql->resetFrom();
-            $this->_sql->addTable( $this->getTable() );
 
-            return $this->findSql( $this->_sql->getSql() );
+            $pos = 0;
+            $slices = array();
+
+            // Add local table
+            $this->_sql->addTable( $this->getTable() );
+            
+            // Prepare query in local object
+            $this->_prepareQuery( false );
+            
+            // Add the local slice
+            $slices[ $pos ] = '';
+            $pos = $pos + sizeof( $this->_sql->select );
+
+            // If there are any relations
+
+            foreach ( $relations as $relation ) {
+
+                // Load relation if not loaded yet
+                $this->load( $relation );
+                $rel = & $this->getRelation( $relation );
+
+                // Local table
+                $l_table = $this->getTable();
+                $l_key = $rel->getLocalField();
+
+                if ( ! $l_key ) {
+                    $l_key = current( $this->_getFieldsByMethod( 'isKey', false ) );
+                }
+                
+                $l_field = & $this->getField( $l_key );
+                $l_column = $l_field->getColumn();
+
+                // Foreign table
+                $f_var   = $rel->getForeignVar();
+                $f_table = $this->$f_var->getTable();
+                $f_key = $rel->getForeignField();
+
+                if ( ! $f_key ) {
+                    $f_key   = current( $this->$f_var->_getFieldsByMethod( 'isKey', false ) );
+                }
+                
+                $f_field = & $this->$f_var->getField( $f_key );
+                $f_column = $f_field->getColumn();
+
+                // Prepare the query in the foreign object
+                $this->$f_var->_prepareQuery( false );
+
+                // Add the foreign slice
+                $slices[ $pos ] = $f_var;
+                $pos = $pos + sizeof( $this->$f_var->_sql->select );
+
+                // Merge current selects with foreign selects
+                $this->_sql->select = array_merge( $this->_sql->select, $this->$f_var->_sql->select );
+
+                // Not many to many
+                if ( ! $rel->isManyToMany() ) {
+
+                    // Join foreign table
+                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
+                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
+                                            $f_table . '.' . $f_column );
+
+                } else {
+
+                    // Many to many relation
+                    
+                    // Cross-table
+                    $c_var   = $rel->getCrossVar();
+                    $c_table = $this->$c_var->getTable();
+
+                    // Default cross foreign and local key
+                    $c_fkey  = $f_table . '_' . $f_key;
+                    $c_lkey  = $l_table . '_' . $l_key;
+
+                    // User-defined cross foreign key
+                    if ( $rel->getCrossForeignField() ) {
+                        $c_fkey = $rel->getCrossForeignField();
+                    }
+                    
+                    // User-defined cross local key
+                    if ( $rel->getCrossLocalField() ) {
+                        $c_lkey = $rel->getCrossLocalField();
+                    }
+                    
+                    // Cross foreign field column name
+                    $c_ffield = & $this->$c_var->getField( $c_fkey );
+                    $c_fcolumn = $c_ffield->getColumn();
+                    
+                    // Cross local field column name
+                    $c_lfield = & $this->$c_var->getField( $c_lkey );
+                    $c_lcolumn = $c_lfield->getColumn();
+
+                    // Prepare the query in the cross object
+                    $this->$c_var->_prepareQuery( false );
+
+                    // Add the cross slice
+                    $slices[ $pos ] = $c_var;
+                    $pos = $pos + sizeof( $this->$c_var->_sql->select );
+
+                    // Merge current selects with cross selects
+                    $this->_sql->select = array_merge( $this->_sql->select, $this->$c_var->_sql->select );
+
+                    // Join cross table
+                    $this->_sql->addJoin( $rel->getCrossJoin(), $c_table );
+                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
+                                            $c_table . '.' . $c_lcolumn );
+
+                    // Cross table additional conditions
+                    if ( $where = $rel->getCrossConditions() ) {
+                        $this->_sql->addJoinOn( $where );
+                    }
+                    if ( $where = $this->$c_var->_sql->getWhere( false ) ) {
+                        $this->_sql->addJoinOn( $where );
+                    }
+
+                    // Join foreign table
+                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
+                    $this->_sql->addJoinOn( $c_table . '.' . $c_fcolumn . ' = ' .
+                                            $f_table . '.' . $f_column );
+
+                }
+
+                // Foreign table additional conditions
+                if ( $where = $rel->getForeignConditions() ) {
+                    $this->_sql->addJoinOn( $where );
+                }
+                if ( $where = $this->$f_var->_sql->getWhere( false ) ) {
+                    $this->_sql->addJoinOn( $where );
+                }
+
+                // Additional statements
+                if ( $where = $rel->getWhere() ) {
+                    $this->_sql->addWhere( $where );
+                }
+                if ( $group = $rel->getGroup() ) {
+                    $this->_sql->addGroup( $group );
+                }
+                if ( $having = $rel->getHaving() ) {
+                    $this->_sql->addHaving( $having );
+                }
+                if ( $order = $rel->getOrder() ) {
+                    $this->_sql->addOrder( $order );
+                }
+
+            }
+
+            return $this->findSql( $this->_sql->getSql(), $slices );
 
         }
 
@@ -1101,7 +1023,7 @@
         }
 
         /**
-         *    Adds a select field to the query. The registered fields and selects can
+         *  Adds a select field to the query. The registered fields and selects can
          *  be added at each parameter of the method.
          */
         function addSelect() {
@@ -1130,7 +1052,7 @@
         }
 
         /**
-         *    Adds a condition to the WHERE clause.
+         *  Adds a condition to the WHERE clause.
          *
          *  @param $expr   The condition expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
@@ -1140,9 +1062,9 @@
         }
 
         /**
-         *    Adds an expression to the GROUP BY clause.
+         *  Adds an expression to the GROUP BY clause.
          *
-         *    @param $expr  The expression.
+         *  @param $expr  The expression.
          *  @param $desc  (optional) If true adds a DESC string to the expression. Default: false.
          */
         function addGroup( $expr, $desc=false ) {
@@ -1150,9 +1072,9 @@
         }
 
         /**
-         *    Adds an expression to the HAVING clause.
+         *  Adds an expression to the HAVING clause.
          *
-         *    @param $expr   The expression.
+         *  @param $expr   The expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
         function addHaving( $expr, $logic='AND' ) {
@@ -1160,9 +1082,9 @@
         }
 
         /**
-         *    Adds a column to the ORDER BY clause.
+         *  Adds a column to the ORDER BY clause.
          *
-         *    @param $expr  Column name.
+         *  @param $expr  Column name.
          *  @param $desc  (optional) If true adds a DESC string to the column. Default: false.
          */
         function addOrder( $expr, $desc=false ) {
@@ -1170,7 +1092,7 @@
         }
 
         /**
-         *    This function sets the limit for SELECT queries only.
+         *  This function sets the limit for SELECT queries only.
          *
          *  @param $limit     How many records to return.
          *  @param $offset    (optional) Where to start from.
@@ -1186,6 +1108,25 @@
          *  @returns  True if any result has been fetched, otherwise false.
          */
         function fetch() {
+            
+            $relations = $this->_last;
+            
+            foreach ( $relations as $relation ) {
+
+                $rel = & $this->getRelation( $relation );
+
+                $f_var = $rel->getForeignVar();
+                $this->$f_var->fetch();
+
+                if ( $rel->isManyToMany() ) {
+
+                    $c_var = $rel->getCrossVar();
+                    $this->$c_var->fetch();
+
+                }
+
+            }
+
             $res = array_shift( $this->_results );
             if ( ! is_null( $res ) ) {
                 $this->setValues( $res );
@@ -1199,8 +1140,15 @@
          *  This function resets all information in the object and relation objects.
          */
         function resetAll() {
+            
             $this->reset();
-            $this->resetAllRelations();
+            
+            $relations = array_keys( get_object_vars( $this->_relations ) );
+
+            foreach ( $relations as $relation ) {
+                $this->resetRelation( $relation );
+            }
+            
         }
 
         /**
@@ -1253,7 +1201,7 @@
          *
          *  @returns  An associative array with the values.
          */
-        function getValues( $only_fields=false, $columns=false, $prefix='' ) {
+        function _getValues( $only_fields=false, $columns=false, $prefix='' ) {
 
             $this->resetProtected();
 
@@ -1276,76 +1224,46 @@
             return $new;
 
         }
-
-        /**
-         *  This function retrieves all the results that weren't fetched.
-         *
-         *  @param $only_fields  (optional) Returns only defined fields. Default: false.
-         *  @param $columns      (optional) Returns the columns names instead of the fields names.
-         *  @param $prefix       (optional) Adds a prefix to the array keys. Default: (empty)
-         *
-         *  @returns  An array with the results.
-         */
-        function getResults( $only_fields=false, $columns=false, $prefix='' ) {
-
-            $results = array();
-            while( $this->fetch() ) {
-                $results[] = $this->getValues( $only_fields, $columns, $prefix );
-            }
-
-            return $results;
-
-        }
         
         /**
          *  This function retrieves all the results that weren't fetched as an
          *  associative array using the indicated fields for keys and values
          *
          *  @param $key      The field to use for the keys.
-         *  @param $val      The field to use for the values.
+         *  @param $val      The fields to use for the values.
          *  @param $prefix   (optional) The text to prepend to the key name.
-         *  @param $columns  (optional) Returns the columns names instead of the fields names.
          *
          *  @returns  An associative array with the results.
          */
-        function getResultsAsAssocArray( $key, $val, $prefix='', $columns=false ) {
+        function getResultsAsAssocArray( $key, $val, $prefix='' ) {
 
-            if ( ! $this->_fields->exists( $key ) ) {
-                trigger_error(  $this->getClassName() . ' -
-                                The key field name "' . $key . '" is not a defined field.', YD_ERROR );
-            }
-            
-            $one_value = true;
             if ( ! is_array( $val ) ) {
                 $val = array( $val );
             }
+            
+            $one_value = true;
             if ( sizeof( $val ) > 1 ) {
                 $one_value = false;
             }
-            
-            foreach ( $val as $field_val ) {
-                if ( ! $this->_fields->exists( $field_val ) ) {
-                    trigger_error(  $this->getClassName() . ' -
-                                    The value field name "' . $field_val . '" is not a defined field.', YD_ERROR );
-                }
-            }
 
-            $results = array();
-            while( $this->fetch() ) {
+            $results = $this->getResults();
+            $output = array();
+            
+            foreach ( $results as $res ) {
                 
                 if ( $one_value ) {
-                    $values = $this->get( $val[0] );
+                    $values = $res[$val[0]];
                 } else {
                     $values = array();
                     foreach ( $val as $field_val ) {
-                        $values[ $field_val ] = $this->get( $field_val );
+                        $values[ $field_val ] = $res[ $field_val ];
                     }
                 }
                 
-                $results[ $prefix . $this->get( $key ) ] = $values;
+                $output[ $prefix . $res[ $key ] ] = $values;
             }
 
-            return $results;
+            return $output;
 
         }
 
@@ -1756,6 +1674,9 @@
         var $local;
         var $foreign;
         var $cross;
+        
+        var $foreign_obj = null;
+        var $cross_obj = null;
 
         /**
          *  The class constructor.
@@ -1873,6 +1794,18 @@
         }
 
         /**
+         *  @returns  The foreign table name.
+         */
+        function getForeignTable() {
+            
+            if ( ! isset( $this->foreign_obj ) ) {
+                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
+            }
+            return $this->foreign_obj->getTable();
+        
+        }
+
+        /**
          *  This function set the foreign field name.
          *
          *  @param $name  The field name.
@@ -1963,6 +1896,18 @@
                 return $cross_class;
             }
             return $this->getLocalClass() . '_' . $this->getForeignClass();
+        }
+
+        /**
+         *  @returns  The cross table name.
+         */
+        function getCrossTable() {
+            
+            if ( ! isset( $this->cross_obj ) ) {
+                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
+            }
+            return $this->cross_obj->getTable();
+        
         }
 
         /**

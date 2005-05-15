@@ -36,7 +36,8 @@
 			$address->setForeignJoin( 'LEFT' );
 			$address->setForeignVar( 'address' );
 			
-		}		
+			
+		}
 		
 		function getAge( $birthday ) {
 		

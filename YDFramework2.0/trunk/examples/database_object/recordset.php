@@ -14,10 +14,10 @@
     echo "<p>Let's load our groups and users relation with 3 records per page.</p>";
 
     $user = YDDatabaseObject::getInstance( 'User' );
-    $user->loadAllRelations();
+    $user->loadAll();
     
-    $user->findRelation( 'group' );
-    $results = $user->getRelationResults();
+    $user->find( 'group' );
+    $results = $user->getResults();
 
     $page = @ $_GET['page'];
     $size = @ $_GET['size'] ? $_GET['size'] : 3;

@@ -20,7 +20,7 @@
     $user->is_admin = 1; 
     $user->birthday = '19801120';
     
-    $user->insert();    
+    $user->insert();
     YDDebugUtil::dump( $user->getValues() );
     
     echo '<p>The user "' . $user->name . '" have ID = ' . $user->id . '.</p>';
@@ -57,7 +57,8 @@
     echo "<p>Let's load my data to use this feature.</p>";
     
     $user->reset();
-    $user->find(1);    
+    $user->id =1;
+    $user->find();
     
     YDDebugUtil::dump( $user->getValues() );
     

@@ -65,7 +65,8 @@
     echo "<h1>But I really want is the first group.</h1>";
     
     $group->reset();
-    $group->find( 1 );
+    $group->id = 1;
+    $group->find();
     YDDebugUtil::dump( $group->getValues() );
     
     echo "<h1>And I don't like the 'Yo! Ugly Group, so I'll delete it. I will reset the object and execute a delete.</h1>";

@@ -14,7 +14,7 @@
     echo "<p>This type of relation needs an additional database object (table) to handle the relation.</p>";
     echo "<p>When we load this type of relation 2 objects are instantiated. The foreign object and the join object.</p>";
     
-    $user->loadRelation( 'group' );
+    $user->load( 'group' );
     
     // Let's truncate the join table
     $user->executeSql( 'TRUNCATE ' . $user->usergroup->getTable() );    
@@ -27,12 +27,12 @@
     $user->usergroup->active =  1;
     
     $user->usergroup->insert();
-    $user->resetRelation();
+    $user->resetAll( 'group' );
 
     echo "<p>Done. Now I can get the results of the relation if I want.</p>";
         
     $user->id = 1;
-    $user->findRelation();
+    $user->find( 'group' );
 
     YDDebugUtil::dump( $user->group->getValues() );
 
@@ -42,54 +42,54 @@
     
     echo "<p>And my own information, of course.</p>";
         
-    YDDebugUtil::dump( $user->getValues() );
+    YDDebugUtil::dump( $user->getValues( true ) );
     
     echo "<p>Let's do some more adding.</p>";
         
     // Myself to the second group
-    $user->resetRelation();
+    $user->resetAll();
     $user->usergroup->user_id = 1;
     $user->usergroup->group_id = 2;
     $user->usergroup->active =  1;
     $user->usergroup->insert();
 
     // Pieter to the first group
-    $user->resetRelation();
+    $user->resetAll();
     $user->usergroup->user_id = 2;
     $user->usergroup->group_id = 1;
     $user->usergroup->active =  1;
     $user->usergroup->insert();
     
     // Francisco to the first group
-    $user->resetRelation();
+    $user->resetAll();
     $user->usergroup->user_id = 3;
     $user->usergroup->group_id = 1;
     $user->usergroup->active =  1;
     $user->usergroup->insert();
         
     // Pieter to the second group
-    $user->resetRelation();
+    $user->resetAll();
     $user->usergroup->user_id = 2;
     $user->usergroup->group_id = 2;
     $user->usergroup->insert();
     
     // Francisco to the second group
-    $user->resetRelation();
+    $user->resetAll();
     $user->usergroup->user_id = 3;
     $user->usergroup->group_id = 2;
     $user->usergroup->insert();
     
     echo "<h1>Now let's see who is in the first group.</h1>";
     
-    $user->resetRelation();
+    $user->resetAll();
     $user->group->id = 1;
-    $user->findRelation();
-    
+    $user->find( 'group' );
+
     $user->group->fetch();
     YDDebugUtil::dump( $user->group->getValues() );
-    while ( $user->fetchRelation() ) {            
+    while ( $user->fetch() ) {            
         YDDebugUtil::dump( '-----------------------------------' );
-        YDDebugUtil::dump( $user->getValues() );
+        YDDebugUtil::dump( $user->getValues( true ) );
         YDDebugUtil::dump( $user->usergroup->getValues() );
     }
     
@@ -97,7 +97,7 @@
     echo "<p>Let's order by name and return only the group name, user name, is_admin and active.</p>";
     echo "<p>And return the values in a single array.</p>";
     
-    $user->resetRelation();
+    $user->resetAll();
     $user->group->id = 2;
     $user->addOrder( 'name' );
     $user->addSelect( 'name', 'is_admin' );
@@ -105,22 +105,22 @@
     $user->usergroup->addSelect( 'active' );
     $user->group->addSelect( 'name' );
     
-    $user->findRelation();
+    $user->find( 'group' );
     
-    while ( $user->fetchRelation() ) {
+    while ( $user->fetch() ) {
         YDDebugUtil::dump( '-----------------------------------' );
-        YDDebugUtil::dump( $user->getRelationValues() );
+        YDDebugUtil::dump( $user->getValues() );
     }
     
     echo "<h1>But I only want active users.</h1>";
     
-    $user->resetRelation();    
+    $user->resetAll();    
     $user->group->id = 2;
     $user->usergroup->active = 1;
-    $user->findRelation();
+    $user->find( 'group' );
     
-    while ( $user->fetchRelation() ) {
-        YDDebugUtil::dump( $user->getRelationValues() );
+    while ( $user->fetch() ) {
+        YDDebugUtil::dump( $user->getValues() );
     }
     
     echo "<p>&nbsp;</p>";

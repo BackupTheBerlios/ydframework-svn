@@ -16,13 +16,13 @@
 
     $user = YDDatabaseObject::getInstance( 'User' );
     
-    $user->loadAllRelations();
+    $user->loadAll();
     $user->id = 1;
     
-    $user->findAllRelations();
+    $user->findAll();
     
-    while( $user->fetchRelation() ) {
-        YDDebugUtil::dump( $user->getRelationValues() );
+    while( $user->fetch() ) {
+        YDDebugUtil::dump( $user->getValues() );
     }
     
     echo "<p>With getRelationValues I've returned all values in a single array, but we still are<br>";
@@ -30,13 +30,13 @@
     
     echo "<p>Let's do that with Pieter's user.</p>";
     
-    $user->resetRelation();    
+    $user->resetAll();    
     $user->id = 2;
     
-    $user->findAllRelations();
+    $user->findAll();
     
-    while( $user->fetchRelation() ) {
-        YDDebugUtil::dump( $user->getRelationValues() );
+    while( $user->fetch() ) {
+        YDDebugUtil::dump( $user->getValues() );
     }
     
     echo "<p>&nbsp;</p>";

@@ -13,9 +13,9 @@
     echo "<h1>Let's start working with relations</h1>";
     echo "<p>Let's load the \"address\" relation so we can start.</p>";
     
-    $user->loadRelation( 'address' );
+    $user->load( 'address' );
     
-    echo "<p>The loadRelation method includes the necessary files in the relation and instantiates<br>";
+    echo "<p>The load method includes the necessary files in the relation and instantiates<br>";
     echo "the relation objects as parameters of the current object.</p>";
 
     // Let's truncate the table
@@ -25,8 +25,7 @@
 
     $user->id = 1;
     
-    // you don't have to pass the relation id if you want to use the same as last time
-    $total = $user->findRelation(); 
+    $total = $user->find( 'address' ); 
     
     echo "<p>I have " . $total . " addresses defined? That's not true. We have 1 row returned because<br>";
     echo "this is a LEFT join. Let's see the results in the address object.</p>";
@@ -48,10 +47,10 @@
     
     // I reset all info so I'll just check with my ID
     // The resetRelation method executes a reset at each related object
-    $user->resetRelation();
+    $user->resetAll();
     
     $user->id = 1;
-    $user->findRelation();
+    $user->find( 'address' );
     
     echo "<p>I have " . $user->count() . " address defined. I don't have to fetch it because<br>";
     echo "single results are automatically fetched.</p>";
@@ -60,32 +59,32 @@
     
     echo "<p>And my info...</p>";
 
-    YDDebugUtil::dump( $user->getValues() );
+    YDDebugUtil::dump( $user->getValues( true ) );
 
     echo "<p>Let's filter the results a little. We'll select only the id, name and the country.</p>";
     
-    $user->resetRelation();
+    $user->resetAll();
     $user->id = 1;
 
     $user->addSelect( 'id', 'name' );
     $user->address->addSelect( 'country' );
     
-    $user->findRelation();
+    $user->find( 'address' );
     
     echo "<p>Still have " . $user->count() . " address defined.</p>";
 
-    YDDebugUtil::dump( $user->getValues() );
+    YDDebugUtil::dump( $user->getValues( true ) );
     YDDebugUtil::dump( $user->address->getValues() );
 
     echo "<p>But we can get a single array with getRelationValues. By default this method<br>";
     echo "returns the relation values with a prefix (the variable name).</p>";
     
-    YDDebugUtil::dump( $user->getRelationValues() );
+    YDDebugUtil::dump( $user->getValues() );
 
     echo "<p>You can take out this prefix setting false the prefix parameter, but is risky<br>";
     echo "if you have same field names in different tables.</p>";
 
-    YDDebugUtil::dump( $user->getRelationValues( false, false, false ) );
+    YDDebugUtil::dump( $user->getValues( false, false, false, false ) );
         
     echo "<p>&nbsp;</p>";
     echo "<p>Let's do some more complex relations with Users Groups! <a href=\"users_groups.php?YD_DEBUG=" . YDConfig::get( 'YD_DEBUG' ) . "\">Click here</a>.</p>";
