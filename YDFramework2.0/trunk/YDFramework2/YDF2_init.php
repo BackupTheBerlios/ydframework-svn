@@ -132,13 +132,13 @@
         closedir( $handle );
     }
     $includePath .= YD_PATHDELIM . YD_SELF_DIR;
-    if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
-        $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
+    if ( is_dir( YD_SELF_DIR . YD_DIRDELIM . 'includes' ) ) {
+        $includePath .= YD_PATHDELIM . YD_SELF_DIR . YD_DIRDELIM . 'includes';
     }
     $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormElements';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDFormRenderers';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . '/YDDatabaseDrivers';
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormElements';
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormRenderers';
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDDatabaseDrivers';
     $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
     $includePath .= YD_PATHDELIM . dirname( __FILE__ );
     if ( ini_get( 'include_path' ) != '' ) {
@@ -148,11 +148,11 @@
     @ini_set( 'include_path', $includePath );
 
     // Include the standard functions
-    include_once( 'YDBase.php' );
-    include_once( 'YDConfig.php' );
-    include_once( 'YDLocale.php' );
-    include_once( 'YDF2_functions.php' );
-    include_once( 'YDAddOnModule.php' );
+    include_once( YD_DIR_HOME . YD_DIRDELIM . 'YDF2_functions.php' );
+    YDInclude( 'YDBase.php' );
+    YDInclude( 'YDConfig.php' );
+    YDInclude( 'YDLocale.php' );
+    YDInclude( 'YDAddOnModule.php' );
 
     // Default the locale to English
     YDConfig::set( 'YD_LOCALE', 'en', false );
