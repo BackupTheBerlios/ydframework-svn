@@ -9,7 +9,7 @@
     
     echo "<h1>Loading and finding all relations</h1>";
     echo "<p>There is way of loading all relations and making a single query to all relations.</p>";
-    echo "<p>You can use the findAllRelations method or findRelation( 'relation', 'relation', ... ) to<br>";
+    echo "<p>You can use the findAll method or find( 'relation', 'relation', ... ) to<br>";
     echo "join only a few relations in a single query.</p>";
     
     echo "<p>Let's do that with my user.</p>";
@@ -25,7 +25,7 @@
         YDDebugUtil::dump( $user->getValues() );
     }
     
-    echo "<p>With getRelationValues I've returned all values in a single array, but we still are<br>";
+    echo "<p>With getValues I've returned all values in a single array, but we still are<br>";
     echo "able to access the individual relation objects.</p>";
     
     echo "<p>Let's do that with Pieter's user.</p>";

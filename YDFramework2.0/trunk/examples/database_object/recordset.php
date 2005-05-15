@@ -10,7 +10,7 @@
     
     echo "<h1>YDRecordSet pagination</h1>";
     echo "<p>Because YDRecordSet handles simple arrays, we just need to get an array of results.</p>";
-    echo "<p>For that we have the getResults and getRelationResults methods.</p>";
+    echo "<p>For that we have the getResults method.</p>";
     echo "<p>Let's load our groups and users relation with 3 records per page.</p>";
 
     $user = YDDatabaseObject::getInstance( 'User' );
