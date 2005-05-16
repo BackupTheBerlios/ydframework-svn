@@ -457,6 +457,16 @@
             }
 
             if ( $only_keys ) {
+                foreach ( $keys as $field ) {
+                    if ( ! $this->exists( $field->getName() ) ) {
+                        $only_keys = false;
+                        break;
+                    }
+                }
+                
+            }
+            
+            if ( $only_keys ) {
                 $fields = $keys;
             }
             
@@ -781,7 +791,7 @@
             $this->_sql->addTable( $this->getTable() );
             
             // Prepare query in local object
-            $this->_prepareQuery( false );
+            $this->_prepareQuery( true );
             
             // Add the local slice
             $slices[ $pos ] = '';
@@ -819,7 +829,7 @@
                 $f_column = $f_field->getColumn();
 
                 // Prepare the query in the foreign object
-                $this->$f_var->_prepareQuery( false );
+                $this->$f_var->_prepareQuery( true );
 
                 // Add the foreign slice
                 $slices[ $pos ] = $f_var;
@@ -867,7 +877,7 @@
                     $c_lcolumn = $c_lfield->getColumn();
 
                     // Prepare the query in the cross object
-                    $this->$c_var->_prepareQuery( false );
+                    $this->$c_var->_prepareQuery( true );
 
                     // Add the cross slice
                     $slices[ $pos ] = $c_var;
