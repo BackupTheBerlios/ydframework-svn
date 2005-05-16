@@ -19,7 +19,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set the user id
     $user->id = 123;
@@ -39,7 +39,7 @@
 
     <programlisting><![CDATA[SELECT * FROM users WHERE id = 123]]></programlisting>
 
-    <para>The result depends on what was defined in the User class but could be something like this:</para>
+    <para>The result depends on what was defined in the user class but could be something like this:</para>
 
     <programlisting><![CDATA[array(
 
@@ -57,7 +57,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set the user data
     $user->id    = 123;
@@ -82,7 +82,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set the user data
     $user->name  = 'Bill';
@@ -105,7 +105,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set the user data
     $user->id  = 123;
@@ -120,6 +120,83 @@
     <programlisting><![CDATA[DELETE FROM users WHERE id = 123]]></programlisting>
 
     <para>The class can handle relations between multiple tables, but this part will be explained in the relations section.</para>
+
+    <sect1 id="yddatabaseobject_sql">
+
+        <title>The SQL schema for the examples</title>
+
+        <para>All the examples in this section of the guide refer to the following SQL schema:</para>
+        
+        <programlisting><![CDATA[
+users                 users_groups              groups                phones
+-------------------   -----------------------   -------------------   -------------------
+id                    user_id                   id                    user_id
+name                  group_id                  name                  number
+email                 active                    active                ord
+country               joined
+birthday
+admin
+
+-- 
+-- Table structure for table `users`
+-- 
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `email` varchar(255) NOT NULL default '',
+  `country` varchar(255) NOT NULL default '',
+  `admin` tinyint(1) NOT NULL default '0',
+  `birthday` int(8) default NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `users_groups`
+-- 
+
+DROP TABLE IF EXISTS `users_groups`;
+CREATE TABLE `users_groups` (
+  `user_id` int(11) NOT NULL default '0',
+  `group_id` int(11) NOT NULL default '0',
+  `joined` int(8) default NULL,
+  `active` tinyint(1) NOT NULL default '0'
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `groups`
+-- 
+
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL default '',
+  `active` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+-- --------------------------------------------------------
+
+-- 
+-- Table structure for table `phones`
+-- 
+
+DROP TABLE IF EXISTS `phones`;
+CREATE TABLE `phones` (
+  `user_id` int(11) NOT NULL default '0',
+  `number` varchar(30) NOT NULL default '',
+  `ord` int(3) NOT NULL default '0'
+) TYPE=MyISAM;
+
+
+]]></programlisting>
+        
+    </sect1>
 
     <sect1 id="yddatabaseobject_build">
 
@@ -139,13 +216,13 @@
             <listitem><emphasis role="bold">Relations (optional):</emphasis> the relations with other tables.</listitem>
         </itemizedlist>
 
-        <para>An example for the User class:</para>
+        <para>An example for the user class:</para>
 
         <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // Initializes the parent class
             $this->YDDatabaseObject();
@@ -165,18 +242,18 @@
             // Register the fields
             $this->registerStringField( 'name' );
             $this->registerStringField( 'email' );
-            $this->registerStringField( 'birthday' );
             $this->registerStringField( 'country' );
-            $this->registerNumericField( 'is_active' );
+            $this->registerStringField( 'birthday' );
+            $this->registerNumericField( 'admin' );
 
             // Register select expressions
             $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
 
             // Register protected fields
-            $this->registerProtected( 'is_active', 0 );
+            $this->registerProtected( 'admin', 0 );
 
             // Register relations
-            $this->registerRelation( 'address' );
+            $this->registerRelation( 'phone' );
 
         }
     }
@@ -206,7 +283,7 @@
 
             <title>Register the table name</title>
 
-            <para>The registerTable method defines the table name.</para>
+            <para>The registerTable method defines the table name that can be retrieved with the getTable method.</para>
 
             <programlisting><![CDATA[<?php
 
@@ -236,7 +313,7 @@
             <programlisting><![CDATA[<?php
 
     // Register a numeric field
-    $this->registerNumericField( 'number' );
+    $this->registerNumericField( 'admin' );
 
     // Register a string field
     // The second parameter defines that the field can be null. Default: false.
@@ -247,7 +324,7 @@
     $this->registerNumericKey( 'id', true );
 
     // Register a string key
-    $this->registerStringKey( 'date' );
+    $this->registerStringKey( 'birthday' );
 
 ?>]]></programlisting>
 
@@ -275,7 +352,7 @@
     $birthday->setNull();
 
     // Set the real column of the field
-    $birthday->setColumn( 'date_birthday' );
+    $birthday->setColumn( 'birthday' );
 
     // Set the default value for the field
     $birthday->setDefault( 19700101 );
@@ -296,16 +373,14 @@
             <programlisting><![CDATA[<?php
 
     // Register select statements
-    $this->registerSelect( 'birth_year', 'YEAR( birthday )' );
-    $this->registerSelect( 'total', 'SUM( value )' );
-    $this->registerSelect( 'is_admin', 'IF( admin=1, 1, 0 )' );
+    $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
+    $this->registerSelect( 'is_admin', 'IF( ' . $this->getTable() . '.admin=1, 1, 0 )' );
 
 ?>]]></programlisting>
 
             <para>The above example will add the following piece of SQL code when you execute a find:</para>
 
-            <programlisting><![CDATA[SELECT ..., YEAR( birthday ) AS 'birth_year',
-SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlisting>
+            <programlisting><![CDATA[SELECT ..., YEAR( users.birthday ) AS 'birth_year', IF( users.admin=1, 1, 0 ) AS 'is_admin' ...]]></programlisting>
 
             <para>These values will be available as object variables but will not be included in INSERT, UPDATE or DELETE calls as they are not defined fields of the table.</para>
 
@@ -320,16 +395,16 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
             <programlisting><![CDATA[<?php
 
     // Register a select
-    $total = & $this->registerSelect( 'total', 'SUM( value )' );
+    $birth_year = & $this->registerSelect( 'birthyear', 'YEAR( ' . $this->getTable() . '.birthday )' );
 
-    // Change the select name from 'total' to 'sum'
-    $total->setName( 'sum' );
+    // Change the select name from 'birthyear' to 'birth_year'
+    $birth_year->setName( 'birth_year' );
 
-    // Change the expression
-    $total->setExpression( 'SUM( value ) - SUM( value2 )' );
+    // Set the expression
+    $birth_year->setExpression( 'YEAR( ' . $this->getTable() . '.birthday )' );
 
     // Set the callback method - this method has to be defined in the class
-    $total->setCallback( 'getSumFormatted' );
+    $birth_year->setCallback( 'getAgeByYear' );
 
 ?>]]></programlisting>
 
@@ -361,15 +436,15 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
             <programlisting><![CDATA[<?php
 
     // Register relations
-    $this->registerRelation( 'group' );
+    $this->registerRelation( 'phone' );
 
     // The second parameter sets the relation as a many-to-many relation
-    $this->registerRelation( 'events', true );
+    $this->registerRelation( 'group', true );
 
     // In a many-to-many relation we need a middle table that cross-reference the other two tables
     // The third parameter sets the foreign class name
     // The fourth parameter sets the cross class name (the middle table)
-    $this->registerRelation( 'events', true, 'event', 'user_events' );
+    $this->registerRelation( 'groups', true, 'group', 'user_group' );
 
 ?>]]></programlisting>
 
@@ -396,27 +471,27 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
     // Include the database object class
     YDInclude( 'YDDatabaseObject.php' );
 
-    // Create a new user class
-    $user = YDDatabaseObject::getInstance( 'User' );
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Getting the table name
-    $table_users = $user->getTable();
+    $table_user = $user->getTable();
 
     // Getting the database connection
     $db = & $user->getDatabase();
-    $db->getRecords( 'SELECT * FROM ' . $table_users );
+    $db->getRecords( 'SELECT * FROM ' . $table_user );
 
     // Getting a field object
     $country = & $user->getField( 'country' );
     $country->setCallback( 'getContinent' );
 
     // Getting a select object
-    $total = & $user->getSelect( 'total' );
-    $total->setCallback( 'getTotalFormatted' );
+    $birth_year = & $user->getSelect( 'birth_year' );
+    $birth_year->setCallback( 'getYearFormatted' );
 
     // Getting a relation object
-    $group = & $user->getRelation( 'group' );
-    $group->setForeignClass( 'greatGroup' );
+    $group = & $user->getRelation( 'groups' );
+    $group->setForeignClass( 'active_group' );
 
 ?>]]></programlisting>
 
@@ -448,20 +523,20 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
     // Set a prefix
     YDConfig::set( 'YD_DBOBJECT_PREFIX', 'YDDBOBJ_' );
 
-    // Create a new user class using getInstance
-    $user = YDDatabaseObject::getInstance( 'User' );
+    // Create a new user object using getInstance
+    $user = YDDatabaseObject::getInstance( 'user' );
 
 ?>]]></programlisting>
 
-        <para>The classes names must start with the prefix and end with the sufix, but the filenames doesn't require them. For the above example the class name is YDDBOBJ_User but the filename is User.php.</para>
+        <para>The classes names must start with the prefix and end with the sufix, but the filenames doesn't require them. For the above example the class name is YDDBOBJ_user but the filename is user.php.</para>
 
-        <programlisting><![CDATA[// file: User.php
+        <programlisting><![CDATA[// file: user.php
 
 <?php
 
-    class YDDBOBJ_User extends YDDatabaseObject {
+    class YDDBOBJ_user extends YDDatabaseObject {
 
-        function YDDBOBJ_User() {
+        function YDDBOBJ_user() {
 
             // Init the parent
             $this->YDDatabaseObject();
@@ -478,11 +553,11 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
 
         <programlisting><![CDATA[<?php
 
-    // Include the User class
-    include_once "User.php";
+    // Include the user class
+    include_once "user.php";
 
     // Create a new user class
-    $user = new User();
+    $user = new user();
 
 ?>]]></programlisting>
 
@@ -503,7 +578,7 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Setting directly
     $user->id      = 123;
@@ -535,7 +610,7 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Setting directly
     $user->id      = 123;
@@ -559,7 +634,7 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Create a new form object
     $form = new YDForm();
@@ -577,7 +652,7 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Create a new form object
     $form = new YDForm();
@@ -608,7 +683,7 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set the user data
     $user->id  = 123;
@@ -620,31 +695,9 @@ SUM( value ) AS 'total', IF( admin=1, 1, 0 ) AS 'is_admin' ...]]></programlistin
     $rows = $user->findSql( "SELECT * FROM " . $user->getTable() . " WHERE id=123" );
 
     // Using executeSql
-    $user->executeSql( "UPDATE " . $user->getTable() . " SET name = 'John' WHERE id=123" );
+    $affected = $user->executeSql( "UPDATE " . $user->getTable() . " SET name = 'John' WHERE id=123" );
 
 ?>]]></programlisting>
-
-        <para>The find method can have some arguments passed to it. These arguments should be the values of the keys in the order they where defined. For example: </para>
-
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
-
-    // Find rows with id=123
-    // Assume "id" is a defined key
-    $rows = $user->find( 123 );
-
-    // Find rows with id=123 and country=Brazil
-    // Assume "id" and "country" are defined keys
-    $rows = $user->find( 123, 'Brazil' );
-
-?>]]></programlisting>
-
-        <para>The above examples will produce the following SQL queries:</para>
-
-        <programlisting><![CDATA[SELECT * FROM users WHERE id=123
-SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
 
         <para>You can build more complex searches using the following optional methods:</para>
 
@@ -660,7 +713,7 @@ SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // This find will retrieve all rows of the table because it doesn't have a filter defined
     $rows = $user->find();
@@ -671,22 +724,22 @@ SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
     $user->resetQuery();
 
     // Add WHERE statement
-    $user->addWhere( "id > 100", "AND" );
-    $user->addWhere( "name LIKE 'a%'", "AND" );
+    $user->addWhere( $user->getTable() . ".id > 100", "AND" );
+    $user->addWhere( $user->getTable() . ".name LIKE 'a%'", "AND" );
 
     // Add a GROUP BY statement
     // The second parameter defines if DESC is added to the item
     $user->addGroup( "id", false );
 
     // Add a HAVING statement
-    $user->addHaving( "total > 10" ); // consider "total" = SUM( value )
-                                      // registered select in the class
+    $user->addHaving( "birth_year > 1970" ); // consider "birth_year" = YEAR( users.birthday )
+                                             // registered select in the class
 
     // Add an ORDER statement
     $user->addOrder( "name" );
 
     // Add a registered select
-    $user->addSelect( 'total' );
+    $user->addSelect( 'birth_year' );
 
     // Set the limit
     // 20 = max. number of rows
@@ -697,7 +750,7 @@ SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
 
         <para>The above example will generate the following SQL code:</para>
 
-        <programlisting><![CDATA[SELECT SUM( value ) AS total FROM users WHERE id > 100 AND name LIKE 'a%' GROUP BY id HAVING total > 10 ORDER BY name LIMIT 0, 20]]></programlisting>
+        <programlisting><![CDATA[SELECT YEAR( users.birthday ) AS birth_year FROM users WHERE id > 100 AND name LIKE 'a%' GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 0, 20]]></programlisting>
 
         <para>A combination of object variables and these methods can be used.</para>
 
@@ -714,10 +767,10 @@ SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Country'
+    $user->country = 'Spain'
 
     // Search using the criteria defined
     $rows = $user->find();
@@ -738,19 +791,19 @@ SELECT * FROM users WHERE id=123 AND country='Brazil']]></programlisting>
 array(
     'id' => 1,
     'name' => 'Pieter',
-    'country' => 'Country',
+    'country' => 'Spain',
     ...
 )
 array(
     'id' => 2,
     'name' => 'David',
-    'country' => 'Country',
+    'country' => 'Spain',
     ...
 )
 array(
     'id' => 3,
     'name' => 'Francisco',
-    'country' => 'Country',
+    'country' => 'Spain',
     ...
 )
 ]]></programlisting>
@@ -760,10 +813,10 @@ array(
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Country'
+    $user->country = 'Spain'
 
     // Search using the criteria defined
     $rows = $user->find();
@@ -784,15 +837,17 @@ array(
             <listitem><emphasis role="bold">resetValues:</emphasis> delete all the current values of the object.</listitem>
             <listitem><emphasis role="bold">resetQuery:</emphasis> delete all query information added by addWhere, addGroup, etc. By default, all fields and selects are automatically added to any select query, but calling this method will delete them from the query leaving it blank.</listitem>
             <listitem><emphasis role="bold">reset:</emphasis> reset all data and configuration of the object, like instantiating a new object. Actually this method calls all the methods above.</listitem>
+            <listitem><emphasis role="bold">resetRelation:</emphasis> reset all data and configuration of the related objects in a relation.</listitem>
+            <listitem><emphasis role="bold">resetAll:</emphasis> reset all data and configuration of the objects and of all relations.</listitem>
         </itemizedlist>
 
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Country'
+    $user->country = 'Spain'
 
     // Search using the criteria defined
     $rows = $user->find();
@@ -810,12 +865,12 @@ array(
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Country'
+    $user->country = 'Spain'
 
-    // If you call find() it will add all User fields to the SELECT
+    // If you call find() it will add all user fields to the SELECT
     // e.g. id, name, email, etc
 
     // Calling resetQuery you can define what fields or selects to add to the query
@@ -831,7 +886,7 @@ array(
 
         <para>The above example will return this SQL query:</para>
 
-        <programlisting><![CDATA[SELECT name, email FROM users WHERE country='Country']]></programlisting>
+        <programlisting><![CDATA[SELECT name, email FROM users WHERE country='Spain']]></programlisting>
 
     </sect1>
 
@@ -844,7 +899,7 @@ array(
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
     $user->id = 123;
@@ -856,8 +911,8 @@ array(
     $user->name = 'John Fulano';
     $user->email = 'johnfulano@host.com';
 
-    // Uses the key "id" to update the user info
-    $user->update()
+    // Uses the keys to update the user info
+    $user->update();
 
 ?>]]></programlisting>
 
@@ -870,7 +925,7 @@ array(
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Add data
     $user->name = 'John Fulano';
@@ -904,7 +959,7 @@ array(
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Add data
     $user->name    = 'John Fulano';
@@ -936,12 +991,12 @@ VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
     $user->id = 123;
 
-    // Uses the key "id" to delete the row
+    // Uses the keys to delete the row
     $rows = $user->delete();
 
 ?>]]></programlisting>
@@ -955,10 +1010,10 @@ VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
         <programlisting><![CDATA[<?php
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // No criteria (id) - all rows of the table should be deleted
-    $rows = $user->delete(); // Returns an error by default
+    $rows = $user->delete(); // Returns a notice by default
 
     // You can set this configuration and execute the query to update all rows
     YDConfig::set( 'YD_DBOBJECT_DELETE', true );
@@ -990,47 +1045,47 @@ VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
             <listitem><emphasis role="bold">Cross:</emphasis> in a many-to-many relation there is a need of a third class that cross-reference the local and foreign classes.</listitem>
         </itemizedlist>
 
-        <para>For example, if you have a one-to-many relationship between the User table and the Phone table, you must define the following relation:</para>
+        <para>For example, if you have a one-to-many relationship between the users table and the phone table, you must define the following relation:</para>
 
-        <programlisting><![CDATA[// User class
+        <programlisting><![CDATA[// user class
 
-Local: User
-Foreign: Phone
+Local: user
+Foreign: phone
 
-// Phone class
+// phone class
 
-Local: Phone
-Foreign: User
+Local: phone
+Foreign: user
 ]]></programlisting>
 
-        <para>For a many-to-many relationship between the User table and the Group table that has a cross-reference table named User_Group, you must define the following relation:</para>
+        <para>For a many-to-many relationship between the users table and the groups table that has a cross-reference table named users_groups, you must define the following relation:</para>
 
-        <programlisting><![CDATA[// User class
+        <programlisting><![CDATA[// user class
 
-Local: User
-Foreign: Group
-Cross: User_Group
+Local: user
+Foreign: group
+Cross: user_group
 
-// Group class
+// group class
 
-Local: Group
-Foreign: User
-Cross: User_Group
+Local: group
+Foreign: user
+Cross: user_group
 
-// User_Group class
+// user_group class
 // 1st relation (one-to-many)
 
-Local: User_Group
-Foreign: User
+Local: user_group
+Foreign: user
 
-// User_Group class
+// user_group class
 // 2nd relation (one-to-many)
 
-Local: User_Group
-Foreign: Group
+Local: user_group
+Foreign: group
 ]]></programlisting>
 
-        <para>For a relation to work, you don't have to define it at each class, but is recommended as you would want to retrieve it by different angles. For example: if you have a Group and want to get all the Users you could load the Group class and get the Users using the relation defined in there.</para>
+        <para>For a relation to work, you don't have to define it at each class, but is recommended as you would want to retrieve it by different angles. For example: if you have a group and want to get all the users you could load the group class and get the users using the relation defined in there.</para>
 
         <sect2 id="yddatabaseobject_relations_config">
 
@@ -1056,9 +1111,9 @@ Foreign: Group
 
                 <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // All other configuration
             // ...
@@ -1067,26 +1122,26 @@ Foreign: Group
             $phone = & $this->registerRelation( 'phone' );
 
             // Change the relation name
-            $phone->setName( 'fone' );
+            $phone->setName( 'phones' );
 
             // Sets the where expression
-            $phone->setWhere( 'phones.user_id = users.id AND users.active=1' );
+            $phone->setWhere( 'phone.user_id = users.id AND users.active=1' );
 
             // Sets the group by expression
-            $phone->setGroup( 'phones.total_calls' );
+            $phone->setGroup( 'phone.total_calls' );
 
             // Sets the having expression
-            $phone->setHaving( 'phones.total_calls > 10' );
+            $phone->setHaving( 'phone.total_calls > 10' );
 
             // Sets the order by expression
-            $phone->setOrder( 'users.name, phones.total_calls DESC' );
+            $phone->setOrder( 'users.name, phone.total_calls DESC' );
 
         }
     }
 
 ?>]]></programlisting>
 
-                <para>If the setWhere, setGroup, setHaving and setOrder methods are used, it's values will replace all the values defined by the user during runtime.</para>
+                <para>If the setWhere, setGroup, setHaving and setOrder methods are used, it's values are added to the values defined by the user during runtime, so the developer must pay attention for duplicated conditions and filters.</para>
 
             </sect3>
 
@@ -1102,9 +1157,9 @@ Foreign: Group
 
                 <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // All other configuration
             // ...
@@ -1132,18 +1187,20 @@ Foreign: Group
                 <para>The foreign class have some properties that can be defined by the following methods:</para>
 
                 <itemizedlist spacing="compact">
-                    <listitem><emphasis role="bold">setForeignClass (optional):</emphasis> sets the foreign class name. Must be a defined YDDatabaseObject class. If not defined, the relation name is used. For example: a relation called Group will use the Group class as the foreign class.</listitem>
+                    <listitem><emphasis role="bold">setForeignClass (optional):</emphasis> sets the foreign class name. Must be a defined YDDatabaseObject class. If not defined, the relation name is used. For example: a relation called group will use the group class as the foreign class.</listitem>
                     <listitem><emphasis role="bold">setForeignVar (optional):</emphasis> sets the local class variable name that will hold the foreign object. If not defined, the foreign class name will be used.</listitem>
                     <listitem><emphasis role="bold">setForeignField (optional):</emphasis> sets the field name in the foreign class that is the relation key. If not defined, the defined keys in the foreign class are used.</listitem>
-                    <listitem><emphasis role="bold">setForeignConditions (optional):</emphasis> sets additional conditions for the foreign table. For example, you could want to only return active Groups.</listitem>
+                    <listitem><emphasis role="bold">setForeignConditions (optional):</emphasis> sets additional conditions for the foreign table. For example, you could want to only return active groups.</listitem>
                     <listitem><emphasis role="bold">setForeignJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
                 </itemizedlist>
+                
+                <para>There is a special method called getForeignTable that retrieves the foreign table name. It works by instantiating the foreign class and returning the result from getTable in that object. Notice that if you call this method before setting the correct foreign class name, you will get an error.</para>
 
                 <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // All other configuration
             // ...
@@ -1152,19 +1209,19 @@ Foreign: Group
             $phone = & $this->registerRelation( 'phone' );
 
             // Sets the foreign class
-            // If not set, the class will try to call the Phone class as it's the relation name
-            $phone->setForeignClass( 'Fone' );
+            // If not set, the class will try to call the phone class as it's the relation name
+            $phone->setForeignClass( 'phone' );
 
             // Sets the foreign var
             // If not set, the foreign class name is used
-            $phone->setForeignVar( 'fone' );
+            $phone->setForeignVar( 'phone' );
 
             // Sets the foreign field
             // The foreign class Fone must have a defined field called user_id.
             $phone->setForeignField( 'user_id' );
 
             // Sets the foreign conditions
-            $phone->setForeignConditions( 'phones.active = 1' );
+            $phone->setForeignConditions( $phone->getForeignTable() . ".number != ''" );
 
             // Sets the foreign join type
             $phone->setForeignJoin( 'LEFT' );
@@ -1184,21 +1241,23 @@ Foreign: Group
                 <para>The cross class have some properties that can be defined by the following methods:</para>
 
                 <itemizedlist spacing="compact">
-                    <listitem><emphasis role="bold">setCrossClass (optional):</emphasis> sets the cross class name. Must be a defined YDDatabaseObject class. If not defined, a combination of the local class name ($local_class) and the foreign class name ($foreign_class) is used ($local_class . "_" . $foreign_class). For example: a many-to-many relation called Group in the User class will use the Group class as the foreign class and the User_Group class as the cross class.</listitem>
+                    <listitem><emphasis role="bold">setCrossClass (optional):</emphasis> sets the cross class name. Must be a defined YDDatabaseObject class. If not defined, a combination of the local class name ($local_class) and the foreign class name ($foreign_class) is used ($local_class . "_" . $foreign_class). For example: a many-to-many relation called group in the user class will use the group class as the foreign class and the user_group class as the cross class.</listitem>
                     <listitem><emphasis role="bold">setCrossVar (optional):</emphasis> sets the local class variable name that will hold the cross object. If not defined, the cross class name will be used.</listitem>
                     <listitem><emphasis role="bold">setCrossLocalField (optional):</emphasis> sets the field name in the local class that is the relation key between the cross and the local classes. If not defined, a combination of the local table name and the local defined key is used ($local_table . "_" . $local_key).</listitem>
                     <listitem><emphasis role="bold">setCrossForeignField (optional):</emphasis> sets the field name in the cross class that is the relation key between the cross and the foreign classes. If not defined, a combination of the foreign table name and the foreign defined key is used ($foreign_table . "_" . $foreign_key).</listitem>
-                    <listitem><emphasis role="bold">setCrossConditions (optional):</emphasis> sets additional conditions for the cross table. For example, you could want to only return active users the Group.</listitem>
+                    <listitem><emphasis role="bold">setCrossConditions (optional):</emphasis> sets additional conditions for the cross table. For example, you could want to only return active users of the group.</listitem>
                     <listitem><emphasis role="bold">setCrossJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
                 </itemizedlist>
+
+                <para>Like the getForeignTable, there is a method called getCrossTable that retrieves the cross table name. It works by instantiating the cross class and returning the result from getTable in that object. Notice that if you call this method before setting the correct cross class name, you will get an error.</para>
 
                 <para>For a better understanding of the default naming of the classes, tables and keys:</para>
 
                 <programlisting><![CDATA[// Many-to-many relationship
 
-Local class: User
-Foreign class: Group
-Cross class: User_Group
+Local class: user
+Foreign class: group
+Cross class: user_group
 
 // Defined keys in the classes
 Local key: id
@@ -1207,34 +1266,34 @@ Cross keys: user_id, group_id
 
 // Table names defined in the classes
 
-Local table name: user
-Foreign table name: group
-Cross table name: user_group
+Local table name: users
+Foreign table name: groups
+Cross table name: users_groups
 
 // Default naming in a registerRelation without any additional configuration
 
 // Local
-Class: User
+Class: user
 Field: id (defined key)
 
 // Foreign
-Class: Group
+Class: group
 Field: id (defined key)
 
 // Cross
-Class: User_Group (combination of Local and Foreign classes)
-Local Field: user_id (combination of Local table and Local Key)
-Foreign Field: group_id (combination of Foreign table and Foreign Key)
+Class: user_group (combination of Local and Foreign classes)
+Local Field: users_id (combination of Local table and Local Key)
+Foreign Field: groups_id (combination of Foreign table and Foreign Key)
 
 // Default relation between the tables
 
-User (user)           User_Group (user_group)   Group (group)
--------------------   -----------------------   -------------------
+users (user)          users_groups (user_group)   groups (group)
+-------------------   -------------------------   -------------------
 id....................user_id
-                      group_id..................id
-name                  active                    name
-email                 joined                    active
-...                   ...                       ...
+                      group_id....................id
+name                  active                      name
+email                 joined                      active
+...                   ...                         ...
 
 ]]></programlisting>
 
@@ -1242,9 +1301,9 @@ email                 joined                    active
 
                 <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // All other configuration
             // ...
@@ -1256,7 +1315,7 @@ email                 joined                    active
             // ...
 
             // Sets the cross class
-            $group->setCrossClass( 'User_Group' );
+            $group->setCrossClass( 'user_group' );
 
             // Sets the cross var
             $group->setCrossVar( 'user_group' );
@@ -1268,7 +1327,7 @@ email                 joined                    active
             $group->setCrossForeignField( 'group_id' );
 
             // Sets the cross conditions
-            $group->setForeignConditions( 'user_group.active = 1' );
+            $group->setCrossConditions( $this->getCrossTable() . '.active = 1' );
 
             // Sets the cross join type
             $group->setCrossJoin( 'LEFT' );
@@ -1295,7 +1354,7 @@ email                 joined                    active
 
             <title>Loading relations</title>
 
-            <para>A YDDatabaseObject class can have many relations defined, so the related classes are not included every time you instantiate the class. There is a method called loadRelation that includes the relation and adds a instantiated object to the relation variable (or variables if it is a many-to-many relationship).</para>
+            <para>A YDDatabaseObject class can have many relations defined, so the related classes are not included every time you instantiate the class. There is a method called load that includes the relation and adds a instantiated object to the relation variable (or variables if it is a many-to-many relationship).</para>
 
             <programlisting><![CDATA[<?php
 
@@ -1303,10 +1362,10 @@ email                 joined                    active
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
-    // Load relation Phone
-    $user->loadRelation( 'phone' );
+    // Load relation phone
+    $user->load( 'phone' );
 
     // Now you can access the relation object
     $user->phone->number = '5555-2222';
@@ -1316,13 +1375,13 @@ email                 joined                    active
     $phone_array  = $user->phone->getValues();
 
     // Or even instantiate a new phone object
-    $phone = new Phone();
+    $phone = new phone();
 
 ?>]]></programlisting>
 
-            <para>There is also a loadAllRelations method that loads all relations defined in the class.</para>
+            <para>There is also a loadAll method that loads all relations defined in the class.</para>
 
-            <para>After any action with a relation (loading, finding, fetching, etc), the last relation name used is saved so you don't need to put it in the following actions with relations. For example:</para>
+            <para>After a search with a relation, the last relation name used is saved so you don't need to put it in the following actions with relations. For example:</para>
 
             <programlisting><![CDATA[<?php
 
@@ -1330,28 +1389,28 @@ email                 joined                    active
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
-    // Load relation Phone
+    // Load relation phone
     // This relation is saved for the next actions
-    $user->loadRelation( 'phone' );
+    $user->load( 'phone' );
 
     // Set a criteria
     $user->id = 123;
 
     // Search for phones that match the criteria
-    // In this case, the relation we are searching is the Phone relation.
-    $user->findRelation();
+    // In this case, the relation we are searching is the phone relation.
+    $user->find( 'phone' );
 
     // Here we are searching the group relation
     // This relation is saved for the next actions
-    $user->findRelation( 'group' );
+    $user->find( 'group' );
 
 ?>]]></programlisting>
 
             <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
 
-            <programlisting><![CDATA[SELECT * FROM user INNER JOIN phone ON ( user.id = phone.user_id ) WHERE user.id = 123]]></programlisting>
+            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id ) WHERE users.id = 123]]></programlisting>
 
         </sect2>
 
@@ -1359,7 +1418,7 @@ email                 joined                    active
 
             <title>Finding data in the database</title>
 
-            <para>A search between the relations uses all values defined in the related objects variables like a simple search in a single object. The findRelation method build the search query considering all the values defined in the related objects.</para>
+            <para>A search between the relations uses all values defined in the related objects variables like a simple search in a single object. The find method build the search query considering all the values defined in the related objects of the relation you are querying.</para>
 
             <programlisting><![CDATA[<?php
 
@@ -1367,17 +1426,17 @@ email                 joined                    active
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
-    // Load relation Phone
-    $user->loadRelation( 'phone' );
+    // Load relation phone
+    $user->load( 'phone' );
 
     // Add the search criteria
     $user->id = 123;
-    $user->phone->order = 1;
+    $user->phone->ord = 1;
 
     // Search using the criteria defined by the variables of the relation
-    $user->findRelation();
+    $user->find( 'phone' );
 
     // Getting the data returned
     $user_name    = $user->name;
@@ -1387,11 +1446,11 @@ email                 joined                    active
 
             <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
 
-            <programlisting><![CDATA[SELECT * FROM user INNER JOIN phone ON ( user.id = phone.user_id AND phone.order = 1 ) WHERE user.id = 123]]></programlisting>
+            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id AND phone.ord = 1 ) WHERE users.id = 123]]></programlisting>
 
             <para>You can add more conditions and definitions to the query as you would do in a simple query using addWhere, addSelect, addOrder, etc.</para>
 
-            <para>If you don't want to add values to the relation object, there is no need to load it before executing findRelation. The findRelation method automatically loads all relations that were not loaded before.</para>
+            <para>If you don't want to add values to the relation object, there is no need to load it before executing find. The find method automatically loads all objects needed.</para>
 
         </sect2>
 
@@ -1399,12 +1458,12 @@ email                 joined                    active
 
             <title>Getting the results</title>
 
-            <para>Like in a simple query in YDDatabaseObject, for relations we have the following defined methods:</para>
+            <para>Like in a simple query in YDDatabaseObject, we use the same methods for retrieving the results of a relation query. These methods remember the last relations searched and return the values from the related objects.</para>
 
             <itemizedlist spacing="compact">
-                <listitem><emphasis role="bold">fetchRelation:</emphasis> fetch the results of all the objects of the relation adding it's values to the corresponding object.</listitem>
-                <listitem><emphasis role="bold">getRelationValues:</emphasis> return the values of all related objects in a single array.</listitem>
-                <listitem><emphasis role="bold">getRelationResults:</emphasis> return all the results of the related objects in a single array.</listitem>
+                <listitem><emphasis role="bold">fetch:</emphasis> fetch the results of all the objects of the last relation adding it's values to the corresponding object.</listitem>
+                <listitem><emphasis role="bold">getValues:</emphasis> return the values of all related objects in a single array.</listitem>
+                <listitem><emphasis role="bold">getResults:</emphasis> return all the results of the related objects in a single array.</listitem>
             </itemizedlist>
 
             <programlisting><![CDATA[<?php
@@ -1413,22 +1472,22 @@ email                 joined                    active
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
-    // Load relation Phone
-    $user->loadRelation( 'phone' );
+    // Load relation phone
+    $user->load( 'phone' );
 
     // Add a search criteria
     $user->id = 123;
 
     // Search using the criteria
-    $user->findRelation();
+    $user->find( 'phone' );
 
     // Fetch the results
-    while ( $user->fetchRelation() ) {
+    while ( $user->fetch() ) {
 
         // Display the values from both objects in a single array
-        print_r( $user->getRelationValues() );
+        print_r( $user->getValues() );
 
     }
 
@@ -1436,7 +1495,7 @@ email                 joined                    active
 
             <para>The above example may execute the following SQL query and display the results bellow it:</para>
 
-            <programlisting><![CDATA[SELECT * FROM user INNER JOIN phone ON ( user.id = phone.user_id ) WHERE user.id = 123
+            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id ) WHERE users.id = 123
 
 array(
     'id' => '123',
@@ -1444,7 +1503,7 @@ array(
     'email' => 'johnfulano@host.com',
     ...
     'phone_number' => '5555-2222',
-    'phone_order' => 1,
+    'phone_ord' => 1,
     ...
 )
 array(
@@ -1453,7 +1512,7 @@ array(
     'email' => 'johnfulano@host.com',
     ...
     'phone_number' => '6666-3333',
-    'phone_order' => 2,
+    'phone_ord' => 2,
     ...
 )
 array(
@@ -1462,15 +1521,13 @@ array(
     'email' => 'johnfulano@host.com',
     ...
     'phone_number' => '7777-4444',
-    'phone_order' => 3,
+    'phone_ord' => 3,
     ...
 )]]></programlisting>
 
-            <para>As you can see, the relation variable name is added as a prefix to the related field names so if you have equal field names in both classes, they will not get mixed. You can take this prefix off in getRelationValues and getRelationResults.</para>
+            <para>As you can see, the relation variable name is added as a prefix to the related field names so if you have equal field names in both classes, they will not get mixed. You can take this prefix off in getValues and getResults.</para>
 
-            <para>The getRelationResults works in a similar way as getResults but returns all the results returned by findRelation.</para>
-
-            <para>There is also the possibility to return the real column names of the fields or even only the defined fields in the class. For more information, read the API documentation for YDDatabaseObject::getRelationValues.</para>
+            <para>There is also the possibility to return the real column names of the fields or even only the defined fields in the class. For more information, read the API documentation for YDDatabaseObject::getValues.</para>
 
             <para>Similar to reset, the resetRelation method resets the information defined in all the relation objects. It basically executes the reset method at every related object.</para>
 
@@ -1480,7 +1537,7 @@ array(
 
             <title>Getting multiple relations results in a single query</title>
 
-            <para>It's possible to return multiple relations results using a single query. You can pass multiple relation names to the parameters of the findRelation method and use the findAllRelations to join all defined relations in a single query.</para>
+            <para>It's possible to return multiple relations results using a single query. You can pass multiple relation names to the parameters of the find method or use the findAll method to join all defined relations in a single query.</para>
 
             <programlisting><![CDATA[<?php
 
@@ -1488,7 +1545,7 @@ array(
     YDInclude( 'YDDatabaseObject.php' );
 
     // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'User' );
+    $user = YDDatabaseObject::getInstance( 'user' );
 
     // Assume the phone and group relations are registered
 
@@ -1499,10 +1556,10 @@ array(
     // If only phone and group relations are defined,
     // you can use the findAllRelations method instead of
     // findRelation with multiple relations
-    $user->findRelation( 'phone', 'group' );
+    $user->find( 'phone', 'group' );
 
     // Fetch the results
-    while ( $user->fetchRelation() ) {
+    while ( $user->fetch() ) {
 
         // Get the results from any object
         $user_name    = $user->name;
@@ -1515,8 +1572,8 @@ array(
 
             <para>The above example will execute the following SQL query considering all relations are INNER joins:</para>
 
-            <programlisting><![CDATA[SELECT * FROM user INNER JOIN phone ON ( user.id = phone.user_id )
-INNER JOIN group ON ( user.id = group.user_id ) WHERE user.id = 123]]></programlisting>
+            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id )
+INNER JOIN groups ON ( users.id = groups.user_id ) WHERE users.id = 123]]></programlisting>
 
         </sect2>
 
@@ -1526,15 +1583,15 @@ INNER JOIN group ON ( user.id = group.user_id ) WHERE user.id = 123]]></programl
 
         <title>Creating custom methods and callbacks</title>
 
-        <para>In YDDatabaseObject classes you have the possibility of adding any number of custom methods so you can center all related functions in one place. For example, in the User class you may add methods to check a password, format user data, etc, using the data from object variables and relations variables.</para>
+        <para>In YDDatabaseObject classes you have the possibility of adding any number of custom methods so you can center all related functions in one place. For example, in the user class you may add methods to check a password, format user data, etc, using the data from object variables and relations variables.</para>
 
         <para>As described before, you can also define callbacks to be executed when a field value is modified. The callback will receive as parameter the field value. For example:</para>
 
         <programlisting><![CDATA[<?php
 
-    class User extends YDDatabaseObject {
+    class user extends YDDatabaseObject {
 
-        function User() {
+        function user() {
 
             // Initializes the parent class
             $this->YDDatabaseObject();
@@ -1565,7 +1622,7 @@ INNER JOIN group ON ( user.id = group.user_id ) WHERE user.id = 123]]></programl
 
             // When the birthday receives no value, the variable age is deleted
             if ( ! $birthday ) {
-                unset( $this->age );
+                @unset( $this->age );
                 return;
             }
 

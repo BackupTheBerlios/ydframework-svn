@@ -602,7 +602,7 @@
         function getResults( $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
 
             $results = array();
-            while( $this->fetch() ) {
+            while( $this->fetch( $only_current ) ) {
                 $results[] = $this->getValues( $only_current, $only_fields, $columns, $prefix );
             }
 
@@ -990,7 +990,7 @@
 
                 $obj->resetQuery();
 
-                if ( $obj->_count == 1 ) {
+                if ( $obj->_count >= 1 ) {
                     $obj->setValues( $obj->_results[0] );
                 }
 
@@ -1105,26 +1105,32 @@
         /**
          *  This function fetch the results and adds it's values to the object.
          *
+         *  @param $only_current (optional) Fetch only the current object values. Default: false.
+         *  
          *  @returns  True if any result has been fetched, otherwise false.
          */
-        function fetch() {
+        function fetch( $only_current=false ) {
             
-            $relations = $this->_last;
-            
-            foreach ( $relations as $relation ) {
-
-                $rel = & $this->getRelation( $relation );
-
-                $f_var = $rel->getForeignVar();
-                $this->$f_var->fetch();
-
-                if ( $rel->isManyToMany() ) {
-
-                    $c_var = $rel->getCrossVar();
-                    $this->$c_var->fetch();
-
+            if ( ! $only_current ) {
+                
+                $relations = $this->_last;
+                
+                foreach ( $relations as $relation ) {
+    
+                    $rel = & $this->getRelation( $relation );
+    
+                    $f_var = $rel->getForeignVar();
+                    $this->$f_var->fetch( true );
+    
+                    if ( $rel->isManyToMany() ) {
+    
+                        $c_var = $rel->getCrossVar();
+                        $this->$c_var->fetch( true );
+    
+                    }
+    
                 }
-
+                
             }
 
             $res = array_shift( $this->_results );
