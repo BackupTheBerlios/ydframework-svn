@@ -179,7 +179,7 @@
             $this->totalRowsOnPage = sizeof( $this->set );
 
             // Get the previous and next page
-            $this->pagePrevious = ( $this->page == 1 ) ? false : $this->page - 1;
+            $this->pagePrevious = ( $this->page <= 1 ) ? false : $this->page - 1;
             $this->pageNext = ( $this->page >= $this->totalPages ) ? false : $this->page + 1;
 
             // Indicate if we are on the last or first page
@@ -187,7 +187,7 @@
             $this->isLastPage = ( $this->pageNext == false ) ? true : false;
 
             // Add the list of pages as an array
-            $this->pages = ( $this->totalPages == 1 ) ? array() : range( 1, $this->totalPages );
+            $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
 
             // Remove the original set of records, as we don't need them anymore
             unset( $records );
