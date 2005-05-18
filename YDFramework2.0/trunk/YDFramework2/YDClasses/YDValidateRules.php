@@ -119,6 +119,16 @@
         }
 
         /**
+         *  This function returns true if the variable is a correctly formatted IP address.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function ip( $val, $opts='' ) {
+            return YDValidateRules::regex( $val, '/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/' );
+        }
+
+        /**
          *	This function returns true if the variable contains only letters.
          *
          *	@param $val		The value to test.

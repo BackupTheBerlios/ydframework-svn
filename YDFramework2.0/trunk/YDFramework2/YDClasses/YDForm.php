@@ -115,6 +115,7 @@
             $this->registerRule( 'rangelength', array( 'YDValidateRules', 'rangelength' ), 'YDValidateRules.php' );
             $this->registerRule( 'regex', array( 'YDValidateRules', 'regex' ), 'YDValidateRules.php' );
             $this->registerRule( 'email', array( 'YDValidateRules', 'email' ), 'YDValidateRules.php' );
+            $this->registerRule( 'ip', array( 'YDValidateRules', 'ip' ), 'YDValidateRules.php' );
             $this->registerRule( 'lettersonly', array( 'YDValidateRules', 'lettersonly' ), 'YDValidateRules.php' );
             $this->registerRule( 'character', array( 'YDValidateRules', 'character' ), 'YDValidateRules.php' );
             $this->registerRule( 'alphanumeric', array( 'YDValidateRules', 'alphanumeric' ), 'YDValidateRules.php' );

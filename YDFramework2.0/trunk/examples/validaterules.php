@@ -54,6 +54,13 @@
                     array( 'pieter@127.0', array(), false ),
                     array( 'pieter@127.0.0.1', array(), true ),
                 ),
+                'ip' => array( 
+                    array( '10', array(), false ),
+                    array( '10.10.10.10', array(), true ),
+                    array( '0.0.0.0', array(), true ),
+                    array( '255.255.255.255', array(), true ),
+                    array( '300.300.300.300', array(), false ),
+                ),
                 'lettersonly' => array(
                     array( '1234', array(), false ),
                     array( '1,2,3,4', array(), false ),
