@@ -38,7 +38,12 @@
          *	@param $opts	(not required)
          */
         function required( $val, $opts='' ) {
-            if ( is_null( $val ) || strlen( $val ) == 0 ) {
+            if ( is_null( $val ) ) {
+                return false;
+            }
+            if ( is_array( $val ) && sizeof( $val ) == 0 ) {
+                return false;
+            } elseif ( strlen( $val ) == 0 ) {
                 return false;
             } else {
                 return true;
