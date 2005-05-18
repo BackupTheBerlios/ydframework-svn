@@ -224,7 +224,22 @@
 
             // Return false if no previous page
             if ( $this->isFirstPage ) {
-                return false;
+
+                // Check if the set is empty or not
+                if ( sizeof( $this->set ) > 0 ) {
+
+                    // Return zero for empty set
+                    return $this->getPageUrl( 0, $pagevar, $sizevar );
+
+                } else {
+
+                    // Return one for non-empty set
+                    return $this->getPageUrl( 1, $pagevar, $sizevar );
+
+                }
+
+                //return false;
+
             }
 
             // Return the updated URL
@@ -261,7 +276,12 @@
 
             // Return false if no next page
             if ( $this->isLastPage ) {
-                return false;
+
+                // Return the updated URL
+                return $this->getPageUrl( $this->totalPages, $pagevar, $sizevar );
+
+                //return false;
+
             }
 
             // Return the updated URL
