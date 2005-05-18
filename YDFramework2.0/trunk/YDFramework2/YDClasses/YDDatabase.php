@@ -159,6 +159,11 @@
             $this->totalPages = ceil( sizeof( $records ) / ( float ) $this->pagesize );
             $this->totalRows = sizeof( $records );
 
+            // Set the number of pages correctly to zero for an empty recordset
+            if ( $this->totalPages == 0 ) {
+                $this->page = 0;
+            }
+
             // Fix the page number if bigger than the amount of pages
             if ( $this->page > $this->totalPages ) {
                 $this->page = $this->totalPages;
