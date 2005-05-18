@@ -266,25 +266,35 @@
         }
 
         /**
+         *  This function will set the default value for a form element.
+         *
+         *  @param  $element    Name of the form element
+         *  @param  $value      Default value for the form element
+         */
+        function setDefault( $element, $value ) {
+
+            // Set the value in the defaults class variable
+            $this->_defaults[ $element ] = $value;
+
+            // Update the value for the existing elements
+            if ( ! $this->isSubmitted() ) {
+                if ( isset( $this->_elements[ $element ] ) ) {
+                    $o = & $this->_elements[ $element ];
+                    $o->setValue( $value );
+                }
+            }
+
+        }
+
+        /**
          *	This function will set the default values for the form.
          *
          *	@param $array	Associative array containing the default values.
          */
         function setDefaults( $array ) {
-
-            // Will be used for new elements
-            $this->_defaults = $array;
-
-            // Update the values for the existing elements
-            if ( ! $this->isSubmitted() ) {
-                foreach ( $this->_elements as $name=>$element ) {
-                    if ( isset( $this->_defaults[ $element->_name ] ) ) {
-                        $element->setValue( $this->_defaults[ $element->_name ] );
-                        $this->_elements[ $name ] = $element;
-                    }
-                }
+            foreach ( $array as $key=>$val ) {
+                $this->setDefault( $key, $val );
             }
-
         }
 
         /**
