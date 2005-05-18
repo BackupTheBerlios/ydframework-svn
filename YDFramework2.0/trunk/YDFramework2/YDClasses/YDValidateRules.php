@@ -40,8 +40,7 @@
         function required( $val, $opts='' ) {
             if ( is_null( $val ) ) {
                 return false;
-            }
-            if ( is_array( $val ) && sizeof( $val ) == 0 ) {
+            } elseif ( is_array( $val ) && sizeof( $val ) == 0 ) {
                 return false;
             } elseif ( strlen( $val ) == 0 ) {
                 return false;
