@@ -155,15 +155,22 @@
                 $this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
             }
 
+            // Get the number of pages
+            $this->totalPages = ceil( sizeof( $records ) / ( float ) $this->pagesize );
+            $this->totalRows = sizeof( $records );
+
+            // Fix the page number if bigger than the amount of pages
+            if ( $this->page > $this->totalPages ) {
+                $this->page = $this->totalPages;
+            }
+
             // Get the offset
             $this->offset = $this->pagesize * ( $this->page - 1 );
 
             // Get the subset of the records we need
             $this->set = array_slice( $records, $this->offset, $this->pagesize );
 
-            // Get the number of pages
-            $this->totalPages = ceil( sizeof( $records ) / ( float ) $this->pagesize );
-            $this->totalRows = sizeof( $records );
+            // Get the total number of rows on a page
             $this->totalRowsOnPage = sizeof( $this->set );
 
             // Get the previous and next page
