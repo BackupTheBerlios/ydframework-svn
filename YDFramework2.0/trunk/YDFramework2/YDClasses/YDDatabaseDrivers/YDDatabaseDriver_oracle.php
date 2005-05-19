@@ -281,7 +281,7 @@
             $start = ( $offset < 0 ) ? 1 : $offset+1;
 
             // Check the limit clause
-            $end = ( $limit < 0 ) ? '' : $start + $limit;
+            $end = ( $limit < 0 ) ? $start : $start + $limit;
 
             // Change the select statement
             if ( substr( strtolower( $sql ), 0, 6 ) == 'select' ) {
