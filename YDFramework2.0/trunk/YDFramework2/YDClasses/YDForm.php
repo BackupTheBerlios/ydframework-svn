@@ -934,7 +934,7 @@
             if ( sizeof( $array ) == 0 ) { return ''; }
             $out = '';
             foreach ( $array as $key=>$value ) {
-                $out .= ' ' . strval( $key ) . '="' . htmlspecialchars( strval( $value ) ) . '"';
+                $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
             }
             return $out;
         }
