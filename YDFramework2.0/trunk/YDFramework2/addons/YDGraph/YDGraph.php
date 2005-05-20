@@ -103,6 +103,7 @@
             $this->m_withLegend = false;
 
             $this->offset = false;
+            $this->up_padding = 0.1;
 
             $this->setXAxis('#000000', SOLID, 4, "");
             $this->setYAxis('#000000', SOLID, 4, "");
@@ -131,7 +132,17 @@
         function setOffset( $offset ){
             $this->offset = $offset;
         }
-
+        
+        /**
+         *  This function sets the graph padding
+         *
+         *  @param $value  (optional) the grapdh padding. 
+         *                 A float value between 0 and 1. 
+         *                 Default: 0.1
+         */
+        function setPadding( $value = 0.1 ){
+            $this->up_padding = $value;
+        }
 
         /**
          *  This function sets the display format
@@ -431,7 +442,7 @@
          */
         function plot($file=''){
             $min = $this->m_minValue;
-            $max = $this->m_maxValue + (($this->m_maxValue - $this->m_minValue)*0.1/5)*5;
+            $max = $this->m_maxValue + $this->m_maxValue * $this->up_padding;
 
             // margins
             $margin=$this->m_margin;
