@@ -319,6 +319,15 @@
         }
 
         /**
+         *	Function to get the filename of the object without the extension. This does not include the path information.
+         *
+         *	@returns	String containing the name of the object.
+         */
+        function getBasenameNoExt() {
+            return substr( YDPath::getFilePathWithoutExtension( $this->getBasename() ), 2 );
+        }
+
+        /**
          *	Function to get the extension of the file.
          *
          *	@returns	String containing the extension of the file.
