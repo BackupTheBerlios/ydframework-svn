@@ -272,25 +272,35 @@
          */
         function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) {
 
-            // If no limit and offset, return the original SQL statement
-            if ( $limit == -1 && $offset == -1 ) {
-                return $sql;
+            // if no limit and offset, return the original SQL statement
+            if ( $offset < 0 && $limit < 0 ) return $sql;
+             
+            // if no offset but there's a limit return everything before 1+OFFSET+LIMIT 
+            // if offset is defined test limit
+            if ( $offset < 0 ) { $end = 1 + $offset + $limit;
+                $sql_append = 'rn <= ' . $end . ';';
+            } else {
+
+               // offset is the line
+               $offset ++;
+          
+               // if no limit return everything bigget than OFFSET
+               // if limit is defined return everything between OFFSET and OFFSET+LIMIT
+               if ( $limit < 0 ) {
+                   $sql_append = 'rn => ' . $offset . ';';
+               } else {
+                   $end = $offset + $limit;
+                   $sql_append = 'rn between ' . $offset . ' and ' . $end . ';';
+               }
             }
 
-            // Check if there is an offset
-            $start = ( $offset < 0 ) ? 1 : $offset+1;
-
-            // Check the limit clause
-            $end = ( $limit < 0 ) ? $start : $start + $limit;
-
-            // Change the select statement
+            // Change the select statement 
             if ( substr( strtolower( $sql ), 0, 6 ) == 'select' ) {
                 $sql = 'SELECT /*+FIRST_ROWS*/ rownum as rn, ' . substr( $sql, 7 );
             }
-            $sql = 'select * from (' . $sql . ') where rn between ' . $start . ' and ' . $end . ';';
-
-            // Return the changed SQL statement
-            return $sql;
+          
+            // Return the changed SQL statement 
+            return 'SELECT * FROM (' . $sql . ') WHERE ' . sql_append;
 
         }
 
