@@ -810,8 +810,8 @@
             $thumb->h = $height;
 
             // Create the cached thumbnail
-            //$cacheFName = $thumb->GenerateCachedFilename();
-            $cacheFName = $thumb->SetCacheFilename();
+            $thumb->SetCacheFilename();
+            $cacheFName = $thumb->cache_filename;
             $cacheFName .= $this->getLastModified();
             $cacheFName .= $this->getAbsolutePath();
             $cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.tmn';
