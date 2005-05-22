@@ -147,7 +147,14 @@
         function convertToTable( $array, $columns, $fillLastRow=false ) {
 
             // If the number of columns is 1, return the original array
-            if ( $columns == 1 ) { return $array; }
+            if ( $columns == 1 ) {
+                return $array;
+            }
+
+            // Return original array if empty
+            if ( sizeof( $array ) == 0 ) {
+                return $array;
+            }
 
             // Use the array_chunk function to convert to a table
             $newArray = @array_chunk( $array, $columns );
