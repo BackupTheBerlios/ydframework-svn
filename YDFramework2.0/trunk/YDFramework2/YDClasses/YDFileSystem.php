@@ -597,6 +597,9 @@
             if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
                 return 'png';
             }
+            if ( in_array( strtolower( $this->getExtension() ), array( 'jpg', 'png', 'gif' ) ) ) {
+                return strtolower( $this->getExtension() );
+            }
             return false;
         }
 
