@@ -832,19 +832,31 @@
          *
          *	@internal
          */
-        function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) {
+        function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) { 
 
-            // If no limit and offset, return the original SQL statement
-            if ( $limit == -1 && $offset == -1 ) {
+            // If no limit and offset, return the original SQL statement 
+            if ( $limit < 0 && $offset < 0 ) {
                 return $sql;
             }
 
-            // Check if there is an offset
-            $args = ( $offset >= 0 ) ? $offset . ',' . $limit : $limit;
+            // if offset is defined but limit isn't return everything after offset 
+            // if limit is defined test offset 
+            if ( $limit < 0 ) {
+                $sql_append = $offset . ',18446744073709551615';
+            } else {
+             
+               // if offset is not defined return everything before limit 
+               // otherwise use offset and limit 
+               if ( $offset < 0 ) {
+                   $sql_append = $limit;
+               } else {
+                   $sql_append = $offset . ',' . $limit;
+               }
 
-            // Return the changed SQL statement
-            return $sql . ' LIMIT ' . $args;
+            } 
 
+            // Return the changed SQL statement 
+            return $sql . ' LIMIT ' . $sql_append;
         }
 
     }
