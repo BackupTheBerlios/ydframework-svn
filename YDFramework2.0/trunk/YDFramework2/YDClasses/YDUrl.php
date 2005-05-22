@@ -595,7 +595,7 @@
                  return $rel_uri;
              }
              if ( is_null( $base ) ) {
-                 $base = YDRequest::getCurrentUrl();
+                 $base = YDRequest::getCurrentUrl( true );
              }
              preg_match( "'^([^:]+://[^/]+)/'", $base, $m );
              $base_start = $m[1];
