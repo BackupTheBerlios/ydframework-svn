@@ -94,12 +94,16 @@
          *
          *	@returns	The full url of the current request.
          */
-        function getCurrentUrl() {
+        function getCurrentUrl( $no_qs=false ) {
             $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
             if ( $_SERVER['SERVER_PORT'] != '80' ) {
                 $url = $url . ':' . $_SERVER['SERVER_PORT'];
             }
-            $url = $url . $_SERVER['REQUEST_URI'];
+            if ( $no_qs ) {
+                $url = $url . YD_SELF_SCRIPT;
+            } else {
+                $url = $url . $_SERVER['REQUEST_URI'];
+            }
             return $url;
         }
 
