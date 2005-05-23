@@ -549,7 +549,10 @@
 
             // plot graph
             foreach($this->m_series as $series){
+                
                 $cnt = count($series->m_values);
+                if ($cnt == 0) continue;
+                
                 // LINE PLOT
                 if($series->m_type == 'line'){
                     $this->_set_style($this->m_image,$series->m_style,$series->m_strokeColor, $this->m_fillColor);
