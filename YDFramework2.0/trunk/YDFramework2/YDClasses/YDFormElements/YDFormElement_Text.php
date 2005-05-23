@@ -67,7 +67,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . '>';
+            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
         }
 

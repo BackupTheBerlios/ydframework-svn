@@ -90,15 +90,15 @@
                         if ( $element['placeLabel'] == 'after' ) {
                             $html .= $element['html'] . $element['label_html'];
                             if ( ! empty( $element['error'] ) ) {
-                                $html .= '<br>' . $element['error_html'];
+                                $html .= '<br />' . $element['error_html'];
                             }
                         } else {
                             $html .= $element['label_html'];
                             if ( ! empty( $element['label'] ) ) {
-                                $html .= '<br>';
+                                $html .= '<br />';
                             }
                             if ( ! empty( $element['error'] ) ) {
-                                $html .= $element['error_html'] . '<br>';
+                                $html .= $element['error_html'] . '<br />';
                             }
                             $html .= $element['html'];
                         }

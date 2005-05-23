@@ -128,7 +128,7 @@
                 $form[YD_ACTION_PARAM]['label'] = '';
                 $form[YD_ACTION_PARAM]['options'] = array();
                 $form[YD_ACTION_PARAM]['placeLabel'] = 'before';
-                $form[YD_ACTION_PARAM]['html'] = '<input type="hidden" name="' . YD_ACTION_PARAM . '" value="' . YDRequest::getActionName() . '">';
+                $form[YD_ACTION_PARAM]['html'] = '<input type="hidden" name="' . YD_ACTION_PARAM . '" value="' . YDRequest::getActionName() . '" />';
                 $form[YD_ACTION_PARAM]['isButton'] = false;
                 $form[YD_ACTION_PARAM]['error'] = '';
                 $form[YD_ACTION_PARAM]['required'] = false;

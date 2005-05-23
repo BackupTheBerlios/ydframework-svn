@@ -79,11 +79,11 @@
                     if ( $this->_value == strval( $key ) ) {
                         $attribsElement['checked'] = '';
                     }
-                    $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . '>' . $val;
+                    $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' />' . $val;
 
                 }
             } else {
-                $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value;
+                $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />' . $this->_value;
             }
 
             // Return the HTML
