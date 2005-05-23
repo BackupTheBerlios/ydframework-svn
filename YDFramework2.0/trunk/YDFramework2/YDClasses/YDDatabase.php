@@ -139,8 +139,15 @@
          *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
          *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
          *						will be the same as the total number of rows in the recordset.
+         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
+         *						"size"
          */
-        function YDRecordSet( $records, $page=-1, $pagesize=null ) {
+        function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size' ) {
+
+            // Define the query string variables
+            $this->pagevar = $pagevar;
+            $this->sizevar = $sizevar; 
 
             // Convert the page and pagesize to integers
             $page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
@@ -214,13 +221,9 @@
         /**
          *	This returns the URL to the previous page. If there is no previous page, it will return false.
          *
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
-         *
          *	@returns	The URL to the previous page or false if no previous page.
          */
-        function getPreviousUrl( $pagevar='page', $sizevar='size' ) {
+        function getPreviousUrl() {
 
             // Return false if no previous page
             if ( $this->isFirstPage ) {
@@ -229,12 +232,12 @@
                 if ( sizeof( $this->set ) > 0 ) {
 
                     // Return zero for empty set
-                    return $this->getPageUrl( 0, $pagevar, $sizevar );
+                    return $this->getPageUrl( 0 );
 
                 } else {
 
                     // Return one for non-empty set
-                    return $this->getPageUrl( 1, $pagevar, $sizevar );
+                    return $this->getPageUrl( 1 );
 
                 }
 
@@ -243,49 +246,41 @@
             }
 
             // Return the updated URL
-            return $this->getPageUrl( $this->pagePrevious, $pagevar, $sizevar );
+            return $this->getPageUrl( $this->pagePrevious );
 
         }
 
         /**
          *	This returns the URL to the current page.
          *
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
-         *
          *	@returns	The URL to the current page.
          */
-        function getCurrentUrl( $pagevar='page', $sizevar='size' ) {
+        function getCurrentUrl() {
 
             // Return the updated URL
-            return $this->getPageUrl( $this->page, $pagevar, $sizevar );
+            return $this->getPageUrl( $this->page );
 
         }
 
         /**
          *	This returns the URL to the next page. If there is no next page, it will return false.
          *
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
-         *
          *	@returns	The URL to the next page or false if no next page.
          */
-        function getNextUrl( $pagevar='page', $sizevar='size' ) {
+        function getNextUrl() {
 
             // Return false if no next page
             if ( $this->isLastPage ) {
 
                 // Return the updated URL
-                return $this->getPageUrl( $this->totalPages, $pagevar, $sizevar );
+                return $this->getPageUrl( $this->totalPages );
 
                 //return false;
 
             }
 
             // Return the updated URL
-            return $this->getPageUrl( $this->pageNext, $pagevar, $sizevar );
+            return $this->getPageUrl( $this->pageNext );
 
         }
 
@@ -293,13 +288,10 @@
          *	This function will update the query string to set the page size and page number.
          *
          *	@param	$page		The page number.
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
-         *
+         *  
          *	@returns	The updated URL.
          */
-        function getPageUrl( $page, $pagevar='page', $sizevar='size'  ) {
+        function getPageUrl( $page ) {
 
             // Doublecheck the pagenumber
             $page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
@@ -314,8 +306,8 @@
             foreach ( $_GET as $key=>$val ) {
                 $url->setQueryVar( $key, $val );
             }
-            $url->setQueryVar( $pagevar, $page );
-            $url->setQueryVar( $sizevar, $this->pagesize );
+            $url->setQueryVar( $this->pagevar, $page );
+            $url->setQueryVar( $this->sizevar, $this->pagesize );
 
             // Return the url
             return $url->getUri();
@@ -514,19 +506,23 @@
          *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
          *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
          *						will be the same as the total number of rows in the recordset.
+         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
+         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
+         *						"size"
+
          *
          *	@returns	The records matching the SQL statement as a YDRecordSet object.
          *
          *	@todo
          *		Performance needs to be improved. This is a quick and dirty solution right now.
          */
-        function getRecordsAsSet( $sql, $page=-1, $pagesize=-1 ) {
+        function getRecordsAsSet( $sql, $page=-1, $pagesize=-1, $pagevar = 'page', $sizevar = 'size' ) {
 
             // Get all records
             $records = $this->getRecords( $sql );
 
             // Return the YDRecordSet
-            return new YDRecordSet( $records, $page, $pagesize );
+            return new YDRecordSet( $records, $page, $pagesize, $pagevar, $sizevar );
 
         }
 
