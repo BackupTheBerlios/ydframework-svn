@@ -452,22 +452,37 @@
          *
          *	@param $sql		The SQL statement to use.
          *	@param $key		The field to use for the keys.
-         *	@param $val		The field to use for the values.
+         *	@param $val		The field or array of fileds to use for the values.
          *	@param $prefix	(optional) The text to prepend to the key name.
          *
          *	@returns An associative array.
          */
         function getAsAssocArray( $sql, $key, $val, $prefix='' ) {
+
             $records = $this->getRecords( $sql );
             if ( ! $records ) { return false; }
             $result = array();
             $key = strtolower( $key );
-            $val = strtolower( $val );
             $prefix = strtolower( $prefix );
-            foreach ( $records as $record ) {
-                $result[ $prefix . $record[ $key ] ] = $record[ $val ];
+           
+            if ( is_array( $val ) ) {
+                foreach ( $records as $record ) {
+                    $result[ $prefix . $record[ $key ] ] = array();
+                    foreach( $val as $v ) {
+                        $v = strtolower( $v );
+                        $result[ $prefix . $record[ $key ] ][ $v ] = $record[ $v ];
+                    }
+                }
             }
-            return $result;
+            else{
+                $val = strtolower( $val );
+                foreach ( $records as $record ) {
+                    $result[ $prefix . $record[ $key ] ] = $record[ $val ];
+                }
+            }
+           
+            return $result; 
+
         }
 
         /**
