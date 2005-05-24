@@ -645,6 +645,35 @@
         }
 
         /**
+         *	This function merges the query string part of another YDUrl object(s) to the current one.
+         *
+         *	@param	$obj	An YDUrl object or an array of objects.
+         */
+        function merge( $obj ) {
+            
+            if ( ! is_array( $obj ) ) {
+                $obj = array( $obj );
+            }
+            
+            foreach ( $obj as $url ) {
+           
+                foreach ( $url->getNamedPart( 'query' ) as $key => $value ) {
+                   
+                    if ( in_array( $key, array_keys( $this->getNamedPart( 'query' ) ) ) ) {
+                       
+                        if ( is_array( $this->getQueryVar( $key ) ) && is_array( $value ) ) {
+                            $this->setQueryVar( $key, array_merge( $this->getQueryVar( $key ), $value ) );
+                        }
+                       
+                    } else {
+                        $this->setQueryVar( $key, $value );
+                    }
+                }
+            }
+           
+        }
+
+        /**
          *	This function will return an already setup HTTP client object.
          *
          *	@internal

@@ -397,7 +397,8 @@
               <a href="url.php?do=image1">YDUrl object - Image 1</a> <br>
               <a href="url.php?do=headers">YDUrl object - Headers</a> <br>
               <a href="url.php?do=status">YDUrl object - Status</a> <br>
-              <a href="url.php?do=alter">YDUrl object - Altering URLs</a> </td>
+              <a href="url.php?do=alter">YDUrl object - Altering URLs</a> <br>
+              <a href="url.php?do=merge">YDUrl object - Merging URLs</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=url.php">url.php</a>
             </td>

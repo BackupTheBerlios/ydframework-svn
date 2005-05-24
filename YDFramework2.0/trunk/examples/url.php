@@ -195,6 +195,27 @@
             YDDebugUtil::dump( $url->getUrl(), 'The new URL' );
 
         }
+        
+        function actionMerge() {
+
+            $urla = new YDUrl( 'http://www.yellowduck.be/directory/test/index.php?do=x&id=1&var[]=big&good=#10' );
+            $urlb = new YDUrl( 'http://www.yellowduck.be/directory/test/index.php?do=x&id=3&name=blah&var[]=small&good=yes' );
+            $urlc = new YDUrl( 'http://www.yellowduck.be/directory/test/index.php?var[]=medium&c=123' );
+
+            // Show the original URLs
+            YDDebugUtil::dump( $urla->getUrl(), 'URL A' );
+            YDDebugUtil::dump( $urlb->getUrl(), 'URL B' );
+            YDDebugUtil::dump( $urlc->getUrl(), 'URL C' );
+
+            // Merge the objects
+            $urla->merge( $urlb );
+            $urlb->merge( array( $urla, $urlc ) );
+
+            // Show the new URLs
+            YDDebugUtil::dump( $urla->getUrl(), 'The new URL A - merged B' );
+            YDDebugUtil::dump( $urlb->getUrl(), 'The new URL B - merged A and C' ); 
+
+        }
 
     }
 
