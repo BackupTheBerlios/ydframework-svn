@@ -914,18 +914,14 @@
          *	Function that makes the actual connection.
          */
         function connect() {
-            if ( $this->_conn == null ) {
-                $conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-                if ( ! $conn ) {
-                    trigger_error( mysql_error(), YD_ERROR );
-                }
-                if ( ! @mysql_select_db( $this->_db, $conn ) ) {
-                    trigger_error( mysql_error( $conn ), YD_ERROR );
-                }
-                $this->_conn = $conn;
-            } else {
-                @mysql_ping( $this->_conn );
+            $conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
+            if ( ! $conn ) {
+                trigger_error( mysql_error(), YD_ERROR );
             }
+            if ( ! @mysql_select_db( $this->_db, $conn ) ) {
+                trigger_error( mysql_error( $conn ), YD_ERROR );
+            }
+            $this->_conn = $conn;
         }
 
         /**
