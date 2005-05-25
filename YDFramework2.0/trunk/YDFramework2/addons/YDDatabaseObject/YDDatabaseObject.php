@@ -1,5 +1,5 @@
 <?php
-
+ 
     /*
 
         Yellow Duck Framework version 2.0
@@ -74,6 +74,7 @@
         var $_fields    = null;
         var $_relations = null;
         var $_selects   = null;
+        var $_callbacks = null;
         var $_sql       = null;
 
         var $_limit     = -1;
@@ -98,7 +99,14 @@
             $this->_fields    = new YDDatabaseObject_Properties();
             $this->_selects   = new YDDatabaseObject_Properties();
             $this->_relations = new YDDatabaseObject_Properties();
+            $this->_callbacks = new YDDatabaseObject_Properties();
             $this->_sql       = new YDSqlQuery();
+            
+            $this->_callbacks->set( 'find',   array( 'before' => array(), 'after' => array() ) );
+            $this->_callbacks->set( 'delete', array( 'before' => array(), 'after' => array() ) );
+            $this->_callbacks->set( 'update', array( 'before' => array(), 'after' => array() ) );
+            $this->_callbacks->set( 'insert', array( 'before' => array(), 'after' => array() ) );
+            $this->_callbacks->set( 'reset',  array( 'before' => array(), 'after' => array() ) );
 
         }
 
@@ -257,13 +265,15 @@
          *
          *  @param $name  The field name.
          *  @param $expr  The select expression.
+         *
+         *  @returns      A reference to the select object.
          */
         function & registerSelect( $name, $expr ) {
             if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The select name "' . $name . '" is already defined.', YD_ERROR );
             }
-            $this->_selects->set( $name, new YDDatabaseObject_Select( $name, $expr ) );
+            return $this->_selects->set( $name, new YDDatabaseObject_Select( $name, $expr ) );
         }
 
         /**
@@ -304,6 +314,51 @@
                                 The field "' . $name . '" is not defined.', YD_ERROR );
             }
             $this->_fields->$name->unsetProtected();
+        }
+
+        /**
+         *  This function registers a callback method.
+         *
+         *  @param $method  The method name.
+         *  @param $action  The action that triggers the call.
+         *  @param $before  (optional) Execute callback before the action. Default: false.
+         */
+        function registerCallback( $method, $action, $before=false ) {
+            
+            if ( ! $this->_callbacks->exists( strtolower( $action ) ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                Incorrect action for callback "' . $method . '".', YD_ERROR );
+            }
+            
+            $sub = $before ? 'before' : 'after';
+            $act = & $this->_callbacks->$action;
+            
+            $act[ $sub ][ $method ] = '';
+        }
+        
+        /**
+         *  This function unregisters a callback method.
+         *
+         *  @param $method  The method name.
+         *  @param $action  (optional) The action that triggers the call. If null, from all actions. Default: null.
+         */
+        function unregisterCallback( $method, $action=null ) {
+            
+            if ( ! is_null( $action ) && ! $this->_callbacks->exists( strtolower( $action ) ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                Incorrect action for unregistering callback method "' . $method . '".', YD_ERROR );
+            }
+            
+            $actions = array( $action );
+            if ( is_null( $action ) ) {
+                $actions = array_keys( get_object_vars( $this->_callbacks ) );
+            }
+            
+            foreach ( $actions as $action ) {
+                $act = & $this->_callbacks->$action;
+                unset( $act[ 'before' ][ $method ] );
+                unset( $act[ 'after' ][ $method ] );
+            }
         }
 
         /**
@@ -681,6 +736,9 @@
             }
 
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
+            
+            // before insert callbacks
+            $this->_executeCallbacks( 'insert', true );
 
             $result = $this->_db->executeInsert( $this->getTable(), $values );
 
@@ -689,6 +747,10 @@
             if ( is_numeric( $result ) && $auto_field ) {
                 $this->set( $auto_field->getName(), $result );
             }
+            
+            // after insert callbacks
+            $this->_executeCallbacks( 'insert', false );
+            
             return $result;
 
         }
@@ -719,10 +781,16 @@
                                 Your UPDATE query has no conditions and will not be executed.', YD_NOTICE );
                 return;
             }
+            
+            // before update callbacks
+            $this->_executeCallbacks( 'update', true );
 
             $result = $this->_db->executeUpdate( $this->getTable(), $values, $where );
 
             YDDebugUtil::debug( end( $GLOBALS['YD_SQL_QUERY'] ) );
+
+            // after update callbacks
+            $this->_executeCallbacks( 'update', false );
 
             return $this->_count = (int) $result;
         }
@@ -749,10 +817,16 @@
                                 Your DELETE query has no conditions and will not be executed.', YD_NOTICE );
                 return;
             }
+            
+            // before delete callbacks
+            $this->_executeCallbacks( 'delete', true );
 
             $result = $this->_db->executeDelete( $this->getTable(), $where . $order );
 
             YDDebugUtil::debug( end( $GLOBALS['YD_SQL_QUERY'] ) );
+
+            // after delete callbacks
+            $this->_executeCallbacks( 'delete', false );
 
             return $this->_count = (int) $result;
 
@@ -947,6 +1021,9 @@
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
 
+            // before find callbacks
+            $this->_executeCallbacks( 'find', true );
+
             $fetch = YDConfig::get( 'YD_DB_FETCHTYPE' );
             YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_NUM );
 
@@ -1007,6 +1084,9 @@
                 $var = current( $slices );
 
             }
+            
+            // after find callbacks
+            $this->_executeCallbacks( 'find', false );
 
             return $this->_count;
 
@@ -1172,10 +1252,17 @@
          *  any result remaining to be fetch.
          */
         function reset() {
+            
+            // before reset callbacks
+            $this->_executeCallbacks( 'reset', true );
+            
             $this->resetValues();
             $this->resetQuery();
             $this->resetResults();
             $this->resetCount();
+            
+            // after reset callbacks
+            $this->_executeCallbacks( 'reset', false );
         }
 
         /**
@@ -1374,7 +1461,36 @@
         function get( $field ) {
             return $this->exists( $field ) ? $this->$field : null;
         }
-
+        
+        /**
+         *  This function executes all callbacks defined for the action.
+         *
+         *  @param  $action  The action name.
+         *  @param  $before  (optional) Execute the before actions. Default: false.
+         *
+         *  @internal
+         */
+        function _executeCallbacks( $action, $before=false ) {
+            
+            if ( ! $this->_callbacks->exists( strtolower( $action ) ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                Incorrect action in _executeCallbacks.', YD_ERROR );
+            }
+            
+            $sub = $before ? 'before' : 'after';
+            $actions = & $this->_callbacks->$action;
+            
+            foreach ( $actions[ $sub ] as $callback => $n ) {
+                
+                if ( ! $this->hasMethod( $callback ) ) {
+                    trigger_error(  $this->getClassName() . ' -
+                                    The ' . $action . ' callback method "' . $callback . '" is not defined.', YD_ERROR );
+                }
+                call_user_func( array( & $this, $callback ), $action, $before );
+                
+            }
+            
+        }
 
     }
 
