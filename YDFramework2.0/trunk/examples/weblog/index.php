@@ -14,6 +14,12 @@
         // Default action
         function actionDefault() {
 
+            // Get the ID from the query string
+            $id = $this->getIdFromQS();
+            if ( $id != -1 ) {
+                $this->redirect( 'item.php?id=' . $id );
+            }
+
             // Get the weblog items and 5 older items
             $items     = $this->weblog->getItems( YDConfig::get( 'weblog_entries_fp', 5 ) );
             $old_items = $this->weblog->getItems( 5, sizeof( $items ) );
