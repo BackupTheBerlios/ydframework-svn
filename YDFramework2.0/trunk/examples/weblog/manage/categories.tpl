@@ -20,11 +20,10 @@
                 </td>
                 <td class="adminRowR" colspan="2">
                     <p class="subline">
-                    &laquo;
                     {if ! $categories->isFirstPage}
-                        <a href="{$categories->getPreviousUrl()}" class="subline">{t w="previous"}</a>
+                        <a href="{$categories->getPreviousUrl()}" class="subline">&laquo;</a>
                     {else}
-                        {t w="previous"}
+                        &laquo;
                     {/if}
                     |
                     {foreach from=$categories->pages item="page"}
@@ -36,11 +35,10 @@
                     {/foreach}
                     |
                     {if ! $categories->isLastPage}
-                        <a href="{$categories->getNextUrl()}" class="subline">{t w="next"}</a>
+                        <a href="{$categories->getNextUrl()}" class="subline">&raquo;</a>
                     {else}
-                        {t w="next"}
+                        &raquo;
                     {/if}
-                    &raquo;
                     </p>
                 </td>
             </tr>
