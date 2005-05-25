@@ -125,6 +125,14 @@
 
                 {/if}
 
+                {if $YD_ACTION == 'error'}
+
+                    <p class="title">An error occured!</p>
+
+                    <p><font color="red"><b>This software is already installed and cannot be installed again.</b></font></p>
+
+                {/if}
+
                 <p class="subline">
                     &nbsp;<br/>
                     Powered by <a href="{$YD_FW_HOMEPAGE}" class="subline" target="_blank">{$YD_FW_NAME}</a>.

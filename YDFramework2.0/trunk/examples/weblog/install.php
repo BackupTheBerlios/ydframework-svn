@@ -32,6 +32,11 @@
         // Default action
         function actionDefault() {
 
+            // Check for the config file
+            if ( is_file( dirname( __FILE__ ) . '/include/config.php' ) ) {
+                $this->redirectToAction( 'error' );
+            }
+
             // Get the list of skins
             $dir = new YDFSDirectory( dirname( __FILE__ ) . '/' . $this->dir_skins );
             $items = $dir->getContents( '!.*', '', array( 'YDFSDirectory' ) );
@@ -263,6 +268,14 @@
             if ( ! is_file( dirname( __FILE__ ) . '/include/config.php' ) ) {
                 $this->redirectToAction();
             }
+
+            // Display the template
+            $this->tpl->display();
+
+        }
+
+        // Error action
+        function actionError() {
 
             // Display the template
             $this->tpl->display();
