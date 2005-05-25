@@ -1,7 +1,7 @@
 <?php
 
     // Define the default pagesize
-    YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20 );
+    YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 40 );
 
     // Class for an admin request
     class YDWeblogAdminRequest extends YDWeblogRequest {
