@@ -237,7 +237,8 @@ class phpthumb_bmp {
 			$ThisFileInfo['video']['codec']           = $thisfile_bmp_header['compression'].' '.$thisfile_bmp_header_raw['bits_per_pixel'].'-bit';
 			$ThisFileInfo['video']['bits_per_sample'] = $thisfile_bmp_header_raw['bits_per_pixel'];
 
-			if ($thisfile_bmp['type_version'] >= 4) {
+			if (($thisfile_bmp['type_version'] >= 4) || ($thisfile_bmp_header_raw['compression'] == 3)) {
+				// should only be v4+, but BMPs with type_version==1 and BI_BITFIELDS compression have been seen
 				$BMPheader .= substr($BMPdata, $overalloffset, 44);
 				$overalloffset += 44;
 
@@ -262,11 +263,11 @@ class phpthumb_bmp {
 				$offset += 4;
 				$thisfile_bmp_header_raw['cs_type']      = $this->LittleEndian2Int(substr($BMPheader, $offset, 4));
 				$offset += 4;
-				$thisfile_bmp_header_raw['ciexyz_red']   =                              substr($BMPheader, $offset, 4);
+				$thisfile_bmp_header_raw['ciexyz_red']   =                         substr($BMPheader, $offset, 4);
 				$offset += 4;
-				$thisfile_bmp_header_raw['ciexyz_green'] =                              substr($BMPheader, $offset, 4);
+				$thisfile_bmp_header_raw['ciexyz_green'] =                         substr($BMPheader, $offset, 4);
 				$offset += 4;
-				$thisfile_bmp_header_raw['ciexyz_blue']  =                              substr($BMPheader, $offset, 4);
+				$thisfile_bmp_header_raw['ciexyz_blue']  =                         substr($BMPheader, $offset, 4);
 				$offset += 4;
 				$thisfile_bmp_header_raw['gamma_red']    = $this->LittleEndian2Int(substr($BMPheader, $offset, 4));
 				$offset += 4;
@@ -352,7 +353,7 @@ class phpthumb_bmp {
 						case 1:
 							for ($row = ($thisfile_bmp_header_raw['height'] - 1); $row >= 0; $row--) {
 								for ($col = 0; $col < $thisfile_bmp_header_raw['width']; $col = $col) {
-									$paletteindexbyte = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
+									$paletteindexbyte = ord($BMPpixelData{$pixeldataoffset++});
 									for ($i = 7; $i >= 0; $i--) {
 										$paletteindex = ($paletteindexbyte & (0x01 << $i)) >> $i;
 										$thisfile_bmp['data'][$row][$col] = $thisfile_bmp['palette'][$paletteindex];
@@ -369,7 +370,7 @@ class phpthumb_bmp {
 						case 4:
 							for ($row = ($thisfile_bmp_header_raw['height'] - 1); $row >= 0; $row--) {
 								for ($col = 0; $col < $thisfile_bmp_header_raw['width']; $col = $col) {
-									$paletteindexbyte = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
+									$paletteindexbyte = ord($BMPpixelData{$pixeldataoffset++});
 									for ($i = 1; $i >= 0; $i--) {
 										$paletteindex = ($paletteindexbyte & (0x0F << (4 * $i))) >> (4 * $i);
 										$thisfile_bmp['data'][$row][$col] = $thisfile_bmp['palette'][$paletteindex];
@@ -386,7 +387,7 @@ class phpthumb_bmp {
 						case 8:
 							for ($row = ($thisfile_bmp_header_raw['height'] - 1); $row >= 0; $row--) {
 								for ($col = 0; $col < $thisfile_bmp_header_raw['width']; $col++) {
-									$paletteindex = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
+									$paletteindex = ord($BMPpixelData{$pixeldataoffset++});
 									$thisfile_bmp['data'][$row][$col] = $thisfile_bmp['palette'][$paletteindex];
 								}
 								while (($pixeldataoffset % 4) != 0) {
@@ -397,16 +398,23 @@ class phpthumb_bmp {
 							break;
 
 						case 24:
+							for ($row = ($thisfile_bmp_header_raw['height'] - 1); $row >= 0; $row--) {
+								for ($col = 0; $col < $thisfile_bmp_header_raw['width']; $col++) {
+									$thisfile_bmp['data'][$row][$col] = (ord($BMPpixelData{$pixeldataoffset+2}) << 16) | (ord($BMPpixelData{$pixeldataoffset+1}) << 8) | ord($BMPpixelData{$pixeldataoffset});
+									$pixeldataoffset += 3;
+								}
+								while (($pixeldataoffset % 4) != 0) {
+									// lines are padded to nearest DWORD
+									$pixeldataoffset++;
+								}
+							}
+							break;
+
 						case 32:
 							for ($row = ($thisfile_bmp_header_raw['height'] - 1); $row >= 0; $row--) {
 								for ($col = 0; $col < $thisfile_bmp_header_raw['width']; $col++) {
-									$blue  = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
-									$green = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
-									$red   = $this->LittleEndian2Int(substr($BMPpixelData, $pixeldataoffset++, 1));
-									if ($thisfile_bmp_header_raw['bits_per_pixel'] == 32) {
-										$paletteoffset++; // filler byte
-									}
-									$thisfile_bmp['data'][$row][$col] = (($red << 16) | ($green << 8) | ($blue));
+									$thisfile_bmp['data'][$row][$col] = (ord($BMPpixelData{$pixeldataoffset+3}) << 24) | (ord($BMPpixelData{$pixeldataoffset+2}) << 16) | (ord($BMPpixelData{$pixeldataoffset+1}) << 8) | ord($BMPpixelData{$pixeldataoffset});
+									$pixeldataoffset += 4;
 								}
 								while (($pixeldataoffset % 4) != 0) {
 									// lines are padded to nearest DWORD
@@ -416,6 +424,8 @@ class phpthumb_bmp {
 							break;
 
 						case 16:
+							// ?
+							break;
 
 						default:
 							$ThisFileInfo['error'][] = 'Unknown bits-per-pixel value ('.$thisfile_bmp_header_raw['bits_per_pixel'].') - cannot read pixel data';
@@ -595,6 +605,10 @@ class phpthumb_bmp {
 							$redshift   = 0;
 							$greenshift = 0;
 							$blueshift  = 0;
+							if (!$thisfile_bmp_header_raw['red_mask'] || !$thisfile_bmp_header_raw['green_mask'] || !$thisfile_bmp_header_raw['blue_mask']) {
+								$ThisFileInfo['error'][] = 'missing $thisfile_bmp_header_raw[(red|green|blue)_mask]';
+								return false;
+							}
 							while ((($thisfile_bmp_header_raw['red_mask'] >> $redshift) & 0x01) == 0) {
 								$redshift++;
 							}
@@ -678,7 +692,7 @@ class phpthumb_bmp {
 		}
 
 		foreach ($BMPdata['data'] as $row => $colarray) {
-			set_time_limit(30);
+			@set_time_limit(30);
 			foreach ($colarray as $col => $color) {
 				list($red, $green, $blue) = $this->IntColor2RGB($color);
 				if ($truecolor) {
@@ -736,6 +750,25 @@ class phpthumb_bmp {
 		return (isset($BMPcompressionOS2Lookup[$compressionid]) ? $BMPcompressionOS2Lookup[$compressionid] : 'invalid');
 	}
 
+
+	// from getid3.lib.php
+
+	function trunc($floatnumber) {
+		// truncates a floating-point number at the decimal point
+		// returns int (if possible, otherwise float)
+		if ($floatnumber >= 1) {
+			$truncatednumber = floor($floatnumber);
+		} elseif ($floatnumber <= -1) {
+			$truncatednumber = ceil($floatnumber);
+		} else {
+			$truncatednumber = 0;
+		}
+		if ($truncatednumber <= 1073741824) { // 2^30
+			$truncatednumber = (int) $truncatednumber;
+		}
+		return $truncatednumber;
+	}
+
 	function LittleEndian2Int($byteword) {
 		$intvalue = 0;
 		$byteword = strrev($byteword);
@@ -746,7 +779,54 @@ class phpthumb_bmp {
 		return $intvalue;
 	}
 
-}
+	function BigEndian2Int($byteword) {
+		return $this->LittleEndian2Int(strrev($byteword));
+	}
 
+	function BigEndian2Bin($byteword) {
+		$binvalue = '';
+		$bytewordlen = strlen($byteword);
+		for ($i = 0; $i < $bytewordlen; $i++) {
+			$binvalue .= str_pad(decbin(ord($byteword{$i})), 8, '0', STR_PAD_LEFT);
+		}
+		return $binvalue;
+	}
+
+	function FixedPoint2_30($rawdata) {
+		$binarystring = $this->BigEndian2Bin($rawdata);
+		return $this->Bin2Dec(substr($binarystring, 0, 2)) + (float) ($this->Bin2Dec(substr($binarystring, 2, 30)) / 1073741824);
+	}
+
+	function Bin2Dec($binstring, $signed=false) {
+		$signmult = 1;
+		if ($signed) {
+			if ($binstring{0} == '1') {
+				$signmult = -1;
+			}
+			$binstring = substr($binstring, 1);
+		}
+		$decvalue = 0;
+		for ($i = 0; $i < strlen($binstring); $i++) {
+			$decvalue += ((int) substr($binstring, strlen($binstring) - $i - 1, 1)) * pow(2, $i);
+		}
+		return $this->CastAsInt($decvalue * $signmult);
+	}
+
+	function CastAsInt($floatnum) {
+		// convert to float if not already
+		$floatnum = (float) $floatnum;
+
+		// convert a float to type int, only if possible
+		if ($this->trunc($floatnum) == $floatnum) {
+			// it's not floating point
+			if ($floatnum <= 1073741824) { // 2^30
+				// it's within int range
+				$floatnum = (int) $floatnum;
+			}
+		}
+		return $floatnum;
+	}
+
+}
 
 ?>

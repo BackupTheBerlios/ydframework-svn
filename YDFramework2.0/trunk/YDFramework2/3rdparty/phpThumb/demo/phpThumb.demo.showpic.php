@@ -31,7 +31,6 @@
 // See demo linked from http://phpthumb.sourceforge.net    ///
 //////////////////////////////////////////////////////////////
 ?>
-
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -74,8 +73,7 @@
 if (get_magic_quotes_gpc()) {
 	$_GET['src'] = stripslashes($_GET['src']);
 }
-echo '<img src="'.$_GET['src'].'" border="0">';
-flush();
+
 if ($imgdata = @getimagesize($_GET['src'])) {
 
 	// this would be an excellent place to put some caching stuff to avoid re-scanning every picture every time
@@ -84,20 +82,18 @@ if ($imgdata = @getimagesize($_GET['src'])) {
 	echo '<script language="Javascript">'."\n";
 	echo 'if (((screen.width * 1.1) > '.$imgdata[0].') || ((screen.height * 1.1) > '.$imgdata[1].')) {'."\n";
 	// screen is large enough to fit whole picture on screen with 10% margin
+	echo 'document.writeln(\'<img src="'.$_GET['src'].'" border="0">\');';
 	echo 'CrossBrowserResizeInnerWindowTo('.$imgdata[0].', '.$imgdata[1].');'."\n";
 	echo '} else {'."\n";
-	if (!isset($_REQUEST['norespawn'])) {
-		// image is too large for screen: respawn with scrollbars
-		echo 'window.open("'.$_SERVER['PHP_SELF'].'?src='.urlencode($_GET['src']).'&title='.urlencode(@$_GET['title']).'&norespawn=1", "respawn", "width="+Math.round(screen.width * 0.9)+",height="+Math.round(screen.height * 0.9)+",resizable=yes,status=no,menubar=no,toolbar=no,scrollbars=yes");'."\n";
-		echo 'self.close();'."\n";
-	}
+	// image is too large for screen: add scrollbars by putting the image inside an IFRAME
+	echo 'document.writeln(\'<iframe width="100%" height="100%" marginheight="0" marginwidth="0" frameborder="0" scrolling="on" src="'.$_GET['src'].'">Your browser does not support the IFRAME tag. Please use one that does (IE, Firefox, etc).<br><img src="'.$_GET['src'].'"></iframe>\');';
 	echo '}'."\n";
-	echo '</script></body></html>';
+	echo '</script>';
 
-} elseif (!isset($_REQUEST['norespawn'])) {
+} else {
 
-	// cannot determine correct window size, or correct size too large: respawn with scrollbars
-	echo '<script language="Javascript">window.open("'.$_SERVER['PHP_SELF'].'?src='.urlencode($_GET['src']).'&title='.urlencode(@$_GET['title']).'&norespawn=1", "respawn", "width=600,height=400,resizable=yes,status=no,menubar=no,toolbar=no,scrollbars=yes"); self.close();</script>';
+	// cannot determine correct window size, or correct size too large: add scrollbars by putting the image inside an IFRAME
+	echo '<iframe width="100%" height="100%" marginheight="0" marginwidth="0" frameborder="0" scrolling="on" src="'.$_GET['src'].'"></iframe>';
 
 }
 

@@ -11,24 +11,45 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
-
-function SendSaveAsFileHeaderIfNeeded() {
-	if (!empty($_REQUEST['down'])) {
-		$downloadfilename = ereg_replace('[/\\:\*\?"<>|]', '_', $_REQUEST['down']);
-		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
-			$downloadfilename = trim($downloadfilename, '.');
-		}
-		if (!empty($downloadfilename)) {
-			header('Content-Disposition: attachment; filename="'.$downloadfilename.'"');
-		}
-	}
-	return true;
+if (!@ini_get('safe_mode')) {
+	set_time_limit(60);  // shouldn't take nearly this long in most cases, but with many filter and/or a slow server...
 }
 
 // this script relies on the superglobal arrays, fake it here for old PHP versions
 if (phpversion() < '4.1.0') {
-	$_SERVER  = $HTTP_SERVER_VARS;
-	$_REQUEST = $HTTP_GET_VARS;
+	$_SERVER = $HTTP_SERVER_VARS;
+	$_GET    = $HTTP_GET_VARS;
+}
+
+
+if (file_exists('phpThumb.config.php')) {
+	ob_start();
+	if (include_once('phpThumb.config.php')) {
+		// great
+	} else {
+		ob_end_flush();
+		die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('.').'/phpThumb.config.php"');
+	}
+	ob_end_clean();
+} elseif (file_exists('phpThumb.config.php.default')) {
+	die('Please rename "phpThumb.config.php.default" to "phpThumb.config.php"');
+} else {
+	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('.').'/phpThumb.config.php"');
+}
+
+if (!@$_SERVER['QUERY_STRING']) {
+	die('$_SERVER[QUERY_STRING] is empty');
+}
+if (@$PHPTHUMB_CONFIG['high_security_enabled']) {
+	if (!@$_GET['hash']) {
+		die('ERROR: missing hash');
+	}
+	if (strlen($PHPTHUMB_CONFIG['high_security_password']) < 5) {
+		die('ERROR: strlen($PHPTHUMB_CONFIG[high_security_password]) < 5');
+	}
+	if ($_GET['hash'] != md5(str_replace('&hash='.$_GET['hash'], '', $_SERVER['QUERY_STRING']).$PHPTHUMB_CONFIG['high_security_password'])) {
+		die('ERROR: invalid hash');
+	}
 }
 
 if (!function_exists('ImageJPEG') && !function_exists('ImagePNG') && !function_exists('ImageGIF')) {
@@ -43,115 +64,71 @@ if (!function_exists('ImageJPEG') && !function_exists('ImagePNG') && !function_e
 if (get_magic_quotes_gpc()) {
 	$RequestVarsToStripSlashes = array('src', 'wmf', 'file', 'err', 'goto', 'down');
 	foreach ($RequestVarsToStripSlashes as $key) {
-		if (isset($_REQUEST[$key])) {
-			$_REQUEST[$key] = stripslashes($_REQUEST[$key]);
+		if (isset($_GET[$key])) {
+			$_GET[$key] = stripslashes($_GET[$key]);
 		}
 	}
 }
 
 // instantiate a new phpThumb() object
+ob_start();
 if (!include_once('phpthumb.class.php')) {
+	ob_end_flush();
 	die('failed to include_once("'.realpath('phpthumb.class.php').'")');
 }
+ob_end_clean();
 $phpThumb = new phpThumb();
 
-////////////////////////////////////////////////////////////////
-// Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '1') {
-	$phpThumb->phpThumbDebug();
+if (@$_GET['src'] && isset($_GET['md5s']) && empty($_GET['md5s'])) {
+	if (eregi('^(f|ht)tp[s]?://', $_GET['src'])) {
+		if ($fp_source = @fopen($_GET['src'], 'rb')) {
+			$filedata = '';
+			while (true) {
+				$buffer = fread($fp_source, 16384);
+				if (strlen($buffer) == 0) {
+					break;
+				}
+				$filedata .= $buffer;
+			}
+			fclose($fp_source);
+			$md5s = md5($filedata);
+		}
+	} else {
+		$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($_GET['src']);
+		if (is_readable($SourceFilename)) {
+			$md5s = phpthumb_functions::md5_file_safe($SourceFilename);
+		} else {
+			$phpThumb->ErrorImage('ERROR: "'.$SourceFilename.'" cannot be read');
+		}
+	}
+	if (@$_SERVER['HTTP_REFERER']) {
+		$phpThumb->ErrorImage('&md5s='.$md5s);
+	} else {
+		die('&md5s='.$md5s);
+	}
 }
-////////////////////////////////////////////////////////////////
 
-
-if (!file_exists('phpThumb.config.php') || !include_once('phpThumb.config.php')) {
-	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('phpThumb.config.php').'"');
-}
 foreach ($PHPTHUMB_CONFIG as $key => $value) {
 	$keyname = 'config_'.$key;
 	$phpThumb->$keyname = $value;
 }
-foreach ($_REQUEST as $key => $value) {
-	$phpThumb->$key = $value;
-}
-if (!empty($PHPTHUMB_DEFAULTS)) {
-	foreach ($PHPTHUMB_DEFAULTS as $key => $value) {
-		if ($PHPTHUMB_DEFAULTS_GETSTRINGOVERRIDE || !isset($_REQUEST[$key])) {
-			$phpThumb->$key = $value;
-		}
-	}
-}
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '2') {
+if (@$_GET['phpThumbDebug'] == '1') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
 
-
-// check to see if file can be output from source with no processing or caching
-$CanPassThroughDirectly = true;
-$FilenameParameters = array('h', 'w', 'sx', 'sy', 'sw', 'sh', 'bw', 'brx', 'bry', 'bg', 'bgt', 'bc', 'usa', 'usr', 'ust', 'wmf', 'wmp', 'wmm', 'wma', 'xto', 'ra', 'ar', 'iar', 'maxb');
-foreach ($FilenameParameters as $key) {
-	if (isset($_REQUEST[$key])) {
-		$phpThumb->DebugMessage('Cannot pass through directly because $_REQUEST['.$key.'] is set to "'.$_REQUEST[$key].'"', __FILE__, __LINE__);
-		$CanPassThroughDirectly = false;
-		break;
-	}
+$parsed_url_referer = parse_url(@$_SERVER['HTTP_REFERER']);
+if ($phpThumb->config_nooffsitelink_require_refer && !in_array(@$parsed_url_referer['host'], $phpThumb->config_nohotlink_valid_domains)) {
+	$phpThumb->ErrorImage('config_nooffsitelink_require_refer enabled and '.(@$parsed_url_referer['host'] ? '"'.$parsed_url_referer['host'].'" is not an allowed referer' : 'no HTTP_REFERER exists'));
+}
+$parsed_url_src = parse_url(@$_GET['src']);
+if ($phpThumb->config_nohotlink_enabled && $phpThumb->config_nohotlink_erase_image && eregi('^(f|ht)tp[s]?://', @$_GET['src']) && !in_array(@$parsed_url_src['host'], $phpThumb->config_nohotlink_valid_domains)) {
+	$phpThumb->ErrorImage($phpThumb->config_nohotlink_text_message);
 }
 
-////////////////////////////////////////////////////////////////
-// Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '3') {
-	$phpThumb->phpThumbDebug();
-}
-////////////////////////////////////////////////////////////////
-
-if ($CanPassThroughDirectly && !empty($_REQUEST['src'])) {
-	// no parameters set, passthru
-	$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($_REQUEST['src']);
-	if ($getimagesize = @GetImageSize($SourceFilename)) {
-		if (!empty($_REQUEST['phpThumbDebug'])) {
-			$phpThumb->DebugMessage('Would have passed "'.$SourceFilename.'" through directly, but skipping due to phpThumbDebug', __FILE__, __LINE__);
-		} else {
-			SendSaveAsFileHeaderIfNeeded();
-			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
-			@readfile($SourceFilename);
-			exit;
-		}
-	} else {
-		$phpThumb->DebugMessage('Cannot pass through directly because GetImageSize("'.$SourceFilename.'") failed', __FILE__, __LINE__);
-	}
-}
-
-////////////////////////////////////////////////////////////////
-// Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '4') {
-	$phpThumb->phpThumbDebug();
-}
-////////////////////////////////////////////////////////////////
-
-// check to see if file already exists in cache, and output it with no processing if it does
-$phpThumb->SetCacheFilename();
-if (is_file($phpThumb->cache_filename)) {
-	if (empty($_REQUEST['phpThumbDebug'])) {
-		SendSaveAsFileHeaderIfNeeded();
-		header('Content-type: image/'.$phpThumb->thumbnailFormat);
-		@readfile($phpThumb->cache_filename);
-		exit;
-	} else {
-		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'", but skipping due to phpThumbDebug', __FILE__, __LINE__);
-	}
-} else {
-	$phpThumb->DebugMessage('Cached file "'.$phpThumb->cache_filename.'" does not exist, processing as normal', __FILE__, __LINE__);
-}
-
-////////////////////////////////////////////////////////////////
-// Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '5') {
-	$phpThumb->phpThumbDebug();
-}
-////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////
 // You may want to pull data from a database rather than a physical file
@@ -159,55 +136,211 @@ if (@$_REQUEST['phpThumbDebug'] == '5') {
 // Note: this must be the actual binary data of the image, not a URL or filename
 // see http://www.billy-corgan.com/blog/archive/000143.php for a brief tutorial on this section
 
-//$SQLquery = 'SELECT `Picture` FROM `products` WHERE (`ProductID` = \''.mysql_escape_string($_REQUEST['id']).'\')';
-if (empty($_REQUEST['src']) && !empty($SQLquery)) {
+//$SQLquery = 'SELECT `picture` FROM `products` WHERE (`id` = \''.mysql_escape_string(@$_GET['id']).'\')';
+if (@$SQLquery) {
 
 	// change this information to match your server
-	$server   = 'localhost';
-	$username = 'user';
+	$hostname = 'localhost';
+	$username = 'username';
 	$password = 'password';
 	$database = 'database';
-	if ($cid = @mysql_connect($server, $username, $password)) {
+	if ($cid = @mysql_connect($hostname, $username, $password)) {
 		if (@mysql_select_db($database, $cid)) {
-			if ($result = mysql_query($SQLquery, $cid)) {
+			if ($result = @mysql_query($SQLquery, $cid)) {
 				if ($row = @mysql_fetch_array($result)) {
+
 					mysql_free_result($result);
 					mysql_close($cid);
-					$phpThumb->rawImageData = $row[0];
+					$phpThumb->setSourceData($row[0]);
 					unset($row);
+
 				} else {
+					mysql_free_result($result);
+					mysql_close($cid);
 					$phpThumb->ErrorImage('no matching data in database.');
 					//$phpThumb->ErrorImage('no matching data in database. MySQL said: "'.mysql_error($cid).'"');
 				}
 			} else {
+				mysql_close($cid);
 				$phpThumb->ErrorImage('Error in MySQL query: "'.mysql_error($cid).'"');
 			}
 		} else {
-			$phpThumb->ErrorImage('cannot select MySQL database');
+			mysql_close($cid);
+			$phpThumb->ErrorImage('cannot select MySQL database: "'.mysql_error($cid).'"');
 		}
 	} else {
 		$phpThumb->ErrorImage('cannot connect to MySQL server');
 	}
+	unset($_GET['id']);
+}
 
-} elseif (empty($_REQUEST['src'])) {
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_GET['phpThumbDebug'] == '2') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+$allowedGETparameters = array('src', 'new', 'w', 'h', 'f', 'q', 'sx', 'sy', 'sw', 'sh', 'zc', 'bc', 'bg', 'bgt', 'fltr', 'file', 'goto', 'err', 'xto', 'ra', 'ar', 'aoe', 'far', 'iar', 'maxb', 'down', 'phpThumbDebug', 'hash', 'md5s');
+foreach ($_GET as $key => $value) {
+	if (in_array($key, $allowedGETparameters)) {
+		$phpThumb->$key = $value;
+	} else {
+		$phpThumb->ErrorImage('Forbidden parameter: '.$key);
+	}
+}
+
+if (!empty($PHPTHUMB_DEFAULTS)) {
+	foreach ($PHPTHUMB_DEFAULTS as $key => $value) {
+		if ($PHPTHUMB_DEFAULTS_GETSTRINGOVERRIDE || !isset($_GET[$key])) {
+			$phpThumb->$key = $value;
+		}
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_GET['phpThumbDebug'] == '3') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+
+// check to see if file can be output from source with no processing or caching
+$CanPassThroughDirectly = true;
+if (!empty($phpThumb->rawImageData)) {
+	// data from SQL, should be fine
+} elseif (!@is_file(@$_GET['src']) || !@is_readable(@$_GET['src'])) {
+	$CanPassThroughDirectly = false;
+}
+foreach ($_GET as $key => $value) {
+	switch ($key) {
+		case 'src':
+			// allowed
+			break;
+
+		default:
+			// all other parameters will cause some processing,
+			// therefore cannot pass through original image unmodified
+			$CanPassThroughDirectly = false;
+			$UnAllowedGET[] = $key;
+			break;
+	}
+}
+if (!empty($UnAllowedGET)) {
+	$phpThumb->DebugMessage('Cannot pass through directly because $_GET['.implode(';', array_unique($UnAllowedGET)).'] are set', __FILE__, __LINE__);
+}
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_GET['phpThumbDebug'] == '4') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+if ($CanPassThroughDirectly && $phpThumb->src) {
+	// no parameters set, passthru
+	$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($phpThumb->src);
+	if (@$_GET['phpThumbDebug']) {
+		$phpThumb->DebugMessage('Would have passed "'.$SourceFilename.'" through directly, but skipping due to phpThumbDebug', __FILE__, __LINE__);
+	} else {
+		phpthumb_functions::SendSaveAsFileHeaderIfNeeded();
+		header('Last-Modified: '.gmdate('D, d M Y H:i:s', @filemtime($SourceFilename)).' GMT');
+		if ($getimagesize = @GetImageSize($SourceFilename)) {
+			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+		}
+		@readfile($SourceFilename);
+		exit;
+	}
+}
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_GET['phpThumbDebug'] == '5') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+// check to see if file already exists in cache, and output it with no processing if it does
+$phpThumb->SetCacheFilename();
+if (is_file($phpThumb->cache_filename)) {
+	$parsed_url = @parse_url(@$_SERVER['HTTP_REFERER']);
+	if ($phpThumb->config_nooffsitelink_enabled && @$_SERVER['HTTP_REFERER'] && !in_array(@$parsed_url['host'], $phpThumb->config_nooffsitelink_valid_domains)) {
+		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'" (Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT), but skipping because $_SERVER[HTTP_REFERER] ('.@$_SERVER['HTTP_REFERER'].') is not in $phpThumb->config_nooffsitelink_valid_domains ('.implode(';', $phpThumb->config_nooffsitelink_valid_domains).')', __FILE__, __LINE__);
+	} elseif (@$_GET['phpThumbDebug']) {
+		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'" (Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT), but skipping due to phpThumbDebug', __FILE__, __LINE__);
+	} else {
+		phpthumb_functions::SendSaveAsFileHeaderIfNeeded();
+		header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT');
+		if ($getimagesize = @GetImageSize($phpThumb->cache_filename)) {
+			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+		}
+		if (ereg('^'.preg_quote(str_replace($phpThumb->osslash, '/', $PHPTHUMB_CONFIG['document_root'])).'(.*)$', str_replace($phpThumb->osslash, '/', $phpThumb->cache_filename), $matches)) {
+			header('Location: '.dirname($matches[1]).'/'.urlencode(basename($matches[1])));
+		} else {
+			@readfile($phpThumb->cache_filename);
+		}
+		exit;
+	}
+} else {
+	$phpThumb->DebugMessage('Cached file "'.$phpThumb->cache_filename.'" does not exist, processing as normal', __FILE__, __LINE__);
+}
+
+////////////////////////////////////////////////////////////////
+// Debug output, to try and help me diagnose problems
+if (@$_GET['phpThumbDebug'] == '6') {
+	$phpThumb->phpThumbDebug();
+}
+////////////////////////////////////////////////////////////////
+
+if ($phpThumb->rawImageData) {
+
+	// great
+
+} elseif (!empty($_GET['new'])) {
+
+	// generate a blank image resource of the specified size/background color/opacity
+	if (($phpThumb->w <= 0) || ($phpThumb->h <= 0)) {
+		$phpThumb->ErrorImage('"w" and "h" parameters required for "new"');
+	}
+	@list($bghexcolor, $opacity) = explode('|', $_GET['new']);
+	if (!phpthumb_functions::IsHexColor($bghexcolor)) {
+		$phpThumb->ErrorImage('BGcolor parameter for "new" is not valid');
+	}
+	$opacity = (strlen($opacity) ? $opacity : 100);
+	if ($phpThumb->gdimg_source = phpthumb_functions::ImageCreateFunction($phpThumb->w, $phpThumb->h)) {
+		$alpha = (100 - min(100, max(0, $opacity))) * 1.27;
+		if ($alpha) {
+			$phpThumb->is_alpha = true;
+			ImageAlphaBlending($phpThumb->gdimg_source, false);
+			ImageSaveAlpha($phpThumb->gdimg_source, true);
+		}
+		$new_background_color = phpthumb_functions::ImageHexColorAllocate($phpThumb->gdimg_source, $bghexcolor, false, $alpha);
+		ImageFilledRectangle($phpThumb->gdimg_source, 0, 0, $phpThumb->w, $phpThumb->h, $new_background_color);
+	} else {
+		$phpThumb->ErrorImage('failed to create "new" image ('.$phpThumb->w.'x'.$phpThumb->h.')');
+	}
+
+} elseif (!$phpThumb->src) {
 
 	$phpThumb->ErrorImage('Usage: '.$_SERVER['PHP_SELF'].'?src=/path/and/filename.jpg'."\n".'read Usage comments for details');
 
-} elseif (substr(strtolower(@$phpThumb->src), 0, 7) == 'http://') {
+} elseif (substr(strtolower($phpThumb->src), 0, 7) == 'http://') {
 
 	ob_start();
 	$HTTPurl = strtr($phpThumb->src, array(' '=>'%20'));
 	if ($fp = fopen($HTTPurl, 'rb')) {
 
-		$phpThumb->rawImageData = '';
+		$rawImageData = '';
 		do {
 			$buffer = fread($fp, 8192);
 			if (strlen($buffer) == 0) {
 				break;
 			}
-			$phpThumb->rawImageData .= $buffer;
+			$rawImageData .= $buffer;
 		} while (true);
 		fclose($fp);
+		$phpThumb->setSourceData($rawImageData, urlencode($phpThumb->src));
 
 	} else {
 
@@ -226,7 +359,7 @@ if (empty($_REQUEST['src']) && !empty($SQLquery)) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '6') {
+if (@$_GET['phpThumbDebug'] == '7') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
@@ -235,17 +368,17 @@ $phpThumb->GenerateThumbnail();
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '7') {
+if (@$_GET['phpThumbDebug'] == '8') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
 
-if (!empty($_REQUEST['file'])) {
+if ($phpThumb->file) {
 
-	$phpThumb->RenderToFile($phpThumb->ResolveFilenameToAbsolute($_REQUEST['file']));
-	if (!empty($_REQUEST['goto']) && (substr(strtolower($_REQUEST['goto']), 0, strlen('http://')) == 'http://')) {
+	$phpThumb->RenderToFile($phpThumb->ResolveFilenameToAbsolute($phpThumb->file));
+	if ($phpThumb->goto && (substr(strtolower($phpThumb->goto), 0, strlen('http://')) == 'http://')) {
 		// redirect to another URL after image has been rendered to file
-		header('Location: '.$_REQUEST['goto']);
+		header('Location: '.$phpThumb->goto);
 		exit;
 	}
 
@@ -266,7 +399,7 @@ if (!empty($_REQUEST['file'])) {
 
 ////////////////////////////////////////////////////////////////
 // Debug output, to try and help me diagnose problems
-if (@$_REQUEST['phpThumbDebug'] == '8') {
+if (@$_GET['phpThumbDebug'] == '9') {
 	$phpThumb->phpThumbDebug();
 }
 ////////////////////////////////////////////////////////////////
