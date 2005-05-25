@@ -914,10 +914,12 @@
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
          *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
          *					string.
+         *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
+         *  @param $sor_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
-        function getContents( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage', 'YDFSDirectory' ) ) {
+        function getContents( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage', 'YDFSDirectory' ), $sort_by_date=false, $sort_order='asc' ) {
 
             // Start with an empty list
             $fileList = array();
@@ -982,11 +984,19 @@
                         }
                     }
                 }
-                $fileList2[ strtolower( $file ) ] = $fileObj;
+                if ( $sort_by_date === true ) {
+                    $fileList2[ filectime( $file ) ] = $fileObj;
+                } else {
+                    $fileList2[ strtolower( $file ) ] = $fileObj;
+                }
             }
 
             // Sort the list of files
-            ksort( $fileList2 );
+            if ( strtolower( $sort_order ) != 'desc' ) {
+                ksort( $fileList2 );
+            } else {
+                krsort( $fileList2 );
+            }
             $fileList2 = array_values( $fileList2 );
 
             // Remove the unsupported classes
@@ -1037,14 +1047,16 @@
          *					the list of filenames instead of objects.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage and
          *					YDFSFile classes. If you only need a single class, you can also specify it as a string.
+         *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
+         *  @param $sor_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
-        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ) ) {
+        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ), $sort_by_date=false, $sort_order='asc'  ) {
             $files = array();
             foreach ( $this->_getSubdirectories( $this->_path ) as $dir ) {
                 $dir = new YDFSDirectory( $dir );
-                $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes ) );
+                $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes ), $sort_by_date, $sort_order );
             }
             return $files;
         }
