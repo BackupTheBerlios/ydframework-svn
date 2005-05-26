@@ -1378,7 +1378,7 @@
          */
         function setValues( $values ) {
 
-            $current = $this->getValues();
+            $current = $this->getValues( true, true );
 
             foreach ( $current as $field => $value ) {
                 if ( ! array_key_exists( $field, $values ) ) {
