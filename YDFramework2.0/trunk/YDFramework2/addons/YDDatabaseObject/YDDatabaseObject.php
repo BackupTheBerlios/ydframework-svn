@@ -168,70 +168,37 @@
         }
 
         /**
-         *  This function registers a new field.
+         *  This function registers a field.
          *
-         *  @param $name     The field name.
-         *  @param $type     (optional) The field type: numeric or string. Default: numeric.
-         *  @param $key      (optional) Is a key? Default: false.
-         *  @param $auto     (optional) Is auto-increment? Default: false.
-         *  @param $null     (optional) Can be null? Default: false.
+         *  @param $name  The field name.
+         *  @param $null  (optional) The field can be null? Default: false.
          *
-         *  @returns  A reference to the field object.
+         *  @returns      A reference to the field object.
          */
-        function & registerField( $name, $type='numeric', $key=false, $auto=false, $null=false ) {
+        function & registerField( $name, $null=false ) {
             if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The field name "' . $name . '" is already defined.', YD_ERROR );
             }
 
-            return $this->_fields->set( $name, new YDDatabaseObject_Field( $name, $type, $key, $auto, $null ) );
+            return $this->_fields->set( $name, new YDDatabaseObject_Field( $name, false, false, $null ) );
         }
-
+        
         /**
-         *  This function registers a numeric key.
+         *  This function registers a key.
          *
          *  @param $name  The field name.
          *  @param $auto  (optional) The key is a auto-increment field? Default: false.
          *
          *  @returns      A reference to the field object.
          */
-        function & registerNumericKey( $name, $auto=false ) {
-            return $this->registerField( $name, 'numeric', true, $auto, false );
-        }
+        function & registerKey( $name, $auto=false ) {
+            if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                The field name "' . $name . '" is already defined.', YD_ERROR );
+            }
 
-        /**
-         *  This function registers a string key.
-         *
-         *  @param $name  The field name.
-         *
-         *  @returns      A reference to the field object.
-         */
-        function & registerStringKey( $name ) {
-            return $this->registerField( $name, 'string', true, false, false );
-        }
-
-        /**
-         *  This function registers a numeric field.
-         *
-         *  @param $name  The field name.
-         *  @param $null  (optional) The field can be null? Default: false.
-         *
-         *  @returns      A reference to the field object.
-         */
-        function & registerNumericField( $name, $null=false ) {
-            return $this->registerField( $name, 'numeric', false, false, $null );
-        }
-
-        /**
-         *  This function registers a string field.
-         *
-         *  @param $name  The field name.
-         *  @param $null  (optional) The field can be null? Default: false.
-         *
-         *  @returns      A reference to the field object.
-         */
-        function & registerStringField( $name, $null=false ) {
-            return $this->registerField( $name, 'string', false, false, $null );
+            return $this->_fields->set( $name, new YDDatabaseObject_Field( $name, true, $auto, false ) );
         }
 
         /**
@@ -536,9 +503,23 @@
                 if ( is_null( $value ) ) {
                     $value = ' IS NULL ';
                 } else if ( is_array( $value ) ) {
-                    $value = " IN ( '" . implode( "', '", $value ) . "' )";
+                    $value_string = ' IN ( ';
+                    $first = true;
+                    foreach ( $value as $val ) {
+                        if ( ! $first ) {
+                            $value_string .= ', ';
+                        }
+                        if ( is_numeric( $val ) ) {
+                            $value_string .= $val;
+                        } else {
+                            $value_string .= "'" . $val . "'";
+                        }
+                        $first = false;
+                    }
+                    $value_string .= ' )';
+                    $value = $value_string;
                 } else {
-                    if ( $field->isNumeric() ) {
+                    if ( is_numeric( $value ) ) {
                         $value = ' = ' . $value;
                     } else {
                         $value = " = '" . $value . "'";
@@ -1028,7 +1009,7 @@
             YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_NUM );
 
             $results = $this->_db->getRecords( $sql, $this->_limit, $this->_offset );
-
+            
             YDConfig::set( 'YD_DB_FETCHTYPE', $fetch );
 
             if ( ! sizeof( $slices ) ) {
@@ -1309,7 +1290,7 @@
             $this->resetProtected();
 
             $values = get_object_vars( $this );
-
+            
             $new = array();
             foreach ( $values as $field => $value ) {
                 if ( $this->exists( $field ) && ! is_object( $this->$field ) && substr( $field, 0, 1 ) != '_' ) {
@@ -1323,7 +1304,7 @@
                     }
                 }
             }
-
+            
             return $new;
 
         }
@@ -1553,7 +1534,6 @@
         var $column;
         var $null;
         var $auto;
-        var $type;
         var $key;
         var $protected;
         var $default;
@@ -1568,12 +1548,11 @@
          *  @param $auto     (optional) Is auto-increment? Default: false.
          *  @param $null     (optional) Can be null? Default: false.
          */
-        function YDDatabaseObject_Field( $name, $type='numeric', $key=false, $auto=false, $null=false ) {
+        function YDDatabaseObject_Field( $name, $key=false, $auto=false, $null=false ) {
 
             $this->YDDatabaseObject_Properties();
 
             $this->setName( $name );
-            $this->setType( $type );
 
             if ( $key ) {  $this->setKey(); }
             if ( $auto ) { $this->setAutoIncrement(); }
@@ -1595,22 +1574,6 @@
          */
         function getName() {
             return $this->get( 'name' );
-        }
-
-        /**
-         *  This function sets the field type.
-         *
-         *  @param $type     The type.
-         */
-        function setType( $type ) {
-            $this->set( 'type', $type );
-        }
-
-        /**
-         *  @returns  The field type.
-         */
-        function getType() {
-            return strtolower( $this->get( 'type' ) );
         }
 
         /**
@@ -1697,20 +1660,6 @@
          */
         function getDefault() {
             return $this->get( 'default' );
-        }
-
-        /**
-         *  @returns  If the field is numeric.
-         */
-        function isNumeric() {
-            return ( $this->getType() == 'numeric' ) ? true : false;
-        }
-
-        /**
-         *  @returns  If the field is a string.
-         */
-        function isString() {
-            return ( $this->getType() == 'string' ) ? true : false;
         }
 
         /**

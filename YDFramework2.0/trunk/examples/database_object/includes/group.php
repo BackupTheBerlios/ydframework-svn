@@ -10,9 +10,9 @@
             $this->registerTable( 'groups' );
             
             // Fields
-            $this->registerNumericKey( 'id', true );
-            $this->registerStringField( 'name' );
-            $this->registerNumericField( 'active' );
+            $this->registerKey( 'id', true );
+            $this->registerField( 'name' );
+            $this->registerField( 'active' );
             
             // Relations
             $users = & $this->registerRelation( 'user', true, 'user', 'user_group' );

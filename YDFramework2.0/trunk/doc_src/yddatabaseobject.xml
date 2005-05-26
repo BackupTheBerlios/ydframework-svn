@@ -238,14 +238,14 @@ CREATE TABLE `phones` (
 
             // Register the keys
             // The second argument defines id as an auto-increment field
-            $this->registerNumericKey( 'id', true );
+            $this->registerKey( 'id', true );
 
             // Register the fields
-            $this->registerStringField( 'name' );
-            $this->registerStringField( 'email' );
-            $this->registerStringField( 'country' );
-            $this->registerStringField( 'birthday' );
-            $this->registerNumericField( 'admin' );
+            $this->registerField( 'name' );
+            $this->registerField( 'email' );
+            $this->registerField( 'country' );
+            $this->registerField( 'birthday' );
+            $this->registerField( 'admin' );
 
             // Register select expressions
             $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
@@ -309,33 +309,27 @@ CREATE TABLE `phones` (
 
             <title>Register fields and keys</title>
 
-            <para>The only difference between fields and keys is that keys are fields with a "key" property defined. There are a few methods to add fields and keys:</para>
+            <para>The only difference between fields and keys is that keys are fields with a "key" property defined. There are two methods to add fields and keys:</para>
 
             <itemizedlist spacing="compact">
-                <listitem><emphasis role="bold">registerField:</emphasis> registers any type of field or key.</listitem>
-                <listitem><emphasis role="bold">registerNumericField:</emphasis> registers a numeric field.</listitem>
-                <listitem><emphasis role="bold">registerStringField:</emphasis> registers a string field.</listitem>
-                <listitem><emphasis role="bold">registerNumericKey:</emphasis> registers a numeric key.</listitem>
-                <listitem><emphasis role="bold">registerStringKey:</emphasis> registers a string key.</listitem>
+                <listitem><emphasis role="bold">registerField:</emphasis> registers a field.</listitem>
+                <listitem><emphasis role="bold">registerKey:</emphasis> registers a key.</listitem>
             </itemizedlist>
-
-            <para>String fields are fields that must be encapsulated by single quotes.</para>
 
             <programlisting><![CDATA[<?php
 
-    // Register a numeric field
-    $this->registerNumericField( 'admin' );
+    // Register a field
+    $this->registerField( 'admin' );
 
-    // Register a string field
     // The second parameter defines that the field can be null. Default: false.
-    $this->registerStringField( 'email', true );
+    $this->registerField( 'email', true );
 
-    // Register a numeric key
+    // Register a key
     // The second parameter defines that the key is auto-increment
-    $this->registerNumericKey( 'id', true );
+    $this->registerKey( 'id', true );
 
-    // Register a string key
-    $this->registerStringKey( 'birthday' );
+    // Register a key that is not auto-increment
+    $this->registerKey( 'birthday' );
 
 ?>]]></programlisting>
 
@@ -346,7 +340,6 @@ CREATE TABLE `phones` (
                 <listitem><emphasis role="bold">setKey:</emphasis> set the field as key of the table.</listitem>
                 <listitem><emphasis role="bold">setAutoIncrement:</emphasis> set the field as auto-increment.</listitem>
                 <listitem><emphasis role="bold">setNull:</emphasis> set the field as null.</listitem>
-                <listitem><emphasis role="bold">setType:</emphasis> set the type of the field (string or numeric).</listitem>
                 <listitem><emphasis role="bold">setColumn:</emphasis> sets the real name of the column as defined in the table. So the field name will be an alias for the real column name defined here.</listitem>
                 <listitem><emphasis role="bold">setDefault:</emphasis> sets a default value for the field. This value can be added to the object using the getDefaults method.</listitem>
                 <listitem><emphasis role="bold">setCallback:</emphasis> sets a callback method to be called each time the field value is set.</listitem>
@@ -356,8 +349,8 @@ CREATE TABLE `phones` (
 
             <programlisting><![CDATA[<?php
 
-    // Register a numeric field
-    $birthday = & $this->registerNumericField( 'birthday' );
+    // Register a field
+    $birthday = & $this->registerField( 'birthday' );
 
     // Set the field as null
     $birthday->setNull();
@@ -1639,14 +1632,14 @@ INNER JOIN groups ON ( users.id = groups.user_id ) WHERE users.id = 123]]></prog
 
             // Register the keys
             // The second argument defines id as an auto-increment field
-            $this->registerNumericKey( 'id', true );
+            $this->registerKey( 'id', true );
 
             // Register the fields
-            $this->registerStringField( 'name' );
-            $this->registerStringField( 'email' );
+            $this->registerField( 'name' );
+            $this->registerField( 'email' );
 
             // Add a field with a callback
-            $birthday = & $this->registerStringField( 'birthday' );
+            $birthday = & $this->registerField( 'birthday' );
             $birthday->setCallback( 'getAge' );
             
             // Register callbacks

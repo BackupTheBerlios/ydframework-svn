@@ -10,18 +10,18 @@
             $this->registerTable( 'users' );
             
             // Fields
-            $this->registerNumericKey( 'id', true );
+            $this->registerKey( 'id', true );
 
-            $name = & $this->registerStringField( 'name' );
+            $name = & $this->registerField( 'name' );
             $name->setDefault( 'John Doe' );
             
-            $this->registerStringField( 'email' );
-            $this->registerStringField( 'country' );
+            $this->registerField( 'email' );
+            $this->registerField( 'country' );
 
-            $is_admin = & $this->registerNumericField( 'is_admin' );
+            $is_admin = & $this->registerField( 'is_admin' );
             $is_admin->setColumn( 'admin' );
             
-            $birthday = & $this->registerNumericField( 'birthday', true );
+            $birthday = & $this->registerField( 'birthday', true );
             $birthday->setCallback( 'getAge' );
             
             $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.' . $birthday->getColumn() . ' )' );

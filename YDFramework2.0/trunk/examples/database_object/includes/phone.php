@@ -10,9 +10,9 @@
             $this->registerTable( 'phones' );
         
             // Fields
-            $this->registerNumericKey( 'user_id', false );
-            $this->registerStringField( 'number' );
-            $this->registerNumericField( 'ord' );
+            $this->registerKey( 'user_id', false );
+            $this->registerField( 'number' );
+            $this->registerField( 'ord' );
             
             // Relations
             $user = & $this->registerRelation( 'user' );
