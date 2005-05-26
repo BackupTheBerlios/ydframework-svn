@@ -76,7 +76,7 @@
                     <a name="comment-{$comment.id}" />
                     <cite>
                         {if $comment.userwebsite}
-                            <a href="{$comment.userwebsite}" rel="external nofollow">{$comment.username}</a>
+                            <a href="{$comment.userwebsite}" rel="external nofollow" target="_blank">{$comment.username}</a>
                         {else}
                             {$comment.username}
                         {/if}
