@@ -1003,6 +1003,52 @@
             return $vars;
         }
 
+        /**
+         *      This function will return all default values of the form.
+         *
+         *      @returns        The default values of the form as an associative array.
+         */
+        function getDefaults() {
+            return $this->_defaults;
+        }
+
+        /**
+         *      This function will return the default values of an element.
+         *
+         *      @param $element  The element name.
+         *
+         *      @returns         The default value of the element.
+         */
+        function getDefault( $element ) {
+            if ( isset( $this->_defaults[ $element ] ) ) {
+                return $this->_defaults[ $element ];
+            }
+        }
+
+        /**
+         *      This function will return all elements that were modified from it's default value.
+         *
+         *      @returns        The modified elements and it's values as an associative array.
+         */
+        function getModifiedValues() {
+            
+            $modified = array();
+            
+            if ( $this->isSubmitted() ) {
+                
+                $defaults = $this->getDefaults();
+                $values   = $this->getValues();
+                
+                foreach ( $values as $element => $value ) {
+                    if ( ! isset( $defaults[ $element ] ) || $value != $defaults[ $element ] ) {
+                        $modified[ $element ] = $value;
+                    }
+                }
+            }
+            
+            return $modified;
+        }
+
     }
 
     /**
