@@ -70,8 +70,7 @@
         function initCommentsFeed() {
 
             // Get the weblog items
-            $comments = $this->weblog->getComments( null, 'CREATED', YDConfig::get( 'max_syndicated_items', 15 ) );
-            $comments = array_reverse( $comments );
+            $comments = $this->weblog->getComments( null, 'CREATED DESC', YDConfig::get( 'max_syndicated_items', 15 ) );
 
             // Initialize the feed
             $this->feed = new YDFeedCreator();
