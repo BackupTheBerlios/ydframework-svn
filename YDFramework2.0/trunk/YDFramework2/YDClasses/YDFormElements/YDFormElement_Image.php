@@ -51,8 +51,13 @@
             // Set the type
             $this->_type = 'image';
 
-            // If options is a string, it overrides the value
-            $this->setValue( $options );
+            // Set the label as the "src"
+            $this->setValue( $label );
+            
+            // If options is a string, replace the label as the "src"
+            if ( is_string( $options ) && strlen( $options ) ) {
+                $this->setValue( $options );
+            }
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
