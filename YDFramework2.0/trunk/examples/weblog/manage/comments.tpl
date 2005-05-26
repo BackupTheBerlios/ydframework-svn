@@ -88,6 +88,10 @@
                 <td class="adminRowC" width="400"><a href="items.php?do=edit&id={$comment.item_id}"><b>{$comment.item_title}</b></a></td>
             </tr>
             <tr>
+                <td class="adminRowL" width="300">{t w="posted_from"}</td>
+                <td class="adminRowC" width="400">{$comment.userip}</td>
+            </tr>
+            <tr>
                 <td class="adminRowL">{$form.username.label_html}</td>
                 <td class="adminRowC">{$form.username.html}</td>
             </tr>

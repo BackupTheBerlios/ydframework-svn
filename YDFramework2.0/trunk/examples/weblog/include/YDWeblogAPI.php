@@ -173,19 +173,20 @@
             if ( $item_id ) {
                 $sql = $this->_prepareQuery( 'SELECT * FROM comments WHERE item_id = ' . $this->str( $item_id ), $order );
             } else {
-                $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM comments c, items i WHERE c.item_id = i.id', $order );
+                $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM comments c, items i WHERE c.item_id = i.id', $order );
             }
             return $this->db->getRecords( $sql, $limit, $offset );
         }
 
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
-            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM comments c, items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
+            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM comments c, items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
             return $this->db->getRecord( $sql );
         }
 
         // Add a comment
         function addComment( $values ) {
+            $values['userip'] = $_SERVER["REMOTE_ADDR"];
             $result = $this->_executeInsert( 'comments', $values );
             $sql = 'UPDATE items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
             $this->db->executeSql( $sql );

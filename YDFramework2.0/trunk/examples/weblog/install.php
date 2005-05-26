@@ -112,6 +112,7 @@
                       username varchar(255) NOT NULL default \'\',
                       useremail varchar(255) NOT NULL default \'\',
                       userwebsite varchar(255) default NULL,
+                      userip varchar(20) default NULL,
                       comment longtext NOT NULL,
                       created int(11) default NULL,
                       modified int(11) default NULL,
