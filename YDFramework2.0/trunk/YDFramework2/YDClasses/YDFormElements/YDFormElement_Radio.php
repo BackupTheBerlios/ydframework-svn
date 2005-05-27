@@ -77,7 +77,7 @@
                     $attribsElement = $attribs;
                     $attribsElement['value'] = $key;
                     if ( $this->_value == strval( $key ) ) {
-                        $attribsElement['checked'] = '';
+                        $attribsElement['checked'] = 'checked';
                     }
                     $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' />' . $val;
 

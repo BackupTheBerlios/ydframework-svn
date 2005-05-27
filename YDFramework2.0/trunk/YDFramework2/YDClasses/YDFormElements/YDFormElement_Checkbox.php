@@ -79,7 +79,7 @@
 
             // If a value, fill it in and make it checked
             if ( ! empty( $this->_value ) ) {
-                $attribs['checked'] = '';
+                $attribs['checked'] = 'checked';
             }
 
             // Get the HTML

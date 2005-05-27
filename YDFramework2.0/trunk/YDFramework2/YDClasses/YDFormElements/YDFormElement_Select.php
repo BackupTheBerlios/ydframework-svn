@@ -72,7 +72,7 @@
             $html .= '<select' . YDForm::_convertToHtmlAttrib( $attribs ) . '>';
             foreach ( $this->_options as $val=>$label ) {
                 if ( strval( $this->_value ) == strval( $val ) ) {
-                    $html .= '<option value="' . $val . '" selected>' . $label . '</option>';
+                    $html .= '<option value="' . $val . '" selected="selected">' . $label . '</option>';
                 } else {
                     $html .= '<option value="' . $val . '">' . $label . '</option>';
                 }
