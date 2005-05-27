@@ -915,7 +915,7 @@
          *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
          *					string.
          *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
-         *  @param $sor_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
+         *  @param $sort_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
@@ -985,7 +985,7 @@
                     }
                 }
                 if ( $sort_by_date === true ) {
-                    $fileList2[ filectime( $file ) ] = $fileObj;
+                    $fileList2[ filectime( $file ) . strtolower( $file ) ] = $fileObj;
                 } else {
                     $fileList2[ strtolower( $file ) ] = $fileObj;
                 }
@@ -1048,7 +1048,7 @@
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage and
          *					YDFSFile classes. If you only need a single class, you can also specify it as a string.
          *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
-         *  @param $sor_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
+         *  @param $sort_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
