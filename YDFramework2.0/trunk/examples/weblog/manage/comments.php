@@ -83,8 +83,6 @@
                 // Set the defaults
                 $form->setDefaults( $defaults );
 
-                YDDebugUtil::dump( $defaults );
-
                 // Add the comment to the template
                 $this->tpl->assign( 'comment', $defaults );
 
