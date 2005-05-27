@@ -177,6 +177,9 @@
             // Get the logging data
             $values = array();
             $values['uri'] = str_replace( dirname( YD_SELF_SCRIPT ) . '/', '', $this->getNormalizedUri() );
+            if ( substr( $values['uri'], 0, 1 ) == '/' ) {
+                $values['uri'] = substr( $values['uri'], 1 );
+            }
             $values['date'] = strftime( '%Y-%m-%d' );
             $values['browser'] = $this->browser->browser;
             $values['platform'] = $this->browser->platform;
