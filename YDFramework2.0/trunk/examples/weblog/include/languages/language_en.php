@@ -219,6 +219,7 @@ $GLOBALS['t']['parent'] = 'Parent Item';
 $GLOBALS['t']['change_comment_desc'] = 'Change comment';
 $GLOBALS['t']['mail'] = 'Email';
 $GLOBALS['t']['no_comments_found'] = 'No comments were found';
+$GLOBALS['t']['posted_from'] = 'Posted from IP address';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Settings';
@@ -246,6 +247,7 @@ $GLOBALS['t']['err_weblog_entries_fp_num'] = 'Number of entries on the front pag
 $GLOBALS['t']['err_max_syndicated_items'] = 'Number of syndicated items is required';
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Number of syndicated items should be numeric';
 $GLOBALS['t']['change_config'] = 'Change the configuration';
+$GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

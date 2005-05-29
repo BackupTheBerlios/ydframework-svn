@@ -219,6 +219,7 @@ $GLOBALS['t']['parent'] = 'Bovenliggend Item';
 $GLOBALS['t']['change_comment_desc'] = 'Wijzig commentaar';
 $GLOBALS['t']['mail'] = 'Email';
 $GLOBALS['t']['no_comments_found'] = 'Er werden geen commentaren gevonden';
+$GLOBALS['t']['posted_from'] = 'Gepost van het IP adres';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Instellingen';
@@ -246,6 +247,7 @@ $GLOBALS['t']['err_weblog_entries_fp_num'] = 'Aantal items op de voorpagina moet
 $GLOBALS['t']['err_max_syndicated_items'] = 'Aantal gesyndiceerde items is vereist';
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Aantal gesyndiceerde items moet een getal zijn';
 $GLOBALS['t']['change_config'] = 'Wijzig de instellingen';
+$GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

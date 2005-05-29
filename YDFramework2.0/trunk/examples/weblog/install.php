@@ -27,6 +27,14 @@
             $this->dir_uploads = YDConfig::get( 'dir_uploads', 'uploads' );
             $this->dir_skins   = YDConfig::get( 'dir_skins',   'skins' ) . '/';
 
+            // Error out if the YDFramework temp directory is not writeable
+            if ( ! is_writeable( YD_DIR_TEMP ) ) {
+                echo( '<html><head><title>' . YD_FW_NAME . ' Weblog - Installer</title></head><body>'
+                echo( '<h2>' . YD_FW_NAME . ' Weblog - Installer</h2>'
+                echo( '<p><font color="red"><b>Make sure the directory ' . YD_DIR_TEMP . ' is writeable before continueing</b></font></p>' );
+                die();
+            }
+
         }
 
         // Default action
@@ -62,6 +70,7 @@
             $form->addElement( 'text', 'db_name', 'Database name', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_user', 'Database user', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_pass', 'Database password', array( 'class' => 'tfM' ) );
+            $form->addElement( 'text', 'db_prefix', 'Database table prefix', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'weblog_title', 'Weblog title', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'weblog_description', 'Weblog description', array( 'class' => 'tfM' ) );
             $form->addElement( 'select', 'weblog_skin', 'Weblog skin', array( 'class' => 'tfM', 'style' => 'width: 100%' ), $skins );
@@ -85,6 +94,7 @@
             $form->setDefault( 'db_host', 'localhost' );
             $form->setDefault( 'db_name', 'ydweblog' );
             $form->setDefault( 'db_user', 'root' );
+            $form->setDefault( 'db_prefix', 'ydw_' );
             $form->setDefault( 'weblog_title', 'My Weblog' );
             $form->setDefault( 'weblog_description', 'Description of my Weblog' );
 
@@ -94,19 +104,22 @@
                 // Get the form values
                 $values = $form->getValues();
 
+                //YDDebugUtil::dump( $values );
+                //die();
+
                 // Connect to the database
                 $db = YDDatabase::getInstance(
                     'mysql', $values['db_name'], $values['db_user'], $values['db_pass'], $values['db_host']
                 );
 
                 // Create the tables
-                $db->executeSql( 'DROP TABLE IF EXISTS categories;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'categories;' );
                 $db->executeSql(
-                    'CREATE TABLE categories ( id int(11) NOT NULL auto_increment, title varchar(255) NOT NULL default \'\', created int(11) default NULL, modified int(11) default NULL, PRIMARY KEY  (id) ) TYPE=MyISAM;'
+                    'CREATE TABLE ' . $values['db_prefix'] . 'categories ( id int(11) NOT NULL auto_increment, title varchar(255) NOT NULL default \'\', created int(11) default NULL, modified int(11) default NULL, PRIMARY KEY  (id) ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS comments;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'comments;' );
                 $db->executeSql(
-                    'CREATE TABLE comments (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'comments (
                       id int(11) NOT NULL auto_increment,
                       item_id int(11) NOT NULL default \'1\',
                       username varchar(255) NOT NULL default \'\',
@@ -120,9 +133,9 @@
                       KEY item_id (item_id)
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS items;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'items;' );
                 $db->executeSql(
-                    'CREATE TABLE items (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'items (
                       id int(11) NOT NULL auto_increment,
                       category_id int(11) default \'1\',
                       user_id int(11) NOT NULL default \'1\',
@@ -136,9 +149,9 @@
                       KEY user_id (user_id)
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS links;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'links;' );
                 $db->executeSql(
-                    'CREATE TABLE links (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'links (
                       id int(11) NOT NULL auto_increment,
                       title varchar(255) NOT NULL default \'\',
                       url varchar(255) NOT NULL default \'\',
@@ -149,9 +162,9 @@
                       UNIQUE KEY url (url)
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS pages;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'pages;' );
                 $db->executeSql(
-                    'CREATE TABLE pages (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'pages (
                       id int(11) NOT NULL auto_increment,
                       user_id int(11) NOT NULL default \'1\',
                       title varchar(255) NOT NULL default \'\',
@@ -162,9 +175,9 @@
                       KEY user_id (user_id)
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS statistics;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'statistics;' );
                 $db->executeSql(
-                    'CREATE TABLE statistics (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'statistics (
                       id int(11) NOT NULL auto_increment,
                       date date NOT NULL default \'0000-00-00\',
                       uri varchar(255) NOT NULL default \'0\',
@@ -174,15 +187,15 @@
                       PRIMARY KEY  (id)
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS statistics_init;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'statistics_init;' );
                 $db->executeSql(
-                    'CREATE TABLE statistics_init (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'statistics_init (
                       created varchar(10) NOT NULL default \'\'
                     ) TYPE=MyISAM;'
                 );
-                $db->executeSql( 'DROP TABLE IF EXISTS users;' );
+                $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'users;' );
                 $db->executeSql(
-                    'CREATE TABLE users (
+                    'CREATE TABLE ' . $values['db_prefix'] . 'users (
                       id int(11) NOT NULL auto_increment,
                       name varchar(255) NOT NULL default \'\',
                       email varchar(255) NOT NULL default \'\',
@@ -194,7 +207,7 @@
                     ) TYPE=MyISAM;'
                 );
                 $db->executeInsert(
-                    'statistics_init', array( 'created' => $db->getDate( '__NOW__' ) )
+                    $values['db_prefix'] . 'statistics_init', array( 'created' => $db->getDate( '__NOW__' ) )
                 );
 
                 // Save the config file
@@ -297,10 +310,10 @@
 
             // Check for writeable directories
             if ( ! is_writeable( dirname( __FILE__ ) . '/include' ) ) {
-                return array( '__ALL__' => 'The include directory is not writeable' );
+                return array( '__ALL__' => 'The ' . realpath( 'include' ) . ' directory is not writeable' );
             }
             if ( ! is_writeable( dirname( __FILE__ ) . '/uploads' ) ) {
-                return array( '__ALL__' => 'The uploads directory is not writeable' );
+                return array( '__ALL__' => 'The ' . realpath( 'uploads' ) . ' directory is not writeable' );
             }
 
             // All is OK

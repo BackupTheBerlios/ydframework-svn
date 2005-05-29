@@ -65,6 +65,7 @@
             $form->addElement( 'text', 'db_name', t( 'cfg_db_name' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_user', t( 'cfg_db_user' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_pass', t( 'cfg_db_pass' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'text', 'db_prefix', t( 'cfg_db_prefix' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'text', 'weblog_title', t( 'cfg_weblog_title' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'weblog_description', t( 'cfg_weblog_description' ), array( 'class' => 'tfM' ) );
@@ -123,6 +124,7 @@
             $config['db_name']              = YDConfig::get( 'db_name',              'yellowd_ydweblog' );
             $config['db_user']              = YDConfig::get( 'db_user',              'root' );
             $config['db_pass']              = YDConfig::get( 'db_pass',              '' );
+            $config['db_prefix']            = YDConfig::get( 'db_prefix',            '' );
             $config['weblog_title']         = YDConfig::get( 'weblog_title',         'Untitled weblog' );
             $config['weblog_description']   = YDConfig::get( 'weblog_description',   '' );
             $config['weblog_entries_fp']    = YDConfig::get( 'weblog_entries_fp',    1 );

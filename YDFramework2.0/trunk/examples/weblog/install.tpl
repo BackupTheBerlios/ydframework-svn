@@ -68,6 +68,10 @@
                                 <td class="adminRowL">{$form.db_pass.label_html}</td>
                                 <td class="adminRowL">{$form.db_pass.html}</td>
                             </tr>
+                            <tr>
+                                <td class="adminRowL">{$form.db_prefix.label_html}</td>
+                                <td class="adminRowL">{$form.db_prefix.html}</td>
+                            </tr>
                         </table>
                         <table width="700" cellspacing="0" cellpadding="0" border="0">
                             <tr>
