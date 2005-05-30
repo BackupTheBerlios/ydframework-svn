@@ -289,19 +289,32 @@
     class YDFSFile extends YDBase {
 
         /**
-         *	The class constructor of the YDFSFile class takes the path to the file as it's only argument. It will then
-         *	provide you with a number of functions to get the properties of the file.
+         *  The class constructor of the YDFSFile class takes the path to the file as it's first argument. 
+         *  It will then provide you with a number of functions to get the properties of the file.
          *
-         *	@param $path	Path of the file.
+         *  @param $path    Path of the file.
+         *  @param $create  (optional) Force the creation of the file if it doesn't exist. Default: false.
          */
-        function YDFSFile( $path ) {
+        function YDFSFile( $path, $create=false ) {
 
             // Initialize YDBase
             $this->YDBase();
 
-            // Fail if directory
+            // Check if the path if the file exists
             if ( ! is_file( $path ) ) {
-                trigger_error( 'The file with path "' . $path . '" does not exist.', YD_ERROR );
+                
+                // Check if the file should be created
+                if ( $create ) {
+
+                    // Create a new YDFSDirectory object
+                    $dir = new YDFSDirectory( dirname( $path ) );
+                    
+                    // Create the file
+                    $dir->createFile( basename( $path ), ' ' );
+
+                } else {
+                    trigger_error( 'The file with path "' . $path . '" does not exist.', YD_ERROR );
+                }
             }
 
             // Save the path

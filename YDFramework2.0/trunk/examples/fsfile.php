@@ -39,8 +39,10 @@
             YDDebugUtil::dump( $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )' );
 
             // Create a dummy file
-            $dir = new YDFSDirectory( '.' );
-            $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+            $file = new YDFSFile( 'dummy.txt', true );
+            
+            // Set the initial contents
+            $file->setContents( 'initial contents' );
 
             // Update the contents
             $file->setContents( 'new contents' );
