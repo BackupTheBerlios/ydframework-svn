@@ -18,7 +18,7 @@
     // Template Date modifier
     function YDTplModDate( $text, $format=null ) {
         if ( is_null( $format ) ) {
-            $format = '%A, %b %d, %Y';
+            $format = '%A, %d %b %Y';
         }
         return ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) );
     }

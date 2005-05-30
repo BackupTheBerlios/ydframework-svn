@@ -82,7 +82,7 @@
                         {/if}
                     </cite> {t w="says"}:<br />
                     <small class="commentmetadata">
-                        <a href="#comment-{$comment.id}" title="">{$comment.created|date:"%A, %b %d, %Y at %H:%M"}</a>
+                        <a href="#comment-{$comment.id}" title="">{$comment.created|date:"%A, %d %b %Y @ %H:%M"|lower}</a>
                     </small>
                     <p>{$comment.comment|bbcode}</p>
                 </li>
