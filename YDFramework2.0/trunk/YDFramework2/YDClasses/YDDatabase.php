@@ -39,18 +39,18 @@
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC, false );
 
     /**
-     *	This class defines a database object.
+     *  This class defines a database object.
      */
     class YDDatabase extends YDBase {
 
         /**
-         *	Using this static function, you can get an instance of a YDDatabaseDriver class.
+         *  Using this static function, you can get an instance of a YDDatabaseDriver class.
          *
-         *	@param $driver	Name of the database driver or array containing drivername, file name and class name.
-         *	@param $db		Database name to use for the connection.
-         *	@param $user	(optional) User name to use for the connection.
-         *	@param $pass	(optional) Password to use for the connection.
-         *	@param $host	(optional) Host name to use for the connection.
+         *  @param $driver  Name of the database driver or array containing drivername, file name and class name.
+         *  @param $db      Database name to use for the connection.
+         *  @param $user    (optional) User name to use for the connection.
+         *  @param $pass    (optional) Password to use for the connection.
+         *  @param $host    (optional) Host name to use for the connection.
          */
         function getInstance( $driver, $db, $user='', $pass='', $host='' ) {
 
@@ -101,47 +101,47 @@
     }
 
     /**
-     *	This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
-     *	not available if you return the database results as an array. This object is really handy if you want to work
-     *	with paged recordsets.
+     *  This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
+     *  not available if you return the database results as an array. This object is really handy if you want to work
+     *  with paged recordsets.
      *
-     *	Here's the extra information that is available:
+     *  Here's the extra information that is available:
      *
-     *	- page: current page number
-     *	- pagesize: total size of each page
-     *	- pagePrevious: the number of the previous page
-     *	- pageNext: the number of the next page
-     *	- offset: the first record we started reading from
-     *	- totalPages: the total number of pages
-     *	- totalRows: the total number of rows in the unpaged recordset
-     *	- totalRowsOnPages: the total number of rows on the current page
-     *	- isFirstPage: boolean indicating if we are on the first page or not
-     *	- isLastPage: boolean indicating if we are on the last page or not
-     *	- pages: all the page numbers as a single-dimension array
-     *	- getPreviousUrl: the URL to the previous page
-     *	- getCurrentUrl: the URL of the current page
-     *	- getNextUrl: the URL of the next page
-     *	- getPageUrl: the URL of the given page
+     *  - page: current page number
+     *  - pagesize: total size of each page
+     *  - pagePrevious: the number of the previous page
+     *  - pageNext: the number of the next page
+     *  - offset: the first record we started reading from
+     *  - totalPages: the total number of pages
+     *  - totalRows: the total number of rows in the unpaged recordset
+     *  - totalRowsOnPages: the total number of rows on the current page
+     *  - isFirstPage: boolean indicating if we are on the first page or not
+     *  - isLastPage: boolean indicating if we are on the last page or not
+     *  - pages: all the page numbers as a single-dimension array
+     *  - getPreviousUrl: the URL to the previous page
+     *  - getCurrentUrl: the URL of the current page
+     *  - getNextUrl: the URL of the next page
+     *  - getPageUrl: the URL of the given page
      *
-     *	All these options are available as class variables.
+     *  All these options are available as class variables.
      *
-     *	@todo
-     *		Improve performance with very large recordsets (millions of rows).
+     *  @todo
+     *      Improve performance with very large recordsets (millions of rows).
      */
     class YDRecordSet extends YDBase {
 
         /**
          * This is the class constructor for the YDRecordSet class.
          *
-         *	@param	$records	The list of records as an array (as returned by the YDDatabaseDriver::getRecords
-         *						function.
-         *	@param	$page		(optional) The page you want to retrieve. If omitted all records will be returned.
-         *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
-         *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
-         *						will be the same as the total number of rows in the recordset.
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
+         *  @param  $records    The list of records as an array (as returned by the YDDatabaseDriver::getRecords
+         *                      function.
+         *  @param  $page       (optional) The page you want to retrieve. If omitted all records will be returned.
+         *  @param  $pagesize   (optional) The maximum number of rows for each page. If a page number is given, the
+         *                      default will be to return a maximum of 20 rows. If no page number is given, the pagesize
+         *                      will be the same as the total number of rows in the recordset.
+         *  @param  $pagevar    (optional) The name of the query string variable indicating the page. Defaults to "page"
+         *  @param  $sizevar    (optional) The name of the query string variable indicating the page size. Defaults to
+         *                      "size"
          */
         function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size' ) {
 
@@ -205,23 +205,23 @@
         }
 
         /**
-         *	This function returns a reference to the URL for this recordset object. If you want to alter this url, you
-         *	should get a instance of it as a reference. This code shows you how to do this:
+         *  This function returns a reference to the URL for this recordset object. If you want to alter this url, you
+         *  should get a instance of it as a reference. This code shows you how to do this:
          *
-         *	@code
-         *	$url = & $dataset->getUrl();
-         *	@endcode
+         *  @code
+         *  $url = & $dataset->getUrl();
+         *  @endcode
          *
-         *	@returns	Reference to the YDUrl object for this YDRecordSet object.
+         *  @returns    Reference to the YDUrl object for this YDRecordSet object.
          */
         function & getUrl() {
             return $this->url;
         }
 
         /**
-         *	This returns the URL to the previous page. If there is no previous page, it will return false.
+         *  This returns the URL to the previous page. If there is no previous page, it will return false.
          *
-         *	@returns	The URL to the previous page or false if no previous page.
+         *  @returns    The URL to the previous page or false if no previous page.
          */
         function getPreviousUrl() {
 
@@ -251,9 +251,9 @@
         }
 
         /**
-         *	This returns the URL to the current page.
+         *  This returns the URL to the current page.
          *
-         *	@returns	The URL to the current page.
+         *  @returns    The URL to the current page.
          */
         function getCurrentUrl() {
 
@@ -263,9 +263,9 @@
         }
 
         /**
-         *	This returns the URL to the next page. If there is no next page, it will return false.
+         *  This returns the URL to the next page. If there is no next page, it will return false.
          *
-         *	@returns	The URL to the next page or false if no next page.
+         *  @returns    The URL to the next page or false if no next page.
          */
         function getNextUrl() {
 
@@ -285,11 +285,11 @@
         }
 
         /**
-         *	This function will update the query string to set the page size and page number.
+         *  This function will update the query string to set the page size and page number.
          *
-         *	@param	$page		The page number.
+         *  @param  $page       The page number.
          *  
-         *	@returns	The updated URL.
+         *  @returns    The updated URL.
          */
         function getPageUrl( $page ) {
 
@@ -315,8 +315,8 @@
         }
 
         /**
-         *	Converts the YDDatabase set to an array containing the records of the recordset. The meta information about
-         *	the dataset is not kept.
+         *  Converts the YDDatabase set to an array containing the records of the recordset. The meta information about
+         *  the dataset is not kept.
          */
         function toArray() {
             return $this->set;
@@ -325,19 +325,18 @@
     }
 
     /**
-     *	This class defines a database driver.
+     *  This class defines a database driver.
      */
     class YDDatabaseDriver extends YDBase {
 
         /**
-         *	This is the class constructor for the YDDatabaseDriver class.
+         *  This is the class constructor for the YDDatabaseDriver class.
          *
-         *	@param $db		Name of the database.
-         *	@param $db		Database name to use for the connection.
-         *	@param $user	(optional) User name to use for the connection.
-         *	@param $pass	(optional) Password to use for the connection.
-         *	@param $host	(optional) Host name to use for the connection.
-         *	@param $options	(optional) Options to pass to the driver.
+         *  @param $db      Database name to use for the connection.
+         *  @param $user    (optional) User name to use for the connection.
+         *  @param $pass    (optional) Password to use for the connection.
+         *  @param $host    (optional) Host name to use for the connection.
+         *  @param $options (optional) Options to pass to the driver.
          */
         function YDDatabaseDriver( $db, $user='', $pass='', $host='', $options=array() ) {
 
@@ -360,47 +359,92 @@
             $this->_fmtQuote = "'";
 
         }
+        
+        /**
+         *  This funciton returns the database name.
+         *
+         *  @returns    The database name.
+         */
+        function getDatabase() {
+            return $this->_db;
+        }
+        
+        /**
+         *  This funciton returns the user name of the connection.
+         *
+         *  @returns    The user name.
+         */
+        function getUser() {
+            return $this->_user;
+        }
+        
+        /**
+         *  This funciton returns the password of the connection.
+         *
+         *  @returns    The password.
+         */
+        function getPassword() {
+            return $this->_pass;
+        }
+        
+        /**
+         *  This funciton returns the host name of the connection.
+         *
+         *  @returns    The host name.
+         */
+        function getHost() {
+            return $this->_host;
+        }
+        
+        /**
+         *  This funciton returns the options of the connection.
+         *
+         *  @returns    The array of options
+         */
+        function getOptions() {
+            return $this->_options;
+        }
 
         /**
-         *	This function will check if the server supports this database type.
+         *  This function will check if the server supports this database type.
          *
-         *	@returns	Boolean indicating if the database type is supported by the server.
+         *  @returns    Boolean indicating if the database type is supported by the server.
          */
         function isSupported() {
             return true;
         }
 
         /**
-         *	This function will return the version of the database server software.
+         *  This function will return the version of the database server software.
          *
-         *	@returns	The version of the database server software.
+         *  @returns    The version of the database server software.
          */
         function getServerVersion() {
             return 'unknown';
         }
 
         /**
-         *	Function that makes the actual connection.
+         *  Function that makes the actual connection.
          */
         function connect() {
         }
 
         /**
-         *	This function will return the number of queries that were executed.
+         *  This function will return the number of queries that were executed.
          *
-         *	@returns	The number of queries that were executed.
+         *  @returns    The number of queries that were executed.
          */
         function getSqlCount() {
             return sizeof( $GLOBALS['YD_SQL_QUERY'] );
         }
 
         /**
-         *	This function will return a single value.
+         *  This function will return a single value.
          *
-         *	@param $sql		The SQL statement to use.
-         *	@param $index	(optional) The index of the column you want to use for getting the value.
+         *  @param $sql     The SQL statement to use.
+         *  @param $index   (optional) The index of the column you want to use for getting the value.
          *
-         *	@returns	A single value matching the SQL statement.
+         *  @returns    A single value matching the SQL statement.
          */
         function getValue( $sql, $index=0 ) {
             $records = $this->getRecord( $sql );
@@ -418,12 +462,12 @@
         }
 
         /**
-         *	This function will return a single value.
+         *  This function will return a single value.
          *
-         *	@param $sql		The SQL statement to use.
-         *	@param $name	The field value to return.
+         *  @param $sql     The SQL statement to use.
+         *  @param $name    The field value to return.
          *
-         *	@returns	A single value matching the SQL statement.
+         *  @returns    A single value matching the SQL statement.
          */
         function getValueByName( $sql, $name ) {
             $record = array_values( $this->getRecords( $sql ) );
@@ -432,12 +476,12 @@
         }
 
         /**
-         *	This function will return an array of single values.
+         *  This function will return an array of single values.
          *
-         *	@param $sql		The SQL statement to use.
-         *	@param $name	The field value to return.
+         *  @param $sql     The SQL statement to use.
+         *  @param $name    The field value to return.
          *
-         *	@returns	An array of single values matching the SQL statement.
+         *  @returns    An array of single values matching the SQL statement.
          */
         function getValuesByName( $sql, $name ) {
             $records = $this->getRecords( $sql );
@@ -448,14 +492,14 @@
         }
 
         /**
-         *	Get the values as an associative array using the indicated columns for keys and values.
+         *  Get the values as an associative array using the indicated columns for keys and values.
          *
-         *	@param $sql		The SQL statement to use.
-         *	@param $key		The field to use for the keys.
-         *	@param $val		The field or array of fileds to use for the values.
-         *	@param $prefix	(optional) The text to prepend to the key name.
+         *  @param $sql     The SQL statement to use.
+         *  @param $key     The field to use for the keys.
+         *  @param $val     The field or array of fileds to use for the values.
+         *  @param $prefix  (optional) The text to prepend to the key name.
          *
-         *	@returns An associative array.
+         *  @returns An associative array.
          */
         function getAsAssocArray( $sql, $key, $val, $prefix='' ) {
 
@@ -486,50 +530,50 @@
         }
 
         /**
-         *	This function will return a single record.
+         *  This function will return a single record.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	A single record matching the SQL statement.
+         *  @returns    A single record matching the SQL statement.
          */
         function getRecord( $sql ) {
         }
 
         /**
-         *	This function will execute the SQL statement and return the records as an associative array. Optionally, you
-         *	can limit the number of records that are returned. Optionally, you can also specify which record to start
-         *	from.
+         *  This function will execute the SQL statement and return the records as an associative array. Optionally, you
+         *  can limit the number of records that are returned. Optionally, you can also specify which record to start
+         *  from.
          *
-         *	@param $sql	The SQL statement to use.
-         *	@param $limit	(optional) How many records to return
-         *	@param $offset	(optional) Where to start from
+         *  @param $sql The SQL statement to use.
+         *  @param $limit   (optional) How many records to return
+         *  @param $offset  (optional) Where to start from
          *
-         *	@returns	The records matching the SQL statement as an associative array.
+         *  @returns    The records matching the SQL statement as an associative array.
          */
         function getRecords( $sql, $limit=-1, $offset=-1 ) {
         }
 
         /**
-         *	This function executes the SQL statement and returns the records as a YDRecordSet object, which contains
-         *	meta information about the recordset as well as the recordset itself. Optionally, you can limit the number
-         *	of records that are returned. Optionally, you can also specify which record to start from. This is the
-         *	preferred way when you are using paged resultsets.
+         *  This function executes the SQL statement and returns the records as a YDRecordSet object, which contains
+         *  meta information about the recordset as well as the recordset itself. Optionally, you can limit the number
+         *  of records that are returned. Optionally, you can also specify which record to start from. This is the
+         *  preferred way when you are using paged resultsets.
          *
-         *	@param	$sql		The list of records as an array (as returned by the YDDatabaseDriver::getRecords
-         *						function.
-         *	@param	$page		(optional) The page you want to retrieve. If omitted all records will be returned.
-         *	@param	$pagesize	(optional) The maximum number of rows for each page. If a page number is given, the
-         *						default will be to return a maximum of 20 rows. If no page number is given, the pagesize
-         *						will be the same as the total number of rows in the recordset.
-         *	@param	$pagevar	(optional) The name of the query string variable indicating the page. Defaults to "page"
-         *	@param	$sizevar	(optional) The name of the query string variable indicating the page size. Defaults to
-         *						"size"
+         *  @param  $sql        The list of records as an array (as returned by the YDDatabaseDriver::getRecords
+         *                      function.
+         *  @param  $page       (optional) The page you want to retrieve. If omitted all records will be returned.
+         *  @param  $pagesize   (optional) The maximum number of rows for each page. If a page number is given, the
+         *                      default will be to return a maximum of 20 rows. If no page number is given, the pagesize
+         *                      will be the same as the total number of rows in the recordset.
+         *  @param  $pagevar    (optional) The name of the query string variable indicating the page. Defaults to "page"
+         *  @param  $sizevar    (optional) The name of the query string variable indicating the page size. Defaults to
+         *                      "size"
 
          *
-         *	@returns	The records matching the SQL statement as a YDRecordSet object.
+         *  @returns    The records matching the SQL statement as a YDRecordSet object.
          *
-         *	@todo
-         *		Performance needs to be improved. This is a quick and dirty solution right now.
+         *  @todo
+         *      Performance needs to be improved. This is a quick and dirty solution right now.
          */
         function getRecordsAsSet( $sql, $page=-1, $pagesize=-1, $pagevar = 'page', $sizevar = 'size' ) {
 
@@ -542,32 +586,32 @@
         }
 
         /**
-         *	This function will execute the SQL statement and return the number of affected records.
+         *  This function will execute the SQL statement and return the number of affected records.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	The number of affected rows.
+         *  @returns    The number of affected rows.
          */
         function executeSql( $sql ) {
         }
 
         /**
-         *	This function will return the number of rows matched by the SQL query.
+         *  This function will return the number of rows matched by the SQL query.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	The number of rows matched by the SQL query.
+         *  @returns    The number of rows matched by the SQL query.
          */
         function getMatchedRowsNum( $sql ) {
         }
 
         /**
-         *	This function will insert the specified values in to the specified table.
+         *  This function will insert the specified values in to the specified table.
          *
-         *	@param $table	The table to insert the data into.
-         *	@param $values	Associative array with the field names and their values to insert.
+         *  @param $table   The table to insert the data into.
+         *  @param $values  Associative array with the field names and their values to insert.
          *
-         *	@returns	The number of affected rows.
+         *  @returns    The number of affected rows.
          */
         function executeInsert( $table, $values ) {
             $sql = $this->_createSqlInsert( $table, $values );
@@ -576,13 +620,13 @@
         }
 
         /**
-         *	This function will update the specified values in to the specified table using the specified where clause.
+         *  This function will update the specified values in to the specified table using the specified where clause.
          *
-         *	@param $table	The table to update the data froms.
-         *	@param $values	Associative array with the field names and their values to insert.
-         *	@param $where	(optional) The where statement to execute.
+         *  @param $table   The table to update the data froms.
+         *  @param $values  Associative array with the field names and their values to insert.
+         *  @param $where   (optional) The where statement to execute.
          *
-         *	@returns	The number of affected rows.
+         *  @returns    The number of affected rows.
          */
         function executeUpdate( $table, $values, $where='' ) {
             $sql = $this->_createSqlUpdate( $table, $values, $where );
@@ -590,12 +634,12 @@
         }
 
         /**
-         *	This function will delete the records matching the where string from the specified database table.
+         *  This function will delete the records matching the where string from the specified database table.
          *
-         *	@param $table	The table to delete the data from.
-         *	@param $where	(optional) The where statement to execute.
+         *  @param $table   The table to delete the data from.
+         *  @param $where   (optional) The where statement to execute.
          *
-         *	@returns	The number of affected rows.
+         *  @returns    The number of affected rows.
          */
         function executeDelete( $table, $where='' ) {
             $sql = 'DELETE FROM ' . $table;
@@ -606,17 +650,17 @@
         }
 
         /**
-         *	This function will close the database connection.
+         *  This function will close the database connection.
          */
         function close() {
         }
 
         /**
-         *	This function will escape a string so that it's safe to include it in an SQL statement.
+         *  This function will escape a string so that it's safe to include it in an SQL statement.
          *
-         *	@param $string	The string to escape.
+         *  @param $string  The string to escape.
          *
-         *	@returns	The escaped string.
+         *  @returns    The escaped string.
          */
         function string( $string ) {
             if ( is_string( $string ) ) {
@@ -628,12 +672,12 @@
         }
 
         /**
-         *	This function will escape a string so that it's safe to include it in an SQL statement and will surround it
-         *	with the quotes appropriate for the database backend.
+         *  This function will escape a string so that it's safe to include it in an SQL statement and will surround it
+         *  with the quotes appropriate for the database backend.
          *
-         *	@param $string	The string to escape.
+         *  @param $string  The string to escape.
          *
-         *	@returns	The escaped string surrounded by quotes.
+         *  @returns    The escaped string surrounded by quotes.
          */
         function sqlString( $string ) {
             if ( is_string( $string ) ) {
@@ -645,42 +689,42 @@
         }
 
         /**
-         *	Format the $date in the format the database accepts. The $date parameter can be a Unix integer timestamp or
-         *	an ISO format Y-m-d. Uses the fmtDate field, which holds the format to use. If null or false or '' is passed
-         *	in, it will be converted to an SQL null.
+         *  Format the $date in the format the database accepts. The $date parameter can be a Unix integer timestamp or
+         *  an ISO format Y-m-d. Uses the fmtDate field, which holds the format to use. If null or false or '' is passed
+         *  in, it will be converted to an SQL null.
          *
-         *	@param $date	(optional) Unix integer timestamp or an ISO format Y-m-d. If you give it the string value
-         *					__NOW__, the current time will be used.
+         *  @param $date    (optional) Unix integer timestamp or an ISO format Y-m-d. If you give it the string value
+         *                  __NOW__, the current time will be used.
          *
-         *	@returns	The properly formatted date for the database.
+         *  @returns    The properly formatted date for the database.
          */
         function getDate( $date='' ) {
             return $this->_getDateOrTime( $date, $this->_fmtDate );
         }
 
         /**
-         *	Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO
-         *	format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is
-         *	passed in, it will be converted to an SQL null.
+         *  Format the timestamp $ts in the format the database accepts; this can be a Unix integer timestamp or an ISO
+         *  format Y-m-d H:i:s. Uses the fmtTimeStamp field, which holds the format to use. If null or false or '' is
+         *  passed in, it will be converted to an SQL null.
          *
-         *	@param $time	(optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
-         *					value __NOW__, the current time will be used.
+         *  @param $time    (optional) Unix integer timestamp or an ISO format Y-m-d H:i:s. If you give it the string
+         *                  value __NOW__, the current time will be used.
          *
-         *	@returns	The properly formatted timestamp for the database.
+         *  @returns    The properly formatted timestamp for the database.
          */
         function getTime( $time='' ) {
             return $this->_getDateOrTime( $time, $this->_fmtTimeStamp );
         }
 
         /**
-         *	This function will convert the argument to a date or timestamp.
+         *  This function will convert the argument to a date or timestamp.
          *
-         *	@param $arg	The argument to convert.
-         *	@param $fmt		The format to return the argument in.
+         *  @param $arg The argument to convert.
+         *  @param $fmt     The format to return the argument in.
          *
-         *	@returns	The argument as date or time.
+         *  @returns    The argument as date or time.
          *
-         *	@internal
+         *  @internal
          */
         function _getDateOrTime( $arg='', $fmt='' ) {
             if ( empty( $arg ) || $arg == false || $arg == null ) {
@@ -696,17 +740,17 @@
         }
 
         /**
-         *	This function will create an SQL insert statement from the specified array and table name.
+         *  This function will create an SQL insert statement from the specified array and table name.
          *
-         *	@remarks
-         *		All the field names that start with an underscore will not be used.
+         *  @remarks
+         *      All the field names that start with an underscore will not be used.
          *
-         *	@param $table	The table to insert the data into.
-         *	@param $values	Associative array with the field names and their values to insert.
+         *  @param $table   The table to insert the data into.
+         *  @param $values  Associative array with the field names and their values to insert.
          *
-         *	@returns	The insert SQL statement
+         *  @returns    The insert SQL statement
          *
-         *	@internal
+         *  @internal
          */
         function _createSqlInsert( $table, $values ) {
 
@@ -744,18 +788,18 @@
         }
 
         /**
-         *	This function will create an SQL update statement from the specified array, table name and where clause.
+         *  This function will create an SQL update statement from the specified array, table name and where clause.
          *
-         *	@remarks
-         *		All the field names that start with an underscore will not be used.
+         *  @remarks
+         *      All the field names that start with an underscore will not be used.
          *
-         *	@param $table	The table to insert the data into.
-         *	@param $values	Associative array with the field names and their values to insert.
-         *	@param $where	The where statement to execute.
+         *  @param $table   The table to insert the data into.
+         *  @param $values  Associative array with the field names and their values to insert.
+         *  @param $where   The where statement to execute.
          *
-         *	@returns	The insert SQL statement
+         *  @returns    The insert SQL statement
          *
-         *	@internal
+         *  @internal
          */
         function _createSqlUpdate( $table, $values, $where='' ) {
 
@@ -794,25 +838,25 @@
         }
 
         /**
-         *	This function will connect to the database, execute a query and will return the result handle.
+         *  This function will connect to the database, execute a query and will return the result handle.
          *
-         *	@param $sql	The SQL statement to execute.
+         *  @param $sql The SQL statement to execute.
          *
-         *	@returns	Handle to the result of the query.
+         *  @returns    Handle to the result of the query.
          *
-         *	@internal
+         *  @internal
          */
         function & _connectAndExec( $sql ) {
         }
 
         /**
-         *	This function will convert the given record so that all the keys are lowercase.
+         *  This function will convert the given record so that all the keys are lowercase.
          *
-         *	@param $array	The array to convert.
+         *  @param $array   The array to convert.
          *
-         *	@returns	The original array with all the field names as lowercase.
+         *  @returns    The original array with all the field names as lowercase.
          *
-         *	@internal
+         *  @internal
          */
         function _lowerKeyNames( $array ) {
             if ( $array ) {
@@ -823,25 +867,25 @@
         }
 
         /**
-         *	This function will log the SQL statement to the debug log and keep track of the number of queries that were
-         *	executed.
+         *  This function will log the SQL statement to the debug log and keep track of the number of queries that were
+         *  executed.
          *
-         *	@param $sql	The SQL statement to log.
+         *  @param $sql The SQL statement to log.
          *
-         *	@internal
+         *  @internal
          */
         function _logSql( $sql ) {
             array_push( $GLOBALS['YD_SQL_QUERY'], YDStringUtil::removeWhiteSpace( $sql ) );
         }
 
         /**
-         *	This function will preprare an SQL SELECT statement for the getRecordsLimit and getRecordsPaged functions.
+         *  This function will preprare an SQL SELECT statement for the getRecordsLimit and getRecordsPaged functions.
          *
-         *	@param $sql	The SQL statement to prepare
-         *	@param $limit	(optional) How many records to return
-         *	@param $offset	(optional) Where to start from
+         *  @param $sql The SQL statement to prepare
+         *  @param $limit   (optional) How many records to return
+         *  @param $offset  (optional) Where to start from
          *
-         *	@internal
+         *  @internal
          */
         function _prepareSqlForLimit( $sql, $limit=-1, $offset=-1 ) { 
 
@@ -873,37 +917,37 @@
     }
 
     /**
-     *	This class defines a database driver for MySQL.
+     *  This class defines a database driver for MySQL.
      */
     class YDDatabaseDriver_mysql extends YDDatabaseDriver {
 
         /**
-         *	This is the class constructor for the YDDatabaseDriver_mysql class.
+         *  This is the class constructor for the YDDatabaseDriver_mysql class.
          *
-         *	@param $db		Name of the database.
-         *	@param $user	(optional) User name to use for the connection.
-         *	@param $pass	(optional) Password to use for the connection.
-         *	@param $host	(optional) Host name to use for the connection.
-         *	@param $host	(optional) Host name to use for the connection.
-         *	@param $options	(optional) Options to pass to the driver.
+         *  @param $db      Name of the database.
+         *  @param $user    (optional) User name to use for the connection.
+         *  @param $pass    (optional) Password to use for the connection.
+         *  @param $host    (optional) Host name to use for the connection.
+         *  @param $host    (optional) Host name to use for the connection.
+         *  @param $options (optional) Options to pass to the driver.
          */
         function YDDatabaseDriver_mysql( $db, $user='', $pass='', $host='', $options=array() ) {
             $this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
         }
 
         /**
-         *	This function will check if the server supports this database type.
+         *  This function will check if the server supports this database type.
          *
-         *	@returns	Boolean indicating if the database type is supported by the server.
+         *  @returns    Boolean indicating if the database type is supported by the server.
          */
         function isSupported() {
             return extension_loaded( 'mysql' );
         }
 
         /**
-         *	This function will return the version of the database server software.
+         *  This function will return the version of the database server software.
          *
-         *	@returns	The version of the database server software.
+         *  @returns    The version of the database server software.
          */
         function getServerVersion() {
             $this->connect();
@@ -911,7 +955,7 @@
         }
 
         /**
-         *	Function that makes the actual connection.
+         *  Function that makes the actual connection.
          */
         function connect() {
             $conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
@@ -925,11 +969,11 @@
         }
 
         /**
-         *	This function will return a single record.
+         *  This function will return a single record.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	A single record matching the SQL statement.
+         *  @returns    A single record matching the SQL statement.
          */
         function getRecord( $sql ) {
             $result = & $this->_connectAndExec( $sql );
@@ -940,15 +984,15 @@
         }
 
         /**
-         *	This function will execute the SQL statement and return the records as an associative array. Optionally, you
-         *	can limit the number of records that are returned. Optionally, you can also specify which record to start
-         *	from.
+         *  This function will execute the SQL statement and return the records as an associative array. Optionally, you
+         *  can limit the number of records that are returned. Optionally, you can also specify which record to start
+         *  from.
          *
-         *	@param $sql	The SQL statement to use.
-         *	@param $limit	(optional) How many records to return
-         *	@param $offset	(optional) Where to start from
+         *  @param $sql The SQL statement to use.
+         *  @param $limit   (optional) How many records to return
+         *  @param $offset  (optional) Where to start from
          *
-         *	@returns	The records matching the SQL statement as an associative array.
+         *  @returns    The records matching the SQL statement as an associative array.
          */
         function getRecords( $sql, $limit=-1, $offset=-1 ) {
             $sql = $this->_prepareSqlForLimit( $sql, $limit, $offset );
@@ -963,11 +1007,11 @@
         }
 
         /**
-         *	This function will execute the SQL statement and return the number of affected records.
+         *  This function will execute the SQL statement and return the number of affected records.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	The number of affected rows.
+         *  @returns    The number of affected rows.
          */
         function executeSql( $sql ) {
             $result = & $this->_connectAndExec( $sql );
@@ -975,11 +1019,11 @@
         }
 
         /**
-         *	This function will return the number of rows matched by the SQL query.
+         *  This function will return the number of rows matched by the SQL query.
          *
-         *	@param $sql	The SQL statement to use.
+         *  @param $sql The SQL statement to use.
          *
-         *	@returns	The number of rows matched by the SQL query.
+         *  @returns    The number of rows matched by the SQL query.
          */
         function getMatchedRowsNum( $sql ) {
             $result = & $this->_connectAndExec( $sql );
@@ -987,12 +1031,12 @@
         }
 
         /**
-         *	This function will insert the specified values in to the specified table.
+         *  This function will insert the specified values in to the specified table.
          *
-         *	@param $table	The table to insert the data into.
-         *	@param $values	Associative array with the field names and their values to insert.
+         *  @param $table   The table to insert the data into.
+         *  @param $values  Associative array with the field names and their values to insert.
          *
-         *	@returns	The ID of the last insert.
+         *  @returns    The ID of the last insert.
          */
         function executeInsert( $table, $values ) {
             $sql = $this->_createSqlInsert( $table, $values );
@@ -1001,7 +1045,7 @@
         }
 
         /**
-         *	This function will close the database connection.
+         *  This function will close the database connection.
          */
         function close() {
             if ( $this->_conn != null ) {
@@ -1011,11 +1055,11 @@
         }
 
         /**
-         *	This function will escape a string so that it's safe to include it in an SQL statement.
+         *  This function will escape a string so that it's safe to include it in an SQL statement.
          *
-         *	@param $string	The string to escape.
+         *  @param $string  The string to escape.
          *
-         *	@returns	The escaped string.
+         *  @returns    The escaped string.
          */
         function string( $string ) {
             if ( is_string( $string ) ) {
@@ -1027,13 +1071,13 @@
         }
 
         /**
-         *	This function will connect to the database, execute a query and will return the result handle.
+         *  This function will connect to the database, execute a query and will return the result handle.
          *
-         *	@param $sql	The SQL statement to execute.
+         *  @param $sql The SQL statement to execute.
          *
-         *	@returns	Handle to the result of the query.
+         *  @returns    Handle to the result of the query.
          *
-         *	@internal
+         *  @internal
          */
         function & _connectAndExec( $sql ) {
             $this->_logSql( $sql );
