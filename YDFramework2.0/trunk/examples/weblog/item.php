@@ -72,6 +72,11 @@
                 // Get the form values
                 $values = $form->getValues();
 
+                // Fix any faulty web addresses
+                if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
+                    $values['userwebsite'] = 'http://' . $values['userwebsite'];
+                }
+
                 // Save the username, useremail and userwebsite
                 setcookie( 'YD_USER_NAME',    $values['username'],    time() + 31536000, '/' );
                 setcookie( 'YD_USER_EMAIL',   $values['useremail'],   time() + 31536000, '/' );
