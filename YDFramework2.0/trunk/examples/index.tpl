@@ -590,6 +590,14 @@
             <td valign="top"><a href="stringutil.php">StringUtil class</a> </td>
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
         </tr>
+        <tr>
+            <td valign="top"><a href="ajax.php">Using AJAX with the {$YD_FW_NAME}</a></td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=ajax.php">ajax.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=ajax.tpl">ajax.tpl</a>
+            </td>
+        </tr>
         </table>
 
     {/if}
