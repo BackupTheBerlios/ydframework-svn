@@ -16,7 +16,7 @@
         <para>The Yellow Duck Framework has the following features:</para>
 
         <itemizedlist spacing="compact">
-            <listitem>Structured programming envirmonment by using requests and actions</listitem>
+            <listitem>Structured programming environment by using requests and actions</listitem>
             <listitem>Clean separation of code and output</listitem>
             <listitem>Support for multi-langual websites by using locales</listitem>.
             <listitem>Templates for outputting HTML easily based on <ulink url="http://smarty.php.net/">Smarty</ulink></listitem>
