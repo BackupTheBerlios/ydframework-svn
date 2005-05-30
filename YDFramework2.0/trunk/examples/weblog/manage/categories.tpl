@@ -72,7 +72,7 @@
                 <td class="adminRowR">
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$category.id}">{t w="edit"}</a> |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$category.id}"
-                     onClick="return YDConfirmDelete( '{$category.title}' );">{t w="delete"}</a>
+                     onClick="return YDConfirmDelete( '{$category.title|addslashes}' );">{t w="delete"}</a>
                 </td>
             </tr>
         {/foreach}

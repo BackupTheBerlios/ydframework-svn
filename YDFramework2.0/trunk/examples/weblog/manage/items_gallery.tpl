@@ -82,7 +82,7 @@
                 <td class="adminRowL">{$image->getWidth()} x {$image->getHeight()}</td>
                 <td class="adminRowR">
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}&img={$image->relative_path}"
-                     onClick="return YDConfirmDelete( '{$image->getBaseName()}' );">{t w="delete"}</a>
+                     onClick="return YDConfirmDelete( '{$image->getBaseName()|addslashes}' );">{t w="delete"}</a>
                 </td>
             </tr>
         {/foreach}

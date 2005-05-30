@@ -63,7 +63,7 @@
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$page.id}">{t w="edit"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$page.id}"
-                     onClick="return YDConfirmDelete( '{$page.title}' );">{t w="delete"}</a>
+                     onClick="return YDConfirmDelete( '{$page.title|addslashes}' );">{t w="delete"}</a>
                 </td>
             </tr>
         {/foreach}

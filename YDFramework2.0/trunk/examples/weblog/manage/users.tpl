@@ -31,7 +31,7 @@
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$usr.id}">{t w="edit"}</a>
                     |
                     {if strtolower( $usr.name ) neq strtolower( $user.name )}
-                        <a href="{$YD_SELF_SCRIPT}?do=delete&id={$usr.id}" onClick="return YDConfirmDelete( '{$usr.name}' );">{t w="delete"}</a>
+                        <a href="{$YD_SELF_SCRIPT}?do=delete&id={$usr.id}" onClick="return YDConfirmDelete( '{$usr.name|addslashes}' );">{t w="delete"}</a>
                     {else}
                         <span class="disabled">{t w="delete"}</span>
                     {/if}
