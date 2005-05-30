@@ -90,6 +90,7 @@
                     $eml = new YDEmail();
                     $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
                     $eml->setReplyTo( 'no@reply.net' );
+                    $eml->addBcc( $item['user_email'] );
                     foreach ( $subscribers as $subscriber ) {
                         $eml->addBcc( $subscriber );
                     }
