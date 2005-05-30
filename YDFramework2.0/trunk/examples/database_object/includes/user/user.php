@@ -27,12 +27,12 @@
             $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.' . $birthday->getColumn() . ' )' );
             
             // Relations
-            $group = & $this->registerRelation( 'group', true, 'group', 'user_group' );
-            $group->setCrossLocalField( 'user_id' );
-            $group->setCrossForeignField( 'group_id' );
+            $rel = & $this->registerRelation( 'group', true, 'group', 'user/user_group' );
+            $rel->setCrossLocalField( 'user_id' );
+            $rel->setCrossForeignField( 'group_id' );
             
-            $phone = & $this->registerRelation( 'phone', false, 'phone' );
-            $phone->setForeignJoin( 'LEFT' );
+            $rel = & $this->registerRelation( 'phone', false, 'phone' );
+            $rel->setForeignJoin( 'LEFT' );
             
         }
         

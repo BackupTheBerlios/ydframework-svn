@@ -1,6 +1,6 @@
 <?php
 
-    YDInclude( 'user.php' );
+    YDInclude( 'user/user.php' );
     
     class admin extends user {
     

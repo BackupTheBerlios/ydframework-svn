@@ -96,7 +96,7 @@
         
         function actionUsers() {
             
-            $user = YDDatabaseObject::getInstance( 'user' );
+            $user = YDDatabaseObject::getInstance( 'user/user' );
             
             $user->executeSql( 'TRUNCATE `' . $user->getTable() . '`' );
             
@@ -149,7 +149,7 @@
         
         function actionAdmins() {
             
-            $admin = YDDatabaseObject::getInstance( 'admin' );
+            $admin = YDDatabaseObject::getInstance( 'user/admin' );
             $this->template->assign( 'find1_results', YDDebugUtil::r_dump( $admin->getValues() ) );
             
             $admin->find();
@@ -168,11 +168,9 @@
         function actionPhones() {
             
             $phone = YDDatabaseObject::getInstance( 'phone' );
-            $user = YDDatabaseObject::getInstance( 'user' );
+            $user = YDDatabaseObject::getInstance( 'user/user' );
 
             $phone->executeSql( 'TRUNCATE `' . $phone->getTable() . '`' );
-            
-            $phone = YDDatabaseObject::getInstance( 'phone' );
 
             $phone->user_id = 1;
             $phone->number = '1111-1111';
@@ -256,8 +254,8 @@
         
         function actionUsersGroups() {
             
-            $user = YDDatabaseObject::getInstance( 'user' );
-            $user_group = YDDatabaseObject::getInstance( 'user_group' );
+            $user = YDDatabaseObject::getInstance( 'user/user' );
+            $user_group = YDDatabaseObject::getInstance( 'user/user_group' );
 
             $user_group->executeSql( 'TRUNCATE `' . $user_group->getTable() . '`' );
             
@@ -341,7 +339,7 @@
         
         function actionUsersAll() {
             
-            $user = YDDatabaseObject::getInstance( 'user' );
+            $user = YDDatabaseObject::getInstance( 'user/user' );
             
             $user->id = 1;
             $user->findAll();
