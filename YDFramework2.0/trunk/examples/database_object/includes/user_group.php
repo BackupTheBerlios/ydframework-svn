@@ -20,7 +20,7 @@
             $rel->setLocalField( 'group_id' );
             $rel->setForeignVar( 'groups' );
 
-            $rel = & $this->registerRelation( 'users', false, 'user/user' );
+            $rel = & $this->registerRelation( 'users', false, 'user' );
             $rel->setLocalField( 'user_id' );
             $rel->setForeignVar( 'users' );
             

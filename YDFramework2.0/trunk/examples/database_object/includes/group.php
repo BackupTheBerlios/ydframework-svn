@@ -15,7 +15,7 @@
             $this->registerField( 'active' );
             
             // Relations
-            $rel = & $this->registerRelation( 'user', true, 'user/user', 'user/user_group' );
+            $rel = & $this->registerRelation( 'user', true, 'user', 'user_group' );
             $rel->setCrossLocalField( 'group_id' );
             $rel->setCrossForeignField( 'user_id' );
             

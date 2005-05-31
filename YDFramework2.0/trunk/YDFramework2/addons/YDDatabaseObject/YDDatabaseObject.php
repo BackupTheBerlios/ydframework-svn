@@ -129,13 +129,9 @@
             if ( ! strlen( $class ) ) {
                 $class = $this->getClassName();
             }
-            
-            $class = str_replace( "/",  YD_DIRDELIM, $class );
-            $class = str_replace( "\\", YD_DIRDELIM, $class );
 
             $path  = $path . $class . $ext;
-            $pos = (int) strrpos( $class, YD_DIRDELIM );
-            $class = $prefix . substr( $class, ( $pos ? ++$pos : 0 ), strlen( $class ) ) . $sufix;
+            $class = $prefix . $class . $sufix;
 
             if ( ! class_exists( $class ) ) {
                 YDInclude( $path );
@@ -1314,6 +1310,32 @@
         }
         
         /**
+         *  This function retrieves an associative array of values of the 
+         *  indicated fields.
+         *
+         *  @param $val      The fields to retrieve.
+         *  @param $prefix   (optional) The text to prepend to the key name.
+         *
+         *  @returns  An associative array with the values.
+         */
+        function getValuesAsAssocArray( $val, $prefix='' ) {
+            
+            if ( ! is_array( $val ) ) {
+                $val = array( $val );
+            }
+            
+            $values = $this->getValues();
+            $output = array();
+            
+            foreach ( $val as $v ) {
+                $output[ $prefix . $v ] = $values[ $v ];
+            }
+            
+            return $output;
+            
+        }
+        
+        /**
          *  This function retrieves all the results that weren't fetched as an
          *  associative array using the indicated fields for keys and values
          *
@@ -1780,15 +1802,6 @@
             $this->foreign = new YDDatabaseObject_Properties();
             $this->cross   = new YDDatabaseObject_Properties();
 
-            $local_class   = str_replace( "/",  YD_DIRDELIM, $local_class );
-            $local_class   = str_replace( "\\", YD_DIRDELIM, $local_class );
-            
-            $foreign_class = str_replace( "/",  YD_DIRDELIM, $foreign_class );
-            $foreign_class = str_replace( "\\", YD_DIRDELIM, $foreign_class );
-            
-            $cross_class   = str_replace( "/",  YD_DIRDELIM, $cross_class );
-            $cross_class   = str_replace( "\\", YD_DIRDELIM, $cross_class );
-
             $this->setName( $name );
             $this->setLocalClass( $local_class );
 
@@ -1944,12 +1957,7 @@
          *  @returns  The foreign variable name. Default: the relation name.
          */
         function getForeignVar() {
-            if ( $this->foreign->exists( 'var' ) ) {
-                return $this->foreign->get( 'var' );
-            } 
-            $class = $this->getForeignClass();
-            $pos = (int) strrpos( $class, YD_DIRDELIM );
-            return substr( $class, ( $pos ? ++$pos : 0 ), strlen( $class ) );
+            return $this->foreign->exists( 'var' ) ? $this->foreign->get( 'var' ) : $this->getForeignClass();
         }
 
         /**
@@ -1994,13 +2002,7 @@
             if ( $cross_class = $this->cross->get( 'class' ) ) {
                 return $cross_class;
             }
-            $foreign_class = $this->getForeignClass();
-            $pos = (int) strrpos( $foreign_class, YD_DIRDELIM );
-            $foreign_class = substr( $foreign_class,
-                                     ( $pos ? ++$pos : 0 ),
-                                     strlen( $foreign_class ) );
-                                     
-            return $this->getLocalClass() . '_' . $foreign_class;
+            return $this->getLocalClass() . '_' . $this->getForeignClass();
         }
 
         /**
@@ -2076,12 +2078,7 @@
          *  @returns  The cross variable name.
          */
         function getCrossVar() {
-            if ( $this->cross->exists( 'var' ) ) {
-                return $this->cross->get( 'var' );
-            } 
-            $class = $this->getCrossClass();
-            $pos = (int) strrpos( $class, YD_DIRDELIM );
-            return substr( $class, ( $pos ? ++$pos : 0 ), strlen( $class ) );
+            return $this->cross->exists( 'var' ) ? $this->cross->get( 'var' ) : $this->getCrossClass();
         }
 
         /**

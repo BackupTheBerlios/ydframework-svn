@@ -15,7 +15,7 @@
             $this->registerField( 'ord' );
             
             // Relations
-            $rel = & $this->registerRelation( 'user', false, 'user/user' );
+            $rel = & $this->registerRelation( 'user', false, 'user' );
             $rel->setForeignJoin( 'LEFT' );
             
         }

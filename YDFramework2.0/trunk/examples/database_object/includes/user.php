@@ -27,7 +27,7 @@
             $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.' . $birthday->getColumn() . ' )' );
             
             // Relations
-            $rel = & $this->registerRelation( 'group', true, 'group', 'user/user_group' );
+            $rel = & $this->registerRelation( 'group', true, 'group', 'user_group' );
             $rel->setCrossLocalField( 'user_id' );
             $rel->setCrossForeignField( 'group_id' );
             
