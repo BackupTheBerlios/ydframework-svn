@@ -30,19 +30,19 @@
     YDInclude( 'YDRequest.php' );
 
     /**
-     *	This class defines an object oriented HTML form.
+     *  This class defines an object oriented HTML form.
      */
     class YDForm extends YDBase {
 
         /**
-         *	This is the class constructor for the YDForm class.
+         *  This is the class constructor for the YDForm class.
          *
-         *	@param $name		The name of the form.
-         *	@param $method		(optional) Method used for submitting the form. Normally, this is either POST or GET.
-         *	@param $action		(optional) Action used for submitting the form. If not specified, it will default to the
-         *						URI of the current request.
-         *	@param $target		(optional) HTML target for the form.
-         *	@param $attributes	(optional) Attributes for the form.
+         *  @param $name        The name of the form.
+         *  @param $method      (optional) Method used for submitting the form. Normally, this is either POST or GET.
+         *  @param $action      (optional) Action used for submitting the form. If not specified, it will default to the
+         *                      URI of the current request.
+         *  @param $target      (optional) HTML target for the form.
+         *  @param $attributes  (optional) Attributes for the form.
          */
         function YDForm( $name, $method='post', $action='', $target='_self', $attributes=array() ) {
 
@@ -72,6 +72,9 @@
 
             // The list of errors
             $this->_errors = array();
+            
+            // The list of default values
+            $this->_defaults = array();
 
             // Some static HTML things
             $this->_htmlRequiredStart =  '';
@@ -79,9 +82,6 @@
             $this->_htmlErrorStart = '<font color="red">Error: ';
             $this->_htmlErrorEnd = '</font>';
             $this->_requiredNote = '';
-
-            // The list of default values
-            $this->_defaults = array();
 
             // Check for post or get variables
             if ( strtoupper( $this->_method ) == 'GET' ) {
@@ -153,11 +153,11 @@
         }
 
         /**
-         *	This function will set the HTML that is added before and after the element label to indicate that the
-         *	element is required. This only has affect if you use the default toHtml function.
+         *  This function will set the HTML that is added before and after the element label to indicate that the
+         *  element is required. This only has affect if you use the default toHtml function.
          *
-         *	@param $start	The HTML that should be added before the label.
-         *	@param $end		The HTML that should be added after the label.
+         *  @param $start   The HTML that should be added before the label.
+         *  @param $end     The HTML that should be added after the label.
          */
         function setHtmlRequired( $start, $end ) {
             $this->_htmlRequiredStart = $start;
@@ -165,11 +165,11 @@
         }
 
         /**
-         *	This function will set the HTML that is added before and after the element label to indicate that the
-         *	element has an errir. This only has affect if you use the default toHtml function.
+         *  This function will set the HTML that is added before and after the element label to indicate that the
+         *  element has an errir. This only has affect if you use the default toHtml function.
          *
-         *	@param $start	The HTML that should be added before the label.
-         *	@param $end		The HTML that should be added after the label.
+         *  @param $start   The HTML that should be added before the label.
+         *  @param $end     The HTML that should be added after the label.
          */
         function setHtmlError( $start, $end ) {
             $this->_htmlErrorStart = $start;
@@ -177,90 +177,90 @@
         }
 
         /**
-         *	This function will set the text that will be added at the top of the form to indicate that there are
-         *	required items.
+         *  This function will set the text that will be added at the top of the form to indicate that there are
+         *  required items.
          *
-         *	@param $text	The text to show.
+         *  @param $text    The text to show.
          */
         function setRequiredNote( $text ) {
             $this->_requiredNote = $text;
         }
 
         /**
-         *	This function will register a new element type.
+         *  This function will register a new element type.
          *
-         *	@param $name	Name of the element.
-         *	@param $class	The class name of the element definition.
-         *	@param $file	(optional) The file containing the class definition for this element.
+         *  @param $name    Name of the element.
+         *  @param $class   The class name of the element definition.
+         *  @param $file    (optional) The file containing the class definition for this element.
          */
         function registerElement( $name, $class, $file='' ) {
             $this->_regElements[ $name ] = array( 'class' => $class, 'file' => $file );
         }
 
         /**
-         *	This function will unregister the element type.
+         *  This function will unregister the element type.
          *
-         *	@param $name	Name of the element.
+         *  @param $name    Name of the element.
          */
         function unregisterElement( $name ) {
             if ( array_key_exists( $name, $this->_regElements ) ) { unset( $this->_regElements[ $name ] ); }
         }
 
         /**
-         *	This function will register a new validation rule.
+         *  This function will register a new validation rule.
          *
-         *	@param $name		Name of the validation rule.
-         *	@param $callback	The function name of the rule definition.
-         *	@param $file		(optional) The file containing the class definition for this validation rule.
+         *  @param $name        Name of the validation rule.
+         *  @param $callback    The function name of the rule definition.
+         *  @param $file        (optional) The file containing the class definition for this validation rule.
          */
         function registerRule( $name, $callback, $file='' ) {
             $this->_regRules[ $name ] = array( 'callback' => $callback, 'file' => $file );
         }
 
         /**
-         *	This function will unregister the validation rule.
+         *  This function will unregister the validation rule.
          *
-         *	@param $name	Name of the validation rule.
+         *  @param $name    Name of the validation rule.
          */
         function unregisterRule( $name ) {
             if ( array_key_exists( $name, $this->_regRules ) ) { unset( $this->_regRules[ $name ] ); }
         }
 
         /**
-         *	This function will register a new filter.
+         *  This function will register a new filter.
          *
-         *	@param $name		Name of the filter.
-         *	@param $callback	The function name of the filter.
-         *	@param $file		(optional) The file containing the definition for this filter.
+         *  @param $name        Name of the filter.
+         *  @param $callback    The function name of the filter.
+         *  @param $file        (optional) The file containing the definition for this filter.
          */
         function registerFilter( $name, $callback, $file='') {
             $this->_regFilters[ $name ] = array( 'callback' => $callback, 'file' => $file );
         }
 
         /**
-         *	This function will unregister the filter.
+         *  This function will unregister the filter.
          *
-         *	@param $name	Name of the filter.
+         *  @param $name    Name of the filter.
          */
         function unregisterFilter( $name ) {
             if ( array_key_exists( $name, $this->_regFilters ) ) { unset( $this->_regFilters[ $name ] ); }
         }
 
         /**
-         *	This function will register a new form renderer.
+         *  This function will register a new form renderer.
          *
-         *	@param $name	Name of the render.
-         *	@param $class	The class name of the renderer definition.
-         *	@param $file	(optional) The file containing the class definition for this renderer.
+         *  @param $name    Name of the render.
+         *  @param $class   The class name of the renderer definition.
+         *  @param $file    (optional) The file containing the class definition for this renderer.
          */
         function registerRenderer( $name, $class, $file='' ) {
             $this->_regRenderers[ $name ] = array( 'class' => $class, 'file' => $file );
         }
 
         /**
-         *	This function will unregister the renderer.
+         *  This function will unregister the renderer.
          *
-         *	@param $name	Name of the renderer.
+         *  @param $name    Name of the renderer.
          */
         function unregisterRenderer( $name ) {
             if ( array_key_exists( $name, $this->_regRenderers ) ) { unset( $this->_regRenderers[ $name ] ); }
@@ -269,43 +269,52 @@
         /**
          *  This function will set the default value for a form element.
          *
-         *  @param  $element    Name of the form element
-         *  @param  $value      Default value for the form element
+         *  @param  $name     Name of the form element
+         *  @param  $value    Default value for the form element
+         *  @param  $raw      (optional) Indicates if the value is a raw value.
          */
-        function setDefault( $element, $value ) {
+        function setDefault( $name, $value, $raw=false ) {
 
-            // Set the value in the defaults class variable
-            $this->_defaults[ $element ] = $value;
+            if ( array_key_exists( $name, $this->_elements ) ) {
 
-            // Update the value for the existing elements
-            if ( ! $this->isSubmitted() ) {
-                if ( isset( $this->_elements[ $element ] ) ) {
-                    $o = & $this->_elements[ $element ];
-                    $o->setValue( $value );
+                $element = & $this->getElement( $name );
+                $element->setDefault( $value, $raw );
+    
+                // Update the value for the existing elements
+                if ( ! $this->isSubmitted() ) {
+                    if ( $raw ) {
+                        $element->setRawValue( $value );
+                    } else {
+                        $element->setValue( $value );
+                    }
                 }
+                
+            } else {
+                $this->_defaults[ $name ] = $value;
             }
+            
 
         }
 
         /**
-         *	This function will set the default values for the form.
+         *  This function will set the default values for the form.
          *
-         *	@param $array	Associative array containing the default values.
+         *  @param $array   Associative array containing the default values.
          */
         function setDefaults( $array ) {
-            foreach ( $array as $key=>$val ) {
+            foreach ( $array as $key => $val ) {
                 $this->setDefault( $key, $val );
             }
         }
 
         /**
-         *	This function will add a new element to the form.
+         *  This function will add a new element to the form.
          *
-         *	@param $type		The type of element to add.
-         *	@param $name		The name of the form element.
-         *	@param $label		(optional) The label for the form element.
-         *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *  @param $type        The type of element to add.
+         *  @param $name        The name of the form element.
+         *  @param $label       (optional) The label for the form element.
+         *  @param $attributes  (optional) The attributes for the form element.
+         *  @param $options     (optional) The options for the elment.
          */
         function & addElement( $type, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -343,9 +352,13 @@
 
             // If there is nothing that matches, use the default
             if ( sizeof( $elementVars ) == 0 )  {
+                if ( isset( $this->_defaults[ $name ] ) ) {
+                    $instance->setDefault( $this->_defaults[ $name ] );
+                    unset( $this->_defaults[ $name ] );
+                }
                 if ( ! $this->isSubmitted() ) {
-                    if ( isset( $this->_defaults[ $name ] ) ) {
-                        $instance->setValue( $this->_defaults[ $name ] );
+                    if ( isset( $instance->_default ) ) {
+                        $instance->setValue( $instance->getDefault() );
                     }
                 }
             } elseif ( sizeof( $elementVars ) == 1 ) {
@@ -356,16 +369,16 @@
 
             // Register the element in the class.
             $this->_elements[ $name ] = $instance;
-
+            
             // Return the reference to the instance
             return $this->_elements[ $name ];
 
         }
 
         /**
-         *	This function will remove the specified form element.
+         *  This function will remove the specified form element.
          *
-         *	@param $name	The name of the form element.
+         *  @param $name    The name of the form element.
          */
         function removeElement( $name ) {
 
@@ -380,11 +393,11 @@
         }
 
         /**
-         *	This function will return a reference to the specified form element.
+         *  This function will return a reference to the specified form element.
          *
-         *	@param $name	The name of the form element.
+         *  @param $name    The name of the form element.
          *
-         *	@returns	A reference to the specified form element.
+         *  @returns    A reference to the specified form element.
          */
         function & getElement( $name ) {
 
@@ -402,11 +415,11 @@
         }
 
         /**
-         *	Add a filter to the form for the specified field.
+         *  Add a filter to the form for the specified field.
          *
-         *	@param	$element	The element to apply the filter on. If you specify an array, it will add the filter for
-         *						each element in the array.
-         *	@param	$filter		The name of the filter to apply.
+         *  @param  $element    The element to apply the filter on. If you specify an array, it will add the filter for
+         *                      each element in the array.
+         *  @param  $filter     The name of the filter to apply.
          */
         function addFilter( $element, $filter ) {
 
@@ -442,13 +455,13 @@
         }
 
         /**
-         *	Add a rule to the form for the specified field.
+         *  Add a rule to the form for the specified field.
          *
-         *	@param	$element	The element to apply the rule on. If you specify an array, it will add the rule for each
-         *						element in the array.
-         *	@param	$rule		The name of the rule to apply.
-         *	@param	$error		The error message to show if an error occured.
-         *	@param	$options	(optional) The options to pass to the validator function.
+         *  @param  $element    The element to apply the rule on. If you specify an array, it will add the rule for each
+         *                      element in the array.
+         *  @param  $rule       The name of the rule to apply.
+         *  @param  $error      The error message to show if an error occured.
+         *  @param  $options    (optional) The options to pass to the validator function.
          */
         function addRule( $element, $rule, $error, $options=null ) {
 
@@ -484,11 +497,11 @@
         }
 
         /**
-         *	Add a rule to compare different form elements with each other.
+         *  Add a rule to compare different form elements with each other.
          *
-         *	@param	$elements	The array of elements to compare with each other.
-         *	@param	$rule		The name of the rule to apply. This can be "equal", "asc" or "desc".
-         *	@param	$error		The error message to show if an error occured.
+         *  @param  $elements   The array of elements to compare with each other.
+         *  @param  $rule       The name of the rule to apply. This can be "equal", "asc" or "desc".
+         *  @param  $error      The error message to show if an error occured.
          */
         function addCompareRule( $elements, $rule, $error ) {
 
@@ -518,22 +531,22 @@
         }
 
         /**
-         *	Add rule that point to a custom function and is not bound to a specific form element. The callback function
-         *	should return an associative array with the names of the fields and the errors. You can use the special name
-         *	__ALL__ to add a form wide error.
+         *  Add rule that point to a custom function and is not bound to a specific form element. The callback function
+         *  should return an associative array with the names of the fields and the errors. You can use the special name
+         *  __ALL__ to add a form wide error.
          *
-         *	@param $callback	The callback of the funtion to perform for this form rule.
+         *  @param $callback    The callback of the funtion to perform for this form rule.
          */
         function addFormRule( $callback ) {
             array_push( $this->_formrules, $callback );
         }
 
         /**
-         *	This function will return the value of the specified form element.
+         *  This function will return the value of the specified form element.
          *
-         *	@param $name	The name of the form element.
+         *  @param $name    The name of the form element.
          *
-         *	@returns	The value to the specified form element.
+         *  @returns    The value to the specified form element.
          */
         function getValue( $name ) {
 
@@ -550,8 +563,8 @@
                     $value = $this->_applyFilter( $name, $value );
                 }
             } else {
-                if ( isset( $this->_defaults[ $name ] ) ) {
-                    $value = $this->_defaults[ $name ];
+                if ( isset( $element->_default ) ) {
+                    $value = $element->getDefault();
                 }
             }
 
@@ -585,9 +598,9 @@
         }
 
         /**
-         *	This function will return all the values for the form as an associative array.
+         *  This function will return all the values for the form as an associative array.
          *
-         *	@returns	The values for the form as an associative array.
+         *  @returns    The values for the form as an associative array.
          */
         function getValues() {
             $vars = array();
@@ -598,9 +611,9 @@
         }
 
         /**
-         *	This function will check if the form was submitted or not.
+         *  This function will check if the form was submitted or not.
          *
-         *	@returns	Boolean indicating if the form was submitted or not.
+         *  @returns    Boolean indicating if the form was submitted or not.
          */
         function isSubmitted() {
 
@@ -628,11 +641,11 @@
         }
 
         /**
-         *	This function will check if the specified button was clicked or not.
+         *  This function will check if the specified button was clicked or not.
          *
-         *	@param $button	The name of the button.
+         *  @param $button  The name of the button.
          *
-         *	@returns	Boolean indicating if the button was clicked or not.
+         *  @returns    Boolean indicating if the button was clicked or not.
          */
         function isClicked( $button ) {
 
@@ -655,15 +668,15 @@
         }
 
         /**
-         *	This function will return true if the form is valid. If not, it will return false.
+         *  This function will return true if the form is valid. If not, it will return false.
          *
-         *	If no rules for the form, the form is considered to be valid.
-         *	If no values for this form where submitted, the form is considered to be valid.
+         *  If no rules for the form, the form is considered to be valid.
+         *  If no values for this form where submitted, the form is considered to be valid.
          *
-         *	It will iterate over all the rules and apply them to each field after having applies the filters.
-         *	Errors will be put on the error stack. In the end, it returns false or true.
+         *  It will iterate over all the rules and apply them to each field after having applies the filters.
+         *  Errors will be put on the error stack. In the end, it returns false or true.
          *
-         *	@returns	Boolean indicating if the form is valid or not.
+         *  @returns    Boolean indicating if the form is valid or not.
          */
         function validate() {
 
@@ -866,11 +879,11 @@
         }
 
         /**
-         *	This function will render a form and return the rendered contents.
+         *  This function will render a form and return the rendered contents.
          *
-         *	@param	$type	The renderer to use.
+         *  @param  $type   The renderer to use.
          *
-         *	@returns	The rendered form.
+         *  @returns    The rendered form.
          */
         function render( $type ) {
 
@@ -896,39 +909,39 @@
         }
 
         /**
-         *	This function will return the form as an array.
+         *  This function will return the form as an array.
          *
-         *	@returns	The form as an array.
+         *  @returns    The form as an array.
          */
         function toArray() {
             return $this->render( 'array' );
         }
 
         /**
-         *	This function will return the form as HTML.
+         *  This function will return the form as HTML.
          *
-         *	@returns	The form as HTML text.
+         *  @returns    The form as HTML text.
          */
         function toHtml() {
             return $this->render( 'html' );
         }
 
         /**
-         *	This function will output the form as HTML.
+         *  This function will output the form as HTML.
          */
         function display() {
             echo( $this->toHtml() );
         }
 
         /**
-         *	This function will convert an associative array to it's HMTL equivalent using keys as attribute names and
-         *	the values as attribute values.
+         *  This function will convert an associative array to it's HMTL equivalent using keys as attribute names and
+         *  the values as attribute values.
          *
-         *	@param $array	An associative array.
+         *  @param $array   An associative array.
          *
-         *	@returns	The associative array as HTML.
+         *  @returns    The associative array as HTML.
          *
-         *	@internal
+         *  @internal
          */
         function _convertToHtmlAttrib( $array ) {
             if ( ! is_array( $array ) ) { return ''; }
@@ -941,10 +954,10 @@
         }
 
         /**
-         *	Function that will apply the actual filters to the named element.
+         *  Function that will apply the actual filters to the named element.
          *
-         *	@param	$name	The name of the field to apply the filter to.
-         *	@param	$value	The value to apply the filter on.
+         *  @param  $name   The name of the field to apply the filter to.
+         *  @param  $value  The value to apply the filter on.
          */
         function _applyFilter( $name, $value ) {
             if ( array_key_exists( $name, $this->_filters ) ) {
@@ -969,32 +982,22 @@
         }
 
         /**
-         *      This function will set raw default values for the form.
+         *  This function will set raw default values for the form.
          *
-         *      @param $array   Associative array containing the default values.
+         *  @param $array   Associative array containing the default values.
          */
         function setRawDefaults( $array ) {
 
-            // Will be used for new elements
-            $this->_defaults = $array;
-
-            // Update the values for the existing elements
-            if ( ! $this->isSubmitted() ) {
-                foreach ( $this->_elements as $name=>$element ) {
-                    if ( isset( $this->_defaults[ $element->_name ] ) ) {
-                        $element->setRawValue( $this->_defaults[ $element->_name ] );
-                        unset( $this->_defaults[ $element->_name ] );
-                        $this->_elements[ $name ] = $element;
-                    }
-                }
+            foreach ( $array as $key => $val ) {
+                $this->setDefault( $key, $val, true );
             }
 
         }
 
         /**
-         *      This function will return all raw values for the form as an associative array.
+         *  This function will return all raw values for the form as an associative array.
          *
-         *      @returns        The values for the form as an associative array.
+         *  @returns  The values for the form as an associative array.
          */
         function getRawValues() {
             $vars = array();
@@ -1005,46 +1008,53 @@
         }
 
         /**
-         *      This function will return all default values of the form.
+         *  This function will return all default values of the form.
          *
-         *      @returns        The default values of the form as an associative array.
+         *  @returns  The default values of the form as an associative array.
          */
         function getDefaults() {
-            return $this->_defaults;
+            $vars = array();
+            foreach ( $this->_elements as $name => $element ) {
+                if ( isset( $element->_default ) ) {
+                    $vars[ $name ] = $element->getDefault();
+                }
+            }
+            return $vars;
         }
 
         /**
-         *      This function will return the default values of an element.
+         *  This function will return the default values of an element.
          *
-         *      @param $element  The element name.
+         *  @param $name  The element name.
          *
-         *      @returns         The default value of the element.
+         *  @returns      The default value of the element.
          */
-        function getDefault( $element ) {
-            if ( isset( $this->_defaults[ $element ] ) ) {
-                return $this->_defaults[ $element ];
+        function getDefault( $name ) {
+
+            $element = & $this->getElement( $name );
+
+            if ( isset( $element->_default ) ) {
+                return $element->getDefault();
             }
         }
 
         /**
-         *      This function will return all elements that were modified from it's default value.
+         *  This function will return all elements that were modified from it's default value.
          *
-         *      @returns        The modified elements and it's values as an associative array.
+         *  @returns  The modified elements and it's values as an associative array.
          */
         function getModifiedValues() {
             
             $modified = array();
             
             if ( $this->isSubmitted() ) {
-                
-                $defaults = $this->getDefaults();
-                $values   = $this->getValues();
-                
-                foreach ( $values as $element => $value ) {
-                    if ( ! isset( $defaults[ $element ] ) || $value != $defaults[ $element ] ) {
-                        $modified[ $element ] = $value;
+
+                foreach ( $this->_elements as $name => $element ) {
+                    if ( $element->isModified() ) {
+                        $modified[ $name ] = $this->getValue( $name );
                     }
                 }
+
             }
             
             return $modified;
@@ -1053,18 +1063,18 @@
     }
 
     /**
-     *	This is the base class for all form elements.
+     *  This is the base class for all form elements.
      */
     class YDFormElement extends YDBase {
 
         /**
-         *	This is the class constructor for the YDFormElement class.
+         *  This is the class constructor for the YDFormElement class.
          *
-         *	@param $form		The name of the form to which this element is connected.
-         *	@param $name		The name of the form element.
-         *	@param $label		(optional) The label for the form element.
-         *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *  @param $form        The name of the form to which this element is connected.
+         *  @param $name        The name of the form element.
+         *  @param $label       (optional) The label for the form element.
+         *  @param $attributes  (optional) The attributes for the form element.
+         *  @param $options     (optional) The options for the elment.
          */
         function YDFormElement( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -1079,8 +1089,8 @@
             $this->_options = $options;
             $this->_type = '';
             $this->_value = '';
+            $this->_raw_default = false;
             $this->_isButton = false;
-            //$this->_autoRules = array();
 
             // Indicate where the label should be
             $this->_labelPlace = 'before';
@@ -1101,17 +1111,83 @@
         }
 
         /**
-         *	This function sets the value for the date element.
+         *  This function sets the value for the element.
          *
-         *	@param	$val	(optional) The value for this object.
+         *  @param  $val    (optional) The value for this object.
          */
         function setValue( $val='' ) {
             $this->_value = $val;
         }
+
         /**
-         *	Indicates if the element is a button or not.
+         *      This function will return the value of the element.
          *
-         *	@returns	Boolean indicating if the element is a button or not.
+         *      @returns        Value of this object.
+         */
+        function getValue() {
+            return $this->_value;
+        }
+
+        /**
+         *      This function sets raw value for the element.
+         *
+         *      @param  $val    (optional) The value for this object.
+         */
+        function setRawValue( $val='' ) {
+            $this->_value = $val;
+        }
+
+        /**
+         *      This function will return the raw value of the element.
+         *
+         *      @returns        Raw value of this object.
+         */
+        function getRawValue() {
+            return $this->_value;
+        }
+        
+        /**
+         *      This function sets the default value of the element.
+         *
+         *      @param  $val    (optional) The default value of this object.
+         *      @param  $raw    (optional) Boolean indicating if the default value is a raw value.
+         */
+        function setDefault( $val='', $raw=false ) {
+            $this->_default = $val;
+            $this->_raw_default = $raw;
+        }
+
+        /**
+         *      This function will return the default value of the element.
+         *
+         *      @returns        Default value of this object.
+         */
+        function getDefault() {
+            return isset( $this->_default ) ? $this->_default : null;
+        }
+
+        /**
+         *      This function will return the if the element value was modified from it's default value.
+         *
+         *      @returns        Boolean indicating if the element was modified.
+         */
+        function isModified() {
+            if ( $this->_raw_default ) {
+                if ( $this->getRawValue() != $this->getDefault() ) {
+                    return true;
+                }
+            } else {
+                if ( $this->getValue() != $this->getDefault() ) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         *  Indicates if the element is a button or not.
+         *
+         *  @returns    Boolean indicating if the element is a button or not.
          */
         function isButton() {
             if ( $this->_isButton === true ) {
@@ -1122,74 +1198,62 @@
         }
 
         /**
-         *	This function will return the element as an array.
+         *  This function will return the element as an array.
          *
-         *	@returns	The form element as an array.
+         *  @returns    The form element as an array.
          */
         function toArray() {
             if ( $this->_labelPlace != 'after' ) {
                 $this->_labelPlace = 'before';
             }
-            return array(
-                'name'	      => $this->_name,
-                'value'	      => $this->_value,
-                'type'	      => $this->_type,
+            $array = array(
+                'name'        => $this->_name,
+                'value'       => $this->_value,
+                'type'        => $this->_type,
                 'labelname'   => $this->_label,
                 'attributes'  => $this->_attributes,
-                'label'	      => '<label for="' . $this->_form . '_' . $this->_name . '">' . $this->_label . '</label>',
+                'label'       => '<label for="' . $this->_form . '_' . $this->_name . '">' . $this->_label . '</label>',
                 'options'     => $this->_options,
                 'placeLabel'  => $this->_labelPlace,
-                'html'	      => $this->toHtml(),
+                'html'        => $this->toHtml(),
                 'isButton'    => $this->isButton(),
             );
+            
+            if ( isset( $this->_default ) ) {
+                $array['default'] = $this->getDefault();
+            }
+            
+            return $array;
         }
 
         /**
-         *	This function will return the element as HTML.
+         *  This function will return the element as HTML.
          *
-         *	@returns	The form element as HTML text.
+         *  @returns    The form element as HTML text.
          */
         function toHtml() {
-        }
-
-        /**
-         *      This function sets raw value for the date element.
-         *
-         *      @param  $val    (optional) The value for this object.
-         */
-        function setRawValue( $val='' ) {
-            $this->_value = $val;
-        }
-
-        /**
-         *      This function will return raw value of the date element.
-         *
-         *      @returns        Raw value of this object.
-         */
-        function getRawValue() {
-            return $this->_value;
         }
 
     }
 
     /**
-     *	This is the class that is able to render a form object to whatever.
+     *  This is the class that is able to render a form object to whatever.
      */
     class YDFormRenderer extends YDBase {
 
         /**
-         *	This is the class constructor for the YDFormRenderer_html class.
+         *  This is the class constructor for the YDFormRenderer_html class.
          *
-         *	@param $form		The form that needs to be rendered.
+         *  @param $form        The form that needs to be rendered.
          */
         function YDFormRenderer( $form ) {
             $this->_form = & $form;
         }
 
         /**
-         *	This function will render the form.
+         *  This function will render the form.
          *
-         *	@returns	The rendered form.
+         *  @returns    The rendered form.
          */
         function render() {
             return '';
