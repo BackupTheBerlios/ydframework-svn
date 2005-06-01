@@ -122,6 +122,51 @@
             );
 
         }
+        
+        /**
+         *      This function will return the if the element value was modified from it's default value.
+         *
+         *      @returns        Boolean indicating if the element was modified.
+         */
+        function isModified() {
+            
+            if ( ! is_null( $this->_default ) ) {
+                if ( intval( $this->_value['day'] )     == intval( $this->_default['day'] ) 
+                  && intval( $this->_value['month'] )   == intval( $this->_default['month'] )
+                  && intval( $this->_value['year'] )    == intval( $this->_default['year'] ) 
+                  && intval( $this->_value['hours'] )   == intval( $this->_default['hours'] ) 
+                  && intval( $this->_value['minutes'] ) == intval( $this->_default['minutes'] ) ) {
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        /**
+         *      This function sets the default value of the element.
+         *
+         *      @param  $val    The default value of this object.
+         *      @param  $raw    (optional) Boolean indicating if the default value is a raw value.
+         */
+        function setDefault( $val, $raw=false ) {
+            
+            $this->_raw_default = $raw;
+            
+            if ( is_numeric( $val ) ) {
+                if ( ! is_int( $val ) ) {
+                    $val = intval( $val );
+                }
+                $now = getdate( $val );
+                $this->_default = array();
+                $this->_default['day'] = $now['mday'];
+                $this->_default['month'] = $now['mon'];
+                $this->_default['year'] = $now['year'];
+                $this->_default['hours'] = $now['hours'];
+                $this->_default['minutes'] = $now['minutes'];
+            } elseif ( ! empty( $val ) ) {
+                $this->_default = $val;
+            }
+        }
 
         /**
          *	This function sets the value for the date element.

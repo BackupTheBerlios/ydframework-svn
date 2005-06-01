@@ -357,7 +357,7 @@
                     unset( $this->_defaults[ $name ] );
                 }
                 if ( ! $this->isSubmitted() ) {
-                    if ( isset( $instance->_default ) ) {
+                    if ( ! is_null( $instance->_default ) ) {
                         $instance->setValue( $instance->getDefault() );
                     }
                 }
@@ -563,7 +563,7 @@
                     $value = $this->_applyFilter( $name, $value );
                 }
             } else {
-                if ( isset( $element->_default ) ) {
+                if ( ! is_null( $element->_default ) ) {
                     $value = $element->getDefault();
                 }
             }
@@ -1015,7 +1015,7 @@
         function getDefaults() {
             $vars = array();
             foreach ( $this->_elements as $name => $element ) {
-                if ( isset( $element->_default ) ) {
+                if ( ! is_null( $element->_default ) ) {
                     $vars[ $name ] = $element->getDefault();
                 }
             }
@@ -1033,7 +1033,7 @@
 
             $element = & $this->getElement( $name );
 
-            if ( isset( $element->_default ) ) {
+            if ( ! is_null( $element->_default ) ) {
                 return $element->getDefault();
             }
         }
@@ -1089,6 +1089,7 @@
             $this->_options = $options;
             $this->_type = '';
             $this->_value = '';
+            $this->_default = null;
             $this->_raw_default = false;
             $this->_isButton = false;
 
@@ -1149,10 +1150,10 @@
         /**
          *      This function sets the default value of the element.
          *
-         *      @param  $val    (optional) The default value of this object.
+         *      @param  $val    The default value of this object.
          *      @param  $raw    (optional) Boolean indicating if the default value is a raw value.
          */
-        function setDefault( $val='', $raw=false ) {
+        function setDefault( $val, $raw=false ) {
             $this->_default = $val;
             $this->_raw_default = $raw;
         }
@@ -1163,7 +1164,7 @@
          *      @returns        Default value of this object.
          */
         function getDefault() {
-            return isset( $this->_default ) ? $this->_default : null;
+            return $this->_default;
         }
 
         /**
@@ -1206,9 +1207,10 @@
             if ( $this->_labelPlace != 'after' ) {
                 $this->_labelPlace = 'before';
             }
-            $array = array(
+            return array(
                 'name'        => $this->_name,
                 'value'       => $this->_value,
+                'default'     => $this->_default,
                 'type'        => $this->_type,
                 'labelname'   => $this->_label,
                 'attributes'  => $this->_attributes,
@@ -1218,12 +1220,6 @@
                 'html'        => $this->toHtml(),
                 'isButton'    => $this->isButton(),
             );
-            
-            if ( isset( $this->_default ) ) {
-                $array['default'] = $this->getDefault();
-            }
-            
-            return $array;
         }
 
         /**

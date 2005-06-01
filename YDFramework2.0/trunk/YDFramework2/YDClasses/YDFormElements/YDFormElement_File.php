@@ -66,6 +66,18 @@
             return is_uploaded_file( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] )
                     && ( filesize( $_FILES[ $this->_form . '_' . $this->_name ]['tmp_name'] ) > 0 );
         }
+        
+        /**
+         *      This function will return the if the element value was modified from it's default value.
+         *
+         *      @returns        Boolean indicating if the element was modified.
+         */
+        function isModified() {
+            if ( $this->isUploaded() ) {
+                return true;
+            }
+            return false;
+        }
 
         /**
          *  This function will move the uploaded file to the specified directory.

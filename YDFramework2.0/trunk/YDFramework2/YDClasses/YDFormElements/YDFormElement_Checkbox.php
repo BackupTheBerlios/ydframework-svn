@@ -63,6 +63,24 @@
             $this->_labelPlace = 'after';
 
         }
+        
+        /**
+         *      This function will return the if the element value was modified from it's default value.
+         *
+         *      @returns        Boolean indicating if the element was modified.
+         */
+        function isModified() {
+            if ( ! is_null( $this->_default ) ) {
+                if ( ! empty( $this->_value ) && ! empty( $this->_default ) ) {
+                    return false;
+                }
+            } else {
+                if ( empty( $this->_value ) ) {
+                    return false;
+                }
+            }
+            return true;
+        }
 
         /**
          *	This function will return the element as HTML.

@@ -60,6 +60,15 @@
             $this->_applyFilters = false;
 
         }
+        
+        /**
+         *      This function will return the if the element value was modified from it's default value.
+         *
+         *      @returns        Boolean indicating if the element was modified.
+         */
+        function isModified() {
+            return false;
+        }
 
         /**
          *	This function will return the element as HTML.

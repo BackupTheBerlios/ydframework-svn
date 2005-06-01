@@ -182,7 +182,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="8" valign="top">&nbsp;</td>
+            <td rowspan="9" valign="top">&nbsp;</td>
             <td valign="top"><a href="form.php">Form handling and validation</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.php">form.php</a>
@@ -228,6 +228,12 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fileupload.php">fileupload.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fileupload.tpl">fileupload.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="form_modified.php">Getting the modified values</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=form_modified.php">form_modified.php</a>
             </td>
         </tr>
         <tr>
