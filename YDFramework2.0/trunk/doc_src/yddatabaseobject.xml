@@ -275,7 +275,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_database">
 
-            <title>Register the database connection</title>
+            <title>Registering the database connection</title>
 
             <para>The registerDatabase method defines the YDDatabase instance.</para>
 
@@ -292,7 +292,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_table">
 
-            <title>Register the table name</title>
+            <title>Registering the table name</title>
 
             <para>The registerTable method defines the table name that can be retrieved with the getTable method.</para>
 
@@ -307,7 +307,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_fields">
 
-            <title>Register fields and keys</title>
+            <title>Registering fields and keys</title>
 
             <para>The only difference between fields and keys is that keys are fields with a "key" property defined. There are two methods to add fields and keys:</para>
 
@@ -370,7 +370,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_selects">
 
-            <title>Register select statements</title>
+            <title>Registering select statements</title>
 
             <para>The registerSelect method defines temporary fields that are only set in SELECT statements. For example:</para>
 
@@ -416,7 +416,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_protected">
 
-            <title>Register protected fields</title>
+            <title>Registering protected fields</title>
 
             <para>The registerProtected method defines fields that have protected values that can't be changed. These values will remain for all actions of the object (find, insert, update, etc).</para>
 
@@ -433,7 +433,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_relations">
 
-            <title>Register relations</title>
+            <title>Registering relations</title>
 
             <para>The registerRelation method defines the relations of the object with other YDDatabaseObjects as you would define between tables. </para>
 
@@ -458,7 +458,7 @@ CREATE TABLE `phones` (
 
         <sect2 id="yddatabaseobject_build_register_callbacks">
 
-            <title>Register callbacks</title>
+            <title>Registering callback methods</title>
 
             <para>The registerCallback method defines methods to be called before or after a default action is executed. These actions are: find, insert, update, delete, reset.</para>
 
@@ -798,7 +798,7 @@ GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 0, 20]]></programlistin
     $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Spain'
+    $user->country = 'Spain';
 
     // Search using the criteria defined
     $rows = $user->find();
@@ -844,7 +844,7 @@ array(
     $user = YDDatabaseObject::getInstance( 'user' );
 
     // Set a criteria
-    $user->country = 'Spain'
+    $user->country = 'Spain';
 
     // Search using the criteria defined
     $rows = $user->find();
@@ -856,6 +856,45 @@ array(
     print_r( $results );
 
 ?>]]></programlisting>
+        
+        <para>There is also a method called getResultsAsAssocArray that retrieves a configurable associative array of the results.</para>
+
+        <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+    
+    // Set a criteria
+    $user->country = 'Spain';
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+    // Consider that the search have found 3 rows with users Pieter, David and Francisco
+    $results = $user->getResultsAsAssocArray( 'id', array( 'name', 'country' ) );
+
+    print_r( $results );
+
+?>]]></programlisting>
+        
+        <para>The result:</para>
+        
+        <programlisting><![CDATA[
+array(
+    1 => array(
+        'name' => 'Pieter',
+        'country' => 'Spain'
+    ),
+    2 => array(
+        'name' => 'David',
+        'country' => 'Spain'
+    ),
+    3 => array(
+        'name' => 'Francisco',
+        'country' => 'Spain'
+    )
+)
+]]></programlisting>
 
         <para>There are a few methods to clear the object variables and it's configurations:</para>
 
