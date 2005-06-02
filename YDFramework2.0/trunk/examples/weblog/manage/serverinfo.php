@@ -40,7 +40,11 @@
             $settings = array();
             foreach ( explode( "\n", $phpInfo ) as $line ) {
                 $line = explode( ' </td><td class="v">', $line );
-                $this->tpl->assign( strtolower( str_replace( ' ', '_', $line[0] ) ), $line[1] );
+                if ( isset( $line[1] ) ) {
+                    $this->tpl->assign( strtolower( str_replace( ' ', '_', $line[0] ) ), $line[1] );
+                } else {
+                    $this->tpl->assign( strtolower( str_replace( ' ', '_', $line[0] ) ), '' );
+                }
             }
 
             // Get the version of phpThumb
