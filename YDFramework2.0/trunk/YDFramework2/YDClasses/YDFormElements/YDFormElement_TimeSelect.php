@@ -87,8 +87,7 @@
             if ( ! is_null( $this->_default ) ) {
                 if ( intval( $this->_value['hours'] )   == intval( $this->_default['hours'] ) 
                   && intval( $this->_value['minutes'] ) == intval( $this->_default['minutes'] ) ) {
-                        return false;
-                    }
+                    return false;
                 }
             }
             return true;
