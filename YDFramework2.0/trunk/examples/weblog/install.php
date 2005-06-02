@@ -69,7 +69,7 @@
             $form->addElement( 'text', 'db_host', 'Database host', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_name', 'Database name', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_user', 'Database user', array( 'class' => 'tfM' ) );
-            $form->addElement( 'text', 'db_pass', 'Database password', array( 'class' => 'tfM' ) );
+            $form->addElement( 'password', 'db_pass', 'Database password', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_prefix', 'Database table prefix', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'weblog_title', 'Weblog title', array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'weblog_description', 'Weblog description', array( 'class' => 'tfM' ) );
