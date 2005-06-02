@@ -53,8 +53,10 @@
 
             // Fix the value setting
             if ( ! empty( $this->_value ) ) {
-                $this->setValue( 'on' );
-            }
+                $this->setValue( 1 );
+            } else {
+                $this->setValue( 0 );
+            } 
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
@@ -71,16 +73,38 @@
          */
         function isModified() {
             if ( ! is_null( $this->_default ) ) {
-                if ( ! empty( $this->_value ) && ! empty( $this->_default ) ) {
+                if ( $this->_value && ! empty( $this->_default ) ) {
                     return false;
                 }
             } else {
-                if ( empty( $this->_value ) ) {
+                if ( ! $this->_value ) {
                     return false;
                 }
             }
             return true;
         }
+
+        /**
+         *	This function sets the value for the element.
+         *
+         *	@param	$val	(optional) The value for this object.
+         */
+        function setValue( $val='' ) {
+            if ( ! empty( $val ) ) {
+                $this->_value = 1;
+            } else {
+                $this->_value = 0;
+            }
+        }
+
+        /**
+         *	This function sets the raw value for the element.
+         *
+         *	@param	$val	(optional) The value for this object.
+         */
+        function setRawValue( $val='' ) {
+            $this->setValue( $val );
+        } 
 
         /**
          *	This function will return the element as HTML.
@@ -96,7 +120,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // If a value, fill it in and make it checked
-            if ( ! empty( $this->_value ) ) {
+            if ( $this->getValue() ) {
                 $attribs['checked'] = 'checked';
             }
 
