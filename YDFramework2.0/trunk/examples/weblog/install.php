@@ -29,8 +29,8 @@
 
             // Error out if the YDFramework temp directory is not writeable
             if ( ! is_writeable( YD_DIR_TEMP ) ) {
-                echo( '<html><head><title>' . YD_FW_NAME . ' Weblog - Installer</title></head><body>'
-                echo( '<h2>' . YD_FW_NAME . ' Weblog - Installer</h2>'
+                echo( '<html><head><title>' . YD_FW_NAME . ' Weblog - Installer</title></head><body>' );
+                echo( '<h2>' . YD_FW_NAME . ' Weblog - Installer</h2>' );
                 echo( '<p><font color="red"><b>Make sure the directory ' . YD_DIR_TEMP . ' is writeable before continueing</b></font></p>' );
                 die();
             }
