@@ -349,6 +349,7 @@
             $this->_pass = $pass;
             $this->_host = $host;
             $this->_options = $options;
+            $this->_driver = 'unknown';
 
             // The connection object
             $this->_conn = null;
@@ -403,6 +404,15 @@
          */
         function getOptions() {
             return $this->_options;
+        }
+
+        /**
+         *  This funciton returns the driver in use.
+         *
+         *  @returns    The driver name in use.
+         */
+        function getDriver() {
+            return $this->_driver;
         }
 
         /**
@@ -933,6 +943,7 @@
          */
         function YDDatabaseDriver_mysql( $db, $user='', $pass='', $host='', $options=array() ) {
             $this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
+            $this->_driver = 'mysql';
         }
 
         /**
@@ -1064,7 +1075,7 @@
         function string( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
-                    return mysql_real_escape_string( $string );
+                    return mysql_escape_string( $string );
                 }
             }
             return $string;

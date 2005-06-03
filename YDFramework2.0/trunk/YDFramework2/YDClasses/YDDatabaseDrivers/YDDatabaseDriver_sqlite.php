@@ -46,6 +46,7 @@
          */
         function YDDatabaseDriver_sqlite( $db, $user='', $pass='', $host='', $options=array() ) {
             $this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
+            $this->_driver = 'sqlite';
         }
 
         /**

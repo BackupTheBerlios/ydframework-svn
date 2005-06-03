@@ -49,6 +49,7 @@
             $this->_NLS_DATE_FORMAT = 'RRRR-MM-DD HH24:MI:SS';
             $this->_fmtDate = 'Y-m-d';
             $this->_fmtTimeStamp = 'Y-m-d, h:i:s A';
+            $this->_driver = 'oracle';
         }
 
         /**
@@ -282,7 +283,7 @@
             } else {
 
                // offset is the line
-               $offset++;
+               $offset ++;
           
                // if no limit return everything bigget than OFFSET
                // if limit is defined return everything between OFFSET and OFFSET+LIMIT
