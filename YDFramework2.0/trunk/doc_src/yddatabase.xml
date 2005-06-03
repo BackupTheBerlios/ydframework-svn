@@ -79,7 +79,7 @@
 
         <title>Escaping variables in SQL statements</title>
 
-        <para>Since the YDDatabase libraries use native SQL statements in a lot of the function calls, there is a need to uniformly escape strings so that it's save to include them in an SQL statement. For this purpose, the YDDatabase library has two functions, called string and sqlString. Both functions do the same, but the string function doesn't put single quotes around the string, while the sqlString function does.</para>
+        <para>Since the YDDatabase libraries use native SQL statements in a lot of the function calls, there is a need to uniformly escape strings so that it's safe to include them in an SQL statement. For this purpose, the YDDatabase library has two functions, called string and sqlString. Both functions do the same, but the string function doesn't put single quotes around the string, while the sqlString function does.</para>
 
     </sect1>
 
