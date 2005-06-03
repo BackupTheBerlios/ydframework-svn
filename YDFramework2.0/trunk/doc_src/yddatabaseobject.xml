@@ -729,12 +729,13 @@ CREATE TABLE `phones` (
         <para>You can build more complex searches using the following optional methods:</para>
 
         <itemizedlist spacing="compact">
-            <listitem><emphasis role="bold">addWhere:</emphasis> adds more statements to the WHERE clause.</listitem>
-            <listitem><emphasis role="bold">addGroup:</emphasis> adds a GROUP BY statement.</listitem>
-            <listitem><emphasis role="bold">addHaving:</emphasis> adds a HAVING statement.</listitem>
-            <listitem><emphasis role="bold">addOrder:</emphasis> adds a ORDER BY statement.</listitem>
-            <listitem><emphasis role="bold">addSelect:</emphasis> adds a select to the query. Only registered selects can be added.</listitem>
-            <listitem><emphasis role="bold">setLimit:</emphasis> sets the LIMIT of rows to be retrieved.</listitem>
+            <listitem><emphasis role="bold">where:</emphasis> adds more statements to the WHERE clause.</listitem>
+            <listitem><emphasis role="bold">group:</emphasis> adds a GROUP BY statement. Alias method: groupby.</listitem>
+            <listitem><emphasis role="bold">having:</emphasis> adds a HAVING statement.</listitem>
+            <listitem><emphasis role="bold">order:</emphasis> adds a ORDER BY statement. Alias method: orderby.</listitem>
+            <listitem><emphasis role="bold">select:</emphasis> adds a select to the query. Only registered selects can be added.</listitem>
+            <listitem><emphasis role="bold">limit:</emphasis> sets the LIMIT of rows to be retrieved.</listitem>
+            <listitem><emphasis role="bold">offset:</emphasis> sets the OFFSET.</listitem>
         </itemizedlist>
 
         <programlisting><![CDATA[<?php
@@ -751,36 +752,41 @@ CREATE TABLE `phones` (
     $user->resetQuery();
 
     // Add WHERE statement
-    $user->addWhere( $user->getTable() . ".id > 100", "AND" );
-    $user->addWhere( $user->getTable() . ".name LIKE 'a%'", "AND" );
+    $user->where( $user->getTable() . ".id > 100", "AND" );
+    $user->where( $user->getTable() . ".name LIKE 'a%'", "AND" );
 
     // Add a GROUP BY statement
     // The second parameter defines if DESC is added to the item
-    $user->addGroup( "id", false );
+    $user->group( "id", false );
 
     // Add a HAVING statement
-    $user->addHaving( "birth_year > 1970" ); // consider "birth_year" = YEAR( users.birthday )
+    $user->having( "birth_year > 1970" ); // consider "birth_year" = YEAR( users.birthday )
                                              // registered select in the class
 
     // Add an ORDER statement
-    $user->addOrder( "name" );
+    $user->order( "name" );
 
     // Add a registered select
-    $user->addSelect( 'birth_year' );
+    $user->select( 'birth_year' );
 
     // Set the limit
     // 20 = max. number of rows
-    // 0  = where to start from
-    $user->setLimit( 20, 0 );
+    $user->limit( 20 );
+    
+    // Set the offset
+    // 0  = where to start from    
+    $user->offset( 0 );
 
 ?>]]></programlisting>
 
         <para>The above example will generate the following SQL code:</para>
 
         <programlisting><![CDATA[SELECT YEAR( users.birthday ) AS birth_year FROM users WHERE id > 100 AND name LIKE 'a%'
-GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 0, 20]]></programlisting>
+GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 20 OFFSET 0]]></programlisting>
 
         <para>A combination of object variables and these methods can be used.</para>
+        
+        <para>By default, all table names and fields are escaped as reserved words although not displayed in the code above.</para>
 
     </sect1>
 
@@ -1219,7 +1225,7 @@ Foreign: group
                 <para>The local class, is the class where you are registering the relation. It has one property that can be defined by the following method:</para>
 
                 <itemizedlist spacing="compact">
-                    <listitem><emphasis role="bold">setLocalField (optional):</emphasis> the field name that is the relation key. If not defined, the defined keys in the class are used.</listitem>
+                    <listitem><emphasis role="bold">setLocalKey (optional):</emphasis> the field name that is the relation key. If not defined, the defined keys in the class are used.</listitem>
                 </itemizedlist>
 
                 <programlisting><![CDATA[<?php
@@ -1235,7 +1241,7 @@ Foreign: group
             $phone = & $this->registerRelation( 'phone' );
 
             // Sets the local field
-            $phone->setLocalField( 'id' );
+            $phone->setLocalKey( 'id' );
 
             // If "id" is a defined key of the class,
             // you don't need to set it as local field
@@ -1256,7 +1262,7 @@ Foreign: group
                 <itemizedlist spacing="compact">
                     <listitem><emphasis role="bold">setForeignClass (optional):</emphasis> sets the foreign class name. Must be a defined YDDatabaseObject class. If not defined, the relation name is used. For example: a relation called group will use the group class as the foreign class.</listitem>
                     <listitem><emphasis role="bold">setForeignVar (optional):</emphasis> sets the local class variable name that will hold the foreign object. If not defined, the foreign class name will be used.</listitem>
-                    <listitem><emphasis role="bold">setForeignField (optional):</emphasis> sets the field name in the foreign class that is the relation key. If not defined, the defined keys in the foreign class are used.</listitem>
+                    <listitem><emphasis role="bold">setForeignKey (optional):</emphasis> sets the field name in the foreign class that is the relation key. If not defined, the defined keys in the foreign class are used.</listitem>
                     <listitem><emphasis role="bold">setForeignConditions (optional):</emphasis> sets additional conditions for the foreign table. For example, you could want to only return active groups.</listitem>
                     <listitem><emphasis role="bold">setForeignJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
                 </itemizedlist>
@@ -1285,7 +1291,7 @@ Foreign: group
 
             // Sets the foreign field
             // The foreign class Fone must have a defined field called user_id.
-            $phone->setForeignField( 'user_id' );
+            $phone->setForeignKey( 'user_id' );
 
             // Sets the foreign conditions
             $phone->setForeignConditions( $phone->getForeignTable() . ".number != ''" );
@@ -1310,8 +1316,8 @@ Foreign: group
                 <itemizedlist spacing="compact">
                     <listitem><emphasis role="bold">setCrossClass (optional):</emphasis> sets the cross class name. Must be a defined YDDatabaseObject class. If not defined, a combination of the local class name ($local_class) and the foreign class name ($foreign_class) is used ($local_class . "_" . $foreign_class). For example: a many-to-many relation called group in the user class will use the group class as the foreign class and the user_group class as the cross class.</listitem>
                     <listitem><emphasis role="bold">setCrossVar (optional):</emphasis> sets the local class variable name that will hold the cross object. If not defined, the cross class name will be used.</listitem>
-                    <listitem><emphasis role="bold">setCrossLocalField (optional):</emphasis> sets the field name in the local class that is the relation key between the cross and the local classes. If not defined, a combination of the local table name and the local defined key is used ($local_table . "_" . $local_key).</listitem>
-                    <listitem><emphasis role="bold">setCrossForeignField (optional):</emphasis> sets the field name in the cross class that is the relation key between the cross and the foreign classes. If not defined, a combination of the foreign table name and the foreign defined key is used ($foreign_table . "_" . $foreign_key).</listitem>
+                    <listitem><emphasis role="bold">setCrossLocalKey (optional):</emphasis> sets the field name in the local class that is the relation key between the cross and the local classes. If not defined, a combination of the local table name and the local defined key is used ($local_table . "_" . $local_key).</listitem>
+                    <listitem><emphasis role="bold">setCrossForeignKey (optional):</emphasis> sets the field name in the cross class that is the relation key between the cross and the foreign classes. If not defined, a combination of the foreign table name and the foreign defined key is used ($foreign_table . "_" . $foreign_key).</listitem>
                     <listitem><emphasis role="bold">setCrossConditions (optional):</emphasis> sets additional conditions for the cross table. For example, you could want to only return active users of the group.</listitem>
                     <listitem><emphasis role="bold">setCrossJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
                 </itemizedlist>
@@ -1388,10 +1394,10 @@ email                 joined                      active
             $group->setCrossVar( 'user_group' );
 
             // Sets the cross foreign field
-            $group->setCrossLocalField( 'user_id' );
+            $group->setCrossLocalKey( 'user_id' );
 
             // Sets the cross foreign field
-            $group->setCrossForeignField( 'group_id' );
+            $group->setCrossForeignKey( 'group_id' );
 
             // Sets the cross conditions
             $group->setCrossConditions( $this->getCrossTable() . '.active = 1' );
@@ -1516,7 +1522,7 @@ email                 joined                      active
             <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id AND phone.ord = 1 )
 WHERE users.id = 123]]></programlisting>
 
-            <para>You can add more conditions and definitions to the query as you would do in a simple query using addWhere, addSelect, addOrder, etc.</para>
+            <para>You can add more conditions and definitions to the query as you would do in a simple query using where, select, order, etc.</para>
 
             <para>If you don't want to add values to the relation object, there is no need to load it before executing find. The find method automatically loads all objects needed.</para>
 

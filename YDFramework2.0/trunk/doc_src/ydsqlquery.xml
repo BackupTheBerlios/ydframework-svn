@@ -7,6 +7,29 @@
 
     <note>This class is specified in it's own include file, so you need to include it manually.</note>
 
+    <para>You can get a new instance of a YDSqlQuery object using the getInstance static method for the database driver you want. For example:</para>
+    
+    <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDSqlQuery.php' );
+
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
+
+?>]]></programlisting>
+    
+    <para>The following database drivers can be specified:</para>
+    
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">mysql</emphasis>: Mysql (requires the mysql PHP extension.</listitem>
+        <listitem><emphasis role="bold">oracle</emphasis>: Oracle (requires the oci8 PHP extension.</listitem>
+        <listitem><emphasis role="bold">sqlite</emphasis>: SQLite (requires the sqlite PHP extension.</listitem>
+        <listitem><emphasis role="bold">postgres</emphasis>: PostgreSQL (requires the pgsql PHP extension.</listitem>
+    </itemizedlist>
+    
+    <para>YDSqlQuery is aware of reserved keywords as tables and field names. So, they can be escaped as reserved keywords. By default, all table names are escaped. But you can escape the select, order and group statements setting to true the $reserved parameter. You can also retrieve the reserved enclosure character with the method getReserved. This is useful if you are using different database drivers.</para>
+    
     <para>The following example shows you how you can use the YDSqlQuery object to create a SELECT SQL statement:</para>
 
     <programlisting><![CDATA[<?php
@@ -14,39 +37,56 @@
         // Includes
         YDInclude( 'YDSqlQuery.php' );
 
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'SELECT', array( 'DISTINCT' ) );
-
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
+        $r = $q->getReserved();
+        
+        // Select query
+        $q->select();
+        
+        // Additional options
+        $q->options( array( 'DISTINCT' ) );
+        
         // Add a table to the query
-        $u = $q->addTable( 'user' );
-
-        // Add the fields we want to select
-        $q->addSelect( "$u.id" );
-        $q->addSelect( "$u.name", 'user_name' );
-        $q->addSelect( "SUM( $u.value )", 'total' );
-
+        // It returns the table alias if defined
+        $u = $q->from( 'user' );
+        
+        // Select expressions
+        $q->expression( "id", '', true ); // quote reserved
+        $q->expression( "name", 'user_name', true ); // quote reserved
+        $q->expression( "SUM( " . $r . "value" . $r . " )", 'total' );
+        
         // Add a where statement
-        $q->openWhereGroup();
-        $q->addWhere( "$u.id = 144" );
-
-        // Add another where statement
-        $q->openWhereGroup( 'OR' );
-        $q->addWhere( "$u.name LIKE 'David%'" );
-        $q->addWhere( "$u.id > 13" );
-
+        $q->openWhere();
+            $q->where( $r . "id" . $r . "= 144" );
+        
+        // Add another where statement inside the above statement
+        $q->openWhere( 'OR' );
+            $q->where( $r . "name" . $r . " LIKE 'David%'" );
+            $q->where( $r . "id" . $r . " > 13" );
+        
+        $q->closeWhere(); // optional
+        $q->closeWhere(); // optional
+        
         // Add a group by clause
-        $q->addGroup( "$u.id", true ); // DESC
-
+        $q->group( "id", true, true ); // DESC and quote reserved
+        
         // Add ordering
-        $q->addOrder( "$u.name" );
-        $q->addOrder( "total", true ); // DESC
-
+        $q->order( "name", false, true ); // ASC and quote reserved
+        $q->order( "total", true, true ); // DESC and quote reserved
+        
         // Add a having clause
-        $q->addHaving( "total > 100" );
-
+        $q->having( $r . "total" . $r . " > 100" );
+        
+        // Add a limit
+        $q->limit( 100 );
+        
+        // Add an offset
+        $q->offset( 50 );
+        
         // Show the SQL statement
         YDDebugUtil::dump( $q->getSql() );
-
+        
         // Reset the contents of the query (optional)
         $q->reset();
 
@@ -54,9 +94,10 @@
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[SELECT DISTINCT user.id, user.name AS "user_name", SUM( user.value ) AS "total"
-FROM user WHERE ( user.id = 144 OR ( user.name LIKE 'David%' AND user.id > 13 ) )
-GROUP BY user.id DESC HAVING total > 100 ORDER BY user.name, total DESC]]></programlisting>
+    <programlisting><![CDATA[SELECT DISTINCT `id`, `name` AS `user_name`, SUM( `value` ) AS
+`total` FROM `user` WHERE ( `id`= 144 OR ( `name` LIKE 'David%' AND
+`id` > 13 ) ) GROUP BY `id` DESC HAVING `total` > 100 ORDER BY `name`,
+`total` DESC LIMIT 100 OFFSET 50]]></programlisting>
 
     <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
 
@@ -65,48 +106,55 @@ GROUP BY user.id DESC HAVING total > 100 ORDER BY user.name, total DESC]]></prog
         // Includes
         YDInclude( 'YDSqlQuery.php' );
 
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'SELECT' );
-
-        // Add a table with an alias
-        $u = $q->addTable( 'user', 'u' );
-
-        // Add the fields for this table
-        $q->addSelect( 'id' );
-        $q->addSelect( 'name' );
-
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
+        
+        // Select query
+        $q->select();
+        
+        // Add table with alias 'u'
+        $u = $q->from( 'user', 'u' );
+        
+        // Add select expressions for this table
+        // The expr method is an alias of the expression method
+        $q->expr( 'id', '', true ); 
+        $q->expr( 'name', '', true );
+        
         // Add a left join
-        $g = $q->addJoin( 'LEFT', 'group', "g" );
-
+        $g = $q->join( 'LEFT', 'group', "g" );
+        
         // Specify the fields to use for the join
-        $q->addJoinOn( "$u.group_id = $g.id" );
-
+        $q->on( "$u.group_id = $g.id" );
+        
         // Add the joined fields
-        $q->addSelect( "$g.id", 'gid' );
-        $q->addSelect( "$g.name", 'group_name' );
+        $q->expr( "$g.id", 'gid', true );
+        $q->expr( "$g.name", 'group_name', true );
 
         // Add an inner join
-        $a = $q->addJoin( 'INNER', 'attach', "a" );
-
+        $a = $q->join( 'INNER', 'attach', "a" );
+        
         // Specify the fields to use for the join
-        $q->addJoinOn( "$g.attach_id = $a.id" );
-
-        // Add a join group
-        $q->openJoinOnGroup( 'OR' );
-
-        // Specify the field to use for the join group
-        $q->addJoinOn( "$a.size > 150" );
-        $q->addJoinOn( "$a.status = 3" );
-
+        $q->on( "$g.attach_id = $a.id" );
+        
+            // Open a group
+            $q->openOn( 'OR' );
+            
+            // Specify more fields to use for the join group
+            $q->on( "$a.size > 150" );
+            $q->on( "$a.status = 3" );
+        
         // Add some more fields
-        $q->addSelect( "$a.id", 'aid' );
-        $q->addSelect( "$a.name", 'attach_name' );
+        $q->expr( "$a.id", 'aid', true );
+        $q->expr( "$a.name", 'attach_name', true );
 
         // Add a where clause
-        $q->addWhere( "$g.id = 144" );
-
+        $q->where( "$g.id = 144" );
+        
         // Add ordering
-        $q->addOrder( "name" );
+        $q->order( "$a.name", false, true );
+        
+        // Add a limit
+        $q->limit( 50 );
 
         // Show the SQL statement
         YDDebugUtil::dump( $q->getSql() );
@@ -115,15 +163,12 @@ GROUP BY user.id DESC HAVING total > 100 ORDER BY user.name, total DESC]]></prog
 
     <para>This would output the following SQL statement:</para>
 
-    <programlisting><![CDATA[SELECT
-    id, name, g.id AS "gid",
-    g.name AS "group_name"
-    a.id AS "aid",
-    a.name AS "attach_name"
-FROM user AS "u"
-LEFT JOIN group AS "g" ON ( u.group_id = g.id )
-INNER JOIN attach AS "a" ON ( g.attach_id = a.id OR ( a.size > 150 AND a.status = 3 ) )
-WHERE g.id = 144 ORDER BY name]]></programlisting>
+    <programlisting><![CDATA[SELECT `id`, `name`, `g`.`id` AS `gid`, `g`.`name` AS
+`group_name`, `a`.`id` AS `aid`, `a`.`name` AS `attach_name`
+FROM `user` AS `u` LEFT JOIN `group` AS `g` ON ( u.group_id =
+g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR
+( a.size > 150 AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY
+`a`.`name` LIMIT 50]]></programlisting>
 
     <para>Also SQL delete statements can be constructed with the YDSqlQuery class:</para>
 
@@ -132,14 +177,17 @@ WHERE g.id = 144 ORDER BY name]]></programlisting>
         // Includes
         YDInclude( 'YDSqlQuery.php' );
 
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'DELETE' );
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
+        
+        // Delete query
+        $q->delete();
 
         // Add a table
-        $q->addTable( 'user' );
+        $q->from( 'user' );
 
         // Specify the where clause
-        $q->addWhere( "id = 144" );
+        $q->where( "id = 144" );
 
         // Show the SQL statement
         YDDebugUtil::dump( $q->getSql() );
@@ -148,33 +196,38 @@ WHERE g.id = 144 ORDER BY name]]></programlisting>
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[DELETE FROM user WHERE id = 144]]></programlisting>
+    <programlisting><![CDATA[DELETE  FROM `user` WHERE id = 144]]></programlisting>
 
     <para>The following example illustrates how to create an insert statement:</para>
 
     <programlisting><![CDATA[<?php
 
+        // The values
+        $values = array(
+                     'name' => 'David',
+                     'email' => 'email@host.com',
+                     'admin' => 1,
+                     'purple' => null
+                  );
+
         // Includes
         YDInclude( 'YDSqlQuery.php' );
 
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'INSERT' );
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
 
+        // Insert query
+        $q->insert();
+    
         // Add a table
-        $q->addTable( 'user' );
+        // The into method is an alias of the from method
+        $q->into( 'user' );
 
         // Set the values
-        $q->setValues(
-            array(
-                'name' => 'David',
-                'email' => 'email@host.com',
-                'admin' => 1,
-                'purple' => null
-            )
-        );
+        $q->values( $values );
 
         // Add the where clause
-        $q->addWhere( "id = 144" );
+        $q->where( "id = 144" );
 
         // Show the SQL statement
         YDDebugUtil::dump( $q->getSql() );
@@ -183,33 +236,40 @@ WHERE g.id = 144 ORDER BY name]]></programlisting>
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[INSERT INTO user ( name, email, admin, purple ) VALUES ( 'David', 'email@host.com', 1, NULL )]]></programlisting>
+    <programlisting><![CDATA[INSERT INTO `user` ( `name`, `email`, `admin`, `purple` )
+VALUES ( 'David', 'email@host.com', 1, null )]]></programlisting>
 
     <para>You can also generate SQL update statements:</para>
 
     <programlisting><![CDATA[<?php
 
+        // The values
+        $values = array(
+                     'name' => 'David',
+                     'email' => 'email@host.com',
+                     'admin' => 1,
+                     'purple' => null
+                  );
+
         // Includes
         YDInclude( 'YDSqlQuery.php' );
 
-        // Instantiate the YDSqlQuery class
-        $q = new YDSqlQuery( 'UPDATE' );
+        // Instantiate the class
+        $q = YDSqlQuery::getInstance( 'mysql' );
+        
+        // Update query
+        $q->update();
 
         // Add a table
-        $q->addTable( 'user' );
+        // The table method is an alias of the from method
+        $q->table( 'user' );
 
         // Set the values
-        $q->setValues(
-            array(
-                'name' => 'David',
-                'email' => 'email@host.com',
-                'admin' => 1,
-                'purple' => null
-            )
-        );
+        // The set method is an alias of the values method
+        $q->set( $values );
 
         // Add the where clause
-        $q->addWhere( "id = 144" );
+        $q->where( "id = 144" );
 
         // Show the SQL statement
         YDDebugUtil::dump( $q->getSql() );
@@ -218,6 +278,7 @@ WHERE g.id = 144 ORDER BY name]]></programlisting>
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[UPDATE user SET name = 'David', email = 'email@host.com', admin = 1, purple = NULL WHERE id = 144]]></programlisting>
+    <programlisting><![CDATA[UPDATE `user` SET `name` = 'David', `email` =
+'email@host.com', `admin` = 1, `purple` = null WHERE id = 144]]></programlisting>
 
 </chapter>
