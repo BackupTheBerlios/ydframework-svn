@@ -28,8 +28,8 @@
             
             // Relations
             $rel = & $this->registerRelation( 'group', true, 'group', 'user_group' );
-            $rel->setCrossLocalField( 'user_id' );
-            $rel->setCrossForeignField( 'group_id' );
+            $rel->setCrossLocalKey( 'user_id' );
+            $rel->setCrossForeignKey( 'group_id' );
             
             $rel = & $this->registerRelation( 'phone', false, 'phone' );
             $rel->setForeignJoin( 'LEFT' );

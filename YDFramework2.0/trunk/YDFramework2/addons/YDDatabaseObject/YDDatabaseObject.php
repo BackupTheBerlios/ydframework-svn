@@ -77,8 +77,6 @@
         var $_callbacks = null;
         var $_sql       = null;
 
-        var $_limit     = -1;
-        var $_offset    = -1;
         var $_count     = 0;
         var $_results   = array();
         var $_last      = array();
@@ -100,7 +98,6 @@
             $this->_selects   = new YDDatabaseObject_Properties();
             $this->_relations = new YDDatabaseObject_Properties();
             $this->_callbacks = new YDDatabaseObject_Properties();
-            $this->_sql       = new YDSqlQuery();
             
             $this->_callbacks->set( 'find',   array( 'before' => array(), 'after' => array() ) );
             $this->_callbacks->set( 'delete', array( 'before' => array(), 'after' => array() ) );
@@ -155,7 +152,9 @@
          *  @returns    A reference to the database abstraction layer.
          */
         function & registerDatabase( & $db ) {
-            return $this->_db = & $db;
+            $this->_db = & $db;
+            $this->_sql = YDSqlQuery::getInstance( $db->getDriver() );
+            return $this->_db;
         }
 
         /**
@@ -230,8 +229,8 @@
         /**
          *  This function registers a select statement.
          *
-         *  @param $name  The field name.
-         *  @param $expr  The select expression.
+         *  @param $name      The field name.
+         *  @param $expr      The select expression.
          *
          *  @returns      A reference to the select object.
          */
@@ -444,14 +443,16 @@
             $keys    = $this->_getFieldsByMethod( 'isKey' );
             $fields  = get_object_vars( $this->_fields );
             $selects = get_object_vars( $this->_selects );
+            
+            $r = $this->_sql->getReserved();
 
             // prepare select
             if ( $this->_sql->getSelect() == '*' ) {
                 foreach ( $fields as $field ) {
-                    $this->addSelect( $field->getName() );
+                    $this->select( $field->getName() );
                 }
                 foreach ( $selects as $select ) {
-                    $this->addSelect( $select->getName() );
+                    $this->select( $select->getName() );
                 }
             }
 
@@ -460,7 +461,8 @@
             foreach ( $groups as $n => $group ) {
                 $field = $group['expr'];
                 if ( $field_obj = & $this->getField( $field ) ) {
-                    $groups[ $n ]['expr'] = $this->getTable() . '.' . $field_obj->getColumn();
+                    $groups[ $n ]['expr']  = $r . $this->getTable()       . $r . '.';
+                    $groups[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
                 }
             }
 
@@ -469,7 +471,8 @@
             foreach ( $orders as $n => $order ) {
                 $field = $order['expr'];
                 if ( $field_obj = & $this->getField( $field ) ) {
-                    $orders[ $n ]['expr'] = $this->getTable() . '.' . $field_obj->getColumn();
+                    $orders[ $n ]['expr']  = $r . $this->getTable()       . $r . '.';
+                    $orders[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
                 }
             }
 
@@ -509,24 +512,21 @@
                         if ( ! $first ) {
                             $value_string .= ', ';
                         }
-                        if ( is_numeric( $val ) ) {
-                            $value_string .= $val;
+                        if ( is_null( $val ) ) {
+                            $value_string .= 'NULL';
                         } else {
-                            $value_string .= "'" . $val . "'";
+                            $value_string .= $this->_sql->sqlString( $val );
                         }
                         $first = false;
                     }
                     $value_string .= ' )';
                     $value = $value_string;
                 } else {
-                    if ( is_numeric( $value ) ) {
-                        $value = ' = ' . $value;
-                    } else {
-                        $value = " = '" . $value . "'";
-                    }
+                    $value = " = " . $this->_sql->sqlString( $value );
                 }
 
-                $this->addWhere( $this->getTable() . '.' . $field->getColumn() . $value );
+                $this->where( $r . $this->getTable()   . $r . '.' .
+                              $r . $field->getColumn() . $r . $value );
             }
         }
 
@@ -702,6 +702,9 @@
          */
         function insert( $auto=true ) {
 
+            // before insert callbacks
+            $this->_executeCallbacks( 'insert', true );
+
             $values = $this->getValues( true, true, true );
 
             $auto_field = current( $this->_getFieldsByMethod( 'isAutoIncrement' ) );
@@ -710,21 +713,21 @@
                 unset( $values[ $auto_field->getColumn() ] );
             }
 
-            $this->resetQuery();
-
             if ( ! sizeof( $values ) ) {
                 return;
             }
 
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
             
-            // before insert callbacks
-            $this->_executeCallbacks( 'insert', true );
+            $this->_sql->insert();
+            $this->_sql->into( $this->getTable() );
+            $this->_sql->values( $values );
+            $sql = $this->_sql->getSql();
 
-            $result = $this->_db->executeInsert( $this->getTable(), $values );
-
-            YDDebugUtil::debug( end( $GLOBALS['YD_SQL_QUERY'] ) );
-
+            YDDebugUtil::debug( $sql );
+            
+            $result = $this->_db->executeSql( $sql );
+            
             if ( is_numeric( $result ) && $auto_field ) {
                 $this->set( $auto_field->getName(), $result );
             }
@@ -732,26 +735,29 @@
             // after insert callbacks
             $this->_executeCallbacks( 'insert', false );
             
+            $this->resetQuery();
+
             return $result;
 
         }
 
         /**
          *  This function executes an UPDATE query based on the values of the object
-         *  and any value set by addWhere.
+         *  and any value set by where.
          *
          *  @returns  The number of rows affected.
          */
         function update() {
 
+            // before update callbacks
+            $this->_executeCallbacks( 'update', true );
+            
             $this->_prepareQuery();
 
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
             $values = $this->getValues( true, true, true );
             $where = $this->_sql->getWhere( false );
-
-            $this->resetQuery();
 
             if ( ! sizeof( $values ) ) {
                 return;
@@ -763,35 +769,39 @@
                 return;
             }
             
-            // before update callbacks
-            $this->_executeCallbacks( 'update', true );
+            $this->_sql->update();
+            $this->_sql->table( $this->getTable() );
+            $this->_sql->set( $values );
+            $sql = $this->_sql->getSql();
 
-            $result = $this->_db->executeUpdate( $this->getTable(), $values, $where );
-
-            YDDebugUtil::debug( end( $GLOBALS['YD_SQL_QUERY'] ) );
-
+            YDDebugUtil::debug( $sql );
+            
+            $result = $this->_db->executeSql( $sql );
+            
             // after update callbacks
             $this->_executeCallbacks( 'update', false );
+            
+            $this->resetQuery();
 
             return $this->_count = (int) $result;
         }
 
         /**
          *  This function executes an DELETE query based on the values of the object
-         *  or any condition set by addWhere and addOrder.
+         *  or any condition set by where and order.
          *
          *  @returns  The number of rows affected.
          */
         function delete() {
+
+            // before delete callbacks
+            $this->_executeCallbacks( 'delete', true );
 
             $this->_prepareQuery();
 
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
             $where = $this->_sql->getWhere( false );
-            $order = $this->_sql->getOrder();
-
-            $this->resetQuery();
 
             if ( ! strlen( trim( $where ) ) &&  ! YDConfig::get( 'YD_DBOBJECT_DELETE' ) ) {
                 trigger_error(  $this->getClassName() . ' -
@@ -799,15 +809,18 @@
                 return;
             }
             
-            // before delete callbacks
-            $this->_executeCallbacks( 'delete', true );
-
-            $result = $this->_db->executeDelete( $this->getTable(), $where . $order );
-
-            YDDebugUtil::debug( end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->_sql->delete();
+            $this->_sql->table( $this->getTable() );
+            $sql = $this->_sql->getSql();
+            
+            YDDebugUtil::debug( $sql );
+            
+            $result = $this->_db->executeSql( $sql );
 
             // after delete callbacks
             $this->_executeCallbacks( 'delete', false );
+
+            $this->resetQuery();
 
             return $this->_count = (int) $result;
 
@@ -815,7 +828,7 @@
 
         /**
          *  This function finds the rows that match the object field's values
-         *  an any other condition added with addWhere, addGroup, addHaving, etc.
+         *  an any other condition added with where, group, having, etc.
          *
          *  You can add values to the method's parameters to search the relations.
          *
@@ -825,6 +838,9 @@
          */
         function find() {
 
+            // before find callbacks
+            $this->_executeCallbacks( 'find', true );
+            
             YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
             $args = func_get_args();
@@ -836,14 +852,15 @@
             
             $this->_last = $relations;
 
-            $this->_sql->setAction( 'SELECT' );
+            $r = $this->_sql->getReserved();
+            $this->_sql->select();
             $this->_sql->resetFrom();
 
             $pos = 0;
             $slices = array();
 
             // Add local table
-            $this->_sql->addTable( $this->getTable() );
+            $this->_sql->table( $this->getTable() );
             
             // Prepare query in local object
             $this->_prepareQuery( true );
@@ -862,7 +879,7 @@
 
                 // Local table
                 $l_table = $this->getTable();
-                $l_key = $rel->getLocalField();
+                $l_key = $rel->getLocalKey();
 
                 if ( ! $l_key ) {
                     $l_key = current( $this->_getFieldsByMethod( 'isKey', false ) );
@@ -874,7 +891,7 @@
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
                 $f_table = $this->$f_var->getTable();
-                $f_key = $rel->getForeignField();
+                $f_key = $rel->getForeignKey();
 
                 if ( ! $f_key ) {
                     $f_key   = current( $this->$f_var->_getFieldsByMethod( 'isKey', false ) );
@@ -897,9 +914,9 @@
                 if ( ! $rel->isManyToMany() ) {
 
                     // Join foreign table
-                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
-                                            $f_table . '.' . $f_column );
+                    $this->_sql->join( $rel->getForeignJoin(), $f_table );
+                    $this->_sql->on( $r . $l_table . $r . '.' . $r . $l_column . $r . ' = ' .
+                                     $r . $f_table . $r . '.' . $r . $f_column . $r );
 
                 } else {
 
@@ -914,13 +931,13 @@
                     $c_lkey  = $l_table . '_' . $l_key;
 
                     // User-defined cross foreign key
-                    if ( $rel->getCrossForeignField() ) {
-                        $c_fkey = $rel->getCrossForeignField();
+                    if ( $rel->getCrossForeignKey() ) {
+                        $c_fkey = $rel->getCrossForeignKey();
                     }
                     
                     // User-defined cross local key
-                    if ( $rel->getCrossLocalField() ) {
-                        $c_lkey = $rel->getCrossLocalField();
+                    if ( $rel->getCrossLocalKey() ) {
+                        $c_lkey = $rel->getCrossLocalKey();
                     }
                     
                     // Cross foreign field column name
@@ -942,50 +959,55 @@
                     $this->_sql->select = array_merge( $this->_sql->select, $this->$c_var->_sql->select );
 
                     // Join cross table
-                    $this->_sql->addJoin( $rel->getCrossJoin(), $c_table );
-                    $this->_sql->addJoinOn( $l_table . '.' . $l_column . ' = ' .
-                                            $c_table . '.' . $c_lcolumn );
+                    $this->_sql->join( $rel->getCrossJoin(), $c_table );
+                    $this->_sql->on( $r . $l_table . $r . '.' . $r . $l_column  . $r . ' = ' .
+                                     $r . $c_table . $r . '.' . $r . $c_lcolumn . $r );
 
                     // Cross table additional conditions
                     if ( $where = $rel->getCrossConditions() ) {
-                        $this->_sql->addJoinOn( $where );
+                        $this->_sql->on( $where );
                     }
                     if ( $where = $this->$c_var->_sql->getWhere( false ) ) {
-                        $this->_sql->addJoinOn( $where );
+                        $this->_sql->on( $where );
                     }
 
                     // Join foreign table
-                    $this->_sql->addJoin( $rel->getForeignJoin(), $f_table );
-                    $this->_sql->addJoinOn( $c_table . '.' . $c_fcolumn . ' = ' .
-                                            $f_table . '.' . $f_column );
+                    $this->_sql->join( $rel->getForeignJoin(), $f_table );
+                    $this->_sql->on( $r . $c_table . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
+                                            $r . $f_table . $r . '.' . $r . $f_column  . $r );
 
                 }
 
                 // Foreign table additional conditions
                 if ( $where = $rel->getForeignConditions() ) {
-                    $this->_sql->addJoinOn( $where );
+                    $this->_sql->on( $where );
                 }
                 if ( $where = $this->$f_var->_sql->getWhere( false ) ) {
-                    $this->_sql->addJoinOn( $where );
+                    $this->_sql->on( $where );
                 }
 
                 // Additional statements
                 if ( $where = $rel->getWhere() ) {
-                    $this->_sql->addWhere( $where );
+                    $this->_sql->where( $where );
                 }
                 if ( $group = $rel->getGroup() ) {
-                    $this->_sql->addGroup( $group );
+                    $this->_sql->group( $group );
                 }
                 if ( $having = $rel->getHaving() ) {
-                    $this->_sql->addHaving( $having );
+                    $this->_sql->having( $having );
                 }
                 if ( $order = $rel->getOrder() ) {
-                    $this->_sql->addOrder( $order );
+                    $this->_sql->order( $order );
                 }
 
             }
 
-            return $this->findSql( $this->_sql->getSql(), $slices );
+            $result = $this->findSql( $this->_sql->getSql(), $slices );
+            
+            // after find callbacks
+            $this->_executeCallbacks( 'find', false );
+            
+            return $result;
 
         }
 
@@ -1002,13 +1024,10 @@
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
 
-            // before find callbacks
-            $this->_executeCallbacks( 'find', true );
-
             $fetch = YDConfig::get( 'YD_DB_FETCHTYPE' );
             YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_NUM );
 
-            $results = $this->_db->getRecords( $sql, $this->_limit, $this->_offset );
+            $results = $this->_db->getRecords( $sql );
             
             YDConfig::set( 'YD_DB_FETCHTYPE', $fetch );
 
@@ -1066,9 +1085,6 @@
 
             }
             
-            // after find callbacks
-            $this->_executeCallbacks( 'find', false );
-
             return $this->_count;
 
         }
@@ -1097,13 +1113,14 @@
          *  Adds a select field to the query. The registered fields and selects can
          *  be added at each parameter of the method.
          */
-        function addSelect() {
+        function select() {
 
             $args = func_get_args();
 
             if ( ! sizeof( $args ) ) {
                 return;
             }
+            $r = $this->_sql->getReserved();
 
             foreach ( $args as $field ) {
 
@@ -1115,9 +1132,9 @@
                     $expr = $select->getExpression();
                 } else {
                     $field_obj = & $this->getField( $field );
-                    $expr = $this->getTable() . '.' . $field_obj->getColumn();
+                    $expr = $r . $this->getTable() . $r . '.' . $r . $field_obj->getColumn() . $r;
                 }
-                $this->_sql->addSelect( $expr, $field );
+                $this->_sql->expr( $expr, $field );
             }
 
         }
@@ -1128,18 +1145,30 @@
          *  @param $expr   The condition expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
-        function addWhere( $expr, $logic='AND' ) {
-            $this->_sql->addWhere( $expr, $logic );
+        function where( $expr, $logic='AND' ) {
+            $this->_sql->where( $expr, $logic );
         }
 
         /**
          *  Adds an expression to the GROUP BY clause.
          *
-         *  @param $expr  The expression.
-         *  @param $desc  (optional) If true adds a DESC string to the expression. Default: false.
+         *  @param $expr     The column name.
+         *  @param $desc     (optional) If true adds a DESC string to the expression. Default: false.
+         *  @param $reserved (optional) Indicates if the expression is a reserved keyword. Default: false.
          */
-        function addGroup( $expr, $desc=false ) {
-            $this->_sql->addGroup( $expr, $desc );
+        function group( $expr, $desc=false, $reserved=false ) {
+            $this->_sql->group( $expr, $desc, $reserved );
+        }
+
+        /**
+         *  Alias of group. Adds an expression to the GROUP BY clause.
+         *
+         *  @param $expr     The column name.
+         *  @param $desc     (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved (optional) Indicates if the expression is a reserved keyword. Default: false.
+         */
+        function groupby( $expr, $desc=false, $reserved=false ) {
+            $this->group( $expr, $desc, $reserved );
         }
 
         /**
@@ -1148,29 +1177,48 @@
          *  @param $expr   The expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
-        function addHaving( $expr, $logic='AND' ) {
-            $this->_sql->addHaving( $expr, $logic );
+        function having( $expr, $logic='AND' ) {
+            $this->_sql->having( $expr, $logic );
         }
 
         /**
          *  Adds a column to the ORDER BY clause.
          *
-         *  @param $expr  Column name.
-         *  @param $desc  (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $expr     Column name.
+         *  @param $desc     (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved (optional) Indicates if the expression is a reserved keyword. Default: false.
          */
-        function addOrder( $expr, $desc=false ) {
-            $this->_sql->addOrder( $expr, $desc );
+        function order( $expr, $desc=false, $reserved=false ) {
+            $this->_sql->order( $expr, $desc, $reserved );
         }
 
         /**
-         *  This function sets the limit for SELECT queries only.
+         *  Alias of order. Adds a column to the ORDER BY clause.
          *
-         *  @param $limit     How many records to return.
-         *  @param $offset    (optional) Where to start from.
+         *  @param $expr     Column name.
+         *  @param $desc     (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved (optional) Indicates if the expression is a reserved keyword. Default: false.
          */
-        function setLimit( $limit=-1, $offset=-1 ) {
-            $this->_limit  = $limit;
-            $this->_offset = $offset;
+        function orderby( $expr, $desc=false, $reserved=false ) {
+            $this->order( $expr, $desc, $reserved );
+        }
+
+        /**
+         *  This function sets the limit for the queries.
+         *
+         *  @param $limit  (optional) The limit number;
+         */
+        function limit( $limit=-1 ) {
+            $this->_sql->limit( $limit );
+        }
+
+        /**
+         *  This function sets the offset for SELECT queries only.
+         *
+         *  @param $offset  (optional) The offset.
+         */
+        function offset( $offset=-1 ) {
+            $this->_sql->offset( $offset );
         }
 
         /**
@@ -1272,8 +1320,6 @@
          */
         function resetQuery() {
             $this->_sql->reset();
-            $this->_limit  = -1;
-            $this->_offset = -1;
         }
 
         /**
@@ -1859,19 +1905,19 @@
         }
 
         /**
-         *  This function set the local field.
+         *  This function set the local key.
          *
          *  @param $name  The field name.
          */
-        function setLocalField( $name ) {
-            $this->local->set( 'field', $name );
+        function setLocalKey( $name ) {
+            $this->local->set( 'key', $name );
         }
 
         /**
-         *  @returns  The local field.
+         *  @returns  The local key.
          */
-        function getLocalField() {
-            return $this->local->get( 'field' );
+        function getLocalKey() {
+            return $this->local->get( 'key' );
         }
 
         /**
@@ -1917,15 +1963,15 @@
          *
          *  @param $name  The field name.
          */
-        function setForeignField( $name ) {
-            $this->foreign->set( 'field', $name );
+        function setForeignKey( $name ) {
+            $this->foreign->set( 'key', $name );
         }
 
         /**
          *  @returns  The foreign field name.
          */
-        function getForeignField() {
-            return $this->foreign->get( 'field' );
+        function getForeignKey() {
+            return $this->foreign->get( 'key' );
         }
 
         /**
@@ -2018,35 +2064,35 @@
         }
 
         /**
-         *  This function set the cross local field.
+         *  This function set the cross local key.
          *
          *  @param $name  The field name.
          */
-        function setCrossLocalField( $name ) {
-            $this->cross->set( 'local_field', $name );
+        function setCrossLocalKey( $name ) {
+            $this->cross->set( 'local_key', $name );
         }
 
         /**
-         *  @returns  The cross local field name.
+         *  @returns  The cross local key name.
          */
-        function getCrossLocalField() {
-            return $this->cross->get( 'local_field' );
+        function getCrossLocalKey() {
+            return $this->cross->get( 'local_key' );
         }
 
         /**
-         *  This function set the cross foreign field.
+         *  This function set the cross foreign key.
          *
          *  @param $name  The field name.
          */
-        function setCrossForeignField( $name ) {
-            $this->cross->set( 'foreign_field', $name );
+        function setCrossForeignKey( $name ) {
+            $this->cross->set( 'foreign_key', $name );
         }
 
         /**
-         *  @returns  The cross foreign field name.
+         *  @returns  The cross foreign key name.
          */
-        function getCrossForeignField() {
-            return $this->cross->get( 'foreign_field' );
+        function getCrossForeignKey() {
+            return $this->cross->get( 'foreign_key' );
         }
 
         /**
@@ -2171,6 +2217,7 @@
 
         var $name;
         var $expr;
+        var $reserved;
         var $callback;
 
         /**
@@ -2219,6 +2266,7 @@
         function getExpression() {
             return $this->get( 'expr' );
         }
+            
 
         /**
          *  This function sets the callback method.

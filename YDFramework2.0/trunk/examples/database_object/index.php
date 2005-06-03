@@ -239,12 +239,12 @@
             $user->resetQuery(); // resets default query statements
             $user->phone->resetQuery();
             
-            $user->addSelect( 'id', 'name', 'country' );
-            $user->phone->addSelect( 'number', 'ord' );
+            $user->select( 'id', 'name', 'country' );
+            $user->phone->select( 'number', 'ord' );
 
-            $user->addWhere( $user->getTable() . ".country LIKE 'b%'" );
-            $user->addOrder( $user->phone->getTable() . '.ord' );
-            $user->setLimit( 2 );
+            $user->where( $user->getTable() . ".country LIKE 'b%'" );
+            $user->order( $user->phone->getTable() . '.ord' );
+            $user->limit( 2 );
             
             $user->find( 'phone' );
             $this->template->assign( 'find3_results', YDDebugUtil::r_dump( $user->getResults() ) );

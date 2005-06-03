@@ -96,12 +96,12 @@ $user->load( 'phone' ); // now we have a phone object in $user
 $user->resetQuery(); // resets default query statements
 $user->phone->resetQuery();
 
-$user->addSelect( 'id', 'name', 'country' );
-$user->phone->addSelect( 'number', 'ord' );
+$user->select( 'id', 'name', 'country' );
+$user->phone->select( 'number', 'ord' );
 
-$user->addWhere( $user->getTable() . ".country LIKE 'b%'" );
-$user->addOrder( $user->phone->getTable() . '.ord' );
-$user->setLimit( 2 );
+$user->where( $user->getTable() . ".country LIKE 'b%'" );
+$user->order( $user->phone->getTable() . '.ord' );
+$user->limit( 2 );
 
 $user->find( 'phone' );
 $results = $user->getResults();
@@ -114,7 +114,7 @@ YDDebugUtil::dump( $results );
     
     <p>The <b>resetQuery</b> method clears all the default query elements for the following query. By default, all fields of the related objects in the search are added to the select statement, so executing a <b>resetQuery</b> will clear all of them and you can add only the fields you want to retrieve.</p>
     
-    <p>The example above only uses <b>addSelect</b>, <b>addWhere</b>, <b>addOrder</b> and <b>setLimit</b> but there is also <b>addGroup</b>, <b>addHaving</b> and the possibility of adding values to the objects fields so your filters can be more complex.</p>
+    <p>The example above only uses <b>select</b>, <b>where</b>, <b>order</b> and <b>limit</b> but there is also <b>group</b>, <b>having</b> and the possibility of adding values to the objects fields so your filters can be more complex.</p>
 
     <p>&nbsp;</p>
     <p><a href="index.php?do=usersgroups&YD_DEBUG={$YD_DEBUG}">Next</a></p>

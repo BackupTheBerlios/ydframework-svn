@@ -16,8 +16,8 @@
             
             // Relations
             $rel = & $this->registerRelation( 'user', true, 'user', 'user_group' );
-            $rel->setCrossLocalField( 'group_id' );
-            $rel->setCrossForeignField( 'user_id' );
+            $rel->setCrossLocalKey( 'group_id' );
+            $rel->setCrossForeignKey( 'user_id' );
             
             // Callbacks
             $this->registerCallback( 'debug', 'insert' );
