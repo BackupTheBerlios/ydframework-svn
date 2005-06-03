@@ -94,10 +94,9 @@
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[SELECT DISTINCT `id`, `name` AS `user_name`, SUM( `value` ) AS
-`total` FROM `user` WHERE ( `id`= 144 OR ( `name` LIKE 'David%' AND
-`id` > 13 ) ) GROUP BY `id` DESC HAVING `total` > 100 ORDER BY `name`,
-`total` DESC LIMIT 100 OFFSET 50]]></programlisting>
+    <programlisting><![CDATA[SELECT DISTINCT `id`, `name` AS `user_name`, SUM( `value` ) AS `total` FROM `user`
+WHERE ( `id`= 144 OR ( `name` LIKE 'David%' AND `id` > 13 ) ) GROUP BY `id` DESC HAVING `total` > 100
+ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
 
     <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
 
@@ -163,12 +162,10 @@
 
     <para>This would output the following SQL statement:</para>
 
-    <programlisting><![CDATA[SELECT `id`, `name`, `g`.`id` AS `gid`, `g`.`name` AS
-`group_name`, `a`.`id` AS `aid`, `a`.`name` AS `attach_name`
-FROM `user` AS `u` LEFT JOIN `group` AS `g` ON ( u.group_id =
-g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR
-( a.size > 150 AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY
-`a`.`name` LIMIT 50]]></programlisting>
+    <programlisting><![CDATA[SELECT `id`, `name`, `g`.`id` AS `gid`, `g`.`name` AS `group_name`,
+`a`.`id` AS `aid`, `a`.`name` AS `attach_name` FROM `user` AS `u` LEFT JOIN `group` AS `g`
+ON ( u.group_id = g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR ( a.size > 150
+AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programlisting>
 
     <para>Also SQL delete statements can be constructed with the YDSqlQuery class:</para>
 
@@ -278,7 +275,7 @@ VALUES ( 'David', 'email@host.com', 1, null )]]></programlisting>
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[UPDATE `user` SET `name` = 'David', `email` =
-'email@host.com', `admin` = 1, `purple` = null WHERE id = 144]]></programlisting>
+    <programlisting><![CDATA[UPDATE `user` SET `name` = 'David', `email` = 'email@host.com',
+`admin` = 1, `purple` = null WHERE id = 144]]></programlisting>
 
 </chapter>
