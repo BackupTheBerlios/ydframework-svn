@@ -26,32 +26,10 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-    /**
-     *  This class defines a YDSqlQuery object.
-     */
     class YDSqlQuery extends YDAddOnModule {
-
-        var $action;
-        var $options = array();
-        var $select  = array();
-        var $tables  = array();
-        var $join    = array();
-        var $where   = array();
-        var $group   = array();
-        var $having  = array();
-        var $order   = array();
-        var $values  = array();
-        var $joinon  = array();
-
-        /**
-         *	The class constructor can be used to set the action and optional options.
-         *
-         *	@param $action	 (optional) Name of the action. Should be one of these:
-         *                   SELECT, INSERT, UPDATE, DELETE. Default: SELECT.
-         *	@param $options	 (optional) Array of flags to be set after the action.
-         *					 e.g. DISTINCT, SQL_CACHE, ALL, etc.
-         */
-         function YDSqlQuery( $action='SELECT', $options=array() ) {
+        
+        function YDSqlQuery() {
+            
             $this->YDAddOnModule();
 
             // Setup the module
@@ -59,66 +37,206 @@
             $this->_version = '1.0';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDSqlQuery object.';
+            
+        }
+        
+        function getInstance( $driver ) {
+            
+            // The list of known drivers
+            $regDrivers = array();
 
+            // Register new driver
+            if( is_array($driver) && isset( $driver['drivername'] ) ) {
+                $regDrivers[ strtolower( $driver['drivername'] ) ] = $driver;
+                $driver = $driver[ 'drivername' ];
+            } else {
+                
+                // Register the standard drivers
+                $regDrivers[ strtolower( 'mysql' ) ] = array(
+                    'class' => 'YDSqlQueryDriver_mysql', 'file' => ''
+                );
+                $regDrivers[ strtolower( 'oracle' ) ] = array(
+                    'class' => 'YDSqlQueryDriver_oracle', 'file' => 'YDSqlQueryDriver_oracle.php'
+                );
+                $regDrivers[ strtolower( 'postgres' ) ] = array(
+                    'class' => 'YDSqlQueryDriver_postgres', 'file' => 'YDSqlQueryDriver_postgres.php'
+                );
+                $regDrivers[ strtolower( 'sqlite' ) ] = array(
+                    'class' => 'YDSqlQueryDriver_sqlite', 'file' => 'YDSqlQueryDriver_sqlite.php'
+                );
+                
+                // Check if the driver exists
+                if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
+                    trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
+                }
+            }
+
+            // Include the driver
+            if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
+                YDInclude( 'YDSqlQueryDrivers' . YD_DIRDELIM . $regDrivers[ strtolower( $driver ) ]['file'] );
+            }
+            
+            // Check if the driver is supported
+            if ( ! call_user_func( array( $regDrivers[ strtolower( $driver ) ]['class'], 'isSupported' ) ) ) {
+                trigger_error( 'Unsupported database type: "' . $driver . '". Extension is not loaded.', YD_ERROR );
+            }
+
+            // Make a new connection object and return it
+            $className = $regDrivers[ strtolower( $driver ) ]['class'];
+            return new $className();
+        }
+        
+    }
+
+    /**
+     *  This class defines a YDSqlQueryDriver object.
+     */
+    class YDSqlQueryDriver extends YDBase {
+
+        var $action   = 'SELECT';
+        var $options  = array();
+        var $select   = array();
+        var $tables   = array();
+        var $join     = array();
+        var $where    = array();
+        var $group    = array();
+        var $having   = array();
+        var $order    = array();
+        var $values   = array();
+        var $joinon   = array();
+        var $limit    = -1;
+        var $offset   = -1;
+        var $reserved = '`';
+        var $quote    = "'";
+        var $filter   = true;
+        
+        /**
+         *  The class constructor can be used to set the action and optional options.
+         */
+         function YDSqlQueryDriver() {
+            
+            $this->YDBase();
+            
             $this->reset();
-            $this->setAction( $action );
-            $this->setOptions( $options );
+            $this->action();
+            
+        }
+        
+        /**
+         *  This function will check if the server supports this database type.
+         *
+         *  @returns    Boolean indicating if the database type is supported by the server.
+         */
+        function isSupported() {
+            return true;
+        }
+        
+        /**
+         *  This function sets the action to INSERT.
+         */
+        function insert() {
+            $this->action( 'INSERT' );
+        }
+        
+        /**
+         *  This function sets the action to SELECT.
+         */
+        function select() {
+            $this->action( 'SELECT' );
+        }
+        
+        /**
+         *  This function sets the action to UPDATE.
+         */
+        function update() {
+            $this->action( 'UPDATE' );
         }
 
         /**
-         *	This function sets the action for the query.
+         *  This function sets the action to DELETE.
+         */
+        function delete() {
+            $this->action( 'DELETE' );
+        }
+
+        /**
+         *  This function sets the action for the query.
          *
-         *	@param $action	 (optional) Name of the action. Should be one of these:
+         *  @param $action   (optional) Name of the action. Should be one of these:
          *                   SELECT, INSERT, UPDATE, DELETE. Default: SELECT.
          */
-        function setAction( $action='SELECT' ) {
-            $this->action = $action;
+        function action( $action='SELECT' ) {
+            $this->action = strtoupper( $action );
         }
+        
         /**
-         *	This function sets the options for the query.
+         *  This function sets the options for the query.
          *
-         *	@param $options	 Array of flags to be set after the action.
-         *					 e.g. DISTINCT, SQL_CACHE, ALL, etc.
+         *  @param $options  Array of flags to be set after the action.
+         *                   e.g. DISTINCT, SQL_CACHE, ALL, etc.
          */
-        function setOptions( $options ) {
+        function options( $options ) {
             $this->options = $options;
         }
 
         /**
-         *	Adds a table to the query.
+         *  Adds a table to the query.
          *
-         *	@param $table  The name of the table.
-         *	@param $alias  (optional) The table alias.
+         *  @param $table  The name of the table.
+         *  @param $alias  (optional) The table alias.
          *
-         *  @returns	   The table alias if defined or the table name.
+         *  @returns       The table alias if defined or the table name.
          */
-        function addTable( $table, $alias='' ) {
+        function table( $table, $alias='' ) {
 
             $alias = ( $alias == $table ) ? '' : $alias;
-            array_push( $this->tables, array( 'name' => $table, 'alias' => $alias ) );
-
+            
             if ( strlen( $alias ) ) {
-                $defined = array();
                 foreach ( $this->tables as $arr ) {
-                    if ( strlen( $arr['alias'] ) && in_array( $arr['alias'], $defined ) ) {
+                    if ( $alias == $arr['alias'] ) {
                         trigger_error( 'Table alias "' . $arr['alias'] . '" already defined.', YD_ERROR );
                     }
-                    array_push( $defined, $arr['alias'] );
                 }
             }
+            $this->tables[] = array( 'name' => $table, 'alias' => $alias );
+
             return strlen( $alias ) ? $alias : $table;
+        }
+        
+        /**
+         *  Alias of table.
+         *
+         *  @param $table  The name of the table.
+         *  @param $alias  (optional) The table alias.
+         *
+         *  @returns       The table alias if defined or the table name.
+         */
+        function from( $table, $alias='' ) {
+            return $this->table( $table, $alias );
         }
 
         /**
-         *	Adds a join table to the query.
+         *  Alias of table.
          *
-         *	@param $type        Should be one of these: LEFT, LEFT OUTER, RIGHT, RIGHT OUTER, INNER, CROSS
+         *  @param $table  The name of the table.
+         *  @param $alias  (optional) The table alias.
+         *
+         *  @returns       The table alias if defined or the table name.
+         */
+        function into( $table, $alias='' ) {
+            return $this->table( $table, $alias );
+        }
+
+        /**
+         *  Adds a join table to the query.
+         *
+         *  @param $type        Should be one of these: LEFT, LEFT OUTER, RIGHT, RIGHT OUTER, INNER, CROSS
          *  @param $table       The joining table name.
          *  @param $alias       (optional) The joining table alias.
          *
          *  @returns   The alias for the joining table.
          */
-        function addJoin( $type, $table, $alias='' ) {
+        function join( $type, $table, $alias='' ) {
 
             if ( ! sizeof( $this->tables ) ) {
                 trigger_error( 'No tables defined to join.', YD_ERROR );
@@ -126,153 +244,249 @@
 
             end( $this->tables );
 
-            $alias = ( $alias == $table ) ? '' : $alias;
-
             $this->join[ key( $this->tables ) ] = array( 'type' => $type,
-                                                         'table' => $table,
-                                                         'alias' => $alias );
+                                         'table' => $table,
+                                         'alias' => ( $alias == $table ) ? '' : $alias );
 
             $this->joinon[ key( $this->tables ) ] = array();
 
-            return $this->addTable( $table, $alias );
+            return $this->table( $table, $alias );
         }
 
         /**
-         *	Opens a group of JOIN conditions.
+         *  Adds a join condition for the last join defined.
          *
-         *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
-         */
-        function openJoinOnGroup( $logic='AND' ) {
-            end( $this->tables );
-            array_push( $this->joinon[ key( $this->tables )-1 ],
-                                       array( 'logic' => strtoupper( $logic ) ) );
-        }
-
-        /**
-         *	Adds a join condition for the last join defined.
-         *
-         *	@param $expr        The expression.
+         *  @param $expr        The expression.
          *  @param $logic       (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
-        function addJoinOn( $expr, $logic='AND' ) {
+        function on( $expr, $logic='AND' ) {
             end( $this->tables );
-            array_push( $this->joinon[ key( $this->tables )-1 ],
-                                       array( 'expr' => $expr,
-                                              'logic' => strtoupper( $logic ) ) );
+            $this->joinon[ key( $this->tables )-1 ][] = array( 'expr' => $expr,
+                                                               'logic' => strtoupper( $logic ) );
         }
 
         /**
-         *	Closes a group of JOIN conditions. This method is optional as the class
+         *  Opens a group of JOIN conditions.
+         *
+         *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
+         */
+        function openOn( $logic='AND' ) {
+            end( $this->tables );
+            $this->joinon[ key( $this->tables )-1 ][] = array( 'logic' => strtoupper( $logic ) );
+        }
+        
+        /**
+         *  Closes a group of JOIN conditions. This method is optional as the class
          *  will automatically close all groups that weren't closed.
          */
-        function closeJoinOnGroup() {
+        function closeOn() {
             end( $this->tables );
-            array_push( $this->joinon[ key( $this->tables )-1 ], array() );
+            $this->joinon[ key( $this->tables )-1 ][] = array();
         }
 
         /**
-         *	Adds a select expression.
+         *  Alias of expression.
          *
-         *	@param $expr   The expression.
-         *  @param $alias  (optional) The alias for the expression.
+         *  @param $expr      The expression.
+         *  @param $alias     (optional) The alias for the expression.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
          */
-        function addSelect( $expr, $alias='' ) {
+        function expr( $expr, $alias='', $reserved=false ) {
+            $this->expression( $expr, $alias, $reserved );
+        }
+        
+        /**
+         *  Adds a select expression.
+         *
+         *  @param $expr      The expression.
+         *  @param $alias     (optional) The alias for the expression.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
+         */
+        function expression( $expr, $alias='', $reserved=false ) {            
             if ( strlen( $expr ) ) {
                 $alias = ( $alias == $expr ) ? '' : $alias;
-                array_push( $this->select, array( 'expr' => $expr,
-                                                  'alias' => $alias ) );
+                if ( $alias ) {
+                    foreach ( $this->select as $arr ) {
+                        if ( $arr['alias'] == $alias ) {
+                            trigger_error( 'Select alias "' . $arr['alias'] . '" already defined.', YD_ERROR );
+                        }
+                    }
+                }
+                $this->select[] = array( 'expr'     => $expr,
+                                         'alias'    => $alias,
+                                         'reserved' => $reserved );
             }
         }
 
         /**
-         *	Adds a column to the ORDER BY clause.
+         *  Adds a column to the ORDER BY clause.
          *
-         *	@param $expr  Column name.
-         *  @param $desc  (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $expr      The expression.
+         *  @param $desc      (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
          */
-        function addOrder( $expr, $desc=false ) {
+        function order( $expr, $desc=false, $reserved=false ) {
             if ( strlen( $expr ) ) {
-                array_push( $this->order, array( 'expr' => $expr, 'desc' => $desc ) );
+                $this->order[] = array( 'expr'     => $expr,
+                                        'desc'     => $desc,
+                                        'reserved' => $reserved );
             }
         }
 
         /**
-         *	Adds an expression to the GROUP BY clause.
+         *  Alias of order.
          *
-         *	@param $expr  The expression.
+         *  @param $expr      The expression.
+         *  @param $desc      (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
+         */
+        function orderby( $expr, $desc=false, $reserved=false ) {
+            $this->order( $expr, $desc, $reserved );
+        }
+
+        /**
+         *  Adds an expression to the GROUP BY clause.
+         *
+         *  @param $expr  The expression.
          *  @param $desc  (optional) If true adds a DESC string to the expression. Default: false.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
          */
-        function addGroup( $expr, $desc=false ) {
+        function group( $expr, $desc=false, $reserved=false ) {
             if ( strlen( $expr ) ) {
-                array_push( $this->group, array( 'expr' => $expr, 'desc' => $desc ) );
+                $this->group[] = array( 'expr'     => $expr,
+                                        'desc'     => $desc,
+                                        'reserved' => $reserved );
             }
         }
 
         /**
-         *	Adds an expression to the HAVING clause.
+         *  Alias of group.
          *
-         *	@param $expr   The expression.
+         *  @param $expr      The expression.
+         *  @param $desc      (optional) If true adds a DESC string to the column. Default: false.
+         *  @param $reserved  (optional) Escapes the expression as a reserved keyword.
+         */
+        function groupby( $expr, $desc=false, $reserved=false ) {
+            $this->group( $expr, $desc, $reserved );
+        }
+
+        /**
+         *  Adds an expression to the HAVING clause.
+         *
+         *  @param $expr   The expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
-        function addHaving( $expr, $logic='AND' ) {
+        function having( $expr, $logic='AND' ) {
             if ( strlen( $expr ) ) {
-                array_push( $this->having, array( 'expr' => $expr, 'logic' => strtoupper( $logic ) ) );
+                $this->having[] = array( 'expr'  => $expr,
+                                         'logic' => strtoupper( $logic ) );
             }
         }
 
         /**
-         *	Opens a group of WHERE conditions.
-         *
-         *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
-         */
-        function openWhereGroup( $logic='AND' ) {
-            array_push( $this->where, array( 'logic' => strtoupper( $logic ) ) );
-        }
-
-        /**
-         *	Adds a condition to the WHERE clause.
+         *  Adds a condition to the WHERE clause.
          *
          *  @param $expr   The condition expression.
          *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
          */
-        function addWhere( $expr, $logic='AND' ) {
+        function where( $expr, $logic='AND' ) {
             if ( strlen( $expr ) ) {
-                array_push( $this->where, array( 'expr' => $expr, 'logic' => strtoupper( $logic ) ) );
+                $this->where[] = array( 'expr'  => $expr,
+                                        'logic' => strtoupper( $logic ) );
             }
         }
 
         /**
-         *	Closes a group of WHERE conditions. This method is optional as the class
+         *  Opens a group of WHERE conditions.
+         *
+         *  @param $logic  (optional) Logic operator (e.g. AND, OR, XOR). Default: AND.
+         */
+        function openWhere( $logic='AND' ) {
+            $this->where[] = array( 'logic' => strtoupper( $logic ) );
+        }
+
+        /**
+         *  Closes a group of WHERE conditions. This method is optional as the class
          *  will automatically close all groups that weren't closed.
          */
-        function closeWhereGroup() {
-            array_push( $this->where, array() );
+        function closeWhere() {
+            $this->where[] = array();
         }
 
         /**
-         *	Adds a column and it's value to be used in a
-         *  UPDATE or INSERT query.
+         *  This function sets the LIMIT.
          *
-         *  @param $column   The column name.
-         *  @param $value    The column value. If null, the value will
-         *                   be converted to a string "null" without the quotes.
+         *  @param $limit  (optional) The limit.
          */
-        function addValue( $column, $value ) {
-            $this->values[ $column ] = $value;
+        function limit( $limit=-1 ) {
+            $this->limit = $limit;
         }
 
         /**
-         *	Sets the values to be used in a UPDATE or INSERT query.
+         *  This function sets the OFFSET.
+         *
+         *  @param $offset  (optional) The offset.
+         */
+        function offset( $offset=-1 ) {
+            $this->offset = $offset;
+        }
+
+        /**
+         *  Sets the values to be used in a UPDATE or INSERT query.
          *
          *  @param $values   The associative array with the column names
          *                   as keys and it's values.
+         *  @param $filter   (optional) Don't include columns that start with underscore.
+         *                   Default: true.
          */
-        function setValues( $values ) {
+        function set( $values, $filter=true ) {
             $this->values = $values;
+            $this->filter = $filter;
         }
 
         /**
-         *	This function builds the tables references expression and returns it.
+         *  Alias of set.
+         *
+         *  @param $values   The associative array with the column names
+         *                   as keys and it's values.
+         *  @param $filter   (optional) Don't include columns that start with underscore.
+         *                   Default: true.
+         */
+        function values( $values, $filter=true ) {
+            $this->set( $values, $filter );
+        }
+        
+        /**
+         *  Returns a quoted string for reserved words.
+         *
+         *  @param $string   The string.
+         *  
+         *  @returns         The quoted string.
+         */
+        function reserved( $string ) {
+            return $this->reserved . $string . $this->reserved;
+        }
+        
+        /**
+         *  Returns the character to quote reserved words.
+         *  
+         *  @returns         The character.
+         */
+        function getReserved() {
+            return $this->reserved;
+        }
+
+        /**
+         *  Returns the quote character.
+         *  
+         *  @returns         The character.
+         */
+        function getQuote() {
+            return $this->quote;
+        }
+
+        /**
+         *  This function builds the tables references expression and returns it.
          *
          *  @param $title       (optional) If true, returns the FROM string. Default: true.
          *
@@ -281,35 +495,40 @@
         function getFrom( $title=true ) {
 
             $from = array();
-            $done = array();
 
             foreach ( $this->tables as $index => $arr ) {
 
-                $table = $arr['name'];
-                $alias = $arr['alias'];
                 $sql = '';
+                
+                if ( ! isset( $this->join[ $index-1 ] ) ) {
 
-                if ( ! in_array( $table, $done ) ) {
+                    $table = $arr['name'];
+                    $alias = $arr['alias'];
+                    
                     $sql  = sizeof( $from ) ? ', ' : '';
-                    $sql .= $table;
-                    $sql .= strlen( $alias ) ? ' AS ' . $alias : '';
-                    array_push( $done, $table );
+                    $sql .= $this->reserved( $table );
+                    if ( strlen( $alias ) ) {
+                        $sql .= ' AS ' . $this->reserved( $alias );
+                    }
+                    
                 }
 
                 if ( array_key_exists( $index, $this->join ) ) {
 
                     $join = $this->join[ $index ];
-                    $sql .= ' ' . $join['type'] . ' JOIN ' . $join['table'];
-                    $sql .= strlen( $join['alias'] ) ? ' AS ' . $join['alias'] : '';
-
-                    if ( array_key_exists( $index, $this->joinon ) ) {
-                        $sql .= $this->getJoinOn( $index );
+                    $sql .= ' ' . $join['type'] . ' JOIN ';
+                    $sql .= $this->reserved( $join['table'] );
+                    if ( strlen( $join['alias'] ) ) {
+                        $sql .= ' AS ' . $this->reserved( $join['alias'] );
                     }
 
-                    array_push( $done, $join[ 'table' ] );
+                    if ( array_key_exists( $index, $this->joinon ) ) {
+                        $sql .= $this->getOn( $index );
+                    }
+                    
                 }
 
-                array_push( $from, $sql );
+                $from[] = $sql;
             }
 
             return ( $title ? ' FROM ' : '' ) . trim( implode( '', $from ) );
@@ -317,14 +536,14 @@
         }
 
         /**
-         *	This function builds the ON expression and returns it.
+         *  This function builds the ON expression and returns it.
          *
          *  @param $index  The index of the JOIN.
          *  @param $title  (optional) If true, returns the WHERE string. Default: true.
          *
          *  @returns  The conditions expression.
          */
-        function getJoinOn( $index, $title=true ) {
+        function getOn( $index, $title=true ) {
 
             $sql = $this->_getConditions( $this->joinon[ $index ] );
 
@@ -336,7 +555,7 @@
         }
 
         /**
-         *	This function builds the WHERE expression and returns it.
+         *  This function builds the WHERE expression and returns it.
          *
          *  @param $title  (optional) If true, returns the WHERE string. Default: true.
          *
@@ -354,7 +573,7 @@
         }
 
         /**
-         *	This functions builds the HAVING expression and returns it.
+         *  This functions builds the HAVING expression and returns it.
          *
          *  @param $title  (optional) If true, returns the HAVING string. Default: true.
          *
@@ -368,13 +587,13 @@
 
             $having = array();
             foreach ( $this->having as $arr ) {
-                array_push( $having, ( sizeof( $having ) ? $arr['logic'] . ' ' : '' ) . $arr['expr'] );
+                $having[] = ( sizeof( $having ) ? $arr['logic'] . ' ' : '' ) . $arr['expr'];
             }
             return ( $title ? ' HAVING ' : '' ) . implode( ' ', $having );
         }
 
         /**
-         *	This functions builds the ORDER BY expression and returns it.
+         *  This functions builds the ORDER BY expression and returns it.
          *
          *  @param $title  (optional) If true, returns the ORDER BY string. Default: true.
          *
@@ -387,14 +606,24 @@
             }
             $order = array();
             foreach ( $this->order as $arr ) {
-                array_push( $order, $arr['expr'] . ( $arr['desc'] ? ' DESC' : '' ) );
+                $sql = $arr['expr'];
+                if ( $arr['reserved'] ) {
+                    $parts = explode( '.', $arr['expr'] );
+                    foreach ( $parts as $k => $exp ) {
+                        $parts[$k] = $this->reserved( $exp );
+                    }
+                    $sql = implode( '.', $parts );
+                } 
+                $sql .= $arr['desc'] ? ' DESC' : '';
+                
+                $order[] = $sql;
             }
             return ( $title ? ' ORDER BY ' : '' ) . implode( ', ', $order );
 
         }
 
         /**
-         *	This functions builds the GROUP BY expression and returns it.
+         *  This functions builds the GROUP BY expression and returns it.
          *
          *  @param $title  (optional) If true, returns the GROUP BY string. Default: true.
          *
@@ -407,14 +636,25 @@
             }
             $group = array();
             foreach ( $this->group as $arr ) {
-                array_push( $group, $arr['expr'] . ( $arr['desc'] ? ' DESC' : '' ) );
+                
+                $sql = $arr['expr'];
+                if ( $arr['reserved'] ) {
+                    $parts = explode( '.', $arr['expr'] );
+                    foreach ( $parts as $k => $exp ) {
+                        $parts[$k] = $this->reserved( $exp );
+                    }
+                    $sql = implode( '.', $parts );
+                } 
+                $sql .= $arr['desc'] ? ' DESC' : '';
+                
+                $group[] = $sql;
             }
             return ( $title ? ' GROUP BY ' : '' ) . implode( ', ', $group );
 
         }
 
         /**
-         *	This functions builds the SELECT expression and returns it.
+         *  This functions builds the SELECT expression and returns it.
          *
          *  @returns  The SELECT expression without the SELECT string.
          */
@@ -426,118 +666,179 @@
 
             $select = array();
             foreach ( $this->select as $arr ) {
-                $sql = $arr['expr'] . ( $arr['alias'] ? ' AS "' . $arr['alias'] . '"' : '' );
-                array_push( $select, $sql );
+                
+                $sql = $arr['expr'];
+                if ( $arr['reserved'] ) {
+                    $parts = explode( '.', $arr['expr'] );
+                    foreach ( $parts as $k => $exp ) {
+                        $parts[$k] = $this->reserved( $exp );
+                    }
+                    $sql = implode( '.', $parts );
+                }
+                if ( $arr['alias'] ) {
+                    $sql .= ' AS ' . $this->reserved( $arr['alias'] );
+                }
+                $select[] = $sql;
             }
             return trim( implode( ', ', $select ) );
         }
 
         /**
-         *	This functions builds the columns and values part of the INSERT query.
+         *  This functions builds the columns and values part of the INSERT query.
          *
          *  @returns  The expression without the INSERT INTO "table_name" part.
          */
         function getInsert() {
 
             if ( ! sizeof( $this->values ) ) {
-                trigger_error( 'No values were added for the INSERT statement.', YD_ERROR );
+                trigger_error( 'No values were added for the INSERT query.', YD_ERROR );
             }
 
             $columns = array();
             $values = array();
             foreach ( $this->values as $key => $value ) {
-                if ( substr( $key, 0, 1 ) != '_' ) {
-                    array_push( $columns, $key );
-                    if ( is_null( $value ) ) {
-                        array_push( $values, 'NULL' );
-                    } else if ( is_numeric( $value ) ) {
-                        array_push( $values, $value );
-                    } else {
-                        array_push( $values, "'" . $value . "'" );
-                    }
+                if ( $this->filter && substr( $key, 0, 1 ) == '_' ) {
+                    continue;
                 }
+                $columns[] = $this->reserved( $key );
+                $values[]  = $this->sqlString( $value );
             }
             return ' ( ' . implode( ', ', $columns ) . ' ) VALUES ( ' . implode( ', ', $values ) . ' )';
         }
 
         /**
-         *	This functions builds the columns and values part of the UPDATE query.
+         *  This functions builds the columns and values part of the UPDATE query.
          *
          *  @returns  The expression withou the UPDATE "table_name" part.
          */
         function getUpdate() {
 
             if ( ! sizeof( $this->values ) ) {
-                trigger_error( 'No values were added for the UPDATE statement.', YD_ERROR );
+                trigger_error( 'No values were added for the UPDATE query.', YD_ERROR );
             }
 
             $update = array();
             foreach ( $this->values as $key => $value ) {
-                if ( substr( $key, 0, 1 ) != '_' ) {
-                    if ( is_null( $value ) ) {
-                        array_push( $update, $key . " = " . 'NULL' );
-                    } else if ( is_numeric( $value ) ) {
-                        array_push( $update, $key . " = " . $value );
-                    } else {
-                        array_push( $update, $key . " = " . "'" . $value . "'" );
-                    }
+                if ( $this->filter && substr( $key, 0, 1 ) == '_' ) {
+                    continue;
                 }
+                $update[] = $this->reserved( $key ) . " = " . $this->sqlString( $value );
             }
             return ' SET ' . implode( ', ', $update );
         }
 
         /**
-         *	This functions builds the array of flags that are defined after the action.
-         *	e.g. DISTINCT, SQL_CACHE, ALL, etc.
+         *  This functions builds the array of flags that are defined after the action.
+         *  e.g. DISTINCT, SQL_CACHE, ALL, etc.
          *
          *  @returns  The expression.
          */
         function getOptions() {
             return sizeof( $this->options ) ? implode( ' ', $this->options ) . ' ' : '';
         }
-
+        
         /**
-         *	This functions builds and returns the query defined by the object.
+         *  This functions returns the LIMIT.
          *
          *  @returns  The expression.
+         */
+        function getLimit( $title=true ) {
+            if ( $this->limit < 0 ) {
+                return '';
+            }
+            return ( $title ? ' LIMIT ' : '' ) . $this->limit;
+        }
+        
+        /**
+         *  This functions returns the OFFSET.
+         *
+         *  @returns  The expression.
+         */
+        function getOffset( $title=true ) {
+            if ( $this->offset < 0 ) {
+                return '';
+            }
+            return ( $title ? ' OFFSET ' : '' ) . $this->offset;
+        }
+        
+        /**
+         *  This functions builds and returns the query defined by the object.
+         *
+         *  @returns  The query.
          */
         function getSql() {
 
             switch ( strtoupper( $this->action ) ) {
 
                 case 'SELECT':
-                    $sql =  'SELECT ' . $this->getOptions() . $this->getSelect()
-                                      . $this->getFrom() . $this->getWhere() . $this->getGroup()
-                                      . $this->getHaving() . $this->getOrder();
-                    break;
+                    return $this->getSelectSql();
 
                 case 'INSERT':
-                    $sql =  'INSERT ' . $this->getOptions() .
-                            'INTO '   . $this->getFrom( false ) . $this->getInsert();
-                    break;
+                    return $this->getInsertSql();
 
                 case 'UPDATE':
-                    $sql =  'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
-                                      . $this->getWhere() . $this->getOrder();
-                    break;
+                    return $this->getUpdateSql();
 
                 case 'DELETE':
-                    $sql =  'DELETE ' . $this->getOptions() . trim( $this->getFrom( true ) ) . $this->getWhere()
-                                      . $this->getOrder();
-                    break;
+                    return $this->getDeleteSql();
             }
 
-            if ( ! isset( $sql ) ) {
-                trigger_error( 'Action not defined correctly.', YD_ERROR );
-                return;
-            }
-
-            return $sql;
+            trigger_error( 'Incorrect action for the query.', YD_ERROR );
 
         }
 
         /**
-         *	This function resets all variables of the object.
+         *  This functions builds and returns the select query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getSelectSql() {
+            
+            return 'SELECT ' . $this->getOptions() . $this->getSelect()
+                             . $this->getFrom() . $this->getWhere() . $this->getGroup()
+                             . $this->getHaving() . $this->getOrder() . $this->getLimit()
+                             . $this->getOffset();
+            
+        }
+
+        /**
+         *  This functions builds and returns the insert query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getInsertSql() {
+            
+            return 'INSERT ' . $this->getOptions() .
+                   'INTO '   . $this->getFrom( false ) . $this->getInsert();
+            
+        }
+        
+        
+        /**
+         *  This functions builds and returns the update query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getUpdateSql() {
+            
+            return 'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
+                             . $this->getWhere();
+            
+        }
+
+        /**
+         *  This functions builds and returns the delete query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getDeleteSql() {
+            
+            return 'DELETE ' . $this->getOptions() . $this->getFrom( true ) . $this->getWhere();
+        }
+        
+
+        /**
+         *  This function resets all variables of the object.
          */
         function reset() {
             $this->resetAction();
@@ -549,38 +850,40 @@
             $this->resetGroup();
             $this->resetHaving();
             $this->resetOrder();
+            $this->resetLimit();
+            $this->resetOffset();
         }
 
         /**
-         *	This function resets the action defined in the object.
+         *  This function resets the action defined in the object.
          */
         function resetAction() {
-            $this->action = null;
+            $this->action();
         }
 
         /**
-         *	This function resets the options defined in the object.
+         *  This function resets the options defined in the object.
          */
         function resetOptions() {
             $this->options = array();
         }
 
         /**
-         *	This function resets the values defined in the object.
+         *  This function resets the values defined in the object.
          */
         function resetValues() {
             $this->values = array();
         }
 
         /**
-         *	This function resets the SELECT expressions defined in the object.
+         *  This function resets the SELECT expressions defined in the object.
          */
         function resetSelect() {
             $this->select = array();
         }
 
         /**
-         *	This function resets the tables defined in the object.
+         *  This function resets the tables defined in the object.
          */
         function resetFrom() {
             $this->tables = array();
@@ -589,35 +892,49 @@
         }
 
         /**
-         *	This function resets the WHERE expressions defined in the object.
+         *  This function resets the WHERE expressions defined in the object.
          */
         function resetWhere() {
             $this->where = array();
         }
 
         /**
-         *	This function resets the GROUP BY expressions defined in the object.
+         *  This function resets the GROUP BY expressions defined in the object.
          */
         function resetGroup() {
             $this->group = array();
         }
 
         /**
-         *	This function resets the HAVING expressions defined in the object.
+         *  This function resets the HAVING expressions defined in the object.
          */
         function resetHaving() {
             $this->having = array();
         }
 
         /**
-         *	This function resets the ORDER BY expressions defined in the object.
+         *  This function resets the ORDER BY expressions defined in the object.
          */
         function resetOrder() {
             $this->order = array();
         }
+        
+        /**
+         *  This function resets the LIMIT.
+         */
+        function resetLimit() {
+            $this->limit = -1;
+        }
+        
+        /**
+         *  This function resets the OFFSET.
+         */
+        function resetOffset() {
+            $this->offset = -1;
+        }
 
         /**
-         *	This function builds the JOIN and WHERE conditions expressions.
+         *  This function builds the JOIN and WHERE conditions expressions.
          *
          *  @param $array  The array of expressions and logical operators.
          *
@@ -640,14 +957,14 @@
 
                 $arr['expr']  = ! isset( $arr['expr'] )  ? '' : $arr['expr'];
                 $arr['logic'] = ! isset( $arr['logic'] ) ? '' : $arr['logic'];
-
+                
                 if ( ! $arr['expr'] ) {
                     if ( ! $arr['logic'] && ! sizeof( $open ) ) {
                         continue;
                     }
                     if ( $arr['logic'] ) {
                         $sql = $start ? '( ' : $arr['logic'] . ' ( ';
-                        array_push( $open, $sql );
+                        $open[] = $sql;
                         $start = true;
                     } else {
                         $sql = ') ';
@@ -659,18 +976,153 @@
                     $exists = true;
                     $start = false;
                 }
-                array_push( $cond, $sql );
+                $cond[] = $sql;
             }
             if ( $exists ) {
                 foreach ( $open as $op ) {
-                    array_push( $cond, ') ');
+                    $cond[] = ') ';
                 }
                 return trim( implode( '', $cond ) );
             }
             return '';
 
         }
+        
+        /**
+         *  This function will escape a string so that it's safe to include 
+         *  it in an SQL statement.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns    The escaped string.
+         */
+        function string( $string ) {
+            if ( is_string( $string ) ) {
+                if ( strtolower( $string ) != 'null' ) {
+                    return str_replace( "'", "''", $string );
+                }
+            } else if ( is_null( $string ) ) {
+                return 'null';
+            }
+            return $string;
+        }
 
+        /**
+         *  This function will escape a string so that it's safe to include it 
+         *  in an SQL statement and will surround it with the quotes appropriate 
+         *  for the database backend.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns    The escaped string surrounded by quotes.
+         */
+        function sqlString( $string ) {
+            if ( is_string( $string ) ) {
+                if ( strtolower( $string ) != 'null' ) {
+                    return $this->quote . $this->string( $string ) . $this->quote;
+                }
+            } else if ( is_null( $string ) ) {
+                return 'null';
+            }
+            return $string;
+        }
+
+        
     }
+    
+    /**
+     *  This class defines a YDSqlQueryDriver_mysql object.
+     */
+    class YDSqlQueryDriver_mysql extends YDSqlQueryDriver {
+
+        /**
+         *  The class constructor can be used to set the action and optional options.
+         */
+        function YDSqlQueryDriver_mysql() {
+            
+            $this->YDSqlQueryDriver();
+            
+        }
+        
+        /**
+         *  This function will check if the server supports this database type.
+         *
+         *  @returns    Boolean indicating if the database type is supported by the server.
+         */
+        function isSupported() {
+            return extension_loaded( 'mysql' );
+        }
+        
+        /**
+         *  This function will escape a string so that it's safe to include it 
+         *  in an SQL statement.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns    The escaped string.
+         */
+        function string( $string ) {
+            if ( is_string( $string ) ) {
+                if ( strtolower( $string ) != 'null' ) {
+                    return mysql_real_escape_string( $string );
+                }
+            } else if ( is_null( $string ) ) {
+                return 'null';
+            }
+            return $string;
+        }
+        
+        /**
+         *  This functions builds and returns the select query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getSelectSql() {
+            
+            $sql = 'SELECT ' . $this->getOptions() . $this->getSelect()
+                             . $this->getFrom() . $this->getWhere() . $this->getGroup()
+                             . $this->getHaving() . $this->getOrder();
+                             
+            if ( $this->limit < 0 && $this->offset < 0 ) {
+                return $sql;
+            }
+            
+            if ( $this->limit < 0 ) {
+                return $sql . ' LIMIT ' . $this->offset . ',18446744073709551615';
+            } else {
+                if ( $this->offset < 0 ) {
+                    return $sql . $this->getLimit();
+                } else {
+                    return $sql . $this->getLimit() . $this->getOffset();
+                }
+            }
+            
+        }
+        
+        /**
+         *  This functions builds and returns the update query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getUpdateSql() {
+            
+            return 'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
+                             . $this->getWhere() . $this->getOrder() . $this->getLimit();
+            
+        }
+
+        /**
+         *  This functions builds and returns the delete query defined by the object.
+         *
+         *  @returns  The query.
+         */
+        function getDeleteSql() {
+            
+            return 'DELETE ' . $this->getOptions() . $this->getFrom( true ) . $this->getWhere()
+                             . $this->getOrder() . $this->getLimit();
+        }
+        
+    }
+
 
 ?>
