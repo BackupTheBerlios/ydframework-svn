@@ -1,0 +1,136 @@
+$Id: CHANGELOG,v 1.23 2005/04/21 10:06:20 cybot_tm Exp $
+$Source: /cvsroot/phpdatetime/phpDateTime/CHANGELOG,v $
+
+phpDateTime - Changelog
+=======================
+
+phpDateTime-0.6.1.0
+------------------------
+
+2005-04-21 fixed Date::setFromDin() if time is also in string given
+!          INCOMPATIBLE CHANGE: replaced param from  Date::getAsDin()
+           made Date::getAsDin() statically callable
+           made Date::getAsAmi() statically callable
+           made Date::getAsTs() statically callable
+
+2005-04-07 fixed documentor-tags
+
+2005-03-08 added DateTime::getAsTs()
+           added DateTime::set() now accepts object DateTime also
+           added Timespan::getAsString() returns difference in a textual representation
+           added Timespan::getAsSeconds()
+           some documentation-changes
+
+2005-03-05 fixed values for hours, minutes, seconds in Timespan::getDifference()
+
+
+phpDateTime-0.6.0.1
+------------------------
+
+2005-03-02 class Time: removed ommiting of seconds in return of get()
+           class Timespan: added properties for hours, minutes, seconds
+           fixed Timespan::set()
+           fixed Timespan::getDifference()
+           Timespan::getDifference() now also returns values for hours, minutes, seconds
+
+
+phpDateTime-0.6.0.0
+------------------------
+
+2005-02-21 fixed static call to Date::get()
+           Date::set() now recognizes '' (empty string) as 0, which results in 0000-00-00
+           added trigger_error() to Date::set() when unknown parameter-type
+           
+           Timepsan.class.php:
+            deprecated getDifferenz() by getDifference() and updateProperties()
+            changed values used and returned in getDifferenz() are now class-properties
+            added class-properties days, months, years, fullremyears, fullremmonths, fullremdays
+            added getDifference()
+            added updateProperties() to update years, days, month, ... , in timespan
+            added set() and moved code out of constructor into set()
+            added setStart() and setEnd()
+           
+           Timespan is highly a alpha-version, any propertie and mehtod-name is subject to change!!!
+
+2005-01-26 made Date::get() static
+           made Date::getAsIso() static
+           added trigger_error() in Date::set() when date-format unknown
+
+2005-01-25 added Date::getLastWeek() returns date of first day in last week
+           added Date::getNextWeek() returns date of first day in next week
+           added Date::getPrevWeek() as alias for Date::getLastWeek()
+
+2004-06-30 made Date::getWeek() static
+           added Date::getWeekYear() returns ISO8601 Year of Week with given date
+           added Date::setFromUnixTimestamp()
+           added Date::getDayNameAbbr() returns abbreviated dayname according to the current locale
+           
+           fixed Date::getYearWeek() returned wrong Year for dates in last year but in first week of new year
+           fixed Date::addDay() to use Date::setFromUnixTimestamp()
+
+2004-06-29 added Date::getWeekDate() - returns ISO8601 Week Date
+           made Date::getYearWeek() static
+           some documentation
+           
+2004-06-28 added Date::getStartOfWeek()
+           added Date::getEndOfWeek()
+           added Date::getNextDay()
+           added Date::getPrevDay()
+           made Date::addDay() static
+
+2004-06-23 Date.class.php
+             removed 'instanceof' keyword
+
+
+phpDateTime-0.5.1.0
+------------------------
+
+2004-05-25 Time.class.php:
+             removed 'public' keyword
+
+
+phpDateTime-0.5.0.0
+------------------------
+
+2004-05-25 Time.class.php:
+             made all Time::get*() static
+             made Time::is*() static
+           
+           Date.class.php:
+             fixed clone statement (forgot to remove)
+             
+2004-05-11 fixed MySQL-Timestamp-detection in DateTime::set()
+
+
+phpDateTime-0.4.0.0
+------------------------
+
+2004-05-10 removed php5-specific changes
+
+2004-05-00 formating code
+           documentation
+
+           class Date:
+             Date::setFromTs():
+               added support for MySQL-Timestamp (<4.1)
+               
+           class DateTime:
+             added DateTime::set()
+             added support for MySQL-Timestamp (<4.1)
+             
+           class Time:
+             made Time::get() static
+             made Time::getAsSeconds() static
+             added Time::isNegative() as alias for Time::isNeg()
+             most set*() methods now return get() as return value
+             finished Time::mul()
+             finished Time::div()
+             
+           Time.class.php:
+             removed time_toseconds()
+             removed seconds_to_time()
+             time_add(), time_sub() now uses Time::getAsSeconds() and Time::get()
+
+
+phpDateTime-0.3.0.0
+------------------------

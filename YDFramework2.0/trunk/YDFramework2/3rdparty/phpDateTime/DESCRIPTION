@@ -1,0 +1,14 @@
+$Id: DESCRIPTION,v 1.2 2005/02/21 09:50:44 cybot_tm Exp $
+$Source: /cvsroot/phpdatetime/phpDateTime/DESCRIPTION,v $
+
+phpDateTime - Description
+=========================
+
+  Summary:
+    phpDateTime is intended to handle various Date and Time values
+    Currently it can:
+      - convert
+      - format
+      - manipulate
+      - mathematical functions like substract, differenz
+      - ISO, AMI, DIN, UK, UNIX- and MySQL-Timestamp formats

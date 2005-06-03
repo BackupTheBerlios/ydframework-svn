@@ -1,0 +1,10 @@
+$Id: INSTALL,v 1.3 2005/02/21 09:50:44 cybot_tm Exp $
+$Source: /cvsroot/phpdatetime/phpDateTime/INSTALL,v $
+
+phpDateTime - Installation
+==========================
+
+    unpack to any folder
+    add this folder to your include-path
+    or unpack to your application-(include)-folder
+    add 'require_once Timespan.class.php;' to your php-script
