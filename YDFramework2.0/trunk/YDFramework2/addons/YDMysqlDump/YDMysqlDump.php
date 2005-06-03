@@ -49,7 +49,6 @@
 
             // database instance
             $this->dbinstance = $dbinstance;
-            $this->separator = ";\n";
             
             // predefined filepath for store content (used if we don't want a string)
             $this->filepath = YD_DIR_TEMP . YD_DIRDELIM . "backup.sql";
@@ -64,10 +63,10 @@
          *
          *  @returns            The drop statement for a table
          */
-        function _getTableDrop( $table ) {
+        function _getTableDrop( $table, $separator ) {
         
             // return drop statement
-            return "DROP TABLE IF EXISTS `" . $table . "`" . $this->separator;
+            return "DROP TABLE IF EXISTS `" . $table . "`" . $separator;
         
         }
       
@@ -100,13 +99,13 @@
          *
          *  @returns            The create statement for a table
          */
-        function _getTableStructure( $table ) {
+        function _getTableStructure( $table, $separator ) {
         
             // get creation statement of a specific table
             $record = $this->dbinstance->getRecord( "SHOW CREATE TABLE `". $table . "`" );
             
             // return only the statement
-            return $record['create table'] . $this->separator;
+            return $record['create table'] . $separator;
         
         } 
       
@@ -118,7 +117,7 @@
          *
          *  @returns            The insert statements for each row of the table
          */
-        function _getTableData( $table ) {
+        function _getTableData( $table, $separator ) {
    
             // variable to store all insert information
             $content = '';
@@ -154,7 +153,7 @@
                 }
             
                 // add string statement
-                $content .= "INSERT INTO `" . $table . "` VALUES (" . implode( ",", $insert ) . ")" . $this->separator;
+                $content .= "INSERT INTO `" . $table . "` VALUES (" . implode( ",", $insert ) . ")" . $separator;
             }
             
             return $content;
@@ -187,7 +186,10 @@
          *
          *  @returns            A YDFile object or a string with the contents
          */ 
-        function backup( $file = false ) {
+        function backup( $file=false, $separator=";" ) {
+
+            // add two new lines to separator
+            $separator .= "\n\n";
 
             // initialize string to record all queries
             $content = '';
@@ -199,13 +201,13 @@
             foreach( $tables as $table ) {
             
                 // drop table
-                $content .= $this->_getTableDrop( $table ) . "\n";
+                $content .= $this->_getTableDrop( $table, $separator );
                 
                 // get table structure information
-                $content .= $this->_getTableStructure( $table ) . "\n";
+                $content .= $this->_getTableStructure( $table, $separator );
                 
                 // get table data
-                $content .= $this->_getTableData( $table ) . "\n";
+                $content .= $this->_getTableData( $table, $separator );
             }
             
             // return the content if we don't want to download
@@ -232,10 +234,10 @@
          *  @param $content     Sql content to use
          *  @param $separator   Separator to parse queries
          */   
-        function restore( $content ) {
+        function restore( $content, $separator=";" ) {
    
             // get array of queries
-            $content = explode( $this->separator, $content );
+            $content = explode( $separator, $content );
                          
             // delete last element (is always null)
             array_pop( $content );
