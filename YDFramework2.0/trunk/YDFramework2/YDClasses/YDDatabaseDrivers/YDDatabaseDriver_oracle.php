@@ -282,7 +282,7 @@
             } else {
 
                // offset is the line
-               $offset ++;
+               $offset++;
           
                // if no limit return everything bigget than OFFSET
                // if limit is defined return everything between OFFSET and OFFSET+LIMIT
@@ -300,7 +300,7 @@
             }
           
             // Return the changed SQL statement 
-            return 'SELECT * FROM (' . $sql . ') WHERE ' . sql_append;
+            return 'SELECT * FROM (' . $sql . ') WHERE ' . $sql_append;
 
         }
 
