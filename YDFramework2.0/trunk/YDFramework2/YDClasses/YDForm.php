@@ -38,9 +38,11 @@
          *  This is the class constructor for the YDForm class.
          *
          *  @param $name        The name of the form.
-         *  @param $method      (optional) Method used for submitting the form. Normally, this is either POST or GET.
-         *  @param $action      (optional) Action used for submitting the form. If not specified, it will default to the
-         *                      URI of the current request.
+         *  @param $method      (optional) Method used for submitting the form.
+         *                      Normally, this is either POST or GET.
+         *  @param $action      (optional) Action used for submitting the form.
+         *                      If not specified, it will default to the URI of
+         *                      the current request.
          *  @param $target      (optional) HTML target for the form.
          *  @param $attributes  (optional) Attributes for the form.
          */
@@ -153,8 +155,9 @@
         }
 
         /**
-         *  This function will set the HTML that is added before and after the element label to indicate that the
-         *  element is required. This only has affect if you use the default toHtml function.
+         *  This function will set the HTML that is added before and after the element
+         *  label to indicate that the element is required. This only has affect if
+         *  you use the default toHtml function.
          *
          *  @param $start   The HTML that should be added before the label.
          *  @param $end     The HTML that should be added after the label.
@@ -165,8 +168,9 @@
         }
 
         /**
-         *  This function will set the HTML that is added before and after the element label to indicate that the
-         *  element has an errir. This only has affect if you use the default toHtml function.
+         *  This function set the HTML that is added before and after the element
+         *  label to indicate that the element has an errir. This only has affect if
+         *  you use the default toHtml function.
          *
          *  @param $start   The HTML that should be added before the label.
          *  @param $end     The HTML that should be added after the label.
@@ -177,8 +181,8 @@
         }
 
         /**
-         *  This function will set the text that will be added at the top of the form to indicate that there are
-         *  required items.
+         *  This function set the text that will be added at the top of the form
+         *  to indicate that there are required items.
          *
          *  @param $text    The text to show.
          */
@@ -187,7 +191,7 @@
         }
 
         /**
-         *  This function will register a new element type.
+         *  This function registers a new element type.
          *
          *  @param $name    Name of the element.
          *  @param $class   The class name of the element definition.
@@ -198,7 +202,7 @@
         }
 
         /**
-         *  This function will unregister the element type.
+         *  This function unregisters the element type.
          *
          *  @param $name    Name of the element.
          */
@@ -207,7 +211,7 @@
         }
 
         /**
-         *  This function will register a new validation rule.
+         *  This function registers a new validation rule.
          *
          *  @param $name        Name of the validation rule.
          *  @param $callback    The function name of the rule definition.
@@ -218,7 +222,7 @@
         }
 
         /**
-         *  This function will unregister the validation rule.
+         *  This function unregisters the validation rule.
          *
          *  @param $name    Name of the validation rule.
          */
@@ -238,7 +242,7 @@
         }
 
         /**
-         *  This function will unregister the filter.
+         *  This function unregisters the filter.
          *
          *  @param $name    Name of the filter.
          */
@@ -247,7 +251,7 @@
         }
 
         /**
-         *  This function will register a new form renderer.
+         *  This function registers a new form renderer.
          *
          *  @param $name    Name of the render.
          *  @param $class   The class name of the renderer definition.
@@ -258,7 +262,7 @@
         }
 
         /**
-         *  This function will unregister the renderer.
+         *  This function unregisters the renderer.
          *
          *  @param $name    Name of the renderer.
          */
@@ -267,7 +271,7 @@
         }
 
         /**
-         *  This function will set the default value for a form element.
+         *  This function set the default value for a form element.
          *
          *  @param  $name     Name of the form element
          *  @param  $value    Default value for the form element
@@ -297,7 +301,7 @@
         }
 
         /**
-         *  This function will set the default values for the form.
+         *  This function set the default values for the form.
          *
          *  @param $array   Associative array containing the default values.
          */
@@ -376,7 +380,7 @@
         }
 
         /**
-         *  This function will remove the specified form element.
+         *  This function removes the specified form element.
          *
          *  @param $name    The name of the form element.
          */
@@ -393,7 +397,7 @@
         }
 
         /**
-         *  This function will return a reference to the specified form element.
+         *  This function returns a reference to the specified form element.
          *
          *  @param $name    The name of the form element.
          *
@@ -542,7 +546,7 @@
         }
 
         /**
-         *  This function will return the value of the specified form element.
+         *  This function returns the value of the specified form element.
          *
          *  @param $name    The name of the form element.
          *
@@ -598,7 +602,7 @@
         }
 
         /**
-         *  This function will return all the values for the form as an associative array.
+         *  This function returns all the values for the form as an associative array.
          *
          *  @returns    The values for the form as an associative array.
          */
@@ -982,7 +986,7 @@
         }
 
         /**
-         *  This function will set raw default values for the form.
+         *  This function set raw default values for the form.
          *
          *  @param $array   Associative array containing the default values.
          */
@@ -995,7 +999,7 @@
         }
 
         /**
-         *  This function will return all raw values for the form as an associative array.
+         *  This function returns all raw values for the form as an associative array.
          *
          *  @returns  The values for the form as an associative array.
          */
@@ -1008,7 +1012,7 @@
         }
 
         /**
-         *  This function will return all default values of the form.
+         *  This function returns all default values of the form.
          *
          *  @returns  The default values of the form as an associative array.
          */
@@ -1023,7 +1027,7 @@
         }
 
         /**
-         *  This function will return the default values of an element.
+         *  This function returns the default value of an element.
          *
          *  @param $name  The element name.
          *
@@ -1121,7 +1125,7 @@
         }
 
         /**
-         *      This function will return the value of the element.
+         *      This function returns the value of the element.
          *
          *      @returns        Value of this object.
          */
@@ -1159,7 +1163,7 @@
         }
 
         /**
-         *      This function will return the default value of the element.
+         *      This function returns the default value of the element.
          *
          *      @returns        Default value of this object.
          */
@@ -1168,7 +1172,8 @@
         }
 
         /**
-         *      This function will return the if the element value was modified from it's default value.
+         *      This function returns a boolean indicating if the element value was
+         *      modified from it's default value.
          *
          *      @returns        Boolean indicating if the element was modified.
          */
@@ -1199,7 +1204,7 @@
         }
 
         /**
-         *  This function will return the element as an array.
+         *  This function returns the element as an array.
          *
          *  @returns    The form element as an array.
          */
@@ -1223,7 +1228,7 @@
         }
 
         /**
-         *  This function will return the element as HTML.
+         *  This function returns the element as HTML.
          *
          *  @returns    The form element as HTML text.
          */
@@ -1247,7 +1252,7 @@
         }
 
         /**
-         *  This function will render the form.
+         *  This function renders the form.
          *
          *  @returns    The rendered form.
          */

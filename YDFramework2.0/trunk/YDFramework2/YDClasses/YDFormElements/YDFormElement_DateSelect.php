@@ -106,7 +106,8 @@
         }
         
         /**
-         *      This function will return the if the element value was modified from it's default value.
+         *      This function returns a boolean indicating if the element value was
+         *      modified from it's default value.
          *
          *      @returns        Boolean indicating if the element was modified.
          */
