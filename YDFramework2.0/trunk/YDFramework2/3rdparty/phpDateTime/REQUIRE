@@ -1,8 +1,0 @@
-$Id: REQUIRE,v 1.2 2005/02/21 09:50:44 cybot_tm Exp $
-$Source: /cvsroot/phpdatetime/phpDateTime/REQUIRE,v $
-
-phpDateTime - Readme
-====================
-
-    php 4.3.6 or later <http://www.php.net/>
-    or PEAR::PHP_Compat <http://pear.php.net/package/PHP_Compat>
