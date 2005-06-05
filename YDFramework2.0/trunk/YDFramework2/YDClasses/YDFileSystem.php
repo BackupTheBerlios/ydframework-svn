@@ -486,14 +486,6 @@
          */
         function isImage() {
 
-            // Check for the getimagesize function
-            if ( ! function_exists( 'getimagesize' ) ) {
-                trigger_error(
-                    'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
-                    . 'using the YDFSImage::getImageSize function.', YD_ERROR
-                );
-            }
-
             // Get the image type
             $type = $this->_getImageType();
 
@@ -607,20 +599,22 @@
          *	@internal
          */
         function _getImageType() {
-            $fp = fopen( $this->getAbsolutePath(), 'rb' );
-            $header = fread( $fp, 32 );
-            fclose( $fp );
-            if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
-                return 'gif';
-            }
-            if ( substr( $header, 6, 4 ) == 'JFIF' ) {
-                return 'jpeg';
-            }
-            if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
-                return 'png';
-            }
             if ( in_array( strtolower( $this->getExtension() ), array( 'jpg', 'png', 'gif' ) ) ) {
                 return strtolower( $this->getExtension() );
+            }
+            if ( strtolower( $this->getExtension() ) == 'tmn' ) {
+                $fp = fopen( $this->getAbsolutePath(), 'rb' );
+                $header = fread( $fp, 32 );
+                fclose( $fp );
+                if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
+                    return 'gif';
+                }
+                if ( substr( $header, 6, 4 ) == 'JFIF' ) {
+                    return 'jpeg';
+                }
+                if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
+                    return 'png';
+                }
             }
             return false;
         }
@@ -654,8 +648,14 @@
          *
          *	@param $path	Path of the image.
          */
-        function YDImage( $path ) {
+        function YDFSImage( $path ) {
+
+            // Initialize the parent
             $this->YDFSFile( $path );
+
+            // Get the image size
+            $this->image_size = getimagesize( $this->getAbsolutePath() );
+
         }
 
         /**
@@ -713,11 +713,8 @@
                 );
             }
 
-            // Get the parameters
-            $params = getimagesize( $this->getAbsolutePath() );
-
             // Get the first two elements
-            $imgSize = array_slice( $params, 0, 2 );
+            $imgSize = array_slice( $this->image_size, 0, 2 );
 
             // Return the image size
             return $imgSize;
@@ -730,8 +727,7 @@
          *	@returns	The width in pixels.
          */
         function getWidth() {
-            $imgSize = $this->getImageSize();
-            return $imgSize[0];
+            return $this->image_size[0];
         }
 
         /**
@@ -740,8 +736,7 @@
          *	@returns	The height in pixels.
          */
         function getHeight() {
-            $imgSize = $this->getImageSize();
-            return $imgSize[1];
+            return $this->image_size[1];
         }
 
         /**
@@ -822,23 +817,25 @@
             $thumb->w = $width;
             $thumb->h = $height;
 
-            // Create the cached thumbnail
-            $thumb->SetCacheFilename();
-            $cacheFName = $thumb->cache_filename;
-            $cacheFName .= $this->getLastModified();
-            $cacheFName .= $this->getAbsolutePath();
-            $cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.tmn';
-            $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
+            // Get the cache filename
+            $cacheFName = $this->_createThumbnailName( $width, $height );
 
             // Check if caching is enabled
             if ( $cache == true ) {
 
                 // Output the cached version if any
                 if ( is_file( $cacheFName ) ) {
+
+                    // Create a new image for the cache file
                     $img = new YDFSImage( $cacheFName );
+
+                    // Set the content type
                     header( 'Content-type: ' . $img->getMimeType() );
-                    echo( $img->getContents() );
+
+                    // Output the image
+                    readfile( $cacheFName );
                     die();
+
                 }
 
             }
@@ -864,6 +861,19 @@
             // Return the thumbnail object
             return $thumb;
 
+        }
+
+        /**
+         *  This function creates the cache name for thumbnails.
+         *
+         *	@param $width	The maximum width of the thumbnail.
+         *	@param $height	The maximum height of the thumbnail.
+         */
+        function _createThumbnailName( $width, $height ) {
+            $cacheFName = md5( $this->getAbsolutePath() ) . '/' . $width . '/' . $height . '/' . $this->getLastModified();
+            $cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.' . strtolower( $this->getExtension() );
+            $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
+            return $cacheFName;
         }
 
     }
@@ -1312,6 +1322,14 @@
          *	@internal
          */
         function _match( $pattern, $file ) {
+
+            // Use the native fnmatch function if it is there
+            if ( function_exists( 'fnmatch' ) ) {
+
+                // Match the pattern
+                return fnmatch( $pattern, $file );
+
+            }
 
             // Loop over the characters of the pattern
             for ( $i=0; $i < strlen( $pattern ); $i++ ) {
