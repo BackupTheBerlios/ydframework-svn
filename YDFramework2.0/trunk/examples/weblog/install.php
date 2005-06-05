@@ -28,13 +28,20 @@
             $this->dir_skins   = YDConfig::get( 'dir_skins',   'skins' ) . '/';
 
             // Error out if the YDFramework temp directory is not writeable
-            if ( ! is_writeable( YD_DIR_TEMP ) ) {
+            $this->_checkWriteableDirectory( YD_DIR_TEMP );
+            $this->_checkWriteableDirectory( dirname( __FILE__ ) . '/include' );
+            $this->_checkWriteableDirectory( dirname( __FILE__ ) . '/uploads' );
+
+        }
+
+        // Check if a directory is writeable
+        function _checkWriteableDirectory( $dir ) {
+            if ( ! is_writeable( $dir ) ) {
                 echo( '<html><head><title>' . YD_FW_NAME . ' Weblog - Installer</title></head><body>' );
                 echo( '<h2>' . YD_FW_NAME . ' Weblog - Installer</h2>' );
-                echo( '<p><font color="red"><b>Make sure the directory ' . YD_DIR_TEMP . ' is writeable before continueing</b></font></p>' );
+                echo( '<p><font color="red"><b>Make sure the directory ' . realpath( $dir ) . ' is writeable before continueing</b></font></p>' );
                 die();
             }
-
         }
 
         // Default action
@@ -306,14 +313,6 @@
             }
             if ( ! @mysql_select_db( $params['db_name'], $conn ) ) {
                 return array( '__ALL__' => 'Database does not exist!' );
-            }
-
-            // Check for writeable directories
-            if ( ! is_writeable( dirname( __FILE__ ) . '/include' ) ) {
-                return array( '__ALL__' => 'The ' . realpath( 'include' ) . ' directory is not writeable' );
-            }
-            if ( ! is_writeable( dirname( __FILE__ ) . '/uploads' ) ) {
-                return array( '__ALL__' => 'The ' . realpath( 'uploads' ) . ' directory is not writeable' );
             }
 
             // All is OK
