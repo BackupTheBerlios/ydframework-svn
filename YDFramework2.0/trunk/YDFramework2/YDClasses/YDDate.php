@@ -153,9 +153,6 @@
          *  @returns         A string of the datetime.
          */
         function addSecond( $value=1 ) {
-            if ( $skip ) {
-                $value = $this->_calcSkip( $value, 'second' );
-            }
             $this->Add( 'second', $value );
             return $this->toString();
         }
