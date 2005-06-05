@@ -9,10 +9,10 @@
     YDInclude( 'YDMysqlDump.php' );
 
     // Class definition
-    class backup extends YDRequest {
+    class database_backup extends YDRequest {
 
         // Class constructor
-        function backup() {
+        function database_backup() {
             $this->YDRequest();
             
             // Get the data
