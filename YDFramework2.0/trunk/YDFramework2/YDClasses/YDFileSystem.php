@@ -818,7 +818,7 @@
             $thumb->h = $height;
 
             // Get the cache filename
-            $cacheFName = $this->_createThumbnailName( $width, $height );
+            $cacheFName = YD_DIR_TEMP . '/' . $this->_createThumbnailName( $width, $height );
 
             // Check if caching is enabled
             if ( $cache == true ) {
@@ -870,9 +870,8 @@
          *	@param $height	The maximum height of the thumbnail.
          */
         function _createThumbnailName( $width, $height ) {
-            $cacheFName = md5( $this->getAbsolutePath() ) . '/' . $width . '/' . $height . '/' . $this->getLastModified();
+            $cacheFName = $this->getAbsolutePath() . '/' . $width . '/' . $height . '/' . $this->getLastModified();
             $cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.' . strtolower( $this->getExtension() );
-            $cacheFName = YD_DIR_TEMP . '/' . $cacheFName;
             return $cacheFName;
         }
 
