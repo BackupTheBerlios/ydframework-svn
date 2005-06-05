@@ -33,7 +33,7 @@
     {capture assign="browsebar"}
         {if $images->pages}
             <tr>
-                <td class="adminRowL" colspan="2" style="border-top: 1px solid #DDDDDD;">
+                <td class="adminRowL" colspan="1" style="border-top: 1px solid #DDDDDD;">
                     <p class="subline">{t w="total"}: {$images->totalRows}</p>
                 </td>
                 <td class="adminRowR" colspan="3" style="border-top: 1px solid #DDDDDD;">
