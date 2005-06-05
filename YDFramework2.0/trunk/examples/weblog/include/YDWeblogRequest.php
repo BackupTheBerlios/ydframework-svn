@@ -42,19 +42,6 @@
             // Get the browser information
             $this->browser = new YDBrowserInfo();
 
-            /*
-            // Add a warning if the install files are still there
-            if (
-                is_file( dirname( __FILE__ ) . '/../install.php' )
-                ||
-                is_file( dirname( __FILE__ ) . '/../install.tpl' )
-            ) {
-                if ( $this->getActionName() != 'thumbnail' && $this->getActionName() != 'thumbnailsmall' ) {
-                   echo( '<h2><font color="red"><b>' . t('install_warning') . '</b></font></h2>' );
-                }
-            }
-            */
-
         }
 
         // Function to show a thumbnail
