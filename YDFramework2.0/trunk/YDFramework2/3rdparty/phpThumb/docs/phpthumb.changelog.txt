@@ -3,6 +3,36 @@
 //        available at http://phpthumb.sourceforge.net     ///
 //////////////////////////////////////////////////////////////
 
+v1.5.4 - May 27, 2005
+  * Security issue with passthrough addressed
+    (thanks mr*agilityÿgmail*com)
+  * 'wmt' now reads TTF fonts from the config font
+    directory, or from anywhere if a path is specified in
+    the font filename
+    (thanks mailÿmmjaeger*com)
+  * Changed default error_die_on_source_failure to true in
+    phpThumb.config.php
+  * Bugfix: Firefox (possibly other browsers) did not like
+    the new (faster) cache retrieval method with Location
+    header redirection if the cached filename does not have
+    a recognized filename extension (.jpeg, .png, .gif).
+    Cached images have therefore been renamed from *_jpeg to
+    *.jpeg and the _qXX parameter has been removed for PNG
+    and GIF output. Please use the included cache renamer:
+    /demo/phpThumb.demo.cacheconvert2.php
+    (thanks mailÿmmjaeger*com)
+  * Bugfix: Changed "Content-type" to "Content-Type" in all
+    header calls
+  * Bugfix: 'wmt' text opacity was broken
+    (thanks mstuhuÿweb*de)
+  * Bugfix: variable name typo in phpThumb.demo.object.php
+    (thanks mbÿmarko-bischof*de)
+  * Bugfix: no GD support for source image format now
+    reported as such for remote images
+    (thanks andgu842ÿstudent*liu*se)
+  * Bugfix: very narrow images no longer produce Invalid
+    Image Dimensions error  (thanks mailÿmmjaeger*com)
+
 v1.5.3 - May 4, 2005
   * Added new filters:
     - 'wb' (White Balance) [ex: &fltr[]=wb|<c>]

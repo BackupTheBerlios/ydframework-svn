@@ -116,12 +116,12 @@ $only_php432 = '<br>(only works with PHP v4.3.2+, this server is running PHP v'.
 $only_exif   = '<br>(only works when the EXIF extension is loaded, so on this server it <b>will '.(extension_loaded('exif') ? '' : 'not').'</b> work)';
 
 echo 'The source images, without manipulation:<ul>';
-echo '<li><a href="'.$img_square.'">'.$img_square.'</a></li>';
-echo '<li><a href="'.$img_landscape.'">'.$img_landscape.'</a></li>';
-echo '<li><a href="'.$img_portrait.'">'.$img_portrait.'</a></li>';
-echo '<li><a href="'.$img_unrotated.'">'.$img_unrotated.'</a></li>';
-echo '<li><a href="'.$img_watermark.'">'.$img_watermark.'</a></li>';
-echo '<li><a href="'.$img_levels.'">'.$img_levels.'</a></li>';
+echo '<li><a href="../'.$img_square.'">'.basename($img_square).'</a></li>';
+echo '<li><a href="../'.$img_landscape.'">'.basename($img_landscape).'</a></li>';
+echo '<li><a href="../'.$img_portrait.'">'.basename($img_portrait).'</a></li>';
+echo '<li><a href="../'.$img_unrotated.'">'.basename($img_unrotated).'</a></li>';
+echo '<li><a href="../'.$img_watermark.'">'.basename($img_watermark).'</a></li>';
+echo '<li><a href="../'.$img_levels.'">'.basename($img_levels).'</a></li>';
 echo '</ul><hr>';
 
 $Examples[] = array('getstrings' => array('../phpThumb.php?src='.$img_square.'&w=200'), 'description' => 'width=200px');

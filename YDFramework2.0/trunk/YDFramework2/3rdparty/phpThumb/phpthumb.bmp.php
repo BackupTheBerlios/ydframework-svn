@@ -719,7 +719,7 @@ class phpthumb_bmp {
 			ImageDestroy($im);
 			exit;
 		} else {
-			header('Content-type: image/png');
+			header('Content-Type: image/png');
 			ImagePNG($im);
 			ImageDestroy($im);
 			return true;

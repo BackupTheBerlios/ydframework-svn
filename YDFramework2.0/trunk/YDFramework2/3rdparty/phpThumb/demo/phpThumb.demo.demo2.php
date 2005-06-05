@@ -5,11 +5,38 @@
 </HEAD>
 <BODY BGCOLOR="#EFEFEF">
 
-This is a live demo of <A HREF="http://phpthumb.sourceforge.net"><B>phpThumb()</B></A><BR>
-(See the usual static demo <A HREF="phpThumb.demo.demo1.php">here</A>)<BR>
-<BR>
-Note: this server is working on GD v1.6, so images (especially watermarks & resizing) do not look as good as they would on GD v2.x<HR>
 <?php
+
+$GDversion['string']  = 'unknown';
+$GDversion['numeric'] = 0;
+ob_start();
+if (!@include_once('../phpthumb.functions.php')) {
+	ob_end_flush();
+	die('failed to include_once("../phpthumb.functions.php")');
+}
+if (!@include_once('../phpthumb.class.php')) {
+	die('failed to include_once("../phpthumb.class.php")');
+	ob_end_flush();
+}
+ob_end_clean();
+$phpThumb = new phpThumb();
+$phpthumb_version = $phpThumb->phpthumb_version;
+unset($phpThumb);
+$GDversion['string']  = phpthumb_functions::gd_version(true);
+$GDversion['numeric'] = phpthumb_functions::gd_version(false);
+
+
+echo 'This is a partial user-configurable demo of <a href="http://phpthumb.sourceforge.net"><b>phpThumb()</b></a> (current version: v'.@$phpthumb_version.')<br>';
+echo 'The usual static demo can be found <a href="phpThumb.demo.demo1.php">here</a>.<br>';
+
+echo '<b>Note:</b> this server is working on GD "';
+echo $GDversion['string'].'"';
+if ($GDversion['numeric'] >= 2) {
+	echo ', so images should be of optimal quality.';
+} else {
+	echo ', so images (especially watermarks) do not look as good as they would on GD v2.';
+}
+
 
 if (!empty($_REQUEST['src'])) {
 	$GETpairs = array();
@@ -18,7 +45,7 @@ if (!empty($_REQUEST['src'])) {
 			$GETpairs[] = $key.'='.urlencode($value);
 		}
 	}
-	$imageSRC = 'phpThumb.php?'.implode('&', $GETpairs);
+	$imageSRC = '../phpThumb.php?'.implode('&', $GETpairs);
 	echo '<XMP><IMG SRC="'.$imageSRC.'"></XMP>';
 	echo '<IMG SRC="'.$imageSRC.'"><HR>';
 }
@@ -29,13 +56,13 @@ echo '<FORM ACTION="" METHOD="GET">';
 
 echo '<TR><TD><B>Source Image</B></TD><TD>';
 $PossibleImages = array(
-	'../images/loco.jpg',
-	'../images/watermark.png',
-	'../images/bottle.jpg',
-	'../images/kayak.jpg'
+	'images/loco.jpg',
+	'images/watermark.png',
+	'images/bottle.jpg',
+	'images/kayak.jpg'
 );
 foreach ($PossibleImages as $image) {
-	echo '<INPUT TYPE="RADIO" NAME="src" VALUE="'.$image.'"'.((@$_REQUEST['src'] == $image) ? ' CHECKED' : '').'><IMG ALIGN="MIDDLE" SRC="phpThumb.php?src='.$image.'&w=100&h=100"><BR><BR>';
+	echo '<INPUT TYPE="RADIO" NAME="src" VALUE="../'.$image.'"'.((@$_REQUEST['src'] == $image) ? ' CHECKED' : '').'><IMG ALIGN="MIDDLE" SRC="../phpThumb.php?src='.$image.'&w=100&h=100"><BR><BR>';
 }
 echo '</UL></TD></TR>';
 
@@ -77,7 +104,7 @@ echo '<TR><TD><B>Background Hex Color:</B></TD><TD><INPUT TYPE="TEXT" NAME="bg" 
 //echo '<TR><TD><B>Watermark Image</B></TD><TD>';
 //echo '<INPUT TYPE="RADIO" NAME="wmf" VALUE=""'.((@$_REQUEST['wmf'] == '') ? ' CHECKED' : '').'><I>none</I><BR><BR>';
 //foreach ($PossibleImages as $image) {
-//	echo '<INPUT TYPE="RADIO" NAME="wmf" VALUE="'.$image.'"'.((@$_REQUEST['wmf'] == $image) ? ' CHECKED' : '').'><IMG ALIGN="MIDDLE" SRC="phpThumb.php?src='.$image.'&w=100&h=100"><BR><BR>';
+//	echo '<INPUT TYPE="RADIO" NAME="wmf" VALUE="../'.$image.'"'.((@$_REQUEST['wmf'] == $image) ? ' CHECKED' : '').'><IMG ALIGN="MIDDLE" SRC="../phpThumb.php?src='.$image.'&w=100&h=100"><BR><BR>';
 //}
 //echo '</UL></TD></TR>';
 //

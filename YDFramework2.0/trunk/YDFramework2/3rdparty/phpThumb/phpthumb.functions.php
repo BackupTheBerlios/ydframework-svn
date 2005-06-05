@@ -195,7 +195,7 @@ class phpthumb_functions {
 
 	function ImageColorAllocateAlphaSafe(&$gdimg_hexcolorallocate, $R, $G, $B, $alpha=false) {
 		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=') && ($alpha !== false)) {
-			return ImageColorAllocateAlpha($gdimg_hexcolorallocate, $R, $G, $B, $alpha);
+			return ImageColorAllocateAlpha($gdimg_hexcolorallocate, $R, $G, $B, intval($alpha));
 		} else {
 			return ImageColorAllocate($gdimg_hexcolorallocate, $R, $G, $B);
 		}
@@ -422,19 +422,6 @@ class phpthumb_functions {
 			}
 		}
 		return $gd_info;
-	}
-
-	function SendSaveAsFileHeaderIfNeeded() {
-		if (@$_GET['down']) {
-			$downloadfilename = ereg_replace('[/\\:\*\?"<>|]', '_', $_GET['down']);
-			if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
-				$downloadfilename = trim($downloadfilename, '.');
-			}
-			if (@$downloadfilename) {
-				header('Content-Disposition: attachment; filename="'.$downloadfilename.'"');
-			}
-		}
-		return true;
 	}
 
 	function filesize_remote($remotefile, $timeout=10) {

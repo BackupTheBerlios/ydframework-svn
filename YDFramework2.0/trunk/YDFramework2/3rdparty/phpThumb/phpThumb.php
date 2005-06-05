@@ -24,17 +24,17 @@ if (phpversion() < '4.1.0') {
 
 if (file_exists('phpThumb.config.php')) {
 	ob_start();
-	if (include_once('phpThumb.config.php')) {
+	if (include_once(dirname(__FILE__).'/phpThumb.config.php')) {
 		// great
 	} else {
 		ob_end_flush();
-		die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('.').'/phpThumb.config.php"');
+		die('failed to include_once('.dirname(__FILE__).'/phpThumb.config.php) - realpath="'.realpath(dirname(__FILE__).'/phpThumb.config.php').'"');
 	}
 	ob_end_clean();
 } elseif (file_exists('phpThumb.config.php.default')) {
 	die('Please rename "phpThumb.config.php.default" to "phpThumb.config.php"');
 } else {
-	die('failed to include_once(phpThumb.config.php) - realpath="'.realpath('.').'/phpThumb.config.php"');
+	die('failed to include_once('.dirname(__FILE__).'/phpThumb.config.php) - realpath="'.realpath(dirname(__FILE__).'/phpThumb.config.php').'"');
 }
 
 if (!@$_SERVER['QUERY_STRING']) {
@@ -55,7 +55,7 @@ if (@$PHPTHUMB_CONFIG['high_security_enabled']) {
 if (!function_exists('ImageJPEG') && !function_exists('ImagePNG') && !function_exists('ImageGIF')) {
 	// base64-encoded error image in GIF format
 	$ERROR_NOGD = 'R0lGODlhIAAgALMAAAAAABQUFCQkJDY2NkZGRldXV2ZmZnJycoaGhpSUlKWlpbe3t8XFxdXV1eTk5P7+/iwAAAAAIAAgAAAE/vDJSau9WILtTAACUinDNijZtAHfCojS4W5H+qxD8xibIDE9h0OwWaRWDIljJSkUJYsN4bihMB8th3IToAKs1VtYM75cyV8sZ8vygtOE5yMKmGbO4jRdICQCjHdlZzwzNW4qZSQmKDaNjhUMBX4BBAlmMywFSRWEmAI6b5gAlhNxokGhooAIK5o/pi9vEw4Lfj4OLTAUpj6IabMtCwlSFw0DCKBoFqwAB04AjI54PyZ+yY3TD0ss2YcVmN/gvpcu4TOyFivWqYJlbAHPpOntvxNAACcmGHjZzAZqzSzcq5fNjxFmAFw9iFRunD1epU6tsIPmFCAJnWYE0FURk7wJDA0MTKpEzoWAAskiAAA7';
-	header('Content-type: image/gif');
+	header('Content-Type: image/gif');
 	echo base64_decode($ERROR_NOGD);
 	exit;
 }
@@ -72,9 +72,9 @@ if (get_magic_quotes_gpc()) {
 
 // instantiate a new phpThumb() object
 ob_start();
-if (!include_once('phpthumb.class.php')) {
+if (!include_once(dirname(__FILE__).'/phpthumb.class.php')) {
 	ob_end_flush();
-	die('failed to include_once("'.realpath('phpthumb.class.php').'")');
+	die('failed to include_once("'.realpath(dirname(__FILE__).'/phpthumb.class.php').'")');
 }
 ob_end_clean();
 $phpThumb = new phpThumb();
@@ -238,20 +238,69 @@ if (@$_GET['phpThumbDebug'] == '4') {
 }
 ////////////////////////////////////////////////////////////////
 
-if ($CanPassThroughDirectly && $phpThumb->src) {
+function SendSaveAsFileHeaderIfNeeded() {
+	global $phpThumb;
+	if (@$_GET['down']) {
+		$downloadfilename = ereg_replace('[/\\:\*\?"<>|]', '_', $_GET['down']);
+		if (phpthumb_functions::version_compare_replacement(phpversion(), '4.1.0', '>=')) {
+			$downloadfilename = trim($downloadfilename, '.');
+		}
+		if (@$downloadfilename) {
+			$phpThumb->DebugMessage('SendSaveAsFileHeaderIfNeeded() sending header: Content-Disposition: attachment; filename="'.$downloadfilename.'"', __FILE__, __LINE__);
+			header('Content-Disposition: attachment; filename="'.$downloadfilename.'"');
+			return true;
+		}
+	}
+	$phpThumb->DebugMessage('SendSaveAsFileHeaderIfNeeded() sending header: Content-Disposition: inline', __FILE__, __LINE__);
+	header('Content-Disposition: inline');
+	return true;
+}
+
+while ($CanPassThroughDirectly && $phpThumb->src) {
 	// no parameters set, passthru
 	$SourceFilename = $phpThumb->ResolveFilenameToAbsolute($phpThumb->src);
-	if (@$_GET['phpThumbDebug']) {
+
+	if (!GetImageSize($SourceFilename)) {
+
+		// security -- prevent passing through of non-image files
+		$phpThumb->DebugMessage('GetImageSize('.$SourceFilename.') failed (invalid image?)', __FILE__, __LINE__);
+
+	} else if (@$_GET['phpThumbDebug']) {
+
 		$phpThumb->DebugMessage('Would have passed "'.$SourceFilename.'" through directly, but skipping due to phpThumbDebug', __FILE__, __LINE__);
+
 	} else {
-		phpthumb_functions::SendSaveAsFileHeaderIfNeeded();
+
+		// security checks
+		if ($GetImageSize = @GetImageSize($SourceFilename)) {
+			$ImageCreateFunctions = array(1=>'ImageCreateFromGIF', 2=>'ImageCreateFromJPEG', 3=>'ImageCreateFromPNG');
+			if (@$ImageCreateFunctions[$GetImageSize[2]]) {
+				$theFunction = $ImageCreateFunctions[$GetImageSize[2]];
+				if (function_exists($theFunction) && ($dummyImage = @$theFunction($SourceFilename))) {
+					// great
+					unset($dummyImage);
+				} else {
+					$phpThumb->DebugMessage('Not passing "'.$SourceFilename.'" through directly because '.$theFunction.'() failed', __FILE__, __LINE__);
+					break;
+				}
+			} else {
+				$phpThumb->DebugMessage('Not passing "'.$SourceFilename.'" through directly because GetImageSize() returned unhandled image type "'.$GetImageSize[2].'"', __FILE__, __LINE__);
+				break;
+			}
+		} else {
+			$phpThumb->DebugMessage('Not passing "'.$SourceFilename.'" through directly because GetImageSize() failed', __FILE__, __LINE__);
+			break;
+		}
+		SendSaveAsFileHeaderIfNeeded();
 		header('Last-Modified: '.gmdate('D, d M Y H:i:s', @filemtime($SourceFilename)).' GMT');
 		if ($getimagesize = @GetImageSize($SourceFilename)) {
-			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+			header('Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
 		}
 		@readfile($SourceFilename);
 		exit;
+
 	}
+	break;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -267,13 +316,22 @@ if (is_file($phpThumb->cache_filename)) {
 	$parsed_url = @parse_url(@$_SERVER['HTTP_REFERER']);
 	if ($phpThumb->config_nooffsitelink_enabled && @$_SERVER['HTTP_REFERER'] && !in_array(@$parsed_url['host'], $phpThumb->config_nooffsitelink_valid_domains)) {
 		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'" (Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT), but skipping because $_SERVER[HTTP_REFERER] ('.@$_SERVER['HTTP_REFERER'].') is not in $phpThumb->config_nooffsitelink_valid_domains ('.implode(';', $phpThumb->config_nooffsitelink_valid_domains).')', __FILE__, __LINE__);
-	} elseif (@$_GET['phpThumbDebug']) {
-		$phpThumb->DebugMessage('Would have used cached (image/'.$phpThumb->thumbnailFormat.') file "'.$phpThumb->cache_filename.'" (Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT), but skipping due to phpThumbDebug', __FILE__, __LINE__);
+	} elseif ($phpThumb->phpThumbDebug) {
+		$phpThumb->DebugMessage('Would have used cached file, but skipping due to phpThumbDebug', __FILE__, __LINE__);
+		$phpThumb->DebugMessage('* Would have sent headers (1): Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT', __FILE__, __LINE__);
+		if ($getimagesize = @GetImageSize($phpThumb->cache_filename)) {
+			$phpThumb->DebugMessage('* Would have sent headers (2): Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]), __FILE__, __LINE__);
+		}
+		if (ereg('^'.preg_quote(str_replace($phpThumb->osslash, '/', $PHPTHUMB_CONFIG['document_root'])).'(.*)$', str_replace($phpThumb->osslash, '/', $phpThumb->cache_filename), $matches)) {
+			$phpThumb->DebugMessage('* Would have sent headers (3): Location: '.dirname($matches[1]).'/'.urlencode(basename($matches[1])), __FILE__, __LINE__);
+		} else {
+			$phpThumb->DebugMessage('* Would have sent headers (3): readfile('.$phpThumb->cache_filename.')', __FILE__, __LINE__);
+		}
 	} else {
-		phpthumb_functions::SendSaveAsFileHeaderIfNeeded();
+		SendSaveAsFileHeaderIfNeeded();
 		header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($phpThumb->cache_filename)).' GMT');
 		if ($getimagesize = @GetImageSize($phpThumb->cache_filename)) {
-			header('Content-type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
+			header('Content-Type: '.phpthumb_functions::ImageTypeToMIMEtype($getimagesize[2]));
 		}
 		if (ereg('^'.preg_quote(str_replace($phpThumb->osslash, '/', $PHPTHUMB_CONFIG['document_root'])).'(.*)$', str_replace($phpThumb->osslash, '/', $phpThumb->cache_filename), $matches)) {
 			header('Location: '.dirname($matches[1]).'/'.urlencode(basename($matches[1])));

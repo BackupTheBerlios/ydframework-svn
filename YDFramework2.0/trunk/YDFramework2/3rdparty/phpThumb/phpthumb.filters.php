@@ -680,9 +680,10 @@ class phpthumb_filters {
 		if (!$text) {
 			return false;
 		}
-		$opacity = max(min($opacity, 100), 0);
+		$opacity = 100 - intval(max(min($opacity, 100), 0));
 
 		if (@is_readable($ttffont) && is_file($ttffont)) {
+			$this->DebugMessage('Using TTF font "'.$ttffont.'"', __FILE__, __LINE__);
 
 			$TTFbox = ImageTTFbBox($size, $angle, $ttffont, $text);
 
@@ -744,8 +745,7 @@ class phpthumb_filters {
 					$text_origin_y = ImageSY($gdimg) - $text_height + $TTFbox[1] - $min_y - $margin;
 					break;
 			}
-
-			$letter_color_text = phpthumb_functions::ImageHexColorAllocate($gdimg, $hex_color, $opacity * 1.27);
+			$letter_color_text = phpthumb_functions::ImageHexColorAllocate($gdimg, $hex_color, false, $opacity * 1.27);
 
 			if ($alignment == '*') {
 
@@ -791,10 +791,8 @@ class phpthumb_filters {
 
 		} else {
 
-			if ($ttffont) {
-				//$this->DebugMessage('Using built-in font for text watermark because $ttffont !is_readable('.$ttffont.')', __FILE__, __LINE__);
-			}
 			$size = min(5, max(1, $size));
+			$this->DebugMessage('Using built-in font (size='.$size.') for text watermark'.($ttffont ? ' because $ttffont !is_readable('.$ttffont.')' : ''), __FILE__, __LINE__);
 
 			$text_width  = ImageFontWidth($size) * strlen($text);
 			$text_height = ImageFontHeight($size);

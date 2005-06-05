@@ -264,7 +264,8 @@ fltr = filter system. Call as an array as follows:
          histogram in pixels, or if <= 1 then percentage of
          source image width/height;
          <a> is the alignment (same as for "wmi" and "wmt");
-         <o> is opacity from 0 to 100;
+         <o> is opacity from 0 (transparent) to 100 (opaque)
+             (requires PHP v4.3.2, otherwise 100% opaque);
          <m> is the edge (and inter-tile) margin in percent
        - "over" (OVERlay/underlay image) overlays an image on
          the thumbnail, or overlays the thumbnail on another
@@ -277,28 +278,32 @@ fltr = filter system. Call as an array as follows:
          percentage of the thumbnail size [must be < 0.5]
          (default is 0 for overlay and 10% for underlay);
          <o> is opacity (0 = transparent, 100 = opaque)
+             (requires PHP v4.3.2, otherwise 100% opaque);
          (thanks raynerapeÿgmail*com, shabazz3ÿmsu*edu)
        - "wmi" (WaterMarkImage)
-         [ex: &fltr[]=wmi|<f>|<a>|<o>|<m>] where <f> is the
-         filename of the image to overlay, <a> is the
-         alignment (one of BR, BL, TR, TL, C, R, L, T, B, *
-         where B=bottom, T=top, L=left, R=right, C=centre,
-         *=tile), <o> is opacity from 0 to 100, <m> is the
-         edge (and inter-tile) margin in percent
+         [ex: &fltr[]=wmi|<f>|<a>|<o>|<m>] where
+         <f> is the filename of the image to overlay;
+         <a> is the alignment (one of BR, BL, TR, TL, C,
+             R, L, T, B, *) where B=bottom, T=top, L=left,
+             R=right, C=centre, *=tile);
+         <o> is opacity from 0 (transparent) to 100 (opaque)
+             (requires PHP v4.3.2, otherwise 100% opaque);
+         <m> is the edge (and inter-tile) margin in percent
        - "wmt" (WaterMarkText)
          [ex: &fltr[]=wmt|<t>|<s>|<a>|<c>|<f>|<o>|<m>|<n>]
          where:
-         <t> is the text to use as a watermark,
+         <t> is the text to use as a watermark;
          <s> is the font size (1-5 for built-in font, or point
-           size for TrueType fonts),
+           size for TrueType fonts);
          <a> is the alignment (one of BR, BL, TR, TL, C, R, L,
            T, B, * where B=bottom, T=top, L=left, R=right,
-           C=centre, *=tile),
-         <c> is the hex color of the text
+           C=centre, *=tile);
+         <c> is the hex color of the text;
          <f> is the filename of the TTF file (optional, if
-           omitted a built-in font will be used)
-         <o> is opacity from 0 to 100,
-         <m> is the edge (and inter-tile) margin in percent
+           omitted a built-in font will be used);
+         <o> is opacity from 0 (transparent) to 100 (opaque)
+             (requires PHP v4.3.2, otherwise 100% opaque);
+         <m> is the edge (and inter-tile) margin in percent;
          <n> is the angle
          (thanks mailÿmmjaeger*com)
        - "flip" [ex: &fltr[]=flip|x   or   &fltr[]=flip|y]

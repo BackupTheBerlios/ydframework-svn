@@ -9,9 +9,9 @@
 //////////////////////////////////////////////////////////////
 
 ob_start();
-if (!file_exists('phpthumb.functions.php') || !include_once('phpthumb.functions.php')) {
+if (!file_exists(dirname(__FILE__).'/phpthumb.functions.php') || !include_once(dirname(__FILE__).'/phpthumb.functions.php')) {
 	ob_end_flush();
-	die('failed to include_once(phpthumb.functions.php) - realpath="'.realpath('phpthumb.functions.php').'"');
+	die('failed to include_once(phpthumb.functions.php) - realpath="'.realpath(dirname(__FILE__).'/phpthumb.functions.php').'"');
 }
 ob_end_clean();
 
@@ -124,7 +124,7 @@ $PHPTHUMB_CONFIG['error_textcolor']             = 'FF0000'; // color of text in 
 $PHPTHUMB_CONFIG['error_fontsize']              = 1;        // size of text in error messages, from 1 (smallest) to 5 (largest)
 $PHPTHUMB_CONFIG['error_die_on_error']          = true;     // die with error message on any fatal error (recommended with standalone phpThumb.php)
 $PHPTHUMB_CONFIG['error_silent_die_on_error']   = false;    // simply die with no output of any kind on fatal errors (not recommended)
-$PHPTHUMB_CONFIG['error_die_on_source_failure'] = false;    // die with error message if source image cannot be processed by phpThumb() (usually because source image is corrupt in some way). If false (default) the source image will be passed through unprocessed, if true an error message will be displayed.
+$PHPTHUMB_CONFIG['error_die_on_source_failure'] = true;     // die with error message if source image cannot be processed by phpThumb() (usually because source image is corrupt in some way). If false the source image will be passed through unprocessed, if true (default) an error message will be displayed.
 
 // * Off-server Thumbnailing Configuration:
 $PHPTHUMB_CONFIG['nohotlink_enabled']           = true;                                     // If false will allow thumbnailing from any source domain

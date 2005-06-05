@@ -24,7 +24,7 @@ $phpThumb->config_error_die_on_error = false;
 $output_filename = '';
 if ($phpThumb->GenerateThumbnail()) {
 	if ($output_filename) {
-		if (!$phpThumb->RenderToFile($filename)) {
+		if (!$phpThumb->RenderToFile($output_filename)) {
 			// do something with debug/error messages
 			die('Failed:<pre>'.implode("\n\n", $phpThumb->debugmessages).'</pre>');
 		}
