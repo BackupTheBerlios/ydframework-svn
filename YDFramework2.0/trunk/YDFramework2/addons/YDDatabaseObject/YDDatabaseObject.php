@@ -1427,7 +1427,7 @@
                         $curr[ $res[ $field_key ] ] = array();
                     }
                     $curr = & $curr[ $res[ $field_key ] ];
-                    unset( $res[ $field_key ] );
+                    // unset( $res[ $field_key ] );
                     
                 }
                 
