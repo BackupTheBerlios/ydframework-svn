@@ -1366,15 +1366,15 @@
          */
         function getValuesAsAssocArray( $val=array(), $prefix='' ) {
             
-            if ( ! is_array( $val ) ) {
-                $val = array( $val );
-            }
-            
             $values = $this->getValues();
             $output = array();
             
             if ( empty( $val ) ) {
                 $val = array_keys( $values );
+            }
+            
+            if ( ! is_array( $val ) ) {
+                $val = array( $val );
             }
             
             foreach ( $val as $v ) {
@@ -1398,7 +1398,11 @@
         function getResultsAsAssocArray( $key=array(), $val=array(), $prefix='' ) {
 
             if ( ! is_array( $val ) ) {
-                $val = array( $val );
+                if ( empty( $val ) ) {
+                    $val = array();
+                } else {
+                    $val = array( $val );
+                }
             }
             
             if ( empty( $key ) ) {
@@ -1428,7 +1432,9 @@
                 }
                 
                 if ( empty( $val ) ) {
-                    $curr = $res;
+                    foreach ( $res as $field => $field_val ) {
+                        $curr[ $prefix . $field ] = $field_val;
+                    }
                 } else if ( sizeof( $val ) == 1 ) {
                     $curr = $res[ $val[0] ];
                 } else {
