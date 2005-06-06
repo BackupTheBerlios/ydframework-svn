@@ -81,10 +81,9 @@
                         @unlink( $this->dir_rel . $file->getBaseName() );
                     }
 
-                    // Create the thumbnails
-                    $thumb = new YDFSImage( $this->dir_rel . $file->getBaseName() );
-                    $thumb->_createThumbnail( 100, 100, true );
-                    $thumb->_createThumbnail(  48,  48, true );
+                    // Delete the thumbnails
+                    @unlink( $this->dir_rel . 's_' . $file->getBaseName() );
+                    @unlink( $this->dir_rel . 'm_' . $file->getBaseName() );
 
                 }
 
@@ -102,8 +101,15 @@
             $image = $this->getImage();
             $this->redirectIfMissing( $image );
 
+            // The path to the image
+            $path = realpath( '../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $image );
+
             // Delete the file
-            @unlink( realpath( '../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $image ) );
+            @unlink( $path );
+
+            // Delete the thumbnails
+            @unlink( dirname( $path ) . '/s_' . basename( $path ) );
+            @unlink( dirname( $path ) . '/m_' . basename( $path ) );
 
             // Redirect to the list view
             $this->redirect( YD_SELF_SCRIPT . '?id=' . $this->item['id'] );
