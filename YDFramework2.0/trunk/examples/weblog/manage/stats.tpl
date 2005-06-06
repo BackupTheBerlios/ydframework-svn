@@ -165,7 +165,7 @@
         </tr>
         {foreach from=$urls item="url"}
             <tr>
-                <td class="adminRowL" width="200"><a href="{$url.uri}" target="_blank">{$url.uri}</a>   </td>
+                <td class="adminRowL" width="200"><a href="../{$url.uri}" target="_blank">{$url.uri}</a>   </td>
                 <td class="adminRowL" style="vertical-align: middle;">{graph width=$url.hits_pct}</td>
                 <td class="adminRowR" width="100">{$url.hits}</td>
             </tr>
