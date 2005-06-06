@@ -1359,12 +1359,12 @@
          *  This function retrieves an associative array of values of the 
          *  indicated fields.
          *
-         *  @param $val      The fields to retrieve.
-         *  @param $prefix   (optional) The text to prepend to the key name.
+         *  @param $val      (optional) The fields to retrieve. Default: all.
+         *  @param $prefix   (optional) The text to prepend to the field name. Default: (empty).
          *
          *  @returns  An associative array with the values.
          */
-        function getValuesAsAssocArray( $val, $prefix='' ) {
+        function getValuesAsAssocArray( $val=array(), $prefix='' ) {
             
             if ( ! is_array( $val ) ) {
                 $val = array( $val );
@@ -1372,6 +1372,10 @@
             
             $values = $this->getValues();
             $output = array();
+            
+            if ( empty( $val ) ) {
+                $val = array_keys( $values );
+            }
             
             foreach ( $val as $v ) {
                 $output[ $prefix . $v ] = $values[ $v ];
@@ -1385,38 +1389,54 @@
          *  This function retrieves all the results that weren't fetched as an
          *  associative array using the indicated fields for keys and values
          *
-         *  @param $key      The field to use for the keys.
-         *  @param $val      The fields to use for the values.
-         *  @param $prefix   (optional) The text to prepend to the key name.
+         *  @param $key      (optional) The fields to use for the keys. Default: all keys.
+         *  @param $val      (optional) The fields to use for the values. Default: all fields.
+         *  @param $prefix   (optional) The text to prepend to the field name. Default: (empty).
          *
          *  @returns  An associative array with the results.
          */
-        function getResultsAsAssocArray( $key, $val, $prefix='' ) {
+        function getResultsAsAssocArray( $key=array(), $val=array(), $prefix='' ) {
 
             if ( ! is_array( $val ) ) {
                 $val = array( $val );
             }
             
-            $one_value = true;
-            if ( sizeof( $val ) > 1 ) {
-                $one_value = false;
+            if ( empty( $key ) ) {
+                $key = $this->_getFieldsByMethod( 'isKey', false );
             }
-
+            
+            if ( ! is_array( $key ) ) {
+                $key = array( $key );
+            }
+            
             $results = $this->getResults();
             $output = array();
+            $curr = null;
             
             foreach ( $results as $res ) {
                 
-                if ( $one_value ) {
-                    $values = $res[$val[0]];
+                $curr = & $output;
+                
+                foreach ( $key as $field_key ) {
+                    
+                    if ( ! isset( $curr[ $res[ $field_key ] ] ) ) {
+                        $curr[ $res[ $field_key ] ] = array();
+                    }
+                    $curr = & $curr[ $res[ $field_key ] ];
+                    unset( $res[ $field_key ] );
+                    
+                }
+                
+                if ( empty( $val ) ) {
+                    $curr = $res;
+                } else if ( sizeof( $val ) == 1 ) {
+                    $curr = $res[ $val[0] ];
                 } else {
-                    $values = array();
                     foreach ( $val as $field_val ) {
-                        $values[ $field_val ] = $res[ $field_val ];
+                        $curr[ $prefix . $field_val ] = $res[ $field_val ];
                     }
                 }
                 
-                $output[ $prefix . $res[ $key ] ] = $values;
             }
 
             return $output;

@@ -18,11 +18,11 @@
             // Relations
             $rel = & $this->registerRelation( 'groups', false, 'group' );
             $rel->setLocalKey( 'group_id' );
-            $rel->setForeignVar( 'groups' );
+            $rel->setForeignVar( 'group' );
 
             $rel = & $this->registerRelation( 'users', false, 'user' );
             $rel->setLocalKey( 'user_id' );
-            $rel->setForeignVar( 'users' );
+            $rel->setForeignVar( 'user' );
             
         }
 
