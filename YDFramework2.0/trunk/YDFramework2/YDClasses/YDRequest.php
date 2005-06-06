@@ -122,7 +122,9 @@
             }
             $query = array();
             foreach( $params as $key=>$val ) {
-                array_push( $query, urlencode( $key ) . '=' . urlencode( $val ) );
+                if ( $key != 'PHPSESSID' ) {
+                    array_push( $query, urlencode( $key ) . '=' . urlencode( $val ) );
+                }
             }
             $url['query'] = implode( '&', $query );
             if ( ! empty( $url['query'] ) ) {
