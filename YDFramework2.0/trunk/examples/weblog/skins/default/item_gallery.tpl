@@ -39,9 +39,11 @@
                     {t w="item"}: <a href="{$item|@link_item}">{$item.title}</a>
                     {if $image->exif}
                         <br/>
-                        EXIF: {$image->exif.ShutterSpeedValue|replace:' sec':'s'}
+                        EXIF: {$image->exif.Model}
+                        {$image->exif.ExposureTime|replace:' sec':'s'}
                         {$image->exif.ApertureValue|replace:' ':'/'} {t w="at"}
-                        {$image->exif.FocalLength|replace:' ':''} iso {$image->exif.ISOSpeedRatings}
+                        {$image->exif.FocalLength|replace:' ':''}
+                        ISO-{$image->exif.ISOSpeedRatings}
                     {/if}
                 </small>
             </p>
