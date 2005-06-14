@@ -82,7 +82,7 @@
                 $dir = new YDFSDirectory( dirname( __FILE__ ) . '/../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/item_' . $item['id'] .'/' );
 
                 // Fix the directory permissions
-                @chmod( $dir->getAbsolutePath(), 0777 );
+                //@chmod( $dir->getAbsolutePath(), 0777 );
 
                 // Get the list of files
                 $images = $dir->getContents( array( '!index.html', '!index.php', '!m_*.*', '!s_*.*' ), null, array( 'YDFSImage' ) );
@@ -93,15 +93,15 @@
                     // Generate the thumbnails if not there yet
                     if ( ! is_file( $dir->getAbsolutePath() . '/s_' . $image->getBasename() ) ) {
                         $image->saveThumbnail( 48, 48, $dir->getAbsolutePath() . '/s_' . $image->getBasename() );
+                        @chmod( $dir->getAbsolutePath() . '/s_' . $image->getBasename(), 0666 );
                     }
                     if ( ! is_file( $dir->getAbsolutePath() . '/m_' . $image->getBasename() ) ) {
                         $image->saveThumbnail( 100, 100, $dir->getAbsolutePath() . '/m_' . $image->getBasename() );
+                        @chmod( $dir->getAbsolutePath() . '/m_' . $image->getBasename(), 0666 );
                     }
 
                     // Fix the file permissions
-                    @chmod( $image->getAbsolutePath(), 0666 );
-                    @chmod( $dir->getAbsolutePath() . '/s_' . $image->getBasename(), 0666 );
-                    @chmod( $dir->getAbsolutePath() . '/m_' . $image->getBasename(), 0666 );
+                    //@chmod( $image->getAbsolutePath(), 0666 );
 
                     // Set the relative path
                     $dir_uploads = dirname( __FILE__ ) . '/../' . YDConfig::get( 'dir_uploads', 'uploads' );
