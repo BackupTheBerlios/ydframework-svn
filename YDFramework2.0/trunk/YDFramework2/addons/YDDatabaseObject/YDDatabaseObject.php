@@ -94,10 +94,10 @@
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
-            $this->_fields    = new YDDatabaseObject_Properties();
-            $this->_selects   = new YDDatabaseObject_Properties();
-            $this->_relations = new YDDatabaseObject_Properties();
-            $this->_callbacks = new YDDatabaseObject_Properties();
+            $this->_fields    = new YDBase();
+            $this->_selects   = new YDBase();
+            $this->_relations = new YDBase();
+            $this->_callbacks = new YDBase();
             
             $this->_callbacks->set( 'find',   array( 'before' => array(), 'after' => array() ) );
             $this->_callbacks->set( 'delete', array( 'before' => array(), 'after' => array() ) );
@@ -175,6 +175,9 @@
          *  @returns      A reference to the field object.
          */
         function & registerField( $name, $null=false ) {
+            
+            $name = strtolower( $name );
+            
             if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The field name "' . $name . '" is already defined.', YD_ERROR );
@@ -192,6 +195,9 @@
          *  @returns      A reference to the field object.
          */
         function & registerKey( $name, $auto=false ) {
+            
+            $name = strtolower( $name );
+            
             if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The field name "' . $name . '" is already defined.', YD_ERROR );
@@ -214,6 +220,8 @@
          */
         function & registerRelation( $name, $manytomany=false, $foreign_class='', $cross_class='' ) {
 
+            $name = strtolower( $name );
+
             if ( $this->_relations->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The relation name "' . $name . '" is already defined.', YD_ERROR );
@@ -235,6 +243,9 @@
          *  @returns      A reference to the select object.
          */
         function & registerSelect( $name, $expr ) {
+            
+            $name = strtolower( $name );
+            
             if ( $this->_fields->exists( $name ) || $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The select name "' . $name . '" is already defined.', YD_ERROR );
@@ -248,6 +259,9 @@
          *  @param $name  The field name.
          */
         function unregisterSelect( $name ) {
+            
+            $name = strtolower( $name );
+            
             if ( ! $this->_selects->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The select "' . $name . '" is not defined.', YD_ERROR );
@@ -262,6 +276,9 @@
          *  @param $value  The protected value.
          */
         function registerProtected( $name, $value ) {
+            
+            $name = strtolower( $name );
+            
             if ( ! $this->_fields->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The field "' . $name . '" is not defined.', YD_ERROR );
@@ -275,6 +292,9 @@
          *  @param $name   The field name.
          */
         function unregisterProtected( $name ) {
+            
+            $name = strtolower( $name );
+            
             if ( ! $this->_fields->exists( $name ) ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The field "' . $name . '" is not defined.', YD_ERROR );
@@ -1581,59 +1601,9 @@
     }
 
     /**
-     *  This class defines a YDDatabaseObject_Properties object.
-     */
-    class YDDatabaseObject_Properties extends YDBase {
-
-        /**
-         *  This class constructor.
-         */
-        function YDDatabaseObject_Properties() {
-            $this->YDBase();
-        }
-
-        /**
-         *  This function sets the value of a property.
-         *
-         *  @param $name        The property name.
-         *  @param $value        The property value.
-         *
-         *  @returns  A reference to the property.
-         */
-        function & set( $name, $value ) {
-            $this->$name = $value;
-            return $this->$name;
-        }
-
-        /**
-         *  This function checks if a property is set.
-         *
-         *  @param $name        The property name.
-         *  @param $null        (optional) If true, it returns properties that have null value.
-         *
-         *  @returns  If a property is set.
-         */
-        function exists( $name, $null=false ) {
-            return $null ? array_key_exists( $name, $this ) : isset( $this->$name );
-        }
-
-        /**
-         *  This function returns a property value.
-         *
-         *  @param $name        The property name.
-         *
-         *  @returns  The property value.
-         */
-        function get( $name ) {
-            return $this->exists( $name, true ) ? $this->$name : null;
-        }
-
-    }
-
-    /**
      *  This class defines a YDDatabaseObject_Field object.
      */
-    class YDDatabaseObject_Field extends YDDatabaseObject_Properties {
+    class YDDatabaseObject_Field extends YDBase {
 
         var $name;
         var $column;
@@ -1655,7 +1625,7 @@
          */
         function YDDatabaseObject_Field( $name, $key=false, $auto=false, $null=false ) {
 
-            $this->YDDatabaseObject_Properties();
+            $this->YDBase();
 
             $this->setName( $name );
 
@@ -1852,7 +1822,7 @@
     /**
      *  This class defines a YDDatabaseObject_Relation object.
      */
-    class YDDatabaseObject_Relation extends YDDatabaseObject_Properties {
+    class YDDatabaseObject_Relation extends YDBase {
 
         var $name;
         var $manytomany;
@@ -1877,9 +1847,11 @@
          */
         function YDDatabaseObject_Relation( $name, $local_class, $manytomany=false, $foreign_class='', $cross_class='' ) {
 
-            $this->local   = new YDDatabaseObject_Properties();
-            $this->foreign = new YDDatabaseObject_Properties();
-            $this->cross   = new YDDatabaseObject_Properties();
+            $this->YDBase();
+
+            $this->local   = new YDBase();
+            $this->foreign = new YDBase();
+            $this->cross   = new YDBase();
 
             $this->setName( $name );
             $this->setLocalClass( $local_class );
@@ -2246,7 +2218,7 @@
     /**
      *  This class defines a YDDatabaseObject_Select object.
      */
-    class YDDatabaseObject_Select extends YDDatabaseObject_Properties {
+    class YDDatabaseObject_Select extends YDBase {
 
         var $name;
         var $expr;
@@ -2261,7 +2233,7 @@
          */
         function YDDatabaseObject_Select( $name, $expr ) {
 
-            $this->YDDatabaseObject_Properties();
+            $this->YDBase();
 
             $this->setName( $name );
             $this->setExpression( $expr );
