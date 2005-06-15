@@ -576,6 +576,23 @@
             return $string;
         }
 
+        /** 
+         *   This function will encode all characters in a string to it's ASCII value. 
+         * 
+         *   @param $string   The original string to encode. 
+         * 
+         *   @returns   The encoded string. 
+         * 
+         *   @static 
+         */ 
+        function encodeToAscii( $string ) { 
+            $result = ''; 
+            for ( $i=0; $i < strlen( $string ); $i++ ) { 
+                $result .= "&#" . ord( substr( $string, $i, 1) ); 
+            } 
+            return $result; 
+        }
+
         /**
          *	This function will truncate a string.
          *
