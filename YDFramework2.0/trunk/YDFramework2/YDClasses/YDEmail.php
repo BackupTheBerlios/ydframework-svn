@@ -252,6 +252,12 @@
             if ( empty( $this->sender ) ) {
                 trigger_error( 'You need to specify who this email message coming from.', YD_ERROR );
             }
+            
+            // Check if there is a text body but no HTML body
+            if ( strlen( $this->_msg->AltBody ) && ! strlen( $this->_msg->Body ) ) {
+                $this->_msg->IsHTML( false );
+                $this->_msg->Body = $this->_msg->AltBody;
+            }
 
             // Get the original the message
             $message = & $this->_msg;
