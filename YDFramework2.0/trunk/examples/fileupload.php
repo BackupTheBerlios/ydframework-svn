@@ -1,7 +1,7 @@
 <?php
 
     // Standard include
-    include_once( 'YDF2_init.php' );
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
 
     // Includes
     YDInclude( 'YDForm.php' );
