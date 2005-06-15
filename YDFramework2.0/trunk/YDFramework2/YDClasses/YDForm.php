@@ -682,6 +682,22 @@
          *
          *  @returns    Boolean indicating if the form is valid or not.
          */
+        function isValid() {
+            return $this->validate();
+        }
+
+
+        /**
+         *  This function will return true if the form is valid. If not, it will return false.
+         *
+         *  If no rules for the form, the form is considered to be valid.
+         *  If no values for this form where submitted, the form is considered to be valid.
+         *
+         *  It will iterate over all the rules and apply them to each field after having applies the filters.
+         *  Errors will be put on the error stack. In the end, it returns false or true.
+         *
+         *  @returns    Boolean indicating if the form is valid or not.
+         */
         function validate() {
 
             // Form should be submitted
