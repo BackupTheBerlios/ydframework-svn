@@ -26,653 +26,957 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-    // Includes
-    YDInclude( YD_DIR_3RDP . YD_DIRDELIM . 'dateclass' . YD_DIRDELIM . 'dateclass.php' );
-
+    // Custom formats
+    YDConfig::set( 'YD_DATE_FORMATS', array(), false );
+    
     /**
-     *  This class defines a YDDate object and is a wrapper of the DateClass class
-     *  from Steve Powell.
+     *  This class defines a YDDate object.
+     *
+     *  @author  David Bittencourt
      */
-    class YDDate extends DateClass {
+    class YDDate extends YDBase {
+        
+        var $year;
+        var $month;
+        var $day;
+        var $hours;
+        var $minutes;
+        var $seconds;
 
-        var $format;
+        var $day_with_zero;
+        var $month_with_zero;
+        var $hours_with_zero;
+        var $minutes_with_zero;
+        var $seconds_with_zero;
 
+        var $day_name;
+        var $day_name_abbr;
+        var $month_name;
+        var $month_name_abbr;
+
+        var $quarter;
+        var $weekday;
+        var $leap;
+        
+        var $timestamp;
+        var $timestamp_string;
+        
         /**
          *  The constructor.
          *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *                    If empty, the current time.
+         *  @param $date    (Optional) A YDDate object, timestamp, array or string.
+         *                             If null, the current date.
+         *  @param $format  (Optional) The format name. Default: 'ISO'.
          */
-        function YDDate( $datetime='' ) {
-            $this->DateClass( $datetime );
-            $this->setFormat();
+        function YDDate( $date=null, $format='ISO' ) {
+            
+            $this->YDBase();
+            $this->set( $date, $format );
+            
         }
 
         /**
-         *  This function sets the date of the object.
+         *  This function sets a custom format.
+         *  The following specifiers are recognized in the format string:
          *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
+         *  %a - abbreviated weekday name
+         *  %A - weekday name
+         *  %b - abbreviated month name
+         *  %B - month name
+         *  %d - day (with zero)
+         *  %m - month (with zero)
+         *  %Y - year (4 digits)
+         *  %H - hours (with zero)
+         *  %M - minutes (with zero)
+         *  %S - seconds (with zero)
+         *  %w - weekday number (0 = sunday, 6 = saturday)
+         *  %T - equal to %H:%M:%S
          *
-         *  @returns  This object.
+         *  @param $name    The name.
+         *  @param $format  The format string.
+         *
+         *  @static
          */
-        function setDate( $datetime='' ) {
+        function setFormat( $name, $format, $parts=array(), $regex=array(), $empty='', $override=true ) {
             
-            $oldStamp = $this->TimeStamp();
+            $formats = YDConfig::get( 'YD_DATE_FORMATS' );
+            $name = strtoupper( $name );
             
-            if ( $datetime == '' ) {
-                $this->_Date = time();
+            if ( in_array( $name, array_keys( $formats ) ) ) {
+                if ( $override ) {
+                    $formats[ $name ] = array( 'string'   => $format,
+                                               'parts'    => $parts,
+                                               'regexes'  => $regex,
+                                               'empty'    => $empty );
+                }
             } else {
-                $this->_Date = $this->_parseDate( $datetime );
+                $formats[ $name ] = array( 'string'   => $format,
+                                           'parts'    => $parts,
+                                           'regexes'  => $regex,
+                                           'empty'    => $empty );
+            }
+            YDConfig::set( 'YD_DATE_FORMATS', $formats );
+            
+        }
+        
+        /**
+         *  This function returns the data of a defined custom format.
+         *
+         *  @param  $name    The format name.
+         *  @param  $array   (Optional) If true, returns the array of data, otherwise
+         *                   returns the format string. Default: false.
+         *
+         *  @returns         The format array or string.
+         *  
+         *  @static
+         */
+        function getFormat( $name, $array=false ) {
+            
+            $formats = YDConfig::get( 'YD_DATE_FORMATS' );
+            $name    = strtoupper( $name );
+            
+            if ( isset( $formats[ $name ] ) ) {
+                if ( $array ) {
+                    return $formats[ $name ];
+                }
+                return $formats[ $name ]['string'];
             }
             
-            if ( $oldStamp != $this->TimeStamp() ) {
-                $this->_datePart = getdate( $this->TimeStamp() );
+        }
+
+        /**
+         *  This function returns the timestamp of the object date.
+         *
+         *  @returns  A unix timestamp if valid, -1 otherwise.
+         */
+        function getTimestamp() {
+            
+            $this->reset();
+            
+            return @mktime( $this->hours,
+                            $this->minutes,
+                            $this->seconds,
+                            $this->month,
+                            $this->day,
+                            $this->year );
+        }
+
+        /**
+         *  This function returns the date as a formatted string defined by the
+         *  custom formats (e.g. 'ISO', 'EUN', 'USA', 'SQL', 'HUM' ).
+         *
+         *  @param $format    (Optional) The format. Default: 'ISO'.
+         *  
+         *  @returns  A string with the formatted result.
+         */
+        function get( $format='ISO' ) {
+            
+            if ( $this->isDateEmpty() && $this->isTimeEmpty() ) {
+                return YDDate::getEmpty( $format );
             }
-            return $this;
-        }
-
-        /**
-         *  This function adds a number of days to the current date.
-         *
-         *  @param  $days  (optional) Number of days. Default: 1.
-         *  @param  $skip  (optional) Skips weekends. Default: false.
-         *
-         *  @returns       A string of the datetime.
-         */
-        function addDay( $value=1, $skip=false ) {
             
-            if ( $skip ) {
-                
-                $datetime1 = new DateClass( $this->getTimeStamp() );
-                $datetime2 = $datetime1;
-                $datetime2->Add( 'day', $value );
-                
-                $span = new DateSpanClass( $datetime1, $datetime2 );
-                $weekdays = $span->WeekDays();
-                
-                $value += ( $value - $weekdays );
+            $string = YDDate::getFormat( $format );
+            
+            if ( is_null( $string ) ) {
+                trigger_error( 'The format "' . $name . '" is not defined', YD_ERROR );
             }
             
-            $this->Add( 'day', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function adds a number of months to the current date.
-         *
-         *  @param  $months  (optional) Number of months. Default: 1.
-         *
-         *  @returns         A string of the datetime.
-         */
-        function addMonth( $value=1 ) {
-            $this->Add( 'month', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function adds a number of years to the current date.
-         *
-         *  @param  $years  (optional) Number of years. Default: 1.
-         *
-         *  @returns         A string of the datetime.
-         */
-        function addYear( $value=1 ) {
-            $this->Add( 'year', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function adds a number of hours to the current date.
-         *
-         *  @param  $hours  (optional) Number of hours. Default: 1.
-         *
-         *  @returns         A string of the datetime.
-         */
-        function addHour( $value=1 ) {
-            $this->Add( 'hour', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function adds a number of minutes to the current date.
-         *
-         *  @param  $minutes  (optional) Number of minutes. Default: 1.
-         *
-         *  @returns         A string of the datetime.
-         */
-        function addMinute( $value=1 ) {
-            $this->Add( 'minute', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function adds a number of seconds to the current date.
-         *
-         *  @param  $seconds  (optional) Number of seconds. Default: 1.
-         *
-         *  @returns         A string of the datetime.
-         */
-        function addSecond( $value=1 ) {
-            $this->Add( 'second', $value );
-            return $this->toString();
-        }
-
-        /**
-         *  This function returns the timestamp of the datetime.
-         *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  The timestamp of the datetime.
-         */
-        function getTimeStamp( $datetime='' ) {
-            return $this->TimeStamp( $datetime );
-        }
-
-        /**
-         *  This function returns a MySQL timestamp string of the datetime - YYYYMMDDHHMMSS.
-         *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  A timestamp string of the datetime.
-         */
-        function getTimeStampString( $datetime='' ) {
-            if ( $datetime ) { $this->setDate( $datetime ); }
+            // date
+            $string = str_replace( '%a', $this->day_name_abbr,      $string );
+            $string = str_replace( '%A', $this->day_name,           $string );
+            $string = str_replace( '%b', $this->month_name_abbr,    $string );
+            $string = str_replace( '%B', $this->month_name,         $string );
+            $string = str_replace( '%d', $this->day_with_zero,      $string );
+            $string = str_replace( '%m', $this->month_with_zero,    $string );
+            $string = str_replace( '%Y', $this->year,               $string );
+            $string = str_replace( '%w', $this->weekday,            $string );
             
-            return $this->getPart( 'year' ) .
-                   $this->getPart( 'month_with_zero' ) .
-                   $this->getPart( 'day_with_zero' ) .
-                   $this->getPart( 'hours_with_zero' ) .
-                   $this->getPart( 'minutes_with_zero' ) .
-                   $this->getPart( 'seconds_with_zero' );
-        }
-
-        /**
-         *  This function returns a MySQL timestamp string of the time - HHMMSS.
-         *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  A timestamp string of the time.
-         */
-        function getTimeStampStringTime( $datetime='' ) {
-            if ( $datetime ) { $this->setDate( $datetime ); }
+            // time
+            $string = str_replace( '%T', '%H:%M:%S',                $string );
+            $string = str_replace( '%H', $this->hours_with_zero,    $string );
+            $string = str_replace( '%M', $this->minutes_with_zero,  $string );
+            $string = str_replace( '%S', $this->seconds_with_zero,  $string );
             
-            return $this->getPart( 'hours_with_zero' ) .
-                   $this->getPart( 'minutes_with_zero' ) .
-                   $this->getPart( 'seconds_with_zero' );
+            return $string;
+        
         }
-
+        
         /**
-         *  This function returns a MySQL timestamp string of the date - YYYYMMDD.
+         *  This function returns a boolean indicating if the date part if empty.
          *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  A timestamp string of the date.
+         *  @returns  A boolean.
          */
-        function getTimeStampStringDate( $datetime='' ) {
-            if ( $datetime ) { $this->setDate( $datetime ); }
-            
-            return $this->getPart( 'year' ) . 
-                   $this->getPart( 'month_with_zero' ) .
-                   $this->getPart( 'day_with_zero' );
-        }
-
-        /**
-         *  This function sets the default format of the class.
-         *
-         *  @param $format  (optional) A format accepted by PHP function strftime.
-         */
-        function setFormat( $format='' ) {
-            if ( ! $format ) {
-                $format = '%Y-%m-%d %H:%M:%S';
-            }
-            $this->format = $format;
-        }
-
-        /**
-         *  This function parses the datetime passed and returns a timestamp.
-         *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  A timestamp of the date passed.
-         *
-         *  @internal
-         */
-        function _parseDate( $dateTime="" ) {
-            $ts = 0;
-            switch( gettype($dateTime) ) {
-                case "string": 
-                    $ts = strtotime( $dateTime ); 
-                    break;
-                case "integer":
-                    $ts = $dateTime;
-                    break;
-                case "object":
-                    if ( is_a( $dateTime, "dateclass" ) ) {
-                        $ts = $dateTime->TimeStamp();
-                    }
-            } 
-            return $ts;
-        }
-
-        /**
-         *  This function returns a string representation of the date based
-         *  on a format passed as parameter or by the default format.
-         *
-         *  @param $format    (optional) A format accepted by PHP function strftime.
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  A string of the date.
-         */
-        function toString( $format='', $datetime='' ) {
-            if ( $datetime ) { $this->setDate( $datetime ); }
-            if ( ! $format ) { $format = $this->format; }
-            return strftime( $format, $this->getTimeStamp() );
-        }
-
-        /**
-         *  This function returns a part of the date information.
-         *
-         *  year, month, month_with_zero, month_name, month_name_abbr, day,
-         *  day_with_zero, day_name, day_name_abbr, hours, hours_with_zero, minutes,
-         *  minutes_with_zero, seconds, seconds_with_zero, weekday, yearday, timestamp.
-         *
-         *  @param $part      The part of the date information.
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  The part of the date information.
-         */
-        function getPart( $part, $datetime='' ) {
-            
-            if ( $datetime ) { $this->setDate( $datetime ); }
-            
-            switch ( $part ) {
-                case 'year':
-                    return (int) strftime( '%Y', $this->getTimeStamp() );
-                case 'month':
-                    return (int) strftime( '%m', $this->getTimeStamp() );
-                case 'month_with_zero':
-                    return strftime( '%m', $this->getTimeStamp() );
-                case 'month_name':
-                    return ucfirst( strftime( '%B', $this->getTimeStamp() ) );
-                case 'month_name_abbr':
-                    return ucfirst( strftime( '%b', $this->getTimeStamp() ) );
-                case 'day':
-                    return (int) strftime( '%d', $this->getTimeStamp() );
-                case 'day_with_zero':
-                    return strftime( '%d', $this->getTimeStamp() );
-                case 'day_name':
-                    return ucfirst( strftime( '%A', $this->getTimeStamp() ) );
-                case 'day_name_abbr':
-                    return ucfirst( strftime( '%a', $this->getTimeStamp() ) );
-                case 'hours':
-                    return (int) strftime( '%H', $this->getTimeStamp() );
-                case 'hours_with_zero':
-                    return strftime( '%H', $this->getTimeStamp() );
-                case 'minutes':
-                    return (int) strftime( '%M', $this->getTimeStamp() );
-                case 'minutes_with_zero':
-                    return strftime( '%M', $this->getTimeStamp() );
-                case 'seconds':
-                    return (int) strftime( '%S', $this->getTimeStamp() );
-                case 'seconds_with_zero':
-                    return strftime( '%S', $this->getTimeStamp() );
-                case 'weekday':
-                    return (int) strftime( '%w', $this->getTimeStamp() );
-                case 'yearday':
-                    return (int) strftime( '%j', $this->getTimeStamp() );
-                case 'timestamp':
-                    return $this->getTimeStamp();
+        function isDateEmpty() {
+            if ( ! $this->year && ! $this->month && ! $this->day ) {
+                return true;
             }
             return false;
         }
 
         /**
-         *  This function returns an array with all the date information.
+         *  This function returns a boolean indicating if the time part if empty.
          *
-         *  @param $datetime  (optional) A YDDate object, timestamp or string of a date.
-         *
-         *  @returns  An array with all the date information.
+         *  @returns  A boolean.
          */
-        function toArray( $datetime='' ) {
+        function isTimeEmpty() {
+            if ( ! $this->hours && ! $this->minutes && ! $this->seconds ) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         *  This function returns an array with all the values of the object.
+         *
+         *  @returns  An array with all the values.
+         */
+        function toArray() {
+            return get_object_vars( $this );
+        }
+
+        /**
+         *  This function returns the empty string of the format.
+         *
+         *  @param  $format  (Optional) The format. Default: 'ISO'.
+         *
+         *  @returns  The empty string.
+         *
+         *  @static
+         */
+        function getEmpty( $format='ISO' ) {
             
-            if ( $datetime ) { $this->setDate( $datetime ); }
+            $f = YDDate::getFormat( $format, true );
             
-            $parts = array( 'year', 'month', 'day', 'month_with_zero', 'day_with_zero', 'month_name', 'month_name_abbr', 'day_name', 'day_name_abbr', 'yearday', 'weekday', 'hours', 'minutes', 'seconds', 'hours_with_zero', 'minutes_with_zero', 'seconds_with_zero', 'timestamp' );
-            
-            $arr = array();
-            foreach ( $parts as $part ) {
-                $arr[ $part ] = $this->getPart( $part );
+            if ( $f ) {
+                return $f['empty'];
             }
             
-            $arr['timestamp_string']      = $this->getTimeStampString();
-            $arr['timestamp_string_date'] = $this->getTimeStampStringDate();
-            $arr['timestamp_string_time'] = $this->getTimeStampStringTime();
-            
-            return $arr;
+            return '';
             
         }
 
         /**
-         *  This function returns the second.
+         *  This function sets the date.
          *
-         *  @returns  The second.
+         *  @param $date    (Optional) A YDDate object, timestamp, array or
+         *                  string. If null, the current date. Default: null.
+         *  @param $format  (Optional) The format name. Default: 'ISO'.
+         *  @param $family  (Optional) If true, parses in all the format family. Default: true.
          */
-        function getSeconds() {
-            return $this->Seconds();
-        }
+        function set( $date=null, $format='ISO', $family=true ) {
+            
+            if ( $date === null ) {
+                $date = time();
+            }
+            
+            $date = $this->parse( $date, $format, $family, true );
+            
+            $this->year              = $date['year'];
+            $this->month             = $date['month'];
+            $this->day               = $date['day'];
+            $this->hours             = $date['hours'];
+            $this->minutes           = $date['minutes'];
+            $this->seconds           = $date['seconds'];
+            
+            $this->day_with_zero     = substr( "00" . $this->day,     -2 );
+            $this->month_with_zero   = substr( "00" . $this->month,   -2 );
+            $this->hours_with_zero   = substr( "00" . $this->hours,   -2 );
+            $this->minutes_with_zero = substr( "00" . $this->minutes, -2 );
+            $this->seconds_with_zero = substr( "00" . $this->seconds, -2 );
+            
+            $this->timestamp         = @mktime( $this->hours,
+                                                $this->minutes,
+                                                $this->seconds,
+                                                $this->month,
+                                                $this->day,
+                                                $this->year );
+                                               
+            $this->timestamp_string  = $this->year . 
+                                       $this->month_with_zero .  
+                                       $this->day_with_zero   . 
+                                       $this->hours_with_zero   . 
+                                       $this->minutes_with_zero . 
+                                       $this->seconds_with_zero;
+            
+            if ( ! (int) $this->timestamp_string ) {
+                $this->timestamp_string = '';
+            }
+            
+            $this->quarter           = $this->getQuarter();
+            $this->weekday           = $this->getWeekDay();
+            $this->day_name          = $this->getDayName();
+            $this->day_name_abbr     = $this->getDayName( true );
+            $this->month_name        = $this->getMonthName();
+            $this->month_name_abbr   = $this->getMonthName( true );
+            $this->leap              = (int) $this->isLeapYear();
 
-        /**
-         *  This function returns the minute.
-         *
-         *  @returns  The minute.
-         */
-        function getMinutes() {
-            return $this->Minutes();
         }
-
+        
+        
         /**
-         *  This function returns the hour.
+         *  This function parses a date by it's format and returns an
+         *  array with the date values.
          *
-         *  @returns  The hour.
+         *  @param $date    A YDDate object, timestamp, array or string.
+         *                  If null, the object date. Default: null.
+         *  @param $format  (Optional) The format name. Default: 'ISO'.
+         *  @param $family  (Optional) If true, parses in all the format family. Default: true.
+         *  @param $error   (Optional) If true, errors are triggered. Default: true.
+         *
+         *  @returns  An array with the date values.
+         *
+         *  @static  If $date is passed.
          */
-        function getHours() {
-            return $this->Hours();
+        function parse( $date=null, $format='ISO', $family=true, $error=true ) {
+            
+            if ( $date === null ) {
+                return $this->toArray();
+            }
+            
+            $old_date = $date;
+            $match = false;
+            $valid_date = true;
+            $valid_time = true;
+            
+            $month_name = null;
+            
+            $result = array();
+            $result['year']    = $year    = 0;
+            $result['month']   = $month   = 0;
+            $result['day']     = $day     = 0;
+            $result['hours']   = $hours   = 0;
+            $result['minutes'] = $minutes = 0;
+            $result['seconds'] = $seconds = 0;
+            
+            if ( is_int( $date ) ) {
+                
+                $result['year']    = (int) strftime( '%Y', $date );
+                $result['month']   = (int) strftime( '%m', $date );
+                $result['day']     = (int) strftime( '%d', $date );
+                $result['hours']   = (int) strftime( '%H', $date );
+                $result['minutes'] = (int) strftime( '%M', $date );
+                $result['seconds'] = (int) strftime( '%S', $date );
+                
+                return $result;
+                
+            } else if ( is_object( $date ) && is_a( $date, 'YDDate' ) ) {
+                
+                if ( $date->isDateEmpty() && $date->isTimeEmpty() ) {
+                    return $result;
+                }
+                return $date->toArray();
+            
+            } else if ( is_array( $date ) ) {
+                
+                if ( empty( $date ) ) {
+                    return $result;
+                }
+                
+                if ( isset( $date['day'] ) && isset( $date['month'] ) && isset( $date['year'] ) ) {
+                    
+                    $day   = $date['day'];
+                    $month = $date['month'];
+                    $year  = $date['year'];
+                    $match = true;
+                    
+                    if ( isset( $date['hours'] ) && isset( $date['minutes'] ) && isset( $date['seconds'] ) ) {
+                        $hours    = $date['hours'];
+                        $minutes  = $date['minutes'];
+                        $seconds  = $date['seconds'];
+                    }
+                }
+                
+            }
+            
+            if ( is_string( $date ) ) {
+                
+                $date = trim( $date );
+                
+                if ( $date === YDDate::getEmpty( $format ) ) {
+                    return $result;
+                }
+                
+                $fam = array();
+                $fam[] = $format;
+                
+                if ( $family ) {
+                    
+                    $formats = YDConfig::get( 'YD_DATE_FORMATS' );
+                    
+                    foreach ( $formats as $name => $arr ) {
+                        
+                        if ( empty( $arr['parts'] ) ) {
+                            continue;
+                        }
+                        
+                        if ( preg_match( '/^' . $format . '(.+)/i', $name, $parts ) ) {
+                            $fam[] = $format . $parts[1];
+                        }
+
+                    }
+                }
+                
+                foreach ( $fam as $name ) {
+                
+                    $f = YDDate::getFormat( $name, true );
+                    $r = $f['regexes'] ? $f['regexes'] : array();
+                    
+                    if ( preg_match( YDDate::getRegex( $name, $r ), $date, $date_parts ) ) {
+                        
+                        foreach ( $f['parts'] as $var => $num ) {
+                             $$var = isset( $date_parts[ $num ] ) ? $date_parts[ $num ] : 0;
+                        }
+                        
+                        $match = true;
+                    
+                        if ( $month_name ) {
+                        
+                            for ( $i=1; $i<=12; $i++ ) {
+                                
+                                $month_abbr = strtolower( strftime( '%b', mktime( 0, 0, 0, $i, 1, 2000 ) ) );
+                                if ( substr( strtolower( $month_name ), 0, 3 ) == substr( $month_abbr, 0, 3 ) ) {
+                                    $month = $i;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+            
+            $valid_date = YDDate::isValidDate( $day,   $month,   $year );
+            $valid_time = YDDate::isValidTime( $hours, $minutes, $seconds );
+            
+            if ( ! $match || ! $valid_date || ! $valid_time ) {
+                if ( $error ) {
+                    trigger_error( 'The date "' . $old_date . '" is not valid.', YD_ERROR );
+                }
+                return false;
+            }
+            
+            $result['year']    = (int) $year;
+            $result['month']   = (int) $month;
+            $result['day']     = (int) $day;
+            $result['hours']   = (int) $hours;
+            $result['minutes'] = (int) $minutes;
+            $result['seconds'] = (int) $seconds;
+            
+            return $result;
+            
         }
-
+        
         /**
-         *  This function returns the day.
+         *  This function returns the month name.
          *
-         *  @returns  The day.
+         *  @param $abbr   (Optional) If true, returns the abbreviated month name. Default: false.
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the object. Default: null.
+         *  @param $format (Optional) The format name. Default: 'ISO'.
+         *  
+         *  @returns  The month name.
+         *
+         *  @static   If $date is passed.
          */
-        function getDay() {
-            return $this->Day();
+        function getMonthName( $abbr=false, $date=null, $format='ISO' ) {
+            
+            if ( $date === null ) {
+                $date = $this->parse( $date, $format );
+            } else {
+                $date = YDDate::parse( $date, $format );
+            }
+            
+            if ( ! $date['month'] ) {
+                return '';
+            }
+            
+            if ( $abbr ) {
+                return ucfirst( strftime( '%b', mktime( 0, 0, 0, $date['month'], 1, 2000 ) ) );
+            }
+            return ucfirst( strftime( '%B', mktime( 0, 0, 0, $date['month'], 1, 2000 ) ) );
+        
         }
         
         /**
          *  This function returns the weekday name.
          *
+         *  @param $abbr   (Optional) If true, returns the abbreviated weekday name. Default: false.
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the date of the object. Default: null.
+         *  @param $format (Optional) The format name. Default: 'ISO'.
+         *  
          *  @returns  The weekday name.
-         */
-        function getDayName() {
-            return $this->getPart( 'day_name' );
-        }
-
-        /**
-         *  This function returns the abbreviated weekday name.
          *
-         *  @returns  The weekday name.
+         *  @static   If $date is passed.
          */
-        function getDayNameAbbr() {
-            return $this->getPart( 'day_name_abbr' );
-        }
-
-        /**
-         *  This function returns the weekday. 0 = Sunday, 6 = Saturday
-         *
-         *  @returns  The weekday.
-         */
-        function getWeekDay() {
-            return $this->getPart( 'weekday' );
-        }
-
-        /**
-         *  This function returns the month.
-         *
-         *  @returns  The month.
-         */
-        function getMonth() {
-            return $this->Month();
-        }
-
-        /**
-         *  This function returns the month name.
-         *
-         *  @returns  The month name.
-         */
-        function getMonthName() {
-            return $this->getPart( 'month_name' );
-        }
-
-
-        /**
-         *  This function returns the abbreviated month name based on the locale settings.
-         *
-         *  @returns  The abbreviated month name.
-         */
-        function getMonthNameAbbr() {
-            return $this->getPart( 'month_name_abbr' );
-        }
-
-        /**
-         *  This function returns the year.
-         *
-         *  @returns  The year.
-         */
-        function getYear() {
-            return $this->Year();
-        }
-
-        /**
-         *  This function returns the quarter.
-         *
-         *  @returns  The quarter.
-         */
-        function getQuarter() {
-            return $this->Quarter();
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date is today.
-         *
-         *  @returns  A boolean indicating if the date is today.
-         */
-        function isToday() {
-            if ( $this->toString( '%Y-%m-%d' ) === date( 'Y-m-d' ) ) {
-                return true;
+        function getDayName( $abbr=false, $date=null, $format='ISO' ) {
+            
+            if ( $date === null ) {
+                $weekday = $this->getWeekDay( $date, $format );
+            } else {
+                $weekday = YDDate::getWeekDay( $date, $format );
             }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date is tomorrow.
-         *
-         *  @returns  A boolean indicating if the date is tomorrow.
-         */
-        function isTomorrow() {
-            if ( $this->toString( '%Y-%m-%d' ) === date( 'Y-m-d', time()+(60*60*24) ) ) {
-                return true;
+            
+            for ( $i=1; $i<=7; $i++ ) {
+                
+                $wday = strftime( '%w', mktime( 0, 0, 0, 1, $i, 2000 ) ) ;
+                
+                if ( $wday == $weekday ) {
+                    if ( $abbr ) {
+                        return ucfirst( strftime( '%a', mktime( 0, 0, 0, 1, $i, 2000 ) ) );
+                    }
+                    return ucfirst( strftime( '%A', mktime( 0, 0, 0, 1, $i, 2000 ) ) );
+                }
+                
             }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date is yesterday.
-         *
-         *  @returns  A boolean indicating if the date is yesterday.
-         */
-        function isYesterday() {
-            if ( $this->toString( '%Y-%m-%d' ) === date( 'Y-m-d', time()-(60*60*24) ) ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date
-         *  is in the current month.
-         *
-         *  @returns  A boolean indicating if the date is in the current month.
-         */
-        function isCurrentMonth() {
-            if ( $this->toString( '%Y-%m' ) === date( 'Y-m' ) ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date
-         *  is in the current year.
-         *
-         *  @returns  A boolean indicating if the date is in the current year.
-         */
-        function isCurrentYear() {
-            if ( $this->toString( '%Y' ) === date( 'Y' ) ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the time
-         *  is in the current hour.
-         *
-         *  @returns  A boolean indicating if the time is in the current hour.
-         */
-        function isCurrentHour() {
-            if ( $this->toString( '%Y-%m-%d %H' ) === date( 'Y-m-d H' ) ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the time
-         *  is in the current minute.
-         *
-         *  @returns  A boolean indicating if the time is in the current minute.
-         */
-        function isCurrentMinute() {
-            if ( $this->toString( '%Y-%m-%d %H:%M' ) === date( 'Y-m-d H:i' ) ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the day
-         *  is a friday.
-         *
-         *  @returns  A boolean indicating if the day is a friday.
-         */
-        function isFriday() {
-            if ( $this->getWeekDay() == 5 ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the day
-         *  is a saturday.
-         *
-         *  @returns  A boolean indicating if the day is a saturday.
-         */
-        function isSaturday() {
-            if ( $this->getWeekDay() == 6 ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the day
-         *  is a sunday.
-         *
-         *  @returns  A boolean indicating if the day is a sunday.
-         */
-        function isSunday() {
-            if ( $this->getWeekDay() == 0 ) {
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         *  This function returns a boolean indicating if the date
-         *  is in a weekend.
-         *
-         *  @returns  A boolean indicating if the date is in a weekend.
-         */
-        function isWeekend() {
-            return ( $this->isSaturday() || $this->isSunday() );
-        }
-
-        /**
-         *  This function returns a YDDate object of the previous day.
-         *
-         *  @returns  A YDDate object of the previous day.
-         */
-        function getPrevDay() {
-            $date = new YDDate();
-            $date->addDay( -1 );
-            return $date;
-        }
-
-        /**
-         *  This function returns a YDDate object of the next day.
-         *
-         *  @returns  A YDDate object of the next day.
-         */
-        function getNextDay() {
-            $date = new YDDate();
-            $date->addDay( +1 );
-            return $date;
-        }
-
-        /**
-         *  This function sets the date to the previous day.
-         *
-         *  @returns  A formatted string of the datetime.
-         */
-        function prevDay() {
-            return $this->addDay( -1 );
-        }
-
-        /**
-         *  This function sets the date to the next day.
-         *
-         *  @returns  A formatted string of the datetime.
-         */
-        function nextDay() {
-            return $this->addDay( +1 );
+            
+            return '';
+            
         }
         
         /**
-         *  This function returns the difference between the current object
-         *  and another datetime.
+         *  This function returns a boolean indicating if the year
+         *  is a leap year.
          *
-         *  @param $datetime  A YDDate object, a timestamp or a string.
+         *  @param $year (Optional) If empty, object's year. Default: empty.
          *
-         *  @returns  An array with the number of years, months, days, weeks, 
-         *            weekdays, quarters, hours, minutes and seconds 
-         *            between the dates.
+         *  @returns  True if leap year, false otherwise.
+         *
+         *  @static  If $year is passed.
          */
-        function getDifference( $datetime ) {
+        function isLeapYear( $year='' ) {
             
-            $datetime_start = new DateClass( $this->getTimeStamp() );
-            if ( is_object( $datetime ) && is_a( $datetime, 'dateclass' ) ) {
-                $datetime_end = new DateClass( $datetime->TimeStamp() );
+            if ( ! $year ) { $year = $this->year; }
+            
+            if ( $year % 4 == 0 ) {
+                if ( $year % 100 == 0 ) {
+                    if ( $year % 400 == 0 ) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if a date is
+         *  valid by it's format.
+         *
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *  @param $format (Optional) The format name. Default: 'ISO'.
+         *  @param $family (Optional) If true, checks in all the format family. Default: true.
+         *  @param $empty  (Optional) If false, empty dates are not valid. Default: true.
+         *
+         *  @returns  True if the date is valid, false otherwise.
+         *
+         *  @static
+         */
+        function isValid( $date, $format='ISO', $family=true, $empty=true ) {
+            
+            if ( ! YDDate::parse( $date, $format, $family, false ) ) {
+                return false;
+            }
+            if ( ! $empty && $date === YDDate::getEmpty( $format ) ) {
+                return false;
+            }
+            return true;
+            
+        }
+
+        /**
+         *  This function returns a boolean indicating if the time passed is valid.
+         *
+         *  @returns  True if valid, false otherwise.
+         */
+        function isValidTime( & $hours, & $minutes, & $seconds ) {
+            
+            if ( $hours < 0 && $hours > 23 ) {
+                return false;
+            }
+            if ( $minutes < 0 && $minutes > 59 ) {
+                return false;
+            }
+            if ( $seconds < 0 && $seconds > 59 ) {
+                return false;
+            }
+            return true;
+            
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date passed is valid.
+         *
+         *  @returns  True if valid, false otherwise.
+         */
+        function isValidDate( $day, $month, $year ) {
+            
+            if ( ! checkdate( $month, $day, $year ) ) {
+                return false;
+            }
+            return true;
+            
+        }
+        
+        /**
+         *  This function returns the weekday as an integer.
+         *  0 = Sunday - 6 = Saturday
+         *
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the date of the object. Default: null.
+         *  @param $format (Optional) The format. Default: 'ISO'.
+         *
+         *  @returns  The weeday number.
+         *
+         *  @static   If $date is passed.
+         */
+        function getWeekDay( $date=null, $format='ISO' ) {
+            
+            if ( $date === null ) {
+                $date = $this->parse( $date, $format );
             } else {
-                $datetime_end = new DateClass( $datetime );
+                $date = YDDate::parse( $date, $format );
             }
             
-            $span = new DateSpanClass( $datetime_start, $datetime_end );
+            if ( ! $date['day'] && ! $date['month'] && ! $date['year'] ) {
+                return null;
+            }
             
-            $arr = array();
-            $arr['years']    = round( $span->Years() );
-            $arr['months']   = round( $span->Months() );
-            $arr['weeks']    = round( $span->Weeks() );
-            $arr['weekdays'] = round( $span->WeekDays() );
-            $arr['days']     = round( $span->Days() );
-            $arr['quarters'] = round( $span->Quarters() );
-            $arr['hours']    = round( $span->Hours() );
-            $arr['minutes']  = round( $span->Minutes() );
-            $arr['seconds']  = round( $span->Seconds() );
+            $arr = array( 0, 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 );
             
-            return $arr;
+            $y = substr( $date['year'], -2 );
+            $a = $date['day'] + $y + ( floor( $y/4 ) ) + $arr[ $date['month'] ];
+            
+            if ( YDDate::isLeapYear( $date['year'] ) && $date['month'] <= 2 && $date['day'] < 29 ) {
+                $a--;
+            }
+            while ( $a > 7 ) {
+                $a -= 7;
+            }
+            
+            if ( $date['year'] != 2000 && $date['year'] % 100 == 0 ) {
+                if ( $date['year'] < 2000 ) {
+                    $a += ( 2000 - $date['year'] ) / 100;
+                } else {
+                    $a -= 2 * ( ( $date['year'] - 2000 ) / 100 );
+                }
+            }
+            
+            return ( $a == 7 ) ? 0 : $a;
+            
+        }
+        
+        /**
+         *  This function returns the quarter of the date.
+         *
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the date of the object. Default: null.
+         *  @param $format (Optional) The format name. Default: 'ISO'.
+         *
+         *  @returns  The quarter.
+         *
+         *  @static   If $date is passed.
+         */
+        function getQuarter( $date=null, $format='ISO' ) {
+            
+            if ( $date === null ) {
+                $date = $this->parse( $date, $format );
+            } else {
+                $date = YDDate::parse( $date, $format );
+            }
+            
+            switch ( $date['month'] ) {
+                case 1:
+                case 2:
+                case 3:
+                    return 1;
+                case 4:
+                case 5:
+                case 6:
+                    return 2;
+                case 7:
+                case 8:
+                case 9:
+                    return 3;
+                case 10:
+                case 11:
+                case 12:
+                    return 4;
+            }
+            
+            return 0;
+            
+        }
+
+        /**
+         *  This function adds a number of days to the date.
+         *
+         *  @param $value (Optional) The number of days. Default: 1.
+         *
+         *  @returns  The date in the 'ISO' format.
+         */
+        function addDay( $value=1 ) {
+            
+            if ( $value == 0 ) {
+                return $this->get();
+            }
+            
+            if ( ! extension_loaded( 'calendar' ) ) {
+                trigger_error( 'The PHP calendar extension must be enabled', YD_ERROR );
+            }
+            if ( $this->isDateEmpty() ) {
+                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            $julian = GregoriantoJD( $this->month, $this->day, $this->year );
+            $julian += $value;
+               
+            $gregorian = JDtoGregorian( $julian ); 
+               
+            list ( $month, $day, $year ) = split ( '[/]', $gregorian );
+            
+            $this->day   = $day;
+            $this->month = $month;
+            $this->year  = $year;
+            
+            $this->reset();
+            
+            return $this->get();
+           
+        }
+        
+        /**
+         *  This function returns a regex string of the format.
+         *
+         *  @param $format   The format name.
+         *  @param $regexes  (Optional) Regexes replacements.
+         *
+         *  @returns     The regex string.
+         *
+         *  @static
+         */
+        function getRegex( $format, $regexes=array() ) {
+            
+            $s = '([0-5]{1}[0-9]{1}|[0-9]{1})';           // seconds and minutes
+            $h = '([0-1]{1}[0-9]{1}|2[0-3]{1}|[0-9]{1})'; // hours
+            $d = '([0-2]{1}[0-9]{1}|30|31|[0-9]{1})';     // day
+            $m = '(0[0-9]{1}|1[0-2]{1}|[0-9]{1})';        // month
+            $y = '([0-9]{4})';                            // year 4 digits
+            $t = '([\-\/\.\,\: ])';                       // separators
+            $a = '([a-zA-Z]+)';                           // alpha
+            $w = '([0-9]+)';                              // numbers
+            
+            // replace regexes
+            if ( $regexes ) {
+                foreach ( $regexes as $k => $v ) {
+                    $$k = $v;
+                }
+            }
+            
+            // format string
+            $string = YDDate::getFormat( $format );
+            
+            // time representation
+            $string = str_replace( '%T', '%H:%M:%S', $string );
+            
+            // separators
+            $string = preg_replace( $t, $t, $string );
+            
+            // date
+            $string = str_replace( '%a', $a, $string );
+            $string = str_replace( '%A', $a, $string );
+            $string = str_replace( '%b', $a, $string );
+            $string = str_replace( '%B', $a, $string );
+            $string = str_replace( '%d', $d, $string );
+            $string = str_replace( '%m', $m, $string );
+            $string = str_replace( '%Y', $y, $string );
+            $string = str_replace( '%w', $w, $string );
+            
+            // time
+            $string = str_replace( '%H', $h, $string );
+            $string = str_replace( '%M', $s, $string );
+            $string = str_replace( '%S', $s, $string );
+            
+            return '/^' . $string . '$/i';
+            
+        }
+        
+        /**
+         *  This function sets the date object based on it's values
+         *  in case they were modified.
+         *
+         *  @internal
+         */
+        function reset() {
+            
+            $set = false;
+            if ( (int) $this->day_with_zero != (int) $this->day ) {
+                $set = true;
+            }
+            if ( (int) $this->month_with_zero != (int) $this->month ) {
+                $set = true;
+            }
+            if ( (int) $this->hours_with_zero != (int) $this->hours ) {
+                $set = true;
+            }
+            if ( (int) $this->minutes_with_zero != (int) $this->minutes ) {
+                $set = true;
+            }
+            if ( (int) $this->seconds_with_zero != (int) $this->seconds ) {
+                $set = true;
+            }
+            
+            if ( $set ) {
+            
+                $this->set( (int) $this->year  .'-'. (int) $this->month .'-'  . (int) $this->day . ' ' . 
+                            (int) $this->hours .':'. (int) $this->minutes .':'. (int) $this->seconds );
+            
+            }
+            
         }
         
     }
+    
+    // Setting default custom output formats
+    YDDate::setFormat( 'ISO',
+                       '%Y-%m-%d %H:%M:%S',
+                       array( 'day'     => 5,
+                              'month'   => 3,
+                              'year'    => 1,
+                              'hours'   => 7,
+                              'minutes' => 9,
+                              'seconds' => 11 ),
+                       array(), '0000-00-00 00:00:00', false );
+
+    YDDate::setFormat( 'ISO_DATE',
+                       '%Y-%m-%d',
+                       array( 'day'     => 5,
+                              'month'   => 3,
+                              'year'    => 1 ),
+                       array(), '0000-00-00', false );
+
+    YDDate::setFormat( 'ISO_TIME',
+                       '%H:%M:%S',
+                       array(), array(), '00:00:00', false );
+
+    YDDate::setFormat( 'USA',
+                       '%m/%d/%Y %T',
+                       array( 'day'     => 3,
+                              'month'   => 1,
+                              'year'    => 5,
+                              'hours'   => 7,
+                              'minutes' => 9,
+                              'seconds' => 11 ),
+                        array(), '' , false );
+
+    YDDate::setFormat( 'USA_DATE',
+                       '%m/%d/%Y',
+                       array( 'day'     => 3,
+                              'month'   => 1,
+                              'year'    => 5 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'EUN',
+                       '%d.%m.%Y %T',
+                       array( 'day'     => 1,
+                              'month'   => 3,
+                              'year'    => 5,
+                              'hours'   => 7,
+                              'minutes' => 9,
+                              'seconds' => 11 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'EUN_DATE',
+                       '%d.%m.%Y',
+                       array( 'day'     => 1,
+                              'month'   => 3,
+                              'year'    => 5 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'SQL',
+                       '%Y%m%d%H%M%S',
+                       array( 'day'     => 3,
+                              'month'   => 2,
+                              'year'    => 1,
+                              'hours'   => 4,
+                              'minutes' => 5,
+                              'seconds' => 6 ),
+                       array(
+                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+                       ), false );
+
+    YDDate::setFormat( 'SQL_NOSEC',
+                       '%Y%m%d%H%M',
+                       array( 'day'     => 3,
+                              'month'   => 2,
+                              'year'    => 1,
+                              'hours'   => 4,
+                              'minutes' => 5 ),
+                       array(
+                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+                       ),
+                       '00000000000000', false );
+    
+    YDDate::setFormat( 'SQL_DATE',
+                       '%Y%m%d',
+                       array( 'day'     => 3,
+                              'month'   => 2,
+                              'year'    => 1 ),
+                       array(
+                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+                       ),
+                       '00000000', false );
+
+    YDDate::setFormat( 'SQL_TIME',
+                       '%H%M%S',
+                       array(),
+                       array(
+                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+                       ),
+                       '000000', false );
+
+    YDDate::setFormat( 'HUM',
+                       '%a, %d %b %Y %T',
+                       array( 'day'        => 3,
+                              'month_name' => 5,
+                              'year'       => 7,
+                              'hours'      => 8,
+                              'minutes'    => 11,
+                              'seconds'    => 13 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'HUM_NOWEEK',
+                       '%d %b %Y %T',
+                       array( 'day'        => 1,
+                              'month_name' => 3,
+                              'year'       => 5,
+                              'hours'      => 7,
+                              'minutes'    => 9,
+                              'seconds'    => 11 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'HUM_DATE',
+                       '%a, %d %b %Y',
+                       array( 'day'        => 3,
+                              'month_name' => 5,
+                              'year'       => 7 ),
+                       array(), '', false );
+
+    YDDate::setFormat( 'HUM_DATE_NOWEEK',
+                       '%d %b %Y',
+                       array( 'day'        => 1,
+                              'month_name' => 3,
+                              'year'       => 5 ),
+                       array(), '', false );
 
 ?>
