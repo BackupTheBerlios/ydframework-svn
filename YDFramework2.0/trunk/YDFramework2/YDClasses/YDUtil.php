@@ -645,6 +645,32 @@
 
         }
 
+        /** 
+         *   This function will compare two network ip addresses 
+         * 
+         *   @param $ip1      First ip 
+         * 
+         *   @param $ip2      Second ip 
+         * 
+         *   @returns    Returns < 0 if ip1 is less than ip2; > 0 if str1 is greater than ip2, and 0 if they are equal. 
+         * 
+         *   @static 
+         */ 
+        function ipcmp( $ip1, $ip2 ){ 
+
+            // get 4 elements from the network address 
+            $ip1 = explode(".", $ip1); 
+            $ip2 = explode(".", $ip2); 
+
+            // get an integer that represents the numeric value of the address 
+            $ip1 = $ip1[0]*256^3 + $ip1[1]*256^2 + $ip1[2]*256 + $ip1[3]; 
+            $ip2 = $ip2[0]*256^3 + $ip2[1]*256^2 + $ip2[2]*256 + $ip2[3]; 
+
+            // return diference 
+            return $ip1 - $ip2; 
+
+        }
+
     }
 
     /**
