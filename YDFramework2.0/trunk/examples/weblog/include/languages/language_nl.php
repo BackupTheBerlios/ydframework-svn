@@ -4,6 +4,7 @@
 $GLOBALS['t']['not_found'] = 'Niets gevonden';
 $GLOBALS['t']['sorry_not_there'] = 'Sorry, maar je bent iets aan het zoeken dat er niet is.';
 $GLOBALS['t']['sorry_not_found'] = 'Sorry, maar je bent iets aan het zoeken dat er niet is.';
+$GLOBALS['t']['no_items_found'] = 'Sorry, maar je bent iets aan het zoeken dat er niet is.';
 $GLOBALS['t']['by'] = 'door';
 $GLOBALS['t']['required'] = 'vereist';
 $GLOBALS['t']['login'] = 'Aanmelden';

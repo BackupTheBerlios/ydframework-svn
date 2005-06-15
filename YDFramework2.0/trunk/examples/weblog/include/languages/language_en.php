@@ -4,6 +4,7 @@
 $GLOBALS['t']['not_found'] = 'Not Found';
 $GLOBALS['t']['sorry_not_there'] = 'Sorry, but you are looking for something that isn\'t here.';
 $GLOBALS['t']['sorry_not_found'] = 'Sorry, but you are looking for something that isn\'t here.';
+$GLOBALS['t']['no_items_found'] = 'Sorry, but you are looking for something that isn\'t here.';
 $GLOBALS['t']['by'] = 'by';
 $GLOBALS['t']['required'] = 'required';
 $GLOBALS['t']['login'] = 'Login';
