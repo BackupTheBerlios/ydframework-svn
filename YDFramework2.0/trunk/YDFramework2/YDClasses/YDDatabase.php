@@ -673,6 +673,8 @@
                 if ( strtolower( $string ) != 'null' ) {
                     return str_replace( "'", "''", $string );
                 }
+            } else if ( is_null( $string ) ) {
+                return 'null';
             }
             return $string;
         }
@@ -690,6 +692,8 @@
                 if ( strtolower( $string ) != 'null' ) {
                     return $this->_fmtQuote . $this->string( $string ) . $this->_fmtQuote;
                 }
+            } else if ( is_null( $string ) ) {
+                return 'null';
             }
             return $string;
         }
@@ -1078,6 +1082,8 @@
                     // Returns the escaped string using last link opened
                     return mysql_real_escape_string( $string );
                 }
+            } else if ( is_null( $string ) ) {
+                return 'null';
             }
             return $string;
         }

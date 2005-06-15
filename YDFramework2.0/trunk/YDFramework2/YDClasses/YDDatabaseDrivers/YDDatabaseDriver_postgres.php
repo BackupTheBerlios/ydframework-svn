@@ -175,6 +175,8 @@
                 if ( strtolower( $string ) != 'null' ) {
                     return pg_escape_string( $string );
                 }
+            } else if ( is_null( $string ) ) {
+                return 'null';
             }
             return $string;
         }

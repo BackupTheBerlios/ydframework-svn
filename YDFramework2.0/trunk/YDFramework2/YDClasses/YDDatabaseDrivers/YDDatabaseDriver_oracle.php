@@ -173,6 +173,8 @@
                 if ( strtolower( $string ) != 'null' ) {
                     return str_replace( "'", "''", $string );
                 }
+            } else if ( is_null( $string ) ) {
+                return 'null';
             }
             return $string;
         }
@@ -186,7 +188,7 @@
          *	@returns	The escaped string surrounded by quotes.
          */
         function sqlString( $string ) {
-            if ( strtolower( $string ) == 'null' ) {
+            if ( is_null( $string ) || strtolower( $string ) == 'null' ) {
                 return 'null';
             }
             if ( strtolower( substr( $string, 0, 7 ) ) == 'to_date' ) {
