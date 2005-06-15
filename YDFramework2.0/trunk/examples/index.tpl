@@ -506,6 +506,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
+            <td valign="top" rowspan="1">&nbsp;</td>
             <td valign="top"><a href="dates.php">Using the YDDate and YDDateUtil classes</a></td>
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=dates.php">dates.php</a></td>
         </tr>
