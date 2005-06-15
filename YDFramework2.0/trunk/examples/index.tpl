@@ -498,8 +498,8 @@
             <td valign="top">step by step tutorial</td>
         </tr>
         <tr>
-            <td valign="top"><a href="sqlquery.php">YDSqlQuery class</a></td>
-            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=sqlquery.php">sqlquery.php</a></td>
+            <td valign="top"><a href="database_query.php">YDDatabaseQuery class</a></td>
+            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=database_query.php">database_query.php</a></td>
         </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>YDTimer</b></td>

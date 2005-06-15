@@ -27,19 +27,19 @@
     }
 
     // Includes
-    YDInclude( 'YDSqlQuery.php' );
+    YDInclude( 'YDDatabaseQuery.php' );
 
     /**
      *  This class defines a YDSqlQueryDriver_oracle object.
      */
-    class YDSqlQueryDriver_oracle extends YDSqlQueryDriver {
+    class YDDatabaseQueryDriver_oracle extends YDDatabaseQueryDriver {
 
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-        function YDSqlQueryDriver_oracle() {
+        function YDDatabaseQueryDriver_oracle( & $db ) {
             
-            $this->YDSqlQueryDriver();
+            $this->YDDatabaseQueryDriver( $db );
             $this->reserved = '"';
             
         }
@@ -77,7 +77,7 @@
          *
          *  @returns  The query.
          */
-        function getSelectSql() {
+        function getSelectQuery() {
             
             if ( $this->limit < 0 && $this->offset < 0 ) {
                 return 'SELECT ' . $this->getOptions() . $this->getSelect()

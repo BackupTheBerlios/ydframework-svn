@@ -26,9 +26,9 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-    class YDSqlQuery extends YDAddOnModule {
+    class YDDatabaseQuery extends YDAddOnModule {
         
-        function YDSqlQuery() {
+        function YDDatabaseQuery() {
             
             $this->YDAddOnModule();
 
@@ -36,44 +36,39 @@
             $this->_author = 'David Bittencourt';
             $this->_version = '1.0';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
-            $this->_description = 'This class defines a YDSqlQuery object.';
+            $this->_description = 'This class defines a YDDatabaseQuery object.';
             
         }
         
-        function getInstance( $driver ) {
+        function getInstance( & $db ) {
+            
+            $driver = $db->getDriver();
             
             // The list of known drivers
             $regDrivers = array();
 
-            // Register new driver
-            if( is_array($driver) && isset( $driver['drivername'] ) ) {
-                $regDrivers[ strtolower( $driver['drivername'] ) ] = $driver;
-                $driver = $driver[ 'drivername' ];
-            } else {
-                
-                // Register the standard drivers
-                $regDrivers[ strtolower( 'mysql' ) ] = array(
-                    'class' => 'YDSqlQueryDriver_mysql', 'file' => ''
-                );
-                $regDrivers[ strtolower( 'oracle' ) ] = array(
-                    'class' => 'YDSqlQueryDriver_oracle', 'file' => 'YDSqlQueryDriver_oracle.php'
-                );
-                $regDrivers[ strtolower( 'postgres' ) ] = array(
-                    'class' => 'YDSqlQueryDriver_postgres', 'file' => 'YDSqlQueryDriver_postgres.php'
-                );
-                $regDrivers[ strtolower( 'sqlite' ) ] = array(
-                    'class' => 'YDSqlQueryDriver_sqlite', 'file' => 'YDSqlQueryDriver_sqlite.php'
-                );
-                
-                // Check if the driver exists
-                if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
-                    trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
-                }
+            // Register the standard drivers
+            $regDrivers[ strtolower( 'mysql' ) ] = array(
+                'class' => 'YDDatabaseQueryDriver_mysql', 'file' => ''
+            );
+            $regDrivers[ strtolower( 'oracle' ) ] = array(
+                'class' => 'YDDatabaseQueryDriver_oracle', 'file' => 'YDDatabaseQueryDriver_oracle.php'
+            );
+            $regDrivers[ strtolower( 'postgres' ) ] = array(
+                'class' => 'YDDatabaseQueryDriver_postgres', 'file' => 'YDDatabaseQueryDriver_postgres.php'
+            );
+            $regDrivers[ strtolower( 'sqlite' ) ] = array(
+                'class' => 'YDDatabaseQueryDriver_sqlite', 'file' => 'YDDatabaseQueryDriver_sqlite.php'
+            );
+            
+            // Check if the driver exists
+            if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
+                trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
             }
 
             // Include the driver
             if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
-                YDInclude( 'YDSqlQueryDrivers' . YD_DIRDELIM . $regDrivers[ strtolower( $driver ) ]['file'] );
+                YDInclude( 'YDDatabaseQueryDrivers' . YD_DIRDELIM . $regDrivers[ strtolower( $driver ) ]['file'] );
             }
             
             // Check if the driver is supported
@@ -83,7 +78,7 @@
 
             // Make a new connection object and return it
             $className = $regDrivers[ strtolower( $driver ) ]['class'];
-            return new $className();
+            return new $className( $db );
         }
         
     }
@@ -91,7 +86,7 @@
     /**
      *  This class defines a YDSqlQueryDriver object.
      */
-    class YDSqlQueryDriver extends YDBase {
+    class YDDatabaseQueryDriver extends YDBase {
 
         var $action   = 'SELECT';
         var $options  = array();
@@ -113,9 +108,11 @@
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-         function YDSqlQueryDriver() {
+         function YDDatabaseQueryDriver( & $db ) {
             
             $this->YDBase();
+            
+            $this->db = & $db;
             
             $this->reset();
             $this->action();
@@ -766,21 +763,21 @@
          *
          *  @returns  The query.
          */
-        function getSql() {
+        function getQuery() {
 
             switch ( strtoupper( $this->action ) ) {
 
                 case 'SELECT':
-                    return $this->getSelectSql();
+                    return $this->getSelectQuery();
 
                 case 'INSERT':
-                    return $this->getInsertSql();
+                    return $this->getInsertQuery();
 
                 case 'UPDATE':
-                    return $this->getUpdateSql();
+                    return $this->getUpdateQuery();
 
                 case 'DELETE':
-                    return $this->getDeleteSql();
+                    return $this->getDeleteQuery();
             }
 
             trigger_error( 'Incorrect action for the query.', YD_ERROR );
@@ -792,7 +789,7 @@
          *
          *  @returns  The query.
          */
-        function getSelectSql() {
+        function getSelectQuery() {
             
             return 'SELECT ' . $this->getOptions() . $this->getSelect()
                              . $this->getFrom() . $this->getWhere() . $this->getGroup()
@@ -806,7 +803,7 @@
          *
          *  @returns  The query.
          */
-        function getInsertSql() {
+        function getInsertQuery() {
             
             return 'INSERT ' . $this->getOptions() .
                    'INTO '   . $this->getFrom( false ) . $this->getInsert();
@@ -819,7 +816,7 @@
          *
          *  @returns  The query.
          */
-        function getUpdateSql() {
+        function getUpdateQuery() {
             
             return 'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
                              . $this->getWhere();
@@ -831,7 +828,7 @@
          *
          *  @returns  The query.
          */
-        function getDeleteSql() {
+        function getDeleteQuery() {
             
             return 'DELETE ' . $this->getOptions() . $this->getFrom( true ) . $this->getWhere();
         }
@@ -1033,14 +1030,14 @@
     /**
      *  This class defines a YDSqlQueryDriver_mysql object.
      */
-    class YDSqlQueryDriver_mysql extends YDSqlQueryDriver {
+    class YDDatabaseQueryDriver_mysql extends YDDatabaseQueryDriver {
 
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-        function YDSqlQueryDriver_mysql() {
+        function YDDatabaseQueryDriver_mysql( & $db ) {
             
-            $this->YDSqlQueryDriver();
+            $this->YDDatabaseQueryDriver( $db );
             
         }
         
@@ -1062,6 +1059,9 @@
          *  @returns    The escaped string.
          */
         function string( $string ) {
+            
+            $this->db->connect();
+            
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     return mysql_real_escape_string( $string );
@@ -1077,7 +1077,7 @@
          *
          *  @returns  The query.
          */
-        function getSelectSql() {
+        function getSelectQuery() {
             
             $sql = 'SELECT ' . $this->getOptions() . $this->getSelect()
                              . $this->getFrom() . $this->getWhere() . $this->getGroup()
@@ -1104,7 +1104,7 @@
          *
          *  @returns  The query.
          */
-        function getUpdateSql() {
+        function getUpdateQuery() {
             
             return 'UPDATE ' . $this->getOptions() . $this->getFrom( false ) . $this->getUpdate()
                              . $this->getWhere() . $this->getOrder() . $this->getLimit();
@@ -1116,7 +1116,7 @@
          *
          *  @returns  The query.
          */
-        function getDeleteSql() {
+        function getDeleteQuery() {
             
             return 'DELETE ' . $this->getOptions() . $this->getFrom( true ) . $this->getWhere()
                              . $this->getOrder() . $this->getLimit();

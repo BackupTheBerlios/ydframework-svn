@@ -1,25 +1,31 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
-<chapter id="ydsqlquery">
+<chapter id="YDDatabaseQuery">
 
-    <title>Addon: YDSqlQuery, using objects to create SQL queries</title>
+    <title>Addon: YDDatabaseQuery, using objects to create SQL queries</title>
 
-    <para>The Yellow Duck Framework has a special object called YDSqlQuery that allows you to create SQL statements using an object. This makes it a lot easier to read the SQL statements and it's also easier to maintain them. This is a solution in between using plain SQL statements and using a object relational mapper such as YDDatabaseObject.</para>
+    <para>The Yellow Duck Framework has a special object called YDDatabaseQuery that allows you to create SQL statements using an object. This makes it a lot easier to read the SQL statements and it's also easier to maintain them. This is a solution in between using plain SQL statements and using a object relational mapper such as YDDatabaseObject.</para>
 
     <note>This class is specified in it's own include file, so you need to include it manually.</note>
 
-    <para>You can get a new instance of a YDSqlQuery object using the getInstance static method for the database driver you want. For example:</para>
+    <para>You can get a new instance of a YDDatabaseQuery object using the getInstance static method. This method receives a YDDatabase instance as parameter. For example:</para>
     
     <programlisting><![CDATA[<?php
 
-        // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        // Include YDDatabase
+        YDInclude( 'YDDatabase.php' );
+        
+        // Include YDDatabaseQuery
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
 
 ?>]]></programlisting>
     
-    <para>The following database drivers can be specified:</para>
+    <para>The class handles all database drivers supported by YDDatabase:</para>
     
     <itemizedlist spacing="compact">
         <listitem><emphasis role="bold">mysql</emphasis>: Mysql (requires the mysql PHP extension.</listitem>
@@ -28,17 +34,21 @@
         <listitem><emphasis role="bold">postgres</emphasis>: PostgreSQL (requires the pgsql PHP extension.</listitem>
     </itemizedlist>
     
-    <para>YDSqlQuery is aware of reserved keywords as tables and field names. So, they can be escaped as reserved keywords. By default, all table names are escaped. But you can escape the select, order and group statements setting to true the $reserved parameter. You can also retrieve the reserved enclosure character with the method getReserved. This is useful if you are using different database drivers.</para>
+    <para>YDDatabaseQuery is aware of reserved keywords as tables and field names. So, they can be escaped as reserved keywords. By default, all table names are escaped. But you can escape the select, order and group statements setting to true the $reserved parameter. You can also retrieve the reserved enclosure character with the method getReserved. This is useful if you are using different database drivers.</para>
     
-    <para>The following example shows you how you can use the YDSqlQuery object to create a SELECT SQL statement:</para>
+    <para>The following example shows you how you can use the YDDatabaseQuery object to create a SELECT SQL statement:</para>
 
     <programlisting><![CDATA[<?php
 
         // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
         $r = $q->getReserved();
         
         // Select query
@@ -85,7 +95,7 @@
         $q->offset( 50 );
         
         // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
+        YDDebugUtil::dump( $q->getQuery() );
         
         // Reset the contents of the query (optional)
         $q->reset();
@@ -103,10 +113,14 @@ ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
     <programlisting><![CDATA[<?php
 
         // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
         
         // Select query
         $q->select();
@@ -156,7 +170,7 @@ ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
         $q->limit( 50 );
 
         // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
+        YDDebugUtil::dump( $q->getQuery() );
 
 ?>]]></programlisting>
 
@@ -167,15 +181,19 @@ ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
 ON ( u.group_id = g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR ( a.size > 150
 AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programlisting>
 
-    <para>Also SQL delete statements can be constructed with the YDSqlQuery class:</para>
+    <para>Also SQL delete statements can be constructed with the YDDatabaseQuery class:</para>
 
     <programlisting><![CDATA[<?php
 
         // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
         
         // Delete query
         $q->delete();
@@ -187,7 +205,7 @@ AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programli
         $q->where( "id = 144" );
 
         // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
+        YDDebugUtil::dump( $q->getQuery() );
 
 ?>]]></programlisting>
 
@@ -208,10 +226,14 @@ AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programli
                   );
 
         // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
 
         // Insert query
         $q->insert();
@@ -227,7 +249,7 @@ AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programli
         $q->where( "id = 144" );
 
         // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
+        YDDebugUtil::dump( $q->getQuery() );
 
 ?>]]></programlisting>
 
@@ -249,10 +271,14 @@ VALUES ( 'David', 'email@host.com', 1, null )]]></programlisting>
                   );
 
         // Includes
-        YDInclude( 'YDSqlQuery.php' );
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
 
         // Instantiate the class
-        $q = YDSqlQuery::getInstance( 'mysql' );
+        $q = YDDatabaseQuery::getInstance( $db );
         
         // Update query
         $q->update();
@@ -269,7 +295,7 @@ VALUES ( 'David', 'email@host.com', 1, null )]]></programlisting>
         $q->where( "id = 144" );
 
         // Show the SQL statement
-        YDDebugUtil::dump( $q->getSql() );
+        YDDebugUtil::dump( $q->getQuery() );
 
 ?>]]></programlisting>
 

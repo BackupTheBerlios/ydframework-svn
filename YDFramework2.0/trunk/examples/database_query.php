@@ -5,21 +5,25 @@
 
     // Includes
     YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDSqlQuery.php' );
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDDatabaseQuery.php' );
 
     // Class definition
-    class sqlquery extends YDRequest {
+    class database_query extends YDRequest {
 
         // Class constructor
-        function sqlquery() {
+        function database_query() {
             $this->YDRequest();
         }
 
         // Default action
         function actionDefault() {
             
+            // Database instance
+            $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
+            
             // Instantiate the class
-            $q = YDSqlQuery::getInstance( 'mysql' );
+            $q = YDDatabaseQuery::getInstance( $db );
             $r = $q->reserved;
             
             // Select action
@@ -66,7 +70,7 @@
             $q->offset( 50 );
             
             // Show the SQL statement
-            YDDebugUtil::dump( $q->getSql() );
+            YDDebugUtil::dump( $q->getQuery() );
             
             // Reset the contents of the query 
             $q->reset();
@@ -121,7 +125,7 @@
             $q->limit( 50 );
     
             // Show the SQL statement
-            YDDebugUtil::dump( $q->getSql() );
+            YDDebugUtil::dump( $q->getQuery() );
             
             // Reset the query
             $q->reset();
@@ -138,7 +142,7 @@
             $q->where( "id = 144" );
     
             // Show the SQL statement
-            YDDebugUtil::dump( $q->getSql() );
+            YDDebugUtil::dump( $q->getQuery() );
             
             // Reset the query
             $q->reset();
@@ -146,7 +150,8 @@
             // ------------------------------------------------------------
             
             $values = array(
-                        'name' => 'David',
+                        'name' => "David O'Connor
+The Great",
                         'email' => 'email@host.com',
                         'admin' => 1,
                         'purple' => null
@@ -166,7 +171,7 @@
             $q->where( "id = 144" );
     
             // Show the SQL statement
-            YDDebugUtil::dump( $q->getSql() );
+            YDDebugUtil::dump( $q->getQuery() );
             
             // Reset the query
             $q->reset();
@@ -188,7 +193,7 @@
             $q->where( "id = 144" );
     
             // Show the SQL statement
-            YDDebugUtil::dump( $q->getSql() );
+            YDDebugUtil::dump( $q->getQuery() );
 
         }        
 

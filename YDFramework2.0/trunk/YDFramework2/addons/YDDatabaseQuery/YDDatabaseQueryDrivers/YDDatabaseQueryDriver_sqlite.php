@@ -27,18 +27,18 @@
     }
 
     // Includes
-    YDInclude( 'YDSqlQuery.php' );
+    YDInclude( 'YDDatabaseQuery.php' );
 
     /**
      *  This class defines a YDSqlQueryDriver_sqlite object.
      */
-    class YDSqlQueryDriver_sqlite extends YDSqlQueryDriver {
+    class YDDatabaseQueryDriver_sqlite extends YDDatabaseQueryDriver {
 
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-        function YDSqlQueryDriver_sqlite() {
-            $this->YDSqlQueryDriver();
+        function YDDatabaseQueryDriver_sqlite( & $db ) {
+            $this->YDDatabaseQueryDriver( $db );
             $this->reserved = '"';
         }
         
@@ -60,6 +60,7 @@
          *  @returns    The escaped string.
          */
         function string( $string ) {
+            $this->db->connect();
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     return sqlite_escape_string( $string );
