@@ -21,7 +21,7 @@
             // Static validation
             YDDebugUtil::dump( YDDate::isValid( "" ), 'YDDate::isValid( "" )' );
             YDDebugUtil::dump( YDDate::isValid( "0000-00-00 00:00:00", "ISO" ), 'YDDate::isValid( "0000-00-00 00:00:00", "ISO" )' );
-            YDDebugUtil::dump( YDDate::isValid( "0000-00-00 00:00:00", "ISO", false ), 'YDDate::isValid( "0000-00-00 00:00:00", "ISO", false )' );
+            YDDebugUtil::dump( YDDate::isValid( "0000-00-00 00:00:00", "ISO", true, false ), 'YDDate::isValid( "0000-00-00 00:00:00", "ISO", true, false )' );
             YDDebugUtil::dump( YDDate::isValid( "2005-5-5" ), 'YDDate::isValid( "2005-5-5" )' );
             YDDebugUtil::dump( YDDate::isValid( "2005 5 15" ), 'YDDate::isValid( "2005 5 15" )' );
             YDDebugUtil::dump( YDDate::isValid( "20050515", "SQL" ), 'YDDate::isValid( "20050515", "SQL" )' );
@@ -136,7 +136,8 @@
             // Getting an array
             YDDebugUtil::dump( $date->toArray(), '$date->toArray()' );
             
-            $date->set( '1981-11-20' );
+            $date->set( "1981-11-20" );
+            YDDebugUtil::dump( $date->get(), '$date->set( "1981-11-20" )' );
             YDDebugUtil::dump( $date->getYearsToToday(), '$date->getYearsToToday()' );
             
             // Should return an error

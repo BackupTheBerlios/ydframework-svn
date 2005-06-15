@@ -502,6 +502,14 @@
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=database_query.php">database_query.php</a></td>
         </tr>
         <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDDate</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="dates.php">Using the YDDate and YDDateUtil classes</a></td>
+            <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=dates.php">dates.php</a></td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>YDTimer</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
