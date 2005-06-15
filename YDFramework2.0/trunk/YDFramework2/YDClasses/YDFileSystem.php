@@ -599,7 +599,7 @@
          *	@internal
          */
         function _getImageType() {
-            if ( in_array( strtolower( $this->getExtension() ), array( 'jpg', 'png', 'gif' ) ) ) {
+            if ( in_array( strtolower( $this->getExtension() ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
                 return strtolower( $this->getExtension() );
             }
             if ( strtolower( $this->getExtension() ) == 'tmn' ) {
