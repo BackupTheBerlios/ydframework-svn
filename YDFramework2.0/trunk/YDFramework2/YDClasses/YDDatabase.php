@@ -1075,7 +1075,12 @@
         function string( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
-                    return mysql_escape_string( $string );
+                    
+                    // Needs a connection to escape strings
+                    $this->connect();
+                    
+                    // Returns the escaped string using last link opened
+                    return mysql_real_escape_string( $string );
                 }
             }
             return $string;
