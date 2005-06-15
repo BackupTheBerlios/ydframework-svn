@@ -302,10 +302,6 @@
             // Get the URL
             $url = $this->url;
 
-            // Set the query variables
-            foreach ( $_GET as $key=>$val ) {
-                $url->setQueryVar( $key, $val );
-            }
             $url->setQueryVar( $this->pagevar, $page );
             $url->setQueryVar( $this->sizevar, $this->pagesize );
 
