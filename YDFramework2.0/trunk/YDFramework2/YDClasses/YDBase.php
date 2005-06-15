@@ -27,74 +27,99 @@
     }
 
     /**
-     *	This is the base class for all other YD classes.
+     *  This is the base class for all other YD classes.
      */
     class YDBase {
 
         /**
-         *	Class constructor for the YDBase class.
+         *  Class constructor for the YDBase class.
          */
         function YDBase() {
         }
 
         /**
-         *	This function returns the name of the current class.
+         *  This function returns the name of the current class.
          *
-         *	@returns	The name of the current class in lowercase.
+         *  @returns    The name of the current class in lowercase.
          */
         function getClassName() {
             return strtolower( get_class( $this ) );
         }
 
         /**
-         *	This function returns true if the specified method is existing in the current class.
+         *  This function returns true if the specified method is existing in the current class.
          *
-         *	@param		$name	The name of the class method to look for.
+         *  @param      $name   The name of the class method to look for.
          *
-         *	@returns	Boolean indicating if the class method exists or not.
+         *  @returns    Boolean indicating if the class method exists or not.
          */
         function hasMethod( $name ) {
             return method_exists( $this, $name );
         }
 
         /**
-         *	This function checks if this object instance is of a specific class or is based on a derived class of the
-         *	given class. The class name is case insensitive.
+         *  This function checks if this object instance is of a specific class or is based on a derived class of the
+         *  given class. The class name is case insensitive.
          *
-         *	@param $class	The object type you want to check against.
+         *  @param $class   The object type you want to check against.
          *
-         *	@returns	Boolean indicating if this object is of the specified class.
+         *  @returns    Boolean indicating if this object is of the specified class.
          */
         function isSubClass( $class ) {
             return YDObjectUtil::isSubClass( $this, $class );
         }
 
         /**
-         *	Function to get all the ancestors of this class. The list will contain the parent class first, and then it's
-         *	parent class, etc. You can pass both the name of the class or an object instance to this function
+         *  Function to get all the ancestors of this class. The list will contain
+         *  the parent class first, and then it's parent class, etc. You can pass both
+         *  the name of the class or an object instance to this function.
          *
-         *	@returns	Array with all the ancestors.
+         *  @returns    Array with all the ancestors.
          */
         function getAncestors() {
             return YDObjectUtil::getAncestors( $this->getClassName() );
         }
 
         /**
-         *	This function will serialize the object.
+         *  This function will serialize the object.
          */
         function serialize( $obj ) {
             return YDObjectUtil::serialize( $this );
         }
 
+        /**
+         *  This function sets a variable in the object.
+         *
+         *  @param  $name   The variable name.
+         *  @param  $value  The variable value.
+         *
+         *  @returns        Returns a reference to the variable
+         */
         function & set( $name, $value ) { 
             $this->$name = $value; 
             return $this->$name; 
         } 
 
+        /**
+         *  This function indicates if a variable in the object exists or not.
+         *
+         *  @param  $name   The variable name.
+         *  @param  $null   (Optional) If false, indicates variables that are null
+         *                  as they don't exist. Default: false.
+         *
+         *  @returns        Returns a boolean indicating if a variable exists or not.
+         */
         function exists( $name, $null=false ) { 
             return $null ? array_key_exists( $name, $this ) : isset( $this->$name ); 
         } 
 
+        /**
+         *  This function returns a variable value in the object.
+         *
+         *  @param  $name  The variable name.
+         *
+         *  @returns       Returns the variable value.
+         */
         function get( $name ) { 
             return $this->exists( $name, true ) ? $this->$name : null; 
         }
