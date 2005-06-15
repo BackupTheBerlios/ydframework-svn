@@ -96,11 +96,16 @@
                 }
 
                 // Check if the field is required
+                $required = false;
                 if ( array_key_exists( $name, $this->_form->_rules ) ) {
-                    $form[ $name ]['required'] = true;
-                } else {
-                    $form[ $name ]['required'] = false;
+                    foreach ( $this->_form->_rules[ $name ] as $rules ) {
+                        if ( strtolower( $rules['rule'] ) == 'required' ) {
+                            $required = true;
+                            break;
+                        }
+                    }
                 }
+                $form[ $name ]['required'] = $required;
 
                 // Add the HTML labels
                 if ( $form[ $name ]['isButton'] === false && $form[ $name ]['type'] != 'hidden' ) {
@@ -109,7 +114,7 @@
                         $form[ $name ]['label_html'] .= $form[ $name ]['label'];
                     }
                     $obj = $this->_form->getElement( $name );
-                    if ( $form[ $name ]['required'] && ( ! isset( $obj->_options['mandatory'] ) OR $obj->_options['mandatory'] == true ) ) {
+                    if ( $form[ $name ]['required'] ) {
                         $form[ $name ]['label_html'] = $this->_form->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_form->_htmlRequiredEnd;
                     }
                     if ( ! empty( $form[ $name ]['error'] ) ) {

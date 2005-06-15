@@ -497,6 +497,7 @@
 
             // Add the rule
             array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
+            
 
         }
 
@@ -716,6 +717,15 @@
                 // Check if the element exists
                 if ( array_key_exists( $element, $this->_elements ) ) {
 
+                    // Check if the element is required
+                    $required = false;
+                    foreach ( $rules as $rule ) {
+                        if ( strtolower( $rule['rule'] ) == 'required' ) {
+                            $required = true;
+                            break;
+                        }
+                    }
+
                     // Loop over the rules
                     foreach ( $rules as $rule ) {
 
@@ -742,13 +752,21 @@
                             }
                         }
 
-                        // If field has been marked NOT mandatory, and field is empty, don't check for validity
-                        $obj = & $this->getElement( $element );
-                        if (
-                            ! isset($obj->_options['mandatory'] )
-                            OR $obj->_options['mandatory'] == true
-                            OR strlen( $value ) > 0
-                        ) {
+                        // If a field is required, we check if it's set and check the extra validations.
+                        // If a field is NOT required and not set, no extra validation is done.
+                        // If a field is NOT required and set, the extra validation is done. 
+                        $mandatory = true;
+                        if ( ! $required ) {
+                            if ( is_null( $value ) ) {
+                                $mandatory = false;
+                            } else if ( is_string( $value ) && ! strlen( $value ) ) {
+                                $mandatory = false;
+                            } else if ( is_array( $value ) && empty( $value ) ) {
+                                $mandatory = false;
+                            }
+                        }
+                        
+                        if ( $mandatory ) {
 
                             // Check the rule
                             // @todo Are we able to handle arrays?
