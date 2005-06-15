@@ -86,6 +86,19 @@
             return YDObjectUtil::serialize( $this );
         }
 
+        function & set( $name, $value ) { 
+            $this->$name = $value; 
+            return $this->$name; 
+        } 
+
+        function exists( $name, $null=false ) { 
+            return $null ? array_key_exists( $name, $this ) : isset( $this->$name ); 
+        } 
+
+        function get( $name ) { 
+            return $this->exists( $name, true ) ? $this->$name : null; 
+        }
+
     }
 
 ?>
