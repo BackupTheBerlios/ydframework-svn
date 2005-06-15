@@ -173,6 +173,11 @@
         trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
     }
 
+    // Check that we are not running as a CGI script, as that doesn't work
+    if ( strtolower( php_sapi_name() ) == 'cgi' ) {
+        trigger_error( YD_FW_NAME . ' requires that PHP runs as a server module, not as a CGI script.', YD_ERROR );
+    }
+
     // Class executor
     YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
 
