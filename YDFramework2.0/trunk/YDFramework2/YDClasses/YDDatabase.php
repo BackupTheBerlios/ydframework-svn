@@ -616,11 +616,12 @@
          *
          *  @param $table   The table to insert the data into.
          *  @param $values  Associative array with the field names and their values to insert.
+         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
          *
          *  @returns    The number of affected rows.
          */
-        function executeInsert( $table, $values ) {
-            $sql = $this->_createSqlInsert( $table, $values );
+        function executeInsert( $table, $values, $filter=true ) {
+            $sql = $this->_createSqlInsert( $table, $values, $filter );
             $result = & $this->_connectAndExec( $sql );
             return $result;
         }
@@ -631,11 +632,12 @@
          *  @param $table   The table to update the data froms.
          *  @param $values  Associative array with the field names and their values to insert.
          *  @param $where   (optional) The where statement to execute.
+         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
          *
          *  @returns    The number of affected rows.
          */
-        function executeUpdate( $table, $values, $where='' ) {
-            $sql = $this->_createSqlUpdate( $table, $values, $where );
+        function executeUpdate( $table, $values, $where='', $filter=true ) {
+            $sql = $this->_createSqlUpdate( $table, $values, $where, $filter );
             return $this->executeSql( $sql );
         }
 
@@ -757,12 +759,13 @@
          *
          *  @param $table   The table to insert the data into.
          *  @param $values  Associative array with the field names and their values to insert.
+         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
          *
          *  @returns    The insert SQL statement
          *
          *  @internal
          */
-        function _createSqlInsert( $table, $values ) {
+        function _createSqlInsert( $table, $values, $filter=true ) {
 
             // Check if there are values
             if ( empty( $table ) ) {
@@ -773,13 +776,14 @@
             $ifields = array();
             $ivalues = array();
             foreach ( $values as $key=>$value ) {
-                if ( substr( $key, 0, 1 ) != '_' ) {
-                    array_push( $ifields, $key );
-                    if ( is_null( $value ) ) {
-                        array_push( $ivalues, 'NULL' );
-                    } else {
+                if ( $filter ) {
+                    if ( substr( $key, 0, 1 ) != '_' ) {
+                        array_push( $ifields, $key );
                         array_push( $ivalues, $this->sqlString( $value ) );
                     }
+                } else {
+                    array_push( $ifields, $key );
+                    array_push( $ivalues, $this->sqlString( $value ) );
                 }
             }
 
@@ -806,12 +810,13 @@
          *  @param $table   The table to insert the data into.
          *  @param $values  Associative array with the field names and their values to insert.
          *  @param $where   The where statement to execute.
+         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
          *
          *  @returns    The insert SQL statement
          *
          *  @internal
          */
-        function _createSqlUpdate( $table, $values, $where='' ) {
+        function _createSqlUpdate( $table, $values, $where='', $filter=true ) {
 
             // Check if there are values
             if ( empty( $table ) ) {
@@ -821,12 +826,12 @@
             // Get the list of field names and values
             $uvalues = array();
             foreach ( $values as $key=>$value ) {
-                if ( substr( $key, 0, 1 ) != '_' ) {
-                    if ( is_null( $value ) ) {
-                        array_push( $uvalues, $key . "=" . 'NULL' );
-                    } else {
+                if ( $filter ) {
+                    if ( substr( $key, 0, 1 ) != '_' ) {
                         array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
                     }
+                } else {
+                    array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
                 }
             }
 
@@ -1046,11 +1051,12 @@
          *
          *  @param $table   The table to insert the data into.
          *  @param $values  Associative array with the field names and their values to insert.
+         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
          *
          *  @returns    The ID of the last insert.
          */
-        function executeInsert( $table, $values ) {
-            $sql = $this->_createSqlInsert( $table, $values );
+        function executeInsert( $table, $values, $filter=true ) {
+            $sql = $this->_createSqlInsert( $table, $values, $filter );
             $result = & $this->_connectAndExec( $sql );
             return mysql_insert_id( $this->_conn );
         }
