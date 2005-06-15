@@ -122,6 +122,10 @@
                     }
                 }
 
+                // Fix the labels
+                $form[ $name ]['label'] = $form[ $name ]['labelname'];
+                unset( $form[ $name ]['labelname'] );
+
             }
 
             // Add the do parameter if it's a get form
