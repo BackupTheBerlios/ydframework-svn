@@ -175,7 +175,7 @@
 
     // Check that we are not running as a CGI script, as that doesn't work
     if ( strtolower( php_sapi_name() ) == 'cgi' ) {
-        trigger_error( YD_FW_NAME . ' requires that PHP runs as a server module, not as a CGI script.', YD_ERROR );
+        //trigger_error( YD_FW_NAME . ' requires that PHP runs as a server module, not as a CGI script.', YD_ERROR );
     }
 
     // Class executor
