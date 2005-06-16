@@ -30,6 +30,187 @@
     YDConfig::set( 'YD_DATE_FORMATS', array(), false );
     
     /**
+     *  This class defines a YDDateFormat object.
+     *
+     *  @author  David Bittencourt
+     */
+    class YDDateFormat extends YDBase {
+        
+        /**
+         *  The constructor.
+         */
+        function YDDateFormat() {
+            $this->YDBase();
+        }
+
+        /**
+         *  This function sets the value of a part of the format.
+         *
+         *  @param  $name    The format name.
+         *  @param  $part    The part name: string, parts, regexes or empty.
+         *  @param  $value   The part value.
+         *
+         *  @internal
+         *  @static
+         */
+        function _setPart( $name, $part='string', $value ) {
+            
+            $all  = YDConfig::get( 'YD_DATE_FORMATS' );
+            $name = strtoupper( $name );
+            
+            if ( ! isset( $all[ $name ] ) ) {
+                $all[ $name ] = array( 'string' => '',
+                                       'parts' => array(),
+                                       'regexes' => array(),
+                                       'empty' => '' );
+            }
+            
+            $all[ $name ][ $part ] = $value;
+            
+            YDConfig::set( 'YD_DATE_FORMATS', $all );
+            
+        }
+        
+        /**
+         *  This function returns the value of a part of the format.
+         *
+         *  @param  $name    The format name.
+         *  @param  $part    The part name: string, parts, regexes or empty.
+         *
+         *  @returns         The part value.
+         *
+         *  @internal
+         *  @static
+         */
+        function _getPart( $name, $part ) {
+
+            $all  = YDConfig::get( 'YD_DATE_FORMATS' );
+            $name = strtoupper( $name );
+            
+            if ( isset( $all[ $name ][ $part ] ) ) {
+                return $all[ $name ][ $part ];
+            }
+            return;
+        }
+        
+        /**
+         *  This function sets the format string. The following specifiers
+         *  are recognized in the format string:
+         *
+         *  %a - abbreviated weekday name
+         *  %A - weekday name
+         *  %b - abbreviated month name
+         *  %B - month name
+         *  %d - day (with zero)
+         *  %m - month (with zero)
+         *  %Y - year (4 digits)
+         *  %H - hours (with zero)
+         *  %M - minutes (with zero)
+         *  %S - seconds (with zero)
+         *  %w - weekday number (0 = sunday, 6 = saturday)
+         *  %T - equal to %H:%M:%S
+         *
+         *  @param  $name    The format name.
+         *  @param  $value   The format string.
+         *  
+         *  @static
+         */
+        function setString( $name, $value ) {
+            YDDateFormat::_setPart( $name, 'string', $value );
+        }
+        
+        /**
+         *  This function sets the format parts.
+         *
+         *  @param  $name    The format name.
+         *  @param  $value   (Optional) The format parts array. Default: array()
+         *  
+         *  @static
+         */
+        function setParts( $name, $value=array() ) {
+            YDDateFormat::_setPart( $name, 'parts', $value );
+        }
+        
+        /**
+         *  This function sets the format regexes.
+         *
+         *  @param  $name    The format name.
+         *  @param  $value   (Optional) The format regexes array. Default: array()
+         *  
+         *  @static
+         */
+        function setRegexes( $name, $value=array() ) {
+            YDDateFormat::_setPart( $name, 'regexes', $value );
+        }
+        
+        /**
+         *  This function sets the format empty string.
+         *
+         *  @param  $name    The format name.
+         *  @param  $value   (Optional) The format empty string. Default: ""
+         *  
+         *  @static
+         */
+        function setEmpty( $name, $value='' ) {
+            YDDateFormat::_setPart( $name, 'empty', $value );
+        }
+        
+        /**
+         *  This function returns the format string.
+         *
+         *  @param  $name    The format name.
+         *
+         *  @returns   The format string.
+         *  
+         *  @static
+         */
+        function getString( $name ) {
+            return (string) YDDateFormat::_getPart( $name, 'string' );
+        }
+        
+        /**
+         *  This function returns the format parts.
+         *
+         *  @param  $name    The format name.
+         *
+         *  @returns   The format parts array.
+         *  
+         *  @static
+         */
+        function getParts( $name ) {
+            return (array) YDDateFormat::_getPart( $name, 'parts' );
+        }
+        
+        /**
+         *  This function returns the format regexes.
+         *
+         *  @param  $name    The format name.
+         *
+         *  @returns   The format regexes array.
+         *  
+         *  @static
+         */
+        function getRegexes( $name ) {
+            return (array) YDDateFormat::_getPart( $name, 'regexes' );
+        }
+        
+        /**
+         *  This function returns the format empty string.
+         *
+         *  @param  $name    The format name.
+         *
+         *  @returns   The format empty string.
+         *  
+         *  @static
+         */
+        function getEmpty( $name ) {
+            return (string) YDDateFormat::_getPart( $name, 'empty' );
+        }
+        
+        
+    }
+    
+    /**
      *  This class defines a YDDate object.
      *
      *  @author  David Bittencourt
@@ -76,75 +257,6 @@
         }
 
         /**
-         *  This function sets a custom format.
-         *  The following specifiers are recognized in the format string:
-         *
-         *  %a - abbreviated weekday name
-         *  %A - weekday name
-         *  %b - abbreviated month name
-         *  %B - month name
-         *  %d - day (with zero)
-         *  %m - month (with zero)
-         *  %Y - year (4 digits)
-         *  %H - hours (with zero)
-         *  %M - minutes (with zero)
-         *  %S - seconds (with zero)
-         *  %w - weekday number (0 = sunday, 6 = saturday)
-         *  %T - equal to %H:%M:%S
-         *
-         *  @param $name    The name.
-         *  @param $format  The format string.
-         *
-         *  @static
-         */
-        function setFormat( $name, $format, $parts=array(), $regex=array(), $empty='', $override=true ) {
-            
-            $formats = YDConfig::get( 'YD_DATE_FORMATS' );
-            $name = strtoupper( $name );
-            
-            if ( in_array( $name, array_keys( $formats ) ) ) {
-                if ( $override ) {
-                    $formats[ $name ] = array( 'string'   => $format,
-                                               'parts'    => $parts,
-                                               'regexes'  => $regex,
-                                               'empty'    => $empty );
-                }
-            } else {
-                $formats[ $name ] = array( 'string'   => $format,
-                                           'parts'    => $parts,
-                                           'regexes'  => $regex,
-                                           'empty'    => $empty );
-            }
-            YDConfig::set( 'YD_DATE_FORMATS', $formats );
-            
-        }
-        
-        /**
-         *  This function returns the data of a defined custom format.
-         *
-         *  @param  $name    The format name.
-         *  @param  $array   (Optional) If true, returns the array of data, otherwise
-         *                   returns the format string. Default: false.
-         *
-         *  @returns         The format array or string.
-         *  
-         *  @static
-         */
-        function getFormat( $name, $array=false ) {
-            
-            $formats = YDConfig::get( 'YD_DATE_FORMATS' );
-            $name    = strtoupper( $name );
-            
-            if ( isset( $formats[ $name ] ) ) {
-                if ( $array ) {
-                    return $formats[ $name ];
-                }
-                return $formats[ $name ]['string'];
-            }
-            
-        }
-
-        /**
          *  This function returns the timestamp of the object date.
          *
          *  @returns  A unix timestamp if valid, -1 otherwise.
@@ -172,10 +284,10 @@
         function get( $format='ISO' ) {
             
             if ( $this->isDateEmpty() && $this->isTimeEmpty() ) {
-                return YDDate::getEmpty( $format );
+                return YDDateFormat::getEmpty( $format );
             }
             
-            $string = YDDate::getFormat( $format );
+            $string = YDDateFormat::getString( $format );
             
             if ( is_null( $string ) ) {
                 trigger_error( 'The format "' . $name . '" is not defined', YD_ERROR );
@@ -232,27 +344,6 @@
          */
         function toArray() {
             return get_object_vars( $this );
-        }
-
-        /**
-         *  This function returns the empty string of the format.
-         *
-         *  @param  $format  (Optional) The format. Default: 'ISO'.
-         *
-         *  @returns  The empty string.
-         *
-         *  @static
-         */
-        function getEmpty( $format='ISO' ) {
-            
-            $f = YDDate::getFormat( $format, true );
-            
-            if ( $f ) {
-                return $f['empty'];
-            }
-            
-            return '';
-            
         }
 
         /**
@@ -392,7 +483,7 @@
                 
                 $date = trim( $date );
                 
-                if ( $date === YDDate::getEmpty( $format ) ) {
+                if ( $date === YDDateFormat::getEmpty( $format ) ) {
                     return $result;
                 }
                 
@@ -418,12 +509,12 @@
                 
                 foreach ( $fam as $name ) {
                 
-                    $f = YDDate::getFormat( $name, true );
-                    $r = $f['regexes'] ? $f['regexes'] : array();
+                    $p = YDDateFormat::getParts( $name );
+                    $r = YDDateFormat::getRegexes( $name );
                     
                     if ( preg_match( YDDate::getRegex( $name, $r ), $date, $date_parts ) ) {
                         
-                        foreach ( $f['parts'] as $var => $num ) {
+                        foreach ( $p as $var => $num ) {
                              $$var = isset( $date_parts[ $num ] ) ? $date_parts[ $num ] : 0;
                         }
                         
@@ -579,7 +670,7 @@
             if ( ! YDDate::parse( $date, $format, $family, false ) ) {
                 return false;
             }
-            if ( ! $empty && $date === YDDate::getEmpty( $format ) ) {
+            if ( ! $empty && $date === YDDateFormat::getEmpty( $format ) ) {
                 return false;
             }
             return true;
@@ -776,7 +867,7 @@
             }
             
             // format string
-            $string = YDDate::getFormat( $format );
+            $string = YDDateFormat::getString( $format );
             
             // time representation
             $string = str_replace( '%T', '%H:%M:%S', $string );
@@ -840,143 +931,142 @@
     }
     
     // Setting default custom output formats
-    YDDate::setFormat( 'ISO',
-                       '%Y-%m-%d %H:%M:%S',
-                       array( 'day'     => 5,
-                              'month'   => 3,
-                              'year'    => 1,
-                              'hours'   => 7,
-                              'minutes' => 9,
-                              'seconds' => 11 ),
-                       array(), '0000-00-00 00:00:00', false );
+    YDDateFormat::setString( 'ISO', '%Y-%m-%d %T' );
+    YDDateFormat::setEmpty(  'ISO', '0000-00-00 00:00:00' );
+    YDDateFormat::setParts(  'ISO', array(
+        'day'     => 5,
+        'month'   => 3,
+        'year'    => 1,
+        'hours'   => 7,
+        'minutes' => 9,
+        'seconds' => 11 ) );
 
-    YDDate::setFormat( 'ISO_DATE',
-                       '%Y-%m-%d',
-                       array( 'day'     => 5,
-                              'month'   => 3,
-                              'year'    => 1 ),
-                       array(), '0000-00-00', false );
+    YDDateFormat::setString( 'ISO_DATE', '%Y-%m-%d' );
+    YDDateFormat::setEmpty(  'ISO_DATE', '0000-00-00' );
+    YDDateFormat::setParts(  'ISO_DATE', array(
+        'day'     => 5,
+        'month'   => 3,
+        'year'    => 1 ) );
 
-    YDDate::setFormat( 'ISO_TIME',
-                       '%H:%M:%S',
-                       array(), array(), '00:00:00', false );
+    YDDateFormat::setString( 'ISO_TIME', '%T' );
+    YDDateFormat::setEmpty(  'ISO_TIME', '00:00:00' );
 
-    YDDate::setFormat( 'USA',
-                       '%m/%d/%Y %T',
-                       array( 'day'     => 3,
-                              'month'   => 1,
-                              'year'    => 5,
-                              'hours'   => 7,
-                              'minutes' => 9,
-                              'seconds' => 11 ),
-                        array(), '' , false );
+    YDDateFormat::setString( 'USA', '%m/%d/%Y %T' );
+    YDDateFormat::setParts(  'USA', array(
+        'day'     => 3,
+        'month'   => 1,
+        'year'    => 5,
+        'hours'   => 7,
+        'minutes' => 9,
+        'seconds' => 11 ) );
 
-    YDDate::setFormat( 'USA_DATE',
-                       '%m/%d/%Y',
-                       array( 'day'     => 3,
-                              'month'   => 1,
-                              'year'    => 5 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'USA_DATE', '%m/%d/%Y' );
+    YDDateFormat::setParts(  'USA_DATE', array(
+        'day'     => 3,
+        'month'   => 1,
+        'year'    => 5 ) );
 
-    YDDate::setFormat( 'EUN',
-                       '%d.%m.%Y %T',
-                       array( 'day'     => 1,
-                              'month'   => 3,
-                              'year'    => 5,
-                              'hours'   => 7,
-                              'minutes' => 9,
-                              'seconds' => 11 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'EUN', '%d.%m.%Y %T' );
+    YDDateFormat::setParts(  'EUN', array(
+        'day'     => 1,
+        'month'   => 3,
+        'year'    => 5,
+        'hours'   => 7,
+        'minutes' => 9,
+        'seconds' => 11 ) );
 
-    YDDate::setFormat( 'EUN_DATE',
-                       '%d.%m.%Y',
-                       array( 'day'     => 1,
-                              'month'   => 3,
-                              'year'    => 5 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'EUN_DATE', '%d.%m.%Y' );
+    YDDateFormat::setParts(  'EUN_DATE', array(
+        'day'     => 1,
+        'month'   => 3,
+        'year'    => 5 ) );
 
-    YDDate::setFormat( 'SQL',
-                       '%Y%m%d%H%M%S',
-                       array( 'day'     => 3,
-                              'month'   => 2,
-                              'year'    => 1,
-                              'hours'   => 4,
-                              'minutes' => 5,
-                              'seconds' => 6 ),
-                       array(
-                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
-                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
-                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
-                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
-                       ), false );
+    YDDateFormat::setString( 'SQL', '%Y%m%d%H%M%S' );
+    YDDateFormat::setEmpty(  'SQL', '00000000000000' );
+    YDDateFormat::setParts(  'SQL', array(
+        'day'     => 3,
+        'month'   => 2,
+        'year'    => 1,
+        'hours'   => 4,
+        'minutes' => 5,
+        'seconds' => 6 ) );
+        
+    YDDateFormat::setRegexes( 'SQL', array(
+        's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+        'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+        'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+        'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+        ) );
 
-    YDDate::setFormat( 'SQL_NOSEC',
-                       '%Y%m%d%H%M',
-                       array( 'day'     => 3,
-                              'month'   => 2,
-                              'year'    => 1,
-                              'hours'   => 4,
-                              'minutes' => 5 ),
-                       array(
-                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
-                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
-                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
-                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
-                       ),
-                       '00000000000000', false );
-    
-    YDDate::setFormat( 'SQL_DATE',
-                       '%Y%m%d',
-                       array( 'day'     => 3,
-                              'month'   => 2,
-                              'year'    => 1 ),
-                       array(
-                              'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
-                              'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
-                       ),
-                       '00000000', false );
+    YDDateFormat::setString( 'SQL_NOSEC', '%Y%m%d%H%M' );
+    YDDateFormat::setEmpty(  'SQL_NOSEC', '000000000000' );
+    YDDateFormat::setParts(  'SQL_NOSEC', array(
+        'day'     => 3,
+        'month'   => 2,
+        'year'    => 1,
+        'hours'   => 4,
+        'minutes' => 5 ) );
+        
+    YDDateFormat::setRegexes( 'SQL_NOSEC', array(
+        's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+        'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+        'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+        'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+        ) );
 
-    YDDate::setFormat( 'SQL_TIME',
-                       '%H%M%S',
-                       array(),
-                       array(
-                              's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
-                              'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
-                       ),
-                       '000000', false );
+    YDDateFormat::setString( 'SQL_DATE', '%Y%m%d' );
+    YDDateFormat::setEmpty(  'SQL_DATE', '00000000' );
+    YDDateFormat::setParts(  'SQL_DATE', array(
+        'day'     => 3,
+        'month'   => 2,
+        'year'    => 1 ) );
+        
+    YDDateFormat::setRegexes( 'SQL_DATE', array(
+        'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+        'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+        ) );
 
-    YDDate::setFormat( 'HUM',
-                       '%a, %d %b %Y %T',
-                       array( 'day'        => 3,
-                              'month_name' => 5,
-                              'year'       => 7,
-                              'hours'      => 8,
-                              'minutes'    => 11,
-                              'seconds'    => 13 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'SQL_TIME', '%H%M%S' );
+    YDDateFormat::setEmpty(  'SQL_TIME', '000000' );
+    YDDateFormat::setParts(  'SQL_TIME', array(
+        'hours'   => 1,
+        'minutes' => 2,
+        'seconds' => 3 ) );
+        
+    YDDateFormat::setRegexes( 'SQL_TIME', array(
+        's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+        'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+        ) );
 
-    YDDate::setFormat( 'HUM_NOWEEK',
-                       '%d %b %Y %T',
-                       array( 'day'        => 1,
-                              'month_name' => 3,
-                              'year'       => 5,
-                              'hours'      => 7,
-                              'minutes'    => 9,
-                              'seconds'    => 11 ),
-                       array(), '', false );
 
-    YDDate::setFormat( 'HUM_DATE',
-                       '%a, %d %b %Y',
-                       array( 'day'        => 3,
-                              'month_name' => 5,
-                              'year'       => 7 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'HUM', '%a, %d %b %Y %T' );
+    YDDateFormat::setParts(  'HUM', array(
+        'day'        => 3,
+        'month_name' => 5,
+        'year'       => 7,
+        'hours'      => 9,
+        'minutes'    => 11,
+        'seconds'    => 13 ) );
 
-    YDDate::setFormat( 'HUM_DATE_NOWEEK',
-                       '%d %b %Y',
-                       array( 'day'        => 1,
-                              'month_name' => 3,
-                              'year'       => 5 ),
-                       array(), '', false );
+    YDDateFormat::setString( 'HUM_NOWEEK', '%d %b %Y %T' );
+    YDDateFormat::setParts(  'HUM_NOWEEK', array(
+        'day'        => 1,
+        'month_name' => 3,
+        'year'       => 5,
+        'hours'      => 7,
+        'minutes'    => 9,
+        'seconds'    => 11 ) );
+
+    YDDateFormat::setString( 'HUM_DATE', '%a, %d %b %Y' );
+    YDDateFormat::setParts(  'HUM_DATE', array(
+        'day'        => 3,
+        'month_name' => 5,
+        'year'       => 7 ) );
+
+    YDDateFormat::setString( 'HUM_DATE_NOWEEK', '%d %b %Y' );
+    YDDateFormat::setParts(  'HUM_DATE_NOWEEK', array(
+        'day'        => 1,
+        'month_name' => 3,
+        'year'       => 5 ) );
 
 ?>

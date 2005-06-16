@@ -67,7 +67,7 @@
             YDDebugUtil::dump( $date->get(), '$date->set( "5.15.2005", "USA" )' );
             
             // Setting a custom format
-            YDDebugUtil::dump( YDDate::setFormat( "custom format", "%a %A %b %B %d %m %Y %H %M %S %T %w" ), 'YDDate::setFormat( "custom format", "%a %A %b %B %d %m %Y %H %M %S %T %w" )' );
+            YDDebugUtil::dump( YDDateFormat::setString( "custom format", "%a %A %b %B %d %m %Y %H %M %S %T %w" ), 'YDDateFormat::setString( "custom format", "%a %A %b %B %d %m %Y %H %M %S %T %w" )' );
             
             // Returning the date with a custom format
             YDDebugUtil::dump( $date->get( "custom format" ), '$date->get( "custom format" )' );
