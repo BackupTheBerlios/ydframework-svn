@@ -25,7 +25,7 @@
             $elementDate = $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
             $elementTime = $form->addElement( 'timeselect', 'timeSelect1', 'Enter data:' );
             $elementDateTime = $form->addElement( 'datetimeselect', 'datetimeSelect1', 'Enter data:' );
-
+            
             // Add a second set of elements
             $form->addElement(
                 'dateselect', 'dateSelect2', 'Enter data:',
@@ -36,6 +36,8 @@
                 'datetimeselect', 'datetimeSelect2', 'Enter data:',
                 array(), array( 'yearstart' => 1970, 'yearend' => '2050' )
             );
+            
+            $form->addElement( 'datetimeselect', 'datetimeSelect3', 'Enter data with seconds:', array(), array( 'seconds' => true ) );
 
             // Add the send button
             $form->addElement( 'submit', 'cmd1', 'Send' );

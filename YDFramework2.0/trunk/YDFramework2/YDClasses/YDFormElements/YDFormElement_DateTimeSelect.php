@@ -54,6 +54,10 @@
 
             // Set the type
             $this->_type = 'datetimeselect';
+            
+            if ( ! isset( $this->_options['seconds'] ) ) {
+                $this->_options['seconds'] = false;
+            }
 
             // Get the names of the days
             $days = array();
@@ -103,7 +107,7 @@
             for ( $i = 0; $i <= 59; $i++ ) {
                 $minutes[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
             }
-
+            
             // Add the different elements
             $this->day = new YDFormElement_Select(
                 $this->_form, $this->_name . '[day]', '', $this->_attributes, $days
@@ -119,6 +123,9 @@
             );
             $this->minutes = new YDFormElement_Select(
                 $this->_form, $this->_name . '[minutes]', '', $this->_attributes, $minutes
+            );
+            $this->seconds = new YDFormElement_Select(
+                $this->_form, $this->_name . '[seconds]', '', $this->_attributes, $minutes
             );
 
         }
@@ -136,7 +143,8 @@
                   && intval( $this->_value['month'] )   == intval( $this->_default['month'] )
                   && intval( $this->_value['year'] )    == intval( $this->_default['year'] ) 
                   && intval( $this->_value['hours'] )   == intval( $this->_default['hours'] ) 
-                  && intval( $this->_value['minutes'] ) == intval( $this->_default['minutes'] ) ) {
+                  && intval( $this->_value['minutes'] ) == intval( $this->_default['minutes'] )
+                  && intval( $this->_value['seconds'] ) == intval( $this->_default['seconds'] ) ) {
                         return false;
                 }
             }
@@ -164,9 +172,15 @@
                 $this->_default['year'] = $now['year'];
                 $this->_default['hours'] = $now['hours'];
                 $this->_default['minutes'] = $now['minutes'];
+                $this->_default['seconds'] = $now['seconds'];
             } elseif ( ! empty( $val ) ) {
                 $this->_default = $val;
             }
+            
+            if ( ! isset( $this->_default['seconds'] ) ) {
+                $this->_default['seconds'] = 0;
+            }
+            
         }
 
         /**
@@ -186,6 +200,7 @@
                 $this->_value['year'] = $now['year'];
                 $this->_value['hours'] = $now['hours'];
                 $this->_value['minutes'] = $now['minutes'];
+                $this->_value['seconds'] = $now['seconds'];
             } elseif ( $val == array() ) {
                 $now = getdate();
                 $this->_value['day'] = $now['mday'];
@@ -193,9 +208,15 @@
                 $this->_value['year'] = $now['year'];
                 $this->_value['hours'] = $now['hours'];
                 $this->_value['minutes'] = $now['minutes'];
+                $this->_value['seconds'] = $now['seconds'];
             } else {
                 $this->_value = $val;
             }
+            
+            if ( ! isset( $this->_value['seconds'] ) ) {
+                $this->_value['seconds'] = 0;
+            }
+            
             if ( strlen( $this->_value['day'] ) == 1 ) {
                 $this->_value['day_with_zero'] = '0' . $this->_value['day'];
             } else {
@@ -216,12 +237,17 @@
             } else {
                 $this->_value['minutes_with_zero'] = $this->_value['minutes'];
             }
+            if ( strlen( $this->_value['seconds'] ) == 1 ) {
+                $this->_value['seconds_with_zero'] = '0' . $this->_value['seconds'];
+            } else {
+                $this->_value['seconds_with_zero'] = $this->_value['seconds'];
+            }
             $this->_value['timestamp_string'] = $this->_value['year']
                                               . $this->_value['month_with_zero']
                                               . $this->_value['day_with_zero']
                                               . $this->_value['hours_with_zero']
                                               . $this->_value['minutes_with_zero']
-                                              . '00';
+                                              . $this->_value['seconds_with_zero'];
         }
 
         /**
@@ -235,7 +261,7 @@
         function getTimeStamp( $format=null ) {
             $this->setValue( $this->_value );
             $tstamp = mktime(
-                $this->_value['hours'], $this->_value['minutes'], 0,
+                $this->_value['hours'], $this->_value['minutes'], $this->_value['seconds'],
                 $this->_value['month'], $this->_value['day'], $this->_value['year']
             );
             if ( is_null( $format ) ) {
@@ -261,7 +287,15 @@
             $this->year->_value = isset( $this->_value['year'] ) ? $this->_value['year'] : '';
             $this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';
             $this->minutes->_value = isset( $this->_value['minutes'] ) ? $this->_value['minutes'] : '';
-            return $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' - ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
+            $this->seconds->_value = isset( $this->_value['seconds'] ) ? $this->_value['seconds'] : '';
+            
+            $html = $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' - ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
+            
+            if ( $this->_options['seconds'] ) {
+                $html .= ' : ' . $this->seconds->toHtml();
+            }
+            
+            return $html;
 
         }
 
