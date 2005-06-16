@@ -314,6 +314,20 @@
         }
         
         /**
+         *  This function returns the current date/time formatted.
+         *
+         *  @param $format    (Optional) The format. Default: 'ISO'.
+         *  
+         *  @returns  A string with the formatted result.
+         *
+         *  @static
+         */
+        function now( $format='ISO' ) {
+            $date = new YDDate();
+            return $date->get( $format );
+        }
+        
+        /**
          *  This function returns a boolean indicating if the date part if empty.
          *
          *  @returns  A boolean.
@@ -438,6 +452,10 @@
             $result['hours']   = $hours   = 0;
             $result['minutes'] = $minutes = 0;
             $result['seconds'] = $seconds = 0;
+            
+            if ( is_string( $date ) && $date == '__NOW__' ) {
+                $date = time();
+            }
             
             if ( is_int( $date ) ) {
                 
@@ -950,6 +968,10 @@
 
     YDDateFormat::setString( 'ISO_TIME', '%T' );
     YDDateFormat::setEmpty(  'ISO_TIME', '00:00:00' );
+    YDDateFormat::setParts(  'ISO_TIME', array(
+        'hours'     => 1,
+        'minutes'   => 3,
+        'seconds'   => 5 ) );
 
     YDDateFormat::setString( 'USA', '%m/%d/%Y %T' );
     YDDateFormat::setParts(  'USA', array(
