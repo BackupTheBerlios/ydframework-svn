@@ -14,7 +14,7 @@
             <itemizedlist spacing="compact">
                 <listitem>SVN repository protocol: SVN</listitem>
                 <listitem>SVN repository host: svn.berlios.de</listitem>
-                <listitem>SVN repository url: svn://svn.berlios.de/YDFramework2.0/</listitem>
+                <listitem>SVN repository url: svn://svn.berlios.de/ydframework/YDFramework2.0/</listitem>
             </itemizedlist>
 
             <para>If you want read/write access to the repository, please contact pieter@yellowduck.be and he will setup the account for you.</para>
@@ -35,11 +35,11 @@
 
             <para>To get the latest version of e.g. the Yellow Duck Framework version 2.0, you will issue the following command:</para>
 
-            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/YDFramework2.0/trunk YDF2]]></programlisting>
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/trunk YDF2]]></programlisting>
 
             <para>To get version 2.0 beta 2, you will use the following command:</para>
 
-            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
 
         </sect1>
 
@@ -49,7 +49,7 @@
 
             <para>Here's a transcript on how to get the latest source code from the SVN repository. You need to have the SubVersion application files installed to make this work.</para>
 
-            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/YDFramework2.0/trunk YDF2]]></programlisting>
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/trunk YDF2]]></programlisting>
 
         </sect1>
 
@@ -61,15 +61,15 @@
 
             <para>To get version 2.0 beta 2, you will use the following command:</para>
 
-            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
 
             <para>To get the list of all the existing named versions, you can execute the following command:</para>
 
-            <programlisting><![CDATA[svn list -v svn://svn.berlios.de/YDFramework2.0/tags/]]></programlisting>
+            <programlisting><![CDATA[svn list -v svn://svn.berlios.de/ydframework/YDFramework2.0/tags/]]></programlisting>
 
             <para>The command above outputs the following:</para>
 
-            <programlisting><![CDATA[# svn list -v svn://svn.berlios.de/YDFramework2.0/tags/
+            <programlisting><![CDATA[# svn list -v svn://svn.berlios.de/ydframework/YDFramework2.0/tags/
     434 PClaerho            Jul 15 10:29 2.0.0-beta1/
     450 PClaerho            Jul 18 19:33 2.0.0-beta2/
     483 pieter              Jul 31 17:33 2.0.0-beta3/
