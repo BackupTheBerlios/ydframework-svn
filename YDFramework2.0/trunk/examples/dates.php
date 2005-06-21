@@ -19,6 +19,10 @@
         function actionDefault() {
             
             // Static validation
+            YDDebugUtil::dump( YDDate::get( "HUM", time() ), 'YDDate::get( "HUM", time() )' );
+            YDDebugUtil::dump( YDDate::get( "EUN_DATE", time() ), 'YDDate::get( "EUN_DATE", time() )' );
+            YDDebugUtil::dump( YDDate::get( "HUM_DATE", "2004-03-12", "ISO" ), 'YDDate::get( "HUM_DATE", "2004-03-12", "ISO" )' );
+            
             YDDebugUtil::dump( YDDate::now(), 'YDDate::now()' );
             YDDebugUtil::dump( YDDate::now( "EUN_DATE" ), 'YDDate::now( "EUN_DATE" )' );
             YDDebugUtil::dump( YDDate::now( "ISO_TIME" ), 'YDDate::now( "ISO_TIME" )' );

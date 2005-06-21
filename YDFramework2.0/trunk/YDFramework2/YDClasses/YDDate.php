@@ -277,11 +277,21 @@
          *  This function returns the date as a formatted string defined by the
          *  custom formats (e.g. 'ISO', 'EUN', 'USA', 'SQL', 'HUM' ).
          *
-         *  @param $format    (Optional) The format. Default: 'ISO'.
+         *  @param $format     (Optional) The format to be returned. Default: 'ISO'.
+         *  @param $date       (Optional) A date to be converted to another format.
+         *                     Default: current object.
+         *  @param $format_in  (Optional) The format of $date, if passed. Default: 'SQL'.
          *  
          *  @returns  A string with the formatted result.
+         *
+         *  @static  If $date is passed.
          */
-        function get( $format='ISO' ) {
+        function get( $format='ISO', $date=null, $format_in='SQL' ) {
+            
+            if ( $date !== null ) {
+                $date = new YDDate( $date, $format_in );
+                return $date->get( $format );
+            }
             
             if ( $this->isDateEmpty() && $this->isTimeEmpty() ) {
                 return YDDateFormat::getEmpty( $format );
@@ -325,6 +335,20 @@
         function now( $format='ISO' ) {
             $date = new YDDate();
             return $date->get( $format );
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date and time are empty.
+         *
+         *  @returns  A boolean.
+         */
+        function isEmpty() {
+            
+            if ( $this->isDateEmpty() && $this->isTimeEmpty() ) {
+                return true;
+            }
+            return false;
+            
         }
         
         /**
@@ -988,6 +1012,13 @@
         'month'   => 1,
         'year'    => 5 ) );
 
+    YDDateFormat::setString( 'USA_TIME', '%T' );
+    YDDateFormat::setEmpty(  'USA_TIME', '00:00:00' );
+    YDDateFormat::setParts(  'USA_TIME', array(
+        'hours'     => 1,
+        'minutes'   => 3,
+        'seconds'   => 5 ) );
+
     YDDateFormat::setString( 'EUN', '%d.%m.%Y %T' );
     YDDateFormat::setParts(  'EUN', array(
         'day'     => 1,
@@ -1002,6 +1033,13 @@
         'day'     => 1,
         'month'   => 3,
         'year'    => 5 ) );
+
+    YDDateFormat::setString( 'EUN_TIME', '%T' );
+    YDDateFormat::setEmpty(  'EUN_TIME', '00:00:00' );
+    YDDateFormat::setParts(  'EUN_TIME', array(
+        'hours'     => 1,
+        'minutes'   => 3,
+        'seconds'   => 5 ) );
 
     YDDateFormat::setString( 'SQL', '%Y%m%d%H%M%S' );
     YDDateFormat::setEmpty(  'SQL', '00000000000000' );
@@ -1090,5 +1128,12 @@
         'day'        => 1,
         'month_name' => 3,
         'year'       => 5 ) );
+
+    YDDateFormat::setString( 'HUM_TIME', '%T' );
+    YDDateFormat::setEmpty(  'HUM_TIME', '00:00:00' );
+    YDDateFormat::setParts(  'HUM_TIME', array(
+        'hours'     => 1,
+        'minutes'   => 3,
+        'seconds'   => 5 ) );
 
 ?>
