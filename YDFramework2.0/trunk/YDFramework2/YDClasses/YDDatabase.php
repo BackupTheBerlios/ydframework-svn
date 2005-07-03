@@ -143,11 +143,51 @@
          *  @param  $sizevar    (optional) The name of the query string variable indicating the page size. Defaults to
          *                      "size"
          */
-        function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size' ) {
+        function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size', $sortvar='sortfld', $sortdir='sortdir' ) {
 
             // Define the query string variables
             $this->pagevar = $pagevar;
             $this->sizevar = $sizevar; 
+            $this->sortvar = $sortvar;
+            $this->sortdir = $sortdir;
+
+            // The sort field and direction
+            $this->sortfield = null;
+            $this->sortdirection = null;
+
+            // Sort the records
+            if ( ! empty( $_GET[$sortvar] ) ) {
+
+                // Set the sortfield and direction
+                $this->sortfield = $_GET[$sortvar];
+
+                // Get the list of array indexes with the right column
+                $sort_array = array();
+                foreach ( $records as $key=>$record ) {
+                    $sort_array[ $key ] = $record[$_GET[$this->sortvar]];
+                }
+
+                // Get the sort direction
+                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
+                    $this->sortdirection = 'DESC';
+                    arsort( $sort_array );
+                } else {
+                    $this->sortdirection = 'ASC';
+                    asort( $sort_array );
+                }
+
+                // Create a new records object
+                $records_new = array();
+                foreach ( $sort_array as $key=>$val ) {
+                    array_push( $records_new, $records[$key] );
+                }
+
+                // Repopulate the records variable
+                $records = $records_new;
+                unset( $records_new );
+                unset( $sort_array );
+
+            }
 
             // Convert the page and pagesize to integers
             $page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
@@ -241,8 +281,6 @@
 
                 }
 
-                //return false;
-
             }
 
             // Return the updated URL
@@ -275,8 +313,6 @@
                 // Return the updated URL
                 return $this->getPageUrl( $this->totalPages );
 
-                //return false;
-
             }
 
             // Return the updated URL
@@ -302,8 +338,47 @@
             // Get the URL
             $url = $this->url;
 
-            $url->setQueryVar( $this->pagevar, $page );
-            $url->setQueryVar( $this->sizevar, $this->pagesize );
+            if ( $this->totalPages > 1 ) {
+                $url->setQueryVar( $this->pagevar, $page );
+                $url->setQueryVar( $this->sizevar, $this->pagesize );
+            }
+
+            // Return the url
+            return $url->getUri();
+
+        }
+
+        /**
+         *  This function will return an URL to sort on a field.
+         *
+         *  @param  $sortfld    The field to sort on.
+         *  @param  $sortdir    (optional) The sort direction. Default is ASC.
+         */
+        function getSortUrl( $sortfld, $sortdir='ASC' ) {
+
+            // Get the current sort direction
+            $sortdir = ( strtoupper( $sortdir ) == 'ASC' ) ? 'ASC' : 'DESC';
+
+            // Get the URL
+            $url = $this->url;
+
+            if ( $this->totalPages > 1 ) {
+                $url->setQueryVar( $this->pagevar, $this->page );
+                $url->setQueryVar( $this->sizevar, $this->pagesize );
+            }
+            
+            $url->setQueryVar( $this->sortvar, $sortfld );
+
+            if ( isset( $_GET[$this->sortvar] ) && $_GET[$this->sortvar] == $sortfld ) {
+                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'ASC' ) ) {
+                    $sortdir = 'DESC';
+                } else {
+                    $sortdir = 'ASC';
+                }
+                $url->setQueryVar( $this->sortdir, $sortdir );
+            } else {
+                $url->setQueryVar( $this->sortdir, $sortdir );
+            }
 
             // Return the url
             return $url->getUri();

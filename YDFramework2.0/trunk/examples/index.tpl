@@ -353,6 +353,14 @@
             </td>
         </tr>
         <tr>
+            <td valign="top"><a href="array_paging.php">Paged arrays with sorting</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.php">array_paging_with_sorting.php</a>
+                <br>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.tpl">array_paging_with_sorting.tpl</a>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Using files, images and directories</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
