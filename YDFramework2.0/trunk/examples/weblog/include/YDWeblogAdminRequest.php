@@ -45,6 +45,7 @@
             }
         }
 
+        /*
         // Function to show a thumbnail
         function actionThumbnail() {
 
@@ -60,6 +61,7 @@
             $img->outputThumbnail( 100, 100 );
 
         }
+        */
 
         // Function to show a thumbnail
         function actionThumbnailSmall() {
