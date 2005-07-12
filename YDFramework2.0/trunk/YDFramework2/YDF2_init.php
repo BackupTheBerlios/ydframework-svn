@@ -84,7 +84,8 @@
     @define( 'YD_ACTION_DEFAULT', 'actionDefault' );
 
     // File and URL constants
-    @define( 'YD_SELF_SCRIPT', $_SERVER['SCRIPT_NAME'] );
+    //@define( 'YD_SELF_SCRIPT', $_SERVER['SCRIPT_NAME'] );
+    @define( 'YD_SELF_SCRIPT', $PHP_SELF );
     if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
     }
