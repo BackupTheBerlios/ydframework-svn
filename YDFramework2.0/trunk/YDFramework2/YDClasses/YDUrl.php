@@ -333,11 +333,11 @@
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key1=>$val ) {
                         $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
-                        $querystr .= $key . '[]=' . rawurlencode( $val );
+                        $querystr .= rawurlencode( $key  . '[' . $key1 . ']' ) . '=' . rawurlencode( $val );
                     }
                 } else {
                     $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
-                    $querystr .= $key . '=' . rawurlencode( $value );
+                    $querystr .= rawurlencode( $key ) . '=' . rawurlencode( $value );
                 }
             }
 
