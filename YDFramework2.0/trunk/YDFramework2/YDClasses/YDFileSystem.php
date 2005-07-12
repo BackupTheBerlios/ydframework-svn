@@ -370,19 +370,33 @@
         /**
          *	Function to get the last modification date of the object.
          *
+         *  @param  $format (optional) The date format to use to format the date.
+         *  @param  $locale (optional) The locale to use for formatting the date.
+         *
          *	@returns	String containing the last modification date of the object.
          */
-        function getLastModified() {
-            return filemtime( $this->getAbsolutePath() );
+        function getLastModified( $format = 'timestamp', $locale=null ) {
+            if ( $format == 'timestamp' ) {
+                return filemtime( $this->getAbsolutePath() );
+            }
+            YDInclude( 'YDUtil.php' ); 
+            return YDStringUtil::formatDate( filemtime( $this->getAbsolutePath() ), $format, $locale ); 
         }
 
         /**
          *	Function to get the size of the file.
          *
+         *  @param  $formatted  (optional) If set to true, the filesize will be returned in a human readable format.
+         *  @param  $decimals   (optional) The number of decimals to use for formatting the filesize.
+         *
          *	@returns	Double containing the length of the file.
          */
-        function getSize() {
-            return filesize( $this->getAbsolutePath() );
+        function getSize( $formatted = false, $decimals = 1 ) {
+            if ( ! $formatted ) {
+                return filesize( $this->getAbsolutePath() );
+            }
+            YDInclude( 'YDUtil.php' );
+            return YDStringUtil::formatFilesize( filesize( $this->getAbsolutePath() ), $decimals );
         }
 
         /**
@@ -496,6 +510,15 @@
                 return true;
             }
 
+        }
+
+        /**
+         *  This function returns true if the file is readable.
+         *
+         *  @returns    Returns true if the file is readable.
+         */
+        function isReadable(){
+            return is_readable( $this->getAbsolutePath() );
         }
 
         /**
@@ -921,6 +944,40 @@
         }
 
         /**
+         *  This function return the number of files that are in the directory.
+         *
+         *  @returns    The number of files in the directory.
+         */
+        function getFileCount(){ 
+            $total = 0;
+            $dirHandle = opendir( $this->getPath() );
+            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
+                if ( $file != '.' && $file != '..' && is_file( $this->getPath() .'/'. $file ) ) {
+                   $total++;
+                }
+            }
+            closedir( $dirHandle );
+            return $total;
+        }
+
+        /**
+         *  This function return the number of directories that are in the directory.
+         *
+         *  @returns    The number of directories in the directory.
+         */
+        function getDirectoryCount(){ 
+            $total = 0;
+            $dirHandle = opendir( $this->getPath() );
+            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
+            if ( $file != '.' && $file != '..' && is_dir( $this->getPath() .'/'. $file ) ) {
+                    $total++;
+                }
+            }
+            closedir( $dirHandle );
+            return $total;
+        }
+
+        /**
          *	This function will get a file list using a pattern. You can compare this function with the dir command from
          *	DOS or the ls command from Unix. The pattern syntax is the same as well.
          *
@@ -1114,6 +1171,15 @@
          */
         function getPath() {
             return YDPath::getFullPath( $this->_path );
+        }
+
+        /**
+         *  This function returns true if the directory is readable.
+         *
+         *  @returns    Returns true if the directory is readable.
+         */
+        function isReadable(){
+            return is_readable( $this->getPath() );
         }
 
         /**
