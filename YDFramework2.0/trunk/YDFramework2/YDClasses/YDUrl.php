@@ -475,7 +475,7 @@
             $client = $this->_getHttpClient();
 
             // Now send the request
-            $result = $client->doRequest();
+            $result = @ $client->doRequest();
 
             // Check if there was a result
             if ( $result == false ) {
@@ -484,7 +484,7 @@
                     YD_ERROR
                 );
             } else {
-                $data = $client->getContent();
+                $data = @ $client->getContent();
             }
 
             // Check if caching is enabled
@@ -528,7 +528,7 @@
             $client = $this->_getHttpClient();
             $client->method = 'HEAD';
             $client->headers_only = true;
-            $result = $client->doRequest();
+            $result = @ $client->doRequest();
             if ( $result == false ) {
                 trigger_error(
                     'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
@@ -548,7 +548,7 @@
             $client = $this->_getHttpClient();
             $client->method = 'HEAD';
             $client->headers_only = true;
-            $result = $client->doRequest();
+            $result = @ $client->doRequest();
             if ( $result == false ) {
                 trigger_error(
                     'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
