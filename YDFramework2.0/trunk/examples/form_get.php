@@ -33,6 +33,7 @@
 
             // Add elements
             $form->addElement( 'text', 'txt', 'Enter text:' );
+            $form->addElement( 'dateselect', 'dateSelect1', 'Enter data:' );
             $form->addElement( 'submit', 'cmdSubmit', 'submit' );
 
             // Display the form

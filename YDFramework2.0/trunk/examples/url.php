@@ -121,6 +121,12 @@
             YDDebugUtil::dump( $url->getPathSubsegments('forum'), "getPathSubsegments('forum')" );
             YDDebugUtil::dump( $url->getPathSubsegments('test'), "getPathSubsegments('test')" );
 
+            // Do some more testing
+            $x = 'http://localhostexamples/form2.php?form2_tmp%5Bday%5D=1&form2_tmp%5Bmonth%5D=1&form2_tmp%5Byear%5D=2000&do=test';
+            $url = new YDUrl( $x );
+            YDDebugUtil::dump( $url, $x );
+            YDDebugUtil::dump( $url->getUrl(), 'Original url' );
+
             // Get the contents
             $url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
             YDDebugUtil::dump( $url->getContents(), 'URL contents' );
