@@ -386,6 +386,24 @@
         }
 
         /**
+         *  This function returns the url of the last page in the set.
+         *
+         *  @returns    The url of the last page in the set.
+         */
+        function getLastUrl(){
+            return $this->getPageUrl( $this->totalPages );
+        }
+
+        /**
+         *  This function returns the url of the first page in the set.
+         *
+         *  @returns    The url of the last first in the set.
+         */
+        function getFirstUrl(){
+            return $this->getPageUrl(1);
+        }
+
+        /**
          *  Converts the YDDatabase set to an array containing the records of the recordset. The meta information about
          *  the dataset is not kept.
          */
