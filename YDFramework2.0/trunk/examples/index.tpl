@@ -301,7 +301,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="7" valign="top">
+            <td rowspan="8" valign="top">
             <p>&nbsp;</p></td>
             <td valign="top"><a href="database.php">Database connectivity - Native functions</a> </td>
             <td valign="top">
