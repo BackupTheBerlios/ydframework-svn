@@ -529,6 +529,9 @@
             if ( strtolower( $format ) == 'time' ) {
                 $format = '%H:%M';
             }
+            if ( strtolower( $format ) == 'file' ) {
+                $format = '%d-%m-%Y %H:%M';
+            }
 
             // Set the new locale
             if ( ! is_null( $locale ) ) {
