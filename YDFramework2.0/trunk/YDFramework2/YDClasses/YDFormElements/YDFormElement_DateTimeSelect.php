@@ -189,11 +189,11 @@
          *	@param	$val	(optional) The value for this object.
          */
         function setValue( $val=array() ) {
+            $now = getdate( $val );
             if ( is_numeric( $val ) ) {
                 if ( ! is_int( $val ) ) {
                     $val = intval( $val );
                 }
-                $now = getdate( $val );
                 $this->_value = array();
                 $this->_value['day'] = $now['mday'];
                 $this->_value['month'] = $now['mon'];
@@ -202,7 +202,6 @@
                 $this->_value['minutes'] = $now['minutes'];
                 $this->_value['seconds'] = $now['seconds'];
             } elseif ( $val == array() ) {
-                $now = getdate();
                 $this->_value['day'] = $now['mday'];
                 $this->_value['month'] = $now['mon'];
                 $this->_value['year'] = $now['year'];
@@ -211,6 +210,24 @@
                 $this->_value['seconds'] = $now['seconds'];
             } else {
                 $this->_value = $val;
+                if ( ! isset( $this->_value['day'] ) ) {
+                    $this->_value['day'] = $now['mday'];
+                }
+                if ( ! isset( $this->_value['month'] ) ) {
+                    $this->_value['month'] = $now['mon'];
+                }
+                if ( ! isset( $this->_value['year'] ) ) {
+                    $this->_value['year'] = $now['year'];
+                }
+                if ( ! isset( $this->_value['hours'] ) ) {
+                    $this->_value['hours'] = $now['hours'];
+                }
+                if ( ! isset( $this->_value['minutes'] ) ) {
+                    $this->_value['minutes'] = $now['minutes'];
+                }
+                if ( ! isset( $this->_value['seconds'] ) ) {
+                    $this->_value['seconds'] = $now['seconds'];
+                }
             }
             
             if ( ! isset( $this->_value['seconds'] ) ) {

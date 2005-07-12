@@ -153,22 +153,30 @@
          *	@param	$val	(optional) The value for this object.
          */
         function setValue( $val=array() ) {
+            $now = getdate( $val );
             if ( is_numeric( $val ) ) {
                 if ( ! is_int( $val ) ) {
                     $val = intval( $val );
                 }
-                $now = getdate( $val );
                 $this->_value = array();
                 $this->_value['day'] = $now['mday'];
                 $this->_value['month'] = $now['mon'];
                 $this->_value['year'] = $now['year'];
             } elseif ( $val == array() ) {
-                $now = getdate();
                 $this->_value['day'] = $now['mday'];
                 $this->_value['month'] = $now['mon'];
                 $this->_value['year'] = $now['year'];
             } else {
                 $this->_value = $val;
+                if ( ! isset( $this->_value['day'] ) ) {
+                    $this->_value['day'] = $now['mday'];
+                }
+                if ( ! isset( $this->_value['month'] ) ) {
+                    $this->_value['month'] = $now['mon'];
+                }
+                if ( ! isset( $this->_value['year'] ) ) {
+                    $this->_value['year'] = $now['year'];
+                }
             }
             if ( strlen( $this->_value['day'] ) == 1 ) {
                 $this->_value['day_with_zero'] = '0' . $this->_value['day'];

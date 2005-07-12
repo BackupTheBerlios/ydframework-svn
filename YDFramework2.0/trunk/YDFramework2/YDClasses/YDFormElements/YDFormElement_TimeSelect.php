@@ -124,20 +124,25 @@
          *	@param	$val	(optional) The value for this object.
          */
         function setValue( $val=array() ) {
+            $now = getdate( $val );
             if ( is_numeric( $val ) ) {
                 if ( ! is_int( $val ) ) {
                     $val = intval( $val );
                 }
-                $now = getdate( $val );
                 $this->_value = array();
                 $this->_value['hours'] = $now['hours'];
                 $this->_value['minutes'] = $now['minutes'];
             } elseif ( $val == array() ) {
-                $now = getdate();
                 $this->_value['hours'] = $now['hours'];
                 $this->_value['minutes'] = $now['minutes'];
             } else {
                 $this->_value = $val;
+                if ( ! isset( $this->_value['hours'] ) ) {
+                    $this->_value['hours'] = $now['hours'];
+                }
+                if ( ! isset( $this->_value['minutes'] ) ) {
+                    $this->_value['minutes'] = $now['minutes'];
+                }
             }
             if ( strlen( $this->_value['hours'] ) == 1 ) {
                 $this->_value['hours_with_zero'] = '0' . $this->_value['hours'];
