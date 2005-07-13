@@ -15,53 +15,15 @@
 
         <para>The original array looked as follows:</para>
 
-        <programlisting><![CDATA[<?php
-
-    array (
-        0 => 1,
-        1 => 2,
-        2 => 3,
-        3 => 4,
-        4 => 5,
-        5 => 6,
-        6 => 7,
-    )
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_001.xml" />
 
         <para>Let's say we want to convert it to a table with 3 columns, we can do the following:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Convert to a table with 3 columns
-    YDArrayUtil::convertToTable( $array, 3 );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_002.xml" />
 
         <para>The new array will look as follows:</para>
 
-        <programlisting><![CDATA[<?php
-
-    array (
-        0 =>
-        array (
-            0 => 1,
-            1 => 2,
-            2 => 3,
-        ),
-        1 =>
-        array (
-            0 => 4,
-            1 => 5,
-            2 => 6,
-        ),
-        2 =>
-        array (
-            0 => 7,
-        ),
-    )
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_003.xml" />
 
         <para>There is a switch for the convertToTable that can fill the last row with null values so that it matches the correct number of columns.</para>
 
@@ -69,116 +31,37 @@
 
         <para>The second function, convertToNested, converts the given array to a nested array using the values from the specified column name. Let's have a look at the following sample array:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $array = array(
-        array( 'id' => 1, 'name' => 'Pieter', 'group' => 'admin' ),
-        array( 'id' => 2, 'name' => 'Fiona', 'group' => 'admin' ),
-        array( 'id' => 3, 'name' => 'Bert', 'group' => 'user' ),
-        array( 'id' => 3, 'name' => 'Jan', 'group' => 'guest' ),
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_004.xml" />
 
         <para>The array shown above has for each subarray a value named group. Let's say we want to use the value of the group column to create the nested array, we can use the following function call:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Convert to a nested array, nesting on the group field
-    YDArrayUtil::convertToNested( $array, 'group' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_005.xml" />
 
         <para>This will give us the following result:</para>
 
-        <programlisting><![CDATA[<?php
-
-    array (
-        'admin' =>
-        array (
-            0 =>
-            array(
-                'id' => 1, 'name' => 'Pieter', 'group' => 'admin'
-            ),
-            1 =>
-            array(
-                'id' => 2, 'name' => 'Fiona', 'group' => 'admin'
-            ),
-        ),
-        'user' =>
-        array (
-            0 =>
-            array(
-                'id' => 3, 'name' => 'Bert', 'group' => 'user'
-            ),
-        ),
-        'guest' =>
-        array (
-            0 =>
-            array(
-                'id' => 3, 'name' => 'Jan', 'group' => 'guest'
-            ),
-        ),
-    )
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_006.xml" />
 
         <note>The original column will not be stripped from the element. You can still reference it just like before.</note>
 
         <para>Another function of YDArrayUtil is map which rearranges arrays in a custom way – according to a given map. Imagine having an array that could result from a YDDatabaseObject query, for instance the one you know already:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $array = array(
-        array('id' => 1, 'name' => 'Pieter', 'group' => 'admin'),
-        array('id' => 2, 'name' => 'Fiona', 'group' => 'admin'),
-        array('id' => 3, 'name' => 'Bert', 'group' => 'user'),
-        array('id' => 4, 'name' => 'Jan'),
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_007.xml" />
 
         <para>Sometimes it would be useful to simplify or rearrange that structure according to your needs. The function map allows you to restructure such an array, for example the following way:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $array = array(
-        'admin' => array(1 => 'Pieter', 2 => 'Fiona'),
-        'user' => array(3 => 'Bert'),
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_008.xml" />
 
         <para>Or:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $array = array(
-        1 => 'Pieter',
-        2 => 'Fiona',
-        3 => 'Bert',
-        4 => 'Jan',
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_009.xml" />
 
         <para>The map function takes three arguments: the original array, the key to group by and a map that defines the structure of the result. This map variable can be an array or a string, depending on how complex or simple the resulting array needs to be. In any case, the resulting array will only consist of what is defined by the map variable. So in the case of the first example, the function call would look like this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Convert to a customly mapped array
-    YDArrayUtil::map( $array, 'group', array( 'id' => 'name' ) );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_010.xml" />
 
         <para>Note that the map variable is an array, whereas to get the result of the second example you need to call the function with a simple string as map variable:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Convert to a customly mapped array
-    YDArrayUtil::map( $array, 'id', 'name' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_011.xml" />
 
     </sect1>
 
@@ -190,52 +73,11 @@
 
         <para>The following code sample demonstrates how to use this class:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Instantiate a new YDBrowserInfo object
-    $browser = new YDBrowserInfo();
-
-    // Dump the different properties
-    YDDebugUtil::dump( $browser->agent, 'Agent' );
-    YDDebugUtil::dump( $browser->browser, 'Browser name' );
-    YDDebugUtil::dump( $browser->version, 'Version' );
-    YDDebugUtil::dump( $browser->platform, 'Platform' );
-    YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
-    YDDebugUtil::dump(
-        $browser->getBrowserLanguages(), 'Languages supported by the browser'
-    );
-    YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_012.xml" />
 
         <para>If you execute this script, the following data will be outputted:</para>
 
-        <programlisting><![CDATA[Agent
-'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)'
-
-Browser name
-'ie'
-
-Version
-'6.0'
-
-Platform
-'win'
-
-Installed .NET runtimes
-array (
-  0 => '1.1',
-)
-
-Languages supported by the browser
-array (
-  0 => 'en',
-  1 => 'nl',
-  2 => 'fr',
-)
-
-Negotiated language
-'en']]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_013.xml" />
 
         <para>The browser property will contain one of the following values: ie, safari, opera, firefox, mozilla or other.</para>
 
@@ -300,172 +142,11 @@ Negotiated language
 
         <para>The following code example indicates how the different functions can be used:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDRequest.php' );
-
-    // Class definition
-    class stringutil extends YDRequest {
-
-        // Class constructor
-        function stringutil() {
-            $this->YDRequest();
-        }
-
-        // Default action
-        function actionDefault() {
-
-            // Test the formatting of filesizes
-            $filesizes = array(
-                '1152921504606846977', '1125899906842625',
-                '1099511627777', '75715455455',
-                '1048577', '6543', '42'
-            );
-
-            // Format the filesizes
-            foreach ( $filesizes as $filesize ) {
-                YDDebugUtil::dump(
-                    YDStringUtil::formatFileSize( $filesize ),
-                    'Formatting filesize: ' . $filesize
-                );
-            }
-
-            // Test the formatDate function
-            YDDebugUtil::dump(
-                YDStringUtil::formatDate( time(), 'date' ), 'Formatting date - date'
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::formatDate( time(), 'time' ), 'Formatting date - time'
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::formatDate( time(), 'datetime' ), 'Formatting date - datetime'
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::formatDate( time(), '%x' ), 'Formatting date - %x'
-            );
-
-            // Test the encode string function
-            $string = 'Pieter Claerhout @ creo.com "générales obsolète"';
-            YDDebugUtil::dump(
-                YDStringUtil::encodeString( $string ), 'Encoding: ' . $string
-            );
-
-            // Test the truncate function
-            YDDebugUtil::dump(
-                YDStringUtil::truncate( $string ),
-                'Truncate (default): ' . $string
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::truncate( $string, 20 ),
-                'Truncate (20): ' . $string
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::truncate( $string, 20, ' [more]' ),
-                'Truncate (20/more): ' . $string
-            );
-            YDDebugUtil::dump(
-                YDStringUtil::truncate( $string, 20, ' [more]', true ),
-                'Truncate (20/more/true): ' . $string
-            );
-
-            // Test the normalizing of newlines
-            $string = "line1\nline2\rline3\r\nline4";
-            YDDebugUtil::dump(
-                explode( "\n", $string ), 'Original string'
-            );
-            YDDebugUtil::dump(
-                explode( YD_CRLF, YDStringUtil::normalizeNewlines( $string ) ),
-                'normalizeNewlines'
-            );
-
-            // Test the normalizing of newlines
-            $string = "  line1  \n  line2  \r  line3  \r\n  line4  ";
-            YDDebugUtil::dump(
-                YDStringUtil::removeWhiteSpace( $string ), 'removeWhiteSpace'
-            );
-
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_014.xml" />
 
         <para>This script will output the following:</para>
 
-        <programlisting><![CDATA[Formatting filesize:1152921504606846977
-'1.0 EB'
-
-Formatting filesize: 1125899906842625
-'1.0 PB'
-
-Formatting filesize: 1099511627777
-'1.0 TB'
-
-Formatting filesize: 75715455455
-'70.5 GB'
-
-Formatting filesize: 1048577
-'1.0 MB'
-
-Formatting filesize: 6543
-'6.4 KB'
-
-Formatting filesize: 42
-'42 bytes'
-
-Formatting date - date
-'24 January 2005'
-
-Formatting date - time
-'21:42'
-
-Formatting date - datetime
-'24 January 2005 21:42'
-
-Formatting date - %x
-'01/24/05'
-
-Encoding: Pieter Claerhout @ creo.com "générales obsolète"
-'Pieter Claerhout @ creo.com "g&#233;n&#233;rales obsol&#232;te"'
-
-Truncate (default): Pieter Claerhout @ creo.com "générales obsolète"
-'Pieter Claerhout @ creo.com "générales obsolète"'
-
-Truncate (20): Pieter Claerhout @ creo.com "générales obsolète"
-'Pieter Claerhout...'
-
-Truncate (20/more): Pieter Claerhout @ creo.com "générales obsolète"
-'Pieter [more]'
-
-Truncate (20/more/true): Pieter Claerhout @ creo.com "générales obsolète"
-'Pieter Claerh [more]'
-
-Original string
-array (
-  0 => 'line1',
-  1 => 'line2
-line3
-',
-  2 => 'line4',
-)
-
-normalizeNewlines
-array (
-  0 => 'line1',
-  1 => 'line2',
-  2 => 'line3',
-  3 => 'line4',
-)
-
-removeWhiteSpace
-'line1 line2 line3 line4']]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_015.xml" />
 
     </sect1>
 

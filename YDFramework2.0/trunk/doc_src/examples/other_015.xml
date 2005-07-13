@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: output from the previous example</title>
+    <programlisting><![CDATA[Formatting filesize:1152921504606846977
+'1.0 EB'
+
+Formatting filesize: 1125899906842625
+'1.0 PB'
+
+Formatting filesize: 1099511627777
+'1.0 TB'
+
+Formatting filesize: 75715455455
+'70.5 GB'
+
+Formatting filesize: 1048577
+'1.0 MB'
+
+Formatting filesize: 6543
+'6.4 KB'
+
+Formatting filesize: 42
+'42 bytes'
+
+Formatting date - date
+'24 January 2005'
+
+Formatting date - time
+'21:42'
+
+Formatting date - datetime
+'24 January 2005 21:42'
+
+Formatting date - %x
+'01/24/05'
+
+Encoding: Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout @ creo.com "g&#233;n&#233;rales obsol&#232;te"'
+
+Truncate (default): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout @ creo.com "générales obsolète"'
+
+Truncate (20): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerhout...'
+
+Truncate (20/more): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter [more]'
+
+Truncate (20/more/true): Pieter Claerhout @ creo.com "générales obsolète"
+'Pieter Claerh [more]'
+
+Original string
+array (
+  0 => 'line1',
+  1 => 'line2
+line3
+',
+  2 => 'line4',
+)
+
+normalizeNewlines
+array (
+  0 => 'line1',
+  1 => 'line2',
+  2 => 'line3',
+  3 => 'line4',
+)
+
+removeWhiteSpace
+'line1 line2 line3 line4']]></programlisting>
+</example>

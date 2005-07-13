@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: convert the array to a table</title>
+    <programlisting><![CDATA[<?php
+
+    // Convert to a table with 3 columns
+    YDArrayUtil::convertToTable( $array, 3 );
+
+?>]]></programlisting>
+</example>

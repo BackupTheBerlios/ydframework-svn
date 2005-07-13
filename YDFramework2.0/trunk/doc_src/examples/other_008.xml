@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: restructured array version 1</title>
+    <programlisting><![CDATA[<?php
+
+    $array = array(
+        'admin' => array(1 => 'Pieter', 2 => 'Fiona'),
+        'user' => array(3 => 'Bert'),
+    );
+
+?>]]></programlisting>
+</example>
