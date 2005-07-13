@@ -15,111 +15,19 @@
 
         <para>This is an example of an RSS 0.91 XML file:</para>
 
-        <programlisting><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
-<rss version="0.91">
-    <channel>
-        <title>Yellow Duck Framework</title>
-        <description>News about the YDF</description>
-        <link>http://localhost/ydf/?do=rss091</link>
-        <item>
-            <title>Title 1</title>
-            <link>http://localhost/ydf/?do=rss091#1</link>
-            <description>Description 1</description>
-            <guid>3a31c01d5c9023115e2433cdb1b6515e</guid>
-        </item>
-        <item>
-            <title>Title 2</title>
-            <link>http://localhost/ydf/?do=rss091#2</link>
-            <description>Description 2</description>
-            <guid>be3e15a372932faea5b235d1965c36bf</guid>
-        </item>
-    </channel>
-</rss>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_001.xml" />
 
         <para>This code sample shows you the source of a RSS 1.0 XML file:</para>
 
-        <programlisting><![CDATA[<rdf:RDF
-    xmlns="http://purl.org/rss/1.0/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <channel rdf:about="">
-        <title>Yellow Duck Framework</title>
-        <description>News about the YDF</description>
-        <link>http://localhost/ydf/?do=rss10</link>
-        <dc:date>2004-05-22T13:36:11+01:00</dc:date>
-        <items>
-            <rdf:Seq>
-                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#1"/>
-                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#2"/>
-            </rdf:Seq>
-        </items>
-    </channel>
-    <item rdf:about="http://localhost/ydf/examples/?do=rss10#1">
-        <dc:format>text/html</dc:format>
-        <title>Title 1</title>
-        <link>http://localhost/ydf/feedcreator1.php?do=rss10#1</link>
-        <description>Description 1</description>
-    </item>
-    <item rdf:about="http://localhost/ydf/examples/?do=rss10#2">
-        <dc:format>text/html</dc:format>
-        <title>Title 2</title>
-        <link>http://localhost/ydf/feedcreator1.php?do=rss10#2</link>
-        <description>Description 2</description>
-    </item>
-</rdf:RDF>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_002.xml" />
 
         <para>The code for an RSS 2.0 feed looks as follows:</para>
 
-        <programlisting><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
-<rss version="2.0">
-    <channel>
-        <title>Yellow Duck Framework</title>
-        <description>News about the YDF</description>
-        <link>http://localhost/ydf/?do=rss20</link>
-        <lastBuildDate>Sat, 22 May 2004 13:36:15+0100</lastBuildDate>
-        <item>
-            <title>Title 1</title>
-            <link>http://localhost/ydf/?do=rss20#1</link>
-            <description>Description 1</description>
-            <guid>d1c9daf41c19e53ed46f8081d4ab99b7</guid>
-        </item>
-        <item>
-            <title>Title 2</title>
-            <link>http://localhost/ydf/?do=rss20#2</link>
-            <description>Description 2</description>
-            <guid>7dbd540a343ecc960efa3c1d9f715e74</guid>
-        </item>
-    </channel>
-</rss>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_003.xml" />
 
         <para>Atom looks similar, but has again some very subtle differences:</para>
 
-        <programlisting><![CDATA[<?xml version="1.0" encoding="utf-8"?>
-<feed version="0.1" xmlns="http://example.com/newformat#">
-    <title>Yellow Duck Framework</title>
-    <subtitle>News about the YDF</subtitle>
-    <link>http://localhost/ydf/?do=atom</link>
-    <entry>
-        <title>Title 1</title>
-        <link>http://localhost/ydf/?do=atom#1</link>
-        <id>2e3c209c100c00c83a791fdbc0c6af1b</id>
-        <content type="text/html" xml:lang="en-us">
-            <div xmlns="http://www.w3.org/1999/xhtml">
-                Description 1
-            </div>
-        </content>
-    </entry>
-    <entry>
-        <title>Title 2</title>
-        <link>http://localhost/ydf/?do=atom#2</link>
-        <id>5d7ed2c293a6e24c9be308e81a2fb8f5</id>
-        <content type="text/html" xml:lang="en-us">
-            <div xmlns="http://www.w3.org/1999/xhtml">
-                Description 2
-            </div>
-        </content>
-    </entry>
-</feed>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_004.xml" />
 
         <para>As you can see with the different examples, the idea is always the same. First, you have the properties of the feed itself, which contains a title, a link, the actual URL of the XML file and so. Then you have one or more entries which again have their own set of properties.</para>
 
@@ -135,15 +43,7 @@
 
         <para>When we want to make a new feed, we first have to setup the feed itself. The following code sample illustrates this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFeedCreator.php' );
-    $fc = new YDFeedCreator();
-    $fc->setTitle( 'Yellow Duck Framework' );
-    $fc->setDescription( 'News about the YDF' );
-    $fc->setLink( 'http://localhost/ydf/' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_005.xml" />
 
         <para>In the above code sample, we first created a new instance of the YDFeedCreator class. Please note that we didn't specify the format of the feed yet, as we will do this only when the actual feed get's created.</para>
 
@@ -159,20 +59,7 @@
 
         <para>Now that the feed is setup correctly, we can start adding items to it. When you add an item, we can use the following code to do this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $fc->addItem(
-        'Title 1 & Co.',
-        'http://localhost/ydf/#1',
-        'Description 1 & Co.'
-    );
-    $fc->addItem(
-        'Title 2 & Co.',
-        'http://localhost/ydf/#2',
-        'Description <b>2</b> & Co.'
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_006.xml" />
 
         <para>By using the addItem function of the YDFeedCreator object, we can add new items to the feed. Each item requires a number of parameters.</para>
 

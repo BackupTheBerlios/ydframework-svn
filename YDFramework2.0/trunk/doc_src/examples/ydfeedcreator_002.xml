@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: an RSS 1.0 XML file</title>
+    <programlisting><![CDATA[<rdf:RDF
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel rdf:about="">
+        <title>Yellow Duck Framework</title>
+        <description>News about the YDF</description>
+        <link>http://localhost/ydf/?do=rss10</link>
+        <dc:date>2004-05-22T13:36:11+01:00</dc:date>
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#1"/>
+                <rdf:li rdf:resource="http://localhost/ydf/?do=rss10#2"/>
+            </rdf:Seq>
+        </items>
+    </channel>
+    <item rdf:about="http://localhost/ydf/examples/?do=rss10#1">
+        <dc:format>text/html</dc:format>
+        <title>Title 1</title>
+        <link>http://localhost/ydf/feedcreator1.php?do=rss10#1</link>
+        <description>Description 1</description>
+    </item>
+    <item rdf:about="http://localhost/ydf/examples/?do=rss10#2">
+        <dc:format>text/html</dc:format>
+        <title>Title 2</title>
+        <link>http://localhost/ydf/feedcreator1.php?do=rss10#2</link>
+        <description>Description 2</description>
+    </item>
+</rdf:RDF>]]></programlisting>
+</example>

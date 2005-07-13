@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: an ATOM XML file</title>
+    <programlisting><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<feed version="0.1" xmlns="http://example.com/newformat#">
+    <title>Yellow Duck Framework</title>
+    <subtitle>News about the YDF</subtitle>
+    <link>http://localhost/ydf/?do=atom</link>
+    <entry>
+        <title>Title 1</title>
+        <link>http://localhost/ydf/?do=atom#1</link>
+        <id>2e3c209c100c00c83a791fdbc0c6af1b</id>
+        <content type="text/html" xml:lang="en-us">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Description 1
+            </div>
+        </content>
+    </entry>
+    <entry>
+        <title>Title 2</title>
+        <link>http://localhost/ydf/?do=atom#2</link>
+        <id>5d7ed2c293a6e24c9be308e81a2fb8f5</id>
+        <content type="text/html" xml:lang="en-us">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Description 2
+            </div>
+        </content>
+    </entry>
+</feed>]]></programlisting>
+</example>
