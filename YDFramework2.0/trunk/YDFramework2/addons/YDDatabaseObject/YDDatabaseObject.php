@@ -1618,7 +1618,6 @@
          *  The class constructor.
          *
          *  @param $name     The field name.
-         *  @param $type     (optional) The field type: numeric or string. Default: numeric.
          *  @param $key      (optional) Is a key? Default: false.
          *  @param $auto     (optional) Is auto-increment? Default: false.
          *  @param $null     (optional) Can be null? Default: false.
