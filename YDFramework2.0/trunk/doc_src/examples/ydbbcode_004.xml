@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: adding custom rules to the YDBBCode class</title>
+    <programlisting><![CDATA[// The converter
+$conv = new YDBBCode();
+
+// Replace [b][/b] and [B][/B]
+$conv->addRule( "/\[[bB]\](.+?)\[\/[bB]\]/s", '<b>\\1</b>' );
+
+// Replace [i][/i] and [I][/I]
+$conv->addRule( "/\[[iI]\](.+?)\[\/[iI]\]/s", '<i>\\1</i>' );
+
+// Replace [u][/u] and [U][/U]
+$conv->addRule( "/\[[uU]\](.+?)\[\/[uU]\]/s", '<u>\\1</u>' );
+
+// Replace [p][/p] and [P][/P]
+$conv->addRule( "/\[[pP]\](.+?)\[\/[pP]\]/s", '<p>\\1</p>' );
+
+// Replace [code][/code]
+$conv->addRule( "/\[code\](.+?)\[\/code\]/s", '<code>\\1</code>' );
+
+// Replace [quote][/quote]
+$conv->addRule( "/\[quote\](.+?)\[\/quote\]/s", '<blockquote>\\1</blockquote>' );
+
+// Replace [url=][/url]
+$conv->addRule( "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i", '<a href="\\1">\\2</a>' );
+
+// Replace [url][/url]
+$conv->addRule( "/\[url\]([^<> \n]+?)\[\/url\]/i", '<a href="\\1">\\1</a>' );
+
+// Replace [mail=][/mail]
+$conv->addRule(
+    "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>'
+);
+
+// Replace [email][/email]
+$conv->addRule(
+    "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>'
+);
+
+// Replace [email=][/email]
+$conv->addRule(
+    "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>'
+);
+
+// Replace [mail][/mail]
+$conv->addRule(
+    "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>'
+);
+
+// Replace [img=][/img]
+$conv->addRule(
+    "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i",
+    '<a href="\\1"><img border="0" src="\\2"></a>'
+);
+
+// Replace [img][/img]
+$conv->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
+
+// Replace [color=][/color]
+$conv->addRule(
+    "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>'
+);]]></programlisting>
+</example>
