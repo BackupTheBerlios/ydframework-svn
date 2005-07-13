@@ -402,8 +402,7 @@
          */
         function executeInsert( $table, $values, $filter=true ) {
             $sql = $this->_createSqlInsert( $table, $values, $filter );
-            $result = & $this->_connectAndExec( $sql );
-            return $result;
+            return $this->getMatchedRowsNum( $result );
         }
 
         /**
