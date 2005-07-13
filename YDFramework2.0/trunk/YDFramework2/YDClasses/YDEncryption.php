@@ -38,6 +38,8 @@
          *  @param  $data   The data to encrypt
          *
          *  @returns    The encrypted data as base64 encoded data.
+         *
+         *  @static
          */
         function encrypt( $passwd, $data ) {
             $key[] = '';
@@ -74,6 +76,8 @@
          *  @param  $data   The data to decrypt. Should be formatted as base64.
          *
          *  @returns    The decrypted data.
+         *
+         *  @static
          */
         function decrypt( $passwd, $data ) {
             return base64_decode( YDEncryption::encrypt( $passwd, base64_decode( $data ) ) );
