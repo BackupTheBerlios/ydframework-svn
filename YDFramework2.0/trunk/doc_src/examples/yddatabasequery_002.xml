@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating an SQL SELECT statement</title>
+    <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+        $r = $q->getReserved();
+        
+        // Select query
+        $q->select();
+        
+        // Additional options
+        $q->options( array( 'DISTINCT' ) );
+        
+        // Add a table to the query
+        // It returns the table alias if defined
+        $u = $q->from( 'user' );
+        
+        // Select expressions
+        $q->expression( "id", '', true ); // quote reserved
+        $q->expression( "name", 'user_name', true ); // quote reserved
+        $q->expression( "SUM( " . $r . "value" . $r . " )", 'total' );
+        
+        // Add a where statement
+        $q->openWhere();
+            $q->where( $r . "id" . $r . "= 144" );
+        
+        // Add another where statement inside the above statement
+        $q->openWhere( 'OR' );
+            $q->where( $r . "name" . $r . " LIKE 'David%'" );
+            $q->where( $r . "id" . $r . " > 13" );
+        
+        $q->closeWhere(); // optional
+        $q->closeWhere(); // optional
+        
+        // Add a group by clause
+        $q->group( "id", true, true ); // DESC and quote reserved
+        
+        // Add ordering
+        $q->order( "name", false, true ); // ASC and quote reserved
+        $q->order( "total", true, true ); // DESC and quote reserved
+        
+        // Add a having clause
+        $q->having( $r . "total" . $r . " > 100" );
+        
+        // Add a limit
+        $q->limit( 100 );
+        
+        // Add an offset
+        $q->offset( 50 );
+        
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getQuery() );
+        
+        // Reset the contents of the query (optional)
+        $q->reset();
+
+?>]]></programlisting>
+</example>

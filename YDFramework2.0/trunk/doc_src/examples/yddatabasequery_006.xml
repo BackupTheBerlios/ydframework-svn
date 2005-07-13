@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating an SQL DELETE query</title>
+    <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+        
+        // Delete query
+        $q->delete();
+
+        // Add a table
+        $q->from( 'user' );
+
+        // Specify the where clause
+        $q->where( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getQuery() );
+
+?>]]></programlisting>
+</example>

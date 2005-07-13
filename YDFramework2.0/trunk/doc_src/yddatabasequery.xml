@@ -8,23 +8,9 @@
     <note>This class is specified in it's own include file, so you need to include it manually.</note>
 
     <para>You can get a new instance of a YDDatabaseQuery object using the getInstance static method. This method receives a YDDatabase instance as parameter. For example:</para>
-    
-    <programlisting><![CDATA[<?php
 
-        // Include YDDatabase
-        YDInclude( 'YDDatabase.php' );
-        
-        // Include YDDatabaseQuery
-        YDInclude( 'YDDatabaseQuery.php' );
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_001.xml" />
 
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-
-?>]]></programlisting>
-    
     <para>The class handles all database drivers supported by YDDatabase:</para>
     
     <itemizedlist spacing="compact">
@@ -38,270 +24,43 @@
     
     <para>The following example shows you how you can use the YDDatabaseQuery object to create a SELECT SQL statement:</para>
 
-    <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDDatabase.php' );
-        YDInclude( 'YDDatabaseQuery.php' );
-
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-        $r = $q->getReserved();
-        
-        // Select query
-        $q->select();
-        
-        // Additional options
-        $q->options( array( 'DISTINCT' ) );
-        
-        // Add a table to the query
-        // It returns the table alias if defined
-        $u = $q->from( 'user' );
-        
-        // Select expressions
-        $q->expression( "id", '', true ); // quote reserved
-        $q->expression( "name", 'user_name', true ); // quote reserved
-        $q->expression( "SUM( " . $r . "value" . $r . " )", 'total' );
-        
-        // Add a where statement
-        $q->openWhere();
-            $q->where( $r . "id" . $r . "= 144" );
-        
-        // Add another where statement inside the above statement
-        $q->openWhere( 'OR' );
-            $q->where( $r . "name" . $r . " LIKE 'David%'" );
-            $q->where( $r . "id" . $r . " > 13" );
-        
-        $q->closeWhere(); // optional
-        $q->closeWhere(); // optional
-        
-        // Add a group by clause
-        $q->group( "id", true, true ); // DESC and quote reserved
-        
-        // Add ordering
-        $q->order( "name", false, true ); // ASC and quote reserved
-        $q->order( "total", true, true ); // DESC and quote reserved
-        
-        // Add a having clause
-        $q->having( $r . "total" . $r . " > 100" );
-        
-        // Add a limit
-        $q->limit( 100 );
-        
-        // Add an offset
-        $q->offset( 50 );
-        
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getQuery() );
-        
-        // Reset the contents of the query (optional)
-        $q->reset();
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_002.xml" />
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[SELECT DISTINCT `id`, `name` AS `user_name`, SUM( `value` ) AS `total` FROM `user`
-WHERE ( `id`= 144 OR ( `name` LIKE 'David%' AND `id` > 13 ) ) GROUP BY `id` DESC HAVING `total` > 100
-ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_003.xml" />
 
     <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
 
-    <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDDatabase.php' );
-        YDInclude( 'YDDatabaseQuery.php' );
-
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-        
-        // Select query
-        $q->select();
-        
-        // Add table with alias 'u'
-        $u = $q->from( 'user', 'u' );
-        
-        // Add select expressions for this table
-        // The expr method is an alias of the expression method
-        $q->expr( 'id', '', true ); 
-        $q->expr( 'name', '', true );
-        
-        // Add a left join
-        $g = $q->join( 'LEFT', 'group', "g" );
-        
-        // Specify the fields to use for the join
-        $q->on( "$u.group_id = $g.id" );
-        
-        // Add the joined fields
-        $q->expr( "$g.id", 'gid', true );
-        $q->expr( "$g.name", 'group_name', true );
-
-        // Add an inner join
-        $a = $q->join( 'INNER', 'attach', "a" );
-        
-        // Specify the fields to use for the join
-        $q->on( "$g.attach_id = $a.id" );
-        
-            // Open a group
-            $q->openOn( 'OR' );
-            
-            // Specify more fields to use for the join group
-            $q->on( "$a.size > 150" );
-            $q->on( "$a.status = 3" );
-        
-        // Add some more fields
-        $q->expr( "$a.id", 'aid', true );
-        $q->expr( "$a.name", 'attach_name', true );
-
-        // Add a where clause
-        $q->where( "$g.id = 144" );
-        
-        // Add ordering
-        $q->order( "$a.name", false, true );
-        
-        // Add a limit
-        $q->limit( 50 );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getQuery() );
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_004.xml" />
 
     <para>This would output the following SQL statement:</para>
 
-    <programlisting><![CDATA[SELECT `id`, `name`, `g`.`id` AS `gid`, `g`.`name` AS `group_name`,
-`a`.`id` AS `aid`, `a`.`name` AS `attach_name` FROM `user` AS `u` LEFT JOIN `group` AS `g`
-ON ( u.group_id = g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR ( a.size > 150
-AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_005.xml" />
 
     <para>Also SQL delete statements can be constructed with the YDDatabaseQuery class:</para>
 
-    <programlisting><![CDATA[<?php
-
-        // Includes
-        YDInclude( 'YDDatabase.php' );
-        YDInclude( 'YDDatabaseQuery.php' );
-
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-        
-        // Delete query
-        $q->delete();
-
-        // Add a table
-        $q->from( 'user' );
-
-        // Specify the where clause
-        $q->where( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getQuery() );
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_006.xml" />
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[DELETE  FROM `user` WHERE id = 144]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_007.xml" />
 
     <para>The following example illustrates how to create an insert statement:</para>
 
-    <programlisting><![CDATA[<?php
-
-        // The values
-        $values = array(
-                     'name' => 'David',
-                     'email' => 'email@host.com',
-                     'admin' => 1,
-                     'purple' => null
-                  );
-
-        // Includes
-        YDInclude( 'YDDatabase.php' );
-        YDInclude( 'YDDatabaseQuery.php' );
-
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-
-        // Insert query
-        $q->insert();
-    
-        // Add a table
-        // The into method is an alias of the from method
-        $q->into( 'user' );
-
-        // Set the values
-        $q->values( $values );
-
-        // Add the where clause
-        $q->where( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getQuery() );
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_008.xml" />
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[INSERT INTO `user` ( `name`, `email`, `admin`, `purple` )
-VALUES ( 'David', 'email@host.com', 1, null )]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_009.xml" />
 
     <para>You can also generate SQL update statements:</para>
 
-    <programlisting><![CDATA[<?php
-
-        // The values
-        $values = array(
-                     'name' => 'David',
-                     'email' => 'email@host.com',
-                     'admin' => 1,
-                     'purple' => null
-                  );
-
-        // Includes
-        YDInclude( 'YDDatabase.php' );
-        YDInclude( 'YDDatabaseQuery.php' );
-
-        // Database instance
-        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
-
-        // Instantiate the class
-        $q = YDDatabaseQuery::getInstance( $db );
-        
-        // Update query
-        $q->update();
-
-        // Add a table
-        // The table method is an alias of the from method
-        $q->table( 'user' );
-
-        // Set the values
-        // The set method is an alias of the values method
-        $q->set( $values );
-
-        // Add the where clause
-        $q->where( "id = 144" );
-
-        // Show the SQL statement
-        YDDebugUtil::dump( $q->getQuery() );
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_010.xml" />
 
     <para>The output of this script would be:</para>
 
-    <programlisting><![CDATA[UPDATE `user` SET `name` = 'David', `email` = 'email@host.com',
-`admin` = 1, `purple` = null WHERE id = 144]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_011.xml" />
+
 
 </chapter>
