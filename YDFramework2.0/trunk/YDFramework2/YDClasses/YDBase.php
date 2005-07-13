@@ -83,7 +83,7 @@
         /**
          *  This function will serialize the object.
          */
-        function serialize( $obj ) {
+        function serialize() {
             return YDObjectUtil::serialize( $this );
         }
 
