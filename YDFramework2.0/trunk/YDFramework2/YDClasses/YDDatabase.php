@@ -142,6 +142,10 @@
          *  @param  $pagevar    (optional) The name of the query string variable indicating the page. Defaults to "page"
          *  @param  $sizevar    (optional) The name of the query string variable indicating the page size. Defaults to
          *                      "size"
+         *  @param  $sortvar    (optional) The name of the query string variable indicating the sort feild. Defaults to 
+         *                      "sortfld"
+         *  @param  $sortdir    (optional) The name of the query string variable indicating the direction. Defaults to
+         *                      "sortdir"
          */
         function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size', $sortvar='sortfld', $sortdir='sortdir' ) {
 
@@ -164,6 +168,9 @@
                 // Get the list of array indexes with the right column
                 $sort_array = array();
                 foreach ( $records as $key=>$record ) {
+                    if ( ! isset( $record[$_GET[$this->sortvar]] ) ) {
+                        $record[$_GET[$this->sortvar]] = '';
+                    }
                     $sort_array[ $key ] = $record[$_GET[$this->sortvar]];
                 }
 
