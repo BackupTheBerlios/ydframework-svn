@@ -353,7 +353,7 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="array_paging.php">Paged arrays with sorting</a> </td>
+            <td valign="top"><a href="array_paging_with_sorting.php">Paged arrays with sorting</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.php">array_paging_with_sorting.php</a>
                 <br>
