@@ -7,6 +7,8 @@
 
     <para>The form module in the Yellow Duck Framework is inspired by a package from the PEAR (PHP Extension and Application Repository) libraries. We wrote our own form library which has almost the same syntax but is more versatile, faster, smaller and works nicely around some limitations of the PEAR implementation.</para>
 
+    <warning>Currently, the YDForm form class doesn't work properly with arrays of form elements. If you define the values of form elements as arrays, by adding <literal>[]</literal> to the name of the form element, you will get unexpected results.</warning>
+
     <sect1 id="ydform_ydform_class">
 
         <title>The YDForm class</title>
