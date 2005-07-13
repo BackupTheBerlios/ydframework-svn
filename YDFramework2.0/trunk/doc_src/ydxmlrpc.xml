@@ -13,47 +13,11 @@
 
         <para>To invoke an XML/RPC call, an XML/RPC client might send the following XML data to a server:</para>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
-<methodCall>
-    <methodName>tide.getTideForDay</methodName>
-    <params>
-        <param>
-            <value>
-                <string>2004-05-11</string>
-            </value>
-        </param>
-    </params>
-</methodCall>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_001.xml" />
 
         <para>This server will then interpret the XML, execute the right function and send back the following XML data:</para>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
-<methodResponse>
-    <params>
-        <param>
-            <value>
-                <struct>
-                    <member>
-                        <name>tideDate</name>
-                        <value><string>2004-05-11</string></value>
-                    </member>
-                    <member>
-                        <name>tideDay</name>
-                        <value><string>di</string></value>
-                    </member>
-                    <member>
-                        <name>tideLow1</name>
-                        <value><string>01:07:00</string></value>
-                    </member>
-                    <member>
-                        <name>tideLow2</name>
-                        <value><string>13:39:00</string></value>
-                    </member>
-                </struct>
-            </value>
-        </param>
-    </params>
-</methodResponse>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_002.xml" />
 
         <para>The XML/RPC client will interpret this XML response and will convert it back to objects and variables in the native programming language.</para>
 
@@ -79,28 +43,13 @@
 
         <para>Let's have a look at the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDXmlRpc.php' );
-    $client = new YDXmlRpcClient(
-        'http://www.grijzeblubber.be/bba/xmlrpc.php'
-    ); 
-    $result = $client->execute(
-        'tide.getTideForDay', array( '2004-05-11' )
-    );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_003.xml" />
 
         <para>In this example, we first connect to the XML/RPC server using the specified URL. Then we execute the 'tide.getTideForDay' function on that server which returns an array.</para>
 
         <para>We had to specify a string with the date. After executing this, the variable $result will have the following contents:</para>
 
-        <programlisting><![CDATA[array (
-    'tideDate' => '2004-05-11',
-    'tideDay' => 'di',
-    'tideLow1' => '01:07:00',
-    'tideLow2' => '13:39:00',
-)]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_004.xml" />
 
         <para>If something went wrong or the XML/RPC server returned an error, a fatal error will be raised with the right error message. The error message will be the same as the error message returned by the XML/RPC server.</para>
 
@@ -114,41 +63,7 @@
 
         <para>It is also possible to write an XML/RPC server with the help of the Yellow Duck Framework. An XML/RPC server is actually a special kind of request class. The following code sample shows you how a very simple XML/RPC server can be written:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDXmlRpc.php' );
-
-    // Class definition
-    class xmlrpcserver extends YDXmlRpcServer {
-
-        // Class constructor
-        function xmlrpcserver() {
-
-            // Initialize the parent class
-            $this->YDXmlRpcServer();
-            
-            // Register the methods
-            $this->registerMethod(
-                'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' )
-            );
-
-        }
-
-        // The method which just echoes a string
-        function xmlrpcEcho( $var ) {
-            return $var;
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_005.xml" />
 
         <para>Every XML/RPC server you create should inherit from the YDXmlRpcServer class. This server will configure the XML/RPC server and show you an overview of the different methods understood by the server when an HTTP GET request is performed. The server that is created automatically has support for introspection.</para>
 
@@ -156,7 +71,7 @@
 
         <para>Now that we have the function, we need to declare it so that the XML/RPC server knows that this function should be published. This is done by using the registerMethod function of the YDXmlRpcServer class. The syntax for this function is as follows:</para>
 
-        <programlisting><![CDATA[function registerMethod( $method, $function, $signature, $help="" ) {}]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_006.xml" />
 
         <para>The following parameters can be specified:</para>
 
@@ -169,15 +84,11 @@
 
         <para>The $function variable can point to both a normal function or a class function. The following code sample shows how to refer to a class function (use the object name, then a colon and then the funtion name):</para>
 
-        <programlisting><![CDATA[function registerMethod(
-    'echo', 'this:xmlrpcEcho', array( 'string', 'string' )
-);]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_007.xml" />
 
         <para>The following code example shows you how to refer to a normal function:</para>
 
-        <programlisting><![CDATA[function registerMethod(
-    'echo', 'xmlrpcEcho', array( 'string', 'string' )
-);]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_008.xml" />
 
         <para>The method signature array describes both the type returned by the XML-RPC method and the types of the required arguments for that function. The first element in the array is the return type - it is compulsary. Any elements after that describe method paramaters. The IXR_IntrospectionServer will enforce these paramater types (unlike the basic IXR_Server which will pass any paramaters on to the methods without checking them) - if a method call is made to the server with an incorrect number of paramaters (or incorrect paramater types) the server will return an error message to the client.</para>
 
@@ -193,46 +104,8 @@
 
         <para>You can change this by overriding the requestNotXmlRpc function in your XML/RPC server class. The following code sample illustrates this:</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydxmlrpc_009.xml" />
 
-    // Standard include
-    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
-
-    // Includes
-    YDInclude( 'YDXmlRpc.php' );
-
-    // Class definition
-    class xmlrpcserver extends YDXmlRpcServer {
-
-        // Class constructor
-        function xmlrpcserver() {
-
-            // Initialize the parent class
-            $this->YDXmlRpcServer();
-            
-            // Register the methods
-            $this->registerMethod(
-                'echo', array( & $this, 'xmlrpcEcho' ), array( 'string', 'string' )
-            );
-
-        }
-
-        // The method which just echoes a string
-        function xmlrpcEcho( $var ) {
-            return $var;
-        }
-
-        // Override the HTTP GET requests
-        function requestNotXmlRpc() {
-            echo( 'This is not a HTTP POST request.' );
-        }
-
-    }
-
-    // Process the request
-    YDInclude( 'YDF2_process.php' );
-
-?>]]></programlisting>
     </sect1>
 
     <sect1 id="ydxmlrpc_more_info">
