@@ -28,6 +28,13 @@
             YDDebugUtil::dump( $dir->getBasename(), '$dir->getBasename()' );
             YDDebugUtil::dump( $dir->getPath(), '$dir->getPath()' );
             YDDebugUtil::dump( $dir->getAbsolutePath(), '$dir->getAbsolutePath()' );
+            YDDebugUtil::dump( $dir->getAbsolutePath(), '$dir->getAbsolutePath()' );
+            YDDebugUtil::dump( $dir->getSize(), '$dir->getSize()' );
+            YDDebugUtil::dump( $dir->getSize( false, true ), '$dir->getSize( false, true )' );
+            YDDebugUtil::dump( $dir->getSize( true ), '$dir->getSize( true )' );
+            YDDebugUtil::dump( $dir->getSize( true, true ), '$dir->getSize( true, true )' );
+            YDDebugUtil::dump( $dir->getFileCount(), '$dir->getFileCount()' );
+            YDDebugUtil::dump( $dir->getDirectoryCount(), '$dir->getDirectoryCount()' );
 
             // All files in the directory
             YDDebugUtil::dump( $dir->getContents(), '$dir->getContents()' );

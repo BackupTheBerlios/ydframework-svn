@@ -575,7 +575,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="10" valign="top">&nbsp;</td>
+            <td rowspan="11" valign="top">&nbsp;</td>
             <td valign="top"><a href="constants.php">YDFramework2 constants</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=constants.php">constants.php</a>
@@ -619,6 +619,14 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=ajax.php">ajax.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=ajax.tpl">ajax.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="encryption.php">Encryption and decryption</a></td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=encryption.php">encryption.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=encryption.tpl">encryption.tpl</a>
             </td>
         </tr>
         </table>
