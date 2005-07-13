@@ -15,18 +15,7 @@
 
         <para>The name of the session variable which is used can be configured during the instantiation of the YDCart class. The default name for the session variable is "YDCart". This is demonstrated with the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Include the YDCart module
-    YDInclude( 'YDCart.php' );
-
-    // Create a new cart with the default session variable
-    $cart = new YDCart();
-
-    // Create a new cart with a custom session variable
-    $cart = new YDCart( 'MyCustomCartName' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydcart_001.xml" />
 
         <note>If you want to use different YDCart objects in the same application that should each get their proper contents, you need to give each one an individual name or their contents will mixed.</note>
 
@@ -50,7 +39,7 @@
 
     <sect1 id="ydcart_alter">
 
-        <title>Alterning the contents of the cart</title>
+        <title>Altering the contents of the cart</title>
 
         <para>To change the content of the cart, we can use the following methods:</para>
 
