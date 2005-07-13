@@ -83,7 +83,7 @@
 
     <sect1 id="installing_user_rights">
 
-        <title>Assigning rights to the <literal>YDFramework2</literal> directory</title>
+        <title>Assigning rights to the <literal>YDFramework2/temp</literal> directory</title>
 
         <para>Since the framework needs to be able to write temporary data into it's temp directory, we need to change the rights for this folder. On Windows, you normally don't need to change this. On a unix or linux based system, you can issue the following command in a shell to do this:</para>
 
