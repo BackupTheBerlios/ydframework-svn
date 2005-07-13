@@ -111,12 +111,13 @@
          *  This function returns an instance of a YDDatabaseObject class.
          *
          *  @param $class  (optional) The class name.
+         *  @param $params (optional) The params to use when instantiating the instance.
          *
          *  @returns    An instance of a YDDatabaseObject class.
          *
          *  @static
          */
-        function getInstance( $class='' ) {
+        function getInstance( $class='', $params=false ) {
 
             $path     = YDConfig::get( 'YD_DBOBJECT_PATH' ) . YD_DIRDELIM;
             $ext      = YDConfig::get( 'YD_DBOBJECT_EXT' );
@@ -134,7 +135,11 @@
                 YDInclude( $path );
             }
 
-            $obj = new $class();
+            if ( $params !== false ) { 
+                $obj = new $class($params); 
+            } else { 
+                $obj = new $class(); 
+            } 
             
             if ( ! $obj->_fields || ! $obj->_table || ! $obj->_db ) {
                 trigger_error(  'The "' . $class . '" class is not correctly configured.', YD_ERROR );
