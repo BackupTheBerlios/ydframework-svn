@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydencryption">
+
+    <title>Using YDEncryption to encrypt and decrypt data</title>
+
+    <para>The YDEncryption class allows you to easily encrypt and decrypt chunks of data.</para>
+
+    <para>To encrypt and decrypt data, you need two items. First of all, you need to encrypt the data using a password, second of all, you need to have the data in a string format. To decrypt, the requirements are the same, which means you need to have the password with which the data was encrypted, and you also need to have the encrypted data as a string.</para>
+
+    <para>The YDEncryption class only exposes two functions: YDEncryption::encrypt and YDEncryption::decrypt. The following example shows how you can encrypt a string and decrypt it again:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydencryption_001.xml" />
+
+    <para>You can also encrypt and decrypt complete objects, but to be able to do that, you need to serialize the object first. Serializing means that you convert the object into a string representation. After decrypting the object, to need to convert it again into a real object, which is done by unserializing the data. The following example shows you how this works:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydencryption_002.xml" />
+
+    <warning>All encrypted data is automatically encoded with a base64 encoding to make sure that it can be transferred to anywhere without corrupting the data. When you decrypt some encrypted data, it will first get decoded from base64 automatically for you.</warning>
+
+</chapter>
