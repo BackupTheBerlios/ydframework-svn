@@ -104,6 +104,7 @@
             // Assign the weblog details
             $this->tpl->assign( 'weblog_title',                YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
             $this->tpl->assign( 'weblog_description',          YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
+            $this->tpl->assign( 'weblog_dir',                  YDUrl::makeLinkAbsolute( '.' ) );
             $this->tpl->assign( 'weblog_link',                 YDUrl::makeLinkAbsolute( 'index.php' ) );
             $this->tpl->assign( 'weblog_link_rss',             YDUrl::makeLinkAbsolute( 'xml.php?do=rss' ) );
             $this->tpl->assign( 'weblog_link_atom',            YDUrl::makeLinkAbsolute( 'xml.php?do=atom' ) );
