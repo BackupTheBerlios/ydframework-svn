@@ -13,12 +13,7 @@
 
         <para>Let's have a look at a code example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    $timer = new YDTimer();
-    $elapsed = $timer->getElapsed();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtimer_001.xml" />
 
         <para>This $elapsed variable will now contain the time it took from the instantiation of YDTimer class till the function call to the getElapsed function.</para>
 
@@ -43,67 +38,11 @@
 
         <para>The following code example illustrates this:</para>
 
-        <programlisting><![CDATA[<?php
-
-// Instantiate the timer
-$timer = new YDTimer();
-
-// The original data
-$timer->addMarker( 'Reading file' );
-$file = new YDFSFile( 'bbcode.txt' );
-$data = $file->getContents();
-$timer->addMarker( 'Finished reading file' );
-
-// The converter
-$timer->addMarker( 'YDBBCode object' );
-$conv = new YDBBCode();
-
-// Show the converted data
-$timer->addMarker( 'Conversion to BBCode' );
-echo( '<pre>' . htmlentities( $data ) . '</pre>' );
-echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
-echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
-
-// Get the report
-$report = $timer->getReport();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtimer_002.xml" />
 
         <para>The report array will look as follows:</para>
 
-        <programlisting><![CDATA[array (
-  '-- Start' =>
-  array (
-    0 => 0,
-    1 => 0,
-    2 => '-- Start',
-  ),
-  'Reading file' => 
-  array (
-    0 => 0,
-    1 => 0,
-    2 => 'Reading file',
-  ),
-  'Finished reading file' =>
-  array (
-    0 => 0,
-    1 => 0,
-    2 => 'Finished reading file',
-  ),
-  'YDBBCode object' =>
-  array (
-    0 => 0,
-    1 => 0,
-    2 => 'YDBBCode object',
-  ),
-  'Conversion to BBCode' =>
-  array (
-    0 => 0,
-    1 => 0,
-    2 => 'Conversion to BBCode',
-  ),
-)
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtimer_003.xml" />
 
         <para>You can use the report variable to create a nice HTML representation of these values if you like.</para>
 
@@ -117,54 +56,11 @@ $report = $timer->getReport();
 
         <para>The following code shows you an example:</para>
 
-        <programlisting><![CDATA[<?php
-
-// The original data
-YDGlobalTimerMarker( 'Reading file' );
-$file = new YDFSFile( 'bbcode.txt' );
-$data = $file->getContents();
-YDGlobalTimerMarker( 'Finished reading file' );
-
-// The converter
-YDGlobalTimerMarker( 'YDBBCode object' );
-$conv = new YDBBCode();
-
-// Show the converted data
-YDGlobalTimerMarker( 'Conversion to BBCode' );
-echo( '<pre>' . htmlentities( $data ) . '</pre>' );
-echo( '<pre>' . htmlentities( $conv->toHtml( $data ) ) . '</pre>' );
-echo( '<p>' . $conv->toHtml( $data, true, false ) . '</p>' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtimer_004.xml" />
 
         <para>To view the results of this timer, you need to turn on debugging (as described in the previous chapter). The debug report will then look as follows:</para>
 
-        <programlisting><![CDATA[Yellow Duck Framework Debug Information
-
-Processing time(s):
-
-    Elapsed   Diff    Marker
-    0 m       0 ms    -- Start
-    29 ms     29 ms   Reading file
-    30 ms     1 ms    Finished reading file
-    30 ms     0 ms    YDBBCode object
-    30 ms     0 ms    Conversion to BBCode
-    41 ms     11 ms   -- Finish
-
-Total size include files: 76.3 KB
-
-Included files: 
-
-    26.5 KB   c:\ydf\YDFramework2\YDClasses\YDFileSystem.php
-    18.8 KB   c:\ydf\YDFramework2\YDClasses\YDUtil.php
-    9.5 KB    c:\ydf\YDFramework2\YDClasses\YDRequest.php
-    7.2 KB    c:\ydf\YDFramework2\YDF2_init.php
-    5.8 KB    c:\ydf\YDFramework2\YDClasses\YDExecutor.php
-    5.6 KB    c:\ydf\YDFramework2\YDClasses\YDBBCode.php
-    1.9 KB    c:\ydf\examples\timer.php
-    1.2 KB    c:\ydf\YDFramework2\YDF2_process.php
-
-Number of SQL queries: 0]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtimer_005.xml" />
 
     </sect1>
 
