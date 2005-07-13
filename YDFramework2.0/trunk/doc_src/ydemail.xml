@@ -43,19 +43,7 @@
 
         <para>The following sample demonstrates you how you can setup a YDEmail object, fill it and send it to the specified recipients.</para>
 
-        <programlisting><![CDATA[<?php
-
-    $eml = new YDEmail();
-    $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
-    $eml->addTo( 'pieter@yellowduck.be' );
-    $eml->setSubject( 'Hello from Pieter & Fiona!' );
-    $eml->setTxtBody( $body );
-    $eml->setHtmlBody( $body );
-    $eml->addAttachment( 'email1.tpl' );
-    $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
-    $eml->send();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydemail_001.xml" />
 
         <para>In this code sample, we first created a new instance of the YDEmail class to represent our email message.</para>
 
@@ -85,49 +73,11 @@
 
         <para>After you got the body of your email, you can assign this to the YDEmail class using the functions setTxtBody and setHtmlBody. The following example demonstrates this concept:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Parse the template for the email
-    $emlTpl = new YDTemplate();
-    $emlTpl->assign( 'email', $form->getValue( 'email' ) );
-    $body = $emlTpl->fetch( 'email1_template' );
-
-    // Send the email
-    $eml = new YDEmail();
-    $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
-    $eml->addTo( $form->exportValue( 'email' ) );
-    $eml->setSubject( 'Hello from Pieter & Fiona!' );
-    $eml->setTxtBody( $body );
-    $eml->setHtmlBody( $body );
-    $eml->addAttachment( 'email1.tpl' );
-    $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
-    $eml->send();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydemail_002.xml" />
 
         <para>The template for this email will look like:</para>
 
-        <programlisting><![CDATA[<html>
-
-<head>
-    <title>{$YD_FW_NAMEVERS}</title>
-</head>
-
-<body>
-
-    <p>Hello from Pieter & Fiona</p>
-
-    <p><img src="fsimage1.jpg" border="1" alt="Pieter & Fiona"
-    width="320" height="213"></p>
-
-    <p>This email was sent to 
-    <a href="mailto:{$email}">{$email}</a>.</p>
-
-    <p>{$YD_FW_NAMEVERS}</p>
-
-</body>
-
-</html>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydemail_003.xml" />
 
         <note>If you look carefully at the example above, you will see that we referenced the image in the template by it's name given when you added the file to the YDEmail object. This src attribute should only contain the name of the image, and not a local path. An internet url is supported as well.</note>
 

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: sending emails using the YDEmail class using a template</title>
+    <programlisting><![CDATA[<?php
+
+    // Parse the template for the email
+    $emlTpl = new YDTemplate();
+    $emlTpl->assign( 'email', $form->getValue( 'email' ) );
+    $body = $emlTpl->fetch( 'email1_template' );
+
+    // Send the email
+    $eml = new YDEmail();
+    $eml->setFrom( 'pieter@yellowduck.be', YD_FW_NAME );
+    $eml->addTo( $form->exportValue( 'email' ) );
+    $eml->setSubject( 'Hello from Pieter & Fiona!' );
+    $eml->setTxtBody( $body );
+    $eml->setHtmlBody( $body );
+    $eml->addAttachment( 'email1.tpl' );
+    $eml->addHtmlImage( 'fsimage1.jpg', 'image/jpeg' );
+    $eml->send();
+
+?>]]></programlisting>
+</example>

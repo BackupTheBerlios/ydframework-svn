@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the template code for our email</title>
+    <programlisting><![CDATA[<html>
+
+<head>
+    <title>{$YD_FW_NAMEVERS}</title>
+</head>
+
+<body>
+
+    <p>Hello from Pieter & Fiona</p>
+
+    <p><img src="fsimage1.jpg" border="1" alt="Pieter & Fiona"
+    width="320" height="213"></p>
+
+    <p>This email was sent to 
+    <a href="mailto:{$email}">{$email}</a>.</p>
+
+    <p>{$YD_FW_NAMEVERS}</p>
+
+</body>
+
+</html>]]></programlisting>
+</example>
