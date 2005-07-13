@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <example>
-    <title>Code listing: the global timers in the debug outu</title>
+    <title>Code listing: the global timers in the debug output</title>
     <programlisting><![CDATA[Yellow Duck Framework Debug Information
 
 Processing time(s):
