@@ -7,3 +7,5 @@ doxygen docs_api.dxy
 
 rem Open the API documentation
 start api\index.html
+
+pause
