@@ -26,6 +26,9 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
+    YDInclude( 'YDUtil.php' );
+
     /**
      *	This class houses all different path related functions.
      */
@@ -379,7 +382,6 @@
             if ( $format == 'timestamp' ) {
                 return filemtime( $this->getAbsolutePath() );
             }
-            YDInclude( 'YDUtil.php' ); 
             return YDStringUtil::formatDate( filemtime( $this->getAbsolutePath() ), $format, $locale ); 
         }
 
@@ -395,7 +397,6 @@
             if ( ! $formatted ) {
                 return filesize( $this->getAbsolutePath() );
             }
-            YDInclude( 'YDUtil.php' );
             return YDStringUtil::formatFilesize( filesize( $this->getAbsolutePath() ), $decimals );
         }
 
@@ -975,6 +976,36 @@
             }
             closedir( $dirHandle );
             return $total;
+        }
+
+        /**
+         *  Returns the total size of the directory.
+         *
+         *  @param  $recursive  (optional) Recurse into the subdirectories. Default is false.
+         *  @param  $formatted  (optional) If set to true, the filesize will be returned in a human readable format.
+         *  @param  $decimals   (optional) The number of decimals to use for formatting the filesize.
+         *
+         *  @returns    The total size of the directory.
+         */
+        function getSize( $recursive = false, $formatted = false, $decimals = 1 ) { 
+            $total = 0; 
+            $dirHandle = opendir( $this->getPath() );
+            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
+                if ( $file == '.' || $file == '..') {
+                    continue;
+                }
+                if ( is_file( $this->getPath() .'/'. $file ) ) {
+                    $total += filesize( $this->getPath() .'/'. $file );
+                } else if ( $recursive && is_dir( $this->getPath() .'/'. $file ) ) {
+                    $subdir = new YDFSDirectory( $this->getPath() .'/'. $file ); 
+                    $total += $subdir->getSize(true, false, $decimals); 
+                }
+            }
+            closedir( $dirHandle );
+            if ( ! $formatted ) {
+                return $total;
+            }
+            return YDStringUtil::formatFilesize( $total, $decimals );
         }
 
         /**
