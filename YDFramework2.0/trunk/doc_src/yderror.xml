@@ -29,29 +29,7 @@
 
         <para>If you want to change which errors are shown, you can add the following code after the inclusion of the YDF2_init.php file:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Turn off all error reporting
-    error_reporting(0);
-
-    // Report simple running errors
-    error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
-    // Reporting E_NOTICE can be good too (to report uninitialized 
-    // variables or catch variable name misspellings ...)
-    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-
-    // Report all errors except E_NOTICE
-    // This is the default value set in php.ini
-    error_reporting(E_ALL ^ E_NOTICE);
-
-    // Report all PHP errors (bitwise 63 may be used in PHP 3)
-    error_reporting(E_ALL);
-
-    // Same as error_reporting(E_ALL);
-    ini_set('error_reporting', E_ALL);
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_001.xml" />
 
         <para>More information about this can be found in the PHP manual:</para>
 
@@ -65,13 +43,7 @@
 
         <para>For raising errors in the Yellow Duck Framework, you should always use the trigger_error function. This function takes two arguments, being the error message and the type of error to raise. Here's an example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    trigger_error( 'Fatal error', YD_ERROR );
-    trigger_error( 'A warning', YD_WARNING );
-    trigger_error( 'A notice', YD_NOTICE );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_002.xml" />
 
     </sect1>
 
@@ -81,15 +53,7 @@
 
         <para>When a fatal error occurs and debugging is turned on, a stack trace is printed as well. This will looks as follows:</para>
 
-        <programlisting><![CDATA[Debug backtrace:
-    @ YDFSFile.php:30 -- trigger_error(...)
-    @ fsimage.php:44 -- ydfsfile->ydfsfile(...)
-    @ fsimage.php -- fsimage->actiondefault()
-    @ YDRequest.php:229 -- call_user_func(...)
-    @ YDExecutor.php:81 -- fsimage->process()
-    @ YDF2_process.php:19 -- ydexecutor->execute()
-    @ fsimage.php:69 -- require_once(...)
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_003.xml" />
 
         <para>You can also print a stack trace yourself by simple calling the YDStackTrace function.</para>
 
