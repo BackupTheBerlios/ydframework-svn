@@ -61,8 +61,8 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="45%">{t w="name"}</th>
-            <th class="adminRowR" width="25%">{t w="number_of_items"}</th>
-            <th class="adminRowR" width="30%">{t w="actions"}</th>
+            <th class="adminRowR" width="20%">{t w="number_of_items"}</th>
+            <th class="adminRowR" width="35%">{t w="actions"}</th>
         </tr>
         {$browsebar}
         {foreach from=$categories->set item="category"}
@@ -70,6 +70,7 @@
                 <td class="adminRowL">{$category.title}</td>
                 <td class="adminRowR">{$category.num_items}</td>
                 <td class="adminRowR">
+                    <a href="../category.php?&id={$category.id}" target="_blank">{t w="view"}</a>  |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$category.id}">{t w="edit"}</a> |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$category.id}"
                      onClick="return YDConfirmDelete( '{$category.title|addslashes}' );">{t w="delete"}</a>

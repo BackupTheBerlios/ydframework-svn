@@ -20,6 +20,7 @@ $GLOBALS['t']['at'] = 'at';
 $GLOBALS['t']['title'] = 'Title';
 $GLOBALS['t']['install_warning'] = 'You need to remove the install.php and install.tpl files for security reasons!';
 $GLOBALS['t']['home'] = 'Home';
+$GLOBALS['t']['view'] = 'view';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';

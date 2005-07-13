@@ -62,6 +62,8 @@
                 <td class="adminRowL">{$item.user_name}</td>
                 <td class="adminRowL">{$item.title}</td>
                 <td class="adminRowR">
+                    <a href="../item.php?&id={$item.id}" target="_blank">{t w="view"}</a>
+                    |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{t w="edit"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}"

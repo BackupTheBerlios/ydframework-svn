@@ -20,6 +20,7 @@ $GLOBALS['t']['at'] = 'op';
 $GLOBALS['t']['title'] = 'Titel';
 $GLOBALS['t']['install_warning'] = 'Je moet de install.php en install.tpl bestanden verwijderen voor veiligheidsredenen!';
 $GLOBALS['t']['home'] = 'Home';
+$GLOBALS['t']['view'] = 'toon';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';

@@ -51,8 +51,8 @@
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
             <th class="adminRowL" width="15%">{t w="name"}</th>
-            <th class="adminRowL" width="35%">{t w="title"}</th>
-            <th class="adminRowR" width="13%">{t w="actions"}</th>
+            <th class="adminRowL" width="30%">{t w="title"}</th>
+            <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
         {foreach from=$pages->set item="page"}
             <tr>
@@ -60,6 +60,8 @@
                 <td class="adminRowL">{$page.user_name}</td>
                 <td class="adminRowL">{$page.title}</td>
                 <td class="adminRowR">
+                    <a href="../page.php?&id={$page.id}" target="_blank">{t w="view"}</a>
+                    |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$page.id}">{t w="edit"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$page.id}"

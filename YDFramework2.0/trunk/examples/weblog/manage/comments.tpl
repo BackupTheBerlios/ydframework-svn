@@ -52,8 +52,8 @@
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
             <th class="adminRowL" width="15%">{t w="name"}</th>
-            <th class="adminRowL" width="35%">{t w="parent"}</th>
-            <th class="adminRowR" width="13%">{t w="actions"}</th>
+            <th class="adminRowL" width="30%">{t w="parent"}</th>
+            <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
         {$browsebar}
         {foreach from=$comments->set item="comment"}
@@ -62,6 +62,8 @@
                 <td class="adminRowL">{$comment.username}</td>
                 <td class="adminRowL">{$comment.comment|bbcode|strip_tags|truncate}</td>
                 <td class="adminRowR">
+                    <a href="../item.php?&id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
+                    |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
