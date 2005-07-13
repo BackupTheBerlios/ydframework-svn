@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDFSFile class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $file = new YDFSFile( __FILE__ );
+
+    // Dump the object
+    echo( '<br>Basename: ' . $file->getBasename() );
+    echo( '<br>Extension: ' . $file->getExtension() );
+    echo( '<br>Path: ' . $file->getPath() );
+    echo( '<br>LastModified: ' . $file->getLastModified() );
+    echo( '<br>File size: ' . $file->getSize() );
+
+    // Contents
+    YDDebugUtil::dump(
+        $file->getContents(), '$file->getContents()'
+    );
+
+    // Contents
+    YDDebugUtil::dump(
+        $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )'
+    );
+
+    // Try to instantiate an object for a non existing file
+    $file = new YDFSFile( 'nofile.php' );
+
+?>]]></programlisting>
+
+</example>

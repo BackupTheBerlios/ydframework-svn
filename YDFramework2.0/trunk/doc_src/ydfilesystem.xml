@@ -33,35 +33,7 @@
 
         <para>The following sample gives you an overview of some of the possibilities of the YDFSFile class:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Get the file object for the current file
-    $file = new YDFSFile( __FILE__ );
-
-    // Dump the object
-    echo( '<br>Basename: ' . $file->getBasename() );
-    echo( '<br>Extension: ' . $file->getExtension() );
-    echo( '<br>Path: ' . $file->getPath() );
-    echo( '<br>LastModified: ' . $file->getLastModified() );
-    echo( '<br>File size: ' . $file->getSize() );
-
-    // Contents
-    YDDebugUtil::dump(
-        $file->getContents(), '$file->getContents()'
-    );
-
-    // Contents
-    YDDebugUtil::dump(
-        $file->getContents( 2, 3 ), '$file->getContents( 2, 3 )'
-    );
-
-    // Try to instantiate an object for a non existing file
-    $file = new YDFSFile( 'nofile.php' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_001.xml" />
 
         <para>To alter the contents of an existing file, you can use the setContents function. With this function, you can:</para>
 
@@ -72,38 +44,11 @@
 
         <para>The parameter called "append" in the setContents function calls indicates if you want to append or replace the contents. This is demonstrated with the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Create a dummy file
-    $dir = new YDFSDirectory( '.' );
-    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
-
-    // Update the contents
-    $file->setContents( 'new contents' );
-
-    // Append the contents
-    $file->setContents( '\nappended contents', true );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_002.xml" />
 
         <para>The file associated with a YDFSFile object can also be deleted by calling it's "delete" function. This is demonstrated by the following code sample:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Create a dummy file
-    $dir = new YDFSDirectory( '.' );
-    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
-
-    // Delete the file
-    $file->delete();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_003.xml" />
 
     </sect1>
 
@@ -123,29 +68,7 @@
 
         <para>The following code sample gives you an example of getting the properties of an image:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Get the file object for the current file
-    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
-
-    // Dump the object
-    YDDebugUtil::dump( $img, __FILE__ );
-
-    // Dump the object
-    echo( '<br>Basename: ' . $img->getBasename() );
-    echo( '<br>Extension: ' . $img->getExtension() );
-    echo( '<br>Path: ' . $img->getPath() );
-    echo( '<br>LastModified: ' . $img->getLastModified() );
-    echo( '<br>File size: ' . $img->getSize() );
-    echo( '<br>Width: ' . $img->getWidth() );
-    echo( '<br>Height: ' . $img->getHeight() );
-    echo( '<br>Image type: ' . $img->getImageType() );
-    echo( '<br>MIME type: ' . $img->getMimeType() );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_004.xml" />
 
         <para>One of the most common things people creating web applications do with images is creating thumbnails. Creating thumbnails looks easy, but it can quickly get difficult. To help you with this, the Yellow Duck Framework has some built-in functions that take care of all the difficult work you normally have to perform to create thumbnails. Additionally, the Yellow Duck Framework allows you to create thumbnails from a GIF image, which the standard GD library included with PHP is not capable of.</para>
 
@@ -158,39 +81,11 @@
 
         <para>For each of these two functions, you can specify a width and a height. This width and height specify the maximum size of the thumbnail. Also keep in mind that all scaling is done proportionally. Here's a code example that demonstrates this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Get the file object for the current file
-    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
-
-    // Create a thumbnail and save it to fsimage.thumb.jpg
-    $img->saveThumbnail( 150, 110, 'fsimage.thumb.jpg' );
-
-    //  Create a thumbnail and output it directly to the webbrowser
-    $img->outputThumbnail( 150, 110 );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_005.xml" />
 
         <para>As creating thumbnails is quite a heavy task for the webserver and PHP (imagine 100 clients requesting the same thumbnail at the same time), the thumbnails are cached by default to increase performance. Caching is only happening of course with the outputThumbnail function and can be disabled by changing the way you call the outputThumbnail function. Here's an example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Get the file object for the current file
-    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
-
-    //  Create a thumbnail and output it with caching
-    $img->outputThumbnail( 150, 110, true );
-
-    //  Create a thumbnail and output it without caching
-    $img->outputThumbnail( 150, 110, false );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_006.xml" />
 
         <para>The image cache files are stored in the temp directory which is put in the YDFramework2 directory.</para>
 
@@ -220,34 +115,7 @@
 
         <para>In addition, there is a function called getContents that is able to return the contents of a directory as YDFS* objects. As it's argument, it takes a file pattern which is the same type of pattern you use in the shell (such as bash, terminal or the command prompt). Depending on the file type of each individual file, it will return a YDFSFile, YDFSImage or YDFSDirectory object. Here's an example illustrating this:</para>
 
-        <programlisting><![CDATA[<?php
-
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDUtil.php' );
-
-    // Get the directory object for the current directory
-    $dir = new YDFSDirectory( dirname( __FILE__ ) );
-
-    // Dump the object
-    YDDebugUtil::dump( $dir, dirname( __FILE__ ) );
-
-    // All files in the directory
-    YDDebugUtil::dump( $dir->getContents() );
-
-    // TPL files in the directory
-    YDDebugUtil::dump( $dir->getContents( '*.tpl' ) );
-
-    // JPG and txt files in the directory
-    YDDebugUtil::dump(
-        $dir->getContents( array( '*.jpg', '*.txt' ) )
-    )
-
-    // JPG and txt files in the directory and subdirectories
-    YDDebugUtil::dump(
-        $dir->getFilesRecursively( array( '*.jpg', '*.txt' ) )
-    )
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_007.xml" />
 
     </sect1>
 

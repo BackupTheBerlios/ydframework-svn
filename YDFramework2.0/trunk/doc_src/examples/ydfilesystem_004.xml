@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDFSImage class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+
+    // Dump the object
+    YDDebugUtil::dump( $img, __FILE__ );
+
+    // Dump the object
+    echo( '<br>Basename: ' . $img->getBasename() );
+    echo( '<br>Extension: ' . $img->getExtension() );
+    echo( '<br>Path: ' . $img->getPath() );
+    echo( '<br>LastModified: ' . $img->getLastModified() );
+    echo( '<br>File size: ' . $img->getSize() );
+    echo( '<br>Width: ' . $img->getWidth() );
+    echo( '<br>Height: ' . $img->getHeight() );
+    echo( '<br>Image type: ' . $img->getImageType() );
+    echo( '<br>MIME type: ' . $img->getMimeType() );
+
+?>]]></programlisting>
+
+</example>
