@@ -1319,7 +1319,7 @@
          *	This function will create a new subdirectory in the given directory.
          *
          *	@param $directory	Directory to create.
-         *	@param $mode		(optional) The mode for the directory. By default, this is 0777.
+         *	@param $mode		(optional) The mode for the directory. By default, this is 0700.
          *
          *	@returns	False on failure, otherwise, it will return a YDFSDirectory object for the new directory.
          */
