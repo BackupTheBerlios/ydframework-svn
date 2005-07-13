@@ -92,40 +92,26 @@
             $this->sortfield = null;
             $this->sortdirection = null;
 
+            // The complete list of all records
+            $this->records = $records;
+
             // Sort the records
             if ( ! empty( $_GET[$sortvar] ) ) {
 
                 // Set the sortfield and direction
                 $this->sortfield = $_GET[$sortvar];
 
-                // Get the list of array indexes with the right column
-                $sort_array = array();
-                foreach ( $records as $key=>$record ) {
-                    if ( ! isset( $record[$_GET[$this->sortvar]] ) ) {
-                        $record[$_GET[$this->sortvar]] = '';
-                    }
-                    $sort_array[ $key ] = $record[$_GET[$this->sortvar]];
-                }
-
                 // Get the sort direction
                 if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
                     $this->sortdirection = 'DESC';
-                    arsort( $sort_array );
+                    //arsort( $sort_array );
                 } else {
                     $this->sortdirection = 'ASC';
-                    asort( $sort_array );
+                    //asort( $sort_array );
                 }
 
-                // Create a new records object
-                $records_new = array();
-                foreach ( $sort_array as $key=>$val ) {
-                    array_push( $records_new, $records[$key] );
-                }
-
-                // Repopulate the records variable
-                $records = $records_new;
-                unset( $records_new );
-                unset( $sort_array );
+                // Perform the sorting
+                $this->records = $this->sort( $this->sortfield, $this->sortdirection );
 
             }
 
@@ -137,14 +123,14 @@
             $this->page = ( $page >= 1 ) ? $page : 1;
             $page = ( $page >= 1 ) ? $page : -1;
             if ( $page == -1 ) {
-                $this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $records );
+                $this->pagesize = ( $pagesize >= 1 ) ? $pagesize : sizeof( $this->records );
             } else {
                 $this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
             }
 
             // Get the number of pages
-            $this->totalPages = ceil( sizeof( $records ) / ( float ) $this->pagesize );
-            $this->totalRows = sizeof( $records );
+            $this->totalPages = ceil( sizeof( $this->records ) / ( float ) $this->pagesize );
+            $this->totalRows = sizeof( $this->records );
 
             // Set the number of pages correctly to zero for an empty recordset
             if ( $this->totalPages == 0 ) {
@@ -160,7 +146,7 @@
             $this->offset = $this->pagesize * ( $this->page - 1 );
 
             // Get the subset of the records we need
-            $this->set = array_slice( $records, $this->offset, $this->pagesize );
+            $this->set = array_slice( $this->records, $this->offset, $this->pagesize );
 
             // Get the total number of rows on a page
             $this->totalRowsOnPage = sizeof( $this->set );
@@ -176,11 +162,47 @@
             // Add the list of pages as an array
             $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
 
-            // Remove the original set of records, as we don't need them anymore
-            unset( $records );
-
             // Publish the URL as an object
             $this->url = new YDUrl( YD_SELF_URI );
+
+        }
+
+        /**
+         *  This function will sort the data given the name of the field to sort on and the sort direction.
+         *
+         *  @param  $sortfld    The field to sort on.
+         *  @param  $sortdir    (optional) The sort direction. The default is ASC.
+         */
+        function sort( $sortfld, $sortdir='ASC' ) {
+
+            // Set the new class variables
+            $this->sortfield = $sortfld;
+            $this->sortdirection = strtoupper( $sortdir ) == 'ASC' ? 'ASC' : 'DESC';
+
+            // Get the list of array indexes with the right column
+            $sort_array = array();
+            foreach ( $this->records as $key=>$record ) {
+                if ( ! isset( $record[$this->sortfield] ) ) {
+                    $record[$this->sortfield] = '';
+                }
+                $sort_array[ $key ] = $record[$this->sortfield];
+            }
+
+            // Do the sorting
+            if ( strtoupper( $this->sortdirection ) == 'DESC' ) {
+                arsort( $sort_array );
+            } else {
+                asort( $sort_array );
+            }
+
+            // Reconstruct the records array
+            $records_new = array();
+            foreach ( $sort_array as $key=>$val ) {
+                array_push( $records_new, $this->records[$key] );
+            }
+
+            // Return the new recordset
+            return $records_new;
 
         }
 
