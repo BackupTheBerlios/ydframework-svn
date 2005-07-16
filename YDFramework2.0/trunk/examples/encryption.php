@@ -22,22 +22,22 @@
             YDDebugUtil::dump( $this, 'Original object before encryption' );
 
             // Get the serialized version of ourselves
-            $data = $this->serialize();
-            YDDebugUtil::dump( $data, 'Input data' );
+            //$data = $this->serialize();
+            YDDebugUtil::dump( $this, 'Input data' );
 
             // Show the password we are using
             YDDebugUtil::dump( YD_SELF_SCRIPT, 'Encryption password' );
 
             // Encrypt the data
-            $data_encrypted = YDEncryption::encrypt( YD_SELF_SCRIPT, $data );
+            $data_encrypted = YDEncryption::encrypt( YD_SELF_SCRIPT, $this );
             YDDebugUtil::dump( $data_encrypted, 'Encrypted data' );
 
             // Decrypt the data
             $data_decrypted = YDEncryption::decrypt( YD_SELF_SCRIPT, $data_encrypted );
-            YDDebugUtil::dump( $data_decrypted, 'Decrypted data' );
+            //YDDebugUtil::dump( $data_decrypted, 'Decrypted data' );
 
             // Show the decrypted object
-            YDDebugUtil::dump( unserialize( $data_decrypted ), 'Original object after decryption' );
+            YDDebugUtil::dump( $data_decrypted, 'Original object after decryption' );
 
         }
 
