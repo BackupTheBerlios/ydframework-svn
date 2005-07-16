@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering the keys and fields</title>
+    <programlisting><![CDATA[<?php
+
+    // Register a field
+    $this->registerField( 'admin' );
+
+    // The second parameter defines that the field can be null. Default: false.
+    $this->registerField( 'email', true );
+
+    // Register a key
+    // The second parameter defines that the key is auto-increment
+    $this->registerKey( 'id', true );
+
+    // Register a key that is not auto-increment
+    $this->registerKey( 'birthday' );
+
+?>]]></programlisting>
+</example>

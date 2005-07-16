@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: instantiating the classes directly</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the user class
+    include_once "user.php";
+
+    // Create a new user class
+    $user = new user();
+
+?>]]></programlisting>
+</example>

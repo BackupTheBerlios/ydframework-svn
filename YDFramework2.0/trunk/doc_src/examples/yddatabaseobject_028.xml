@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: adding form input to YDDatabaseObject</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Create a new form object
+    $form = new YDForm();
+
+    // The user inputs some data
+    // ...
+
+    // Using setValues to add all values to the user object
+    $user->setValues( $form->getValues() );
+
+    // Or even raw values
+    $user->setValues( $form->getRawValues() );
+
+?>]]></programlisting>
+</example>

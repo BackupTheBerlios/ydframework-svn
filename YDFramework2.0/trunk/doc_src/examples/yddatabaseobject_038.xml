@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the resetQuery method</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->country = 'Spain'
+
+    // If you call find() it will add all user fields to the SELECT
+    // e.g. id, name, email, etc
+
+    // Calling resetQuery you can define what fields or selects to add to the query
+    $user->resetQuery();
+
+    // Adding the name and email field
+    $user->addSelect( 'name', 'email' );
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+?>]]></programlisting>
+</example>

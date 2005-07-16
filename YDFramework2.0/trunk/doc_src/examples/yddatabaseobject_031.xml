@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the query that is executed in the background</title>
+    <programlisting><![CDATA[SELECT YEAR( users.birthday ) AS birth_year FROM users WHERE id > 100 AND name LIKE 'a%'
+GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 20 OFFSET 0]]></programlisting>
+</example>

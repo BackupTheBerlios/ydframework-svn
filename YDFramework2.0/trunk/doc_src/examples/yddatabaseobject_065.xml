@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting multiple relations results in a single query</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Assume the phone and group relations are registered
+
+    // Add a search criteria
+    $user->id = 123;
+
+    // Search phone and group relations in a single query
+    // If only phone and group relations are defined,
+    // you can use the findAllRelations method instead of
+    // findRelation with multiple relations
+    $user->find( 'phone', 'group' );
+
+    // Fetch the results
+    while ( $user->fetch() ) {
+
+        // Get the results from any object
+        $user_name    = $user->name;
+        $phone_number = $user->phone->number;
+        $group_name   = $user->group->name;
+
+    }
+
+?>]]></programlisting>
+</example>

@@ -13,111 +13,39 @@
 
     <para>Let's start with an example:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set the user id
-    $user->id = 123;
-
-    // Find the user with that id
-    $user->find();
-
-    // Add all user information to an array
-    $array = $user->getValues();
-
-    // Print this information
-    print_r( $array );
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_001.xml" />
 
     <para>In the above example, this query would be perfomed:</para>
 
-    <programlisting><![CDATA[SELECT * FROM users WHERE id = 123]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_002.xml" />
 
     <para>The result depends on what was defined in the user class but could be something like this:</para>
 
-    <programlisting><![CDATA[array(
-
-    'id' => 123,
-    'name' => 'John',
-    'email' => 'john@host.com'
-
-    );]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_003.xml" />
 
     <para>Other basic operations can be executed by the class, like updates, deletes and inserts. For example:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set the user data
-    $user->id    = 123;
-    $user->name  = 'John Foe';
-    $user->email = 'john@anotherhost.com';
-
-    // Update the user data based on the object values and return the number
-    // of rows affected by the update
-    $rows = $user->update();
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_004.xml" />
 
     <para>In the above example, this query would be perfomed:</para>
 
-    <programlisting><![CDATA[UPDATE users SET name='John Foe', email='john@anotherhost.com' WHERE id = 123]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_005.xml" />
 
     <para>Let's take a look at an insert operation:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set the user data
-    $user->name  = 'Bill';
-    $user->email = 'bill@host.com';
-
-    // Insert the user data and return the auto-increment primary key (id)
-    $id = $user->insert();
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_006.xml" />
 
     <para>In the above example, this query would be perfomed:</para>
 
-    <programlisting><![CDATA[INSERT INTO users ( name, email ) VALUES ( 'Bill', 'bill@host.com' )]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_007.xml" />
 
     <para>Simple delete statements can be executed too:</para>
 
-    <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set the user data
-    $user->id  = 123;
-
-    // Delete the user based on the object values
-    $result = $user->delete();
-
-?>]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_008.xml" />
 
     <para>In the above example, this query would be perfomed:</para>
 
-    <programlisting><![CDATA[DELETE FROM users WHERE id = 123]]></programlisting>
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_009.xml" />
 
     <para>The class can handle relations between multiple tables, but this part will be explained in the relations section.</para>
 
@@ -126,76 +54,9 @@
         <title>The SQL schema for the examples</title>
 
         <para>All the examples in this section of the guide refer to the following SQL schema:</para>
-        
-        <programlisting><![CDATA[
-users                 users_groups              groups                phones
--------------------   -----------------------   -------------------   -------------------
-id                    user_id                   id                    user_id
-name                  group_id                  name                  number
-email                 active                    active                ord
-country               joined
-birthday
-admin
 
--- 
--- Table structure for table `users`
--- 
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_010.xml" />
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
-  `country` varchar(255) NOT NULL default '',
-  `admin` tinyint(1) NOT NULL default '0',
-  `birthday` int(8) default NULL,
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `users_groups`
--- 
-
-DROP TABLE IF EXISTS `users_groups`;
-CREATE TABLE `users_groups` (
-  `user_id` int(11) NOT NULL default '0',
-  `group_id` int(11) NOT NULL default '0',
-  `joined` int(8) default NULL,
-  `active` tinyint(1) NOT NULL default '0'
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `groups`
--- 
-
-DROP TABLE IF EXISTS `groups`;
-CREATE TABLE `groups` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `active` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`)
-) TYPE=MyISAM;
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `phones`
--- 
-
-DROP TABLE IF EXISTS `phones`;
-CREATE TABLE `phones` (
-  `user_id` int(11) NOT NULL default '0',
-  `number` varchar(30) NOT NULL default '',
-  `ord` int(3) NOT NULL default '0'
-) TYPE=MyISAM;
-
-
-]]></programlisting>
-        
     </sect1>
 
     <sect1 id="yddatabaseobject_build">
@@ -219,59 +80,7 @@ CREATE TABLE `phones` (
 
         <para>An example for the user class:</para>
 
-        <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // Initializes the parent class
-            $this->YDDatabaseObject();
-
-            // Register the database connection
-            $this->registerDatabase(
-                YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
-            );
-
-            // Register the table name
-            $this->registerTable( 'users' );
-
-            // Register the keys
-            // The second argument defines id as an auto-increment field
-            $this->registerKey( 'id', true );
-
-            // Register the fields
-            $this->registerField( 'name' );
-            $this->registerField( 'email' );
-            $this->registerField( 'country' );
-            $this->registerField( 'birthday' );
-            $this->registerField( 'admin' );
-
-            // Register select expressions
-            $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
-
-            // Register protected fields
-            $this->registerProtected( 'admin', 0 );
-
-            // Register relations
-            $this->registerRelation( 'phone' );
-            
-            // Register callbacks
-            $this->registerCallback( 'debug', 'find', true );
-
-        }
-        
-        // A registered callback method
-        function debug( $action, $before ) {
-        
-            YDDebugUtil::debug( 'This was generated by the callback "debug" ' .
-                                ( $before ? 'before' : 'after' ) .  ' action "' .
-                                $action . '" was executed.' );
-        
-        }
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_011.xml" />
 
         <para>As you can see, all the properties are defined at the class constructor.</para>
 
@@ -281,14 +90,7 @@ CREATE TABLE `phones` (
 
             <para>The registerDatabase method defines the YDDatabase instance.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register the database connection
-    $this->registerDatabase(
-        YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
-    );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_012.xml" />
 
         </sect2>
 
@@ -298,12 +100,7 @@ CREATE TABLE `phones` (
 
             <para>The registerTable method defines the table name that can be retrieved with the getTable method.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register the table name 'users'
-    $this->registerTable( 'users' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_013.xml" />
 
         </sect2>
 
@@ -318,22 +115,7 @@ CREATE TABLE `phones` (
                 <listitem><emphasis role="bold">registerKey:</emphasis> registers a key.</listitem>
             </itemizedlist>
 
-            <programlisting><![CDATA[<?php
-
-    // Register a field
-    $this->registerField( 'admin' );
-
-    // The second parameter defines that the field can be null. Default: false.
-    $this->registerField( 'email', true );
-
-    // Register a key
-    // The second parameter defines that the key is auto-increment
-    $this->registerKey( 'id', true );
-
-    // Register a key that is not auto-increment
-    $this->registerKey( 'birthday' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_014.xml" />
 
             <para>All these methods return a reference to the field object defined by the YDDatabaseObject_Field class that have some methods to configure the field:</para>
 
@@ -349,24 +131,7 @@ CREATE TABLE `phones` (
 
             <para>Some of these methods have unsetters such as unsetAutoIncrement, unsetDefault, unsetKey, unsetNull and unsetProtected.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register a field
-    $birthday = & $this->registerField( 'birthday' );
-
-    // Set the field as null
-    $birthday->setNull();
-
-    // Set the real column of the field
-    $birthday->setColumn( 'birthday' );
-
-    // Set the default value for the field
-    $birthday->setDefault( 19700101 );
-
-    // Set the callback method - this method has to be defined in the class
-    $birthday->setCallback( 'getAge' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_015.xml" />
 
         </sect2>
 
@@ -376,13 +141,7 @@ CREATE TABLE `phones` (
 
             <para>The registerSelect method defines temporary fields that are only set in SELECT statements. For example:</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register select statements
-    $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
-    $this->registerSelect( 'is_admin', 'IF( ' . $this->getTable() . '.admin=1, 1, 0 )' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_016.xml" />
 
             <para>The above example will add the following piece of SQL code when you execute a find:</para>
 
@@ -398,21 +157,7 @@ CREATE TABLE `phones` (
                 <listitem><emphasis role="bold">setCallback:</emphasis> sets a callback method to be called each time the value is retrieved.</listitem>
             </itemizedlist>
 
-            <programlisting><![CDATA[<?php
-
-    // Register a select
-    $birth_year = & $this->registerSelect( 'birthyear', 'YEAR( '.$this->getTable().'.birthday )' );
-
-    // Change the select name from 'birthyear' to 'birth_year'
-    $birth_year->setName( 'birth_year' );
-
-    // Set the expression
-    $birth_year->setExpression( 'YEAR( ' . $this->getTable() . '.birthday )' );
-
-    // Set the callback method - this method has to be defined in the class
-    $birth_year->setCallback( 'getAgeByYear' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_017.xml" />
 
         </sect2>
 
@@ -422,14 +167,7 @@ CREATE TABLE `phones` (
 
             <para>The registerProtected method defines fields that have protected values that can't be changed. These values will remain for all actions of the object (find, insert, update, etc).</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register protected fields
-    // The second parameter sets the protected value of the field
-    $this->registerProtected( 'admin', 1 );
-    $this->registerProtected( 'country', 'Brazil' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_018.xml" />
 
         </sect2>
 
@@ -439,20 +177,7 @@ CREATE TABLE `phones` (
 
             <para>The registerRelation method defines the relations of the object with other YDDatabaseObjects as you would define between tables. </para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register relations
-    $this->registerRelation( 'phone' );
-
-    // The second parameter sets the relation as a many-to-many relation
-    $this->registerRelation( 'group', true );
-
-    // In a many-to-many relation we need a middle table that cross-reference the other two tables
-    // The third parameter sets the foreign class name
-    // The fourth parameter sets the cross class name (the middle table)
-    $this->registerRelation( 'groups', true, 'group', 'user_group' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_019.xml" />
 
             <para>Check the relations section for more info about defining relations.</para>
 
@@ -464,19 +189,7 @@ CREATE TABLE `phones` (
 
             <para>The registerCallback method defines methods to be called before or after a default action is executed. These actions are: find, insert, update, delete, reset.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Register callback
-    $this->registerCallback( 'debug', 'insert' ); // after insert
-    $this->registerCallback( 'debug', 'delete' ); // after delete
-    $this->registerCallback( 'debug', 'delete', true ); // before delete
-    $this->registerCallback( 'debug', 'update', true ); // before update
-    
-    // Unregister callbacks
-    $this->unregisterCallback( 'debug' ); // unregister "debug" from all actions
-    $this->unregisterCallback( 'debug', 'insert' ); // unregister "debug" only from action "insert"
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_020.xml" />
 
         </sect2>
 
@@ -494,34 +207,7 @@ CREATE TABLE `phones` (
                 <listitem><emphasis role="bold">getRelation:</emphasis> returns a reference to the relation object.</listitem>
             </itemizedlist>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Getting the table name
-    $table_user = $user->getTable();
-
-    // Getting the database connection
-    $db = & $user->getDatabase();
-    $db->getRecords( 'SELECT * FROM ' . $table_user );
-
-    // Getting a field object
-    $country = & $user->getField( 'country' );
-    $country->setCallback( 'getContinent' );
-
-    // Getting a select object
-    $birth_year = & $user->getSelect( 'birth_year' );
-    $birth_year->setCallback( 'getYearFormatted' );
-
-    // Getting a relation object
-    $group = & $user->getRelation( 'groups' );
-    $group->setForeignClass( 'active_group' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_021.xml" />
 
         </sect2>
 
@@ -540,54 +226,15 @@ CREATE TABLE `phones` (
             <listitem><emphasis role="bold">YD_DBOBJECT_SUFIX:</emphasis> the class name sufix for all YDDatabaseObject classes. Default: (no sufix).</listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Set the path to the classes
-    YDConfig::set( 'YD_DBOBJECT_PATH', '/path/to/classes' );
-
-    // Set a prefix
-    YDConfig::set( 'YD_DBOBJECT_PREFIX', 'YDDBOBJ_' );
-
-    // Create a new user object using getInstance
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_022.xml" />
 
         <para>The classes names must start with the prefix and end with the sufix, but the filenames doesn't require them. For the above example the class name is YDDBOBJ_user but the filename is user.php.</para>
 
-        <programlisting><![CDATA[// file: user.php
-
-<?php
-
-    class YDDBOBJ_user extends YDDatabaseObject {
-
-        function YDDBOBJ_user() {
-
-            // Init the parent
-            $this->YDDatabaseObject();
-
-            // ...
-
-        }
-
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_023.xml" />
 
         <para>The second way of instantiating the class is to call it directly, but you must have the YDDatabaseObject class included before.</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Include the user class
-    include_once "user.php";
-
-    // Create a new user class
-    $user = new user();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_024.xml" />
 
     </sect1>
 
@@ -603,27 +250,7 @@ CREATE TABLE `phones` (
             <listitem>Using the setValues method</listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Setting directly
-    $user->id      = 123;
-    $user->country = 'Brazil';
-
-    // Using the set method
-    $user->set( 'id', 123 );
-    $user->set( 'country', 'Brazil' );
-
-    // Using the setValues method
-    $values = array(
-                'id' => 123,
-                'country' => 'Brazil'
-            );
-    $user->setValues( $values );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_025.xml" />
 
         <para>Using set and setValues, the callback methods for the fields will be called immediately.</para>
 
@@ -635,66 +262,15 @@ CREATE TABLE `phones` (
             <listitem>Using the getValues method</listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Setting directly
-    $user->id      = 123;
-    $user->country = 'Brazil';
-
-    // Getting directly
-    $id      = $user->id;
-    $country = $user->country;
-
-    // Using the get method
-    $id      = $user->get( 'id' );
-    $country = $user->get( 'country' );
-
-    // Using the getValues method
-    $values = $user->getValues();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_026.xml" />
 
         <para>With the getValues and setValues methods you can easily integrate YDDatabaseObject with other modules, like YDForm for example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Create a new form object
-    $form = new YDForm();
-
-    // Setting data
-    $user->id  = 123;
-
-    // Using the form setValues method to add all information of the user object
-    $form->setValues( $user->getValues() );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_027.xml" />
 
         <para>Adding form input to YDDatabaseObject:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Create a new form object
-    $form = new YDForm();
-
-    // The user inputs some data
-    // ...
-
-    // Using setValues to add all values to the user object
-    $user->setValues( $form->getValues() );
-
-    // Or even raw values
-    $user->setValues( $form->getRawValues() );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_028.xml" />
 
         <para>Please check the forms section of this User Guide to get more information on how form input data is handled.</para>
 
@@ -708,25 +284,9 @@ CREATE TABLE `phones` (
 
         <para>The difference between find and findSql is that find uses the object variables to build the query and findSql must have a SQL query passed as an argument. Both these methods will add their values to the object variables. We also have a executeSql method that calls the executeSql defined in YDDatabase and can execute any SQL query you want and return the number of affected rows.</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_029.xml" />
 
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set the user data
-    $user->id  = 123;
-
-    // Find rows with id=123
-    $rows = $user->find();
-
-    // This is the same as above
-    $rows = $user->findSql( "SELECT * FROM " . $user->getTable() . " WHERE id=123" );
-
-    // Using executeSql
-    $affected = $user->executeSql( "UPDATE " . $user->getTable() . " SET name = 'John'
-                                    WHERE id=123" );
-
-?>]]></programlisting>
+        <programlisting><![CDATA[]]></programlisting>
 
         <para>You can build more complex searches using the following optional methods:</para>
 
@@ -740,54 +300,14 @@ CREATE TABLE `phones` (
             <listitem><emphasis role="bold">offset:</emphasis> sets the OFFSET.</listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // This find will retrieve all rows of the table because it doesn't have a filter defined
-    $rows = $user->find();
-
-    // Reset all query items defined before
-    // By default, all registered fields and selects are automatically included
-    // to the SELECT clause. This call will delete such fields from the query
-    $user->resetQuery();
-
-    // Add WHERE statement
-    $user->where( $user->getTable() . ".id > 100", "AND" );
-    $user->where( $user->getTable() . ".name LIKE 'a%'", "AND" );
-
-    // Add a GROUP BY statement
-    // The second parameter defines if DESC is added to the item
-    $user->group( "id", false );
-
-    // Add a HAVING statement
-    $user->having( "birth_year > 1970" ); // consider "birth_year" = YEAR( users.birthday )
-                                             // registered select in the class
-
-    // Add an ORDER statement
-    $user->order( "name" );
-
-    // Add a registered select
-    $user->select( 'birth_year' );
-
-    // Set the limit
-    // 20 = max. number of rows
-    $user->limit( 20 );
-    
-    // Set the offset
-    // 0  = where to start from    
-    $user->offset( 0 );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_030.xml" />
 
         <para>The above example will generate the following SQL code:</para>
 
-        <programlisting><![CDATA[SELECT YEAR( users.birthday ) AS birth_year FROM users WHERE id > 100 AND name LIKE 'a%'
-GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 20 OFFSET 0]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_031.xml" />
 
         <para>A combination of object variables and these methods can be used.</para>
-        
+
         <para>By default, all table names and fields are escaped as reserved words although not displayed in the code above.</para>
 
     </sect1>
@@ -800,109 +320,23 @@ GROUP BY id HAVING birth_year > 1970 ORDER BY name LIMIT 20 OFFSET 0]]></program
 
         <para>The fetch method works like mysql_fetch_array, setting the object values with the current row values at each call of fetch. For example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->country = 'Spain';
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-    // Using the count method to retrieve the total
-    $rows = $user->count();
-
-    // Consider that the search have found 3 rows with users Pieter, David and Francisco
-    while ( $user->fetch() ) {
-        print_r( $user->getValues() );
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_032.xml" />
 
         <para>The above example may return the following:</para>
 
-        <programlisting><![CDATA[
-array(
-    'id' => 1,
-    'name' => 'Pieter',
-    'country' => 'Spain',
-    ...
-)
-array(
-    'id' => 2,
-    'name' => 'David',
-    'country' => 'Spain',
-    ...
-)
-array(
-    'id' => 3,
-    'name' => 'Francisco',
-    'country' => 'Spain',
-    ...
-)
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_033.xml" />
 
         <para>There is also a method called getResults that retrieves an array with all rows that were found by the last query.</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->country = 'Spain';
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-    // Consider that the search have found 3 rows with users Pieter, David and Francisco
-    $results = $user->getResults();
-
-    // Will produce a similar result as above
-    print_r( $results );
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_034.xml" />
         
         <para>There is also a method called getResultsAsAssocArray that retrieves a configurable associative array of the results.</para>
 
-        <programlisting><![CDATA[<?php
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_035.xml" />
 
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-    
-    // Set a criteria
-    $user->country = 'Spain';
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-    // Consider that the search have found 3 rows with users Pieter, David and Francisco
-    $results = $user->getResultsAsAssocArray( 'id', array( 'name', 'country' ) );
-
-    print_r( $results );
-
-?>]]></programlisting>
-        
         <para>The result:</para>
-        
-        <programlisting><![CDATA[
-array(
-    1 => array(
-        'name' => 'Pieter',
-        'country' => 'Spain'
-    ),
-    2 => array(
-        'name' => 'David',
-        'country' => 'Spain'
-    ),
-    3 => array(
-        'name' => 'Francisco',
-        'country' => 'Spain'
-    )
-)
-]]></programlisting>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_036.xml" />
 
         <para>There are a few methods to clear the object variables and it's configurations:</para>
 
@@ -916,52 +350,15 @@ array(
             <listitem><emphasis role="bold">resetAll:</emphasis> reset all data and configuration of the objects and of all relations.</listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->country = 'Spain'
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-    // Consider that the search have found 3 rows with users Pieter, David and Francisco
-
-    $user->resetResults(); // no more results
-    $user->resetCount();   // the last results count equals zero
-    $user->resetValues();  // delete all object variables
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_037.xml" />
 
         <para>An example of resetQuery:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->country = 'Spain'
-
-    // If you call find() it will add all user fields to the SELECT
-    // e.g. id, name, email, etc
-
-    // Calling resetQuery you can define what fields or selects to add to the query
-    $user->resetQuery();
-
-    // Adding the name and email field
-    $user->addSelect( 'name', 'email' );
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_038.xml" />
 
         <para>The above example will return this SQL query:</para>
 
-        <programlisting><![CDATA[SELECT name, email FROM users WHERE country='Spain']]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_039.xml" />
 
     </sect1>
 
@@ -971,55 +368,19 @@ array(
 
         <para>The update method uses the information in the object variables to build the statement for an UPDATE query.</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->id = 123;
-
-    // Search using the criteria defined
-    $rows = $user->find();
-
-    // Change the data
-    $user->name = 'John Fulano';
-    $user->email = 'johnfulano@host.com';
-
-    // Uses the keys to update the user info
-    $user->update();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_040.xml" />
 
         <para>In the above example the following SQL query is executed:</para>
 
-        <programlisting><![CDATA[UPDATE users SET name = 'John Fulano', email = 'johnfulano@host.com' WHERE id = 123]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_041.xml" />
 
         <para>If you have no keys defined in the class you should set a condition with the addWhere method. For protection, the YDDatabaseObject class has a default config that doesn't allow an UPDATE with no conditions to be executed. It can be unset using the YDConfig module for the YD_DBOBJECT_UPDATE config:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Add data
-    $user->name = 'John Fulano';
-    $user->email = 'johnfulano@host.com';
-
-    // Search with no criteria (id) - all rows of the table should be updated
-    $rows = $user->update(); // Returns an error by default
-
-    // You can set this configuration and execute the query to update all rows
-    YDConfig::set( 'YD_DBOBJECT_UPDATE', true );
-
-    // Updating all rows
-    $rows = $user->update();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_042.xml" />
 
         <para>In the above example the last update executes the following SQL query:</para>
 
-        <programlisting><![CDATA[UPDATE users SET name = 'John Fulano', email = 'johnfulano@host.com']]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_043.xml" />
 
         <para>With a combination of setValues and getValues it's easy to retrieve and update rows in the table integraded with other modules.</para>
 
@@ -1031,25 +392,11 @@ array(
 
         <para>The insert method uses the information in the object variables to build the statement for an INSERT query.</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Add data
-    $user->name    = 'John Fulano';
-    $user->email   = 'johnfulano@host.com';
-    $user->country = 'Brazil';
-
-    // Inserts only the defined variables in the object
-    $id = $user->insert();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_044.xml" />
 
         <para>In the above example the following SQL query is executed:</para>
 
-        <programlisting><![CDATA[INSERT INTO users ( name, email, country )
-VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_045.xml" />
 
         <para>If the class has a defined auto-increment field, the method returns the last increment value. If no auto-increment field is defined, it returns true on success or false otherwise.</para>
 
@@ -1063,44 +410,19 @@ VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
 
         <para>The delete method uses the information in the object variables to build the statement for an DELETE query.</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Set a criteria
-    $user->id = 123;
-
-    // Uses the keys to delete the row
-    $rows = $user->delete();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_046.xml" />
 
         <para>In the above example the following SQL query is executed:</para>
 
-        <programlisting><![CDATA[DELETE FROM users WHERE id = 123]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_047.xml" />
 
         <para>If you have no keys defined in the class you should set a condition with the addWhere method. For protection, the YDDatabaseObject class has a default config that doesn't allow a DELETE with no conditions to be executed. It can be unset using the YDConfig module for the YD_DBOBJECT_DELETE config:</para>
 
-        <programlisting><![CDATA[<?php
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // No criteria (id) - all rows of the table should be deleted
-    $rows = $user->delete(); // Returns a notice by default
-
-    // You can set this configuration and execute the query to update all rows
-    YDConfig::set( 'YD_DBOBJECT_DELETE', true );
-
-    // Deleting all rows
-    $rows = $user->delete();
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_048.xml" />
 
         <para>In the above example the last delete executes the following SQL query:</para>
 
-        <programlisting><![CDATA[DELETE FROM users]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_049.xml" />
 
     </sect1>
 
@@ -1122,43 +444,11 @@ VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
 
         <para>For example, if you have a one-to-many relationship between the users table and the phone table, you must define the following relation:</para>
 
-        <programlisting><![CDATA[// user class
-
-Local: user
-Foreign: phone
-
-// phone class
-
-Local: phone
-Foreign: user
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_050.xml" />
 
         <para>For a many-to-many relationship between the users table and the groups table that has a cross-reference table named users_groups, you must define the following relation:</para>
 
-        <programlisting><![CDATA[// user class
-
-Local: user
-Foreign: group
-Cross: user_group
-
-// group class
-
-Local: group
-Foreign: user
-Cross: user_group
-
-// user_group class
-// 1st relation (one-to-many)
-
-Local: user_group
-Foreign: user
-
-// user_group class
-// 2nd relation (one-to-many)
-
-Local: user_group
-Foreign: group
-]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_051.xml" />
 
         <para>For a relation to work, you don't have to define it at each class, but is recommended as you would want to retrieve it by different angles. For example: if you have a group and want to get all the users you could load the group class and get the users using the relation defined in there.</para>
 
@@ -1184,37 +474,7 @@ Foreign: group
 
                 </itemizedlist>
 
-                <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // All other configuration
-            // ...
-
-            // Registering a relation
-            $phone = & $this->registerRelation( 'phone' );
-
-            // Change the relation name
-            $phone->setName( 'phones' );
-
-            // Sets the where expression
-            $phone->setWhere( 'phone.user_id = users.id AND users.active=1' );
-
-            // Sets the group by expression
-            $phone->setGroup( 'phone.total_calls' );
-
-            // Sets the having expression
-            $phone->setHaving( 'phone.total_calls > 10' );
-
-            // Sets the order by expression
-            $phone->setOrder( 'users.name, phone.total_calls DESC' );
-
-        }
-    }
-
-?>]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_052.xml" />
 
                 <para>If the setWhere, setGroup, setHaving and setOrder methods are used, it's values are added to the values defined by the user during runtime, so the developer must pay attention for duplicated conditions and filters.</para>
 
@@ -1230,28 +490,7 @@ Foreign: group
                     <listitem><emphasis role="bold">setLocalKey (optional):</emphasis> the field name that is the relation key. If not defined, the defined keys in the class are used.</listitem>
                 </itemizedlist>
 
-                <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // All other configuration
-            // ...
-
-            // Registering a relation
-            $phone = & $this->registerRelation( 'phone' );
-
-            // Sets the local field
-            $phone->setLocalKey( 'id' );
-
-            // If "id" is a defined key of the class,
-            // you don't need to set it as local field
-            // as it would be considered automatically
-
-        }
-    }
-?>]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_053.xml" />
 
             </sect3>
 
@@ -1271,39 +510,7 @@ Foreign: group
                 
                 <para>There is a special method called getForeignTable that retrieves the foreign table name. It works by instantiating the foreign class and returning the result from getTable in that object. Notice that if you call this method before setting the correct foreign class name, you will get an error.</para>
 
-                <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // All other configuration
-            // ...
-
-            // Registering a relation
-            $phone = & $this->registerRelation( 'phone' );
-
-            // Sets the foreign class
-            // If not set, the class will try to call the phone class as it's the relation name
-            $phone->setForeignClass( 'phone' );
-
-            // Sets the foreign var
-            // If not set, the foreign class name is used
-            $phone->setForeignVar( 'phone' );
-
-            // Sets the foreign field
-            // The foreign class Fone must have a defined field called user_id.
-            $phone->setForeignKey( 'user_id' );
-
-            // Sets the foreign conditions
-            $phone->setForeignConditions( $phone->getForeignTable() . ".number != ''" );
-
-            // Sets the foreign join type
-            $phone->setForeignJoin( 'LEFT' );
-
-        }
-    }
-?>]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_054.xml" />
 
             </sect3>
 
@@ -1328,96 +535,15 @@ Foreign: group
 
                 <para>For a better understanding of the default naming of the classes, tables and keys:</para>
 
-                <programlisting><![CDATA[// Many-to-many relationship
-
-Local class: user
-Foreign class: group
-Cross class: user_group
-
-// Defined keys in the classes
-Local key: id
-Foreign key: id
-Cross keys: user_id, group_id
-
-// Table names defined in the classes
-
-Local table name: users
-Foreign table name: groups
-Cross table name: users_groups
-
-// Default naming in a registerRelation without any additional configuration
-
-// Local
-Class: user
-Field: id (defined key)
-
-// Foreign
-Class: group
-Field: id (defined key)
-
-// Cross
-Class: user_group (combination of Local and Foreign classes)
-Local Field: users_id (combination of Local table and Local Key)
-Foreign Field: groups_id (combination of Foreign table and Foreign Key)
-
-// Default relation between the tables
-
-users (user)          users_groups (user_group)   groups (group)
--------------------   -------------------------   -------------------
-id....................user_id
-                      group_id....................id
-name                  active                      name
-email                 joined                      active
-...                   ...                         ...
-
-]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_055.xml" />
 
                 <para>This is the default naming handled by YDDatabaseObject, but you can define any names you want and set them with the methods described before.</para>
 
-                <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // All other configuration
-            // ...
-
-            // Registering a many-to-many relation
-            $group = & $this->registerRelation( 'group' );
-
-            // Foreign class configuration
-            // ...
-
-            // Sets the cross class
-            $group->setCrossClass( 'user_group' );
-
-            // Sets the cross var
-            $group->setCrossVar( 'user_group' );
-
-            // Sets the cross foreign field
-            $group->setCrossLocalKey( 'user_id' );
-
-            // Sets the cross foreign field
-            $group->setCrossForeignKey( 'group_id' );
-
-            // Sets the cross conditions
-            $group->setCrossConditions( $this->getCrossTable() . '.active = 1' );
-
-            // Sets the cross join type
-            $group->setCrossJoin( 'LEFT' );
-
-        }
-    }
-?>]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_056.xml" />
 
                 <para>The registerRelation method can define a relation in a single call if you are using the default naming convention for YDDatabaseObject. Bellow is the definition of the registerRelation method:</para>
 
-                <programlisting><![CDATA[<?php
-
-    function & registerRelation( $name, $manytomany=false, $foreign_class='', $cross_class='' ) {
-
-?>]]></programlisting>
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_057.xml" />
 
                 <para>As you can see a relation can be defined setting only the relation name and if it is a many-to-many relation (default: false).</para>
 
@@ -1431,61 +557,17 @@ email                 joined                      active
 
             <para>A YDDatabaseObject class can have many relations defined, so the related classes are not included every time you instantiate the class. There is a method called load that includes the relation and adds a instantiated object to the relation variable (or variables if it is a many-to-many relationship).</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Load relation phone
-    $user->load( 'phone' );
-
-    // Now you can access the relation object
-    $user->phone->number = '5555-2222';
-    $phone_number = $user->phone->get( 'number' );
-
-    $user->phone->find(); // find phones with number = '5555-2222'
-    $phone_array  = $user->phone->getValues();
-
-    // Or even instantiate a new phone object
-    $phone = new phone();
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_058.xml" />
 
             <para>There is also a loadAll method that loads all relations defined in the class.</para>
 
             <para>After a search with a relation, the last relation name used is saved so you don't need to put it in the following actions with relations. For example:</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Load relation phone
-    // This relation is saved for the next actions
-    $user->load( 'phone' );
-
-    // Set a criteria
-    $user->id = 123;
-
-    // Search for phones that match the criteria
-    // In this case, the relation we are searching is the phone relation.
-    $user->find( 'phone' );
-
-    // Here we are searching the group relation
-    // This relation is saved for the next actions
-    $user->find( 'group' );
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_059.xml" />
 
             <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
 
-            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id ) WHERE users.id = 123]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_060.xml" />
 
         </sect2>
 
@@ -1495,34 +577,11 @@ email                 joined                      active
 
             <para>A search between the relations uses all values defined in the related objects variables like a simple search in a single object. The find method build the search query considering all the values defined in the related objects of the relation you are querying.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Load relation phone
-    $user->load( 'phone' );
-
-    // Add the search criteria
-    $user->id = 123;
-    $user->phone->ord = 1;
-
-    // Search using the criteria defined by the variables of the relation
-    $user->find( 'phone' );
-
-    // Getting the data returned
-    $user_name    = $user->name;
-    $phone_number = $user->phone->number;
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_061.xml" />
 
             <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
 
-            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id AND phone.ord = 1 )
-WHERE users.id = 123]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_062.xml" />
 
             <para>You can add more conditions and definitions to the query as you would do in a simple query using where, select, order, etc.</para>
 
@@ -1542,64 +601,11 @@ WHERE users.id = 123]]></programlisting>
                 <listitem><emphasis role="bold">getResults:</emphasis> return all the results of the related objects in a single array.</listitem>
             </itemizedlist>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Load relation phone
-    $user->load( 'phone' );
-
-    // Add a search criteria
-    $user->id = 123;
-
-    // Search using the criteria
-    $user->find( 'phone' );
-
-    // Fetch the results
-    while ( $user->fetch() ) {
-
-        // Display the values from both objects in a single array
-        print_r( $user->getValues() );
-
-    }
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_063.xml" />
 
             <para>The above example may execute the following SQL query and display the results bellow it:</para>
 
-            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id ) WHERE users.id = 123
-
-array(
-    'id' => '123',
-    'name' => 'John Fulano',
-    'email' => 'johnfulano@host.com',
-    ...
-    'phone_number' => '5555-2222',
-    'phone_ord' => 1,
-    ...
-)
-array(
-    'id' => '123',
-    'name' => 'John Fulano',
-    'email' => 'johnfulano@host.com',
-    ...
-    'phone_number' => '6666-3333',
-    'phone_ord' => 2,
-    ...
-)
-array(
-    'id' => '123',
-    'name' => 'John Fulano',
-    'email' => 'johnfulano@host.com',
-    ...
-    'phone_number' => '7777-4444',
-    'phone_ord' => 3,
-    ...
-)]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_064.xml" />
 
             <para>As you can see, the relation variable name is added as a prefix to the related field names so if you have equal field names in both classes, they will not get mixed. You can take this prefix off in getValues and getResults.</para>
 
@@ -1615,41 +621,11 @@ array(
 
             <para>It's possible to return multiple relations results using a single query. You can pass multiple relation names to the parameters of the find method or use the findAll method to join all defined relations in a single query.</para>
 
-            <programlisting><![CDATA[<?php
-
-    // Include the database object class
-    YDInclude( 'YDDatabaseObject.php' );
-
-    // Create a new user object
-    $user = YDDatabaseObject::getInstance( 'user' );
-
-    // Assume the phone and group relations are registered
-
-    // Add a search criteria
-    $user->id = 123;
-
-    // Search phone and group relations in a single query
-    // If only phone and group relations are defined,
-    // you can use the findAllRelations method instead of
-    // findRelation with multiple relations
-    $user->find( 'phone', 'group' );
-
-    // Fetch the results
-    while ( $user->fetch() ) {
-
-        // Get the results from any object
-        $user_name    = $user->name;
-        $phone_number = $user->phone->number;
-        $group_name   = $user->group->name;
-
-    }
-
-?>]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_065.xml" />
 
             <para>The above example will execute the following SQL query considering all relations are INNER joins:</para>
 
-            <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id )
-INNER JOIN groups ON ( users.id = groups.user_id ) WHERE users.id = 123]]></programlisting>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_066.xml" />
 
         </sect2>
 
@@ -1663,70 +639,7 @@ INNER JOIN groups ON ( users.id = groups.user_id ) WHERE users.id = 123]]></prog
 
         <para>As described before, you can also define callbacks to be executed when a field value is modified or when a certain action is executed. Field's callbacks receive the field value as parameter and action's callbacks receive the action name and a boolean indicating if it was executed before the action. For example:</para>
 
-        <programlisting><![CDATA[<?php
-
-    class user extends YDDatabaseObject {
-
-        function user() {
-
-            // Initializes the parent class
-            $this->YDDatabaseObject();
-
-            // Register the database connection
-            $this->registerDatabase(
-                YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
-            );
-
-            // Register the table name
-            $this->registerTable( 'users' );
-
-            // Register the keys
-            // The second argument defines id as an auto-increment field
-            $this->registerKey( 'id', true );
-
-            // Register the fields
-            $this->registerField( 'name' );
-            $this->registerField( 'email' );
-
-            // Add a field with a callback
-            $birthday = & $this->registerField( 'birthday' );
-            $birthday->setCallback( 'getAge' );
-            
-            // Register callbacks
-            $this->registerCallback( 'debug', 'insert' ); // after insert
-
-        }
-
-        function getAge( $birthday ) {
-
-            // When the birthday receives no value, the variable age is deleted
-            if ( ! $birthday ) {
-                @unset( $this->age );
-                return;
-            }
-
-            // Get the birthday year
-            $year = substr( $birthday, 0, 4 );
-
-            // Not really correct, but just to get the idea
-            // We can set a new object variable called "age"
-            // This variable will not be included in following
-            // SELECTs, INSERTs or UPDATEs as it is not a registered field
-            $this->set( 'age', date('Y') - $year );
-
-        }
-        
-        // Action callback
-        function debug( $action, $before ) {
-            
-            YDDebugUtil::debug( 'This was generated by the callback "debug" ' .
-                                ( $before ? 'before' : 'after' ) .  ' action
-                                "' . $action . '" was executed.' );
-            
-        }
-    }
-
-?>]]></programlisting>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_067.xml" />
 
     </sect1>
 

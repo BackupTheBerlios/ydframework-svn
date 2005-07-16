@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: deleting information</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->id = 123;
+
+    // Uses the keys to delete the row
+    $rows = $user->delete();
+
+?>]]></programlisting>
+</example>

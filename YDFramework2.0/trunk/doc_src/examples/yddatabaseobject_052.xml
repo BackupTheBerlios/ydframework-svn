@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering a relation</title>
+    <programlisting><![CDATA[<?php
+
+    class user extends YDDatabaseObject {
+
+        function user() {
+
+            // All other configuration
+            // ...
+
+            // Registering a relation
+            $phone = & $this->registerRelation( 'phone' );
+
+            // Change the relation name
+            $phone->setName( 'phones' );
+
+            // Sets the where expression
+            $phone->setWhere( 'phone.user_id = users.id AND users.active=1' );
+
+            // Sets the group by expression
+            $phone->setGroup( 'phone.total_calls' );
+
+            // Sets the having expression
+            $phone->setHaving( 'phone.total_calls > 10' );
+
+            // Sets the order by expression
+            $phone->setOrder( 'users.name, phone.total_calls DESC' );
+
+        }
+    }
+
+?>]]></programlisting>
+</example>

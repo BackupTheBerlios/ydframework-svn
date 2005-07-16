@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: integration with the YDForm module</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Create a new form object
+    $form = new YDForm();
+
+    // Setting data
+    $user->id  = 123;
+
+    // Using the form setValues method to add all information of the user object
+    $form->setValues( $user->getValues() );
+
+?>]]></programlisting>
+</example>

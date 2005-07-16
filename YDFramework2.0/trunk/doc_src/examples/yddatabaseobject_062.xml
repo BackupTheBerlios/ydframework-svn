@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the query that gets executed</title>
+    <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id AND phone.ord = 1 )
+WHERE users.id = 123]]></programlisting>
+</example>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting values using different methods</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Setting directly
+    $user->id      = 123;
+    $user->country = 'Brazil';
+
+    // Getting directly
+    $id      = $user->id;
+    $country = $user->country;
+
+    // Using the get method
+    $id      = $user->get( 'id' );
+    $country = $user->get( 'country' );
+
+    // Using the getValues method
+    $values = $user->getValues();
+
+?>]]></programlisting>
+</example>

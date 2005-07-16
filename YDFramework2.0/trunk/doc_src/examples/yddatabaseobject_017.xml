@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering SELECT statements with advanced options</title>
+    <programlisting><![CDATA[<?php
+
+    // Register a select
+    $birth_year = & $this->registerSelect( 'birthyear', 'YEAR( '.$this->getTable().'.birthday )' );
+
+    // Change the select name from 'birthyear' to 'birth_year'
+    $birth_year->setName( 'birth_year' );
+
+    // Set the expression
+    $birth_year->setExpression( 'YEAR( ' . $this->getTable() . '.birthday )' );
+
+    // Set the callback method - this method has to be defined in the class
+    $birth_year->setCallback( 'getAgeByYear' );
+
+?>]]></programlisting>
+</example>

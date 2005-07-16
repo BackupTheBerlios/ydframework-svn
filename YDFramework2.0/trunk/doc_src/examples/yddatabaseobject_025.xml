@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting values using different methods</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Setting directly
+    $user->id      = 123;
+    $user->country = 'Brazil';
+
+    // Using the set method
+    $user->set( 'id', 123 );
+    $user->set( 'country', 'Brazil' );
+
+    // Using the setValues method
+    $values = array(
+                'id' => 123,
+                'country' => 'Brazil'
+            );
+    $user->setValues( $values );
+
+?>]]></programlisting>
+</example>

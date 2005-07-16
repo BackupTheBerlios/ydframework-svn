@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering protected fields</title>
+    <programlisting><![CDATA[<?php
+
+    // Register protected fields
+    // The second parameter sets the protected value of the field
+    $this->registerProtected( 'admin', 1 );
+    $this->registerProtected( 'country', 'Brazil' );
+
+?>]]></programlisting>
+</example>

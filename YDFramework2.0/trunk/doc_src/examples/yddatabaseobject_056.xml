@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting custom names</title>
+    <programlisting><![CDATA[<?php
+
+    class user extends YDDatabaseObject {
+
+        function user() {
+
+            // All other configuration
+            // ...
+
+            // Registering a many-to-many relation
+            $group = & $this->registerRelation( 'group' );
+
+            // Foreign class configuration
+            // ...
+
+            // Sets the cross class
+            $group->setCrossClass( 'user_group' );
+
+            // Sets the cross var
+            $group->setCrossVar( 'user_group' );
+
+            // Sets the cross foreign field
+            $group->setCrossLocalKey( 'user_id' );
+
+            // Sets the cross foreign field
+            $group->setCrossForeignKey( 'group_id' );
+
+            // Sets the cross conditions
+            $group->setCrossConditions( $this->getCrossTable() . '.active = 1' );
+
+            // Sets the cross join type
+            $group->setCrossJoin( 'LEFT' );
+
+        }
+    }
+?>]]></programlisting>
+</example>

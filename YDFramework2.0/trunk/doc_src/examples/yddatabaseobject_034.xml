@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the getResults method</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->country = 'Spain';
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+    // Consider that the search have found 3 rows with users Pieter, David and Francisco
+    $results = $user->getResults();
+
+    // Will produce a similar result as above
+    print_r( $results );
+
+?>]]></programlisting>
+</example>
