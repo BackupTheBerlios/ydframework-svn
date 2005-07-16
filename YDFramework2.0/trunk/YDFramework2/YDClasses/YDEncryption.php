@@ -42,6 +42,37 @@
          *  @static
          */
         function encrypt( $passwd, $data ) {
+            return base64_encode( YDEncryption::_encrypt( $passwd, serialize( $data ) ) );
+        }
+
+        /**
+         *  Decrypt data.
+         *
+         *  @param  $passwd The password to use for the encryption
+         *  @param  $data   The data to decrypt. Should be formatted as base64.
+         *
+         *  @returns    The decrypted data.
+         *
+         *  @static
+         */
+        function decrypt( $passwd, $data ) {
+            return unserialize( YDEncryption::_encrypt( $passwd, base64_decode( $data ) ) );
+
+        }
+
+        /**
+         *  A helper function to do the encryption.
+         *
+         *  @param  $passwd The password to use for the encryption
+         *  @param  $data   The data to encrypt
+         *
+         *  @returns    The encrypted data as base64 encoded data.
+         * 
+         *  @internal
+         *
+         *  @static
+         */
+        function _encrypt( $passwd, $data ) {
             $key[] = '';
             $box[] = '';
             $cipher = '';
@@ -66,21 +97,7 @@
                 $k = $box[ ( ( $box[$a] + $box[$j] ) % 256 ) ];
                 $cipher .= chr( ord( $data[$i] ) ^ $k );
             }
-            return base64_encode( $cipher );
-        }
-
-        /**
-         *  Decrypt data.
-         *
-         *  @param  $passwd The password to use for the encryption
-         *  @param  $data   The data to decrypt. Should be formatted as base64.
-         *
-         *  @returns    The decrypted data.
-         *
-         *  @static
-         */
-        function decrypt( $passwd, $data ) {
-            return base64_decode( YDEncryption::encrypt( $passwd, base64_decode( $data ) ) );
+            return $cipher;
         }
 
     }
