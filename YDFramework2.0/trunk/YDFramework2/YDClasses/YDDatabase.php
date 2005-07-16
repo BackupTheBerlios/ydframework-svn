@@ -230,7 +230,7 @@
          *  @param $sql     The SQL statement to use.
          *  @param $index   (optional) The index of the column you want to use for getting the value.
          *
-         *  @returns    A single value matching the SQL statement.
+         *  @returns    A single value matching the SQL statement. False when no record was found.
          */
         function getValue( $sql, $index=0 ) {
             $records = $this->getRecord( $sql );
@@ -253,11 +253,16 @@
          *  @param $sql     The SQL statement to use.
          *  @param $name    The field value to return.
          *
-         *  @returns    A single value matching the SQL statement.
+         *  @returns    A single value matching the SQL statement, false when no value was found.
          */
         function getValueByName( $sql, $name ) {
             $record = array_values( $this->getRecords( $sql ) );
-            if ( ! $record ) { return false; }
+            if ( ! $record ) {
+                return false;
+            }
+            if ( ! isset( $record[0][ strtolower( $name ) ] ) ) {
+                return false;
+            }
             return $record[0][ strtolower( $name ) ];
         }
 
@@ -271,9 +276,13 @@
          */
         function getValuesByName( $sql, $name ) {
             $records = $this->getRecords( $sql );
-            if ( ! $records ) { return false; }
+            if ( ! $records ) {
+                return array();
+            }
             $values = array();
-            foreach ( $records as $record ) { array_push( $values, $record[ strtolower( $name  ) ] ); }
+            foreach ( $records as $record ) {
+                array_push( $values, $record[ strtolower( $name  ) ] );
+            }
             return $values;
         }
 
@@ -290,7 +299,9 @@
         function getAsAssocArray( $sql, $key, $val, $prefix='' ) {
 
             $records = $this->getRecords( $sql );
-            if ( ! $records ) { return false; }
+            if ( ! $records ) {
+                return array();
+            }
             $result = array();
             $key = strtolower( $key );
             $prefix = strtolower( $prefix );
