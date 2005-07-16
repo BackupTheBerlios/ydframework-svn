@@ -42,7 +42,7 @@
                 return false;
             } elseif ( is_array( $val ) && sizeof( $val ) == 0 ) {
                 return false;
-            } elseif ( strlen( $val ) == 0 ) {
+            } elseif ( is_string( $val ) && strlen( $val ) == 0 ) {
                 return false;
             } else {
                 return true;
