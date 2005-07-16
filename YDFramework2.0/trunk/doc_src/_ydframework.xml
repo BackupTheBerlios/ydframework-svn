@@ -21,6 +21,7 @@
     <!ENTITY yderror SYSTEM "yderror.xml">
     <!ENTITY ydtimer SYSTEM "ydtimer.xml">
     <!ENTITY ydencryption SYSTEM "ydencryption.xml">
+    <!ENTITY ydpersistent SYSTEM "ydpersistent.xml">
     <!ENTITY ydlocale SYSTEM "ydlocale.xml">
     <!ENTITY other SYSTEM "other.xml">
     <!ENTITY addon_ydbbcode SYSTEM "ydbbcode.xml">
@@ -89,6 +90,7 @@
     &yderror;
     &ydtimer;
     &ydencryption;
+    &ydpersistent;
     &ydlocale;
     &other;
     &addon_ydbbcode;

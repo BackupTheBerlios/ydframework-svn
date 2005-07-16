@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydpersistent">
+
+    <title>Using YDPersistent to store session data</title>
+
+    <para>The YDPersistent class allows you to store data accross multiple requests, and even accross different sessions. This is done by using cookies in the background. To safeguard your data, you can optionally encrypt the data using a password.</para>
+
+    <sect1 id="ydpersistent_overview">
+
+        <title>Overview</title>
+
+        <para>The interface for the class is very similar to the one of the YDConfig class:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold"><literal>YDPersistent::get()</literal>:</emphasis> gets the value for the specified persistent variable.</listitem>
+            <listitem><emphasis role="bold"><literal>YDPersistent::set()</literal>:</emphasis> sets the value for the specified persistent variable, optionally overriding any value that was set already.</listitem>
+            <listitem><emphasis role="bold"><literal>YDPersistent::delete()</literal>:</emphasis> removes the specified persistent variable.</listitem>
+            <listitem><emphasis role="bold"><literal>YDPersistent::exists()</literal>:</emphasis> checks if the specified persistent variable is set or not.</listitem>
+            <listitem><emphasis role="bold"><literal>YDPersistent::dump()</literal>:</emphasis> this functions uses the <literal>YDDebugUtil::dump</literal> function to dump the contents of the <literal>YDPersistent</literal> object.</listitem>
+        </itemizedlist>
+
+        <para>The YDPersistent class can store pretty much any type of data, and will return the data in it's original format. It will for example store strings, arrays, objects and so on. If you store an piece of data, the data is automattically serialized and base64 encoded. If you get a variable, it will automatically base64 decode and unserialize the data.</para>
+
+    </sect1>
+
+    <sect1 id="ydpersistent_settings">
+
+        <title>Options for saving data</title>
+
+        <para>If you want, you can specify some options when storing the data:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold"><literal>$password</literal>:</emphasis> if you specify a non null value, the data will be encrypted with the specified password. If no password is given, the data will remain unencrypted.</listitem>
+            <listitem><emphasis role="bold"><literal>$expire</literal>:</emphasis> specifies the lifetime of the object in seconds. By default, this is set to 1 year.</listitem>
+            <listitem><emphasis role="bold"><literal>$scope</literal>:</emphasis> defines the scope for the variable. By default, this is set to "/" which means that this is a sitewide variable. This variable can be compared to the $path variable used in the setcookie function (which is used in the background).</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydpersistent_overriding_settings">
+
+        <title>Overriding values using $_GET values</title>
+
+        <para>Sometimes, you want to override a persistent value, regardless of what the stored setting is. This can be done by specifying a query parameter with the same name of the variable. If the persistent variable doesn't exist yet, it will be automatically created for you.</para>
+
+        <para>When you override a variable, the new value is automatically stored.</para>
+
+    </sect1>
+
+    <sect1 id="ydpersistent_example">
+
+        <title>Example</title>
+
+        <para>This is a small sample script that shows how this class can be used. In the default action, it sets some persistent variables, both encrypted and unencrypted. It then redirects (not a forward but a real HTTP redirect) to the check action which displays the persistent data. If you close you browser afterwards and surf again to the check action, you will see that the persistent variables are still there.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydpersistent_001.xml" />
+
+    </sect1>
+
+</chapter>
