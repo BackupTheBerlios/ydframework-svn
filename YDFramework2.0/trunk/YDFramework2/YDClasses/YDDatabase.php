@@ -234,13 +234,10 @@
          */
         function getValue( $sql, $index=0 ) {
             $records = $this->getRecord( $sql );
-            if ( $records == null ) {
+            if (! $records ) {
                 return false;
             }
             $record = array_values( $records );
-            if ( ! $record ) {
-                return false;
-            }
             if ( ! isset( $record[ $index ] ) ) {
                 return false;
             }
@@ -257,9 +254,6 @@
          */
         function getValueByName( $sql, $name ) {
             $record = array_values( $this->getRecords( $sql ) );
-            if ( ! $record ) {
-                return false;
-            }
             if ( ! isset( $record[0][ strtolower( $name ) ] ) ) {
                 return false;
             }
