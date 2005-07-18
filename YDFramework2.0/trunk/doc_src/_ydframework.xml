@@ -26,6 +26,7 @@
     <!ENTITY ydpersistent SYSTEM "ydpersistent.xml">
     <!ENTITY ydlocale SYSTEM "ydlocale.xml">
     <!ENTITY yddate SYSTEM "yddate.xml">
+    <!ENTITY ydajax SYSTEM "ydajax.xml">
     <!ENTITY other SYSTEM "other.xml">
     <!ENTITY addon_ydbbcode SYSTEM "ydbbcode.xml">
     <!ENTITY addon_ydcart SYSTEM "ydcart.xml">
@@ -101,6 +102,7 @@
     &ydpersistent;
     &ydlocale;
     &yddate;
+    &ydajax;
     &other;
     &addon_ydbbcode;
     &addon_ydcart;
