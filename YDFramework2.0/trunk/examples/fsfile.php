@@ -76,6 +76,12 @@
             $file->download( 'download_test.php' );
         }
 
+        // Download Inline action
+        function actionDownloadInline() {
+            $file = new YDFSFile( __FILE__ );
+            $file->download( 'download_test.txt', true );
+        }
+
     }
 
     // Process the request
