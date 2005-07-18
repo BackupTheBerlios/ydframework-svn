@@ -23,10 +23,9 @@
         // Default action
         function actionDefault() {
 
-            // Get the pagesize and current page from the URL
-            // We use the @ mark to supress any error messsages
-            $page = @ $_GET['page'];
-            $size = @ $_GET['size'];
+            // Get the pagesize and current page using YDPersistent
+            $page = YDPersistent::get( 'page', -1 );
+            $size = YDPersistent::get( 'size', 15 );
 
             // Get the database connection
             $db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
