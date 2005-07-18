@@ -5,4 +5,15 @@
 
     <para>Now that we know the basics of the Yellow Duck Framework, we will have a look at a bigger example application. Included in the examples is a complete weblog application. This chapter will describe how this application was build and designed.</para>
 
+    <para>This is how the weblog application looks like:</para>
+
+        <para><mediaobject>
+            <imageobject role="html">
+                <imagedata fileref="ydweblog_index.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="ydweblog_index.gif" width="117.5mm" height="94.2mm" scalefit="0" />
+            </imageobject>
+        </mediaobject></para>
+
 </chapter>
