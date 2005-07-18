@@ -141,16 +141,12 @@
         }
 
         /**
-         *	This function will insert the specified values in to the specified table.
+         *  This function will return the ID of the last insert for databases that support it. If the database doesn't
+         *  support this, an error will be triggered.
          *
-         *	@param $table	The table to insert the data into.
-         *	@param $values	Associative array with the field names and their values to insert.
-         *
-         *	@returns	The ID of the last insert.
+         *  @returns    The last insert ID of the last insert.
          */
-        function executeInsert( $table, $values ) {
-            $sql = $this->_createSqlInsert( $table, $values );
-            $result = & $this->_connectAndExec( $sql );
+        function getLastInsertID() {
             return sqlite_last_insert_rowid( $this->_conn );
         }
 

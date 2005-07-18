@@ -255,10 +255,12 @@
             $result = @OCIExecute( $stmt );
             if ( $result === false ) {
                 $error = ocierror( $stmt );
-                if ( ! empty( $error['sqltext'] ) ) { $error['message'] .= ' (SQL: ' . $error['sqltext'] . ')'; }
+                if ( ! empty( $error['sqltext'] ) ) {
+                    $error['message'] .= ' (SQL: ' . $error['sqltext'] . ')';
+                }
                 trigger_error( $error['message'], YD_ERROR );
             }
-            return $stmt;
+            return $result;
         }
 
         /**

@@ -397,6 +397,16 @@
         }
 
         /**
+         *  This function will return the ID of the last insert for databases that support it. If the database doesn't
+         *  support this, an error will be triggered.
+         *
+         *  @returns    The last insert ID of the last insert.
+         */
+        function getLastInsertID() {
+            trigger_error( 'The database driver ' . $this->_driver . ' does not support getLastInsertID.' );
+        }
+
+        /**
          *  This function will insert the specified values in to the specified table.
          *
          *  @param $table   The table to insert the data into.
@@ -407,7 +417,7 @@
          */
         function executeInsert( $table, $values, $filter=true ) {
             $sql = $this->_createSqlInsert( $table, $values, $filter );
-            return $this->getMatchedRowsNum( $result );
+            return $this->executeSql( $sql );
         }
 
         /**
@@ -831,17 +841,12 @@
         }
 
         /**
-         *  This function will insert the specified values in to the specified table.
+         *  This function will return the ID of the last insert for databases that support it. If the database doesn't
+         *  support this, an error will be triggered.
          *
-         *  @param $table   The table to insert the data into.
-         *  @param $values  Associative array with the field names and their values to insert.
-         *  @param $filter  If true, all field names that start with underscore will be left out. Default: true.
-         *
-         *  @returns    The ID of the last insert.
+         *  @returns    The last insert ID of the last insert.
          */
-        function executeInsert( $table, $values, $filter=true ) {
-            $sql = $this->_createSqlInsert( $table, $values, $filter );
-            $result = & $this->_connectAndExec( $sql );
+        function getLastInsertID() {
             return mysql_insert_id( $this->_conn );
         }
 
