@@ -58,7 +58,7 @@
 
         <p>View the <a href="../license.txt">License information</a>.</p>
 
-        <p>For more information, please visit:<br>
+        <p>For more information, please visit:<br/>
         <a href="{$YD_FW_HOMEPAGE}">{$YD_FW_HOMEPAGE}</a></p>
 
         <table border="0" width="650" cellpadding="3"  cellspacing="0">
@@ -114,7 +114,7 @@
             <td valign="top"><a href="sample.php">Defining and using action requests</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=sample.php">sample.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=sample.tpl">sample.tpl</a>
             </td>
         </tr>
@@ -194,9 +194,9 @@
             <td valign="top"><a href="form.php">Form handling and validation</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.php">form.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.tpl">form.tpl</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_selector.tpl">form_selector.tpl</a>
             </td>
         </tr>
@@ -270,15 +270,15 @@
             <td valign="top"><a href="login/index.php">Using authentication</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/includes/MyLoginRequest.php">login/includes/MyLoginRequest.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/index.php">login/index.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/index.tpl">login/index.tpl</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/login.tpl">login/login.tpl</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/userinfo.php">login/userinfo.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=login/userinfo.tpl">login/userinfo.tpl</a>
             </td>
         </tr>
@@ -286,7 +286,7 @@
             <td valign="top"><a href="auth_ipcheck.php">Authentication based on IP numbers</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.php">auth_ipcheck.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=auth_ipcheck.tpl">auth_ipcheck.tpl</a>
             </td>
         </tr>
@@ -294,13 +294,13 @@
             <td valign="top"><a href="http_auth/index.php">Basic HTTP Authentication</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=http_auth/includes/MyLoginRequest.php">http_auth/includes/MyLoginRequest.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=http_auth/index.php">http_auth/index.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=http_auth/index.tpl">http_auth/index.tpl</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=http_auth/userinfo.php">http_auth/userinfo.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=http_auth/userinfo.tpl">http_auth/userinfo.tpl</a>
             </td>
         </tr>
@@ -314,7 +314,7 @@
             <td valign="top"><a href="database.php">Database connectivity - Native functions</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database.php">database.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database.tpl">database.tpl</a>
             </td>
         </tr>
@@ -322,7 +322,7 @@
             <td valign="top"><a href="database1.php">Database connectivity - YD MySQL library</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database1.php">database1.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database1.tpl">database1.tpl</a>
             </td>
         </tr>
@@ -348,7 +348,7 @@
             <td valign="top"><a href="database_paging.php">Paged recordsets - YD MySQL library</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database_paging.php">database_paging.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database_paging.tpl">database_paging.tpl</a>
             </td>
         </tr>
@@ -356,7 +356,7 @@
             <td valign="top"><a href="array_paging.php">Paged arrays</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging.php">array_paging.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging.tpl">array_paging.tpl</a>
             </td>
         </tr>
@@ -364,7 +364,7 @@
             <td valign="top"><a href="array_paging_with_sorting.php">Paged arrays with sorting</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.php">array_paging_with_sorting.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.tpl">array_paging_with_sorting.tpl</a>
             </td>
         </tr>
@@ -380,9 +380,9 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="fsfile.php">YDFSFile object</a> <br>
-              <a href="fsfile.php?do=download">YDFSFile object - File download</a> <br>
-              <a href="fsfile.php?do=download2">YDFSFile object - File download with changed name</a> </td>
+            <td valign="top"><a href="fsfile.php">YDFSFile object</a> <br/>
+              <a href="fsfile.php?do=download">YDFSFile object - File download</a> <br/>
+              <a href="fsfile.php?do=download2">YDFSFile object - File download with changed name</a><br/>
               <a href="fsfile.php?do=downloadinline">YDFSFile object - Inline File download</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fsfile.php">fsfile.php</a>
@@ -401,10 +401,10 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="fsimage.php">YDFSImage object</a> <br>
-              <a href="fsimage.php?do=thumbnail1">YDFSImage object - thumbnail 1</a> <br>
-              <a href="fsimage.php?do=thumbnail2">YDFSImage object - thumbnail 2</a> <br>
-              <a href="fsimage.php?do=thumbnail3">YDFSImage object - thumbnail 3 (no caching)</a> <br>
+            <td valign="top"><a href="fsimage.php">YDFSImage object</a> <br/>
+              <a href="fsimage.php?do=thumbnail1">YDFSImage object - thumbnail 1</a> <br/>
+              <a href="fsimage.php?do=thumbnail2">YDFSImage object - thumbnail 2</a> <br/>
+              <a href="fsimage.php?do=thumbnail3">YDFSImage object - thumbnail 3 (no caching)</a> <br/>
               <a href="fsimage.php?do=thumbnailsave">YDFSImage object - thumbnail saving</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fsimage.php">fsimage.php</a>
@@ -416,11 +416,11 @@
         </tr>
         <tr>
             <td rowspan="2" valign="top">&nbsp;</td>
-            <td valign="top"><a href="url.php">YDUrl object</a> <br>
-              <a href="url.php?do=image1">YDUrl object - Image 1</a> <br>
-              <a href="url.php?do=headers">YDUrl object - Headers</a> <br>
-              <a href="url.php?do=status">YDUrl object - Status</a> <br>
-              <a href="url.php?do=alter">YDUrl object - Altering URLs</a> <br>
+            <td valign="top"><a href="url.php">YDUrl object</a> <br/>
+              <a href="url.php?do=image1">YDUrl object - Image 1</a> <br/>
+              <a href="url.php?do=headers">YDUrl object - Headers</a> <br/>
+              <a href="url.php?do=status">YDUrl object - Status</a> <br/>
+              <a href="url.php?do=alter">YDUrl object - Altering URLs</a> <br/>
               <a href="url.php?do=merge">YDUrl object - Merging URLs</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=url.php">url.php</a>
@@ -460,9 +460,9 @@
             <td valign="top"><a href="email.php">Sending emails</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=email.php">email.php</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=email.tpl">email.tpl</a>
-                <br>
+                <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=email_template.tpl">email_template.tpl</a>
             </td>
         </tr>
@@ -472,10 +472,10 @@
         </tr>
         <tr>
             <td valign="top">&nbsp;</td>
-            <td valign="top"><a href="feedcreator.php">YDFeedCreator object</a> <br>
-              <a href="feedcreator.php?do=rss091">YDFeedCreator object - RSS 0.91 output</a> <br>
-              <a href="feedcreator.php?do=rss10">YDFeedCreator object - RSS 1.0 output</a> <br>
-              <a href="feedcreator.php?do=rss20">YDFeedCreator object - RSS 2.0 output</a> <br>
+            <td valign="top"><a href="feedcreator.php">YDFeedCreator object</a> <br/>
+              <a href="feedcreator.php?do=rss091">YDFeedCreator object - RSS 0.91 output</a> <br/>
+              <a href="feedcreator.php?do=rss10">YDFeedCreator object - RSS 1.0 output</a> <br/>
+              <a href="feedcreator.php?do=rss20">YDFeedCreator object - RSS 2.0 output</a> <br/>
               <a href="feedcreator.php?do=atom">YDFeedCreator object - Atom output</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=feedcreator.php">feedcreator.php</a>
