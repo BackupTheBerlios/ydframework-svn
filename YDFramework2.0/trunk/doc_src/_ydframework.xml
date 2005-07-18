@@ -32,6 +32,7 @@
     <!ENTITY addon_yddatabaseobject SYSTEM "yddatabaseobject.xml">
     <!ENTITY addon_ydfeedcreator SYSTEM "ydfeedcreator.xml">
     <!ENTITY addon_ydgraph SYSTEM "ydgraph.xml">
+    <!ENTITY addon_ydmysqldump SYSTEM "ydmysqldump.xml">
     <!ENTITY addon_ydsqlquery SYSTEM "yddatabasequery.xml">
     <!ENTITY addon_ydxmlform SYSTEM "ydxmlform.xml">
     <!ENTITY bestpractices SYSTEM "bestpractices.xml">
@@ -106,6 +107,7 @@
     &addon_yddatabaseobject;
     &addon_ydfeedcreator;
     &addon_ydgraph;
+    &addon_ydmysqldump;
     &addon_ydsqlquery;
     &addon_ydxmlform;
     &faq;
