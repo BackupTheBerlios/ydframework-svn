@@ -1,4 +1,4 @@
 <?php
-header('Location: phpThumb.demo.demo1.php');
+header('Location: phpThumb.demo.demo.php');
 exit;
 ?>

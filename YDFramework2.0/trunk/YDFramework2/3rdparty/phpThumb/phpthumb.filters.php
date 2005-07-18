@@ -680,9 +680,16 @@ class phpthumb_filters {
 		if (!$text) {
 			return false;
 		}
-		$opacity = 100 - intval(max(min($opacity, 100), 0));
+		ImageAlphaBlending($gdimg, true);
+
+		$text = str_replace("\r\n", "\n", $text);
+		$text = str_replace("\r",   "\n", $text);
+		$textlines = explode("\n", $text);
 
 		if (@is_readable($ttffont) && is_file($ttffont)) {
+
+			$opacity = 100 - intval(max(min($opacity, 100), 0));
+
 			$this->DebugMessage('Using TTF font "'.$ttffont.'"', __FILE__, __LINE__);
 
 			$TTFbox = ImageTTFbBox($size, $angle, $ttffont, $text);
@@ -697,59 +704,63 @@ class phpthumb_filters {
 			//$text_height = round($max_y - $min_y + ($size * 0.5));
 			$text_height = round($max_y - $min_y);
 
+			$TTFboxChar = ImageTTFbBox($size, $angle, $ttffont, 'pH');
+			$char_min_y = min($TTFboxChar[1], $TTFboxChar[3], $TTFboxChar[5], $TTFboxChar[7]);
+			$char_max_y = max($TTFboxChar[1], $TTFboxChar[3], $TTFboxChar[5], $TTFboxChar[7]);
+			$char_height = round($char_max_y - $char_min_y);
+
 			switch ($alignment) {
 				case 'T':
 					$text_origin_x = round((ImageSX($gdimg) - $text_width) / 2);
-					$text_origin_y = $text_height + $margin;
+					$text_origin_y = $char_height + $margin;
 					break;
 
 				case 'B':
 					$text_origin_x = round((ImageSX($gdimg) - $text_width) / 2);
-					$text_origin_y = ImageSY($gdimg) - $text_height + $TTFbox[1] - $min_y - $margin;
+					$text_origin_y = ImageSY($gdimg) - $TTFbox[1] - $margin;
 					break;
 
 				case 'L':
-
 					$text_origin_x = $margin;
-					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $text_height;
+					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $char_height;
 					break;
 
 				case 'R':
 					$text_origin_x = ImageSX($gdimg) - $text_width  + $TTFbox[0] - $min_x + round($size * 0.25) - $margin;
-					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $text_height;
+					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $char_height;
 					break;
 
 				case 'C':
 					$text_origin_x = round((ImageSX($gdimg) - $text_width) / 2);
-					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $text_height;
+					$text_origin_y = round((ImageSY($gdimg) - $text_height) / 2) + $char_height;
 					break;
 
 				case 'TL':
 					$text_origin_x = $margin;
-					$text_origin_y = $text_height + $margin;
+					$text_origin_y = $char_height + $margin;
 					break;
 
 				case 'TR':
 					$text_origin_x = ImageSX($gdimg) - $text_width  + $TTFbox[0] - $min_x + round($size * 0.25) - $margin;
-					$text_origin_y = $text_height + $margin;
+					$text_origin_y = $char_height + $margin;
 					break;
 
 				case 'BL':
 					$text_origin_x = $margin;
-					$text_origin_y = ImageSY($gdimg) - $text_height + $TTFbox[1] - $min_y - $margin;
+					$text_origin_y = ImageSY($gdimg) - $TTFbox[1] - $margin;
 					break;
 
 				case 'BR':
 				default:
 					$text_origin_x = ImageSX($gdimg) - $text_width  + $TTFbox[0] - $min_x + round($size * 0.25) - $margin;
-					$text_origin_y = ImageSY($gdimg) - $text_height + $TTFbox[1] - $min_y - $margin;
+					$text_origin_y = ImageSY($gdimg) - $TTFbox[1] - $margin;
 					break;
 			}
 			$letter_color_text = phpthumb_functions::ImageHexColorAllocate($gdimg, $hex_color, false, $opacity * 1.27);
 
 			if ($alignment == '*') {
 
-				$text_origin_y = $text_height + $margin;
+				$text_origin_y = $char_height + $margin;
 				while (($text_origin_y - $text_height) < ImageSY($gdimg)) {
 					$text_origin_x = $margin;
 					while ($text_origin_x < ImageSX($gdimg)) {
@@ -761,6 +772,7 @@ class phpthumb_filters {
 
 			} else {
 
+				//ImageRectangle($gdimg, $text_origin_x + $min_x, $text_origin_y + $TTFbox[1], $text_origin_x + $min_x + $text_width, $text_origin_y + $TTFbox[1] - $text_height, $letter_color_text);
 				ImageTTFtext($gdimg, $size, $angle, $text_origin_x, $text_origin_y, $letter_color_text, $ttffont, $text);
 
 			}
@@ -794,28 +806,58 @@ class phpthumb_filters {
 			$size = min(5, max(1, $size));
 			$this->DebugMessage('Using built-in font (size='.$size.') for text watermark'.($ttffont ? ' because $ttffont !is_readable('.$ttffont.')' : ''), __FILE__, __LINE__);
 
-			$text_width  = ImageFontWidth($size) * strlen($text);
-			$text_height = ImageFontHeight($size);
+			$text_width  = 0;
+			$text_height = 0;
+			foreach ($textlines as $line) {
+				$text_width   = max($text_width, ImageFontWidth($size) * strlen($line));
+				$text_height += ImageFontHeight($size);
+			}
 			if ($img_watermark = phpthumb_functions::ImageCreateFunction($text_width, $text_height)) {
 				ImageAlphaBlending($img_watermark, false);
 				$text_color_background = phpthumb_functions::ImageColorAllocateAlphaSafe($img_watermark, 255, 255, 255, 127);
 				ImageFilledRectangle($img_watermark, 0, 0, ImageSX($img_watermark), ImageSY($img_watermark), $text_color_background);
-				$text_color_watermark = phpthumb_functions::ImageHexColorAllocate($img_watermark, $hex_color);
-				ImageString($img_watermark, $size, 0, 0, $text, $text_color_watermark);
+
 				if ($angle) {
 					if ($img_watermark_mask = phpthumb_functions::ImageCreateFunction($text_width, $text_height)) {
 						$mask_color_background = ImageColorAllocate($img_watermark_mask, 0, 0, 0);
 						ImageAlphaBlending($img_watermark_mask, false);
 						ImageFilledRectangle($img_watermark_mask, 0, 0, ImageSX($img_watermark_mask), ImageSY($img_watermark_mask), $mask_color_background);
 						$mask_color_watermark = ImageColorAllocate($img_watermark_mask, 255, 255, 255);
-						ImageString($img_watermark_mask, $size, 0, 0, $text, $mask_color_watermark);
-
-						$img_watermark      = ImageRotate($img_watermark,      $angle, $text_color_background);
-						$img_watermark_mask = ImageRotate($img_watermark_mask, $angle, $mask_color_background);
 					}
-					phpthumb_filters::ApplyMask($img_watermark_mask, $img_watermark);
 				}
 
+				$text_color_watermark = phpthumb_functions::ImageHexColorAllocate($img_watermark, $hex_color);
+				foreach ($textlines as $key => $line) {
+					switch ($alignment) {
+						case 'C':
+						case 'T':
+						case 'B':
+							$x_offset = round(($text_width - (ImageFontWidth($size) * strlen($line))) / 2);
+							break;
+
+						case 'L':
+						case 'TL':
+						case 'BL':
+							$x_offset = 0;
+							break;
+
+						case 'R':
+						case 'TR':
+						case 'BR':
+						default:
+							$x_offset = $text_width - (ImageFontWidth($size) * strlen($line));
+							break;
+					}
+					ImageString($img_watermark, $size, $x_offset, $key * ImageFontHeight($size), $line, $text_color_watermark);
+					if ($angle && $img_watermark_mask) {
+						ImageString($img_watermark_mask, $size, $x_offset, $key * ImageFontHeight($size), $text, $mask_color_watermark);
+					}
+				}
+				if ($angle && $img_watermark_mask) {
+					$img_watermark      = ImageRotate($img_watermark,      $angle, $text_color_background);
+					$img_watermark_mask = ImageRotate($img_watermark_mask, $angle, $mask_color_background);
+					phpthumb_filters::ApplyMask($img_watermark_mask, $img_watermark);
+				}
 				phpthumb_filters::WatermarkOverlay($gdimg, $img_watermark, $alignment, $opacity, $margin);
 				ImageDestroy($img_watermark);
 				return true;

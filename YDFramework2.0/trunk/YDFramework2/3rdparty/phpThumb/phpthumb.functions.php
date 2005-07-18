@@ -300,25 +300,35 @@ class phpthumb_functions {
 		return array(round($new_width), round($new_height));
 	}
 
-	function SafeBackTick($command) {
-		static $BacktickDisabled = null;
-		if (is_null($BacktickDisabled)) {
-			$disable_functions = explode(',', @ini_get('disable_functions'));
+	function SafeExec($command) {
+		static $AllowedExecFunctions = array();
+		if (empty($AllowedExecFunctions)) {
+			$AllowedExecFunctions = array('exec'=>true, 'system'=>true, 'shell_exec'=>true, 'passthru'=>true);
 			if (@ini_get('safe_mode')) {
-				$BacktickDisabled = true;
-			} else if (in_array('shell_exec', $disable_functions) || in_array('exec', $disable_functions) || in_array('system', $disable_functions)) {
-				$BacktickDisabled = true;
-			} else {
-				$BacktickDisabled = false;
+				$AllowedExecFunctions['shell_exec'] = false;
+			}
+			$disable_functions = explode(',', @ini_get('disable_functions'));
+			foreach ($AllowedExecFunctions as $key => $value) {
+				if (in_array($key, $disable_functions)) {
+					$AllowedExecFunctions[$key] = false;
+				}
 			}
 		}
-		if ($BacktickDisabled) {
-			return '';
+		foreach ($AllowedExecFunctions as $execfunction => $is_allowed) {
+			if (!$is_allowed) {
+				continue;
+			}
+			if ($execfunction == 'passthru') {
+				ob_start();
+				$execfunction($command);
+				$returnvalue = ob_get_contents();
+				ob_end_clean();
+			} else {
+				$returnvalue = @$execfunction($command);
+			}
+			return $returnvalue;
 		}
-		// even with all the above checking, IIS 5/6 sometimes reports problems:
-		// "Warning: shell_exec() [function.shell-exec]: Unable to execute '<command>'"
-		// so @ out the warning
-		return @`$command`;
+		return false;
 	}
 
 	function ApacheLookupURIarray($filename) {

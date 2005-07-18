@@ -18,16 +18,14 @@ ob_end_clean();
 // START USER CONFIGURATION SECTION:
 
 // * DocumentRoot configuration
-// phpThumb() depends on $_SERVER['DOCUMENT_ROOT'] to resolve path/filenames. This value is almost always correct,
-// but has been known to be broken on rare occasion. This value allows you to override the default value.
-// Do not modify from the default value of $_SERVER['DOCUMENT_ROOT'] unless you are having problems.
+// phpThumb() depends on $_SERVER['DOCUMENT_ROOT'] to resolve path/filenames. This value is usually correct,
+// but has been known to be broken on some servers. This value allows you to override the default value.
+// Do not modify from the auto-detect default value unless you are having problems.
 //$PHPTHUMB_CONFIG['document_root'] = '/home/httpd/httpdocs';
 //$PHPTHUMB_CONFIG['document_root'] = 'c:\\webroot\\example.com\\www';
-//echo @$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF'].' = '.phpthumb_functions::md5_file_safe(@$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']).'<br>';
-//echo realpath('.').'/'.basename($_SERVER['PHP_SELF']).' = '.phpthumb_functions::md5_file_safe(realpath('.').'/'.basename($_SERVER['PHP_SELF'])).'<br>';
-//exit;
-$PHPTHUMB_CONFIG['document_root'] = ((@$_SERVER['DOCUMENT_ROOT'] && file_exists(@$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']) && (@phpthumb_functions::md5_file_safe(@$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF']) == @phpthumb_functions::md5_file_safe(realpath('.').'/'.basename($_SERVER['PHP_SELF'])))) ? $_SERVER['DOCUMENT_ROOT'] : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace('\\', '/', realpath('.'))));
-
+//$PHPTHUMB_CONFIG['document_root'] = $_SERVER['DOCUMENT_ROOT'];
+//$PHPTHUMB_CONFIG['document_root'] = realpath((@$_SERVER['DOCUMENT_ROOT'] && file_exists(@$_SERVER['DOCUMENT_ROOT'].$_SERVER['PHP_SELF'])) ? $_SERVER['DOCUMENT_ROOT'] : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace($phpThumb->osslash, '/', realpath('.'))));
+$PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && ereg('^'.preg_quote(realpath(getenv('DOCUMENT_ROOT'))), realpath(__FILE__))) ? getenv('DOCUMENT_ROOT') : str_replace(dirname(@$_SERVER['PHP_SELF']), '', str_replace($phpThumb->osslash, '/', dirname(__FILE__))));
 
 // * Cache directory configuration (choose only one of these - leave the other lines commented-out):
 // Note: this directory must be writable (usually chmod 777 is neccesary) for caching to work.
@@ -101,7 +99,7 @@ if (phpthumb_functions::version_compare_replacement(phpversion(), '4.3.2', '>=')
 // attempt to detect ImageMagick's presence with `which`
 if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
 	// Windows: set absolute pathname
-	$PHPTHUMB_CONFIG['imagemagick_path'] = 'C:\\Program Files\\ImageMagick-6.0.6-Q16\\convert.exe';
+	$PHPTHUMB_CONFIG['imagemagick_path'] = 'C:/Program Files/ImageMagick-6.2.3-Q16/convert.exe';
 } else {
 	// *nix: set absolute pathname to "convert", or leave as null if "convert" is in the path
 	//$PHPTHUMB_CONFIG['imagemagick_path'] = '/usr/local/bin/convert';
@@ -147,16 +145,33 @@ $PHPTHUMB_CONFIG['ttf_directory'] = dirname(__FILE__).'/fonts'; // Base director
 //$PHPTHUMB_CONFIG['ttf_directory'] = 'c:/windows/fonts';
 
 
-$PHPTHUMB_CONFIG['high_security_enabled']  = false; // if enabled, requires 'high_security_password' set to at least 5 characters, and requires the use of phpThumbURL() function (at the bottom of phpThumb.config.php) to generate hashed URLs
-$PHPTHUMB_CONFIG['high_security_password'] = '';    // required if 'high_security_enabled' is true, must be at least 5 characters long
-$PHPTHUMB_CONFIG['disable_debug']          = false; // Prevent phpThumb from displaying any information about your system. If true, phpThumbDebug and error messages will be disabled
+// * MySQL configuration
+// You may want to pull data from a database rather than a physical file
+// If so, modify the $PHPTHUMB_CONFIG['mysql_query'] line to suit your database structure
+// Note: the data retrieved must be the actual binary data of the image, not a URL or filename
+// see http://www.billy-corgan.com/blog/archive/000143.php for a brief tutorial on this section
+
+$PHPTHUMB_CONFIG['mysql_query'] = '';
+//$PHPTHUMB_CONFIG['mysql_query'] = 'SELECT `picture` FROM `products` WHERE (`id` = \''.mysql_escape_string(@$_GET['id']).'\')';
+
+// These 4 values must be modified if $PHPTHUMB_CONFIG['mysql_query'] is not empty, but may be ignored if $PHPTHUMB_CONFIG['mysql_query'] is blank.
+$PHPTHUMB_CONFIG['mysql_hostname'] = 'localhost';
+$PHPTHUMB_CONFIG['mysql_username'] = '';
+$PHPTHUMB_CONFIG['mysql_password'] = '';
+$PHPTHUMB_CONFIG['mysql_database'] = '';
+
+
+// * Security Configuration
+$PHPTHUMB_CONFIG['high_security_enabled']    = false;  // if enabled, requires 'high_security_password' set to at least 5 characters, and requires the use of phpThumbURL() function (at the bottom of phpThumb.config.php) to generate hashed URLs
+$PHPTHUMB_CONFIG['high_security_password']   = '';     // required if 'high_security_enabled' is true, must be at least 5 characters long
+$PHPTHUMB_CONFIG['disable_debug']            = false;  // prevent phpThumb from displaying any information about your system. If true, phpThumbDebug and error messages will be disabled
+$PHPTHUMB_CONFIG['allow_src_above_docroot']  = false;  // if true, allow src to be anywhere in filesystem; if false (default) only allow src within document_root
+$PHPTHUMB_CONFIG['allow_src_above_phpthumb'] = true;   // if true (default), allow src to be anywhere in filesystem; if false only allow src within sub-directory of phpThumb installation
+$PHPTHUMB_CONFIG['allow_parameter_file']     = false;  // if true, allow use of 'file' parameter; if false (default) the 'file' parameter is disabled/ignored
+$PHPTHUMB_CONFIG['allow_parameter_goto']     = false;  // if true, allow use of 'goto' parameter; if false (default) the 'goto' parameter is disabled/ignored
 
 
 $PHPTHUMB_CONFIG['use_exif_thumbnail_for_speed'] = false; // If true, and EXIF thumbnail is available, and is larger or equal to output image dimensions, use EXIF thumbnail rather than actual source image for generating thumbnail. Benefit is only speed, avoiding resizing large image.
-
-// if true, and source image is smaller than 'w' & 'h' parameters or $PHPTHUMB_CONFIG['output_maxheight'] / $PHPTHUMB_CONFIG['output_maxwidth']
-// will be enlarged to that size. If false then small images will not be enlarged beyond their original dimensions
-$PHPTHUMB_CONFIG['output_allow_enlarging'] = (isset($_REQUEST['aoe']) ? (bool) $_REQUEST['aoe'] : false);
 
 // END USER CONFIGURATION SECTION
 
