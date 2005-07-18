@@ -14,31 +14,39 @@
         // Class constructor
         function database_backup() {
             $this->YDRequest();
-            
+
             // Get the data
             $this->db = YDDatabase::getInstance( 'mysql', 'test', 'root', '', 'localhost' );
-            
+
+            // Create the YDMysqlDump object
             $this->dump = new YDMysqlDump( $this->db );
         }
 
         // Default action
         function actionDefault() {
-            
+
+            // Make a backup of the database
             $file = $this->dump->backup( true );
-            
+
+            // Show the properties of the database backup
             YDDebugUtil::dump( $file->getContents(), $this->dump->getFilePath() );
         }
-        
+
+        // Restore action
         function actionRestore() {
-            
-            // include filesystem functions
+
+            // Include filesystem functions
             YDInclude( 'YDFileSystem.php' );
-            
-            // create file object
+
+            // Create file object
             $file = new YDFSFile( $this->dump->getFilePath() );
+
+            // Restore the database dump
             $this->dump->restore( $file->getContents() );
-            
+
+            // Show the properties of the database backup
             YDDebugUtil::dump( $file->getContents(), $this->dump->getFilePath() );
+
         }
 
     }
