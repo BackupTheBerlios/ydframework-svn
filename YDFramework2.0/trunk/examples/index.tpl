@@ -369,7 +369,10 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="database_backup.php">Making MySQL database backups</a> </td>
+            <td valign="top">
+                <a href="database_backup.php">Making MySQL database backups</a><br/>
+                <a href="database_backup.php?do=restore">Restoring a database backup</a><br/>
+            </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database_backup.php">database_backup.php</a>
             </td>
