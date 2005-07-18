@@ -7,7 +7,7 @@
 
         <title>What license is the Yellow Duck Framework published under?</title>
 
-        <para>The Yellow Duck Framework is published under the GNU Lesser General Public License. A copy of this license can be found in <xref linkend="appendixD" />.</para>
+        <para>The Yellow Duck Framework is published under the GNU Lesser General Public License. A copy of this license can be found in <xref linkend="appendixE" />.</para>
 
     </sect1>
 
@@ -20,6 +20,8 @@
         <itemizedlist spacing="compact">
             <listitem><xref linkend="firstsample"/></listitem>
             <listitem><xref linkend="tutorial"/></listitem>
+            <listitem><xref linkend="tutorial1"/></listitem>
+            <listitem><xref linkend="tutorial2"/></listitem>
             <listitem><xref linkend="ydrequest"/></listitem>
         </itemizedlist>
 
@@ -64,6 +66,48 @@
                 <listitem>Provide an example (preferable a lot of examples) on how to use the class.</listitem>
                 <listitem>Provide documentation about the class you wrote so that this can be included in the standard documentation.</listitem>
             </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="faq_error_running_php_exe">
+
+        <title>Cannot instantiate non-existent class: php.exe</title>
+
+        <para>If you get this error message, it means you are running an old build of the Yellow Duck Framework. Make sure you upgrade to build 1123 or newer.</para>
+
+        <para>The reason why this error pops up, is because you are running PHP as a CGI executable. If you do so, the $_SERVER['SCRIPT_NAME'] variable is not populated. In builds prior to build 1123, the Yellow Duck Framework was looking at this variable. As of build 1123, we are now looking at the $_SERVER['PHP_SELF'] instead which is available in both CGI as well as Apache module environments.</para>
+
+    </sect1>
+
+    <sect1 id="faq_overriding_methods">
+
+        <title>Changing the YDRequest behaviour</title>
+
+        <para>Sometimes, you want to change the way the YDRequest class works and behaves. For example, you might want to redirect to the default action if a non existing action was requested. The way this should be done is by subclassing the YDRequest class and re-implementing the methods you want to behave differently.</para>
+
+    </sect1>
+
+    <sect1 id="faq_why_addons">
+
+        <title>What's the motivation behind the addons?</title>
+
+        <para>Addons are pieces of extra software that are not part of the core of the framework, but nevertheless can be handy for a lot of people. The core modules of the framework try to cover most of the needs of a web developer and tries to be as generic as possible. For some modules, this is not possible however as they are either too specific in terms of functionality or in terms of what they are able to do. Those modules generally end up being written as an addon.</para>
+
+    </sect1>
+
+    <sect1 id="faq_freshmeat_record">
+
+        <title>Where can I find the framework on freshmeat.net?</title>
+
+        <para>The Yellow Duck Framework is listed on freshmeat.net under <ulink url="http://freshmeat.net/projects/ydframework">http://freshmeat.net/projects/ydframework</ulink>.</para>
+
+    </sect1>
+
+    <sect1 id="faq_berlios_record">
+
+        <title>Where can I find the framework on berlios.de?</title>
+
+        <para>The Yellow Duck Framework is listed on berlios.de under <ulink url="http://developer.berlios.de/projects/ydframework">http://developer.berlios.de/projects/ydframework</ulink>.</para>
 
     </sect1>
 
