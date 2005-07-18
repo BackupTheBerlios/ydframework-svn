@@ -114,4 +114,47 @@
 
     </sect1>
 
+    <sect1 id="ydtemplate_php_templates">
+
+        <title>Using PHP templates</title>
+
+        <para>In some cases, it's desirable to use normal PHP files as templates rather than using Smarty as the template engine. There are several reasons why you might want to use PHP as the template language instead of Smarty:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Performance: you want to have the maximum performance and don't want the overhead of Smarty.</listitem>
+            <listitem>If you don't have a PHP optimizer such as <ulink url="http://turck-mmcache.sourceforge.net/index_old.html">Turck MMCache</ulink> installed, native PHP will be a lot faster.</listitem>
+            <listitem>You don't have write permissions on the server (which is required as Smarty creates temporary files, while PHP doesn't).</listitem>
+            <listitem>Your template designers are more familiar with the PHP syntax rather than the Smarty syntax.</listitem>
+        </itemizedlist>
+
+        <para>The good thing is that the Yellow Duck Framework supports both out of the box, and leaves the choice up to the developer to choose which one he or she wants to use. This configuration option is not side wide and can be customized for each request class.</para>
+
+        <para>The configuration is done by means of a <literal>YDConfig</literal> setting called <literal>YD_TEMPLATE_ENGINE</literal>. If you set this variable prior to including the <literal>YDTemplate.php</literal> file, the YDTemplate class will use the correct template engine. This configuration variable has two possible values: <literal>php</literal> or <literal>smarty</literal>. The YDTemplate class always defaults to the smarty template engine.</para>
+
+        <warning>The <literal>YD_TEMPLATE_ENGINE</literal> needs to be configured before including the YDTemplate module, otherwise, it will default to the Smarty template engine! If you change the configuration after you included the YDTemplate module, the YDTemplate class will always use Smarty based templates.</warning>
+
+        <para>The following request class shows you how you can use a PHP template instead of a Smarty template:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtemplate_005.xml" />
+
+        <para>As you can see in the code sample above, the syntax of the YDTemplate class is the same for Smarty and PHP templates. The only difference is that PHP templates don't support caching right now, while Smarty templates do.</para>
+
+        <para>The following code sample shows you how the template file looks like that goes along with the request class we just showed:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydtemplate_006.xml" />
+
+        <para>Looking at the template code, you can see that the code looks quite similar to what Smarty is using. For those familiar with Smarty, you will notice that Smarty creates a similar file in the background which it executes (hence the reason why Smarty is a compiling template engine).</para>
+
+        <warning>
+
+            <para>Be careful with using include files in PHP templates. The include path is not relative to the path of the template file, but is relative to the path of the request file. If you store the template and request files in the same directory, this doesn't really matter, but it does if your template files are in a different directory. The easiest way to solve this is to use the following construct to include a file:</para>
+
+            <programlisting><![CDATA[include( dirname( __FILE__ ) . '/standard_header.tpl' );]]></programlisting>
+
+            <para>This construct with make sure the include file's path is relative to the directory of the template file and not the directory of the request class.</para>
+
+        </warning>
+
+    </sect1>
+
 </chapter>
