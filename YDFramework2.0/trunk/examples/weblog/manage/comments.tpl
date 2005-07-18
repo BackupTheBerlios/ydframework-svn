@@ -17,10 +17,7 @@
     {capture assign="browsebar"}
         {if $comments->pages}
             <tr>
-                <td class="adminRowL" colspan="1">
-                    <p class="subline">{t w="total"}: {$comments->totalRows}</p>
-                </td>
-                <td class="adminRowR" colspan="3">
+                <td class="adminRowR" colspan="4">
                     <p class="subline">
                     {if ! $comments->isFirstPage}
                         <a href="{$comments->getPreviousUrl()}" class="subline">&laquo;</a>
@@ -51,7 +48,7 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
-            <th class="adminRowL" width="15%">{t w="name"}</th>
+            <th class="adminRowL" width="15%">{t w="author"}</th>
             <th class="adminRowL" width="30%">{t w="parent"}</th>
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
@@ -72,6 +69,11 @@
             </tr>
         {/foreach}
         {$browsebar}
+        <tr>
+            <td class="adminRowLNB" colspan="4">
+                <p class="subline">{t w="total"}: {$comments->totalRows}</p>
+            </td>
+        </tr>
         </table>
     {else}
         <p>{t w="no_comments_found"}</p>

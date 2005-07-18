@@ -15,10 +15,7 @@
     {capture assign="browsebar"}
         {if $links->pages}
             <tr>
-                <td class="adminRowL" colspan="1">
-                    <p class="subline">{t w="total"}: {$links->totalRows}</p>
-                </td>
-                <td class="adminRowR" colspan="2">
+                <td class="adminRowR" colspan="4">
                     <p class="subline">
                     {if ! $links->isFirstPage}
                         <a href="{$links->getPreviousUrl()}" class="subline">&laquo;</a>
@@ -67,6 +64,11 @@
                 </td>
             </tr>
         {/foreach}
+        <tr>
+            <td class="adminRowLNB" colspan="4">
+                <p class="subline">{t w="total"}: {$links->totalRows}</p>
+            </td>
+        </tr>
         </table>
     {else}
         <p>{t w="no_links_found"}</p>

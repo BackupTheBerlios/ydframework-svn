@@ -15,10 +15,7 @@
     {capture assign="browsebar"}
         {if $categories->pages}
             <tr>
-                <td class="adminRowL" colspan="1">
-                    <p class="subline">{t w="total"}: {$categories->totalRows}</p>
-                </td>
-                <td class="adminRowR" colspan="2">
+                <td class="adminRowR" colspan="3">
                     <p class="subline">
                     {if ! $categories->isFirstPage}
                         <a href="{$categories->getPreviousUrl()}" class="subline">&laquo;</a>
@@ -78,6 +75,11 @@
             </tr>
         {/foreach}
         {$browsebar}
+        <tr>
+            <td class="adminRowLNB" colspan="3">
+                <p class="subline">{t w="total"}: {$categories->totalRows}</p>
+            </td>
+        </tr>
         </table>
     {else}
         <p>{t w="no_categories_found"}</p>

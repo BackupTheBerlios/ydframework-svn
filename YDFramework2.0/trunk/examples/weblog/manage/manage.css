@@ -106,6 +106,13 @@ td.adminRowL, th.adminRowL {
     text-align: left;
 }
 
+td.adminRowLNB, th.adminRowLNB {
+    border-bottom: 0px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+}
+
 td.adminRowC, th.adminRowC {
     border-bottom: 1px solid #DDDDDD;
     padding-top: 4px;

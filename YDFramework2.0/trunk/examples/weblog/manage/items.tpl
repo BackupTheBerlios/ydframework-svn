@@ -15,10 +15,7 @@
     {capture assign="browsebar"}
         {if $items->pages}
             <tr>
-                <td class="adminRowL" colspan="1">
-                    <p class="subline">{t w="total"}: {$items->totalRows}</p>
-                </td>
-                <td class="adminRowR" colspan="3">
+                <td class="adminRowR" colspan="4">
                     <p class="subline">
                     {if ! $items->isFirstPage}
                         <a href="{$items->getPreviousUrl()}" class="subline">&laquo;</a>
@@ -51,7 +48,7 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
-            <th class="adminRowL" width="15%">{t w="name"}</th>
+            <th class="adminRowL" width="15%">{t w="author"}</th>
             <th class="adminRowL" width="26%">{t w="title"}</th>
             <th class="adminRowR" width="22%">{t w="actions"}</th>
         </tr>
@@ -75,6 +72,11 @@
             </tr>
         {/foreach}
         {$browsebar}
+        <tr>
+            <td class="adminRowLNB" colspan="4">
+                <p class="subline">{t w="total"}: {$items->totalRows}</p>
+            </td>
+        </tr>
         </table>
     {else}
         <p>{t w="no_items_found"}</p>
