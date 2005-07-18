@@ -309,7 +309,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="8" valign="top">
+            <td rowspan="9" valign="top">
             <p>&nbsp;</p></td>
             <td valign="top"><a href="database.php">Database connectivity - Native functions</a> </td>
             <td valign="top">
@@ -366,6 +366,12 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.php">array_paging_with_sorting.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=array_paging_with_sorting.tpl">array_paging_with_sorting.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="database_backup.php">Making MySQL database backups</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=database_backup.php">database_backup.php</a>
             </td>
         </tr>
         <tr>
