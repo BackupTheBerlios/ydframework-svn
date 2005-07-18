@@ -413,7 +413,7 @@
         function getStatsBrowser() {
             $browsers = array(
                 'ie' => 'Internet Explorer', 'mozilla' => 'Netscape/Mozilla', 'safari' => 'Apple Safari',
-                'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'),
+                'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'), 'unknown' => t('other')
             );
             $browserStats = $this->db->getRecords(
                 'SELECT browser, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY browser ORDER BY hits DESC'
@@ -429,7 +429,7 @@
         // Get the OS statistics
         function getStatsOs() {
             $platforms = array(
-                'win' => 'Windows', 'mac' => 'Macintosh', 'linux' => 'Linux', 'unix' => 'Unix', 'other' => 'Other',
+                'win' => 'Windows', 'mac' => 'Macintosh', 'linux' => 'Linux', 'unix' => 'Unix', 'other' => 'Other', 'unknown' => t('other')
             );
             $osStats = $this->db->getRecords(
                 'SELECT platform, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY platform ORDER BY hits DESC'
