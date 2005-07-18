@@ -170,7 +170,7 @@
         /**
          *	This function dumps the contents of the configuration.
          *
-         *  @param  (optional) The object to dump. If not set, it will dump all objects.
+         *  @param  $obj    (optional) The object to dump. If not set, it will dump all objects.
          */
         function dump( $obj = null ) {
 
