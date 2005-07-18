@@ -6,7 +6,6 @@
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDDatabase.php' );
     YDInclude( 'YDTemplate.php' );
 
     // Class definition
@@ -29,7 +28,6 @@
             // Assign some stuff
             $browser = new YDBrowserInfo();
             $tpl->assign( 'browser', $browser );
-            //$tpl->assign( 'array', $browser->toArray() );
 
             // Display the template
             $tpl->display();
