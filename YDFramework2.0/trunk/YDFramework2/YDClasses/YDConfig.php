@@ -80,12 +80,8 @@
             // Check if the key exists
             if ( ! YDConfig::exists( $name ) ) {
 
-                // Check if we have a default, if not, raise an error
-                if ( ! is_null( $default ) ) {
-                    return $default;
-                } else {
-                    trigger_error( 'Configuration variable "' . $name . '" is not defined.', YD_ERROR );
-                }
+                // Return the default
+                return $default;
 
             }
 
