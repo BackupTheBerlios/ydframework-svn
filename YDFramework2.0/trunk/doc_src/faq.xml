@@ -111,4 +111,12 @@
 
     </sect1>
 
+    <sect1 id="faq_php5">
+
+        <title>Does the Yellow Duck Framework run on PHP5?</title>
+
+        <para>Yes, it does, but it doesn't take any advantage of the new features of PHP5. Full support for PHP5 with using the new features from PHP5 is planned for Yellow Duck Framework 3.0.</para>
+
+    </sect1>
+
 </chapter>
