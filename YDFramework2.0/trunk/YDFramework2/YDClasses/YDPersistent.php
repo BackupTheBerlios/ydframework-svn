@@ -30,7 +30,9 @@
     YDInclude( 'YDEncryption.php' );
 
     // Constants
-    YDConfig::set( 'YD_PERSISTENT_STORE_NAME', strtoupper( str_replace( ' ', '_', YD_FW_NAME ) ) . '_PERSISTENT_STORE' );
+    YDConfig::set( 'YD_PERSISTENT_STORE_NAME', strtoupper( str_replace( ' ', '_', YD_FW_NAME ) ) . '_PERSISTENT_STORE', false );
+    YDConfig::set( 'YD_PERSISTENT_DEFAULT_LIFETIME', 0, false );
+    YDConfig::set( 'YD_PERSISTENT_DEFAULT_PASSWORD', null, false );
 
     /**
      *  This class is able to save and load persistent data. This data stay active between different requests and allows
@@ -55,7 +57,7 @@
          *	@param	$name		The name of the object.
          *	@param	$object		The object to store.
          *  @param  $passwd     (optional) If not null, the data will be encrypted with this password.
-         *  @param  $expire     (optional) The lifetime of the object in seconds. Defaults to 1 year.
+         *  @param  $expire     (optional) The lifetime of the object in seconds. Defaults to 0 (session only).
          *  @param  $scope      (optional) The scope of the object in seconds. Defaults to "/".
          */
         function set( $name, $object, $passwd=null, $expire=null, $scope='/' ) {
@@ -65,13 +67,16 @@
 
             // Set the expire time
             if ( is_null( $expire ) ) {
-                $expire = time() + 31536000;
+                $expire = YDConfig::get( 'YD_PERSISTENT_DEFAULT_LIFETIME', 0 );
             }
 
             // Convert the object to a base64 encoded serialized version
             $object_data = base64_encode( serialize( $object ) );
 
             // Encrypt the data if needed
+            if ( is_null( $passwd ) && ! is_null( YDConfig::get( 'YD_PERSISTENT_DEFAULT_PASSWORD', null ) ) ) {
+                $passwd = YDConfig::get( 'YD_PERSISTENT_DEFAULT_PASSWORD', null );
+            }
             if ( ! is_null( $passwd ) ) {
                 $object_data = YDEncryption::encrypt( $passwd, $object_data );
             }
@@ -142,7 +147,7 @@
             YDPersistent::_init();
 
             // Remove it from the cookie variable
-            unset( $_COOKIE[ $name ] );
+            unset( $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ][ $name ] );
             setcookie( YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) . '[' . $name . ']', " ", time()-3600 );
 
         }
@@ -164,14 +169,20 @@
 
         /**
          *	This function dumps the contents of the configuration.
+         *
+         *  @param  (optional) The object to dump. If not set, it will dump all objects.
          */
-        function dump() {
+        function dump( $obj = null ) {
 
             // Initialize the store
             YDPersistent::_init();
 
             // Dump the configuration
-            YDDebugUtil::dump( $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ] );
+            if ( ! is_null( $obj ) ) {
+                YDDebugUtil::dump( $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ][ $obj ] );
+            } else {
+                YDDebugUtil::dump( $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ] );
+            }
 
         }
 
