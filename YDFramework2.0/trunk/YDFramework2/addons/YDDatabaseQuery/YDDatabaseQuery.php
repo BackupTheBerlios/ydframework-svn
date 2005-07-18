@@ -26,10 +26,17 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    /**
+     *  The YDDatabaseQuery class defines an object-oriented interface to create SQL queries.
+     */
     class YDDatabaseQuery extends YDAddOnModule {
-        
+
+        /**
+         *  This is the class constructor for the YDDatabaseQuery class.
+         */
         function YDDatabaseQuery() {
-            
+
+            // Initialize the parent
             $this->YDAddOnModule();
 
             // Setup the module
@@ -39,9 +46,17 @@
             $this->_description = 'This class defines a YDDatabaseQuery object.';
             
         }
-        
+
+        /**
+         *  This function creates a new YDDatabaseQuery class for the specified database engine.
+         *
+         *  @param  $db The YDDatabaseDriver object to use.
+         *
+         *  @returns    Returns a new YDDatabaseQuery class.
+         */
         function getInstance( & $db ) {
-            
+
+            // Get the driver name
             $driver = $db->getDriver();
             
             // The list of known drivers
