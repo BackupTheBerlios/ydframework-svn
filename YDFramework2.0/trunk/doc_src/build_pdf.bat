@@ -58,3 +58,5 @@ del pdf\*.svg > NUL
 
 rem Open the result
 if exist pdf\YDFramework2.pdf start pdf\YDFramework2.pdf
+
+pause
