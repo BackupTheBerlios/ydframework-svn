@@ -539,15 +539,24 @@
          *
          *	@param $name	(optional) The name of the file download should show in the browser. By default, this is the
          *					same as the filename.
+         *  @param $inline  (optional) If set to true, the download is inline, otherwise, a download will be forced by
+         *                  the browser. Default is false.
          */
-        function download( $name=null ) {
+        function download( $name=null, $inline=false ) {
 
             // Get the name of the file
             if ( is_null( $name ) ) {
                 $name = $this->getBasename();
             }
-            header( 'Content-Type: application/force-download; name="' . $name . '"');
-            header( 'Content-Disposition: attachment; filename="' . $name . ' "');
+
+            // Force download or do inline
+            if ( ! $inline ) {
+                header( 'Content-Type: application/force-download; name="' . $name . '"');
+                header( 'Content-Disposition: attachment; filename="' . $name . ' "');
+            } else {
+                header( 'Content-Type: application/octet-stream; name="' . $name . '"');
+                header( 'Content-Disposition: inline; filename="' . $name . ' "');
+            }
 
             // Add the rest of the headers
             header( 'Cache-Control: public' );
@@ -607,6 +616,21 @@
             // Return null if the file doesn't exist
             return null;
 
+        }
+
+        /**
+         *  This function will rename the file to the specified file path.
+         *
+         *  @param  $new_path   The new path of the file.
+         *
+         *  @returns    True on success, false on failure.
+         */
+        function rename( $new_path ) {
+            $result = rename( $this->getAbsolutePath(), $new_path );
+            if ( $result === true ) {
+                $this->_path = realpath( $new_path );
+            }
+            return $result;
         }
 
         /**
