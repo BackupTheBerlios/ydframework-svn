@@ -45,24 +45,6 @@
             }
         }
 
-        /*
-        // Function to show a thumbnail
-        function actionThumbnail() {
-
-            // Get the image name
-            if ( ! isset( $_GET['id'] ) ) {
-                die( 'No image selected.' );
-            }
-
-            // Create a new image object
-            $img = new YDFSImage( dirname( __FILE__ ) . '/../' . YDConfig::get( 'dir_uploads', '../uploads' ) . '/' . $_GET['id'] );
-
-            // Output the thumbnail
-            $img->outputThumbnail( 100, 100 );
-
-        }
-        */
-
         // Function to show a thumbnail
         function actionThumbnailSmall() {
 
