@@ -12,7 +12,7 @@
 
         <p>
             <small>
-                {t w="created_on"} {$page.created|date} {t w="by"} <a href="mailto:{$page.user_email}">{$page.user_name}</a>
+                {t w="created_on"} {$page.created|date} {t w="by"} <a href="mailto:{$page.user_email|escape:'hexentity'}">{$page.user_name}</a>
                 {if $page.modified}
                     <br/>
                     {t w="last_modified_on"} {$page.modified|date}.

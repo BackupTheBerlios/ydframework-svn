@@ -16,7 +16,7 @@
                     <br/>
                     {$item.body|bbcode|strip_tags|truncate:70}
                 </div>
-                <small>{$item.created|date} {t w="by"} <a href="mailto:{$item.user_email}">{$item.user_name}</a></small>
+                <small>{$item.created|date} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name}</a></small>
             </p>
         {/foreach}
 

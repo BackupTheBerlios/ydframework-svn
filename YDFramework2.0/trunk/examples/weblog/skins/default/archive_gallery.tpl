@@ -9,7 +9,7 @@
                 <h2 id="post-{$item.id}">
                     <a href="{$item|@link_item}" rel="bookmark" title="PermaLink to {$item.title}">{$item.title}</a>
                 </h2>
-                <small>{$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email}">{$item.user_name|lower}</a></small>
+                <small>{$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a></small>
                 <p>
                     <table width="450" border=0 cellspacing=0 cellpadding=0>
                     {foreach from=$item.images_as_table item="image_row"}

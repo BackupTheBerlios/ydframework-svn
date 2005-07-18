@@ -25,7 +25,7 @@
 
             <p class="postmetadata alt">
                 <small>
-                    {t w="posted_under"} {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email}">{$item.user_name}</a>
+                    {t w="posted_under"} {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name}</a>
                     {t w="filed_under"} <a href="{$item.category_id|link_category}">{$item.category}</a>.
                     {t w="can_leave_comment"}, {t w="or"}
                     <a href="{$item|@link_item}">{t w="trackback"}</a> {t w="from_your_site"}
