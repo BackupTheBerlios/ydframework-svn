@@ -157,12 +157,20 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="2" valign="top">&nbsp;</td>
+            <td rowspan="3" valign="top">&nbsp;</td>
             <td valign="top"><a href="template_smarty.php">Using Smarty templates</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=template_smarty.php">template_smarty.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=template_smarty.tpl">template_smarty.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="cache/index.php">Using PHP templates</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php.php">template_php.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php.tpl">template_php.tpl</a>
             </td>
         </tr>
         <tr>
@@ -375,6 +383,7 @@
             <td valign="top"><a href="fsfile.php">YDFSFile object</a> <br>
               <a href="fsfile.php?do=download">YDFSFile object - File download</a> <br>
               <a href="fsfile.php?do=download2">YDFSFile object - File download with changed name</a> </td>
+              <a href="fsfile.php?do=downloadinline">YDFSFile object - Inline File download</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=fsfile.php">fsfile.php</a>
             </td>
