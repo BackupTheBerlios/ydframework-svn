@@ -5,4 +5,24 @@
 
     <para>In this chapter, we will enhance the tutorial application to make it use a database backend instead of using the filesystem. We will also add the capability to edit items.</para>
 
+    <sect1 id="tutorial1_code">
+
+        <title>The new code</title>
+
+        <para>The updated code for the tutorial application using a database backend instead of a filesystem backend.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_001.xml" />
+
+        <para>The new template file now looks a follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_002.xml" />
+
+        <para>As you can see, we are using the YDDatabase class to interact with the database backend, which is in this case an SQLite database. However, if you have the same database tables available for a different database engine, this works just fine as well and the only thing you need to update is the database connection information.</para>
+
+        <para>What is interesting as well is that we are sharing the same form object for both the edit and add action. These forms are practically identical and share common fields and rules. That's a good way to save typing and prevent errors if you try to use the same form object for both actions. The only difference is that for the edit action, we add a hidden field with the ID of the record, so that the database knows which record to update.</para>
+
+        <para>What you can see as well, is that the values from the form can be accessed using the <literal>$form->getValues()</literal> function. The resulting array can be passed on directly to a YDDatabase instance by using the <literal>$db->executeInsert()</literal> and <literal>$db->executeUpdate()</literal> functions. This makes it very easy to access and edit data in a database.</para>
+
+    </sect1>
+
 </chapter>
