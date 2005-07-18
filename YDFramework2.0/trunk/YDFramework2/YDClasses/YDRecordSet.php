@@ -29,6 +29,7 @@
     // Includes
     YDInclude( 'YDUrl.php' );
     YDInclude( 'YDUtil.php' );
+    YDInclude( 'YDPersistent.php' );
 
     // Configure the default for this class
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
@@ -96,18 +97,16 @@
             $this->records = $records;
 
             // Sort the records
-            if ( ! empty( $_GET[$sortvar] ) ) {
+            if ( YDPersistent::get( $sortvar, '' ) != '' ) {
 
                 // Set the sortfield and direction
-                $this->sortfield = $_GET[$sortvar];
+                $this->sortfield = YDPersistent::get( $sortvar );
 
                 // Get the sort direction
-                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
+                if ( strtoupper( YDPersistent::get( $this->sortdir, 'DESC' ) ) == 'DESC' ) {
                     $this->sortdirection = 'DESC';
-                    //arsort( $sort_array );
                 } else {
                     $this->sortdirection = 'ASC';
-                    //asort( $sort_array );
                 }
 
                 // Perform the sorting
@@ -331,8 +330,8 @@
             
             $url->setQueryVar( $this->sortvar, $sortfld );
 
-            if ( isset( $_GET[$this->sortvar] ) && $_GET[$this->sortvar] == $sortfld ) {
-                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'ASC' ) ) {
+            if ( YDPersistent::get( $this->sortvar ) == $sortfld ) {
+                if ( strtoupper( YDPersistent::get( $this->sortdir ) ) == 'ASC' ) {
                     $sortdir = 'DESC';
                 } else {
                     $sortdir = 'ASC';
