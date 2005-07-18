@@ -4,9 +4,11 @@
 <head>
 
     {literal}<script>
-    
+
+        // The variable holding the request object
         var req;
 
+        // Initialize the request object
         function Initialize() {
             try {
                 req = new ActiveXObject( "Msxml2.XMLHTTP" );
@@ -21,7 +23,8 @@
                 req= new XMLHttpRequest();
             }
         }
-    
+
+        // Send the query
         function SendQuery() {
             Initialize();
             var url = "{/literal}{$YD_SELF_SCRIPT}{literal}?do=server";
@@ -31,22 +34,24 @@
                 req.send( null );
             }
         }
-    
+
+        // Process the response
         function Process() {
             if ( req.readyState == 4 ) {
                 if ( req.status == 200 ) {
                     if( req.responseText == "" ) {
-                        HideDiv( "autocomplete" );
+                        HideDiv( "version_display" );
                     } else {
-                        ShowDiv( "autocomplete" );
-                        document.getElementById( "autocomplete" ).innerHTML = req.responseText;
+                        ShowDiv( "version_display" );
+                        document.getElementById( "version_display" ).innerHTML = req.responseText;
                     }
                 } else {
-                    document.getElementById("autocomplete").innerHTML = "There was a problem retrieving data:<br/>" + req.statusText;
+                    document.getElementById("version_display").innerHTML = "There was a problem retrieving data:<br/>" + req.statusText;
                 }
             }
         }
-    
+
+        // Show the div
         function ShowDiv( divid ) {
             if ( document.layers ) {
                 document.layers[divid].visibility = "show";
@@ -54,7 +59,8 @@
                 document.getElementById(divid).style.visibility = "visible";
             }
         }
-    
+
+        // Hide the div
         function HideDiv( divid ) {
             if ( document.layers ) {
                 document.layers[divid].visibility = "hide";
@@ -62,9 +68,10 @@
                 document.getElementById(divid).style.visibility = "hidden";
             }
         }
-    
+
+        // Executed when the body loads
         function BodyLoad() {
-            HideDiv( "autocomplete" );
+            HideDiv( "version_display" );
         }
         
     </script>{/literal}
@@ -76,7 +83,7 @@
     <form name="form1">
         <input type="submit" onClick="SendQuery(); return false;" value="Get version info" />
         <br/>&nbsp;<br/>
-        <div align="left" class="box" id="autocomplete" style="WIDTH:500px;BACKGROUND-COLOR:#ccccff"></div>
+        <div align="left" class="box" id="version_display" style="WIDTH:500px;BACKGROUND-COLOR:#ccccff"></div>
     </form>
 
 </body>
