@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="tutorial2">
+
+    <title>A real application: the weblog</title>
+
+    <para>Now that we know the basics of the Yellow Duck Framework, we will have a look at a bigger example application. Included in the examples is a complete weblog application. This chapter will describe how this application was build and designed.</para>
+
+</chapter>

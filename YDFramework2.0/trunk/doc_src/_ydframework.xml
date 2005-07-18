@@ -5,6 +5,8 @@
     <!ENTITY firstsample SYSTEM "firstsample.xml">
     <!ENTITY installing SYSTEM "installing.xml">
     <!ENTITY tutorial SYSTEM "tutorial.xml">
+    <!ENTITY tutorial1 SYSTEM "tutorial1.xml">
+    <!ENTITY tutorial2 SYSTEM "tutorial2.xml">
     <!ENTITY ydbase SYSTEM "ydbase.xml">
     <!ENTITY ydconfig SYSTEM "ydconfig.xml">
     <!ENTITY ydrequest SYSTEM "ydrequest.xml">
@@ -23,6 +25,7 @@
     <!ENTITY ydencryption SYSTEM "ydencryption.xml">
     <!ENTITY ydpersistent SYSTEM "ydpersistent.xml">
     <!ENTITY ydlocale SYSTEM "ydlocale.xml">
+    <!ENTITY yddate SYSTEM "yddate.xml">
     <!ENTITY other SYSTEM "other.xml">
     <!ENTITY addon_ydbbcode SYSTEM "ydbbcode.xml">
     <!ENTITY addon_ydcart SYSTEM "ydcart.xml">
@@ -33,11 +36,13 @@
     <!ENTITY addon_ydxmlform SYSTEM "ydxmlform.xml">
     <!ENTITY bestpractices SYSTEM "bestpractices.xml">
     <!ENTITY faq SYSTEM "faq.xml">
+    <!ENTITY config_vars SYSTEM "config_vars.xml">
     <!ENTITY changelog SYSTEM "changelog.xml">
     <!ENTITY appendixA SYSTEM "appendixA.xml">
     <!ENTITY appendixB SYSTEM "appendixB.xml">
     <!ENTITY appendixC SYSTEM "appendixC.xml">
     <!ENTITY appendixD SYSTEM "appendixD.xml">
+    <!ENTITY appendixE SYSTEM "appendixE.xml">
 ]>
 
 <book>
@@ -74,6 +79,8 @@
     &firstsample;
     &installing;
     &tutorial;
+    &tutorial1;
+    &tutorial2;
     &ydbase;
     &ydconfig;
     &ydrequest;
@@ -92,6 +99,7 @@
     &ydencryption;
     &ydpersistent;
     &ydlocale;
+    &yddate;
     &other;
     &addon_ydbbcode;
     &addon_ydcart;
@@ -101,10 +109,12 @@
     &addon_ydsqlquery;
     &addon_ydxmlform;
     &faq;
+    &config_vars;
     &changelog;
     &appendixA;
     &appendixB;
-    &appendixC;
     &appendixD;
+    &appendixC;
+    &appendixE;
 
 </book>

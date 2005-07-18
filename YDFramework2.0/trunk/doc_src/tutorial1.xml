@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="tutorial1">
+
+    <title>Enhancing the tutorial application to use a database backend</title>
+
+    <para>In this chapter, we will enhance the tutorial application to make it use a database backend instead of using the filesystem. We will also add the capability to edit items.</para>
+
+</chapter>

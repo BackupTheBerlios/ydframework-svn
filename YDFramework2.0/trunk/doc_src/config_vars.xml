@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="config_vars">
+
+    <title>YDConfig variables</title>
+
+    <para>This chapter gives you an overview of all the different configuration variables that are exposed in the different modules. All these configuration settings can be changed using the <link linkend="ydconfig"><literal>YDConfig</literal></link> module.</para>
+
+    <sect1 id="config_vars_ydf2init">
+
+        <title>YDF2_init.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDF2_init.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDF2_init.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_LOCALE</entry>
+                        <entry valign="top">The locale used for the current request.</entry>
+                        <entry valign="top"><literal>'en'</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_EXECUTOR</entry>
+                        <entry valign="top">The name of the class used to execute the request.</entry>
+                        <entry valign="top"><literal>'YDExecutor'</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DEBUG</entry>
+                        <entry valign="top">The debugging level for the current request. This influences the amount of debug information that is shown and how.</entry>
+                        <entry valign="top"><literal>0</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_yddatabase">
+
+        <title>YDClasses/YDDatabase.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDDatabase.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDDatabase.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_DB_FETCHTYPE</entry>
+                        <entry valign="top">How the records should be fetched from the database. Values can be either YD_DB_FETCH_ASSOC or YD_DB_FETCH_NUM.</entry>
+                        <entry valign="top"><literal>YD_DB_FETCH_ASSOC</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_yddate">
+
+        <title>YDClasses/YDDate.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDDate.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDDate.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_DATE_FORMATS</entry>
+                        <entry valign="top">The date formats for the <literal>YDDate</literal> module.</entry>
+                        <entry valign="top"><literal>array()</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydhttpclient">
+
+        <title>YDClasses/YDHttpClient.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDHttpClient.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDHttpClient.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_HTTP_USES_GZIP</entry>
+                        <entry valign="top">Use GZip compression for the HTTP downloads.</entry>
+                        <entry valign="top"><literal>1</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_HTTP_CACHE_TIMEOUT</entry>
+                        <entry valign="top">The lifetime for the HTTP cache in seconds.</entry>
+                        <entry valign="top"><literal>3600</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_HTTP_CACHE_USEHEAD</entry>
+                        <entry valign="top">Use a HTTP HEAD request for validating the cache. This is the smart way of doing caching. If you set this to 0, it will keep on using the cached items until the cache is expired. If set to 0, it will send a HTTP HEAD request to make sure the cache is still valid.</entry>
+                        <entry valign="top"><literal>1</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydlog">
+
+        <title>YDClasses/YDLog.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDLog.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDLog.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_LOG_LEVEL</entry>
+                        <entry valign="top">The minimum level of the messages that are shown. Values can be YD_LOG_DEBUG, YD_LOG_INFO, YD_LOG_WARNING and YD_LOG_ERROR.</entry>
+                        <entry valign="top"><literal>YD_LOG_INFO</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_LOG_FILE</entry>
+                        <entry valign="top">The path to the logfile.</entry>
+                        <entry valign="top"><literal>YD_DIR_TEMP/YDFramework2_log.xml</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_LOG_FORMAT</entry>
+                        <entry valign="top">The format for the logfile. Can be TEXT or XML.</entry>
+                        <entry valign="top"><literal>'XML'</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_LOG_TEXTFORMAT</entry>
+                        <entry valign="top">The format for the log messages.</entry>
+                        <entry valign="top"><literal>"%date% | %level% | %uri% | %basefile%:%line% | %function% | %message%"</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_LOG_WRAPLINES</entry>
+                        <entry valign="top">Boolean indicating if long lines need to wrapped or not.</entry>
+                        <entry valign="top"><literal>false</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_LOG_MAX_LINESIZE</entry>
+                        <entry valign="top">If YD_LOG_WRAPLINES is enabled, this option defines the maximum length of a line.</entry>
+                        <entry valign="top"><literal>100</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydpersistent">
+
+        <title>YDClasses/YDPersistent.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDPersistent.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDPersistent.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_PERSISTENT_STORE_NAME</entry>
+                        <entry valign="top">The cookie variable in which to store the persistent data.</entry>
+                        <entry valign="top"><literal>strtoupper( str_replace( ' ', '_', YD_FW_NAME ) ) . '_PERSISTENT_STORE'</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_PERSISTENT_DEFAULT_LIFETIME</entry>
+                        <entry valign="top">The default lifetime for persistent data.</entry>
+                        <entry valign="top"><literal>0</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_PERSISTENT_DEFAULT_PASSWORD</entry>
+                        <entry valign="top">The default password for encrypting persisent data.</entry>
+                        <entry valign="top"><literal>null</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydrecordset">
+
+        <title>YDClasses/YDRecordSet.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDRecordSet.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDRecordSet.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_DB_DEFAULTPAGESIZE</entry>
+                        <entry valign="top">The default pagesize for a recordset.</entry>
+                        <entry valign="top"><literal>20</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydtemplate">
+
+        <title>YDClasses/YDTemplate.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDTemplate.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDTemplate.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_TEMPLATE_ENGINE</entry>
+                        <entry valign="top">The template engine that is used. Can be <literal>smarty</literal> or <literal>php</literal>.</entry>
+                        <entry valign="top"><literal>smarty</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydurl">
+
+        <title>YDClasses/YDUrl.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDUrl.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDUrl.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_HTTP_USES_GZIP</entry>
+                        <entry valign="top">Use GZip compression for the HTTP downloads.</entry>
+                        <entry valign="top"><literal>1</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_HTTP_CACHE_TIMEOUT</entry>
+                        <entry valign="top">The lifetime for the HTTP cache in seconds.</entry>
+                        <entry valign="top"><literal>3600</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_HTTP_CACHE_USEHEAD</entry>
+                        <entry valign="top">Use a HTTP HEAD request for validating the cache. This is the smart way of doing caching. If you set this to 0, it will keep on using the cached items until the cache is expired. If set to 0, it will send a HTTP HEAD request to make sure the cache is still valid.</entry>
+                        <entry valign="top"><literal>1</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_yddatabaseobject">
+
+        <title>addons/YDDatabaseObject/YDDatabaseObject.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>addons/YDDatabaseObject/YDDatabaseObject.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>addons/YDDatabaseObject/YDDatabaseObject.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_PATH</entry>
+                        <entry valign="top">Path to all YDDatabaseObjects.</entry>
+                        <entry valign="top"><literal>YD_SELF_DIR</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_EXT</entry>
+                        <entry valign="top">YDDatabaseObjects file extension.</entry>
+                        <entry valign="top"><literal>YD_SCR_EXT</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_PREFIX</entry>
+                        <entry valign="top">YDDatabaseObject class name prefix.</entry>
+                        <entry valign="top"><literal>''</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_SUFIX</entry>
+                        <entry valign="top">YDDatabaseObject class name suffix.</entry>
+                        <entry valign="top"><literal>''</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_DELETE</entry>
+                        <entry valign="top">This config defines if a DELETE query with no conditions can be executed.</entry>
+                        <entry valign="top"><literal>false</literal></entry>
+                    </row>
+                    <row>
+                        <entry valign="top">YD_DBOBJECT_UPDATE</entry>
+                        <entry valign="top">This config defines if a UPDATE query with no conditions can be executed.</entry>
+                        <entry valign="top"><literal>false</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+    <sect1 id="config_vars_ydgraph">
+
+        <title>addons/YDGraph/YDGraph.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDClasses/YDGraph.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDClasses/YDGraph.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_GRAPH_TYPE</entry>
+                        <entry valign="top">Defines the default image type for the resulting graphs.</entry>
+                        <entry valign="top"><literal>IMG_PNG</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
+
+</chapter>

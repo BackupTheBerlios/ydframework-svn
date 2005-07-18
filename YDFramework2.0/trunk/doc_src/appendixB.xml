@@ -17,7 +17,7 @@
                 <listitem>SVN repository url: svn://svn.berlios.de/ydframework/YDFramework2.0/</listitem>
             </itemizedlist>
 
-            <para>If you want read/write access to the repository, please contact pieter@yellowduck.be and he will setup the account for you. You need to have a Berlios account to be able to join the project as a developer. More information can be found on http://developer.berlios.de/.</para>
+            <para>If you want read/write access to the repository, please contact pieter@yellowduck.be and he will setup the account for you. You need to have a Berlios account to be able to join the project as a developer. More information can be found on <ulink url="http://developer.berlios.de/">developer.berlios.de</ulink>.</para>
 
         </sect1>
 
@@ -74,6 +74,19 @@
     450 PClaerho            Jul 18 19:33 2.0.0-beta2/
     483 pieter              Jul 31 17:33 2.0.0-beta3/
     583 pieter              Oct 22 20:07 2.0.0-beta4/]]></programlisting>
+
+        </sect1>
+
+        <sect1 id="appendixB_web_interface">
+
+            <title>Web interface to the SVN repository</title>
+
+            <para>As we are hosting the SVN repository on <ulink url="http://developer.berlios.de/projects/ydframework/">berlios.de</ulink>, we automatically have a web interface to the SVN repository. The web interface is available in two flavors:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>ViewCVS: <ulink url="http://svn.berlios.de/viewcvs/ydframework">http://svn.berlios.de/viewcvs/ydframework</ulink></listitem>
+                <listitem>WebSVN: <ulink url="http://svn.berlios.de/wsvn/ydframework">http://svn.berlios.de/wsvn/ydframework</ulink></listitem>
+            </itemizedlist>
 
         </sect1>
 
