@@ -45,3 +45,5 @@ xsltproc --xinclude --output html\index.html xsl_html.xsl _ydframework.xml
 
 rem Open the result
 if exist html\index.html start html\index.html
+
+pause
