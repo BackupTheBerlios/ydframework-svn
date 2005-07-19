@@ -112,8 +112,8 @@
     &addon_ydmysqldump;
     &addon_ydsqlquery;
     &addon_ydxmlform;
-    &faq;
     &config_vars;
+    &faq;
     &changelog;
     &appendixA;
     &appendixB;
