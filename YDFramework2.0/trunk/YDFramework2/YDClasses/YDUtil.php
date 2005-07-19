@@ -691,6 +691,46 @@
 
         }
 
+        /**
+         *  This function will replace all special characters to normal ASCII characters. This is very useful when you
+         *  want to rename uploaded files and strip out the special characters.
+         *
+         *  @param  $data   The data to strip the special characters from.
+         *
+         *  @returns    The data with the special characters replaced.
+         *
+         *  @static
+         */
+        function stripSpecialCharacters( $data ) {
+
+            // Trim the data
+            $data = trim( $data );
+
+            // Decode the HTML entities
+            $trans = array_flip( get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES ) );
+            $data = strtr( $data, $trans ); 
+
+            // The characters to replace
+            $chars = array(
+                'À' => 'A', 'Â' => 'A', 'Ä' => 'A', 'Æ' => 'AE', 'È' => 'E', 'Ê' => 'E', 'Ì' => 'I', 'Î' => 'I',
+                'Ğ' => 'D', 'Ò' => 'O', 'Ô' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ú' => 'U', 'Ü' => 'U', 'à' => 'a',
+                'â' => 'a', 'ä' => 'a', 'æ' => 'ae', 'è' => 'e', 'ê' => 'e', 'ì' => 'i', 'î' => 'i', 'ğ' => 'o',
+                'ò' => 'o', 'ô' => 'o', 'ö' => 'o', 'ø' => 'o', 'ú' => 'u', 'ü' => 'u', 'Á' => 'A', 'Ã' => 'A',
+                'Å' => 'A', 'Ç' => 'C', 'É' => 'E', 'Ë' => 'E', 'Í' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ó' => 'O',
+                'Õ' => 'O', 'Ù' => 'U', 'Û' => 'U',  'İ' => 'Y', 'ß' => 'B', 'á' => 'a', 'ã' => 'a', 'å' => 'a',
+                'ç' => 'c', 'é' => 'e', 'ë' => 'e', 'í' => 'i', 'ï' => 'i', 'ñ' => 'n', 'ó' => 'o', 'õ' => 'o',
+                'ù' => 'u', 'û' => 'u', 'ı' => 'y', 'ÿ' => 'y', '@' => '_', ' ' => '_', '[' => '_', ']' => '_',
+                '(' => '_', ')' => '_', '&' => '_', '+' => '_', '=' => '_'
+            );
+
+            // Strip the special characters
+            $data = str_replace( array_keys( $chars ), $chars, $data );
+
+            // Return the data
+            return $data;
+
+        }
+
     }
 
     /**
