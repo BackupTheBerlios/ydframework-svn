@@ -175,14 +175,8 @@
             $dir = new YDFSDirectory( $this->dir_rel );
             $images = @ $dir->getContents( array( '!index.html', '!index.php' ), null, array( 'YDFSImage' ), true, 'desc' );
 
-            // Fix the directory permissions
-            //@chmod( $dir->getAbsolutePath(), 0777 );
-
             // Make the relative path for each file
             foreach ( $images as $key=>$image ) {
-
-                // Fix the file permissions
-                //@chmod( $image->getAbsolutePath(), 0666 );
 
                 // Set the relative path
                 $image->relative_path = str_replace( $dir->getAbsolutePath(), '', $image->getAbsolutePath() );
