@@ -155,6 +155,24 @@
 
         </warning>
 
+        <para>There are a few gotchas unfortunately when using PHP as the template engine. The biggest one is that depending on the configuration in PHP, stuff might work or might not work. The most important configuration setting in the regards is related to something called "short_open_tags". The difference is very subtle, yet very important. Without short tags enabled, you need to write the following template code to display a variable:</para>
+
+        <programlisting><![CDATA[<?php echo( $myvar ); ?>]]></programlisting>
+
+        <para>However, if you enable short open tags, you can shorten this to the following code:</para>
+
+        <programlisting><![CDATA[<?= $myvar ?>]]></programlisting>
+
+        <para>This setting can be changed by altering your php.ini file, or using the standard <literal>.htaccess</literal> file included with the Yellow Duck Framework.</para>
+
+        <programlisting><![CDATA[; Allow the <? tag.  Otherwise, only <?php and <script> tags are recognized.  
+; NOTE: Using short tags should be avoided when developing applications or
+; libraries that are meant for redistribution, or deployment on PHP
+; servers which are not under your control, because short tags may not
+; be supported on the target server. For portable, redistributable code,
+; be sure not to use short tags.
+short_open_tag = On]]></programlisting>
+
     </sect1>
 
 </chapter>
