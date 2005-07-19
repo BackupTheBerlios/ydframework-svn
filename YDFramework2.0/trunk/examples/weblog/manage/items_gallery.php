@@ -69,11 +69,14 @@
                 $file = $this->form->getElement( 'image' );
                 if ( $file->isUploaded() ) {
 
+                    // Get the new filename
+                    $filename = YDStringUtil::stripSpecialCharacters( $file->getBaseName() );
+
                     // Move the upload
                     if ( ! is_dir( $this->dir_rel ) ) {
                         @mkdir( $this->dir_rel );
                     }
-                    $file->moveUpload( $this->dir_rel );
+                    $file->moveUpload( $this->dir_rel, $filename );
 
                     // Check if it's an image
                     $fileObj = new YDFSFile( $this->dir_rel . $file->getBaseName() );
