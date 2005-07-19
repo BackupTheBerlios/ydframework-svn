@@ -138,7 +138,7 @@
 
         /**
          *	This function will return the actual name of the uploaded file.
-         *  In case there is no fileo object, fetch the name from $_FILES
+         *  In case there is no file object, fetch the name from $_FILES
          *
          *	@returns	Name of the uploaded file.
          */
