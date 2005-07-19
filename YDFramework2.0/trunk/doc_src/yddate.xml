@@ -3,6 +3,12 @@
 
     <title>Using YDDate to work with date and time elements</title>
 
-    <para>Not written yet.</para>
+    <para>The following example shows you how the YDDate class can be used.</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_001.xml" />
+
+    <para>This script returns the following ouput:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_001_output.xml" />
 
 </chapter>
