@@ -166,7 +166,7 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="cache/index.php">Using PHP templates</a> </td>
+            <td valign="top"><a href="template_php.php">Using PHP templates</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php.php">template_php.php</a>
                 <br/>
