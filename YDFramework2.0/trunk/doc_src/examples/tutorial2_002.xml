@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The items table</title>
+    <programlisting><![CDATA[CREATE TABLE items (
+  id int(11) NOT NULL auto_increment,
+  category_id int(11) default '1',
+  user_id int(11) NOT NULL default '1',
+  title varchar(255) NOT NULL default '',
+  body longtext NOT NULL,
+  num_comments int(11) NOT NULL default '0',
+  created int(11) default NULL,
+  modified int(11) default NULL,
+  PRIMARY KEY  (id),
+  KEY category_id (category_id),
+  KEY user_id (user_id)
+) TYPE=MyISAM;]]></programlisting>
+</example>

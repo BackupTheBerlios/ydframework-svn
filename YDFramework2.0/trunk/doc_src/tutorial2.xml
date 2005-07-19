@@ -3,9 +3,15 @@
 
     <title>A real application: the weblog</title>
 
-    <para>Now that we know the basics of the Yellow Duck Framework, we will have a look at a bigger example application. Included in the examples is a complete weblog application. This chapter will describe how this application was build and designed.</para>
+    <para>Now that we know the basics of the Yellow Duck Framework, we will have a look at a bigger example application.</para>
 
-    <para>This is how the weblog application looks like:</para>
+    <para>Included in the examples is a complete weblog application which is similar to aplications such as <ulink url="http://www.wordpress.org/">WordPress</ulink>, <ulink url="http://www.textpattern.com/">TextPattern</ulink> and <ulink url="http://www.nucleuscms.org/">Nucleus</ulink>. This chapter will describe how this application was build and designed.</para>
+
+    <sect1 id="ydweblog_description">
+
+        <title>Project description</title>
+
+        <para>This is how the weblog application looks like when you visit the homepage. This is the default view with the default skin. As you can see, it shows the last items posted on the weblog, and shows shortcuts to the different parts of the weblog application on the right side.</para>
 
         <para><mediaobject>
             <imageobject role="html">
@@ -15,5 +21,266 @@
                 <imagedata fileref="ydweblog_index.gif" width="117.5mm" height="94.2mm" scalefit="0" />
             </imageobject>
         </mediaobject></para>
+
+        <para>As you can see, the weblog application supports a number of different content types:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Weblog items (or posts)</listitem>
+            <listitem>One or more pictures linked to a weblog item (like a mini photo-gallery)</listitem>
+            <listitem>On or more static pages</listitem>
+            <listitem>Archives of the items</listitem>
+            <listitem>A thumbnail view of all items that have pictures</listitem>
+            <listitem>One or more categories that group items in logical units</listitem>
+            <listitem>One or more links to external websites</listitem>
+            <listitem>Option to add comments to a weblog item</listitem>
+            <listitem>RSS and ATOM feeds for both items and comments</listitem>
+        </itemizedlist>
+
+        <para>The administrative interface for the weblog looks as follows:</para>
+
+        <para><mediaobject>
+            <imageobject role="html">
+                <imagedata fileref="ydweblog_admin.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="ydweblog_admin.gif" width="117.5mm" height="94.2mm" scalefit="0" />
+            </imageobject>
+        </mediaobject></para>
+
+        <para>However, there are also a whole number of features that are not directly visible:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Support for skins (to change the look of your website)</listitem>
+            <listitem>Email notification when new comments are posted</listitem>
+            <listitem>Full blown statistics</listitem>
+            <listitem>Automatic renaming of uploaded files</listitem>
+            <listitem>Automatic thumbnail creation for uploaded images</listitem>
+            <listitem>Automatic thumbnail creation for uploaded images</listitem>
+            <listitem>Multilingual user interface for the public and admin side</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydweblog_db_schema">
+
+        <title>The database schema</title>
+
+        <para>In this chapter, we will have a look at the database schema that is used by the weblog application.</para>
+
+        <para>We tried to keep the database schema as easy and simple as possible. You will notice that most of the tables look pretty similar in their setup, and that the naming of the tables and fields is very consistent.</para>
+
+        <para>In the database schema, there are different tables, each used for a very specific purpose:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><literal>comments</literal>: this table will hold all the comments</listitem>
+            <listitem><literal>items</literal>: this table will hold all the posts</listitem>
+            <listitem><literal>links</literal>: this table will hold all the links to external websites</listitem>
+            <listitem><literal>pages</literal>: this table will hold all the static pages</listitem>
+            <listitem><literal>statistics</literal>: this table will hold all the statistics</listitem>
+            <listitem><literal>statistics_init</literal>: this table will hold all the installation date of the software</listitem>
+            <listitem><literal>users</literal>: this table will hold all the users that can log in to the admin side</listitem>
+        </itemizedlist>
+
+        <warning>The weblog application allows you specify a prefix for the table names so that you can install multiple weblogs in the same database without problems.</warning>
+
+        <sect2 id="ydweblog_db_comments">
+
+            <title>Table: comments</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_001.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_items">
+
+            <title>Table: items</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_002.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_links">
+
+            <title>Table: links</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_003.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_pages">
+
+            <title>Table: pages</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_004.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_statistics">
+
+            <title>Table: statistics</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_005.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_statistics_init">
+
+            <title>Table: statistics_init</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_006.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_users">
+
+            <title>Table: users</title>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial2_007.xml" />
+
+        </sect2>
+
+        <sect2 id="ydweblog_db_moreinfo">
+
+            <title>More information about the database</title>
+
+            <para>As you can see in the database schema, the field names follow a common standard:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>Primary key is always called "id"</listitem>
+                <listitem>Foreign keys always used the name of the table they are pointing to combined with the name of the field they are pointing to</listitem>
+            </itemizedlist>
+
+            <para>Each table also has a created and a modified field that indicates when the record was created and modified. The field types for these fields is <literal>int</literal> so that we can use simple UNIX timestamps. This makes it a bit easier to store date and timestamps in the database. By using the functions in the Yellow Duck Framework to format the dates, we can make sure they are using the right locale.</para>
+
+        </sect2>
+
+    </sect1>
+
+    <sect1 id="ydweblog_weblogapi">
+
+        <title>The YDWeblogAPI module</title>
+
+        <para>To make it easier to get the data out of the database and in the database, we created a wrapper module called <literal>YDWeblogAPI</literal> that takes care of extracting and inserting data into the database. This makes programming with the weblog application much easier, as you don't have to remember the different SQL statements.</para>
+
+        <para>The YDWeblogAPI is actually the biggest module in the weblog application and is also the core of the weblog application.</para>
+
+        <sect2 id="ydweblog_weblogapi_using">
+
+            <title>Instantiating the YDWeblogAPI module</title>
+
+            <para>To create an instance of the YDWeblogAPI module, you need to have a number of configuration settings setup before you can create an instance of this class. You will need to have the following configuration variables set using YDConfig:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><literal>db_name</literal>: the name of the database</listitem>
+                <listitem><literal>db_user</literal>: the username used to connect to the database</listitem>
+                <listitem><literal>db_pass</literal>: the password used to connect to the database</listitem>
+                <listitem><literal>db_host</literal>: the name of the host on which the database is located</listitem>
+            </itemizedlist>
+
+            <para>These items are needed as the first thing that happens when you create an instance of the YDWeblogAPI class is that it connects to the database.</para>
+
+            <note>In the weblog application, these configuration settings are found in the includes/config.php file.</note>
+
+        </sect2>
+
+        <sect2 id="ydweblog_weblogapi_api">
+
+            <title>The YDWeblogAPI functions</title>
+
+            <para>The YDWeblogAPI class exposes the following functions:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><literal>logRequestToStats</literal>: logs a request to the statistics table</listitem>
+                <listitem><literal>getItem</literal>: gets a single post from the weblog</listitem>
+                <listitem><literal>getItems</literal>: gets multiple posts from the weblog</listitem>
+                <listitem><literal>getItemById</literal>: gets a post by it's ID</listitem>
+                <listitem><literal>addItem</literal>: adds a new post</listitem>
+                <listitem><literal>updateItem</literal>: updates an existing post</listitem>
+                <listitem><literal>deleteItem</literal>: deletes an existing post</listitem>
+                <listitem><literal>getComments</literal>: gets multiple comments from the weblog</listitem>
+                <listitem><literal>getCommentById</literal>: gets a comment by it's ID</listitem>
+                <listitem><literal>addComment</literal>: adds a new comment</listitem>
+                <listitem><literal>updateComment</literal>: updates an existing comment</listitem>
+                <listitem><literal>deleteComment</literal>: deletes an existing comment</listitem>
+                <listitem><literal>getCommentSubscribers</literal>: gets the list of people subscribed to the comment</listitem>
+                <listitem><literal>getCategories</literal>: gets the list of categories for the weblog</listitem>
+                <listitem><literal>getCategoriesAsAssoc</literal>: gets the list of categories for the weblog as an associative array</listitem>
+                <listitem><literal>getCategoryById</literal>: gets a category by it's ID</listitem>
+                <listitem><literal>getCategoryByName</literal>: gets a category by it's name</listitem>
+                <listitem><literal>getItemsByCategoryId</literal>: gets the list of items belonging to the specified category</listitem>
+                <listitem><literal>addCategory</literal>: adds a new category</listitem>
+                <listitem><literal>updateCategory</literal>: updates an existing category</listitem>
+                <listitem><literal>deleteCategory</literal>: deletes an existing category</listitem>
+                <listitem><literal>getPages</literal>: gets multiple static pages from the weblog</listitem>
+                <listitem><literal>getPageByID</literal>: gets a static page by it's ID</listitem>
+                <listitem><literal>addPage</literal>: adds a new static page</listitem>
+                <listitem><literal>updatePage</literal>: updates an existing static page</listitem>
+                <listitem><literal>deletePage</literal>: deletes an existing static page</listitem>
+                <listitem><literal>getLinks</literal>: gets the external links from the weblog</listitem>
+                <listitem><literal>getLinkByID</literal>: gets an external link by it's ID</listitem>
+                <listitem><literal>getLinkByUrl</literal>: gets an external link by it's URL</listitem>
+                <listitem><literal>addLink</literal>: adds a new external link</listitem>
+                <listitem><literal>updateLink</literal>: updates an existing external link</listitem>
+                <listitem><literal>deleteLink</literal>: deletes an existing external link</listitem>
+                <listitem><literal>updateLinkNumVisits</literal>: updates the number of visits for the external link</listitem>
+                <listitem><literal>getInstallDate</literal>: gets the installation date</listitem>
+                <listitem><literal>getTotalHits</literal>: gets the total number of hits</listitem>
+                <listitem><literal>getStatsItemCount</literal>: get the total number of posts</listitem>
+                <listitem><literal>getStatsCommentCount</literal>: get the total number of comments</listitem>
+                <listitem><literal>getStatsMonths</literal>: gets the statistics from the last 6 months</listitem>
+                <listitem><literal>getStatsDays</literal>: gets the statistics from the last 7 days</listitem>
+                <listitem><literal>getStatsUrls</literal>: gets the 10 most visited URLs</listitem>
+                <listitem><literal>getStatsBrowser</literal>: gets the web browser statistics</listitem>
+                <listitem><literal>getStatsOs</literal>: gets the operating system statistics</listitem>
+                <listitem><literal>getUsers</literal>: gets the list of registered users</listitem>
+                <listitem><literal>getUserById</literal>: gets a user by it's ID</listitem>
+                <listitem><literal>getUserByName</literal>: gets a user by it's name</listitem>
+                <listitem><literal>replaceUser</literal>: replaces a user with a different one</listitem>
+                <listitem><literal>saveUser</literal>: saves a new user in the database</listitem>
+                <listitem><literal>deleteUser</literal>: removes a user from the database</listitem>
+                <listitem><literal>t</literal>: gets a translation from the translation table</listitem>
+            </itemizedlist>
+
+            <para>There are a number of internal functions as well that are not supposed to be used directly. All these internal functions have a name that starts with an underscore.</para>
+
+        </sect2>
+
+    </sect1>
+
+    <sect1 id="ydweblog_translations">
+
+        <title>Translations in the weblog application</title>
+
+    </sect1>
+
+    <sect1 id="ydweblog_request_classes">
+
+        <title>The request classes</title>
+
+    </sect1>
+
+    <sect1 id="ydweblog_templates_and_skins">
+
+        <title>Templates and skins</title>
+
+    </sect1>
+
+    <sect1 id="ydweblog_photo_galleries">
+
+        <title>Photo galleries</title>
+
+    </sect1>
+
+    <sect1 id="ydweblog_installer">
+
+        <title>The installer</title>
+
+    </sect1>
+
+    <sect1 id="ydweblog_conclusion">
+
+        <title>Conclusion</title>
+
+    </sect1>
 
 </chapter>
