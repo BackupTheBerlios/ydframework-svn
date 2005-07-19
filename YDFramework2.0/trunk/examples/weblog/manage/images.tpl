@@ -80,7 +80,7 @@
                 <td class="adminRowC" valign="top">{$image->getImageType()|upper}</td>
                 <td class="adminRowL" valign="top">{$image->getWidth()} x {$image->getHeight()}</td>
                 <td class="adminRowR" valign="top">
-                    <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}&img={$image->relative_path}"
+                    <a href="{$YD_SELF_SCRIPT}?do=delete&id={$image->relative_path}"
                      onClick="return YDConfirmDelete( '{$image->getBaseName()|addslashes}' );">{t w="delete"}</a>
                 </td>
             </tr>
