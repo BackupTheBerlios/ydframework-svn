@@ -111,9 +111,6 @@
                 // Get the form values
                 $values = $form->getValues();
 
-                //YDDebugUtil::dump( $values );
-                //die();
-
                 // Connect to the database
                 $db = YDDatabase::getInstance(
                     'mysql', $values['db_name'], $values['db_user'], $values['db_pass'], $values['db_host']
