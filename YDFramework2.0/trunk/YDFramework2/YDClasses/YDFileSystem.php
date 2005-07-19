@@ -29,6 +29,91 @@
     // Includes
     YDInclude( 'YDUtil.php' );
 
+    // The mime types mapping
+    $GLOBALS['YD_FS_MIME_MAPPING'] = array(
+        'ez' => 'application/andrew-inset',
+        'hqx' => 'application/mac-binhex40',
+        'cpt' => 'application/mac-compactpro',
+        'mathml' => 'application/mathml+xml',
+        'doc' => 'application/msword',
+        'oda' => 'application/oda',
+        'ogg' => 'application/ogg',
+        'pdf' => 'application/pdf',
+        'rdf' => 'application/rdf+xml',
+        'gram' => 'application/srgs',
+        'grxml' => 'application/srgs+xml',
+        'mif' => 'application/vnd.mif',
+        'xul' => 'application/vnd.mozilla.xul+xml',
+        'xls' => 'application/vnd.ms-excel',
+        'ppt' => 'application/vnd.ms-powerpoint',
+        'wbxml' => 'application/vnd.wap.wbxml',
+        'wmlc' => 'application/vnd.wap.wmlc',
+        'wmlsc' => 'application/vnd.wap.wmlscriptc',
+        'vxml' => 'application/voicexml+xml',
+        'bcpio' => 'application/x-bcpio',
+        'vcd' => 'application/x-cdlink',
+        'pgn' => 'application/x-chess-pgn',
+        'cpio' => 'application/x-cpio',
+        'csh' => 'application/x-csh',
+        'dvi' => 'application/x-dvi',
+        'spl' => 'application/x-futuresplash',
+        'gtar' => 'application/x-gtar',
+        'hdf' => 'application/x-hdf',
+        'js' => 'application/x-javascript',
+        'latex' => 'application/x-latex',
+        'sh' => 'application/x-sh',
+        'shar' => 'application/x-shar',
+        'swf' => 'application/x-shockwave-flash',
+        'sit' => 'application/x-stuffit',
+        'sv4cpio' => 'application/x-sv4cpio',
+        'sv4crc' => 'application/x-sv4crc',
+        'tar' => 'application/x-tar',
+        'tcl' => 'application/x-tcl',
+        'tex' => 'application/x-tex',
+        'man' => 'application/x-troff-man',
+        'me' => 'application/x-troff-me',
+        'ms' => 'application/x-troff-ms',
+        'ustar' => 'application/x-ustar',
+        'src' => 'application/x-wais-source',
+        'xslt' => 'application/xslt+xml',
+        'dtd' => 'application/xml-dtd',
+        'zip' => 'application/zip',
+        'm3u' => 'audio/x-mpegurl',
+        'rpm' => 'audio/x-pn-realaudio-plugin',
+        'ra' => 'audio/x-realaudio',
+        'wav' => 'audio/x-wav',
+        'pdb' => 'chemical/x-pdb',
+        'xyz' => 'chemical/x-xyz',
+        'bmp' => 'image/bmp',
+        'cgm' => 'image/cgm',
+        'gif' => 'image/gif',
+        'ief' => 'image/ief',
+        'png' => 'image/png',
+        'svg' => 'image/svg+xml',
+        'wbmp' => 'image/vnd.wap.wbmp',
+        'ras' => 'image/x-cmu-raster',
+        'ico' => 'image/x-icon',
+        'pnm' => 'image/x-portable-anymap',
+        'pbm' => 'image/x-portable-bitmap',
+        'pgm' => 'image/x-portable-graymap',
+        'ppm' => 'image/x-portable-pixmap',
+        'rgb' => 'image/x-rgb',
+        'xbm' => 'image/x-xbitmap',
+        'xpm' => 'image/x-xpixmap',
+        'xwd' => 'image/x-xwindowdump',
+        'css' => 'text/css',
+        'rtx' => 'text/richtext',
+        'rtf' => 'text/rtf',
+        'tsv' => 'text/tab-separated-values',
+        'wml' => 'text/vnd.wap.wml',
+        'wmls' => 'text/vnd.wap.wmlscript',
+        'etx' => 'text/x-setext',
+        'avi' => 'video/x-msvideo',
+        'movie' => 'video/x-sgi-movie',
+        'ice' => 'x-conference/x-cooltalk',
+        'php' => 'text/plain',
+    );
+
     /**
      *	This class houses all different path related functions.
      */
@@ -554,7 +639,7 @@
                 header( 'Content-Type: application/force-download; name="' . $name . '"');
                 header( 'Content-Disposition: attachment; filename="' . $name . ' "');
             } else {
-                header( 'Content-Type: application/octet-stream; name="' . $name . '"');
+                header( 'Content-Type: ' . $this->getMimeType() );
                 header( 'Content-Disposition: inline; filename="' . $name . ' "');
             }
 
@@ -641,6 +726,21 @@
          */
         function isDirectory() {
             return false;
+        }
+
+        /**
+         *  This function returns the mime type for the file object.
+         *
+         *  @returns    The mime type for the document. If the mime type is not known, it will use the
+         *              application/octet-stream mime type.
+         */
+        function getMimeType() {
+            $extension = strtolower( $this->getExtension() );
+            if ( isset( $GLOBALS['YD_FS_MIME_MAPPING'][$extension] ) ) {
+                return $GLOBALS['YD_FS_MIME_MAPPING'][$extension];
+            } else {
+                return 'application/octet-stream';
+            }
         }
 
         /**
