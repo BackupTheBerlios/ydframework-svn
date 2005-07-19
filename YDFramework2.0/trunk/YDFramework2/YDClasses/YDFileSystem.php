@@ -711,6 +711,7 @@
          *  @returns    True on success, false on failure.
          */
         function rename( $new_path ) {
+            @unlink( $new_path );
             $result = rename( $this->getAbsolutePath(), $new_path );
             if ( $result === true ) {
                 $this->_path = realpath( $new_path );
