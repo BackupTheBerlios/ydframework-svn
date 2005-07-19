@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding="ISO-8859-1"?>
 <example>
-    <title>Code listing: The request class</title>
+    <title>Code listing: The request class with the edit action added</title>
     <programlisting><![CDATA[<?php
 
     // Initialize the Yellow Duck Framework
@@ -95,6 +95,51 @@
 
             // Add the title to the form
             $this->template->assign( 'title', 'Add Note' );
+
+            // Output the template
+            $this->template->display();
+
+        }
+
+        // Edit a note
+        function actionEditNote() {
+
+            // Add the hidden field
+            $this->form->addElement( 'hidden', '_noteid' );
+
+            // Process the form
+            if ( $this->form->validate() ) {
+
+                // Get the form entries
+                $entry = $this->form->getValues();
+
+                // Save them
+                $this->db->executeUpdate( 'Notes', $entry, 'NoteID = ' . $entry['_noteid'] );
+
+                // Forward to the list view
+                $this->forward( 'default' );
+
+                // Return
+                return;
+
+            } else {
+
+                // Get the note details
+                $entry = $this->db->getRecord(
+                    'SELECT NoteID as _NoteID, NoteTitle, NoteContents '
+                  . 'FROM Notes WHERE NoteID = ' . $_GET['id']
+                );
+
+                // Add the defaults
+                $this->form->setDefaults( $entry );
+
+            }
+
+            // Add the form to the template
+            $this->template->assign( 'form', $this->form->toHtml() );
+
+            // Add the title to the form
+            $this->template->assign( 'title', 'Edit note' );
 
             // Output the template
             $this->template->display();

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: MySQL database schema</title>
+    <programlisting><![CDATA[create table Notes (
+    NoteID integer not null auto_increment,
+    NoteTitle varchar( 255 ),
+    NoteContents text,
+    primary key ( NoteID )
+);]]></programlisting>
+</example>
