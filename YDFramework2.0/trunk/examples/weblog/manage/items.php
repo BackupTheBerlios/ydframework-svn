@@ -46,7 +46,6 @@
             $form->addElement( 'wladmintextarea', 'body',        t('item_body'),     array( 'class' => 'tfM' ) );
             $form->addElement( 'select',          'category_id', t('category'), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $categories );
             $form->addElement( 'datetimeselect',  'created',     t('created_on'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'datetimeselect',  'modified',    t('last_modified_on'), array( 'class' => 'tfM' ) );
             $form->addElement( 'hidden',          'id' );
             $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),      array( 'class' => 'button' ) );
 

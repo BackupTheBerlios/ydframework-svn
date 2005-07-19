@@ -62,7 +62,6 @@
             $form->addElement( 'text',           'userwebsite', t('website'), array( 'class' => 'tfM' ) );
             $form->addElement( 'bbtextarea',     'comment',     t('comment'), array( 'class' => 'tfM' ) );
             $form->addElement( 'datetimeselect', 'created',     t('created_on'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'datetimeselect', 'modified',    t('last_modified_on'), array( 'class' => 'tfM' ) );
             $form->addElement( 'hidden',         'id' );
             $form->addElement( 'submit',         '_cmdSubmit',  t('OK'),      array( 'class' => 'button' ) );
 
