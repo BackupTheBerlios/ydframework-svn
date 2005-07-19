@@ -12,7 +12,12 @@
         <para>The following diagram gives you a graphical overview of how requests are processed in the Yellow Duck Framework.</para>
 
         <para><mediaobject>
-            <imagedata fileref="RequestProcessing.gif"/>
+            <imageobject role="html">
+                <imagedata fileref="RequestProcessing.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="RequestProcessing.gif" width="117.5mm" height="94.2mm" scalefit="0" />
+            </imageobject>
         </mediaobject></para>
 
         <para>This whole process of handling a request is automatically done by the framework. There is no need to code this yourself. Of course, if you want, there are a number of things you can override in this workflow to make the framework do what you want it to do.</para>
