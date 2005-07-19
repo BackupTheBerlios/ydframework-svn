@@ -5,36 +5,48 @@
 
     <para>In the object oriented nature of the Yellow Duck Framework, each script that gets executed is based on a common class, which is the <literal>YDRequest</literal> class. This class is smart enough to figure out which functions needs to be called using parameters given in the url and also supports some advanced functions such as authentication handling.</para>
 
-    <para>Let's take a look at an example script (named <literal>sample1.php</literal>) to understand how this works:</para>
+    <sect1 id="firstsample_script">
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_001.xml" />
+        <title>The request class and template</title>
 
-    <para>The template file that goes along with this script looks as follows (<literal>sample1.tpl</literal>):</para>
+        <para>Let's take a look at an example script (named <literal>sample1.php</literal>) to understand how this works:</para>
 
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_002.xml" />
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_001.xml" />
 
-    <para>When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can be changed to work exactly the way you want it to work.</para>
+        <para>The template file that goes along with this script looks as follows (<literal>sample1.tpl</literal>):</para>
 
-    <para>In the Yellow Duck Framework, all requests are always processed in the same way and order. Let's evaluate the sample above step by step to explain how the processing is happening.</para>
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/firstsample_002.xml" />
 
-    <para>The first line you see in the <literal>sample1.php</literal> script is the include of the file called <literal>YDF2_init.php</literal>. This file is responsible for setting up the Yellow Duck Framework, and does things such as:</para>
+    </sect1>
 
-    <itemizedlist spacing="compact">
-        <listitem>Defining a number of constants with e.g. the path to specific directories and URLs</listitem>
-        <listitem>Starts or restores the previous session</listitem>
-        <listitem>Reconfigures the PHP include path</listitem>
-        <listitem>Includes the different files from the rest of the framework</listitem>
-        <listitem>Makes some standard functions from the framework available, such as the <literal>YDInclude</literal> function.</listitem>
-    </itemizedlist>
+    <sect1 id="firstsample_description">
 
-    <para>After that, we define a new class, called <literal>sample1</literal> which is based on the <literal>YDRequest</literal> class. For each script, you need to have 1 class which is named as the basename of the file (<literal>sample1</literal> in this case). This class should have the <literal>YDRequest</literal> class as one of it ancestors.</para>
+        <title>Description</title>
 
-    <para>Since we are inheriting from the <literal>YDRequest</literal> class, we initialize the parent class in the class constructor of the <literal>sample1</literal> class. In this example, we create a new instance of the <literal>YDTemplate</literal> class which we will need later on in the different actions.</para>
+        <para>When you request this script in your web browser, a number of things happen. Everything that happens is done automatically by the workflow itself and doesn't require any manual intervention from your part. In a future chapter, you will see that this is not the only way of working with the Yellow Duck Framework. Every single part of the Yellow Duck Framework can be changed to work exactly the way you want it to work.</para>
 
-    <para>Then we see two functions that start with the text <literal>action</literal>. All functions that implement actions start with <literal>action</literal>, this is a convention in the framework. The action that is going to be executed is always defined via the parameter <literal>do</literal> in the URL. If the url would be <literal>sample1.php?do=default</literal>, the function <literal>actionDefault</literal> will be executed. If the url would have been <literal>sample1.php?do=edit</literal>, the function <literal>actionEdit</literal> would be executed. If no action is specified, the <literal>actionDefault</literal> function will be executed.</para>
+        <para>In the Yellow Duck Framework, all requests are always processed in the same way and order. Let's evaluate the sample above step by step to explain how the processing is happening.</para>
 
-    <para>Each one of the actions in the sample above link a variable to the template so that we can use this variable in the template. They both end with displaying the parsed template on the screen.</para>
+        <para>The first line you see in the <literal>sample1.php</literal> script is the include of the file called <literal>YDF2_init.php</literal>. This file is responsible for setting up the Yellow Duck Framework, and does things such as:</para>
 
-    <para>The last part of the script is the include of the <literal>YDF2_process.php</literal> script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens. Based on the class information, the complete request will be processed.</para>
+        <itemizedlist spacing="compact">
+            <listitem>Defining a number of constants with e.g. the path to specific directories and URLs</listitem>
+            <listitem>Starts or restores the previous session</listitem>
+            <listitem>Reconfigures the PHP include path</listitem>
+            <listitem>Includes the different files from the rest of the framework</listitem>
+            <listitem>Makes some standard functions from the framework available, such as the <literal>YDInclude</literal> function.</listitem>
+        </itemizedlist>
+
+        <para>After that, we define a new class, called <literal>sample1</literal> which is based on the <literal>YDRequest</literal> class. For each script, you need to have 1 class which is named as the basename of the file (<literal>sample1</literal> in this case). This class should have the <literal>YDRequest</literal> class as one of it ancestors.</para>
+
+        <para>Since we are inheriting from the <literal>YDRequest</literal> class, we initialize the parent class in the class constructor of the <literal>sample1</literal> class. In this example, we create a new instance of the <literal>YDTemplate</literal> class which we will need later on in the different actions.</para>
+
+        <para>Then we see two functions that start with the text <literal>action</literal>. All functions that implement actions start with <literal>action</literal>, this is a convention in the framework. The action that is going to be executed is always defined via the parameter <literal>do</literal> in the URL. If the url would be <literal>sample1.php?do=default</literal>, the function <literal>actionDefault</literal> will be executed. If the url would have been <literal>sample1.php?do=edit</literal>, the function <literal>actionEdit</literal> would be executed. If no action is specified, the <literal>actionDefault</literal> function will be executed.</para>
+
+        <para>Each one of the actions in the sample above link a variable to the template so that we can use this variable in the template. They both end with displaying the parsed template on the screen.</para>
+
+        <para>The last part of the script is the include of the <literal>YDF2_process.php</literal> script, which processes the actual request. It will look for a request class based on the name of the file, and will execute the process function of that class. This is where the magic happens. Based on the class information, the complete request will be processed.</para>
+
+    </sect1>
 
 </chapter>
