@@ -52,6 +52,10 @@
             $string = "  line1  \n  line2  \r  line3  \r\n  line4  ";
             YDDebugUtil::dump( YDStringUtil::removeWhiteSpace( $string ), 'removeWhiteSpace' );
 
+            // Test the normalizing of newlines
+            $string = ' [pieter] &euml; @test.tpl ';
+            YDDebugUtil::dump( YDStringUtil::stripSpecialCharacters( $string ), 'stripSpecialCharacters' );
+
         }
 
     }
