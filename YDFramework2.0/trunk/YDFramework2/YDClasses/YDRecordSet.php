@@ -327,10 +327,12 @@
                 $url->setQueryVar( $this->pagevar, $this->page );
                 $url->setQueryVar( $this->sizevar, $this->pagesize );
             }
-            
+
+            // Set the sort field name
             $url->setQueryVar( $this->sortvar, $sortfld );
 
-            if ( YDPersistent::get( $this->sortvar ) == $sortfld ) {
+            // Get the sort direction
+            if ( YDPersistent::get( $this->sortvar, '' ) == $sortfld ) {
                 if ( strtoupper( YDPersistent::get( $this->sortdir ) ) == 'ASC' ) {
                     $sortdir = 'DESC';
                 } else {
