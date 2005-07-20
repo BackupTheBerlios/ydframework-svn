@@ -32,7 +32,6 @@
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold"><literal>$password</literal>:</emphasis> if you specify a non null value, the data will be encrypted with the specified password. If no password is given, the data will remain unencrypted.</listitem>
             <listitem><emphasis role="bold"><literal>$expire</literal>:</emphasis> specifies the lifetime of the object in seconds. By default, this is set to 1 year.</listitem>
-            <listitem><emphasis role="bold"><literal>$scope</literal>:</emphasis> defines the scope for the variable. By default, this is set to "/" which means that this is a sitewide variable. This variable can be compared to the $path variable used in the setcookie function (which is used in the background).</listitem>
         </itemizedlist>
 
     </sect1>
