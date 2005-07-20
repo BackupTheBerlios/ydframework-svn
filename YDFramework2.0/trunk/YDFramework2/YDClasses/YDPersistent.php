@@ -33,6 +33,7 @@
     YDConfig::set( 'YD_PERSISTENT_STORE_NAME', strtoupper( str_replace( ' ', '_', YD_FW_NAME ) ) . '_PERSISTENT_STORE', false );
     YDConfig::set( 'YD_PERSISTENT_DEFAULT_LIFETIME', 0, false );
     YDConfig::set( 'YD_PERSISTENT_DEFAULT_PASSWORD', null, false );
+    YDConfig::set( 'YD_PERSISTENT_SCOPE', '/', false );
 
     /**
      *  This class is able to save and load persistent data. This data stay active between different requests and allows
@@ -58,9 +59,8 @@
          *	@param	$object		The object to store.
          *  @param  $passwd     (optional) If not null, the data will be encrypted with this password.
          *  @param  $expire     (optional) The lifetime of the object in seconds. Defaults to 0 (session only).
-         *  @param  $scope      (optional) The scope of the object in seconds. Defaults to "/".
          */
-        function set( $name, $object, $passwd=null, $expire=null, $scope='/' ) {
+        function set( $name, $object, $passwd=null, $expire=null ) {
 
             // Initialize the store
             YDPersistent::_init();
@@ -80,6 +80,9 @@
             if ( ! is_null( $passwd ) ) {
                 $object_data = YDEncryption::encrypt( $passwd, $object_data );
             }
+
+            // Get the scope
+            $scope = YDConfig::get( 'YD_PERSISTENT_SCOPE', '/' );
 
             // Save the object
             $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ][$name] = $object_data;
@@ -146,9 +149,12 @@
             // Initialize the store
             YDPersistent::_init();
 
+            // Get the scope
+            $scope = YDConfig::get( 'YD_PERSISTENT_SCOPE', '/' );
+
             // Remove it from the cookie variable
             unset( $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ][ $name ] );
-            setcookie( YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) . '[' . $name . ']', " ", time()-3600 );
+            setcookie( YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) . '[' . $name . ']', "", time()-3600, $scope );
 
         }
 
