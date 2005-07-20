@@ -38,6 +38,9 @@
             YDPersistent::set( 'simple_string', 'Pieter Claerhout' );
             YDPersistent::set( 'my_obj', $obj );
 
+            YDPersistent::set( 'example', 'test' );
+            YDPersistent::delete( 'example' );
+
             // Redirect to the check action
             $this->redirectToAction( 'check', array( 'simple_string' => 'overriden value' ) );
 
@@ -65,6 +68,10 @@
             YDDebugUtil::dump(
                 YDPersistent::get( 'my_obj_encypted', '', 'test' ), 'my_obj_encypted with password'
             );
+
+            // Dunp the complete contents
+            YDPersistent::dump();
+
 
         }
 
