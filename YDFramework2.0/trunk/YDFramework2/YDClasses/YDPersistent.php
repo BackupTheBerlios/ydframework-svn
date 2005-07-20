@@ -59,11 +59,17 @@
          *	@param	$object		The object to store.
          *  @param  $passwd     (optional) If not null, the data will be encrypted with this password.
          *  @param  $expire     (optional) The lifetime of the object in seconds. Defaults to 0 (session only).
+         *  @param  $override   (optional) If an existing value should be overridden or not. Default is true.
          */
-        function set( $name, $object, $passwd=null, $expire=null ) {
+        function set( $name, $object, $passwd=null, $expire=null, $override=true ) {
 
             // Initialize the store
             YDPersistent::_init();
+
+            // Don't overwrite existing values
+            if ( YDPersistent::exists( $name ) && $override === false ) {
+                return;
+            }
 
             // Set the expire time
             if ( is_null( $expire ) ) {
@@ -132,7 +138,7 @@
             }
 
             // Now, we need to base64 decode and unserialize
-            $obj = @ unserialize( base64_decode( $obj ) );
+            $obj = unserialize( base64_decode( $obj ) );
 
             // Return the object
             return $obj;
