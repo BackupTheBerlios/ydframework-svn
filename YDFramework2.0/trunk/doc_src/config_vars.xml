@@ -240,6 +240,11 @@
                         <entry valign="top">The default password for encrypting persisent data.</entry>
                         <entry valign="top"><literal>null</literal></entry>
                     </row>
+                    <row>
+                        <entry valign="top">YD_PERSISTENT_SCOPE</entry>
+                        <entry valign="top">The scope for the persistent data. Defaults to the domain.</entry>
+                        <entry valign="top"><literal>'/'</literal></entry>
+                    </row>
                 </tbody>
             </tgroup>
         </table>
