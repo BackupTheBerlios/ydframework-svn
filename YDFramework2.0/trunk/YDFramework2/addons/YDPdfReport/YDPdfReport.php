@@ -144,7 +144,7 @@
          */                
         function output( $filepath ) {
         
-            if (!is_writable( $filepath )) return false;
+            if (!is_writable( dirname($filepath) )) return false;
         
             // change some win codes, and xhtml into html
             $str = array('<br />'    => '<br>',
