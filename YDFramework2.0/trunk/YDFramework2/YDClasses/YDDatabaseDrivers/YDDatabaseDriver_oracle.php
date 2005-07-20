@@ -260,7 +260,7 @@
                 }
                 trigger_error( $error['message'], YD_ERROR );
             }
-            return $result;
+            return $stmt;
         }
 
         /**
