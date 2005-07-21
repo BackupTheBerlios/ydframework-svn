@@ -56,7 +56,7 @@
          *  @static
          */
         function decrypt( $passwd, $data ) {
-            return unserialize( YDEncryption::_encrypt( $passwd, base64_decode( $data ) ) );
+            return @ unserialize( YDEncryption::_encrypt( $passwd, base64_decode( $data ) ) );
 
         }
 
