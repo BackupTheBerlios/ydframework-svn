@@ -133,6 +133,9 @@
             $obj = $_COOKIE[ YDConfig::get( 'YD_PERSISTENT_STORE_NAME' ) ][ $name ];
 
             // Decrypt the data if needed
+            if ( is_null( $passwd ) && ! is_null( YDConfig::get( 'YD_PERSISTENT_DEFAULT_PASSWORD', null ) ) ) {
+                $passwd = YDConfig::get( 'YD_PERSISTENT_DEFAULT_PASSWORD', null );
+            }
             if ( ! is_null( $passwd ) ) {
                 $obj = YDEncryption::decrypt( $passwd, $obj );
             }
