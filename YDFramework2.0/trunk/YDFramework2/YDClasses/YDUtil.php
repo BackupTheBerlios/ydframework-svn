@@ -79,7 +79,7 @@
          *	Finish the timer.
          */
         function finish() {
-            $this->addMarker( '-- Finish' );
+            $this->addMarker( '** Finish' );
         }
 
         /**
@@ -99,7 +99,7 @@
          *	@returns	Array with the elapsed times, differences and marker names.
          */
         function getReport() {
-            $report = array( '-- Start' => array( 0, 0, '-- Start' ) );
+            $report = array( '** Start' => array( 0, 0, '** Start' ) );
             $previous = 0;
             foreach ( $this->markers as $marker ) {
                 foreach ( $marker as $key=>$val ) {
