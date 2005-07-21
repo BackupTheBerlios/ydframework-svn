@@ -58,28 +58,33 @@
             $regDrivers = array();
 
             // Register new driver
-            if(is_array($driver) AND isset($driver['drivername'])) {
-              $regDrivers[ strtolower( $driver['drivername'] ) ] = $driver;
-              $driver = $driver[ 'drivername' ];
-            } else {
-              // Register the standard drivers
-              $regDrivers[ strtolower( 'mysql' ) ] = array(
-                  'class' => 'YDDatabaseDriver_mysql', 'file' => ''
-              );
-              $regDrivers[ strtolower( 'oracle' ) ] = array(
-                  'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
-              );
-              $regDrivers[ strtolower( 'postgres' ) ] = array(
-                  'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
-              );
-              $regDrivers[ strtolower( 'sqlite' ) ] = array(
-                  'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
-              );
+            if( is_array( $driver ) && isset( $driver['drivername'] ) ) {
 
-              // Check if the driver exists
-              if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
-                  trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
-              }
+                // Register a new driver
+                $regDrivers[ strtolower( $driver['drivername'] ) ] = $driver;
+                $driver = $driver[ 'drivername' ];
+
+            } else {
+
+                // Register the standard drivers
+                $regDrivers[ strtolower( 'mysql' ) ] = array(
+                    'class' => 'YDDatabaseDriver_mysql', 'file' => ''
+                );
+                $regDrivers[ strtolower( 'oracle' ) ] = array(
+                    'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
+                );
+                $regDrivers[ strtolower( 'postgres' ) ] = array(
+                    'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
+                );
+                $regDrivers[ strtolower( 'sqlite' ) ] = array(
+                    'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
+                );
+
+                // Check if the driver exists
+                if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
+                    trigger_error( 'Unsupported database type: "' . $driver . '".', YD_ERROR );
+                }
+
             }
 
             // Include the driver
@@ -870,11 +875,7 @@
         function string( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
-                    
-                    // Needs a connection to escape strings
                     $this->connect();
-                    
-                    // Returns the escaped string using last link opened
                     return mysql_real_escape_string( $string );
                 }
             } else if ( is_null( $string ) ) {
