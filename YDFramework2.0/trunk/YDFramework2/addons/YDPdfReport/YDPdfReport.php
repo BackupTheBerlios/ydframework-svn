@@ -40,26 +40,26 @@
             $this->YDAddOnModule();
 
             // Setup the module
-            $this->_author        = 'Francisco Azevedo';
-            $this->_version        = '0.0.1 beta :)';
+            $this->_author       = 'Francisco Azevedo';
+            $this->_version      = '0.0.2 beta :)';
             $this->_copyright    = '(c) 2005 Francisco Azevedo';
-            $this->_description    = 'This class defines a YDPDF object. Based on Radek HULAN work.';
+            $this->_description  = 'This class defines a YDPDF object. Based on Radek HULAN work.';
         
             // main vars
-            $this->html            = '';        // html text to convert to PDF
-            $this->title        = '';        // article title
-            $this->article        = '';        // article name
-            $this->author        = '';        // article author
-            $this->setdate        = false;    // set date
-            $this->setHrule        = false;
-            $this->date            = time();    // date being published
+            $this->html          = '';      // html text to convert to PDF
+            $this->title         = '';      // article title
+            $this->article       = '';      // article name
+            $this->author        = '';      // article author
+            $this->setdate       = false;   // set date
+            $this->setHrule      = false;
+            $this->date          = time();  // date being published
         
             // other options
-            $this->directory    = '/';        // directory for temp files
-            $this->http            = '/';        // http path
-            $this->delete        = 60;        // keep temp files for 60 minutes
-            $this->useiconv        = false;    // use iconv
-            $this->bi            = false;    // support bold tags
+            $this->directory     = '/';     // directory for temp files
+            $this->http          = '/';     // http path
+            $this->delete        = 60;      // keep temp files for 60 minutes
+            $this->useiconv      = false;   // use iconv
+            $this->bi            = false;   // support bold tags
 
             // pdf object
             $this->pdf = new PDF('P', 'mm', 'A4', $this->title, '', false);
@@ -142,22 +142,20 @@
          *
          *  @param  $filepath    Filepath
          */                
-        function output( $filepath ) {
-        
-            if (!is_writable( dirname($filepath) )) return false;
+        function output( $format = 'download', $name = 'ydf.pdf' ) {
         
             // change some win codes, and xhtml into html
-            $str = array('<br />'    => '<br>',
+            $str = array('<br />'   => '<br>',
                         '<hr />'    => '<hr>',
-                        '[r]'        => '<red>',
-                        '[/r]'        => '</red>',
-                        '[l]'        => '<blue>',
-                        '[/l]'        => '</blue>',
-                        '&#8220;'    => '"',
-                        '&#8221;'    => '"',
-                        '&#8222;'    => '"',
-                        '&#8230;'    => '...',
-                        '&#8217;'    => '\''
+                        '[r]'       => '<red>',
+                        '[/r]'      => '</red>',
+                        '[l]'       => '<blue>',
+                        '[/l]'      => '</blue>',
+                        '&#8220;'   => '"',
+                        '&#8221;'   => '"',
+                        '&#8222;'   => '"',
+                        '&#8230;'   => '...',
+                        '&#8217;'   => '\''
                     );
 
             // replace above tags
@@ -192,16 +190,8 @@
             // define html
             $this->pdf->WriteHTML($this->_convert(stripslashes($this->html)), $this->bi);
 
-            // ugly fpdf hack
-            if( $this->pdf->state < 3 ) $this->pdf->Close();
-
-            // create and save output
-
-            $fp = fopen( $filepath, 'wb');
-            if( !$fp ) return false;
-            
-            fwrite($fp, $this->pdf->buffer, strlen($this->pdf->buffer));
-            fclose($fp);
+            // create it
+            $this->pdf->create( $format, $name );
 
             return true;
         }

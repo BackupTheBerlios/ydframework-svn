@@ -535,5 +535,23 @@ class PDF extends FPDF{
 	}
 
 
+	function create( $format, $name ){
+	
+		switch( strtolower( $format )){
+			case 'inline' :		$this->output( '', '');
+								while (@ob_end_flush());
+								die();
+			
+			case 'file' :		return $this->output( $name, 'F');
+			
+			case 'download' :	$this->output( $name, 'D');
+								while (@ob_end_flush());
+								die();
+		
+			case 'buffer' :		return $this->buffer;
+		}
+
+	}
+
 } 
 ?>

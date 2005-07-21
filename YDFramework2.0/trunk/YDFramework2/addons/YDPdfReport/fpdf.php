@@ -1,10 +1,4 @@
 <?php
-
-    // Check if the framework is loaded
-    if ( ! defined( 'YD_FW_NAME' ) ) {
-        die( 'Yellow Duck Framework is not loaded.' );
-    }
-
 /*******************************************************************************
 * Software: FPDF                                                               *
 * Version:  1.53                                                               *
@@ -12,7 +6,7 @@
 * Author:   Olivier PLATHEY                                                    *
 * License:  Freeware                                                           *
 *                                                                              *
-* You may use and modify this software as you wish.                            *
+* You may use, modify and redistribute this software as you wish.              *
 *******************************************************************************/
 
 if(!class_exists('FPDF'))
@@ -1002,7 +996,20 @@ function Output($name='',$dest='')
 	//Finish document if necessary
 	if($this->state<3)
 		$this->Close();
-
+	//Normalize parameters
+	if(is_bool($dest))
+		$dest=$dest ? 'D' : 'F';
+	$dest=strtoupper($dest);
+	if($dest=='')
+	{
+		if($name=='')
+		{
+			$name='doc.pdf';
+			$dest='I';
+		}
+		else
+			$dest='F';
+	}
 	switch($dest)
 	{
 		case 'I':
