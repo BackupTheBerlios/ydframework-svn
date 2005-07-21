@@ -143,6 +143,11 @@
             // Now, we need to base64 decode and unserialize
             $obj = @unserialize( base64_decode( $obj ) );
 
+            // Return the default if decryption failed
+            if ( ! $obj && ! is_null( $default ) ) {
+                return $default;
+            }
+
             // Return the object
             return $obj;
 
