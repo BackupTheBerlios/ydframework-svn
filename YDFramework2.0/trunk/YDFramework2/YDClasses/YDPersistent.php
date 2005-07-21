@@ -138,7 +138,7 @@
             }
 
             // Now, we need to base64 decode and unserialize
-            $obj = unserialize( base64_decode( $obj ) );
+            $obj = @unserialize( base64_decode( $obj ) );
 
             // Return the object
             return $obj;
