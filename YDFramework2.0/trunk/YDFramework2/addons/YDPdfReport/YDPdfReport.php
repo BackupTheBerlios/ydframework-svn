@@ -26,13 +26,14 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
     YDInclude( 'html2pdf.php' );
 
     /**
      *  This class defines a YDPdfProject object.
      */
     class YDPdfReport extends YDAddOnModule {
-    
+
         /**
          *    The class constructor 
          */
@@ -53,7 +54,7 @@
             $this->setdate       = false;   // set date
             $this->setHrule      = false;
             $this->date          = time();  // date being published
-        
+
             // other options
             $this->directory     = '/';     // directory for temp files
             $this->http          = '/';     // http path
@@ -72,9 +73,15 @@
 
         }
 
-        function _convert($s){
-            if ($this->useiconv)    return iconv('iso-8859-2', 'cp1250', $s); 
-            else                    return $s;
+        /**
+         *  @internal
+         */
+        function _convert( $s ){
+            if ( $this->useiconv ) {
+                return iconv( 'iso-8859-2', 'cp1250', $s );
+            } else {
+                return $s;
+            }
         }
 
         /**
@@ -92,7 +99,7 @@
          *  @param  $language    Language, eg: array('page' => 'Page ',  'createdby' => 'Me', 'pageseparator' => "/", 'createdlink'    => "My homepage");
          */
         function setLanguage( $language ){
-            $this->pdf->setLanguage($language);
+            $this->pdf->setLanguage( $language );
         }
 
         /**
@@ -113,7 +120,6 @@
             $this->title = $title;
         }
 
-
         /**
          *  Defines the html content to parse
          *
@@ -122,7 +128,6 @@
         function setHTML( $html ){
             $this->html = $html;
         }
-        
 
         /**
          *  Defines the color used in headers
@@ -131,11 +136,9 @@
          *  @param  $g    GREEN decimal
          *  @param  $b    BLUE decimal
          */        
-        function setHeaderColor($r, $g, $b){
-            $this->pdf->setHeaderColor( $r, $g, $b);
+        function setHeaderColor( $r, $g, $b ){
+            $this->pdf->setHeaderColor( $r, $g, $b );
         }
-        
-
 
         /**
          *  Creates the pdf file
@@ -145,56 +148,62 @@
         function output( $format = 'download', $name = 'ydf.pdf' ) {
         
             // change some win codes, and xhtml into html
-            $str = array('<br />'   => '<br>',
-                        '<hr />'    => '<hr>',
-                        '[r]'       => '<red>',
-                        '[/r]'      => '</red>',
-                        '[l]'       => '<blue>',
-                        '[/l]'      => '</blue>',
-                        '&#8220;'   => '"',
-                        '&#8221;'   => '"',
-                        '&#8222;'   => '"',
-                        '&#8230;'   => '...',
-                        '&#8217;'   => '\''
-                    );
+            $str = array(
+                '<br />'   => '<br>',
+                '<hr />'    => '<hr>',
+                '[r]'       => '<red>',
+                '[/r]'      => '</red>',
+                '[l]'       => '<blue>',
+                '[/l]'      => '</blue>',
+                '&#8220;'   => '"',
+                '&#8221;'   => '"',
+                '&#8222;'   => '"',
+                '&#8230;'   => '...',
+                '&#8217;'   => '\''
+            );
 
             // replace above tags
-            foreach ($str as $_from => $_to) 
-                $this->html = str_replace($_from, $_to, $this->html);
+            foreach ($str as $_from => $_to) {
+                $this->html = str_replace( $_from, $_to, $this->html );
+            }
 
             // set title, author and create the first page
-            $this->pdf->SetTitle($this->title);
-            $this->pdf->SetAuthor($this->author);
+            $this->pdf->SetTitle( $this->title );
+            $this->pdf->SetAuthor( $this->author );
             $this->pdf->AddPage();
 
             // set title
-            if ($this->title != '')
-                $this->pdf->PutMainTitle($this->_convert($this->title));
+            if ( $this->title != '' ) {
+                $this->pdf->PutMainTitle( $this->_convert( $this->title ) );
+            }
 
             // set article name
-            if ($this->article != ''){
-                $this->pdf->PutMinorHeading('Módulo');
-                $this->pdf->PutMinorTitle($this->_convert($this->article));
+            if ( $this->article != '' ){
+                $this->pdf->PutMinorHeading( 'Módulo' );
+                $this->pdf->PutMinorTitle( $this->_convert( $this->article ) );
             }
             
             // set date
-            if ($this->setdate)
-                $this->pdf->PutMinorHeading("Criado em " . date("d - m - Y, H:i", $this->date) );
+            if ( $this->setdate ) {
+                $this->pdf->PutMinorHeading( "Criado em " . date( "d - m - Y, H:i", $this->date ) );
+            }
 
             // create line separator if there are elements before
-            if ($this->setHrule){
+            if ( $this->setHrule ){
                 $this->pdf->PutLine();
-                $this->pdf->Ln(2);
+                $this->pdf->Ln( 2 );
             }
 
             // define html
-            $this->pdf->WriteHTML($this->_convert(stripslashes($this->html)), $this->bi);
+            $this->pdf->WriteHTML( $this->_convert( stripslashes( $this->html ) ), $this->bi );
 
             // create it
             $this->pdf->create( $format, $name );
 
+            // Return true
             return true;
+
         }
 
-} 
+    }
 ?>
