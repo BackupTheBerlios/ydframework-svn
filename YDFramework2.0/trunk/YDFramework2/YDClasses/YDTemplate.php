@@ -354,15 +354,6 @@
             function fetch( $file='', $display=false ) {
 
                 // Add some default variables
-                $this->assign( 'YD_FW_NAME', YD_FW_NAME );
-                $this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
-                $this->assign( 'YD_FW_NAMEVERS', YD_FW_NAMEVERS );
-                $this->assign( 'YD_FW_HOMEPAGE', YD_FW_HOMEPAGE );
-                $this->assign( 'YD_FW_COPYRIGHT', YD_FW_COPYRIGHT );
-                $this->assign( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
-                $this->assign( 'YD_SELF_FILE', YD_SELF_FILE );
-                $this->assign( 'YD_SELF_URI', YD_SELF_URI );
-                $this->assign( 'YD_ACTION_PARAM', YD_ACTION_PARAM );
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
                 // Get the template name
