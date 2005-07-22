@@ -535,25 +535,75 @@
             $this->Ln(4);
         }
 
-
-        function create( $format, $name ){
+       function create( $format, $name = "ydfreport.pdf"){ 
         
-            switch( strtolower( $format )){
-                case 'inline' :		$this->output( '', '');
-                                    while (@ob_end_flush());
-                                    die();
-                
-                case 'file' :		return $this->output( $name, 'F');
-                
-                case 'download' :	$this->output( $name, 'D');
-                                    while (@ob_end_flush());
-                                    die();
-            
-                case 'buffer' :		return $this->buffer;
-            }
+          // FPDF need to finish pdf creation 
+          if( $this->state < 3 ) $this->Close(); 
+        
+          // switch output 
+          switch( strtolower( $format )){ 
+                case 'inline' :     // redirect output 
+                                    if(ob_get_contents())    
+                                        die( 'Some data has already been output, can\'t send PDF file' ); 
+                             
+                                    // send headers: type, disposition and length 
+                                    header( 'Content-Type: application/pdf' ); 
+                                    header( 'Content-Disposition: inline; filename="'. $name .'"'); 
+                                    header( 'Content-length: '. strlen($this->buffer) ); 
+        
+                                    // send custom headers for ie 
+                                    if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')){ 
+                                        header( 'Cache-Control: public' ); 
+                                        header( 'Content-Transfer-Encoding: binary' ); 
+                                    } 
+                             
+                                    // send output 
+                                    echo $this->buffer; 
+                 
+                                    // clean buffer 
+                                    while (@ob_end_flush()); 
+                                    die(); 
+        
+                case 'download' :   // redirect output 
+                                    if(ob_get_contents()) 
+                                        die( 'Some data has already been output, can\'t send PDF file' ); 
 
-        }
+                                    // send custom type and special headers 
+                                    if(isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')){ 
+                                        header('Content-Type: application/force-download'); 
+                                        header( 'Cache-Control: public' ); 
+                                        header( 'Content-Transfer-Encoding: binary' ); 
+                             
+                                    }else 
+                                        header('Content-Type: application/octet-stream'); 
 
+                                    // send headers: disposition and length 
+                                    header('Content-disposition: attachment; filename="'.$name.'"'); 
+                                    header('Content-Length: '.strlen($this->buffer)); 
+
+                                    // output buffer 
+                                    echo $this->buffer; 
+
+                                    // clean buffer 
+                                    while (@ob_end_flush()); 
+                                    die(); 
+              
+               case 'file' :        // create file pointer 
+                                    $fp = fopen($name, 'wb'); 
+                                    if (!$fp) return false; 
+                             
+                                    // ouput buffer to file 
+                                    fwrite($fp, $this->buffer, strlen($this->buffer)); 
+        
+                                    // close file pointer and return 
+                                    fclose($fp); 
+                                    return true; 
+           
+               case 'buffer' :      // return buffer 
+                                    return $this->buffer; 
+            } 
+
+        } 
     }
 
 ?>
