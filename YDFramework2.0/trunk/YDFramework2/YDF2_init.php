@@ -119,7 +119,17 @@
     $GLOBALS['YD_SQL_QUERY'] = array();
 
     // Update the include path
-    $includePath = YD_DIR_ADDO;
+    $includePath = YD_SELF_DIR;
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
+    $includePath .= YD_PATHDELIM . dirname( __FILE__ );
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormElements';
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormRenderers';
+    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDDatabaseDrivers';
+    if ( is_dir( YD_SELF_DIR . YD_DIRDELIM . 'includes' ) ) {
+        $includePath .= YD_PATHDELIM . YD_SELF_DIR . YD_DIRDELIM . 'includes';
+    }
+    $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
+    $includePath .= YD_PATHDELIM . YD_DIR_ADDO;
     if ( $handle = opendir( YD_DIR_ADDO ) ) {
         while ( false !== ( $file = readdir( $handle ) ) ) {
            if (
@@ -132,16 +142,6 @@
         }
         closedir( $handle );
     }
-    $includePath .= YD_PATHDELIM . YD_SELF_DIR;
-    if ( is_dir( YD_SELF_DIR . YD_DIRDELIM . 'includes' ) ) {
-        $includePath .= YD_PATHDELIM . YD_SELF_DIR . YD_DIRDELIM . 'includes';
-    }
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormElements';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormRenderers';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDDatabaseDrivers';
-    $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
-    $includePath .= YD_PATHDELIM . dirname( __FILE__ );
     if ( ini_get( 'include_path' ) != '' ) {
         $includePath .= YD_PATHDELIM . ini_get( 'include_path' );
     }

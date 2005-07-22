@@ -33,6 +33,14 @@
      *	@param $file	File to be included.
      */
     function YDInclude( $file ) {
+
+        // If it's a file, include it
+        if ( is_file( $file ) ) {
+            include_once( $file );
+            return;
+        }
+
+        // Loop over the include paths
         foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
             if ( $include != false ) {
                 if ( is_file( $include . '/' . $file ) ) {
@@ -41,13 +49,12 @@
                 }
             }
         }
-        if ( is_file( $file ) ) {
-            include_once( $file );
-            return;
-        }
+
+        // Trigger an error if include failed
         trigger_error(
             'Failed to include the file: ' . $file . ' The file was not found in the include path.', YD_ERROR
         );
+
     }
 
     /**
