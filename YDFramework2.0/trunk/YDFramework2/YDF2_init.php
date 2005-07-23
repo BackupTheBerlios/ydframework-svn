@@ -133,11 +133,7 @@
     @ini_set( 'include_path', $includePath );
 
     // Include the standard functions
-    include_once( YD_DIR_HOME . '/YDF2_functions.php' );
-    YDInclude( 'YDBase.php' );
-    YDInclude( 'YDConfig.php' );
-    YDInclude( 'YDLocale.php' );
-    YDInclude( 'YDAddOnModule.php' );
+    include_once( YD_DIR_HOME . '/YDF2_core.php' );
 
     // Default the locale to English
     YDConfig::set( 'YD_LOCALE', 'en', false );
@@ -172,7 +168,7 @@
     }
 
     // Include the base classes
-    YDInclude( 'YDUtil.php' );
+    include_once( YD_DIR_HOME . '/YDClasses/YDUtil.php' );
 
     // Start the global timer
     $timer = new YDTimer();
