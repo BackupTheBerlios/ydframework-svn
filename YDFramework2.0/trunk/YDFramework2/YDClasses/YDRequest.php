@@ -62,18 +62,18 @@
             // $_GET parameters.
             if ( ! empty( $_SERVER['PATH_INFO'] ) ) {
                 $pathInfo = explode( '/', substr( $_SERVER['PATH_INFO'], 1 ) );
-                $action = ( sizeof( $pathInfo ) > 0 ) ? $pathInfo[0] : YD_ACTION_DEFAULT;
+                $action = ( sizeof( $pathInfo ) > 0 ) ? $pathInfo[0] : 'actionDefault';
                 foreach ( array_slice( $pathInfo, 1 ) as $idx=>$val ) {
                     $_GET[ 'arg' . $idx ] = $val;
                 }
 
             // Then we check the $_GET parameters
-            } elseif ( ! empty( $_GET[ YD_ACTION_PARAM ] ) ) {
-                $action = 'action' . $_GET[ YD_ACTION_PARAM ];
+            } elseif ( ! empty( $_GET[ 'do' ] ) ) {
+                $action = 'action' . $_GET[ 'do' ];
 
             // Else, we keep the default
             } else {
-                $action = YD_ACTION_DEFAULT;
+                $action = 'actionDefault';
             }
 
             // We convert to lowercase
@@ -143,7 +143,7 @@
             if ( strpos( $action, 'action' ) === 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
-            $_GET[ YD_ACTION_PARAM ] = $action;
+            $_GET[ 'do' ] = $action;
             if ( ! $this->isActionAllowed() ) {
                 $this->errorActionNotAllowed();
             } else {
@@ -163,7 +163,7 @@
             if ( strpos( $action, 'action' ) === 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
-            $url = YD_SELF_SCRIPT . '?' . YD_ACTION_PARAM . '=' . $action;
+            $url = YD_SELF_SCRIPT . '?do=' . $action;
             foreach ( $params as $key=>$val ) {
                 $url .= '&' . urlencode( $key ) . '=' . urlencode( $val );
             }

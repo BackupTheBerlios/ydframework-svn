@@ -119,7 +119,7 @@
          */
         function getInstance( $class='', $params=false ) {
 
-            $path     = YDConfig::get( 'YD_DBOBJECT_PATH' ) . YD_DIRDELIM;
+            $path     = YDConfig::get( 'YD_DBOBJECT_PATH' ) . '/';
             $ext      = YDConfig::get( 'YD_DBOBJECT_EXT' );
             $prefix   = YDConfig::get( 'YD_DBOBJECT_PREFIX' );
             $sufix    = YDConfig::get( 'YD_DBOBJECT_SUFIX' );

@@ -39,10 +39,6 @@
         <td valign="top">YD_SELF_URI</td>
         <td>{$YD_SELF_URI}</td>
     </tr>
-    <tr>
-        <td valign="top">YD_ACTION_PARAM</td>
-        <td>{$YD_ACTION_PARAM}</td>
-    </tr>
     </table>
 
     <p><a href="index.php">other samples</a></p>

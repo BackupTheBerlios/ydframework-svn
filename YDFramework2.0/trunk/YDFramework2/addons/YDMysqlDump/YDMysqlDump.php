@@ -51,7 +51,7 @@
             $this->dbinstance = $dbinstance;
             
             // predefined filepath for store content (used if we don't want a string)
-            $this->filepath = YD_DIR_TEMP . YD_DIRDELIM . "backup.sql";
+            $this->filepath = YD_DIR_TEMP . '/backup.sql';
             
         }
 

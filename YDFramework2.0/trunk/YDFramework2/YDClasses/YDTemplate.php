@@ -89,7 +89,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $file		(optional) The name of the template you want to parse and output.
              *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
@@ -106,7 +106,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $file		(optional) The name of the template you want to parse and output.
              *	@param $cache_id	(optional) ID for the cache of the template (must be unique).
@@ -131,7 +131,6 @@
                 $this->assign( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
                 $this->assign( 'YD_SELF_FILE', YD_SELF_FILE );
                 $this->assign( 'YD_SELF_URI', YD_SELF_URI );
-                $this->assign( 'YD_ACTION_PARAM', YD_ACTION_PARAM );
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
                 // Get the template name
@@ -161,7 +160,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $name		Name you want to use for this fetched template for referencing it in the template.
              *	@param $file		The name of the template you want to parse and output.
@@ -329,7 +328,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $file		(optional) The name of the template you want to parse and output.
              */
@@ -344,7 +343,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $file		(optional) The name of the template you want to parse and output.
              *	@param $display		(optional) Whether the output should be displayed or returned.
@@ -390,7 +389,7 @@
              *	the basename of the PHP script with the extension '.tpl' will be used.
              *
              *	This function automatically adds some variables to the template, which you can use as well in the template:
-             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI, YD_ACTION_PARAM.
+             *	YD_FW_NAME, YD_FW_VERSION, YD_FW_NAMEVERS, YD_FW_HOMEPAGE, YD_SELF_SCRIPT, YD_SELF_URI.
              *
              *	@param $name		Name you want to use for this fetched template for referencing it in the template.
              *	@param $file		The name of the template you want to parse and output.

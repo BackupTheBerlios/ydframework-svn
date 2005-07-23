@@ -46,19 +46,16 @@
     if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
         @define( 'YD_CRLF', "\r\n" );
         @define( 'YD_PATHDELIM', ';' );
-        @define( 'YD_DIRDELIM', '\\' );
     } elseif ( strtoupper( PHP_OS ) == 'DARWIN' ) {
         @define( 'YD_CRLF', "\r" );
         @define( 'YD_PATHDELIM', ':' );
-        @define( 'YD_DIRDELIM', '/' );
     } else {
         @define( 'YD_CRLF', "\n" );
         @define( 'YD_PATHDELIM', ':' );
-        @define( 'YD_DIRDELIM', '/' );
     }
 
     // Include the version file
-    @include( dirname( __FILE__ ) . YD_DIRDELIM . 'YDF2_version.php' );
+    @include( dirname( __FILE__ ) . '/YDF2_version.php' );
 
     // Global framework constants
     if ( ! defined( 'YD_FW_REVISION' ) ) {
@@ -72,19 +69,11 @@
 
     // Directory paths
     @define( 'YD_DIR_HOME', dirname( __FILE__ ) );
-    @define( 'YD_DIR_CLSS', YD_DIR_HOME . YD_DIRDELIM . 'YDClasses' );
-    @define( 'YD_DIR_3RDP', YD_DIR_HOME . YD_DIRDELIM . '3rdparty' );
     if ( ! defined( 'YD_DIR_TEMP' ) ) {
-        define( 'YD_DIR_TEMP', YD_DIR_HOME . YD_DIRDELIM . 'temp' );
+        define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
     }
-    @define( 'YD_DIR_ADDO', YD_DIR_HOME . YD_DIRDELIM . 'addons' );
-
-    // Action paths
-    @define( 'YD_ACTION_PARAM', 'do' );
-    @define( 'YD_ACTION_DEFAULT', 'actionDefault' );
 
     // File and URL constants
-    //@define( 'YD_SELF_SCRIPT', $_SERVER['SCRIPT_NAME'] );
     @define( 'YD_SELF_SCRIPT', $_SERVER['PHP_SELF'] );
     if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
@@ -97,10 +86,6 @@
     @define( 'YD_TPL_EXT', '.tpl' );
     @define( 'YD_SCR_EXT', '.php' );
     @define( 'YD_TMP_PRE', 'YDF_' );
-
-    // Template constants
-    define( 'YD_TPL_CACHEEXT', '.phc' );
-    define( 'YD_TPL_CACHEPRE', YD_TMP_PRE . 'T_' );
 
     // Error constants
     @define( 'YD_ERROR', E_USER_ERROR );
@@ -120,24 +105,23 @@
 
     // Update the include path
     $includePath = YD_SELF_DIR;
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS;
-    $includePath .= YD_PATHDELIM . dirname( __FILE__ );
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormElements';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDFormRenderers';
-    $includePath .= YD_PATHDELIM . YD_DIR_CLSS . YD_DIRDELIM . 'YDDatabaseDrivers';
-    if ( is_dir( YD_SELF_DIR . YD_DIRDELIM . 'includes' ) ) {
-        $includePath .= YD_PATHDELIM . YD_SELF_DIR . YD_DIRDELIM . 'includes';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME;
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDFormElements';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDFormRenderers';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDDatabaseDrivers';
+    if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
+        $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
     }
-    $includePath .= YD_PATHDELIM . YD_DIR_3RDP;
-    $includePath .= YD_PATHDELIM . YD_DIR_ADDO;
-    if ( $handle = opendir( YD_DIR_ADDO ) ) {
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/3rdparty';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/addons';
+    if ( $handle = opendir( YD_DIR_HOME . '/addons' ) ) {
         while ( false !== ( $file = readdir( $handle ) ) ) {
            if (
-               //$file != '.' && $file != '..' &&
                substr( $file, 0, 1 ) != '.' &&
-               is_dir( YD_DIR_ADDO . YD_DIRDELIM . $file )
+               is_dir( YD_DIR_HOME . '/addons/' . $file )
            ) {
-                $includePath .= YD_PATHDELIM . YD_DIR_ADDO . YD_DIRDELIM . $file;
+                $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/addons/' . $file;
            }
         }
         closedir( $handle );
@@ -149,7 +133,7 @@
     @ini_set( 'include_path', $includePath );
 
     // Include the standard functions
-    include_once( YD_DIR_HOME . YD_DIRDELIM . 'YDF2_functions.php' );
+    include_once( YD_DIR_HOME . '/YDF2_functions.php' );
     YDInclude( 'YDBase.php' );
     YDInclude( 'YDConfig.php' );
     YDInclude( 'YDLocale.php' );

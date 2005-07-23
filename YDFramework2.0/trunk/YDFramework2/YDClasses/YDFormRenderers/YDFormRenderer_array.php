@@ -130,17 +130,17 @@
 
             // Add the do parameter if it's a get form
             if ( $this->_form->_method == 'get' ) {
-                $form[YD_ACTION_PARAM] = array();
-                $form[YD_ACTION_PARAM]['name'] = YD_ACTION_PARAM;
-                $form[YD_ACTION_PARAM]['value'] = YDRequest::getActionName();
-                $form[YD_ACTION_PARAM]['type'] = 'hidden';
-                $form[YD_ACTION_PARAM]['label'] = '';
-                $form[YD_ACTION_PARAM]['options'] = array();
-                $form[YD_ACTION_PARAM]['placeLabel'] = 'before';
-                $form[YD_ACTION_PARAM]['html'] = '<input type="hidden" name="' . YD_ACTION_PARAM . '" value="' . YDRequest::getActionName() . '" />';
-                $form[YD_ACTION_PARAM]['isButton'] = false;
-                $form[YD_ACTION_PARAM]['error'] = '';
-                $form[YD_ACTION_PARAM]['required'] = false;
+                $form['do'] = array();
+                $form['do']['name'] = 'do';
+                $form['do']['value'] = YDRequest::getActionName();
+                $form['do']['type'] = 'hidden';
+                $form['do']['label'] = '';
+                $form['do']['options'] = array();
+                $form['do']['placeLabel'] = 'before';
+                $form['do']['html'] = '<input type="hidden" name="do" value="' . YDRequest::getActionName() . '" />';
+                $form['do']['isButton'] = false;
+                $form['do']['error'] = '';
+                $form['do']['required'] = false;
             }
 
             // Return the form array
