@@ -159,7 +159,7 @@
     }
 
     // Class executor
-    YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
+    //YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
 
     // Set the debugging level
     switch ( @ $_GET['YD_DEBUG'] ) {
