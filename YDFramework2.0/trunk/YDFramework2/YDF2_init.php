@@ -158,9 +158,6 @@
         trigger_error( 'PHP version 4.2.0 or greater is required.', YD_ERROR );
     }
 
-    // Class executor
-    //YDConfig::set( 'YD_EXECUTOR', 'YDExecutor' );
-
     // Set the debugging level
     switch ( @ $_GET['YD_DEBUG'] ) {
         case 2:
