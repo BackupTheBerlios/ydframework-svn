@@ -42,7 +42,6 @@ get - MyConfigVar3 - changed2
 
 YDConfig contents
 array (
-  'YD_EXECUTOR' => 'YDExecutor',
   'YD_DEBUG' => 0,
   'MyConfigVar1' => 'value cfg1 changed',
   'MyConfigVar2' => 'value cfg2 changed',
