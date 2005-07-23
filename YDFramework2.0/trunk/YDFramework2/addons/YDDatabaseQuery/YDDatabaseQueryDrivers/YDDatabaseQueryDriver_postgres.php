@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDDatabaseQuery.php' );
+    include_once( dirname( __FILE__ ) . '/../YDDatabaseQuery.php' );
 
     /**
      *  This class defines a YDSqlQueryDriver_postgres object.

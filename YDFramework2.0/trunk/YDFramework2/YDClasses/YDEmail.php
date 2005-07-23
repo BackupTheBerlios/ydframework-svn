@@ -27,8 +27,8 @@
     }
 
     // Includes
-    YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'phpmailer/class.phpmailer.php' );
+    include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
+    include_once( dirname( __FILE__ ) . '/../3rdparty/phpmailer/class.phpmailer.php' );
 
     // Constants
     define( 'YD_EMAIL_PRIORITY_HIGH', '1' );

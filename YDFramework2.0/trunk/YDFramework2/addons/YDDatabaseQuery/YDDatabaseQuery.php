@@ -83,7 +83,7 @@
 
             // Include the driver
             if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
-                YDInclude( 'YDDatabaseQueryDrivers.' . $regDrivers[ strtolower( $driver ) ]['file'] );
+                include_once( dirname( __FILE__ ) . '/YDDatabaseQueryDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
             }
             
             // Check if the driver is supported

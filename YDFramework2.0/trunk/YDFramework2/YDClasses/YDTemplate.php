@@ -32,8 +32,8 @@
     }
 
     // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDFileSystem.php' );
+    include_once( dirname( __FILE__ ) . '/YDRequest.php');
+    include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
 
     // Configure the default for this class
     YDConfig::set( 'YD_TEMPLATE_ENGINE', 'smarty', false );
@@ -42,7 +42,7 @@
     if ( strtolower( YDConfig::get( 'YD_TEMPLATE_ENGINE', 'smarty' ) == 'smarty' ) ) {
 
         // Include the smarty library
-        YDInclude( SMARTY_DIR . '/Smarty.class.php' );
+        include_once( SMARTY_DIR . '/Smarty.class.php' );
 
         /**
          *	This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/

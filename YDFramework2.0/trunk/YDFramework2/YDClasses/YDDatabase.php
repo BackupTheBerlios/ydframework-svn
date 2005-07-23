@@ -27,9 +27,9 @@
     }
 
     // Includes
-    YDInclude( 'YDUrl.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDRecordSet.php' );
+    include_once( dirname( __FILE__ ) . '/YDUrl.php' );
+    include_once( dirname( __FILE__ ) . '/YDUtil.php' );
+    include_once( dirname( __FILE__ ) . '/YDRecordSet.php' );
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -89,7 +89,11 @@
 
             // Include the driver
             if ( ! empty( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
-                YDInclude( $regDrivers[ strtolower( $driver ) ]['file'] );
+                if ( is_file( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
+                    include_once( $regDrivers[ strtolower( $driver ) ]['file'] );
+                } else {
+                    include_once( dirname( __FILE__ ) . '/YDDatabaseDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
+                }
             }
 
             // Check if the driver is supported

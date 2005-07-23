@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'fpdf.php');
+    include_once( dirname( __FILE__ ) . '/fpdf.php' );
 
     class PDF extends FPDF{
 

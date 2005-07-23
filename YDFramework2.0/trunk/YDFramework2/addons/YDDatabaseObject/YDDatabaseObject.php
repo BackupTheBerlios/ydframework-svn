@@ -61,9 +61,10 @@
      */
     YDConfig::set( 'YD_DBOBJECT_UPDATE', false, false );
 
-    YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDDatabaseQuery.php' );
-    
+    // Includes
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDDatabase.php' );
+    include_once( dirname( __FILE__ ) . '/../YDDatabaseQuery/YDDatabaseQuery.php' );
+
     /**
      *  This class defines a YDDatabaseObject object.
      */

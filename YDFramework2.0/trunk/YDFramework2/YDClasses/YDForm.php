@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDRequest.php' );
+    include_once( dirname( __FILE__ ) . '/YDRequest.php');
 
     /**
      *  This class defines an object oriented HTML form.

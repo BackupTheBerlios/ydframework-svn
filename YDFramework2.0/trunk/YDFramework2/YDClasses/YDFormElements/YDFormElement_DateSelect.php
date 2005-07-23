@@ -27,8 +27,8 @@
     }
 
     // Includes
-    YDInclude( 'YDForm.php' );
-    YDInclude( 'YDFormElements/YDFormElement_Select.php' );
+    include_once( dirname( __FILE__ ) . '/../YDForm.php');
+    include_once( dirname( __FILE__ ) . '/YDFormElement_Selects.php');
 
     /**
      *	This is the class that define a date select form element.

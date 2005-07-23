@@ -27,9 +27,9 @@
     }
 
     // Includes
-    YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDHttpClient.php' );
-    YDInclude( 'IXR_Library.inc.php' );
+    include_once( dirname( __FILE__ ) . '/YDRequest.php');
+    include_once( dirname( __FILE__ ) . '/YDHttpClient.php');
+    include_once( dirname( __FILE__ ) . '/../3rdparty/IXR_Library.class.php' );
 
     /**
      *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support
@@ -332,7 +332,7 @@
             }
 
             // Create a new template
-            YDInclude( 'YDTemplate.php' );
+            include_once( dirname( __FILE__ ) . '/YDTemplate.php');
             $template = new YDTemplate();
             $template->template_dir = dirname( __FILE__ );
             $template->assign( 'methods', $methods );

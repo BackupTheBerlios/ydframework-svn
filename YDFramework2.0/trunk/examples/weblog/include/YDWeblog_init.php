@@ -21,7 +21,6 @@
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDBBCode.php' );
-    YDInclude( 'YDLocale.php' );
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDTemplate.php' );
     YDInclude( 'YDDatabase.php' );

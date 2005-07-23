@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDFileSystem.php' );
+    include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
 
     // The different log levels
     @define( 'YD_LOG_DEBUG', 4 );

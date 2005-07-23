@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDForm.php' );
+    include_once( dirname( __FILE__ ) . '/../YDForm.php');
 
     /**
      *	This is the class that define a select button form element.

@@ -216,8 +216,8 @@
             }
             
             // include filesystem functions
-            YDInclude( 'YDFileSystem.php' );
-            
+            include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
+
             // create file object
             $file = new YDFSFile( $this->filepath, true );
             

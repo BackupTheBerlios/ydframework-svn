@@ -27,8 +27,8 @@
     }
 
     // Includes
-    YDInclude( 'YDUrl.php' );
-    YDInclude( 'YDFileSystem.php' );
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDUrl.php' );
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
 
     /**
      *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and

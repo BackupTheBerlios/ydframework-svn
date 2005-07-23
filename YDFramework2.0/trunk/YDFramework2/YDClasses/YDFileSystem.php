@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDUtil.php' );
+    include_once( dirname( __FILE__ ) . '/YDUtil.php');
 
     // The mime types mapping
     $GLOBALS['YD_FS_MIME_MAPPING'] = array(
@@ -952,7 +952,7 @@
             }
 
             // Include phpThumb
-            YDInclude( 'phpThumb/phpthumb.class.php' );
+            include_once( dirname( __FILE__ ) . '/../3rdparty/phpThumb/phpthumb.class.php' );
 
             // Create a new thumbnail object
             $thumb = new phpThumb();

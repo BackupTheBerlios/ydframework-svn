@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'html2pdf.php' );
+    include_once( dirname( __FILE__ ) . '/html2pdf.php' );
 
     /**
      *  This class defines a YDPdfProject object.

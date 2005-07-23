@@ -27,9 +27,9 @@
     }
 
     // Includes
-    YDInclude( 'YDUrl.php' );
-    YDInclude( 'YDUtil.php' );
-    YDInclude( 'YDPersistent.php' );
+    include_once( dirname( __FILE__ ) . '/YDUrl.php');
+    include_once( dirname( __FILE__ ) . '/YDUtil.php');
+    include_once( dirname( __FILE__ ) . '/YDPersistent.php');
 
     // Configure the default for this class
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );

@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDDate.php' );
+    include_once( dirname( __FILE__ ) . '/YDDate.php');
 
     /**
      *  This class defines a YDDateUtil object.

@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDForm.php' );
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDForm.php' );
 
     /**
      *	This is the class that is able to render a form object to XML.

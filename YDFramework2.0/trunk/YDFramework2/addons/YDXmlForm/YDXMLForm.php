@@ -27,8 +27,8 @@
     }
 
     // Include the needed libraries
-    YDInclude( 'YDForm.php' );
-    YDInclude( dirname( __FILE__ ) . '/xmlize.inc.php');
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDForm.php' );
+    include_once( dirname( __FILE__ ) . '/xmlize.inc.php');
 
     /**
      *  Class definition for the YDXMLForm addon.

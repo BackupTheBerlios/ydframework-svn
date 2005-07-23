@@ -149,7 +149,7 @@
 
             // Make links absolute if needed
             if ( ! is_null( $baseUrl ) ) {
-                YDInclude( 'YDUrl.php' );
+                include_once( dirname( __FILE__ ) . '/../../YDClasses/YDUrl.php' );
                 $data = YDUrl::makeLinksAbsolute( $data, $baseUrl );
             }
 
