@@ -752,7 +752,9 @@
          *  This function will return the ID of the last insert for databases that support it. If the database doesn't
          *  support this, an error will be triggered.
          *
-         *  @returns    The last insert ID of the last insert.
+         *  @returns    The last insert ID of the last insert. Returns 0 If no auto-increment was generated, and false
+         *              if there was no connection. If the database driver doesn't support this functionality, a fatal
+         *              error will be raised.
          */
         function getLastInsertID() {
             trigger_error( 'The database driver ' . $this->_driver . ' does not support getLastInsertID.' );
@@ -1196,7 +1198,8 @@
          *  This function will return the ID of the last insert for databases that support it. If the database doesn't
          *  support this, an error will be triggered.
          *
-         *  @returns    The last insert ID of the last insert.
+         *  @returns    The last insert ID of the last insert. Returns 0 If no auto-increment was generated, and false 
+         *              if there was no connection
          */
         function getLastInsertID() {
             return mysql_insert_id( $this->_conn );

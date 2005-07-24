@@ -144,7 +144,8 @@
          *  This function will return the ID of the last insert for databases that support it. If the database doesn't
          *  support this, an error will be triggered.
          *
-         *  @returns    The last insert ID of the last insert.
+         *  @returns    The last insert ID of the last insert. Returns 0 If no auto-increment was generated, and false 
+         *              if there was no connection
          */
         function getLastInsertID() {
             return sqlite_last_insert_rowid( $this->_conn );
