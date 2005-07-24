@@ -58,6 +58,9 @@
             // Parse the URL
             $this->_url_parsed = array_merge( $this->defaults, parse_url( $url ) );
 
+            // Fix W3C type of URLs
+            $this->_url_parsed['query'] = str_replace( '&amp;', '&', $this->_url_parsed['query'] );
+
             // Parse the query string
             parse_str( $this->_url_parsed['query'], $this->_url_parsed['query'] );
 
@@ -332,11 +335,11 @@
             foreach ( $this->getNamedPart( 'query' ) as $key=>$value ) {
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key1=>$val ) {
-                        $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
+                        $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&amp;';
                         $querystr .= rawurlencode( $key  . '[' . $key1 . ']' ) . '=' . rawurlencode( $val );
                     }
                 } else {
-                    $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&';
+                    $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&amp;';
                     $querystr .= rawurlencode( $key ) . '=' . rawurlencode( $value );
                 }
             }

@@ -127,6 +127,12 @@
             YDDebugUtil::dump( $url, $x );
             YDDebugUtil::dump( $url->getUrl(), 'Original url' );
 
+            // Do some more testing
+            $x = 'http://localhostexamples/form2.php?form2_tmp%5Bday%5D=1&amp;form2_tmp%5Bmonth%5D=1&amp;form2_tmp%5Byear%5D=2000&amp;do=test';
+            $url = new YDUrl( $x );
+            YDDebugUtil::dump( $url, $x );
+            YDDebugUtil::dump( $url->getUrl(), 'Original url' );
+
             // Get the contents
             $url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
             YDDebugUtil::dump( $url->getContents(), 'URL contents' );
