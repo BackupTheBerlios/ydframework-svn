@@ -145,6 +145,8 @@
          *	@param $sql	The SQL statement to use.
          *
          *	@returns	The number of rows matched by the SQL query.
+         *
+         *  @remark     Don't use this for SQL select statements as the returned value will not be correct.
          */
         function getMatchedRowsNum( $sql ) {
             $result = $this->_connectAndExec( $sql );
@@ -240,7 +242,7 @@
          *
          *	@param $sql	The SQL statement to execute.
          *
-         *	@returns	Handle to the result of the query.
+         *  @returns    Handle to the result of the query. In case of an error, this function triggers an error.
          *
          *	@internal
          */
