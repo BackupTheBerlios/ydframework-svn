@@ -28,7 +28,7 @@
 
     // Includes
     include_once( dirname( __FILE__ ) . '/../YDForm.php');
-    include_once( dirname( __FILE__ ) . '/YDFormElement_Selects.php');
+    include_once( dirname( __FILE__ ) . '/YDFormElement_Select.php');
 
     /**
      *	This is the class that define a date select form element.
