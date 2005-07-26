@@ -27,9 +27,9 @@
         // Default action
         function actionDefault() {
 
-            // Get the pagesize and current page using YDPersistent
-            $page = YDPersistent::get( 'page', -1 );
-            $size = YDPersistent::get( 'size', 15 );
+            // Get the pagesize and current page from the query string
+            $page = @ $_GET['page'];
+            $size = @ $_GET['size'];
 
             // Get the list of files in the current directory
             $dir = new YDFSDirectory();

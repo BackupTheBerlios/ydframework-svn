@@ -29,7 +29,7 @@
     // Includes
     include_once( dirname( __FILE__ ) . '/YDUrl.php' );
     include_once( dirname( __FILE__ ) . '/YDUtil.php' );
-    include_once( dirname( __FILE__ ) . '/YDPersistent.php');
+    //include_once( dirname( __FILE__ ) . '/YDPersistent.php');
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -102,13 +102,13 @@
             $this->records = $records;
 
             // Sort the records
-            if ( YDPersistent::get( $sortvar, '' ) != '' ) {
+            if ( ! empty( $_GET[$sortvar] ) ) {
 
                 // Set the sortfield and direction
-                $this->sortfield = YDPersistent::get( $sortvar );
+                $this->sortfield = $_GET[$sortvar];
 
                 // Get the sort direction
-                if ( strtoupper( YDPersistent::get( $this->sortdir, 'DESC' ) ) == 'DESC' ) {
+                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
                     $this->sortdirection = 'DESC';
                 } else {
                     $this->sortdirection = 'ASC';
@@ -337,8 +337,8 @@
             $url->setQueryVar( $this->sortvar, $sortfld );
 
             // Get the sort direction
-            if ( YDPersistent::get( $this->sortvar, '' ) == $sortfld ) {
-                if ( strtoupper( YDPersistent::get( $this->sortdir ) ) == 'ASC' ) {
+            if ( isset( $_GET[$this->sortvar] ) && $_GET[$this->sortvar] == $sortfld ) {
+                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'ASC' ) ) {
                     $sortdir = 'DESC';
                 } else {
                     $sortdir = 'ASC';
