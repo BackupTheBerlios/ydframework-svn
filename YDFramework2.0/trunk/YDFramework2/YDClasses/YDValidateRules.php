@@ -359,8 +359,8 @@
             if ( ! is_array( $opts ) ) {
                 $opts = array( $opts );
             }
-            ereg( ".*\.([a-zA-Z0-9]{0,5})$", $val['name'], $regs );
-            return in_array( $regs[1], $opts );
+            $ext = substr( strrchr( $val['name'], '.' ), 1 );
+            return in_array( $ext, $opts );
         }
 
         /**
