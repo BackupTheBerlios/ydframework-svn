@@ -246,7 +246,7 @@
          *
          *	@internal
          */
-        function _connectAndExec( $sql ) {
+        function & _connectAndExec( $sql ) {
             $this->_logSql( $sql );
             $this->connect();
             $stmt = OCIParse( $this->_conn, $sql );
