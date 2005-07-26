@@ -803,9 +803,20 @@
             $this->YDFSFile( $path );
 
             // Get the image size
-            $this->image_size = getimagesize( $this->getAbsolutePath() );
+            $this->image_size = null;
 
         }
+
+        /**
+         *  Function determine the image size. This is just a helper function for the other ones.
+         *
+         *  @internal
+         */
+        function _initImageSize() {
+            if ( is_null( $this->image_size ) ) {
+                $this->image_size = getimagesize( $this->getAbsolutePath() );
+            }
+       }
 
         /**
          *	Function to output the thumbnail of an image. The function directly outputs the thumbnail to the client
@@ -876,6 +887,7 @@
          *	@returns	The width in pixels.
          */
         function getWidth() {
+            $this->_initImageSize();
             return $this->image_size[0];
         }
 
@@ -885,6 +897,7 @@
          *	@returns	The height in pixels.
          */
         function getHeight() {
+            $this->_initImageSize();
             return $this->image_size[1];
         }
 
