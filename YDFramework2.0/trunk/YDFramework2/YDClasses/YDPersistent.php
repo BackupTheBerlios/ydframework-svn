@@ -97,8 +97,8 @@
         }
 
         /**
-         *	This function returns a variable from the configuration. If the configuration variable doesn't exist, it
-         *	returns a fatal error.
+         *  This function returns a variable from the configuration. If the configuration variable doesn't exist or it's
+         *  a wrong password, it returns the default value if this value isn't null, otherwise returns a fatal error.
          *
          *	@param	$name       The name of the configuration variable to retrieve.
          *  @param  $default    (optional) If not null, this value will be returned if the configuration setting doesn't
