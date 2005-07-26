@@ -245,6 +245,11 @@
                         <entry valign="top">The scope for the persistent data. Defaults to the domain.</entry>
                         <entry valign="top"><literal>'/'</literal></entry>
                     </row>
+                    <row>
+                        <entry valign="top">YD_ALLOW_OVERRIDE_QS</entry>
+                        <entry valign="top">Allow a $_GET variable to override the value of a persistent variable.</entry>
+                        <entry valign="top"><literal>false</literal></entry>
+                    </row>
                 </tbody>
             </tgroup>
         </table>

@@ -34,6 +34,7 @@
     YDConfig::set( 'YD_PERSISTENT_DEFAULT_LIFETIME', 0, false );
     YDConfig::set( 'YD_PERSISTENT_DEFAULT_PASSWORD', null, false );
     YDConfig::set( 'YD_PERSISTENT_SCOPE', '/', false );
+    YDConfig::set( 'YD_ALLOW_OVERRIDE_QS', false, false );
 
     /**
      *  This class is able to save and load persistent data. This data stay active between different requests and allows
@@ -113,8 +114,10 @@
             YDPersistent::_init();
 
             // If the $_GET variable exists, return that one
-            if ( isset( $_GET[$name] ) === true ) {
-                YDPersistent::set( $name, $_GET[$name], $passwd );
+            if ( YDConfig::set( 'YD_ALLOW_OVERRIDE_QS', false ) === true ) {
+                if ( isset( $_GET[$name] ) === true ) {
+                    YDPersistent::set( $name, $_GET[$name], $passwd );
+                }
             }
 
             // Check if the key exists
