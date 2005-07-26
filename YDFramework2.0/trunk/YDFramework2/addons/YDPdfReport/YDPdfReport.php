@@ -114,7 +114,7 @@
         /**
          *  Defines the document title
          *
-         *  @param  $article    Document title
+         *  @param  $title    Document title
          */
         function setTitle( $title ){
             $this->title = $title;
@@ -123,7 +123,7 @@
         /**
          *  Defines the html content to parse
          *
-         *  @param  $article    HTML string to parse
+         *  @param  $html    HTML string to parse
          */
         function setHTML( $html ){
             $this->html = $html;
@@ -143,7 +143,8 @@
         /**
          *  Creates the pdf file
          *
-         *  @param  $filepath    Filepath
+         *  @param  $format     (optional) The format for the download. Default is "download".
+         *  @param  $name       (optional) Filepath
          */                
         function output( $format = 'download', $name = 'ydf.pdf' ) {
         
