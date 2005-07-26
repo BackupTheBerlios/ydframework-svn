@@ -193,7 +193,11 @@
          *	@static
          */
         function getExtension( $path ) {
-            return substr( strrchr( $path, '.' ), 1 );
+            if ( strrchr( $path, '.' ) ) {
+                return substr( strrchr( $path, '.' ), 1 );
+            } else {
+                return '';
+            }
         }
 
         /**
