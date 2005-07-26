@@ -42,6 +42,8 @@
 
         <para>Sometimes, you want to override a persistent value, regardless of what the stored setting is. This can be done by specifying a query parameter with the same name of the variable. If the persistent variable doesn't exist yet, it will be automatically created for you.</para>
 
+        <warning>This only works if you set the YD_ALLOW_OVERRIDE_QS configuration variable to true.</warning>
+
         <para>When you override a variable, the new value is automatically stored.</para>
 
     </sect1>
