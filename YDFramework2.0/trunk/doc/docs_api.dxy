@@ -59,7 +59,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = "../YDFramework2/YDClasses" \
                          "../YDFramework2/YDF2_init.php" \
-                         "../YDFramework2/YDF2_functions.php" \
+                         "../YDFramework2/YDF2_core.php" \
                          "../YDFramework2/YDF2_process.php"  \
                          "../YDFramework2/addons"
 FILE_PATTERNS          = *.php
