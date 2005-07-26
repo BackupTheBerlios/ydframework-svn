@@ -138,7 +138,7 @@
                 // Convert to a string
                 $includeFiles = array();
                 foreach ( $includeFilesWithSize as $size=>$file ) {
-                    array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . $file );
+                    array_push( $includeFiles, YDStringUtil::formatFileSize( $size ) . "\t  " . realpath( $file ) );
                 }
 
                 // Create the debug messages
@@ -160,7 +160,11 @@
                 // Create the list of include directories
                 $debug .= 'Includes search path:' . YD_CRLF . YD_CRLF;
                 foreach ( explode( YD_PATHDELIM, ini_get( 'include_path' ) ) as $path ) {
-                    $debug .= "\t" . $path . YD_CRLF;
+                    if ( realpath( $path ) ) {
+                        $debug .= "\t" . realpath( $path ) . YD_CRLF;
+                    } else {
+                        $debug .= "\t" . $path . YD_CRLF;
+                    }
                 }
                 $debug .= YD_CRLF;
 
