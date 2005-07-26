@@ -177,7 +177,7 @@
          *	@param $url	The URL to redirect to.
          */
         function redirect( $url ) {
-            if ( ereg( 'IIS', $_SERVER['SERVER_SOFTWARE'] ) ) { 
+            if ( strpos( strtoupper( $_SERVER['SERVER_SOFTWARE'] ), 'IIS' ) ) {
                header( 'Refresh: 0; ' . $url ); 
             } else { 
                header( 'Location: '. $url ); 
