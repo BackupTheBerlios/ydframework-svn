@@ -193,8 +193,7 @@
          *	@static
          */
         function getExtension( $path ) {
-            ereg( ".*\.([a-zA-Z0-9]{0,5})$", $path, $regs );
-            return( $regs[1] );
+            return substr( strrchr( $path, '.' ), 1 );
         }
 
         /**
@@ -366,6 +365,45 @@
 
             // Return the joined path
             return $path;
+
+        }
+
+        /**
+         *	Function to determine if the file is an image or not. This function will read the header of the file to
+         *	find out if it's an image or not.
+         *
+         *	@returns	Boolean indicating if the file is an image or not.
+         */
+        function isImage( $path ) {
+
+            // Return false if path doesn't exist
+            if ( ! realpath( $path ) ) {
+                return false;
+            }
+
+            // Check the extension
+            if ( in_array( strtolower( YDPath::getExtension( $path ) ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
+                return strtolower( YDPath::getExtension( $path ) );
+            }
+
+            // Special check for thumbnails
+            if ( strtolower( YDPath::getExtension( $path ) ) == 'tmn' ) {
+                $fp = fopen( $path, 'rb' );
+                $header = fread( $fp, 32 );
+                fclose( $fp );
+                if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
+                    return 'gif';
+                }
+                if ( substr( $header, 6, 4 ) == 'JFIF' ) {
+                    return 'jpeg';
+                }
+                if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
+                    return 'png';
+                }
+            }
+
+            // Not an image
+            return false;
 
         }
 
@@ -579,13 +617,11 @@
          *	Function to determine if the file is an image or not. This function will read the header of the file to
          *	find out if it's an image or not.
          *
-         *	@remarks
-         *		You need to have the GD library enabled in PHP in order to use this function.
-         *
          *	@returns	Boolean indicating if the file is an image or not.
          */
         function isImage() {
 
+            /*
             // Get the image type
             $type = $this->_getImageType();
 
@@ -595,6 +631,8 @@
             } else {
                 return true;
             }
+            */
+            return YDPath::isImage( $this->getAbsolutePath() );
 
         }
 
@@ -748,10 +786,13 @@
          *	@internal
          */
         function _getImageType() {
+            /*
             if ( in_array( strtolower( $this->getExtension() ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
+                YDDebugUtil::dump( 'used extension' );
                 return strtolower( $this->getExtension() );
             }
             if ( strtolower( $this->getExtension() ) == 'tmn' ) {
+                YDDebugUtil::dump( 'used extension' );
                 $fp = fopen( $this->getAbsolutePath(), 'rb' );
                 $header = fread( $fp, 32 );
                 fclose( $fp );
@@ -766,6 +807,8 @@
                 }
             }
             return false;
+            */
+            return YDPath::isImage( $this->getAbsolutePath() );
         }
 
         /**
@@ -1169,6 +1212,8 @@
          */
         function getContents( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage', 'YDFSDirectory' ), $sort_by_date=false, $sort_order='asc' ) {
 
+            YDGlobalTimerMarker( 'start getContents' );
+
             // Start with an empty list
             $fileList = array();
 
@@ -1186,6 +1231,8 @@
             if ( ! is_array( $pattern ) ) {
                 $pattern = array( $pattern );
             }
+
+            YDGlobalTimerMarker( 'start fnmatch' );
 
             // Apply the pattern to match
             $fileListMatch = array();
@@ -1213,9 +1260,12 @@
                 }
             }
 
+            YDGlobalTimerMarker( 'end fnmatch' );
+
             // Get the values
             $fileList = array_values( $fileList );
 
+            YDGlobalTimerMarker( 'start creating objects' );
             // Convert the list of a list of YDFile objects
             $fileList2 = array();
             foreach ( $fileList as $file ) {
@@ -1226,10 +1276,15 @@
                     if ( is_dir( $file ) ) {
                         $fileObj = new YDFSDirectory( $file );
                     } else {
-                        $fileObj = new YDFSFile( $file );
-                        if ( $fileObj->isImage() ) {
+                        if ( YDPath::isImage( $file ) ) {
                             $fileObj = new YDFSImage( $file );
+                        } else {
+                            $fileObj = new YDFSFile( $file );
                         }
+                        //$fileObj = new YDFSFile( $file );
+                        //if ( $fileObj->isImage() ) {
+                        //    $fileObj = new YDFSImage( $file );
+                        //}
                     }
                 }
                 if ( $sort_by_date === true ) {
@@ -1238,6 +1293,7 @@
                     $fileList2[ strtolower( $file ) ] = $fileObj;
                 }
             }
+            YDGlobalTimerMarker( 'finished creating objects' );
 
             // Sort the list of files
             if ( strtolower( $sort_order ) != 'desc' ) {
@@ -1278,6 +1334,8 @@
                 return $fileOnlyList;
 
             }
+
+            YDGlobalTimerMarker( 'finished getContents' );
 
             // Return the file list
             return $fileList2;
