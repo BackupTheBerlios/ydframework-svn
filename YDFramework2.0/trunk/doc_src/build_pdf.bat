@@ -36,7 +36,6 @@ copy images\*.gif pdf > NUL
 copy images\*.svg pdf > NUL
 copy docbook\images\note.gif pdf > NUL
 copy docbook\images\warning.gif pdf > NUL
-copy ..\YDFramework2\images\sponsored_by_rch.gif pdf > NUL
 
 rem Create outputs
 echo Creating YDFramework2.fo

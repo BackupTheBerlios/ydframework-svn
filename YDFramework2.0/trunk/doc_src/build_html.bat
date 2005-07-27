@@ -35,7 +35,6 @@ rem Copy the images
 copy images\*.gif html > NUL
 copy docbook\images\note.gif html > NUL
 copy docbook\images\warning.gif html > NUL
-copy ..\YDFramework2\images\sponsored_by_rch.gif html > NUL
 
 rem Copy the stylesheet
 copy style.css html > NUL
