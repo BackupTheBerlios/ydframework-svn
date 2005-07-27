@@ -89,6 +89,7 @@
         'gif' => 'image/gif',
         'ief' => 'image/ief',
         'png' => 'image/png',
+        'jpg' => 'image/jpeg',
         'svg' => 'image/svg+xml',
         'wbmp' => 'image/vnd.wap.wbmp',
         'ras' => 'image/x-cmu-raster',
@@ -385,29 +386,25 @@
                 return false;
             }
 
-            // Check the extension
-            if ( in_array( strtolower( YDPath::getExtension( $path ) ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
-                if ( YDPath::getExtension( $path ) ) {
-                    return 'jpg';
-                } else {
+            // Check if we have an extension
+            if ( YDPath::getExtension( $path ) && strtolower( YDPath::getExtension( $path ) ) != 'tmn' ) {
+                if ( in_array( strtolower( YDPath::getExtension( $path ) ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
                     return strtolower( YDPath::getExtension( $path ) );
                 }
             }
 
-            // Special check for thumbnails
-            if ( strtolower( YDPath::getExtension( $path ) ) == 'tmn' ) {
-                $fp = fopen( $path, 'rb' );
-                $header = fread( $fp, 32 );
-                fclose( $fp );
-                if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
-                    return 'gif';
-                }
-                if ( substr( $header, 6, 4 ) == 'JFIF' ) {
-                    return 'jpeg';
-                }
-                if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
-                    return 'png';
-                }
+            // No extension, read the file
+            $fp = fopen( $path, 'rb' );
+            $header = fread( $fp, 32 );
+            fclose( $fp );
+            if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
+                return 'gif';
+            }
+            if ( substr( $header, 6, 4 ) == 'JFIF' ) {
+                return 'jpeg';
+            }
+            if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
+                return 'png';
             }
 
             // Not an image
@@ -725,7 +722,6 @@
 
                 }
 
-
                 // Return if the file was deleted or not
                 return $result;
 
@@ -848,11 +844,15 @@
          */
         function outputThumbnail( $width, $height, $cache=true ) {
 
-            // Create the thumbnail
-            $thumb = & $this->_createThumbnail( $width, $height, $cache );
+            // Output right headers
+            $content_type = $this->getMimeType();
+            header( 'Content-type: ' . $content_type );
 
             // Output the thumbnail
-            $thumb->OutputThumbnail();
+            echo( $this->_createThumbnail( $width, $height, $cache ) );
+
+            // Stop the execution
+            die();
 
         }
 
@@ -866,10 +866,11 @@
         function saveThumbnail( $width, $height, $file ) {
 
             // Create the thumbnail
-            $thumb = & $this->_createThumbnail( $width, $height, false );
+            $thumb = $this->_createThumbnail( $width, $height, false );
 
-            // Save the thumbnail
-            $thumb->RenderToFile( $file );
+            // Save it to a file
+            $f = new YDFSFile( $file, true );
+            $f->setContents( $thumb );
 
         }
 
@@ -940,16 +941,6 @@
          }
 
         /**
-         *	Function that returns the MIME type of the image. Currently, it supports GIF, JPG and PNG.
-         *
-         *	@returns	The type of the image, which is either jpg, png or gif.
-         */
-        function getMimeType() {
-            $type = $this->getImageType();
-            return 'image/' . strtolower( $type );
-         }
-
-        /**
          *	This function is used to output an error image.
          *
          *	@param $name	(optional) Name of the error image. Default image that is shown is the generic
@@ -977,29 +968,19 @@
 
             // Check if the GD library is loaded.
             if ( ! extension_loaded( 'gd' ) ) {
-                  $this->_error( 'YD_gd_not_installed' );
+                $this->_error( 'YD_gd_not_installed' );
             }
 
-            // Include phpThumb
-            include_once( dirname( __FILE__ ) . '/../3rdparty/phpThumb/phpthumb.class.php' );
-
-            // Create a new thumbnail object
-            $thumb = new phpThumb();
-            $thumb->src = $this->getAbsolutePath();
-
-            // Set the options for the creation of thumbnails
-            $thumb->config_nohotlink_enabled = false;
-            $thumb->config_cache_directory = YD_DIR_TEMP;
-
-            // Set the width and the height
-            $thumb->w = $width;
-            $thumb->h = $height;
+            // Width and height should be positive integer
+            if ( $width < 1 || $width < 1 ) {
+                $this->_error();
+            }
 
             // Get the cache filename
             $cacheFName = YD_DIR_TEMP . '/' . $this->_createThumbnailName( $width, $height );
 
             // Check if caching is enabled
-            if ( $cache == true ) {
+            if ( $cache === true ) {
 
                 // Output the cached version if any
                 if ( is_file( $cacheFName ) ) {
@@ -1018,26 +999,80 @@
 
             }
 
-            // Width should be positive integer
-            if ( $width < 1 ) {
-                  $this->_error();
+            // Check the extension
+            $img_type = $this->isImage();
+
+            // Open the source image
+            if ( $img_type == 'gif' ) {
+                if ( ! function_exists( 'imagecreatefromgif' ) ) {
+                    $this->_error();
+                }
+                $src_img = imagecreatefromgif( $this->getAbsolutePath() );
+            } elseif ( $img_type == 'png' ) {
+                $src_img = imagecreatefrompng( $this->getAbsolutePath() );
+            } else {
+                $src_img = imagecreatefromjpeg( $this->getAbsolutePath() );
             }
 
-            // Height should be positive integer
-            if ( $width < 1 ) {
-                  $this->_error();
+            // Get the current image size
+            $ori_width  = imageSX( $src_img );
+            $ori_heigth = imageSY( $src_img );
+
+            // Calculate the new image size
+            if ( $width >= $ori_width || $height >= $ori_heigth ) {
+                $thumb_w = $ori_width;
+                $thumb_h = $ori_heigth;
+            } else {
+                if ( $ori_width > $ori_heigth ) {
+                    $thumb_w = $width;
+                    $thumb_h = $ori_heigth * ( $width / $ori_width );
+                }
+                if ( $ori_width < $ori_heigth ) {
+                    $thumb_w = $ori_width * ( $height / $ori_heigth );
+                    $thumb_h = $height;
+                }
+                if ( $ori_width == $ori_heigth ) {
+                    $thumb_w = $width;
+                    $thumb_h = $height;
+                }
             }
 
-            // Generate the thumbnail
-            $thumb->GenerateThumbnail();
+            // Resample the image
+            $dst_img = imagecreatetruecolor( $thumb_w,$thumb_h ); 
+            if ( $img_type == 'png' ) {
+                imagecopyresized( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
+            } else {
+                imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
+            }
 
-            // Check if caching is enabled
+            // Get the resulting image
+            ob_start();
+            if ( $img_type == 'gif' ) {
+                if ( ! function_exists( 'imagegif' ) ) {
+                    imagepng( $dst_img );
+                } else {
+                    imagegif( $dst_img );
+                }
+            } elseif ( $img_type == 'png' ) {
+                imagepng( $dst_img );
+            } else {
+                imagejpeg( $dst_img );
+            }
+            $image_data = ob_get_contents();
+            ob_end_clean();
+
+            // Destroy the images
+            imagedestroy( $dst_img ); 
+            imagedestroy( $src_img ); 
+
+            // Save the cache if needed
             if ( $cache == true ) {
-                $thumb->RenderToFile( $cacheFName );
+                $f = new YDFSFile( $cacheFName, true );
+                $f->setContents( $image_data );
             }
 
-            // Return the thumbnail object
-            return $thumb;
+            // Return the image data
+            return $image_data;
 
         }
 
