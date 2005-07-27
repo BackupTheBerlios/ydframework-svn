@@ -74,14 +74,16 @@
 
     // Provide a link to a thumbnail
     function YDTplModLinkThumb( $img ) {
-        //return YD_SELF_SCRIPT . '?do=thumbnail&id=' . $img->relative_path;
-        return YDUrl::makeLinkAbsolute( YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/m_' . basename( $img->relative_path ) );
+        return YDUrl::makeLinkAbsolute(
+            YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/m_' . basename( $img->relative_path )
+        );
     }
 
     // Provide a link to a small thumbnail
     function YDTplModLinkThumbSmall( $img ) {
-        //return YD_SELF_SCRIPT . '?do=thumbnailsmall&id=' . $img->relative_path;
-        return YDUrl::makeLinkAbsolute( YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/s_' . basename( $img->relative_path ) );
+        return YDUrl::makeLinkAbsolute(
+            YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/s_' . basename( $img->relative_path )
+        );
     }
 
     // Get a text containing the number of comments
