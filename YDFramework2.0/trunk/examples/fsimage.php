@@ -67,6 +67,18 @@
         }
 
         // Action to create and show thumbnail
+        function actionThumbnail4() {
+            $img = new YDFSImage( 'fsimage.png' );
+            $img->outputThumbnail( 150, 110 );
+        }
+
+        // Action to create and show thumbnail
+        function actionThumbnail5() {
+            $img = new YDFSImage( 'fsimage.gif' );
+            $img->outputThumbnail( 150, 110 );
+        }
+
+        // Action to create and show thumbnail
         function actionThumbnailSave() {
             @unlink( 'fsimage.thumb.jpg' );
             $img = new YDFSImage( 'fsimage.jpg' );
