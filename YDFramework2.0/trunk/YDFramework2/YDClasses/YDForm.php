@@ -1206,6 +1206,33 @@
         }
 
         /**
+         *      Gets the type of the form element.
+         *
+         *      @returns        The type of the form element.
+         */
+        function getType( ) {
+            return $this->_type;
+        }
+
+        /**
+         *      Gets the name of the form element.
+         *
+         *      @returns        The name of the form element.
+         */
+        function getName( ) {
+            return $this->_name;
+        }
+
+        /**
+         *      Gets the label of the form element.
+         *
+         *      @returns        The label of the form element.
+         */
+        function getLabel( ) {
+            return $this->_label;
+        }
+
+        /**
          *      This function returns a boolean indicating if the element value was
          *      modified from it's default value.
          *
