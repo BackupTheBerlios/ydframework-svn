@@ -53,9 +53,6 @@
          */
         function render() {
 
-            // Get the form as an array
-            //$form = $this->_form->toArray();
-
             // Start with an empty array
             $form = array();
 
