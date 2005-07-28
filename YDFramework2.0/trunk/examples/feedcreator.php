@@ -31,7 +31,8 @@
                 '<h3>Title 3 & Co.</h3>', $this->getCurrentUrl() . '#3', 'Description 3 & Co.'
             );
             $this->fc->addItem(
-                '<h3>Title 4 & Co.</h3>', $this->getCurrentUrl() . '#4', '<img src="fsimage.jpg" />'
+                '<h3>Title 4 & Co.</h3>', $this->getCurrentUrl() . '#4', '<img src="fsimage.jpg" />', null,
+                'http://music.calarts.edu/~cbaker/files/music/the_hands.mp3', '8562730', 'audio/mpeg'
             );
 
         }

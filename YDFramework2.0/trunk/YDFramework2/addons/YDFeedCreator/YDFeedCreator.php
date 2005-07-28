@@ -106,25 +106,36 @@
          *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which
          *	is the md5 checksum of the different elememts.
          *
-         *	@param $title	The title of the feed item.
-         *	@param $link	The link to the feed item.
-         *	@param $desc	(optional) The description for the feed item.
-         *	@param $guid	(optional) The guid for the feed item.
+         *	@param $title	        The title of the feed item.
+         *	@param $link	        The link to the feed item.
+         *	@param $desc	        (optional) The description for the feed item.
+         *	@param $guid	        (optional) The guid for the feed item.
+         *  @param $enclosure       (optional) The url of the enclosure.
+         *  @param $enclosure_size  (optional) The size in bytes of the enclosure.
+         *  @param $enclosure_type  (optional) The mime-type of the enclosure.
+         *
+         *  @remark
+         *      Enclosures are only supported for ATOM and RSS 2.0 feeds.
          */
-        function addItem( $title, $link, $desc=null, $guid=null ) {
+        function addItem( $title, $link, $desc=null, $guid=null, $enclosure=null, $enclosure_size=null, $enclosure_type=null ) {
 
             $link = YDUrl::makeLinkAbsolute( $link, $this->_link );
             $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
 
-            if ( empty( $guid  ) ) {
+            if ( empty( $guid ) ) {
                 $checkSum = $this->_link . $title . $link;
                 if ( $desc != null ) { $checkSum .= $desc; }
                 $guid = md5( $checkSum );
             }
 
+            if ( ! is_null( $enclosure ) && ( is_null( $enclosure_size ) || is_null( $enclosure_type ) ) ) {
+                trigger_error( 'Enclosures must have both type and size specified!', YD_ERROR );
+            }
+
             $item = array(
                 'title' => YDStringUtil::encodeString( $title, true ), 'link' => htmlentities( $link ),
-                'description' => $desc, 'guid' => $guid
+                'description' => $desc, 'guid' => $guid, 'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
+                'enclosure_type' => $enclosure_type
             );
 
             $this->_items[ $guid ] = $item;
@@ -184,6 +195,12 @@
                     if ( ! empty( $item['description'] ) ) {
                         $xml .= '<description>' . $item['description'] . '</description>';
                     }
+                    if ( $format == 'RSS2.0' && ! is_null( $item['enclosure'] ) ) {
+                        $xml .= '<enclosure url="' . YDStringUtil::encodeString( $item['enclosure'], true )
+                             .  '" length="' . YDStringUtil::encodeString( $item['enclosure_size'], true )
+                             .  '" type="' . YDStringUtil::encodeString( $item['enclosure_type'], true )
+                             .  '" />';
+                    }
                     $xml .= '</item>';
                 }
                 $xml .= '</channel>';
@@ -242,6 +259,12 @@
                         $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ ';
                         $xml .= $item['description'];
                         $xml .= ' ]]></content>';
+                    }
+                    if ( ! is_null( $item['enclosure'] ) ) {
+                        $xml .= '<link rel="enclosure" href="' . YDStringUtil::encodeString( $item['enclosure'], true )
+                             .  '" length="' . YDStringUtil::encodeString( $item['enclosure_size'], true )
+                             .  '" type="' . YDStringUtil::encodeString( $item['enclosure_type'], true )
+                             .  '" />';
                     }
                     $xml .= '</entry>';
                 }
