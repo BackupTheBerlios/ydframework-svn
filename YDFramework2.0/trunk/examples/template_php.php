@@ -20,21 +20,26 @@
             // Initialize the parent
             $this->YDRequest();
 
-        }
-
-        // Default action
-        function actionDefault() {
-
             // Create the template object
-            $tpl = new YDTemplate();
-        
+            $this->tpl = new YDTemplate();
+
             // Assign some stuff
             $browser = new YDBrowserInfo();
-            $tpl->assign( 'browser', $browser );
+            $this->tpl->assign( 'browser', $browser );
+
+        }
+
+        // Default action - short open tags
+        function actionDefault() {
 
             // Display the template
-            $tpl->display();
+            $this->tpl->display( 'template_php.tpl' );
 
+        }
+
+        // Complete PHP tags
+        function actionComplete() {
+            $this->tpl->display( 'template_php2.tpl' );
         }
 
     }

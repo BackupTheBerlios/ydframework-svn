@@ -164,11 +164,14 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="template_php.php">Using PHP templates</a> </td>
+            <td valign="top"><a href="template_php.php">Using PHP templates with short open tags</a><br />
+                             <a href="template_php.php?do=complete">Using PHP templates without short open tags</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php.php">template_php.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php.tpl">template_php.tpl</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=template_php2.tpl">template_php2.tpl</a>
             </td>
         </tr>
         <tr>
