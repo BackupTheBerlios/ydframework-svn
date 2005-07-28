@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <td class="adminRowL">{t w="operating_system"}</td>
-        <td class="adminRowL">{$smarty.env.OS|default:PHP_OS}</td>
+        <td class="adminRowL">{$smarty.env.OS|default:$PHP_OS}</td>
     </tr>
     <tr>
         <td class="adminRowL">MySQL {t w="version"}</td>

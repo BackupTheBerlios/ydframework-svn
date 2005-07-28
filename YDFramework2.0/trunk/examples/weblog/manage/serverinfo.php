@@ -60,6 +60,7 @@
             $this->tpl->assign( 'includePath',       $GLOBALS['YD_INCLUDE_PATH'] );
             $this->tpl->assign( 'phpthumb_version',  $phpThumb->phpthumb_version );
             $this->tpl->assign( 'phpmailer_version', $PHPMailer->Version );
+            $this->tpl->assign( 'PHP_OS', PHP_OS );
 
             // Add the settings to the template
             $this->tpl->assign( 'settings', $settings );
