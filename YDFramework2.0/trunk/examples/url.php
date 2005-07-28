@@ -143,7 +143,7 @@
         function actionImage1() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be/images/uploads/kuifjeseend.jpg' );
+            $url = new YDUrl( 'http://www.yellowduck.be/skins/yellowduck.be/images/kubrickheader1.jpg' );
 
             // Get the contents
             header( 'Content-type: image/jpeg' );
