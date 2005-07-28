@@ -64,7 +64,10 @@ INPUT                  = "../YDFramework2/YDClasses" \
                          "../YDFramework2/addons"
 FILE_PATTERNS          = *.php
 RECURSIVE              = YES
-EXCLUDE                = "../YDFramework2/3rdparty"
+EXCLUDE                = "../YDFramework2/3rdparty" \
+                         "../YDFramework2/addons/YDPdfReport/fpdf.php" \
+                         "../YDFramework2/addons/YDPdfReport/html2pdf.php" \
+                         "../YDFramework2/addons/YDXmlForm/xmlize.inc.php" \
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
