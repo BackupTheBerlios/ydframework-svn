@@ -37,7 +37,6 @@
 
             }
 
-
             // Get the pagesize and current page from the URL
             $page = @ $_GET['page'];
 
@@ -96,7 +95,7 @@
             }
 
             // Process the form
-            if ( $form->validate() === true ) {
+            if ( $form->validate() === true  ) {
 
                 // Get the form values
                 $values = $form->getValues();
