@@ -187,13 +187,19 @@
             } else {
                 $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments c, ' . YDConfig::get( 'db_prefix', '' ) . 'items i WHERE c.item_id = i.id', $order );
             }
-            return $this->db->getRecords( $sql, $limit, $offset );
+            $records = $this->db->getRecords( $sql, $limit, $offset );
+            foreach ( $records as $key=>$record ) {
+                $records[$key]['comment'] = trim( strip_tags( $record['comment'] ) );
+            }
+            return $records;
         }
 
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
             $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments c, ' . YDConfig::get( 'db_prefix', '' ) . 'items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
-            return $this->db->getRecord( $sql );
+            $record  = $this->db->getRecord( $sql );
+            $record['comment'] = trim( strip_tags( $record['comment'] ) );
+            return $record;
         }
 
         // Add a comment
