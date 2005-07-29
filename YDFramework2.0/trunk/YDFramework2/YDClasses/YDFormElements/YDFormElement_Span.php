@@ -32,7 +32,7 @@
     /**
      *        This is the class that define a button form element.
      */
-    class YDFormElement_Button extends YDFormElement {
+    class YDFormElement_Span extends YDFormElement {
 
         /**
          *        This is the class constructor for the YDFormElement_Button class.
@@ -43,13 +43,13 @@
          *        @param $attributes        (optional) The attributes for the form element.
          *        @param $options                (optional) The options for the elment.
          */
-        function YDFormElement_Button( $form, $name, $label='', $attributes=array(), $options=array() ) {
+        function YDFormElement_Span( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
             // Initialize the parent
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
 
             // Set the type
-            $this->_type = 'button';
+            $this->_type = 'span';
 
             // Set the value correctly
             $this->setValue( $label );
@@ -60,7 +60,7 @@
             $this->_applyFilters = false;
 
             // Indicate we are a button type
-            $this->_isButton = true;
+            $this->_isButton = false;
 
         }
 
@@ -83,12 +83,12 @@
 
             // Create the list of attributes
             $attribs = array(
-                'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value
+                'id' => $this->_form . '_' . $this->_name
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+            return '<span' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</span>';
 
         }
 

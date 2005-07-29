@@ -30,18 +30,18 @@
     include_once( dirname( __FILE__ ) . '/../YDForm.php');
 
     /**
-     *	This is the class that define a hidden form element.
+     *        This is the class that define a hidden form element.
      */
     class YDFormElement_Hidden extends YDFormElement {
 
         /**
-         *	This is the class constructor for the YDFormElement_Hidden class.
+         *        This is the class constructor for the YDFormElement_Hidden class.
          *
-         *	@param $form		The name of the form to which this element is connected.
-         *	@param $name		The name of the form element.
-         *	@param $label		(optional) The label for the form element.
-         *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *        @param $form                The name of the form to which this element is connected.
+         *        @param $name                The name of the form element.
+         *        @param $label                (optional) The label for the form element.
+         *        @param $attributes        (optional) The attributes for the form element.
+         *        @param $options                (optional) The options for the elment.
          */
         function YDFormElement_Hidden( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -50,6 +50,7 @@
 
             // Set the type
             $this->_type = 'hidden';
+            $this->_placeLabel = 'none';
 
             // If options is a string, it overrides the value
             if ( is_string( $options ) ) {
@@ -60,7 +61,7 @@
             $this->_applyFilters = false;
 
         }
-        
+
         /**
          *      This function returns a boolean indicating if the element value was
          *      modified from it's default value.
@@ -72,9 +73,9 @@
         }
 
         /**
-         *	This function will return the element as HTML.
+         *        This function will return the element as HTML.
          *
-         *	@returns	The form element as HTML text.
+         *        @returns        The form element as HTML text.
          */
         function toHtml() {
 

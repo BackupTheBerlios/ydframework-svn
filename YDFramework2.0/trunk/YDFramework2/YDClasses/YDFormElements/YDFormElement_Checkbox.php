@@ -62,7 +62,7 @@
             $this->_applyFilters = false;
 
             // Indicate that the label should be appended
-            $this->_labelPlace = 'after';
+            $this->_placeLabel = 'after';
 
         }
         

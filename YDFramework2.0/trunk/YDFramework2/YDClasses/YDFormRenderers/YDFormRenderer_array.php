@@ -105,17 +105,19 @@
                 $form[ $name ]['required'] = $required;
 
                 // Add the HTML labels
-                if ( $form[ $name ]['isButton'] === false && $form[ $name ]['type'] != 'hidden' ) {
+                if ( $form[ $name ]['isButton'] === false ) {
                     $form[ $name ]['label_html'] = '';
-                    if ( ! empty( $form[ $name ]['label'] ) ) {
-                        $form[ $name ]['label_html'] .= $form[ $name ]['label'];
-                    }
-                    $obj = $this->_form->getElement( $name );
-                    if ( $form[ $name ]['required'] ) {
-                        $form[ $name ]['label_html'] = $this->_form->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_form->_htmlRequiredEnd;
-                    }
-                    if ( ! empty( $form[ $name ]['error'] ) ) {
-                        $form[ $name ]['error_html'] = $this->_form->_htmlErrorStart . $form[ $name ]['error'] . $this->_form->_htmlErrorEnd;
+                    if ( $form[ $name ]['placeLabel'] != 'none' ) {
+                        if ( ! empty( $form[ $name ]['label'] ) ) {
+                            $form[ $name ]['label_html'] .= $form[ $name ]['label'];
+                        }
+                        $obj = $this->_form->getElement( $name );
+                        if ( $form[ $name ]['required'] ) {
+                            $form[ $name ]['label_html'] = $this->_form->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_form->_htmlRequiredEnd;
+                        }
+                        if ( ! empty( $form[ $name ]['error'] ) ) {
+                            $form[ $name ]['error_html'] = $this->_form->_htmlErrorStart . $form[ $name ]['error'] . $this->_form->_htmlErrorEnd;
+                        }
                     }
                 }
 
@@ -133,7 +135,7 @@
                 $form['do']['type'] = 'hidden';
                 $form['do']['label'] = '';
                 $form['do']['options'] = array();
-                $form['do']['placeLabel'] = 'before';
+                $form['do']['placeLabel'] = 'none';
                 $form['do']['html'] = '<input type="hidden" name="do" value="' . YDRequest::getActionName() . '" />';
                 $form['do']['isButton'] = false;
                 $form['do']['error'] = '';

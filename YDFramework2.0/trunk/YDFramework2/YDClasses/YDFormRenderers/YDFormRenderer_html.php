@@ -30,14 +30,14 @@
     include_once( dirname( __FILE__ ) . '/../YDForm.php');
 
     /**
-     *	This is the class that is able to render a form object to HTML.
+     *        This is the class that is able to render a form object to HTML.
      */
     class YDFormRenderer_html extends YDFormRenderer {
 
         /**
-         *	This is the class constructor for the YDFormRenderer_html class.
+         *        This is the class constructor for the YDFormRenderer_html class.
          *
-         *	@param $form		The form that needs to be rendered.
+         *        @param $form                The form that needs to be rendered.
          */
         function YDFormRenderer_html( $form ) {
 
@@ -47,9 +47,9 @@
         }
 
         /**
-         *	This function will render the form.
+         *        This function will render the form.
          *
-         *	@returns	The rendered form.
+         *        @returns        The rendered form.
          */
         function render() {
 
@@ -58,7 +58,7 @@
 
             // Start with the form element
             $html = $form['tag'];
-
+            
             // Add form errors if any
             if ( isset( $form['errors']['__ALL__'] ) ) {
                 $html .= '<p>' . $this->_form->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_form->_htmlErrorEnd . '</p>';
@@ -67,6 +67,7 @@
             // Remove some things from the array
             unset( $form['attribs'] );
             unset( $form['tag'] );
+            unset( $form['endtag'] );
             unset( $form['errors'] );
             unset( $form['errors_unique_messages'] );
             unset( $form['requirednote'] );
@@ -84,28 +85,34 @@
 
             // Add the elements
             foreach ( $form as $name=>$element ) {
-                if ( $element['isButton'] === false ) {
-                    if ( $element['type'] != 'hidden' ) {
-                        $html .= '<p>';
-                        if ( $element['placeLabel'] == 'after' ) {
-                            $html .= $element['html'] . $element['label_html'];
-                            if ( ! empty( $element['error'] ) ) {
-                                $html .= '<br />' . $element['error_html'];
-                            }
-                        } else {
-                            $html .= $element['label_html'];
-                            if ( ! empty( $element['label'] ) ) {
-                                $html .= '<br />';
-                            }
-                            if ( ! empty( $element['error'] ) ) {
-                                $html .= $element['error_html'] . '<br />';
-                            }
-                            $html .= $element['html'];
+                if ( $element['isButton'] === true ) {
+                    continue;
+                }
+                if ( $element['type'] == 'hidden' ) {
+                    $html .= $element['html'];
+                } else {
+                    $html .= '<p>';
+                    if ( $element['placeLabel'] == 'after' ) {
+                        $html .= $element['html'] . $element['label_html'];
+                        if ( ! empty( $element['error'] ) ) {
+                            $html .= '<br />' . $element['error_html'];
                         }
-                        $html .= '</p>';
+                    } else if ( $element['placeLabel'] == 'before' ) {
+                        $html .= $element['label_html'];
+                        if ( ! empty( $element['label'] ) ) {
+                            $html .= '<br />';
+                        }
+                        if ( ! empty( $element['error'] ) ) {
+                            $html .= $element['error_html'] . '<br />';
+                        }
+                        $html .= $element['html'];
                     } else {
+                        if ( ! empty( $element['error'] ) ) {
+                            $html .= $element['error_html'] . '<br />';
+                        }
                         $html .= $element['html'];
                     }
+                    $html .= '</p>';
                 }
             }
 

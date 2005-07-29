@@ -30,18 +30,18 @@
     include_once( dirname( __FILE__ ) . '/../YDForm.php');
 
     /**
-     *	This is the class that define a submit button form element.
+     *        This is the class that define a submit button form element.
      */
     class YDFormElement_Submit extends YDFormElement {
 
         /**
-         *	This is the class constructor for the YDFormElement_Submit class.
+         *        This is the class constructor for the YDFormElement_Submit class.
          *
-         *	@param $form		The name of the form to which this element is connected.
-         *	@param $name		The name of the form element.
-         *	@param $label		(optional) The label for the form element.
-         *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *        @param $form                The name of the form to which this element is connected.
+         *        @param $name                The name of the form element.
+         *        @param $label                (optional) The label for the form element.
+         *        @param $attributes        (optional) The attributes for the form element.
+         *        @param $options                (optional) The options for the elment.
          */
         function YDFormElement_Submit( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -54,6 +54,7 @@
             // Set the value correctly
             $this->setValue( $label );
             $this->_label = '';
+            $this->_placeLabel = 'none';
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
@@ -62,7 +63,7 @@
             $this->_isButton = true;
 
         }
-        
+
         /**
          *      This function returns a boolean indicating if the element value was
          *      modified from it's default value.
@@ -74,9 +75,9 @@
         }
 
         /**
-         *	This function will return the element as HTML.
+         *        This function will return the element as HTML.
          *
-         *	@returns	The form element as HTML text.
+         *        @returns        The form element as HTML text.
          */
         function toHtml() {
 

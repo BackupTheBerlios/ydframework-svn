@@ -74,7 +74,7 @@
 
             // The list of errors
             $this->_errors = array();
-            
+
             // The list of default values
             $this->_defaults = array();
 
@@ -98,6 +98,7 @@
             $this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
             $this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
             $this->registerElement( 'datetimeselect', 'YDFormElement_DateTimeSelect', 'YDFormElement_DateTimeSelect.php' );
+            $this->registerElement( 'timeselect', 'YDFormElement_TimeSelect', 'YDFormElement_TimeSelect.php' );
             $this->registerElement( 'file', 'YDFormElement_File', 'YDFormElement_File.php' );
             $this->registerElement( 'hidden', 'YDFormElement_Hidden', 'YDFormElement_Hidden.php' );
             $this->registerElement( 'image', 'YDFormElement_Image', 'YDFormElement_Image.php' );
@@ -108,7 +109,7 @@
             $this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
             $this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
             $this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
-            $this->registerElement( 'timeselect', 'YDFormElement_TimeSelect', 'YDFormElement_TimeSelect.php' );
+            $this->registerElement( 'span', 'YDFormElement_Span', 'YDFormElement_Span.php' );
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
@@ -283,7 +284,7 @@
 
                 $element = & $this->getElement( $name );
                 $element->setDefault( $value, $raw );
-    
+
                 // Update the value for the existing elements
                 if ( ! $this->isSubmitted() ) {
                     if ( $raw ) {
@@ -292,11 +293,11 @@
                         $element->setValue( $value );
                     }
                 }
-                
+
             } else {
                 $this->_defaults[ $name ] = $value;
             }
-            
+
 
         }
 
@@ -373,7 +374,7 @@
 
             // Register the element in the class.
             $this->_elements[ $name ] = $instance;
-            
+
             // Return the reference to the instance
             return $this->_elements[ $name ];
 
@@ -497,7 +498,7 @@
 
             // Add the rule
             array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
-            
+
 
         }
 
@@ -754,7 +755,7 @@
 
                         // If a field is required, we check if it's set and check the extra validations.
                         // If a field is NOT required and not set, no extra validation is done.
-                        // If a field is NOT required and set, the extra validation is done. 
+                        // If a field is NOT required and set, the extra validation is done.
                         $mandatory = true;
                         if ( ! $required ) {
                             if ( is_null( $value ) ) {
@@ -765,7 +766,7 @@
                                 $mandatory = false;
                             }
                         }
-                        
+
                         if ( $mandatory ) {
 
                             // Check the rule
@@ -1082,9 +1083,9 @@
          *  @returns  The modified elements and it's values as an associative array.
          */
         function getModifiedValues() {
-            
+
             $modified = array();
-            
+
             if ( $this->isSubmitted() ) {
 
                 foreach ( $this->_elements as $name => $element ) {
@@ -1094,7 +1095,7 @@
                 }
 
             }
-            
+
             return $modified;
         }
 
@@ -1132,7 +1133,7 @@
             $this->_isButton = false;
 
             // Indicate where the label should be
-            $this->_labelPlace = 'before';
+            $this->_placeLabel = 'before';
 
             // Indicate if filters need to be applied
             $this->_applyFilters = true;
@@ -1184,7 +1185,7 @@
         function getRawValue() {
             return $this->_value;
         }
-        
+
         /**
          *      This function sets the default value of the element.
          *
@@ -1270,8 +1271,8 @@
          *  @returns    The form element as an array.
          */
         function toArray() {
-            if ( $this->_labelPlace != 'after' ) {
-                $this->_labelPlace = 'before';
+            if ( $this->_placeLabel != 'after' && $this->_placeLabel != 'none' ) {
+                $this->_placeLabel = 'before';
             }
             return array(
                 'name'        => $this->_name,
@@ -1282,7 +1283,7 @@
                 'attributes'  => $this->_attributes,
                 'label'       => '<label for="' . $this->_form . '_' . $this->_name . '">' . $this->_label . '</label>',
                 'options'     => $this->_options,
-                'placeLabel'  => $this->_labelPlace,
+                'placeLabel'  => $this->_placeLabel,
                 'html'        => $this->toHtml(),
                 'isButton'    => $this->isButton(),
             );
