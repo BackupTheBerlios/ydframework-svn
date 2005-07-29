@@ -76,6 +76,7 @@ $GLOBALS['t']['ta_enter_url'] = 'Enter the url';
 $GLOBALS['t']['ta_enter_email'] = 'Enter the email address';
 $GLOBALS['t']['ta_enter_image'] = 'Enter the full url of the image';
 $GLOBALS['t']['err_name'] = 'Name is missing';
+$GLOBALS['t']['err_name_email'] = 'Name should not be an email address';
 $GLOBALS['t']['err_email'] = 'Email is missing or invalid';
 $GLOBALS['t']['err_comment'] = 'Comment is required';
 $GLOBALS['t']['with'] = 'for';

@@ -119,6 +119,16 @@
         }
 
         /**
+         *  This function returns true if the variable is not a correctly formatted email address.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function not_email( $val, $opts='' ) {
+            return ( YDValidateRules::email( $val ) ) ? false : true;
+        }
+
+        /**
          *  This function returns true if the variable is a correctly formatted IP address.
          *
          *	@param $val		The value to test.

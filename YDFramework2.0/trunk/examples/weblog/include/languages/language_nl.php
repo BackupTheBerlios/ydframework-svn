@@ -76,6 +76,7 @@ $GLOBALS['t']['ta_enter_url'] = 'Geef de URL in';
 $GLOBALS['t']['ta_enter_email'] = 'Geef het email adres in';
 $GLOBALS['t']['ta_enter_image'] = 'Geef de volledige URL naar het beeld in';
 $GLOBALS['t']['err_name'] = 'Naam is niet ingegeven';
+$GLOBALS['t']['err_name_email'] = 'Naam mag geen email adres zijn';
 $GLOBALS['t']['err_email'] = 'Email is niet ingegeven of niet correct';
 $GLOBALS['t']['err_comment'] = 'Een commentaar is vereist';
 $GLOBALS['t']['with'] = 'bij';
