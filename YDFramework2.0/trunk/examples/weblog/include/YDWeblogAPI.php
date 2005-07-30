@@ -19,7 +19,7 @@
             // Add any missing body_more field
             $fields = $this->db->getValuesByName( 'show fields from ' . YDConfig::get( 'db_prefix', '' ) . 'items', 'field' );
             if ( ! in_array( 'body_more', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE ydw_items ADD body_more LONGTEXT AFTER body' );
+                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'items ADD body_more LONGTEXT AFTER body' );
             }
 
         }
