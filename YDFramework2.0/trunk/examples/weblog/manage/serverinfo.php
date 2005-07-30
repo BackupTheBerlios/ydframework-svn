@@ -4,7 +4,6 @@
     include_once( dirname( __FILE__ ) . '/../include/YDWeblog_init.php' );
 
     // Includes
-    YDInclude( 'phpThumb/phpthumb.class.php' );
     YDInclude( 'phpmailer/class.phpmailer.php' );
 
     // Class definition
@@ -47,9 +46,6 @@
                 }
             }
 
-            // Get the version of phpThumb
-            $phpThumb = new phpthumb();
-
             // Get the version of phpMailer
             $PHPMailer = new PHPMailer();
 
@@ -58,7 +54,6 @@
             $this->tpl->assign( 'mysql_version',     mysql_get_server_info() );
             $this->tpl->assign( 'php_modules',       implode( get_loaded_extensions(), ', ' ) );
             $this->tpl->assign( 'includePath',       $GLOBALS['YD_INCLUDE_PATH'] );
-            $this->tpl->assign( 'phpthumb_version',  $phpThumb->phpthumb_version );
             $this->tpl->assign( 'phpmailer_version', $PHPMailer->Version );
             $this->tpl->assign( 'PHP_OS', PHP_OS );
 

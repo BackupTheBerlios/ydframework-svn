@@ -48,10 +48,6 @@
         <td class="adminRowL">Smarty {$smarty.version}</td>
     </tr>
     <tr>
-        <td class="adminRowL">phpThumb</td>
-        <td class="adminRowL">phpThumb {$phpthumb_version}</td>
-    </tr>
-    <tr>
         <td class="adminRowL">phpMailer</td>
         <td class="adminRowL">phpMailer {$phpmailer_version}</td>
     </tr>
