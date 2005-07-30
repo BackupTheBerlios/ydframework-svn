@@ -138,7 +138,7 @@
             $this->form->setDefault( 'action', $this->getActionName() );
 
             // Define the default pagesize
-            YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 12 );
+            YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 15 );
 
             // Get the list of images
             $images = $this->getImages();
@@ -148,7 +148,7 @@
 
             // Create the YDRecordSet object
             $images = new YDRecordSet( $images, $page, YDConfig::get( 'YD_DB_DEFAULTPAGESIZE', 20 ) );
-            $images->set = YDArrayUtil::convertToTable( $images->set, 4, true );
+            $images->set = YDArrayUtil::convertToTable( $images->set, 5, true );
 
             // Assign it to the template
             $this->tpl->assign( 'uploads_dir', $this->dir_rel );

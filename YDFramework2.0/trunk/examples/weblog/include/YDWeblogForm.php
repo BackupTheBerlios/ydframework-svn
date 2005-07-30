@@ -54,7 +54,7 @@
             $baseurl = 'images.php?do=selectorImages&field=' . rawurlencode( $form . '_' . $name );
 
             // Parameters for the window
-            $params = 'width=740,height=660,location=0,menubar=0,resizable=1,scrollbars=1,status=1,titlebar=1';
+            $params = 'width=880,height=660,location=0,menubar=0,resizable=1,scrollbars=1,status=1,titlebar=1';
 
             // Create the toolbar
             $this->clearButtons();

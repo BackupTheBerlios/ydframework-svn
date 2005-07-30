@@ -33,7 +33,7 @@
     {capture assign="browsebar"}
         {if $images->pages}
             <tr>
-                <td class="adminRowR" colspan="4" style="border-top: 1px solid #DDDDDD;">
+                <td class="adminRowR" colspan="5" style="border-top: 1px solid #DDDDDD;">
                     <p class="subline">
                     {if ! $images->isFirstPage}
                         <a href="{$images->getPreviousUrl()}" class="subline">&laquo;</a>
@@ -62,24 +62,24 @@
 
     {$form.tag}
         {$form.action.html}
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tr>
                 <th class="adminRowL" colspan="3">{t w="upload_image"}</th>
             </tr>
             <tr>
-                <td class="adminRowL" width="540">{$form.image.html}</td>
+                <td class="adminRowL" width="640">{$form.image.html}</td>
                 <td class="adminRowR" width="160">{$form._cmdSubmit.html}</td>
             </tr>
         </table>
     {$form.endtag}
 
     {if $images->set}
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <table width="100%" cellspacing="0" cellpadding="0" border="0">
         {$browsebar}
         {foreach from=$images->set item="image_row"}
         <tr>
             {foreach from=$image_row item="image"}
-                <td width="25%" class="adminRowC" style="border: 0px solid black;vertical-align: middle;" height="100">
+                <td width="20%" class="adminRowC" style="border: 0px solid black;vertical-align: middle;" height="100">
                     {if $image}
                         <a href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )"><img src="{$YD_SELF_SCRIPT}?do=thumbnail&id={$image->relative_path}" border="0"></a>
                     {else}
@@ -90,11 +90,13 @@
         </tr>
         <tr>
             {foreach from=$image_row item="image"}
-                <td width="25%" class="adminRowC">
+                <td width="20%" class="adminRowC">
                     {if $image}
-                        <a href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )">{$image->relative_path}</a>
+                        <a class="subline" href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )">{$image->relative_path}</a>
+                        {*
                         <br/>
                         <span class="subline">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</a>
+                        *}
                     {else}
                         &nbsp;
                     {/if}
@@ -104,7 +106,7 @@
         {/foreach}
         {$browsebar}
         <tr>
-            <td class="adminRowLNB" colspan="4">
+            <td class="adminRowLNB" colspan="5">
                 <p class="subline">{t w="total"}: {$images->totalRows}</p>
             </td>
         </tr>
