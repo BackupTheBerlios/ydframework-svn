@@ -74,7 +74,7 @@
                     <img src="{$YD_SELF_SCRIPT}?do=thumbnailsmall&id={$image->getBaseName()}" alt="{$image->getBaseName()}">
                 </td>
                 <td class="adminRowL" valign="top">
-                    <a href="{$YD_SELF_SCRIPT}?do=showimage&img={$image->relative_path}" target="_blank">{$image->getBaseName()}</a>
+                    <a href="{$YD_SELF_SCRIPT}?do=showimage&id={$image->relative_path}" target="_blank">{$image->getBaseName()}</a>
                 </td>
                 <td class="adminRowR" valign="top">{$image->getSize()|fmtfilesize}</td>
                 <td class="adminRowC" valign="top">{$image->getImageType()|upper}</td>
