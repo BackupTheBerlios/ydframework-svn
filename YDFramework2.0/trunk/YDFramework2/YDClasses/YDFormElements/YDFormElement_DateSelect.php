@@ -153,8 +153,9 @@
          *	@param	$val	(optional) The value for this object.
          */
         function setValue( $val=array() ) {
-            $now = getdate( $val );
+            $now = getdate();
             if ( is_numeric( $val ) ) {
+                $now = getdate( $val );
                 if ( ! is_int( $val ) ) {
                     $val = intval( $val );
                 }
