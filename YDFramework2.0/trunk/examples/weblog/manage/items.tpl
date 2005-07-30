@@ -112,6 +112,13 @@
                 </td>
             </tr>
             <tr>
+                <td class="adminRowL" colspan="2">
+                    {$form.body_more.label_html}
+                    <br/>
+                    {$form.body_more.html}
+                </td>
+            </tr>
+            <tr>
                 <td class="adminRowL">{$form.created.label_html}</td>
                 <td class="adminRowL">{$form.created.html}</td>
             </tr>

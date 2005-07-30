@@ -22,6 +22,7 @@ $GLOBALS['t']['install_warning'] = 'You need to remove the install.php and insta
 $GLOBALS['t']['home'] = 'Home';
 $GLOBALS['t']['view'] = 'view';
 $GLOBALS['t']['author'] = 'Author';
+$GLOBALS['t']['more'] = 'more';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';
@@ -256,6 +257,7 @@ $GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';
 $GLOBALS['t']['item_body'] = 'Item Body';
+$GLOBALS['t']['item_body_more'] = 'Item Body (extended)';
 $GLOBALS['t']['select_image'] = 'Select Image';
 $GLOBALS['t']['view'] = 'view';
 $GLOBALS['t']['add_item'] = 'Add Item';

@@ -16,6 +16,12 @@
                 YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
             );
 
+            // Add any missing body_more field
+            $fields = $this->db->getValuesByName( 'show fields from ' . YDConfig::get( 'db_prefix', '' ) . 'items', 'field' );
+            if ( ! in_array( 'body_more', $fields ) ) {
+                $this->db->executeSql( 'ALTER TABLE ydw_items ADD body_more LONGTEXT AFTER body' );
+            }
+
         }
 
         // Function to log a request to the statistics
@@ -151,7 +157,7 @@
 
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
-            $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.num_comments, i.created, i.modified, '
+            $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
                  . 'c.title as category, u.email as user_email, u.name as user_name FROM ' . YDConfig::get( 'db_prefix', '' ) . 'items i, ' . YDConfig::get( 'db_prefix', '' ) . 'categories c, '
                   . YDConfig::get( 'db_prefix', '' ) . 'users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );

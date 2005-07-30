@@ -10,7 +10,10 @@
                     <a href="{$item|@link_item}" rel="bookmark" title="PermaLink to {$item.title}">{$item.title}</a>
                 </h2>
                 <small>{$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a></small>
-                <div class="entry">{$item.body|bbcode}</div>
+                <div class="entry">
+                    {$item.body|bbcode}
+                    {if $item.body_more}<a href="{$item|@link_item}#more">&raquo; {t w="more"}</a>{/if}
+                </div>
                 <p class="postmetadata">
                     {t w="posted_in"} <a href="{$item.category_id|link_category}">{$item.category}</a> <strong>|</strong>
                     {if $item.num_images != '0'}

@@ -145,6 +145,7 @@
                       user_id int(11) NOT NULL default \'1\',
                       title varchar(255) NOT NULL default \'\',
                       body longtext NOT NULL,
+                      body_more longtext NOT NULL,
                       num_comments int(11) NOT NULL default \'0\',
                       created int(11) default NULL,
                       modified int(11) default NULL,
@@ -242,6 +243,15 @@
                 $item['user_id'] = 1;
                 $item['title'] = 'Your first post';
                 $item['body'] = 'Welcome to your weblog';
+                $item['body_more'] = 'Your extended body';
+                $weblog->addItem( $item );
+
+                // Create a second post
+                $item = array();
+                $item['category_id'] = 1;
+                $item['user_id'] = 1;
+                $item['title'] = 'Your second post';
+                $item['body'] = 'Without an extended body';
                 $weblog->addItem( $item );
 
                 // Add a comment
@@ -263,7 +273,7 @@
                 // Add a link
                 $link = array();
                 $link['title'] = 'Yellow Duck Framework';
-                $link['url'] = 'http://www.yellowduck.be/ydf/';
+                $link['url'] = 'http://ydframework.berlios.de/';
                 $weblog->addLink( $link );
 
                 // Redirect to the finish action

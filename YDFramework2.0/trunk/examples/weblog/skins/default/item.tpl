@@ -23,6 +23,10 @@
 
             <p>{$item.body|bbcode}</p>
 
+            <a name="more"></a>
+
+            <p>{$item.body_more|bbcode}</p>
+
             <p class="postmetadata alt">
                 <small>
                     {t w="posted_under"} {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name}</a>

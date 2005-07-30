@@ -22,6 +22,7 @@ $GLOBALS['t']['install_warning'] = 'Je moet de install.php en install.tpl bestan
 $GLOBALS['t']['home'] = 'Home';
 $GLOBALS['t']['view'] = 'toon';
 $GLOBALS['t']['author'] = 'Auteur';
+$GLOBALS['t']['more'] = 'meer';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';
@@ -256,6 +257,7 @@ $GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';
 $GLOBALS['t']['item_body'] = 'Item Inhoud';
+$GLOBALS['t']['item_body_more'] = 'Item Inhoud (uitgebreid)';
 $GLOBALS['t']['select_image'] = 'Selecteer Beeld';
 $GLOBALS['t']['view'] = 'toon';
 $GLOBALS['t']['add_item'] = 'Voeg item toe';
