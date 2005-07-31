@@ -9,7 +9,14 @@
                 <h2 id="post-{$item.id}">
                     <a href="{$item|@link_item}" rel="bookmark" title="PermaLink to {$item.title}">{$item.title}</a>
                 </h2>
-                <small>{$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a></small>
+                <small>
+                    {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a>
+                    {if $user.name}
+                        | <a href="manage/items.php?do=edit&id={$item.id}" target="_blank">{t w="edit"}</a>
+                        | <a href="manage/items.php?do=delete&id={$item.id}"
+                             onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
+                    {/if}
+                </small>
                 <div class="entry">
                     {$item.body|bbcode}
                     {if $item.body_more}<a href="{$item|@link_item}#more">&raquo; {t w="more"}</a>{/if}

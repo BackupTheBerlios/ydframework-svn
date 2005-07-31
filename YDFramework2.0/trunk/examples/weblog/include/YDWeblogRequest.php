@@ -9,6 +9,12 @@
             // Initialize the parent
             $this->YDRequest();
 
+            // Start with no userdata and check the authentication
+            $this->user = null;
+
+            // This requires authentication
+            $this->setRequiresAuthentication( true );
+
             // Setup the weblog object
             $this->weblog = new YDWeblogAPI();
 
@@ -90,6 +96,9 @@
 
         // Init the template
         function initTemplate() {
+
+            // Assign the userdata to the template
+            $this->tpl->assign( 'user', $this->user );
 
             // Standard stuff for the sidebar
             $categories = $this->weblog->getCategories();
@@ -175,6 +184,35 @@
             // Add them to the database
             $this->weblog->logRequestToStats( $values );
 
+        }
+
+        // Check for authentication
+        function isAuthenticated() {
+            if ( ! empty( $_COOKIE[ 'YD_USER_NAME' ] ) && ! empty( $_COOKIE[ 'YD_USER_PASS' ] ) ) {
+                $fields = array( 'loginName' => $_COOKIE[ 'YD_USER_NAME' ], 'loginPass' => $_COOKIE[ 'YD_USER_PASS' ] );
+                if ( $this->checkLogin( $fields, true ) === true ) {
+                    $this->username = $_COOKIE['YD_USER_NAME'];
+                    $this->authenticationSucceeded();
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        // Function to check the login
+        function checkLogin( $fields, $md5=false ) {
+            if ( ! isset( $this->username ) ) {
+                if ( $md5 === false ) {
+                    $fields['loginPass'] = md5( $fields['loginPass'] );
+                }
+                $result = $this->weblog->checkLogin( $fields['loginName'], $fields['loginPass'] );
+                if ( $result === false ) {
+                    return array( '__ALL__' => t( 'err_login_all' ) );
+                } else {
+                    $this->user = $result;
+                    return true;
+                }
+            }
         }
 
     }

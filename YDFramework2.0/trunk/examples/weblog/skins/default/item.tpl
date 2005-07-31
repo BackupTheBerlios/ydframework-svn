@@ -33,6 +33,12 @@
                     {t w="filed_under"} <a href="{$item.category_id|link_category}">{$item.category}</a>.
                     {t w="can_leave_comment"}, {t w="or"}
                     <a href="{$item|@link_item}">{t w="trackback"}</a> {t w="from_your_site"}
+                    <br/>
+                    {if $user.name}
+                        <a href="manage/items.php?do=edit&id={$item.id}" target="_blank">{t w="edit"}</a>
+                        | <a href="manage/items.php?do=delete&id={$item.id}"
+                             onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
+                    {/if}
                 </small>
             </p>
 
@@ -87,6 +93,11 @@
                     </cite> {t w="says"}:<br />
                     <small class="commentmetadata">
                         <a href="#comment-{$comment.id}" title="">{$comment.created|date:"%A, %d %b %Y @ %H:%M"|lower}</a>
+                        {if $user.name}
+                            | <a href="manage/comments.php?do=edit&id={$comment.id}" target="_blank">{t w="edit"}</a>
+                            | <a href="manage/comments.php?do=delete&id={$comment.id}"
+                                 onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
+                        {/if}
                     </small>
                     <p>{$comment.comment|bbcode}</p>
                 </li>

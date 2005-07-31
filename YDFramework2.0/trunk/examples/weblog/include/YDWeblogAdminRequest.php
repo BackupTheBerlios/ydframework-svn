@@ -12,12 +12,6 @@
             // Initialize the parent
             $this->YDWeblogRequest();
 
-            // This requires authentication
-            $this->setRequiresAuthentication( true );
-
-            // Start with no userdata and check the authentication
-            $this->user = null;
-
             // Change the template directory
             $this->tpl->template_dir = YD_SELF_DIR;
 
@@ -134,22 +128,6 @@
                 }
             }
             return false;
-        }
-
-        // Function to check the login
-        function checkLogin( $fields, $md5=false ) {
-            if ( ! isset( $this->username ) ) {
-                if ( $md5 === false ) {
-                    $fields['loginPass'] = md5( $fields['loginPass'] );
-                }
-                $result = $this->weblog->checkLogin( $fields['loginName'], $fields['loginPass'] );
-                if ( $result === false ) {
-                    return array( '__ALL__' => t( 'err_login_all' ) );
-                } else {
-                    $this->user = $result;
-                    return true;
-                }
-            }
         }
 
         // Failed authentication, forwards to the login action

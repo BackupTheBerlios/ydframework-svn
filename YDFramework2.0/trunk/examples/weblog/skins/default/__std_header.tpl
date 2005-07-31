@@ -25,6 +25,18 @@
     <link rel="alternate" type="text/xml"             title="RSS 0.92"  href="{$weblog_link_rss}"  />
     <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="{$weblog_link_atom}" />
 
+    {if $user.name}
+        <script language="JavaScript">
+        <!--
+
+            {literal}function YDConfirmDelete( img ) {{/literal}
+                return confirm( '{t w="confirm_delete"}\n\n"' + img + '"?');
+            {literal}}{/literal}
+
+        //-->
+        </script>
+    {/if}
+
 </head>
 
 <body>
