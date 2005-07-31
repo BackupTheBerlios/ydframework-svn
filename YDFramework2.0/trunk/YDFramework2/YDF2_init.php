@@ -54,13 +54,8 @@
         @define( 'YD_PATHDELIM', ':' );
     }
 
-    // Include the version file
-    @include( dirname( __FILE__ ) . '/YDF2_version.php' );
-
     // Global framework constants
-    if ( ! defined( 'YD_FW_REVISION' ) ) {
-        @define( 'YD_FW_REVISION', 'unknown' );
-    }
+    @define( 'YD_FW_REVISION', 'unknown' );
     @define( 'YD_FW_NAME', 'Yellow Duck Framework' );
     @define( 'YD_FW_VERSION', '2.0 (build ' . YD_FW_REVISION . ')' );
     @define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
