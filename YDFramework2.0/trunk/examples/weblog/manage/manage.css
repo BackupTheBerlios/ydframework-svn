@@ -78,12 +78,6 @@ select.tfS {
     width: 200px;
 }
 
-/*
-select.tfM {
-    width: 100%;
-}
-*/
-
 input.button {
     width: 120px;
     color: white;
@@ -104,6 +98,15 @@ td.adminRowL, th.adminRowL {
     padding-top: 4px;
     padding-bottom: 4px;
     text-align: left;
+}
+
+td.adminRowLG, th.adminRowLG {
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    color: #266080;
+    background-color: #FF9;
 }
 
 td.adminRowLNB, th.adminRowLNB {

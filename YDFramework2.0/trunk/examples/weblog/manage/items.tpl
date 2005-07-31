@@ -89,11 +89,12 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowL" colspan="3">
+                <th class="adminRowLG" colspan="3">
+                    &raquo;
                     {if $form.title.value == ''}
                         {t w="add_item"}
                     {else}
-                        {t w="change_item_desc"}
+                        {t w="change_item_desc"} ({$form.title.value})
                     {/if}
                 </th>
             </tr>
@@ -123,26 +124,22 @@
                 <td class="adminRowL">{$form.created.label_html}</td>
                 <td class="adminRowL">{$form.created.html}</td>
             </tr>
-            <tr>
-                <th class="adminRowL" colspan="3">
-                    &nbsp;<br/>{t w="a_comments"}
-                </th>
-            </tr>
-            <tr>
-                <td class="adminRowL" colspan="2">
-                    <a href="comments.php?id={$item.id}">{if $item.num_comments > 0}{$item|@text_num_comments:false}{else}<span class="disabled">0 {t w="comments" lower=true}</span>{/if}</a>
-                </td>
-            </tr>
-            <tr>
-                <th class="adminRowL" colspan="3">
-                    &nbsp;<br/>{t w="gallery"}
-                </th>
-            </tr>
-            <tr>
-                <td class="adminRowL" colspan="2">
-                    <a href="items_gallery.php?id={$item.id}">{if $item.num_images > 0}{$item|@text_num_images:false}{else}<span class="disabled">0 {t w="images" lower=true}</span>{/if}</a>
-                </td>
-            </tr>
+            {if $form.title.value != ''}
+                <tr><td colspan="7">&nbsp;</td></tr>
+                <tr>
+                    <th class="adminRowLG" colspan="3">
+                        &raquo; <a href="comments.php?id={$item.id}" style="font-weight: bold;">{t w="a_comments"}</a>
+                        ({$item|@text_num_comments:true})
+                    </th>
+                </tr>
+                <tr><td colspan="7">&nbsp;</td></tr>
+                <tr>
+                    <th class="adminRowLG" colspan="3">
+                        &raquo; <a href="items_gallery.php?id={$item.id}" style="font-weight: bold;">{t w="gallery"}</a>
+                        ({$item|@text_num_images:true})
+                    </th>
+                </tr>
+            {/if}
         </table>
         {$form.id.html}
         <p>{$form._cmdSubmit.html}</p>

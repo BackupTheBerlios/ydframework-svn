@@ -47,30 +47,24 @@
 
         <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th class="adminRowL" colspan="7">
-                {t w="item"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
+                ({$item.title})
             </th>
         </tr>
-        <tr>
-            <td class="adminRowL" colspan="7">
-                <a href="items.php?do=edit&id={$item.id}">{$item.title}</a>
-            </td>
-        </tr>
 
+        <tr><td colspan="7">&nbsp;</td></tr>
         <tr>
-            <th class="adminRowL" colspan="7">
-                &nbsp;<br/>{t w="a_comments"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; <a href="comments.php?id={$item.id}" style="font-weight: bold">{t w="a_comments"}</a>
+                ({$item|@text_num_comments:true})
             </th>
         </tr>
-        <tr>
-            <td class="adminRowL" colspan="7">
-                <a href="comments.php?id={$item.id}">{if $item.num_comments > 0}{$item|@text_num_comments:false}{else}<span class="disabled">0 {t w="comments" lower=true}</span>{/if}</a>
-            </td>
-        </tr>
 
+        <tr><td colspan="7">&nbsp;</td></tr>
         <tr>
-            <th colspan="7" class="adminRowL">
-                &nbsp;<br/>{t w="gallery"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; {t w="gallery"}
             </th>
         </tr>
         {if $images->set}

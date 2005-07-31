@@ -47,19 +47,16 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     {if $item}
         <tr>
-            <th class="adminRowL" colspan="7">
-                {t w="item"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
+                ({$item.title})
             </th>
         </tr>
-        <tr>
-            <td class="adminRowL" colspan="7">
-                <a href="items.php?do=edit&id={$item.id}">{$item.title}</a>
-            </td>
-        </tr>
 
+        <tr><td colspan="7">&nbsp;</td></tr>
         <tr>
-            <th class="adminRowL" colspan="7">
-                &nbsp;<br/>{t w="a_comments"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; {t w="a_comments"}
             </th>
         </tr>
     {/if}
@@ -99,15 +96,12 @@
     {/if}
 
     {if $item}
+        <tr><td colspan="7">&nbsp;</td></tr>
         <tr>
-            <th colspan="7" class="adminRowL">
-                &nbsp;<br/>{t w="gallery"}
+            <th class="adminRowLG" colspan="7">
+                &raquo; <a href="items_gallery.php?id={$item.id}" style="font-weight: bold;">{t w="gallery"}</a>
+                ({$item|@text_num_images:true})
             </th>
-        </tr>
-        <tr>
-            <td class="adminRowL" colspan="7">
-                <a href="items_gallery.php?id={$item.id}">{if $item.num_images > 0}{$item|@text_num_images:false}{else}<span class="disabled">0 {t w="images" lower=true}</span>{/if}</a>
-            </td>
         </tr>
     {/if}
     </table>
