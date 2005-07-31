@@ -75,10 +75,10 @@ del "pdf\*.gif" > NUL
 echo [task] Moving documentation to the right location...
 cd ..
 if exist "doc\userguide" ( rmdir /Q /S "doc\userguide" )
-if exist "doc\YDFramework2.pdf" ( del /Q "doc\YDFramework2.pdf" > NUL )
+if exist "..\YDFramework2.pdf" ( del /Q "..\YDFramework2.pdf" > NUL )
 mkdir "doc\userguide"
 move /Y "doc_src\html\*.*" "doc\userguide\*.*"
-move /Y "doc_src\pdf\YDFramework2.pdf" "doc\YDFramework2.pdf"
+move /Y "doc_src\pdf\YDFramework2.pdf" "..\YDFramework2.pdf"
 rmdir /Q /S "doc_src"
 
 :cleanup_build
@@ -88,6 +88,7 @@ del /Q "doc\docs_api.dxy" > NUL
 del /Q "doc\docs_api_footer.html" > NUL
 del /Q "doc\RequestProcessing.vsd" > NUL
 del /Q "YDFramework2\images\*.psd" > NUL
+del /Q "make_release.bat" > NUL
 
 :create_build_number_file
 echo [task] Creating build revision file...
