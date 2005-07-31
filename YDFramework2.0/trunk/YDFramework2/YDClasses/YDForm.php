@@ -927,6 +927,41 @@
          */
         function render( $type ) {
 
+            // Get the renderer object
+            $instance = $this->getRenderer( $type );
+
+            // Return the rendered form
+            return $instance->render();
+
+        }
+        
+        /**
+         *  This function will use the import feature of the renderers to define
+         *  the object with new settings from the content returned by the render method.
+         *
+         *  @param  $type      The renderer to use.
+         *  @param  $content   The content.
+         *  @param  $options   (optional) Additional options.
+         */
+        function import( $type, $content, $options=array() ) {
+
+            // Get the renderer object
+            $instance = $this->getRenderer( $type );
+
+            // Import the form
+            $this = $instance->import( $content, $options );
+
+        }
+        
+        /**
+         *  This function will return an instance of a renderer class.
+         *
+         *  @param  $type   The renderer to use.
+         *
+         *  @returns    The renderer object.
+         */
+        function getRenderer( $type ) {
+            
             // Check if the renderer is known
             if ( ! array_key_exists( $type, $this->_regRenderers ) ) {
                 trigger_error( 'Unknown for renderer type "' . $type . '".', YD_ERROR );
@@ -940,13 +975,11 @@
             // Check if the class exists
             $class = $this->_regRenderers[ $type ]['class'];
 
-            // Create the instance
-            $instance = new $class( $this );
-
-            // Return the rendered form
-            return $instance->render();
-
+            // Return the instance
+            return new $class( $this );
+        
         }
+
 
         /**
          *  This function will return the form as an array.
@@ -1321,6 +1354,16 @@
          */
         function render() {
             return '';
+        }
+
+        /**
+         *  This function will parse the contents of a render and return
+         *  a new YDForm object.
+         *
+         *  @returns    A YDForm object.
+         */
+        function import( $content, $options=array() ) {
+            trigger_error( '"' . $this->getClassName() . '" does not have an import method defined.', YD_ERROR );
         }
 
     }
