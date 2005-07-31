@@ -5,32 +5,67 @@
 
     <para>This is the overview of the different releases.</para>
 
-    <sect1 id="changelog_ydf_v2_final">
+    <sect1 id="changelog_ydf_v2_0rc2">
 
-        <title>Yellow Duck Framework 2.0 Final</title>
+        <title>Yellow Duck Framework 2.0 Release Candidate 2</title>
 
         <para>Released on: not yet released</para>
         <para>Build number: not yet released</para>
 
         <itemizedlist spacing="compact">
-            <listitem>YDDatabaseObject has a lot of new features and bugfixes</listitem>
-            <listitem>Reworked the examples index</listitem>
-            <listitem>The date/time form elements had a number of bug fixes and feature enhancements</listitem>
-            <listitem>Added the YDFSDirectory::has function</listitem>
-            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function</listitem>
-            <listitem>Added a way to implement Yellow Duck Framework addons (plugins)</listitem>
-            <listitem>Added the list of include paths to the debugging output</listitem>
-            <listitem>Added the maxwords and minwords rules</listitem>
-            <listitem>Added the setAttribute function to the YDFormElement class</listitem>
-            <listitem>Added an option to mark fields as mandatory</listitem>
-            <listitem>Added support for raw values for compound form elements</listitem>
-            <listitem>Added the i_in_array and i_not_in_array validation rules</listitem>
-            <listitem>Added the errors_unique_messages property to the array version of a form</listitem>
-            <listitem>You can now override the SMARTY_DIR constant from YDTemplate</listitem>
-            <listitem>Made some performance improvements for PHP5</listitem>
-            <listitem>Updated Smarty to version 2.6.9</listitem>
-            <listitem>Converted the toArray function to the Array renderer</listitem>
-            <listitem>Added the YDFSDirectory::getFilesRecursively function</listitem>
+            <listitem>Made a lot of performance improvements and bug fixes.</listitem>
+            <listitem>Added the weblog example application.</listitem>
+            <listitem>Improved the date/time form elements.</listitem>
+            <listitem>Improved the YDDatabaseObject class.</listitem>
+            <listitem>The YDForm::getValue and YDForm::getValues now return additional information.</listitem>
+            <listitem>Added the YDFSDirectory::has function.</listitem>
+            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function.</listitem>
+            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function.</listitem>
+            <listitem>Added an option to create addons for the framework.</listitem>
+            <listitem>Added the maxwords and minwords validation rules.</listitem>
+            <listitem>Added an option to mark fields as mandatory.</listitem>
+            <listitem>Added support for raw values for compound form elements.</listitem>
+            <listitem>Added the i_in_array and i_not_in_array validation rules.</listitem>
+            <listitem>Added the errors_unique_messages property to the array version of a form.</listitem>
+            <listitem>Added the YDFSDirectory::getFilesRecursively function.</listitem>
+            <listitem>Added a way to register custom database drivers with YDDatabase.</listitem>
+            <listitem>Added the YDGraph addon.</listitem>
+            <listitem>Added the YDXMLForm addon.</listitem>
+            <listitem>Added the YDMysqlDump addon.</listitem>
+            <listitem>Added the YD_FW_COPYRIGHT constant.</listitem>
+            <listitem>Added the IP form rule.</listitem>
+            <listitem>Added the setDefault function to the YDForm class.</listitem>
+            <listitem>Added a function to YDRequest to get the current URL without the query string.</listitem>
+            <listitem>Added the YDFSFile::getBaseNameNoExt function.</listitem>
+            <listitem>Added the YDUrl::merge function.</listitem>
+            <listitem>Added sorting options to the YDFSDirectory->getContents function.</listitem>
+            <listitem>Added support for callbacks in YDDatabaseObject when default actions are executed.</listitem>
+            <listitem>Added getDefaults, getDefault and getModifiedValues to YDForm.</listitem>
+            <listitem>Added the utf8_decode form filter.</listitem>
+            <listitem>Added the utf8_decode form filter.</listitem>
+            <listitem>Added an option to the YDFSFile constructor to force the creation of a file if it doesn't exist.</listitem>
+            <listitem>Added the getDatabase, getUser, getPassword, getHost and getOptions methods to the YDDatabaseDriver class.</listitem>
+            <listitem>Added an example on using AJAX with the Yellow Duck Framework.</listitem>
+            <listitem>Added support for drivers in YDSqlQuery.</listitem>
+            <listitem>Added the getDriver method to all database drivers.</listitem>
+            <listitem>Added the YDDate class.</listitem>
+            <listitem>Added the YDStringUtil::ipcmp function.</listitem>
+            <listitem>Added the set, exists and get functions to the YDBase class.</listitem>
+            <listitem>Added the YDStringUtil::encodeToAscii function.</listitem>
+            <listitem>Added YDDateFormat class to YDDate.php to define and change formats more easily.</listitem>
+            <listitem>Added sorting options to the YDRecordSet class.</listitem>
+            <listitem>Added the getLastUrl and getFirstUrl functions to YDRecordSet.</listitem>
+            <listitem>Added several new functions to the YDFileSystem classes.</listitem>
+            <listitem>Added the YDFSDirectory::getSize function.</listitem>
+            <listitem>Added the YDEncryption class that implements a simple encryption mechanism.</listitem>
+            <listitem>Added the YDPersistent class.</listitem>
+            <listitem>Added the YDFSFile::rename and added the inline option to YDFSFile::download.</listitem>
+            <listitem>Added support for PHP templates.</listitem>
+            <listitem>The YDFSImage class now uses it's own logic to create thumbnails instead of using phpThumb.</listitem>
+            <listitem>Added YDFormElement_Span class.</listitem>
+            <listitem>Added the clear methods to YDEmail and fixed the setSMTP method.</listitem>
+            <listitem>Added the import feature to YDForm.</listitem>
+            <listitem>Added a script to automatically make builds of releases and revisions.</listitem>
         </itemizedlist>
 
     </sect1>
