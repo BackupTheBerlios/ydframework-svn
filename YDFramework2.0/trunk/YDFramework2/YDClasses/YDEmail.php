@@ -183,7 +183,7 @@
          *	@param $pass	Password used for authentication
          */
         function setSMTP( $host='localhost', $port=25, $helo='', $auth=false, $user='', $pass='' ) {
-            $this->_msg->IsSMTP( true );
+            $this->_msg->IsSMTP();
             $this->_msg->Host = $host;
             $this->_msg->Port = $port;
             $this->_msg->Helo = $helo;
@@ -231,6 +231,56 @@
             }
             $this->_msg->AddEmbeddedImage( $file->getAbsolutePath(), $name, $name, 'base64', $c_type );
         }
+        
+        /**
+         * This function clears all recipients assigned in the TO array.
+         */
+        function clearAddresses() {
+            $this->_msg->ClearAddresses();
+        }
+        
+        /**
+         * This function clears all recipients assigned in the CC array.
+         */
+        function clearCCs() {
+            $this->_msg->ClearCCs();
+        }
+    
+        /**
+         * This function clears all recipients assigned in the BCC array.
+         */
+        function clearBCCs() {
+            $this->_msg->ClearBCCs();
+        }
+    
+        /**
+         * This function clears all recipients assigned in the ReplyTo array.
+         */
+        function clearReplyTos() {
+            $this->_msg->ClearReplyTos();
+        }
+    
+        /**
+         * This function clears all recipients assigned in the TO, CC and BCC array. 
+         */
+        function clearAllRecipients() {
+            $this->_msg->ClearAllRecipients();
+        }
+    
+        /**
+         * This function clears all previously set filesystem, string, and binary
+         * attachments.
+         */
+        function clearAttachments() {
+            $this->_msg->ClearAttachments();
+        }
+    
+        /**
+         * This function clears all custom headers. 
+         */
+        function clearCustomHeaders() {
+            $this->_msg->ClearCustomHeaders();
+        }
 
         /**
          *	This function will send the actual email. It accepts a list of recipients which should be defined as an
@@ -267,7 +317,8 @@
 
             // Send the message
             if ( ! $message->Send() ) {
-                trigger_error( 'Mailer Error: ' . $message->ErrorInfo, YD_WARNING );
+                // trigger_error( 'Mailer Error: ' . $message->ErrorInfo, YD_WARNING );
+                $this->error = 'Mailer Error: ' . $message->ErrorInfo;
                 return false;
             } else {
                 return true;
