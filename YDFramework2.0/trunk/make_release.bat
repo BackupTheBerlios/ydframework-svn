@@ -77,7 +77,7 @@ cd ..
 if exist "doc\userguide" ( rmdir /Q /S "doc\userguide" )
 if exist "..\YDFramework2.pdf" ( del /Q "..\YDFramework2.pdf" > NUL )
 mkdir "doc\userguide"
-move /Y "doc_src\html\*.*" "doc\userguide\*.*"
+move /Y "doc_src\html\*.*" "doc\userguide\"
 move /Y "doc_src\pdf\YDFramework2.pdf" "..\YDFramework2.pdf"
 rmdir /Q /S "doc_src"
 
