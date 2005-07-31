@@ -950,8 +950,7 @@
 
             // Import the form
             $new_this = $instance->import( $content, $options );
-
-            // Update the variables of the current object
+            
             foreach ( get_object_vars( $new_this ) as $key => $val ) {
                 $this->$key = $val;
             }
