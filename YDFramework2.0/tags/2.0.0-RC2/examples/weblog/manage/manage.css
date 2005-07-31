@@ -1,0 +1,199 @@
+select, input, textarea, body, p, .normal, li, td {
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Verdana, Arial, Sans-Serif;
+}
+
+body, p, .normal, li, td, th {
+    font-size: 10pt;
+    line-height: 16pt;
+}
+
+a {
+    color: #266080;
+    text-decoration: underline;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.image {
+    border:1px;
+    border-color: #000066;
+    color: #000066;
+    border-style: solid;
+}
+
+p.title	{
+    font-size: 150%;
+    font-weight: normal;
+    color: #266080;
+}
+
+.subline {
+    color: gray;
+    font-size: 8pt;
+}
+
+.disabled {
+    color: gray;
+}
+
+.error {
+    color: red;
+    margin: 0;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+input.tfS {
+    width: 300px;
+}
+
+input.tfL {
+    width: 400px;
+}
+
+input.tfM {
+    width: 400px;
+}
+
+textarea.taM {
+    width: 400px;
+    height: 200px;
+}
+
+textarea.bbtextarea {
+    width: 700px;
+    height: 200px;
+    font-family: "Lucida Sans Typewriter", "Andale Mono", "Courier New", "Courier";
+    font-size: 9pt;
+    line-height: 14pt;
+}
+
+td.bbtoolbar {
+    background-color: #EEEEEE;
+}
+
+select.tfS {
+    width: 200px;
+}
+
+input.button {
+    width: 120px;
+    color: white;
+    background-color: #266080;
+    font-weight: bold;
+}
+
+td, th {
+    vertical-align: top
+}
+
+th {
+    font-weight: bold;
+}
+
+td.adminRowL, th.adminRowL {
+    border-bottom: 1px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+}
+
+td.adminRowLG, th.adminRowLG {
+    padding-left: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+    color: #266080;
+    background-color: #FF9;
+}
+
+td.adminRowLNB, th.adminRowLNB {
+    border-bottom: 0px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: left;
+}
+
+td.adminRowC, th.adminRowC {
+    border-bottom: 1px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: center;
+}
+
+td.adminRowR, th.adminRowR {
+    border-bottom: 1px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: right;
+}
+
+table {
+    border-width: 0px;
+}
+
+td.topRow {
+    background-color: #CCC;
+    padding-bottom: 8px;
+}
+
+p.langRow, a.langRow {
+    color: white;
+}
+
+td.langRowL {
+    background-color: #266080;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 0px;
+    text-align: left;
+}
+
+td.langRowR {
+    background-color: #266080;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 0px;
+    text-align: right;
+}
+
+td.langRowE {
+    background-color: #000066;
+    padding: 2px;
+    padding-left: 4px;
+}
+
+td.leftCol {
+    width: 200px;
+}
+
+td.adminGraphD {
+    background-color: #266080;
+}
+
+td.adminGraphL {
+    background-color: #DDD;
+}
+
+a.leftColSelected {
+    color: darkred;
+    font-weight: bold;
+}
+
+a.leftColUnselected {
+    font-weight: bold;
+}
+
+a.yes {
+    color: green;
+}
+
+a.no {
+    color: red;
+}
+
+a.helpLink {
+    cursor: pointer;
+}

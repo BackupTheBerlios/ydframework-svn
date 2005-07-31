@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting up a new feed</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFeedCreator.php' );
+    $fc = new YDFeedCreator();
+    $fc->setTitle( 'Yellow Duck Framework' );
+    $fc->setDescription( 'News about the YDF' );
+    $fc->setLink( 'http://localhost/ydf/' );
+
+?>]]></programlisting>
+</example>

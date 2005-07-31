@@ -1,0 +1,646 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="yddatabaseobject">
+
+    <title>Addon: YDDatabaseObject, an object-relational manager</title>
+
+    <para>The main objective of YDDatabaseObject is to use objects to:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem>Build SQL and execute statements based on objects variables.</listitem>
+        <listitem>Provide a simple way to access and manipulate data from the database.</listitem>
+        <listitem>Build complex joins and get related information from other tables.</listitem>
+    </itemizedlist>
+
+    <para>Let's start with an example:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_001.xml" />
+
+    <para>In the above example, this query would be perfomed:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_002.xml" />
+
+    <para>The result depends on what was defined in the user class but could be something like this:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_003.xml" />
+
+    <para>Other basic operations can be executed by the class, like updates, deletes and inserts. For example:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_004.xml" />
+
+    <para>In the above example, this query would be perfomed:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_005.xml" />
+
+    <para>Let's take a look at an insert operation:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_006.xml" />
+
+    <para>In the above example, this query would be perfomed:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_007.xml" />
+
+    <para>Simple delete statements can be executed too:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_008.xml" />
+
+    <para>In the above example, this query would be perfomed:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_009.xml" />
+
+    <para>The class can handle relations between multiple tables, but this part will be explained in the relations section.</para>
+
+    <sect1 id="yddatabaseobject_sql">
+
+        <title>The SQL schema for the examples</title>
+
+        <para>All the examples in this section of the guide refer to the following SQL schema:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_010.xml" />
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_build">
+
+        <title>Building the classes</title>
+
+        <para>The idea behind YDDatabaseObject is to create a class for each table you want to manipulate. So if you have a "users" table, for example, you should create an user class that extends YDDatabaseObject and will handle all operations for an user.</para>
+
+        <para>All YDDatabaseObjects have these properties:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">Database:</emphasis> the database connection.</listitem>
+            <listitem><emphasis role="bold">Table:</emphasis> the name of the table.</listitem>
+            <listitem><emphasis role="bold">Fields:</emphasis> the fields of the table.</listitem>
+            <listitem><emphasis role="bold">Keys (optional):</emphasis> the keys of the table.</listitem>
+            <listitem><emphasis role="bold">Selects (optional):</emphasis> statements that will only be retrieved in SELECT queries.</listitem>
+            <listitem><emphasis role="bold">Protected (optional):</emphasis> fields that have protected values that can't be changed.</listitem>
+            <listitem><emphasis role="bold">Relations (optional):</emphasis> the relations with other tables.</listitem>
+            <listitem><emphasis role="bold">Callbacks (optional):</emphasis> methods that are called before or after default actions.</listitem>
+        </itemizedlist>
+
+        <para>An example for the user class:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_011.xml" />
+
+        <para>As you can see, all the properties are defined at the class constructor.</para>
+
+        <sect2 id="yddatabaseobject_build_register_database">
+
+            <title>Registering the database connection</title>
+
+            <para>The registerDatabase method defines the YDDatabase instance.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_012.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_table">
+
+            <title>Registering the table name</title>
+
+            <para>The registerTable method defines the table name that can be retrieved with the getTable method.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_013.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_fields">
+
+            <title>Registering fields and keys</title>
+
+            <para>The only difference between fields and keys is that keys are fields with a "key" property defined. There are two methods to add fields and keys:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><emphasis role="bold">registerField:</emphasis> registers a field.</listitem>
+                <listitem><emphasis role="bold">registerKey:</emphasis> registers a key.</listitem>
+            </itemizedlist>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_014.xml" />
+
+            <para>All these methods return a reference to the field object defined by the YDDatabaseObject_Field class that have some methods to configure the field:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><emphasis role="bold">setName:</emphasis> set the name of the field.</listitem>
+                <listitem><emphasis role="bold">setKey:</emphasis> set the field as key of the table.</listitem>
+                <listitem><emphasis role="bold">setAutoIncrement:</emphasis> set the field as auto-increment.</listitem>
+                <listitem><emphasis role="bold">setNull:</emphasis> set the field as null.</listitem>
+                <listitem><emphasis role="bold">setColumn:</emphasis> sets the real name of the column as defined in the table. So the field name will be an alias for the real column name defined here.</listitem>
+                <listitem><emphasis role="bold">setDefault:</emphasis> sets a default value for the field. This value can be added to the object using the getDefaults method.</listitem>
+                <listitem><emphasis role="bold">setCallback:</emphasis> sets a callback method to be called each time the field value is set.</listitem>
+            </itemizedlist>
+
+            <para>Some of these methods have unsetters such as unsetAutoIncrement, unsetDefault, unsetKey, unsetNull and unsetProtected.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_015.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_selects">
+
+            <title>Registering select statements</title>
+
+            <para>The registerSelect method defines temporary fields that are only set in SELECT statements. For example:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_016.xml" />
+
+            <para>The above example will add the following piece of SQL code when you execute a find:</para>
+
+            <programlisting><![CDATA[SELECT ..., YEAR( users.birthday ) AS 'birth_year', IF( users.admin=1, 1, 0 ) AS 'is_admin' ...]]></programlisting>
+
+            <para>These values will be available as object variables but will not be included in INSERT, UPDATE or DELETE calls as they are not defined fields of the table.</para>
+
+            <para>The registerSelect method returns a reference to the YDDatabaseObject_Select object. This object have a few methods that helps you configure the select:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><emphasis role="bold">setName:</emphasis> sets the name of the select. Will be the alias in the SQL code and the variable name in the object.</listitem>
+                <listitem><emphasis role="bold">setExpression:</emphasis> sets the SQL expression of the select.</listitem>
+                <listitem><emphasis role="bold">setCallback:</emphasis> sets a callback method to be called each time the value is retrieved.</listitem>
+            </itemizedlist>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_017.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_protected">
+
+            <title>Registering protected fields</title>
+
+            <para>The registerProtected method defines fields that have protected values that can't be changed. These values will remain for all actions of the object (find, insert, update, etc).</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_018.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_relations">
+
+            <title>Registering relations</title>
+
+            <para>The registerRelation method defines the relations of the object with other YDDatabaseObjects as you would define between tables. </para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_019.xml" />
+
+            <para>Check the relations section for more info about defining relations.</para>
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_register_callbacks">
+
+            <title>Registering callback methods</title>
+
+            <para>The registerCallback method defines methods to be called before or after a default action is executed. These actions are: find, insert, update, delete, reset.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_020.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_build_get_info">
+
+            <title>Getting the class configuration</title>
+
+            <para>There are a few methods to access the configuration of the database, table name, fields, selects and relations at any time.</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><emphasis role="bold">getDatabase:</emphasis> returns a reference to the database instance.</listitem>
+                <listitem><emphasis role="bold">getTable:</emphasis> returns the table name.</listitem>
+                <listitem><emphasis role="bold">getField:</emphasis> returns a reference to the field object.</listitem>
+                <listitem><emphasis role="bold">getSelect:</emphasis> returns a reference to the select object.</listitem>
+                <listitem><emphasis role="bold">getRelation:</emphasis> returns a reference to the relation object.</listitem>
+            </itemizedlist>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_021.xml" />
+
+        </sect2>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_instantiate">
+
+        <title>Instantiating the classes</title>
+
+        <para>There are two ways of instantiating a YDDatabaseObject class: using the getInstance static method or calling the class directly. The getInstance static method uses four YDDatabaseObject configurations that can be changed using the YDConfig module.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">YD_DBOBJECT_PATH:</emphasis> the path to all YDDatabaseObject classes to be instantiated. Default: current directory.</listitem>
+            <listitem><emphasis role="bold">YD_DBOBJECT_EXT:</emphasis> the file extension name. Default: php.</listitem>
+            <listitem><emphasis role="bold">YD_DBOBJECT_PREFIX:</emphasis> the class name prefix for all YDDatabaseObject classes. Default: (no prefix).</listitem>
+            <listitem><emphasis role="bold">YD_DBOBJECT_SUFIX:</emphasis> the class name sufix for all YDDatabaseObject classes. Default: (no sufix).</listitem>
+        </itemizedlist>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_022.xml" />
+
+        <para>The classes names must start with the prefix and end with the sufix, but the filenames doesn't require them. For the above example the class name is YDDBOBJ_user but the filename is user.php.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_023.xml" />
+
+        <para>The second way of instantiating the class is to call it directly, but you must have the YDDatabaseObject class included before.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_024.xml" />
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_values">
+
+        <title>Working with the values of the fields and selects</title>
+
+        <para>There are at least three ways of setting the values of the object:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Directly to the variable</listitem>
+            <listitem>Using the set method</listitem>
+            <listitem>Using the setValues method</listitem>
+        </itemizedlist>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_025.xml" />
+
+        <para>Using set and setValues, the callback methods for the fields will be called immediately.</para>
+
+        <para>There is also three ways of getting these values from the object:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Directly from the variable</listitem>
+            <listitem>Using the get method</listitem>
+            <listitem>Using the getValues method</listitem>
+        </itemizedlist>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_026.xml" />
+
+        <para>With the getValues and setValues methods you can easily integrate YDDatabaseObject with other modules, like YDForm for example:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_027.xml" />
+
+        <para>Adding form input to YDDatabaseObject:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_028.xml" />
+
+        <para>Please check the forms section of this User Guide to get more information on how form input data is handled.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_find">
+
+        <title>Finding data in the database</title>
+
+        <para>The idea behind YDDatabaseObject is to use the defined object variables values to build SQL queries such as SELECT, UPDATE, INSERT and DELETE. To find information in the database we have the find and findSql methods.</para>
+
+        <para>The difference between find and findSql is that find uses the object variables to build the query and findSql must have a SQL query passed as an argument. Both these methods will add their values to the object variables. We also have a executeSql method that calls the executeSql defined in YDDatabase and can execute any SQL query you want and return the number of affected rows.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_029.xml" />
+
+        <programlisting><![CDATA[]]></programlisting>
+
+        <para>You can build more complex searches using the following optional methods:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">where:</emphasis> adds more statements to the WHERE clause.</listitem>
+            <listitem><emphasis role="bold">group:</emphasis> adds a GROUP BY statement. Alias method: groupby.</listitem>
+            <listitem><emphasis role="bold">having:</emphasis> adds a HAVING statement.</listitem>
+            <listitem><emphasis role="bold">order:</emphasis> adds a ORDER BY statement. Alias method: orderby.</listitem>
+            <listitem><emphasis role="bold">select:</emphasis> adds a select to the query. Only registered selects can be added.</listitem>
+            <listitem><emphasis role="bold">limit:</emphasis> sets the LIMIT of rows to be retrieved.</listitem>
+            <listitem><emphasis role="bold">offset:</emphasis> sets the OFFSET.</listitem>
+        </itemizedlist>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_030.xml" />
+
+        <para>The above example will generate the following SQL code:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_031.xml" />
+
+        <para>A combination of object variables and these methods can be used.</para>
+
+        <para>By default, all table names and fields are escaped as reserved words although not displayed in the code above.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_fetch">
+
+        <title>Fetching the results</title>
+
+        <para>After a search you may find zero or more rows that match your criteria. The number of rows is returned by the find or findSql methods and can be used to tell you to loop across the results or not. Another way of getting the total number of rows retrieved is using the count method.</para>
+
+        <para>The fetch method works like mysql_fetch_array, setting the object values with the current row values at each call of fetch. For example:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_032.xml" />
+
+        <para>The above example may return the following:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_033.xml" />
+
+        <para>There is also a method called getResults that retrieves an array with all rows that were found by the last query.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_034.xml" />
+        
+        <para>There is also a method called getResultsAsAssocArray that retrieves a configurable associative array of the results.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_035.xml" />
+
+        <para>The result:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_036.xml" />
+
+        <para>There are a few methods to clear the object variables and it's configurations:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">resetResults:</emphasis> delete all results stored in the object.</listitem>
+            <listitem><emphasis role="bold">resetCount:</emphasis> resets the count of results.</listitem>
+            <listitem><emphasis role="bold">resetValues:</emphasis> delete all the current values of the object.</listitem>
+            <listitem><emphasis role="bold">resetQuery:</emphasis> delete all query information added by addWhere, addGroup, etc. By default, all fields and selects are automatically added to any select query, but calling this method will delete them from the query leaving it blank.</listitem>
+            <listitem><emphasis role="bold">reset:</emphasis> reset all data and configuration of the object, like instantiating a new object. Actually this method calls all the methods above.</listitem>
+            <listitem><emphasis role="bold">resetRelation:</emphasis> reset all data and configuration of the related objects in a relation.</listitem>
+            <listitem><emphasis role="bold">resetAll:</emphasis> reset all data and configuration of the objects and of all relations.</listitem>
+        </itemizedlist>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_037.xml" />
+
+        <para>An example of resetQuery:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_038.xml" />
+
+        <para>The above example will return this SQL query:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_039.xml" />
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_update">
+
+        <title>Updating existing information</title>
+
+        <para>The update method uses the information in the object variables to build the statement for an UPDATE query.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_040.xml" />
+
+        <para>In the above example the following SQL query is executed:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_041.xml" />
+
+        <para>If you have no keys defined in the class you should set a condition with the addWhere method. For protection, the YDDatabaseObject class has a default config that doesn't allow an UPDATE with no conditions to be executed. It can be unset using the YDConfig module for the YD_DBOBJECT_UPDATE config:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_042.xml" />
+
+        <para>In the above example the last update executes the following SQL query:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_043.xml" />
+
+        <para>With a combination of setValues and getValues it's easy to retrieve and update rows in the table integraded with other modules.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_insert">
+
+        <title>Inserting new information</title>
+
+        <para>The insert method uses the information in the object variables to build the statement for an INSERT query.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_044.xml" />
+
+        <para>In the above example the following SQL query is executed:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_045.xml" />
+
+        <para>If the class has a defined auto-increment field, the method returns the last increment value. If no auto-increment field is defined, it returns true on success or false otherwise.</para>
+
+        <para>With a combination of setValues and getValues it's easy to insert new rows in the table integraded with other modules.</para>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_delete">
+
+        <title>Deleting information</title>
+
+        <para>The delete method uses the information in the object variables to build the statement for an DELETE query.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_046.xml" />
+
+        <para>In the above example the following SQL query is executed:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_047.xml" />
+
+        <para>If you have no keys defined in the class you should set a condition with the addWhere method. For protection, the YDDatabaseObject class has a default config that doesn't allow a DELETE with no conditions to be executed. It can be unset using the YDConfig module for the YD_DBOBJECT_DELETE config:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_048.xml" />
+
+        <para>In the above example the last delete executes the following SQL query:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_049.xml" />
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_relations">
+
+        <title>Working with relations</title>
+
+        <para>Relations between tables are the basis of relational databases. In YDDatabaseObject, as each class defines a single table in the database, the relations are defined between YDDatabaseObject classes.</para>
+
+        <para>In YDdatabaseObject we have two types of relations: many-to-many and one-to-many. A one-to-one relationship works the same as a one-to-many in YDDatabaseObject and doesn't make any difference in the code.</para>
+
+        <para>Some notations are used to define the relations:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">Local:</emphasis> relates to the current class.</listitem>
+            <listitem><emphasis role="bold">Foreign:</emphasis> relates to the foreign class.</listitem>
+            <listitem><emphasis role="bold">Cross:</emphasis> in a many-to-many relation there is a need of a third class that cross-reference the local and foreign classes.</listitem>
+        </itemizedlist>
+
+        <para>For example, if you have a one-to-many relationship between the users table and the phone table, you must define the following relation:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_050.xml" />
+
+        <para>For a many-to-many relationship between the users table and the groups table that has a cross-reference table named users_groups, you must define the following relation:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_051.xml" />
+
+        <para>For a relation to work, you don't have to define it at each class, but is recommended as you would want to retrieve it by different angles. For example: if you have a group and want to get all the users you could load the group class and get the users using the relation defined in there.</para>
+
+        <sect2 id="yddatabaseobject_relations_config">
+
+            <title>Configuring a relation</title>
+
+            <para>A relation is defined by the registerRelation method that returns a reference to a YDDatabaseObject_Relation object. This class have some properties that must be defined related to each of the classes involved in the relation.</para>
+
+            <sect3 id="yddatabaseobject_relations_config_global">
+
+                <title>Configuring the global options of the relation</title>
+
+                <para>A relation have a few options that can be defined by the following methods:</para>
+
+                <itemizedlist spacing="compact">
+                    <listitem><emphasis role="bold">setName:</emphasis> the name of the relation. A variable with this name will hold the foreign object.</listitem>
+                    <listitem><emphasis role="bold">setManyToMany (optional):</emphasis> sets the relation as a many-to-many relation.</listitem>
+                    <listitem><emphasis role="bold">setWhere (optional):</emphasis> sets the relation WHERE statement.</listitem>
+                    <listitem><emphasis role="bold">setGroup (optional):</emphasis> sets the relation GROUP BY statement.</listitem>
+                    <listitem><emphasis role="bold">setHaving (optional):</emphasis> sets the relation HAVING statement.</listitem>
+                    <listitem><emphasis role="bold">setOrder (optional):</emphasis> sets the relation ORDER BY statement.</listitem>
+
+                </itemizedlist>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_052.xml" />
+
+                <para>If the setWhere, setGroup, setHaving and setOrder methods are used, it's values are added to the values defined by the user during runtime, so the developer must pay attention for duplicated conditions and filters.</para>
+
+            </sect3>
+
+            <sect3 id="yddatabaseobject_relations_config_local">
+
+                <title>Configuring the local class</title>
+
+                <para>The local class, is the class where you are registering the relation. It has one property that can be defined by the following method:</para>
+
+                <itemizedlist spacing="compact">
+                    <listitem><emphasis role="bold">setLocalKey (optional):</emphasis> the field name that is the relation key. If not defined, the defined keys in the class are used.</listitem>
+                </itemizedlist>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_053.xml" />
+
+            </sect3>
+
+            <sect3 id="yddatabaseobject_relations_config_foreign">
+
+                <title>Configuring the foreign class</title>
+
+                <para>The foreign class have some properties that can be defined by the following methods:</para>
+
+                <itemizedlist spacing="compact">
+                    <listitem><emphasis role="bold">setForeignClass (optional):</emphasis> sets the foreign class name. Must be a defined YDDatabaseObject class. If not defined, the relation name is used. For example: a relation called group will use the group class as the foreign class.</listitem>
+                    <listitem><emphasis role="bold">setForeignVar (optional):</emphasis> sets the local class variable name that will hold the foreign object. If not defined, the foreign class name will be used.</listitem>
+                    <listitem><emphasis role="bold">setForeignKey (optional):</emphasis> sets the field name in the foreign class that is the relation key. If not defined, the defined keys in the foreign class are used.</listitem>
+                    <listitem><emphasis role="bold">setForeignConditions (optional):</emphasis> sets additional conditions for the foreign table. For example, you could want to only return active groups.</listitem>
+                    <listitem><emphasis role="bold">setForeignJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
+                </itemizedlist>
+                
+                <para>There is a special method called getForeignTable that retrieves the foreign table name. It works by instantiating the foreign class and returning the result from getTable in that object. Notice that if you call this method before setting the correct foreign class name, you will get an error.</para>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_054.xml" />
+
+            </sect3>
+
+            <sect3 id="yddatabaseobject_relations_config_cross">
+
+                <title>Configuring the cross class</title>
+
+                <para>In many-to-many relationships there is a need for a third class that cross-references the local and foreign classes.</para>
+
+                <para>The cross class have some properties that can be defined by the following methods:</para>
+
+                <itemizedlist spacing="compact">
+                    <listitem><emphasis role="bold">setCrossClass (optional):</emphasis> sets the cross class name. Must be a defined YDDatabaseObject class. If not defined, a combination of the local class name ($local_class) and the foreign class name ($foreign_class) is used ($local_class . "_" . $foreign_class). For example: a many-to-many relation called group in the user class will use the group class as the foreign class and the user_group class as the cross class.</listitem>
+                    <listitem><emphasis role="bold">setCrossVar (optional):</emphasis> sets the local class variable name that will hold the cross object. If not defined, the cross class name will be used.</listitem>
+                    <listitem><emphasis role="bold">setCrossLocalKey (optional):</emphasis> sets the field name in the local class that is the relation key between the cross and the local classes. If not defined, a combination of the local table name and the local defined key is used ($local_table . "_" . $local_key).</listitem>
+                    <listitem><emphasis role="bold">setCrossForeignKey (optional):</emphasis> sets the field name in the cross class that is the relation key between the cross and the foreign classes. If not defined, a combination of the foreign table name and the foreign defined key is used ($foreign_table . "_" . $foreign_key).</listitem>
+                    <listitem><emphasis role="bold">setCrossConditions (optional):</emphasis> sets additional conditions for the cross table. For example, you could want to only return active users of the group.</listitem>
+                    <listitem><emphasis role="bold">setCrossJoin (optional):</emphasis> sets the join type (e.g. LEFT, INNER, RIGHT, etc). Default: INNER.</listitem>
+                </itemizedlist>
+
+                <para>Like the getForeignTable, there is a method called getCrossTable that retrieves the cross table name. It works by instantiating the cross class and returning the result from getTable in that object. Notice that if you call this method before setting the correct cross class name, you will get an error.</para>
+
+                <para>For a better understanding of the default naming of the classes, tables and keys:</para>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_055.xml" />
+
+                <para>This is the default naming handled by YDDatabaseObject, but you can define any names you want and set them with the methods described before.</para>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_056.xml" />
+
+                <para>The registerRelation method can define a relation in a single call if you are using the default naming convention for YDDatabaseObject. Bellow is the definition of the registerRelation method:</para>
+
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_057.xml" />
+
+                <para>As you can see a relation can be defined setting only the relation name and if it is a many-to-many relation (default: false).</para>
+
+            </sect3>
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_relations_load">
+
+            <title>Loading relations</title>
+
+            <para>A YDDatabaseObject class can have many relations defined, so the related classes are not included every time you instantiate the class. There is a method called load that includes the relation and adds a instantiated object to the relation variable (or variables if it is a many-to-many relationship).</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_058.xml" />
+
+            <para>There is also a loadAll method that loads all relations defined in the class.</para>
+
+            <para>After a search with a relation, the last relation name used is saved so you don't need to put it in the following actions with relations. For example:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_059.xml" />
+
+            <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_060.xml" />
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_relations_find">
+
+            <title>Finding data in the database</title>
+
+            <para>A search between the relations uses all values defined in the related objects variables like a simple search in a single object. The find method build the search query considering all the values defined in the related objects of the relation you are querying.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_061.xml" />
+
+            <para>The above example may execute the following SQL query considering the phone relation is a INNER join:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_062.xml" />
+
+            <para>You can add more conditions and definitions to the query as you would do in a simple query using where, select, order, etc.</para>
+
+            <para>If you don't want to add values to the relation object, there is no need to load it before executing find. The find method automatically loads all objects needed.</para>
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_relations_fetch">
+
+            <title>Getting the results</title>
+
+            <para>Like in a simple query in YDDatabaseObject, we use the same methods for retrieving the results of a relation query. These methods remember the last relations searched and return the values from the related objects.</para>
+
+            <itemizedlist spacing="compact">
+                <listitem><emphasis role="bold">fetch:</emphasis> fetch the results of all the objects of the last relation adding it's values to the corresponding object.</listitem>
+                <listitem><emphasis role="bold">getValues:</emphasis> return the values of all related objects in a single array.</listitem>
+                <listitem><emphasis role="bold">getResults:</emphasis> return all the results of the related objects in a single array.</listitem>
+            </itemizedlist>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_063.xml" />
+
+            <para>The above example may execute the following SQL query and display the results bellow it:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_064.xml" />
+
+            <para>As you can see, the relation variable name is added as a prefix to the related field names so if you have equal field names in both classes, they will not get mixed. You can take this prefix off in getValues and getResults.</para>
+
+            <para>There is also the possibility to return the real column names of the fields or even only the defined fields in the class. For more information, read the API documentation for YDDatabaseObject::getValues.</para>
+
+            <para>Similar to reset, the resetRelation method resets the information defined in all the relation objects. It basically executes the reset method at every related object.</para>
+
+        </sect2>
+
+        <sect2 id="yddatabaseobject_relations_single_query">
+
+            <title>Getting multiple relations results in a single query</title>
+
+            <para>It's possible to return multiple relations results using a single query. You can pass multiple relation names to the parameters of the find method or use the findAll method to join all defined relations in a single query.</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_065.xml" />
+
+            <para>The above example will execute the following SQL query considering all relations are INNER joins:</para>
+
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_066.xml" />
+
+        </sect2>
+
+    </sect1>
+
+    <sect1 id="yddatabaseobject_callbacks">
+
+        <title>Creating custom methods and callbacks</title>
+
+        <para>In YDDatabaseObject classes you have the possibility of adding any number of custom methods so you can center all related functions in one place. For example, in the user class you may add methods to check a password, format user data, etc, using the data from object variables and relations variables.</para>
+
+        <para>As described before, you can also define callbacks to be executed when a field value is modified or when a certain action is executed. Field's callbacks receive the field value as parameter and action's callbacks receive the action name and a boolean indicating if it was executed before the action. For example:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_067.xml" />
+
+    </sect1>
+
+</chapter>

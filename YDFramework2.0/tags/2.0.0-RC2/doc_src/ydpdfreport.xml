@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydpdfreport">
+
+    <title>Addon: YDPdfReport, a PDF report generator</title>
+
+    <para>The YDPdfReport allows you to create PDF files without the need for external modules in PHP. The syntax is based on a very basic form of HTML.</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydpdfreport_001.xml" />
+
+</chapter>

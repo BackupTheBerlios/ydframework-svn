@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: converting a form to an array</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDForm.php' );
+    $form = new YDForm( 'firstForm' );
+    $form->setDefaults( array( 'name' => 'Joe User' ) );
+    $form->addElement( 'text', 'name', 'Name:', array( 'size' => 50 ) );
+    $form->addElement( 'textarea', 'desc', 'Description:' );
+    $form->addElement( 'submit', 'cmdSubmit', 'Send' );
+    $form->toArray();
+
+?>]]></programlisting>
+
+</example>

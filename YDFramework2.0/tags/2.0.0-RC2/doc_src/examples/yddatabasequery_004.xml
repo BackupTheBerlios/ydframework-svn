@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating an SQL qeury with joins</title>
+    <programlisting><![CDATA[<?php
+
+        // Includes
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+        
+        // Select query
+        $q->select();
+        
+        // Add table with alias 'u'
+        $u = $q->from( 'user', 'u' );
+        
+        // Add select expressions for this table
+        // The expr method is an alias of the expression method
+        $q->expr( 'id', '', true ); 
+        $q->expr( 'name', '', true );
+        
+        // Add a left join
+        $g = $q->join( 'LEFT', 'group', "g" );
+        
+        // Specify the fields to use for the join
+        $q->on( "$u.group_id = $g.id" );
+        
+        // Add the joined fields
+        $q->expr( "$g.id", 'gid', true );
+        $q->expr( "$g.name", 'group_name', true );
+
+        // Add an inner join
+        $a = $q->join( 'INNER', 'attach', "a" );
+        
+        // Specify the fields to use for the join
+        $q->on( "$g.attach_id = $a.id" );
+        
+            // Open a group
+            $q->openOn( 'OR' );
+            
+            // Specify more fields to use for the join group
+            $q->on( "$a.size > 150" );
+            $q->on( "$a.status = 3" );
+        
+        // Add some more fields
+        $q->expr( "$a.id", 'aid', true );
+        $q->expr( "$a.name", 'attach_name', true );
+
+        // Add a where clause
+        $q->where( "$g.id = 144" );
+        
+        // Add ordering
+        $q->order( "$a.name", false, true );
+        
+        // Add a limit
+        $q->limit( 50 );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getQuery() );
+
+?>]]></programlisting>
+</example>

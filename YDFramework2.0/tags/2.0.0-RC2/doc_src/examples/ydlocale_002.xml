@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: output from the previous example</title>
+    <programlisting><![CDATA[Current locale:
+'en'
+
+strftime test
+'Friday, 14 January 2005'
+
+Current locale:
+'eng'
+
+strftime test
+'Friday, 14 January 2005'
+
+Current locale:
+'nl'
+
+strftime test
+'vrijdag, 14 januari 2005'
+
+Current locale:
+'ptg'
+
+strftime test
+'sexta-feira, 14 Janeiro 2005'
+
+Current locale:
+'ita'
+
+strftime test
+'venerdì, 14 gennaio 2005']]></programlisting>
+</example>

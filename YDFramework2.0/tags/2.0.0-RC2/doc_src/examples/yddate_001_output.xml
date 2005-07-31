@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Output: using the YDDate class</title>
+    <programlisting><![CDATA[YDDate::get( "HUM", time() )'Tue, 19 Jul 2005 15:39:01'
+YDDate::get( "EUN_DATE", time() )'19.07.2005'
+YDDate::get( "HUM_DATE", "2004-03-12", "ISO" )'Fri, 12 Mar 2004'
+YDDate::now()'2005-07-19 15:39:01'
+YDDate::now( "EUN_DATE" )'19.07.2005'
+YDDate::now( "ISO_TIME" )'15:39:01'
+YDDate::now( "HUM" )'Tue, 19 Jul 2005 15:39:01'
+YDDate::isValid( "" )false
+YDDate::isValid( "0000-00-00 00:00:00", "ISO" )true
+YDDate::isValid( "0000-00-00 00:00:00", "ISO", true, false )false
+YDDate::isValid( "2005-5-5" )true
+YDDate::isValid( "2005 5 15" )true
+YDDate::isValid( "20050515", "SQL" )true
+YDDate::isValid( "15 5 2005", "EUN" )true
+YDDate::isValid( "15 May 2005", "HUM" )true
+YDDate::isValid( "5.15.2005", "USA" )true
+YDDate::isValid( "5.15.2005", "EUN" )false
+YDDate::isValid( "5.15.2005", "HUM" )false
+YDDate::isValid( "5.15.2005", "ISO" )false
+YDDate::isValid( "5.15.2005", "SQL" )false
+$date->set( "0000-00-00 00:00:00" )'0000-00-00 00:00:00'
+$date->set( 0 )'1970-01-01 01:00:00'
+$date->set( "20050515", "SQL" )'2005-05-15 00:00:00'
+$date->set( "2005-5-15" )'2005-05-05 00:00:00'
+$date->set( "2005 5 15" )'2005-05-15 00:00:00'
+$date->set( "15 5 2005", "EUN" )'2005-05-15 00:00:00'
+$date->set( "15 May 2005", "HUM" )'2005-05-15 00:00:00'
+$date->set( "5.15.2005", "USA" )'2005-05-15 00:00:00'
+YDDateFormat::setString( "custom format", "%a %A %b %B %d %m %Y %H %M %S %T %w" )NULL
+$date->get( "custom format" )'Sun Sunday May May 15 05 2005 00 00 00 00:00:00 0'
+$date->set()'2005-07-19 15:39:01'
+$date->get()'2005-07-19 15:39:01'
+$date->isToday()true
+$date->isTomorrow()false
+$date->isYesterday()false
+$date->isMonday()false
+$date->isTuesday()true
+$date->isWednesday()false
+$date->isThursday()false
+$date->isFriday()false
+$date->isSaturday()false
+$date->isSunday()false
+$date->isWeekend()false
+$date->isCurrentHour()true
+$date->isCurrentMinute()true
+$date->isCurrentMonth()true
+$date->isCurrentYear()true
+$date->getDayName()'Tuesday'
+$date->getDayName( true )'Tue'
+$date->getMonthName()'July'
+$date->getMonthName( true )'Jul'
+YDLocale::set( "ptb" )NULL
+$date->getDayName()'Terça-feira'
+$date->getDayName( true )'Ter'
+$date->getMonthName()'Julho'
+$date->getMonthName( true )'Jul'
+Date 1'2005-07-19 15:39:01'
+Date 2'2005-08-24 01:39:01'
+Difference between Dates 1 and 2array (
+  'years' => 0,
+  'quarters' => 0,
+  'months' => 1,
+  'weeks' => 5,
+  'days' => 36,
+  'weekdays' => 26,
+  'hours' => 874,
+  'minutes' => 52440,
+  'seconds' => 3146400,
+)
+$date->get()'2005-07-19 15:39:01'
+$date->nextDay()'2005-07-20 15:39:01'
+$date->prevDay()'2005-07-19 15:39:01'
+$date->addSecond( 70 )'2005-07-19 15:40:11'
+$date->addMinute( 80 )'2005-07-19 17:00:11'
+$date->addHour( 27 )'2005-07-20 20:00:11'
+$date->addDay( 40 )'2005-08-29 20:00:11'
+$date->addDay( -3 )'2005-08-26 20:00:11'
+$date->toArray()array (
+  'year' => 2005,
+  'month' => 8,
+  'day' => 26,
+  'hours' => 20,
+  'minutes' => 0,
+  'seconds' => 11,
+  'day_with_zero' => '26',
+  'month_with_zero' => '08',
+  'hours_with_zero' => '20',
+  'minutes_with_zero' => '00',
+  'seconds_with_zero' => '11',
+  'day_name' => 'Sexta-feira',
+  'day_name_abbr' => 'Sex',
+  'month_name' => 'Agosto',
+  'month_name_abbr' => 'Ago',
+  'quarter' => 3,
+  'weekday' => 5,
+  'leap' => 0,
+  'timestamp' => 1125079211,
+  'timestamp_string' => '20050826200011',
+)
+$date->set( "1981-11-20" )'1981-11-20 00:00:00'
+$date->getYearsToToday()23
+
+Fatal error: The date "no_date" is not valid. in c:\\YDFramework2\YDClasses\YDDate.php on line 587]]></programlisting>
+</example>

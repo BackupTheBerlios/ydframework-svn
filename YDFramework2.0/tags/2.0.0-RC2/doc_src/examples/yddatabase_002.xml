@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: configuring the YDDatabase class</title>
+    <programlisting><![CDATA[<?php
+
+    // Change the default pagesize
+    YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 10 );
+
+    // Fetch as an associative array
+    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC );
+
+    // Fetch as an numeric array
+    YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ARRAY );
+
+?>]]></programlisting>
+</example>

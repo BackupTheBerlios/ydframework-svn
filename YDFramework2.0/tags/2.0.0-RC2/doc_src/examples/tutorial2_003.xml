@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The links table</title>
+    <programlisting><![CDATA[CREATE TABLE links (
+  id int(11) NOT NULL auto_increment,
+  title varchar(255) NOT NULL default '',
+  url varchar(255) NOT NULL default '',
+  num_visits int(11) default '0',
+  created int(11) default NULL,
+  modified int(11) default NULL,
+  PRIMARY KEY  (id),
+  UNIQUE KEY url (url)
+) TYPE=MyISAM;]]></programlisting>
+</example>

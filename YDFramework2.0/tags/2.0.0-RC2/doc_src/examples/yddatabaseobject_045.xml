@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the qeury that gets executed</title>
+    <programlisting><![CDATA[INSERT INTO users ( name, email, country )
+VALUES ( 'John Fulano', 'johnfulano@host.com', 'Brazil' )]]></programlisting>
+</example>

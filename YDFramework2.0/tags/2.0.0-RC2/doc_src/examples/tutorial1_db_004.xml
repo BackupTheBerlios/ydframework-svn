@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: Database connection information</title>
+    <programlisting><![CDATA[<?php
+
+    // Using SQLite
+    $db['type'] = 'sqlite';
+    $db['name'] = 'index.db';
+    $db['user'] = '';
+    $db['pass'] = '';
+    $db['host'] = '';
+
+    // Using MySQL
+    $db['type'] = 'mysql';
+    $db['name'] = 'YDDB';
+    $db['user'] = 'root';
+    $db['pass'] = '';
+    $db['host'] = 'localhost';
+
+    // Using PostgreSQL
+    $db['type'] = 'postgres';
+    $db['name'] = 'YDDB';
+    $db['user'] = 'user';
+    $db['pass'] = 'pass';
+    $db['host'] = 'localhost';
+
+?>]]></programlisting>
+</example>

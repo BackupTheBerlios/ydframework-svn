@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting data from the database</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    // Get one record
+    $result = $db->getRecord(
+        'select * from users where userid = 1'
+    );
+
+    // Get a list of records
+    $result = $db->getRecords(
+        'select * from users'
+    );
+
+    // Get a specific value
+    $result = $db->getValue(
+        'select count(*) from users'
+    );
+
+    // Get a specific value by name
+    $result = $db->getValueByName(
+        'select count(*) as usercount from users', 'usercount'
+    );
+
+    // Get a list of values by name
+    $result = $db->getValuesByName(
+        'select username from users', 'username'
+    );
+
+    // Get the result as an associative array
+    $result = $db->getAsAssocArray(
+        'select configname, configvalue from configuration',
+        'configname', 'configvalue'
+    );
+
+?>]]></programlisting>
+</example>

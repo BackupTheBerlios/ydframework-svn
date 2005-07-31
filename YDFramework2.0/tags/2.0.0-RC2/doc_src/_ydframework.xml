@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+          "./dtd/docbookx.dtd" [
+    <!ENTITY introduction SYSTEM "introduction.xml">
+    <!ENTITY firstsample SYSTEM "firstsample.xml">
+    <!ENTITY installing SYSTEM "installing.xml">
+    <!ENTITY tutorial SYSTEM "tutorial.xml">
+    <!ENTITY tutorial1 SYSTEM "tutorial1.xml">
+    <!ENTITY tutorial2 SYSTEM "tutorial2.xml">
+    <!ENTITY ydbase SYSTEM "ydbase.xml">
+    <!ENTITY ydconfig SYSTEM "ydconfig.xml">
+    <!ENTITY ydrequest SYSTEM "ydrequest.xml">
+    <!ENTITY ydtemplate SYSTEM "ydtemplate.xml">
+    <!ENTITY ydform SYSTEM "ydform.xml">
+    <!ENTITY yddebug SYSTEM "yddebug.xml">
+    <!ENTITY ydlog SYSTEM "ydlog.xml">
+    <!ENTITY ydauthentication SYSTEM "ydauthentication.xml">
+    <!ENTITY yddatabase SYSTEM "yddatabase.xml">
+    <!ENTITY ydfilesystem SYSTEM "ydfilesystem.xml">
+    <!ENTITY ydurl SYSTEM "ydurl.xml">
+    <!ENTITY ydxmlrpc SYSTEM "ydxmlrpc.xml">
+    <!ENTITY ydemail SYSTEM "ydemail.xml">
+    <!ENTITY yderror SYSTEM "yderror.xml">
+    <!ENTITY ydtimer SYSTEM "ydtimer.xml">
+    <!ENTITY ydencryption SYSTEM "ydencryption.xml">
+    <!ENTITY ydpersistent SYSTEM "ydpersistent.xml">
+    <!ENTITY ydlocale SYSTEM "ydlocale.xml">
+    <!ENTITY yddate SYSTEM "yddate.xml">
+    <!ENTITY ydajax SYSTEM "ydajax.xml">
+    <!ENTITY other SYSTEM "other.xml">
+    <!ENTITY addon_ydbbcode SYSTEM "ydbbcode.xml">
+    <!ENTITY addon_ydcart SYSTEM "ydcart.xml">
+    <!ENTITY addon_yddatabaseobject SYSTEM "yddatabaseobject.xml">
+    <!ENTITY addon_ydfeedcreator SYSTEM "ydfeedcreator.xml">
+    <!ENTITY addon_ydgraph SYSTEM "ydgraph.xml">
+    <!ENTITY addon_ydmysqldump SYSTEM "ydmysqldump.xml">
+    <!ENTITY addon_ydsqlquery SYSTEM "yddatabasequery.xml">
+    <!ENTITY addon_ydxmlform SYSTEM "ydxmlform.xml">
+    <!ENTITY addon_ydpdfreport SYSTEM "ydpdfreport.xml">
+    <!ENTITY bestpractices SYSTEM "bestpractices.xml">
+    <!ENTITY faq SYSTEM "faq.xml">
+    <!ENTITY config_vars SYSTEM "config_vars.xml">
+    <!ENTITY changelog SYSTEM "changelog.xml">
+    <!ENTITY appendixA SYSTEM "appendixA.xml">
+    <!ENTITY appendixB SYSTEM "appendixB.xml">
+    <!ENTITY appendixC SYSTEM "appendixC.xml">
+    <!ENTITY appendixD SYSTEM "appendixD.xml">
+    <!ENTITY appendixE SYSTEM "appendixE.xml">
+]>
+
+<book>
+
+    <bookinfo>
+        <title>Yellow Duck Framework 2.0</title>
+        <subtitle>User Guide</subtitle>
+        <authorgroup>
+            <author>
+                <firstname>Pieter</firstname><surname>Claerhout</surname>
+                <affiliation><address><email>pieter@yellowduck.be</email></address></affiliation>
+            </author>
+        </authorgroup>
+        <copyright>
+            <year>2002</year><year>2005</year>
+            <holder role="mailto:pieter@yellowduck.be">Pieter Claerhout</holder>
+        </copyright>
+        <abstract>
+            <para>This document contains the user guide for the Yellow Duck Framework version 2.0.</para>
+            <para>The Yellow Duck Framework is an object oriented framework written in <ulink url="http://www.php.net/">PHP</ulink> which makes it a lot easier and faster to create websites and web applications.</para>
+        </abstract>
+    </bookinfo>
+
+    &introduction;
+    &firstsample;
+    &installing;
+    &tutorial;
+    &tutorial1;
+    &tutorial2;
+    &ydbase;
+    &ydconfig;
+    &ydrequest;
+    &ydtemplate;
+    &ydform;
+    &yddebug;
+    &ydlog;
+    &ydauthentication;
+    &yddatabase;
+    &ydfilesystem;
+    &ydurl;
+    &ydxmlrpc;
+    &ydemail;
+    &yderror;
+    &ydtimer;
+    &ydencryption;
+    &ydpersistent;
+    &ydlocale;
+    &yddate;
+    &ydajax;
+    &other;
+    &addon_ydbbcode;
+    &addon_ydcart;
+    &addon_yddatabaseobject;
+    &addon_ydfeedcreator;
+    &addon_ydgraph;
+    &addon_ydmysqldump;
+    &addon_ydsqlquery;
+    &addon_ydxmlform;
+    &addon_ydpdfreport;
+    &config_vars;
+    &faq;
+    &changelog;
+    &appendixA;
+    &appendixB;
+    &appendixD;
+    &appendixC;
+    &appendixE;
+
+</book>

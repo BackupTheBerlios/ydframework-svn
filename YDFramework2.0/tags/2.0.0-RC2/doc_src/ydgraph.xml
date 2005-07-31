@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydgraph">
+
+    <title>Addon: YDGraph, a graphing module</title>
+
+    <para>The YDGraph addon is a module that can be used to created graphs. It's based on the <ulink url="http://www.panacode.com/">PanaChart</ulink> package, but has some additional functions.</para>
+
+    <sect1 id="ydgraph_features">
+
+        <title>The YDGraph features</title>
+
+        <para>This is a small list of the features of the YDGraph module:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Bandwidth friendly, the average image size for a 450*250 image is around 2K</listitem>
+            <listitem>Small and fast library source code</listitem>
+            <listitem>Can be used to create plots with few lines of code</listitem>
+            <listitem>Can output to a file or directly to an HTTP strea</listitem>
+            <listitem>Supports several plot types: bars, lines, dots, areas, step, impuls</listitem>
+            <listitem>Supports multiple series plots on the same image</listitem>
+            <listitem>Supports automatic scaling of plot area by axis labels size</listitem>
+            <listitem>Can output to PNG, GIF and JPEG</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydgraph_example">
+
+        <title>An example of using YDGraph</title>
+
+        <para>The following sample creates a simple bar graph and shows you how to use different colors:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydgraph_001.xml" />
+
+        <para>The result of this script is the following PNG image:</para>
+
+        <para><mediaobject>
+            <imageobject role="html">
+                <imagedata fileref="ydgraph_sample.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="ydgraph_sample.gif" width="117.5mm" height="94.2mm" scalefit="0" />
+            </imageobject>
+        </mediaobject></para>
+
+    </sect1>
+
+</chapter>

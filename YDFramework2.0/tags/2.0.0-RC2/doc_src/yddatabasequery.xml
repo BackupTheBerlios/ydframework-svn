@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="YDDatabaseQuery">
+
+    <title>Addon: YDDatabaseQuery, using objects to create SQL queries</title>
+
+    <para>The Yellow Duck Framework has a special object called YDDatabaseQuery that allows you to create SQL statements using an object. This makes it a lot easier to read the SQL statements and it's also easier to maintain them. This is a solution in between using plain SQL statements and using a object relational mapper such as YDDatabaseObject.</para>
+
+    <note>This class is specified in it's own include file, so you need to include it manually.</note>
+
+    <para>You can get a new instance of a YDDatabaseQuery object using the getInstance static method. This method receives a YDDatabase instance as parameter. For example:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_001.xml" />
+
+    <para>The class handles all database drivers supported by YDDatabase:</para>
+    
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">mysql</emphasis>: Mysql (requires the mysql PHP extension.</listitem>
+        <listitem><emphasis role="bold">oracle</emphasis>: Oracle (requires the oci8 PHP extension.</listitem>
+        <listitem><emphasis role="bold">sqlite</emphasis>: SQLite (requires the sqlite PHP extension.</listitem>
+        <listitem><emphasis role="bold">postgres</emphasis>: PostgreSQL (requires the pgsql PHP extension.</listitem>
+    </itemizedlist>
+    
+    <para>YDDatabaseQuery is aware of reserved keywords as tables and field names. So, they can be escaped as reserved keywords. By default, all table names are escaped. But you can escape the select, order and group statements setting to true the $reserved parameter. You can also retrieve the reserved enclosure character with the method getReserved. This is useful if you are using different database drivers.</para>
+    
+    <para>The following example shows you how you can use the YDDatabaseQuery object to create a SELECT SQL statement:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_002.xml" />
+
+    <para>The output of this script would be:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_003.xml" />
+
+    <para>The next example illustrates how to make an SQL statement with a join of 3 tables:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_004.xml" />
+
+    <para>This would output the following SQL statement:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_005.xml" />
+
+    <para>Also SQL delete statements can be constructed with the YDDatabaseQuery class:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_006.xml" />
+
+    <para>The output of this script would be:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_007.xml" />
+
+    <para>The following example illustrates how to create an insert statement:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_008.xml" />
+
+    <para>The output of this script would be:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_009.xml" />
+
+    <para>You can also generate SQL update statements:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_010.xml" />
+
+    <para>The output of this script would be:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabasequery_011.xml" />
+
+
+</chapter>

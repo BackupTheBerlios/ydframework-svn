@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDFSDirectory class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the directory object for the current directory
+    $dir = new YDFSDirectory( dirname( __FILE__ ) );
+
+    // Dump the object
+    YDDebugUtil::dump( $dir, dirname( __FILE__ ) );
+
+    // All files in the directory
+    YDDebugUtil::dump( $dir->getContents() );
+
+    // TPL files in the directory
+    YDDebugUtil::dump( $dir->getContents( '*.tpl' ) );
+
+    // JPG and txt files in the directory
+    YDDebugUtil::dump(
+        $dir->getContents( array( '*.jpg', '*.txt' ) )
+    )
+
+    // JPG and txt files in the directory and subdirectories
+    YDDebugUtil::dump(
+        $dir->getFilesRecursively( array( '*.jpg', '*.txt' ) )
+    )
+
+?>]]></programlisting>
+
+</example>

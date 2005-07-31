@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: finding data with relations</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Load relation phone
+    $user->load( 'phone' );
+
+    // Add the search criteria
+    $user->id = 123;
+    $user->phone->ord = 1;
+
+    // Search using the criteria defined by the variables of the relation
+    $user->find( 'phone' );
+
+    // Getting the data returned
+    $user_name    = $user->name;
+    $phone_number = $user->phone->number;
+
+?>]]></programlisting>
+</example>

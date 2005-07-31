@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the addElement function</title>
+    <programlisting><![CDATA[<?php
+
+    function & addElement(
+        $type,
+        $name,
+        $label='',
+        $attributes=array(),
+        $options=array()
+    ) {
+    }
+
+?>]]></programlisting>
+
+</example>

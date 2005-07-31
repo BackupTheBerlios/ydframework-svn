@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the query that gets executed</title>
+    <programlisting><![CDATA[DELETE FROM users]]></programlisting>
+</example>

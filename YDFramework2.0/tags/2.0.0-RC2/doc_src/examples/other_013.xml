@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: output from the previous example</title>
+    <programlisting><![CDATA[Agent
+'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)'
+
+Browser name
+'ie'
+
+Version
+'6.0'
+
+Platform
+'win'
+
+Installed .NET runtimes
+array (
+  0 => '1.1',
+)
+
+Languages supported by the browser
+array (
+  0 => 'en',
+  1 => 'nl',
+  2 => 'fr',
+)
+
+Negotiated language
+'en']]></programlisting>
+</example>

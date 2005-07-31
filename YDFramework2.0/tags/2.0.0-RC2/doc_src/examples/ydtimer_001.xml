@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: simple use of the YDTimer class</title>
+    <programlisting><![CDATA[<?php
+
+    $timer = new YDTimer();
+    $elapsed = $timer->getElapsed();
+
+?>]]></programlisting>
+</example>

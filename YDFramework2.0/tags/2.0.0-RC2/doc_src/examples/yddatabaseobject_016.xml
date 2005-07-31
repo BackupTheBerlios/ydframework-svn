@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering SELECT statements</title>
+    <programlisting><![CDATA[<?php
+
+    // Register select statements
+    $this->registerSelect( 'birth_year', 'YEAR( ' . $this->getTable() . '.birthday )' );
+    $this->registerSelect( 'is_admin', 'IF( ' . $this->getTable() . '.admin=1, 1, 0 )' );
+
+?>]]></programlisting>
+</example>

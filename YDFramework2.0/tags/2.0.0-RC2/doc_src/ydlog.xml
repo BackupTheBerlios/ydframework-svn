@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydlog">
+
+    <title>Using logfiles</title>
+
+    <para>In this chapter, we will see how you can use logfiles to gather data about your web application. These files are stored a either plain text or XML files on disk. This is a great way to capture information without having to put it in the actual HTML contents.</para>
+
+    <sect1 id="ydlog_types">
+
+        <title>The different types of logging information</title>
+
+        <para>In the logging system of the Yellow Duck Framework, there are different levels of log messages. We make a differentiation between the following types of log messages:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>debug messages (level 4 - YD_LOG_DEBUG)</listitem>
+            <listitem>informational messages (level 3 - YD_LOG_INFO)</listitem>
+            <listitem>warning messages (level 2 - YD_LOG_WARNING)</listitem>
+            <listitem>error messages (level 1 - YD_LOG_ERROR)</listitem>
+        </itemizedlist>
+
+        <para>The higher the level, the more messages will be shown.</para>
+
+        <para>Logfiles can be both XML or plain text based. Here are some samples from logfiles:</para>
+
+        <para>A plain text logfile:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydlog_001.xml" />
+
+        <para>An XML logfile:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydlog_002.xml" />
+
+        <para>The text based logfiles are very handy if you don't intend to postprocess the logfiles. The XML files however are much more structured and therefore easier to postprocess (e.g. to make you own logging user interface).</para>
+
+    </sect1>
+
+    <sect1 id="ydlog_setup">
+
+        <title>Setting up logging</title>
+
+        <para>Before you can use the logging, you need to perform some configuration. The configuration is done by defining a number of constants.</para>
+
+        <para><emphasis role="bold">YD_LOG_LEVEL:</emphasis> this indicates which messages are written to the logfiles. By default, this is set to YD_LOG_INFO.</para>
+
+        <para><emphasis role="bold">YD_LOG_FILE:</emphasis> the file to where the logging messages should be send. Make sure this is an absolute path. By default, this points to the YDFramework2_log.xml file in the Yellow Duck Framework's temporary directory.</para>
+
+        <para><emphasis role="bold">YD_LOG_FORMAT:</emphasis> indicates if the logfiles should be in plain text or XML. By default, this is XML.</para>
+
+        <para><emphasis role="bold">YD_LOG_TEXTFORMAT:</emphasis> indicates how the entries in the plain text logfile should be formatted. By default, the format is as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydlog_003.xml" />
+
+        <para>The following placeholders can be used in the YD_LOG_TEXTFORMAT definition:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>%date%</listitem>
+            <listitem>%level%</listitem>
+            <listitem>%uri%</listitem>
+            <listitem>%file%</listitem>
+            <listitem>%basefile%</listitem>
+            <listitem>%line%</listitem>
+            <listitem>%function%</listitem>
+            <listitem>%message%</listitem>
+        </itemizedlist>
+
+        <para><emphasis role="bold">YD_LOG_WRAPLINES:</emphasis> boolean indicating if long lines should be wrapped in the logfiles so that it's easier to read them in e.g. a console application.</para>
+
+        <para><emphasis role="bold">YD_LOG_MAX_LINESIZE:</emphasis> a numeric value indicating the maximum linesize if you set YD_LOG_WRAPLINES to true. By default, this is set to 80.</para>
+
+        <para>If you wrap long lines, the log output will look as follows (for a text file):</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydlog_004.xml" />
+
+        <para>These defaults should be set before including the YDLog.php file. If one or more options are not defined, it will revert to the defaults.</para>
+
+    </sect1>
+
+    <sect1 id="ydlog_logging">
+
+        <title>Sending messages to the logfile</title>
+
+        <para>To send a new message to the logfile, you need to call one of the static functions from the YDLog class. For each type of messages, you need to use the accompanying function.</para>
+
+        <para>Here is a sample file on how to use the logging functions:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydlog_005.xml" />
+
+        <para>Currently, the following messages are supported:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>debug</listitem>
+            <listitem>info</listitem>
+            <listitem>warning</listitem>
+            <listitem>error</listitem>
+        </itemizedlist>
+
+        <para>To empty the logfile, you can use the YDLog::clear function.</para>
+
+    </sect1>
+
+</chapter>

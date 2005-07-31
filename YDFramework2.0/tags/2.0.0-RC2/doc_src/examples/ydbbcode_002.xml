@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the HTML result from the previous example</title>
+    <programlisting><![CDATA[<img border="0" src="http://elouai.com/images/star.gif"><br />
+<a target="_blank" href="http://www.yellowduck.be/"><img
+    border="0" src="http://elouai.com/images/star.gif"></a><br />
+<a target="_blank" href="http://elouai.com">eLouai</a><br />
+<a target="_blank" href="http://elouai.com">http://elouai.com</a><br />
+<a href="index.php?YD_DEBUG=1">Yellow Duck Framework examples</a><br />
+<a href="index.php?YD_DEBUG=1">index.php?YD_DEBUG=1</a><br />
+<a href="mailto:webmaster@elouai.com">Webmaster</a><br />
+<a href="mailto:webmaster@elouai.com">webmaster@elouai.com</a><br />
+<a href="mailto:webmaster@elouai.com">Webmaster</a><br />
+<a href="mailto:webmaster@elouai.com">webmaster@elouai.com</a><br />
+<font color="red">RED</font><br />
+<b>bold</b><br />
+<i>italic</i><br />
+<u>underline</u><br />
+<code>value="123";</code><br />
+<blockquote>a quote</blockquote><br />]]></programlisting>
+</example>

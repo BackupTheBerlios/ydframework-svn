@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDLog class</title>
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    require_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDLog.php' );
+    YDInclude( 'YDRequest.php' );
+
+    // Plain function
+    function PlainFunction() {
+        YDLog::info( 'Message from PlainFunction' );
+    }
+
+    // Class definition
+    class logging extends YDRequest {
+
+        // Class constructor
+        function logging() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+            YDLog::clear();
+            YDLog::debug( 'debug message' );
+            YDLog::info( 'info message' );
+            YDLog::warning( 'warning message' );
+            YDLog::error( 'error message' );
+            PlainFunction();
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+</example>

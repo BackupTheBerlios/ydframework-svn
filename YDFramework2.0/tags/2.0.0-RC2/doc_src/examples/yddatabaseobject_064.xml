@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the result from the previous example</title>
+    <programlisting><![CDATA[SELECT * FROM users INNER JOIN phone ON ( users.id = phone.user_id ) WHERE users.id = 123
+
+array(
+    'id' => '123',
+    'name' => 'John Fulano',
+    'email' => 'johnfulano@host.com',
+    ...
+    'phone_number' => '5555-2222',
+    'phone_ord' => 1,
+    ...
+)
+array(
+    'id' => '123',
+    'name' => 'John Fulano',
+    'email' => 'johnfulano@host.com',
+    ...
+    'phone_number' => '6666-3333',
+    'phone_ord' => 2,
+    ...
+)
+array(
+    'id' => '123',
+    'name' => 'John Fulano',
+    'email' => 'johnfulano@host.com',
+    ...
+    'phone_number' => '7777-4444',
+    'phone_ord' => 3,
+    ...
+)]]></programlisting>
+</example>

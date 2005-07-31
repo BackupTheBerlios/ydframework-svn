@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: generating a graph</title>
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDGraph.php' );
+
+    // Class definition
+    class graph extends YDRequest {
+
+        // Class constructor
+        function graph() {
+
+            // Initialize the parent
+            $this->YDRequest();
+
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // The labels and the values for the graph
+            $values = array( 60, 40, 20, 34, 26, 52, 41, 20, 34, 43, 64, 40 );
+            $labels = array(
+                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul','Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+            );
+
+            // Create a new graph
+            $g1 = new YDGraph( 550, 250 );
+
+            // Set the limits
+            $g1->setLimits( 0, 20 );
+
+            // Set the offsets
+            $g1->setOffset( 5 );
+
+            // Set the format
+            $g1->setFormat( 1, ',', '.' );
+
+            // Add the series
+            $g1->addSeries($values, 'bar', 'Series1', SOLID, '#444444', '#4682B4');
+
+            // Set the Y axis
+            $g1->setYAxis( '#4682B4', SOLID, 5, 'example' );
+
+            // Set the labels
+            $g1->setLabels( $labels, '#000000', 1, HORIZONTAL );
+
+            // Plot the graph
+            $g1->plot();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+</example>

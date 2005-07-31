@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydform">
+
+    <title>Using and validating forms</title>
+
+    <para>Processing and validating forms is probably one of the most time-consuming and most difficult things to handle in a web application. Forms can vary from very simple forms to really difficult forms, which makes having a unified system to handle all these forms a real timesaver. By applying an object oriented approach to forms, and by providing different methods and objects to handle forms with ease, processing forms has become really easy and fast.</para>
+
+    <para>The form module in the Yellow Duck Framework is inspired by a package from the PEAR (PHP Extension and Application Repository) libraries. We wrote our own form library which has almost the same syntax but is more versatile, faster, smaller and works nicely around some limitations of the PEAR implementation.</para>
+
+    <warning>Currently, the YDForm form class doesn't work properly with arrays of form elements. If you define the values of form elements as arrays, by adding <literal>[]</literal> to the name of the form element, you will get unexpected results.</warning>
+
+    <sect1 id="ydform_ydform_class">
+
+        <title>The YDForm class</title>
+
+        <para>All the functionality for form handling in the Yellow Duck Framework is handled by a class called "YDForm". This class provides us with functions to register elements, filters and rules. We can also add elements, rules and filters and set options for them. Using the to-family of functions, we can convert our form object to a useful data structure which is easier to handle. In the standard class, you can convert the form object to either an array or HTML.</para>
+
+        <para>The YDForm also has the ability to use custom form elements. You can easily change existing elements or create new ones from scratch and integrate them in your application. This makes the YDForm library a very open and extensible package.</para>
+
+    </sect1>
+
+    <sect1 id="ydform_creating_form">
+
+        <title>Creating a new form</title>
+
+        <para>Creating a new form is done in two steps. First, you need to include the class definition, and then you need to create an instance of the YDForm class. The following code sample will illustrate this:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_001.xml" />
+
+        <para>The first line will include the correct class definition, while the second one will create an instance of the form class. The class constructor takes a number of arguments, but only one is required, the rest is optional. Here's the list of parameters that you can pass when instantiating the form object.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">$name:</emphasis> The name of the form.</listitem>
+            <listitem><emphasis role="bold">$method (optional):</emphasis> Method used for submitting the form. Most of the times, this is either POST or GET.</listitem>
+            <listitem><emphasis role="bold">$action (optional):</emphasis> Action used for submitting the form. If not specified, it will default to the current URI.</listitem>
+            <listitem><emphasis role="bold">$target (optional):</emphasis> HTML target for the form.</listitem>
+            <listitem><emphasis role="bold">$attributes (optional):</emphasis> Attributes for the form.</listitem>
+        </itemizedlist>
+
+        <para>Make sure that all the different form instances you want to use all have separate names. If not, the results might not be as you expected.</para>
+
+        <para>By default, the form's action (the URI that will be called when the form is submitted) is the same URI as the one from the script that displayed the form in the first place. This may seem strange at first, but it is actually very useful, as we shall see. By default in the Yellow Duck Framework, forms are what we call "self-referencing".</para>
+
+    </sect1>
+
+    <sect1 id="ydform_adding_elements">
+
+        <title>Adding form elements</title>
+
+        <para>Adding form elements</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_002.xml" />
+
+        <para>If $element is a string representing an element type, then this method accepts variable number of parameters, their meaning and count depending on element type.</para>
+
+        <para>Parameters starting from second will be passed to the element's constructor, consult the docs for the appropriate element to find out which parameters to pass.</para>
+
+        <para>You can add as many elements to the form as you like. The YDForm class is smart enough to preserve the values of the different form elements between requests, so you don't have to worry about this. The Yellow Duck Framework takes care of this for you. The next section will give you an overview of the different element types you can add to the YDForm class.</para>
+
+    </sect1>
+
+    <sect1 id="ydform_element_types">
+
+        <title>The different form elements</title>
+
+        <para>There are a whole number of standard form elements (sometimes called widgets) that can be added to a form. Here's an overview of the different elements together with the HTML element they represent.</para>
+
+        <para>First, let's have a look at the standard HTML elements.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">button:</emphasis> Class for <![CDATA[<input type="button" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">checkbox:</emphasis> Class for <![CDATA[<input type="checkbox" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">file:</emphasis> Class for <![CDATA[<input type="file" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">hidden:</emphasis> Class for <![CDATA[<input type="hidden" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">image:</emphasis> Class for <![CDATA[<input type="image" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">password:</emphasis> Class for <![CDATA[<input type="password" />]]> elements. docs</listitem>
+            <listitem><emphasis role="bold">radio:</emphasis> Class for <![CDATA[<input type="radio" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">reset:</emphasis> Class for <![CDATA[<input type="reset" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">select:</emphasis> Class for <![CDATA[<select />]]> elements. The class allows loading of <![CDATA[<option>]]> elements from array or database.</listitem>
+            <listitem><emphasis role="bold">submit:</emphasis> Class for <![CDATA[<input type="submit" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">text:</emphasis> Class for <![CDATA[<input type="text" />]]> elements.</listitem>
+            <listitem><emphasis role="bold">textarea:</emphasis> Class for <![CDATA[<textarea />]]> elements.</listitem>
+        </itemizedlist>
+
+        <para>There are also a number of custom form elements that are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">bbtextarea:</emphasis> this is a special type of textarea field which has a toolbar for adding BBCode style tags to markup the text.</listitem>
+            <listitem><emphasis role="bold">dateselect:</emphasis> a combination of select fields that allow a user to select a date.</listitem>
+            <listitem><emphasis role="bold">timeselect:</emphasis> a combination of select fields that allow a user to select a time.</listitem>
+            <listitem><emphasis role="bold">datetimeselect:</emphasis> is a combination of select fields that allow a user to select a datetime.</listitem>
+        </itemizedlist>
+
+        <note>To influence the language of the months in the date and datetime elements, you should use the <link linkend="ydlocale">YDLocale::set</link> function to make sure you have the right locale set.</note>
+
+        <para>You can also easily create your own form elements. Each form element needs to implement the following API:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_003.xml" />
+
+    </sect1>
+
+    <sect1 id="ydform_displaying_form">
+
+        <title>Displaying the form</title>
+
+        <para>For displaying the form, there are several options. The way you display the form is largely influenced by how much control you want to have over the form rendering and whether you want to use the YDTemplate class for templates or not.</para>
+
+        <para>The easiest way of displaying your form is by calling it's class function called display. This will render the form and display the resulting HTML. This is definitely the easiest way of working, but you have very little to almost no control on how the form will be displayed.</para>
+
+        <para>If you want to use a template engine, there are two different ways of rendering the form. If you still want to stick with the default layout, you can use the toHtml class function of the YDForm class to get the HTML representation of your form. You can then assign this as a normal template variable to the template class. This again is a very quick way of working but only gives you limited possibilities to determine the exact look and feel of the rendered form.</para>
+
+        <para>If you want full control and you will be using templates (which is the advised way of working), you can use the class function toArray to get an array representation of your form which is very easy to use in your code. Let's take a look at how the following form code is converted to an array:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_004.xml" />
+
+        <para>The code above results in the following array structure:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_005.xml" />
+
+        <para>The structure of this array is really easy. Every form array always contains a number of standard elements of which only a few are important for us right now. Let's go over them:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">tag:</emphasis> this contains the complete form opening tag as html.</listitem>
+            <listitem><emphasis role="bold">attribs:</emphasis> This variable contains the attributes for the actual form HTML tag. It contains parameters such as the action, method, name and ID of the form.</listitem>
+            <listitem><emphasis role="bold">errors:</emphasis> The errors collection is an array which contains a list of all the errors that were encountered during the validation of the form. We will discuss this in depth later on.</listitem>
+        </itemizedlist>
+
+        <para>Then it contains a subarray for each element in the form. Each of these subforms have the same structure. Let's have a look at the different parameters for each form element:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">name:</emphasis> The name of the form element.</listitem>
+            <listitem><emphasis role="bold">value:</emphasis> The value of the form element (which is generally the contents of the form element).</listitem>
+            <listitem><emphasis role="bold">type:</emphasis> The type of the element.</listitem>
+            <listitem><emphasis role="bold">label:</emphasis> The label specified for the form element.</listitem>
+            <listitem><emphasis role="bold">required:</emphasis> Indicating if this is a required form element or or not. This is always a boolean value.</listitem>
+            <listitem><emphasis role="bold">error:</emphasis> The error message for this form element after validating the form. If not error is attached to the form, this will contain a NULL value.</listitem>
+            <listitem><emphasis role="bold">html:</emphasis> The HTML representation of the form element.</listitem>
+        </itemizedlist>
+
+        <para>Instead of first having to convert the form object to an array for assigning it to the template, there is a shortcut function called assignForm in the YDTemplate class which automatically converts the form object to an array and assigns it to the template object.</para>
+
+        <para>By using the elements of this array in the template, you can pretty much layout the field exactly as you wish. It looks like a lot of work, but it's a lot easier than handcoding every single part of the form.</para>
+
+    </sect1>
+
+    <sect1 id="ydform_validating">
+
+        <title>Validating forms</title>
+
+        <para>The concept of validating forms is to evaluate the input of the form and checking to see if it matches the specified rules. A form is considered to be validated when the URI called to display it has one or more parameters (either GET or POST according to the method used by the form), and all the rules (which we will discuss in a second) have been satisfied.</para>
+
+        <para>For validating forms, we will use three specific functions of the YDForm class. Here is an overview of the ones we are going to use:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">addFilter:</emphasis> We will use this function to massage the data of the form before validating it. We can use this function to e.g. convert a field value to uppercase or we can use it to remove leading and trailing spaces from the actual value.</listitem>
+            <listitem><emphasis role="bold">addRule:</emphasis> This function attaches a rule to a specific form element and also defines the error message that needs to be shown if this rule is not honoured.</listitem>
+            <listitem><emphasis role="bold">validate:</emphasis> This function will check the input of the form against all rules after applying the specified filters, and will return either true or false to indicate if the form was valid or not.</listitem>
+        </itemizedlist>
+
+        <para>The applyFilter function takes two arguments. The first argument is either the name of an element or the string "ALL", meaning that this filter applies to all elements on the form. The second argument is either a function, user-defined or built-in function.</para>
+
+        <note>All rules are evaluated on the server, and no javascript is involved. This is primarily done for safety and easy use. Imagine a browser not having JavaScript? support or a user having it turned off. This would lead to a form that is not checked for it's contents and can be a potential security hole. There are no plans to add client side rules.</note>
+
+        <para>Up till now, we only discussed one specific rule, namely the required rule. There are of course a lot more rules which you can use. Here's the complete list:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">required:</emphasis> value is not empty</listitem>
+            <listitem><emphasis role="bold">maxlength:</emphasis> value must not exceed n characters</listitem>
+            <listitem><emphasis role="bold">minlength:</emphasis> value must have more than n characters</listitem>
+            <listitem><emphasis role="bold">rangelength:</emphasis> value must have between m and n characters</listitem>
+            <listitem><emphasis role="bold">regex:</emphasis> value must pass the regular expression</listitem>
+            <listitem><emphasis role="bold">email:</emphasis> value is a correctly formatted email</listitem>
+            <listitem><emphasis role="bold">ip</emphasis> value is a correctly formatted IP address</listitem>
+            <listitem><emphasis role="bold">lettersonly:</emphasis> value must contain only letters</listitem>
+            <listitem><emphasis role="bold">character</emphasis> value must contain only one single character, and no numbers</listitem>
+            <listitem><emphasis role="bold">alphanumeric:</emphasis> value must contain only letters and numbers</listitem>
+            <listitem><emphasis role="bold">numeric:</emphasis> value must be a number</listitem>
+            <listitem><emphasis role="bold">digit:</emphasis> value must be a digit (0-9)</listitem>
+            <listitem><emphasis role="bold">nopunctuation:</emphasis> value must not contain punctuation characters</listitem>
+            <listitem><emphasis role="bold">nonzero:</emphasis> value must be a number not starting with 0</listitem>
+            <listitem><emphasis role="bold">exact:</emphasis> value must be exactly the same as the rule option</listitem>
+            <listitem><emphasis role="bold">in_array:</emphasis> value must be part of the array specified as the rule option</listitem>
+            <listitem><emphasis role="bold">not_in_array:</emphasis> value must not be part of the array specified as the rule option</listitem>
+            <listitem><emphasis role="bold">i_in_array:</emphasis> value must be part of the array specified as the rule option (case insensitive)</listitem>
+            <listitem><emphasis role="bold">i_not_in_array:</emphasis> value must not be part of the array specified as the rule option (case insensitive)</listitem>
+            <listitem><emphasis role="bold">maxwords:</emphasis> this rule checks if a string contains the maximum specified words or not.</listitem>
+            <listitem><emphasis role="bold">minwords:</emphasis> this rule checks if a string contains the minimum specified words or not.</listitem>
+            <listitem><emphasis role="bold">callback:</emphasis> this rule allows to use an external function/method for validation, either by registering it or by passing a callback as a format parameter.</listitem>
+        </itemizedlist>
+
+        <para>There are also some rules that apply specifically to file uploads:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">uploadedfile:</emphasis> Required file upload</listitem>
+            <listitem><emphasis role="bold">maxfilesize:</emphasis> The file size must not exceed the given number of bytes</listitem>
+            <listitem><emphasis role="bold">mimetype:</emphasis> The file must have a correct mimetype</listitem>
+            <listitem><emphasis role="bold">filename:</emphasis> The filename must match the given regex</listitem>
+            <listitem><emphasis role="bold">extension:</emphasis> The filename must match the indicated extension</listitem>
+        </itemizedlist>
+
+        <para>We also have three rules that are used by the date/time form elements:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">date:</emphasis> value should be a valid date</listitem>
+            <listitem><emphasis role="bold">time:</emphasis> value should be a valid time</listitem>
+            <listitem><emphasis role="bold">datetime:</emphasis> value should be a valid datetime</listitem>
+        </itemizedlist>
+
+        <note>Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</note>
+
+        <note>If you apply one of the standard rules to a file element, it will apply to the filename of the file that was entered in the file text field. It will not apply to the contents of the uploaded file.</note>
+
+        <para>There are also two other types of rules: form rules and compare rules.</para>
+
+        <para>Form rules can be added using the addFormRule function. This function call takes one argument, which is a callback function. When the form rule get's executed, it will execute the indicated function passing the form values as an associative array. If the function returns true, the validation is passed, otherwise, the validation fails. This is demonstrated by the following code sample:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_006.xml" />
+
+        <para>There are also what we call compare rules, which are used to compare the values of form elements with each other. The compare rules are added using the addCompareRule function. This function takes the following arguments:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">$element</emphasis> The array of elements to compare with each other.</listitem>
+            <listitem><emphasis role="bold">$rule</emphasis> The name of the rule to apply. This can be "equal", "asc" or "desc".</listitem>
+            <listitem><emphasis role="bold">$error</emphasis> The error message to show if an error occured.</listitem>
+        </itemizedlist>
+
+        <para>If you use the "equal" rule, the values for all the different form elements should be the same. For the "asc" rule, the first element should be smaller than the second one, the second element smaller than the third one, ... The "desc" rule is the opposite of the "asc" rule.</para>
+
+        <para>The "asc" and "desc" rules are designed to be used with numeric values and date/time form elements.</para>
+
+        <para>The following code listing gives you an example on how to use the compare rules:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_007.xml" />
+
+        <para>Now that we assigned all the rules and filters to the form, we can use the validate function to check if the input from our form was validated succesfully. Only if this condition is met, we will do something with the data of the form. This is also called "processing the form" which is discussed in the next section.</para>
+
+    </sect1>
+
+    <sect1 id="ydform_processing">
+
+        <title>Processing forms</title>
+
+        <para>For the actual processing of the forms, there are only two functions you will really use a lot. This is the class function getValue from the YDForm class and it's companion function called getValues.</para>
+
+        <para>The getValue function will export the value of a named form element. Remember that this function will export the cleaned-up value of the form element. This means that the return value of this function will also have all the possible form filters applied before it's returned.</para>
+
+        <para>The getValues will do the same as the exportValue function but will return the values for all the elements in the form. Unfortunately, this function does not work with file uploads. Again, the values returned by this function will also have all the necessary filters applied to them.</para>
+
+    </sect1>
+
+    <sect1 id="ydform_renderes">
+
+        <title>Using form renderers</title>
+
+        <para>Formatting forms in templates can be a huge task if you need to do it with a lot of forms. Since most of the forms in a website have teh same layout, you can use a form renderer to automate the process.</para>
+
+        <para>A form renderer is instantiated with a reference to the form object, and only exposes one function, which is called render. This function reads in the form object, renders it and returns the rendered form.</para>
+
+        <para>You can easily create your own form renderer by implementing the following API:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_008.xml" />
+
+        <para>Before you can use the form renderer, you need to register it with the form class. This is done with the following function call:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_009.xml" />
+
+        <para>To get the rendered output of a form with a named renderer, you can use the render function from the YDForm object:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydform_010.xml" />
+
+        <para>Form renderers are an excellent tool to automate the layout of your forms, and it makes sure that all the forms in your web application have a consistent look.</para>
+
+    </sect1>
+
+</chapter>

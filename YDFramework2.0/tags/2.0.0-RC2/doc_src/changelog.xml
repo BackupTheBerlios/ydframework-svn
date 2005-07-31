@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="changelog">
+
+    <title>Release History</title>
+
+    <para>This is the overview of the different releases.</para>
+
+    <sect1 id="changelog_ydf_v2_0rc2">
+
+        <title>Yellow Duck Framework 2.0 Release Candidate 2</title>
+
+        <para>Released on: 31 july 2005</para>
+        <para>Build number: 1321</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Made a lot of performance improvements and bug fixes.</listitem>
+            <listitem>Added the weblog example application.</listitem>
+            <listitem>Improved the date/time form elements.</listitem>
+            <listitem>Improved the YDDatabaseObject class.</listitem>
+            <listitem>The YDForm::getValue and YDForm::getValues now return additional information.</listitem>
+            <listitem>Added the YDFSDirectory::has function.</listitem>
+            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function.</listitem>
+            <listitem>Added the YDBrowserInfo::getBrowserLanguagesAndCountries function.</listitem>
+            <listitem>Added an option to create addons for the framework.</listitem>
+            <listitem>Added the maxwords and minwords validation rules.</listitem>
+            <listitem>Added an option to mark fields as mandatory.</listitem>
+            <listitem>Added support for raw values for compound form elements.</listitem>
+            <listitem>Added the i_in_array and i_not_in_array validation rules.</listitem>
+            <listitem>Added the errors_unique_messages property to the array version of a form.</listitem>
+            <listitem>Added the YDFSDirectory::getFilesRecursively function.</listitem>
+            <listitem>Added a way to register custom database drivers with YDDatabase.</listitem>
+            <listitem>Added the YDGraph addon.</listitem>
+            <listitem>Added the YDXMLForm addon.</listitem>
+            <listitem>Added the YDMysqlDump addon.</listitem>
+            <listitem>Added the YD_FW_COPYRIGHT constant.</listitem>
+            <listitem>Added the IP form rule.</listitem>
+            <listitem>Added the setDefault function to the YDForm class.</listitem>
+            <listitem>Added a function to YDRequest to get the current URL without the query string.</listitem>
+            <listitem>Added the YDFSFile::getBaseNameNoExt function.</listitem>
+            <listitem>Added the YDUrl::merge function.</listitem>
+            <listitem>Added sorting options to the YDFSDirectory->getContents function.</listitem>
+            <listitem>Added support for callbacks in YDDatabaseObject when default actions are executed.</listitem>
+            <listitem>Added getDefaults, getDefault and getModifiedValues to YDForm.</listitem>
+            <listitem>Added the utf8_decode form filter.</listitem>
+            <listitem>Added the utf8_decode form filter.</listitem>
+            <listitem>Added an option to the YDFSFile constructor to force the creation of a file if it doesn't exist.</listitem>
+            <listitem>Added the getDatabase, getUser, getPassword, getHost and getOptions methods to the YDDatabaseDriver class.</listitem>
+            <listitem>Added an example on using AJAX with the Yellow Duck Framework.</listitem>
+            <listitem>Added support for drivers in YDSqlQuery.</listitem>
+            <listitem>Added the getDriver method to all database drivers.</listitem>
+            <listitem>Added the YDDate class.</listitem>
+            <listitem>Added the YDStringUtil::ipcmp function.</listitem>
+            <listitem>Added the set, exists and get functions to the YDBase class.</listitem>
+            <listitem>Added the YDStringUtil::encodeToAscii function.</listitem>
+            <listitem>Added YDDateFormat class to YDDate.php to define and change formats more easily.</listitem>
+            <listitem>Added sorting options to the YDRecordSet class.</listitem>
+            <listitem>Added the getLastUrl and getFirstUrl functions to YDRecordSet.</listitem>
+            <listitem>Added several new functions to the YDFileSystem classes.</listitem>
+            <listitem>Added the YDFSDirectory::getSize function.</listitem>
+            <listitem>Added the YDEncryption class that implements a simple encryption mechanism.</listitem>
+            <listitem>Added the YDPersistent class.</listitem>
+            <listitem>Added the YDFSFile::rename and added the inline option to YDFSFile::download.</listitem>
+            <listitem>Added support for PHP templates.</listitem>
+            <listitem>The YDFSImage class now uses it's own logic to create thumbnails instead of using phpThumb.</listitem>
+            <listitem>Added YDFormElement_Span class.</listitem>
+            <listitem>Added the clear methods to YDEmail and fixed the setSMTP method.</listitem>
+            <listitem>Added the import feature to YDForm.</listitem>
+            <listitem>Added a script to automatically make builds of releases and revisions.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v2_0rc1">
+
+        <title>Yellow Duck Framework 2.0 Release Candidate 1</title>
+
+        <para>Released on: 25 january 2005</para>
+        <para>Build number: 864</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Replaced SmartyLight with the full blown Smarty template engine</listitem>
+            <listitem>Brand new documentation based on DocBook XML/XSL. We now have HTML and PDF documentation.</listitem>
+            <listitem>Completely reworked YDEmail class which is now powered by phpMailer.</listitem>
+            <listitem>Added the possibility to do logging to a file using the YDLog module</listitem>
+            <listitem>Added the YDSqlQuery class which gives you an object oriented way of creating SQL queries</listitem>
+            <listitem>Fixed a whole number of bugs in the validation rules and added quite a number of new validation rules. The following rules were added:
+                <itemizedlist spacing="compact">
+                    <listitem>character</listitem>
+                    <listitem>digit</listitem>
+                    <listitem>in_array</listitem>
+                    <listitem>not_in_array</listitem>
+                    <listitem>exact</listitem>
+                </itemizedlist>
+            </listitem>
+            <listitem>Implemented recordset paging using the YDDatabaseDriver::getRecordsAsSet function returning a YDRecordSet object.</listitem>
+            <listitem>Added the possibility to change URLs with the YDUrl class.</listitem>
+            <listitem>Added the YDPath module containing a whole number of frequently-used path operations.</listitem>
+            <listitem>YDDebugUtil can now output as HTML</listitem>
+            <listitem>The YDTimer class now supports markers</listitem>
+            <listitem>Removed our custom template caching in favor of the Smarty caching functions</listitem>
+            <listitem>Documented the YDCart class</listitem>
+            <listitem>Added the delete and setContents functions to the YDFSFile and YDFSDirectory classes</listitem>
+            <listitem>Removed the deprecated YDTemplate::assignObject function. You should use YDTemplate::assign instead.</listitem>
+            <listitem>Renamed the constants in the YDEmail class so that they start with "YD_" instead of with "YD".</listitem>
+            <listitem>Fixed a number of bugs in the YDStringUtil::formatFilesize function</listitem>
+            <listitem>Added: YDStringUtil::normalizeNewlines</listitem>
+            <listitem>Added: YDStringUtil::removeWhiteSpace</listitem>
+            <listitem>Documented the YDStringUtil class</listitem>
+            <listitem>Removed the YDFSFile::toArray, YDFSImage::toArray and YDFSDirectory::toArray functions.</listitem>
+            <listitem>Removed the YDBase::toArray functions.</listitem>
+            <listitem>Removed the YDDatabase class constructor.</listitem>
+            <listitem>Added a new feature to YDForm: compare rules.</listitem>
+            <listitem>Added the executeDelete function to the YDDatabaseDriver class.</listitem>
+            <listitem>Improved the scripts for building the documentation.</listitem>
+            <listitem>Added the FAQ and Appendix C (How to build documentation) to the user guide.</listitem>
+            <listitem>The YDBrowserInfo class now recognizes FireFox as a separate browser.</listitem>
+            <listitem>Added an option to specify a template outside the template directory (as smarty supports it).</listitem>
+            <listitem>The debug function now use YD_CRLF instead of \n for the newline characters.</listitem>
+            <listitem>The logging functions are now able to wordwrap long lines if you define YD_LOG_WRAPLINES. This is off by default.</listitem>
+            <listitem>Fixed some bugs in the defaults for the YDValidateRules functions.</listitem>
+            <listitem>The YDForm::getValue and YDForm::getValues function now include a timestamp for date/time elements</listitem>
+            <listitem>The date/time form elements now can use an array as the default value as well as an integer.</listitem>
+            <listitem>Added the following methods to the YDBase class: getClassName, hasMethod, isSubClass, getAncestors, serialize</listitem>
+            <listitem>Added the YDConfig class that hold global configuration parameters.</listitem>
+            <listitem>The defaults for date/time elements can now be strings, integers, numeric values or integers</listitem>
+            <listitem>The setDefaults function can now be called before, during or after adding the elements</listitem>
+            <listitem>Added the YDLocale module which is a compatibility layer on top of the set_locale function</listitem>
+            <listitem>The YDFileSystem classes now have a move option to move the file/directory to a different place</listitem>
+            <listitem>Added the YDStringUtil::formatDate function</listitem>
+            <listitem>Reorganized the examples index</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v2_0b4">
+
+        <title>Yellow Duck Framework 2.0 beta 4</title>
+
+        <para>Released on: 22 october 2004</para>
+        <para>Build number: 582</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Added the removeElement function to the form class. </listitem>
+            <listitem>Added the label_html and error_html elements to the YDForm::toArray function result. </listitem>
+            <listitem>Added ignore patterns and class filters to the YDFSDirectory::getContents function. </listitem>
+            <listitem>Improved the speed of both the YDBBCode class and the YDStringUtil::encodeString functions. </listitem>
+            <listitem>Added the YDFormElement_DateSelect, YDFormElement_DateTimeSelect and YDFormElement_TimeSelect form elements. </listitem>
+            <listitem>Added support for null values in update and insert SQL statements in the YDDatabaseDriver class. </listitem>
+            <listitem>Added the YDImport function to include parts of the Yellow Duck Framework instead of relying on the include function from PHP. </listitem>
+            <listitem>Added the getBasename and getAbsolutepath functions to the YDFSDirectory class. </listitem>
+            <listitem>Added the createDirectory function to the YDFSDirectory class. </listitem>
+            <listitem>Added the YDCart class that describes a shopping cart. </listitem>
+            <listitem>Added the deleteDirectory function to the YDFSDirectory class. </listitem>
+            <listitem>Added license information to the Yellow Duck Framework. </listitem>
+            <listitem>Added the download function to the YDFSFile class which forces the browser to download the file. </listitem>
+            <listitem>Fixed a huge number of smaller bugs (more info in the changelog)</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v2_0b3">
+
+        <title>Yellow Duck Framework 2.0 beta 3</title>
+
+        <para>Released on: 31 july 2004</para>
+        <para>Build number: 483</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>We are now sponsered by Red Carpet Host </listitem>
+            <listitem>The documentation is now completed. </listitem>
+            <listitem>Added options to log debugging info and log messages to a file. </listitem>
+            <listitem>Much nicer layout for some of the internal index pages and the index page of the examples. </listitem>
+            <listitem>Release history instead of the build logs. </listitem>
+            <listitem>Updated phpThumb to version 1.4.6. </listitem>
+            <listitem>YDFSDirectory::getContents is able to return custom objects now. </listitem>
+            <listitem>Removed the build directory as it was not needed anymore. </listitem>
+            <listitem>YDDatabaseDriver_mysql is no longer a separate include file, which increases performance (as most people tend to use MySQL? anyway). </listitem>
+            <listitem>The API of YDBrowserInfo was updated and it's now part of the YDUtil.php include file. </listitem>
+            <listitem>The template class is refactored and is no longer automatically instantiated with each request. Also caching is working fine now. An example for caching was added as well. </listitem>
+            <listitem>The Smarty Light libraries are updated to 2.2.0. </listitem>
+            <listitem>Added conditional HTTP using etags to the YDFeedCreator module (description) </listitem>
+            <listitem>Caching needs to be done with only a cache ID and not a filename (but both should be possible).</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v2_0b2">
+
+        <title>Yellow Duck Framework 2.0 beta 2</title>
+
+        <para>Released on: 18 july 2004</para>
+        <para>Build number: 450</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Switch from Smarty to Smarty Light for the template engine. </listitem>
+            <listitem>PHP 5 compatible, but doesn't yet take advantage of the new features. </listitem>
+            <listitem>All features from the underlying template engine are now available in the YDTemplate class. </listitem>
+            <listitem>Added constant YD_CRLF which contains the end of line appropriate for the current platform.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v2_0b1">
+
+        <title>Yellow Duck Framework 2.0 beta 1</title>
+
+        <para>Released on: 15 july 2004</para>
+        <para>Build number: 343</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>First public beta version</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="changelog_ydf_v1">
+
+        <title>Yellow Duck Framework 1.0</title>
+
+        <para>Released on: never</para>
+        <para>Build number: none</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Internal only version</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+</chapter>

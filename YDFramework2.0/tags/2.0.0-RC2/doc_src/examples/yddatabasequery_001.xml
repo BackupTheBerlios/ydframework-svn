@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: instantiating a YDDatabaseQuery instance</title>
+    <programlisting><![CDATA[<?php
+
+        // Include YDDatabase
+        YDInclude( 'YDDatabase.php' );
+        
+        // Include YDDatabaseQuery
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+
+?>]]></programlisting>
+</example>

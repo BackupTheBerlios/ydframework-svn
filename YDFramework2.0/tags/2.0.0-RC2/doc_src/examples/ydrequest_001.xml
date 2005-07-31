@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: index.php</title>
+    <programlisting>&lt;?php
+    
+    // Initialize the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' ); 
+    
+    // Inherit from the YDRequest class
+    class index extends YDRequest {
+
+        // This is the class constructor for our class.
+        function index() {
+
+            // Initialize the parent class.
+            $this->YDRequest();
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+    
+?&gt;</programlisting>
+</example>

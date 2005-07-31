@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the form array structure</title>
+    <programlisting><![CDATA[array(7) {
+  ["attribs"]=>
+  string(94) " name="firstForm" id="firstForm"
+    method="POST" action="/ydf/examples/test.php" target="_self""
+  ["tag"]=>
+  string(100) "<form name="firstForm" id="firstForm" method="POST"
+    action="/ydf/examples/test.php" target="_self"><input type="hidden"
+    name="PHPSESSID" value="d37da78c130376040a99404758f333c6" />"
+  ["requirednote"]=>
+  string(26) "Items in bold are required"
+  ["errors"]=>
+  array(0) {
+  }
+  ["name"]=>
+  array(9) {
+    ["name"]=>
+    string(4) "name"
+    ["value"]=>
+    string(8) "Joe User"
+    ["type"]=>
+    string(4) "text"
+    ["label"]=>
+    string(16) "Name:"
+    ["options"]=>
+    array(0) {
+    }
+    ["placeLabel"]=>
+    string(6) "before"
+    ["html"]=>
+    string(68) "<input size="50" type="text" name="firstForm_name"
+        value="Joe User">"
+    ["error"]=>
+    string(0) ""
+    ["required"]=>
+    bool(false)
+  }
+  ["desc"]=>
+  array(9) {
+    ["name"]=>
+    string(4) "desc"
+    ["value"]=>
+    string(0) ""
+    ["type"]=>
+    string(8) "textarea"
+    ["label"]=>
+    string(22) "Description:"
+    ["options"]=>
+    array(0) {
+    }
+    ["placeLabel"]=>
+    string(6) "before"
+    ["html"]=>
+    string(43) "<textarea name="firstForm_desc"></textarea>"
+    ["error"]=>
+    string(0) ""
+    ["required"]=>
+    bool(false)
+  }
+  ["cmdSubmit"]=>
+  array(9) {
+    ["name"]=>
+    string(9) "cmdSubmit"
+    ["value"]=>
+    string(4) "Send"
+    ["type"]=>
+    string(6) "submit"
+    ["label"]=>
+    string(0) ""
+    ["options"]=>
+    array(0) {
+    }
+    ["placeLabel"]=>
+    string(6) "before"
+    ["html"]=>
+    string(61) "<input type="submit" name="firstForm_cmdSubmit"
+        value="Send">"
+    ["error"]=>
+    string(0) ""
+    ["required"]=>
+    bool(false)
+  }
+}]]></programlisting>
+
+</example>

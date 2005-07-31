@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the result from the markers in the YDTimer class</title>
+    <programlisting><![CDATA[array (
+  '-- Start' =>
+  array (
+    0 => 0,
+    1 => 0,
+    2 => '-- Start',
+  ),
+  'Reading file' => 
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Reading file',
+  ),
+  'Finished reading file' =>
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Finished reading file',
+  ),
+  'YDBBCode object' =>
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'YDBBCode object',
+  ),
+  'Conversion to BBCode' =>
+  array (
+    0 => 0,
+    1 => 0,
+    2 => 'Conversion to BBCode',
+  ),
+)]]></programlisting>
+</example>

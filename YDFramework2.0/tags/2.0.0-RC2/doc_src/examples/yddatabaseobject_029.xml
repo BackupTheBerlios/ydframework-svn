@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: finding data using YDDatabaseObject</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set the user data
+    $user->id  = 123;
+
+    // Find rows with id=123
+    $rows = $user->find();
+
+    // This is the same as above
+    $rows = $user->findSql( "SELECT * FROM " . $user->getTable() . " WHERE id=123" );
+
+    // Using executeSql
+    $affected = $user->executeSql( "UPDATE " . $user->getTable() . " SET name = 'John'
+                                    WHERE id=123" );
+
+?>]]></programlisting>
+</example>

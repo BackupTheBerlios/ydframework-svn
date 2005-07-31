@@ -1,0 +1,39 @@
+<configuration>
+    <fonts>
+        <font  metrics-file="fonts/tahoma.xml"  
+               kerning="yes" 
+               embed-file="fonts/TAHOMA.TTF">
+            <font-triplet name="Tahoma" style="normal" weight="normal"/>
+        </font>
+        <font  metrics-file="fonts/tahoma-bold.xml"  
+               kerning="yes" 
+               embed-file="fonts/TAHOMABD.TTF">
+            <font-triplet name="Tahoma" style="normal" weight="bold"/>
+        </font>
+        <font  metrics-file="fonts/lucida_sans.xml"  
+               kerning="yes" 
+               embed-file="fonts/LSANS.TTF">
+            <font-triplet name="LucidaSans" style="normal" weight="normal"/>
+        </font>
+        <font  metrics-file="fonts/lucida_sans.xml"  
+               kerning="yes" 
+               embed-file="fonts/LSANS.TTF">
+            <font-triplet name="LucidaSans" style="italic" weight="normal"/>
+        </font>
+        <font  metrics-file="fonts/lucida_sans-bold.xml"  
+               kerning="yes" 
+               embed-file="fonts/LSANSD.TTF">
+            <font-triplet name="LucidaSans" style="normal" weight="bold"/>
+        </font>
+        <font  metrics-file="fonts/lucida_typewriter.xml"  
+               kerning="yes" 
+               embed-file="fonts/LTYPE.TTF">
+            <font-triplet name="LucidaTypewriter" style="normal" weight="normal"/>
+        </font>
+        <font  metrics-file="fonts/lucida_typewriter-bold.xml"  
+               kerning="yes" 
+               embed-file="fonts/LTYPEB.TTF">
+            <font-triplet name="LucidaTypewriter" style="normal" weight="bold"/>
+        </font>
+    </fonts>
+</configuration>

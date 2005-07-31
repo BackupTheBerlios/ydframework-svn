@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering relations</title>
+    <programlisting><![CDATA[<?php
+
+    // Register relations
+    $this->registerRelation( 'phone' );
+
+    // The second parameter sets the relation as a many-to-many relation
+    $this->registerRelation( 'group', true );
+
+    // In a many-to-many relation we need a middle table that cross-reference the other two tables
+    // The third parameter sets the foreign class name
+    // The fourth parameter sets the cross class name (the middle table)
+    $this->registerRelation( 'groups', true, 'group', 'user_group' );
+
+?>]]></programlisting>
+</example>

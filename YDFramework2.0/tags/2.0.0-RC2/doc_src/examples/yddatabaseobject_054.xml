@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the setForeignClass class</title>
+    <programlisting><![CDATA[<?php
+
+    class user extends YDDatabaseObject {
+
+        function user() {
+
+            // All other configuration
+            // ...
+
+            // Registering a relation
+            $phone = & $this->registerRelation( 'phone' );
+
+            // Sets the foreign class
+            // If not set, the class will try to call the phone class as it's the relation name
+            $phone->setForeignClass( 'phone' );
+
+            // Sets the foreign var
+            // If not set, the foreign class name is used
+            $phone->setForeignVar( 'phone' );
+
+            // Sets the foreign field
+            // The foreign class Fone must have a defined field called user_id.
+            $phone->setForeignKey( 'user_id' );
+
+            // Sets the foreign conditions
+            $phone->setForeignConditions( $phone->getForeignTable() . ".number != ''" );
+
+            // Sets the foreign join type
+            $phone->setForeignJoin( 'LEFT' );
+
+        }
+    }
+?>]]></programlisting>
+</example>

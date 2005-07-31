@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<appendix id="appendixB">
+
+    <title>How to get the latest source from SVN</title>
+
+        <para>This page explains how you can get the latest source from the SVN repository and also explains a little bit about the SVN repository.</para>
+
+        <sect1 id="appendixB_svn_details">
+
+            <title>SVN Repository details</title>
+
+            <para>Currently, the main repository is setup, and it's set to readonly (unless you have the right username and password).</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>SVN repository protocol: SVN</listitem>
+                <listitem>SVN repository host: svn.berlios.de</listitem>
+                <listitem>SVN repository url: svn://svn.berlios.de/ydframework/YDFramework2.0/</listitem>
+            </itemizedlist>
+
+            <para>If you want read/write access to the repository, please contact pieter@yellowduck.be and he will setup the account for you. You need to have a Berlios account to be able to join the project as a developer. More information can be found on <ulink url="http://developer.berlios.de/">developer.berlios.de</ulink>.</para>
+
+        </sect1>
+
+        <sect1 id="appendixB_svn_layout">
+
+            <title>SVN Repository layout</title>
+
+            <para>The layout of the SVN repository follows the standards as for any SVN repository. For each major release (e.g. YDFramework-1.0, YDFramework-2.0), a folder is setup in the SVN repository. For each of these folders, the structure is always the same:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>trunk: here you will find the very latest version of the source code</listitem>
+                <listitem>tags: here you will find all the released beta and full versions</listitem>
+                <listitem>branches: here you will find milestones and special versions</listitem>
+            </itemizedlist>
+
+            <para>To get the latest version of e.g. the Yellow Duck Framework version 2.0, you will issue the following command:</para>
+
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/trunk YDF2]]></programlisting>
+
+            <para>To get version 2.0 beta 2, you will use the following command:</para>
+
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
+
+        </sect1>
+
+        <sect1 id="appendixB_exporting_source">
+
+            <title>Exporting the latest source</title>
+
+            <para>Here's a transcript on how to get the latest source code from the SVN repository. You need to have the SubVersion application files installed to make this work.</para>
+
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/trunk YDF2]]></programlisting>
+
+        </sect1>
+
+        <sect1 id="appendixB_exporting_version">
+
+            <title>Exporting a specific named version</title>
+
+            <para>Here's a transcript on how to get a specific named version of the source code from the SVN repository. You need to have the SubVersion application files installed to make this work.</para>
+
+            <para>To get version 2.0 beta 2, you will use the following command:</para>
+
+            <programlisting><![CDATA[svn export -q svn://svn.berlios.de/ydframework/YDFramework2.0/tags/2.0.0-beta2 YDF2-2.0b2]]></programlisting>
+
+            <para>To get the list of all the existing named versions, you can execute the following command:</para>
+
+            <programlisting><![CDATA[svn list -v svn://svn.berlios.de/ydframework/YDFramework2.0/tags/]]></programlisting>
+
+            <para>The command above outputs the following:</para>
+
+            <programlisting><![CDATA[# svn list -v svn://svn.berlios.de/ydframework/YDFramework2.0/tags/
+    434 PClaerho            Jul 15 10:29 2.0.0-beta1/
+    450 PClaerho            Jul 18 19:33 2.0.0-beta2/
+    483 pieter              Jul 31 17:33 2.0.0-beta3/
+    583 pieter              Oct 22 20:07 2.0.0-beta4/]]></programlisting>
+
+        </sect1>
+
+        <sect1 id="appendixB_web_interface">
+
+            <title>Web interface to the SVN repository</title>
+
+            <para>As we are hosting the SVN repository on <ulink url="http://developer.berlios.de/projects/ydframework/">berlios.de</ulink>, we automatically have a web interface to the SVN repository. The web interface is available in two flavors:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>ViewCVS: <ulink url="http://svn.berlios.de/viewcvs/ydframework">http://svn.berlios.de/viewcvs/ydframework</ulink></listitem>
+                <listitem>WebSVN: <ulink url="http://svn.berlios.de/wsvn/ydframework">http://svn.berlios.de/wsvn/ydframework</ulink></listitem>
+            </itemizedlist>
+
+        </sect1>
+
+</appendix>

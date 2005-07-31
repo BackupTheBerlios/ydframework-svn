@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting the advanced options for a field</title>
+    <programlisting><![CDATA[<?php
+
+    // Register a field
+    $birthday = & $this->registerField( 'birthday' );
+
+    // Set the field as null
+    $birthday->setNull();
+
+    // Set the real column of the field
+    $birthday->setColumn( 'birthday' );
+
+    // Set the default value for the field
+    $birthday->setDefault( 19700101 );
+
+    // Set the callback method - this method has to be defined in the class
+    $birthday->setCallback( 'getAge' );
+
+?>]]></programlisting>
+</example>
