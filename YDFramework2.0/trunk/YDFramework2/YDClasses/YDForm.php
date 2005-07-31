@@ -949,7 +949,12 @@
             $instance = $this->getRenderer( $type );
 
             // Import the form
-            $this = $instance->import( $content, $options );
+            $new_this = $instance->import( $content, $options );
+
+            // Update the variables of the current object
+            foreach ( get_object_vars( $new_this ) as $key => $val ) {
+                $this->$key = $val;
+            }
 
         }
         
