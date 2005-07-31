@@ -102,7 +102,6 @@
 
                 // Update the datetimes
                 $values['created'] =  $values['created']['timestamp'];
-                $values['modified'] = $values['modified']['timestamp'];
 
                 // Update the database
                 $this->weblog->updateComment( $values );

@@ -71,7 +71,6 @@
 
                 // Update the datetimes
                 $values['created'] =  $values['created']['timestamp'];
-                $values['modified'] = $values['modified']['timestamp'];
 
                 // If there is an ID, we do an edit
                 if ( $values['id'] ) {

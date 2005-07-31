@@ -76,7 +76,6 @@
 
                 // Update the datetimes
                 $values['created'] =  $values['created']['timestamp'];
-                $values['modified'] = $values['modified']['timestamp'];
 
                 // Set the user
                 $values['user_id'] = $this->user['id'];
