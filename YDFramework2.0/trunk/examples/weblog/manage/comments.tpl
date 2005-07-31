@@ -44,8 +44,26 @@
         {/if}
     {/capture}
 
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+    {if $item}
+        <tr>
+            <th class="adminRowL" colspan="7">
+                {t w="item"}
+            </th>
+        </tr>
+        <tr>
+            <td class="adminRowL" colspan="7">
+                <a href="items.php?do=edit&id={$item.id}">{$item.title}</a>
+            </td>
+        </tr>
+
+        <tr>
+            <th class="adminRowL" colspan="7">
+                &nbsp;<br/>{t w="a_comments"}
+            </th>
+        </tr>
+    {/if}
     {if $comments->set}
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
             <th class="adminRowL" width="15%">{t w="author"}</th>
@@ -74,10 +92,25 @@
                 <p class="subline">{t w="total"}: {$comments->totalRows}</p>
             </td>
         </tr>
-        </table>
     {else}
-        <p>{t w="no_comments_found"}</p>
+        <tr>
+            <td class="adminRowL" colspan="7">{t w="no_comments_found"}</td>
+        </tr>
     {/if}
+
+    {if $item}
+        <tr>
+            <th colspan="7" class="adminRowL">
+                &nbsp;<br/>{t w="gallery"}
+            </th>
+        </tr>
+        <tr>
+            <td class="adminRowL" colspan="7">
+                <a href="items_gallery.php?id={$item.id}">{if $item.num_images > 0}{$item|@text_num_images:false}{else}<span class="disabled">0 {t w="images" lower=true}</span>{/if}</a>
+            </td>
+        </tr>
+    {/if}
+    </table>
 
 {/if}
 

@@ -85,6 +85,7 @@
 {/if}
 
 {if $YD_ACTION == 'edit'}
+
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
@@ -121,6 +122,26 @@
             <tr>
                 <td class="adminRowL">{$form.created.label_html}</td>
                 <td class="adminRowL">{$form.created.html}</td>
+            </tr>
+            <tr>
+                <th class="adminRowL" colspan="3">
+                    &nbsp;<br/>{t w="a_comments"}
+                </th>
+            </tr>
+            <tr>
+                <td class="adminRowL" colspan="2">
+                    <a href="comments.php?id={$item.id}">{if $item.num_comments > 0}{$item|@text_num_comments:false}{else}<span class="disabled">0 {t w="comments" lower=true}</span>{/if}</a>
+                </td>
+            </tr>
+            <tr>
+                <th class="adminRowL" colspan="3">
+                    &nbsp;<br/>{t w="gallery"}
+                </th>
+            </tr>
+            <tr>
+                <td class="adminRowL" colspan="2">
+                    <a href="items_gallery.php?id={$item.id}">{if $item.num_images > 0}{$item|@text_num_images:false}{else}<span class="disabled">0 {t w="images" lower=true}</span>{/if}</a>
+                </td>
             </tr>
         </table>
         {$form.id.html}

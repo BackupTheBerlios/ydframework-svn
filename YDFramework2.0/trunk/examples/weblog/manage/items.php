@@ -63,6 +63,9 @@
                 // Get the comment by ID
                 $defaults = $this->weblog->getItemById( $id );
 
+                // Assign the values to the template
+                $this->tpl->assign( 'item', $defaults );
+
                 // Set the defaults
                 $form->setDefaults( $defaults );
 
