@@ -65,7 +65,7 @@
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
         {foreach from=$pages->set item="page"}
-            <tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$page.created|date:'%Y/%m/%d %H:%M'}</td>
                 <td class="adminRowL">{$page.user_name}</td>
                 <td class="adminRowL">{$page.title}</td>

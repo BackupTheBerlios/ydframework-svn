@@ -35,7 +35,7 @@
             <th class="adminRowR" width="25%" style="vertical-align: bottom;">{t w="actions"}</th>
         </tr>
         {foreach from=$users item="usr"}
-            <tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$usr.name}</td>
                 <td class="adminRowL"><a href="mailto:{$usr.email}">{$usr.email}</a></td>
                 <td class="adminRowL">{$usr.created|date|lower}</td>

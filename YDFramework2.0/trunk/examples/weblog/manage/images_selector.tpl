@@ -20,6 +20,16 @@
             return false;
         {literal}}{/literal}
 
+        {literal}function YDRowMouseOver( obj ) {{/literal}
+            document.getElementById( obj + '_1' ).bgColor = '#EDF3FE';
+            document.getElementById( obj + '_2' ).bgColor = '#EDF3FE';
+        {literal}}{/literal}
+
+        {literal}function YDRowMouseOut( obj ) {{/literal}
+            document.getElementById( obj + '_1' ).bgColor = '#FFFFFF';
+            document.getElementById( obj + '_2' ).bgColor = '#FFFFFF';
+        {literal}}{/literal}
+
     //-->
     </script>
 
@@ -64,57 +74,57 @@
         {$form.action.html}
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">{t w="upload_image"}</th>
+                <th class="adminRowLG" colspan="5">{t w="select_image"}</th>
             </tr>
             <tr>
-                <td class="adminRowL" width="640">{$form.image.html}</td>
-                <td class="adminRowR" width="160">{$form._cmdSubmit.html}</td>
+                <td class="adminRowL" colspan="4">{$form.image.html}</td>
+                <td class="adminRowR" colspan="1">{$form._cmdSubmit.html}</td>
             </tr>
+        {if $images->set}
+            {$browsebar}
+            {foreach from=$images->set item="image_row"}
+            <tr>
+                {foreach from=$image_row item="image"}
+                    <td width="20%" class="adminRowC" style="border: 0px solid black;vertical-align: middle;" height="100"
+                     {if $image}id="{$image->relative_path}_1" onMouseOver="YDRowMouseOver('{$image->relative_path|addslashes}');" onMouseOut="YDRowMouseOut('{$image->relative_path|addslashes}');"{/if}
+                    >
+                        {if $image}
+                            <a href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )"><img src="{$YD_SELF_SCRIPT}?do=thumbnail&id={$image->relative_path}" border="0"></a>
+                        {else}
+                            &nbsp;
+                        {/if}
+                    </td>
+                {/foreach}
+            </tr>
+            <tr>
+                {foreach from=$image_row item="image"}
+                    <td width="20%" class="adminRowC"
+                     {if $image}id="{$image->relative_path}_2" onMouseOver="YDRowMouseOver('{$image->relative_path|addslashes}');" onMouseOut="YDRowMouseOut('{$image->relative_path|addslashes}');"{/if}
+                    >
+                        {if $image}
+                            <a class="subline" href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )">{$image->relative_path}</a>
+                        {else}
+                            &nbsp;
+                        {/if}
+                    </td>
+                {/foreach}
+            </tr>
+            {/foreach}
+            {$browsebar}
+            <tr>
+                <td class="adminRowLNB" colspan="5">
+                    <p class="subline">{t w="total"}: {$images->totalRows}</p>
+                </td>
+            </tr>
+        {else}
+            <tr>
+                <td class="adminRowL" colspan="5">{t w="no_images_found"}</td>
+            </tr>
+        {/if}
+
         </table>
+
     {$form.endtag}
-
-    {if $images->set}
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
-        {$browsebar}
-        {foreach from=$images->set item="image_row"}
-        <tr>
-            {foreach from=$image_row item="image"}
-                <td width="20%" class="adminRowC" style="border: 0px solid black;vertical-align: middle;" height="100">
-                    {if $image}
-                        <a href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )"><img src="{$YD_SELF_SCRIPT}?do=thumbnail&id={$image->relative_path}" border="0"></a>
-                    {else}
-                        &nbsp;
-                    {/if}
-                </td>
-            {/foreach}
-        </tr>
-        <tr>
-            {foreach from=$image_row item="image"}
-                <td width="20%" class="adminRowC">
-                    {if $image}
-                        <a class="subline" href="javascript:void( addItem( '{$image->relative_path|addslashes}' ) )">{$image->relative_path}</a>
-                        {*
-                        <br/>
-                        <span class="subline">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</a>
-                        *}
-                    {else}
-                        &nbsp;
-                    {/if}
-                </td>
-            {/foreach}
-        </tr>
-        {/foreach}
-        {$browsebar}
-        <tr>
-            <td class="adminRowLNB" colspan="5">
-                <p class="subline">{t w="total"}: {$images->totalRows}</p>
-            </td>
-        </tr>
-        </table>
-    {else}
-        <p>{t w="no_images_found"}</p>
-    {/if}
-
 
 </body>
 

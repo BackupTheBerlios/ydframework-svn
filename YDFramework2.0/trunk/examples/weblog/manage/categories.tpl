@@ -67,7 +67,7 @@
             </tr>
             {$browsebar}
             {foreach from=$categories->set item="category"}
-                <tr>
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL">{$category.title}</td>
                     <td class="adminRowR">{$category.num_items}</td>
                     <td class="adminRowR">

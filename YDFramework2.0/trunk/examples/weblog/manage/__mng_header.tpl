@@ -13,6 +13,14 @@
             return confirm( '{t w="confirm_delete"}\n\n"' + img + '"?');
         {literal}}{/literal}
 
+        {literal}function YDRowMouseOver( obj ) {{/literal}
+            obj.bgColor = '#EDF3FE';
+        {literal}}{/literal}
+
+        {literal}function YDRowMouseOut( obj ) {{/literal}
+            obj.bgColor = '#FFFFFF';
+        {literal}}{/literal}
+
     //-->
     </script>
 

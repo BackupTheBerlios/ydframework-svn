@@ -76,7 +76,7 @@
         </tr>
         {$browsebar}
         {foreach from=$comments->set item="comment"}
-            <tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$comment.created|date:'%Y/%m/%d %H:%M'}</td>
                 <td class="adminRowL">{$comment.username}</td>
                 <td class="adminRowL">{$comment.comment|bbcode|strip_tags|truncate}</td>

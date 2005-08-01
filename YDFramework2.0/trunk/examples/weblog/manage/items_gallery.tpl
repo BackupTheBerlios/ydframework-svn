@@ -90,7 +90,7 @@
             </tr>
             {$browsebar}
             {foreach from=$images->set item="image"}
-                <tr>
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL" valign="top">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</td>
                     <td class="adminRowL" valign="top">
                         <img src="../{$uploads_dir}/{$image->relative_path_s}" alt="{$image->getBaseName()}">

@@ -72,7 +72,7 @@
             </tr>
             {$browsebar}
             {foreach from=$images->set item="image"}
-                <tr>
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL" valign="top">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</td>
                     <td class="adminRowL" valign="top">
                         <img src="{$YD_SELF_SCRIPT}?do=thumbnailsmall&id={$image->getBaseName()}" alt="{$image->getBaseName()}">

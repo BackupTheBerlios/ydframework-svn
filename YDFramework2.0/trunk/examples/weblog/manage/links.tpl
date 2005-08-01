@@ -65,7 +65,7 @@
             <th class="adminRowR" width="20%">{t w="actions"}</th>
         </tr>
         {foreach from=$links->set item="link"}
-            <tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$link.title}</td>
                 <td class="adminRowL"><a href="{$link.url}" target="_blank">{$link.url}</a></td>
                 <td class="adminRowR">{$link.num_visits}</td>

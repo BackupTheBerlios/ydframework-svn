@@ -15,15 +15,15 @@
         <tr>
             <th class="adminRowLG" colspan="3">&raquo; {t w="a_cleanup_cache"}</th>
         </tr>
-        <tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL" width="30">{$form.cache_tmb.html}</td>
             <td class="adminRowL" width="670">{$form.cache_tmb.label_html}</td>
         </tr>
-        <tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{$form.cache_web.html}</td>
             <td class="adminRowL">{$form.cache_web.label_html}</td>
         </tr>
-        <tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{$form.cache_tpl.html}</td>
             <td class="adminRowL">{$form.cache_tpl.label_html}</td>
         </tr>

@@ -66,7 +66,7 @@
         </tr>
         {$browsebar}
         {foreach from=$items->set item="item"}
-            <tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$item.created|date:'%Y/%m/%d %H:%M'}</td>
                 <td class="adminRowL">{$item.user_name}</td>
                 <td class="adminRowL">{$item.title}</td>
