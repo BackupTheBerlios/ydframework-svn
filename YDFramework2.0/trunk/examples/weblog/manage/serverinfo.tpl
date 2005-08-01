@@ -56,7 +56,11 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; PHP</th>
+        <th class="adminRowLG">&raquo; PHP</th>
+        <th class="adminRowLGR">
+            <a href="{$YD_SELF_SCRIPT}?do=phpinfo"><img src="images/more_details.gif" border="0" /></a>
+            <a href="{$YD_SELF_SCRIPT}?do=phpinfo"><b>{t w="full_php_info"}</b></a>
+        </th>
     </tr>
     <tr>
         <td class="adminRowL" width="300"><p>PHP {t w="version"}</td>
@@ -86,7 +90,5 @@
         </tr>
     {/foreach}
 </table>
-
-<p><a href="{$YD_SELF_SCRIPT}?do=phpinfo" target="_blank">{t w="full_php_info"}</a></p>
 
 {include file="__mng_footer.tpl"}

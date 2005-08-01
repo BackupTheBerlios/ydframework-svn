@@ -5,7 +5,7 @@
 {if $items}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_items"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; <a href="items.php"><b>{t w="a_items"}</b></a></td>
         <th class="adminRowLGR">
             <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
             <a href="items.php?do=edit"><b>{t w="add_item"}</b></a>
@@ -41,10 +41,11 @@
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</td>
+        <th class="adminRowLG">&raquo; <a href="serverinfo.php"><b>{t w="a_server_info"}</b></a></td>
+        <th class="adminRowLGR"><a href="serverinfo.php"><img src="images/more_details.gif" border="0" /></a></td>
     </tr>
     <tr>
-        <td class="adminRowL" width="300">{t w="user"}</td>
+        <td class="adminRowL" width="300">{t w="username"}</td>
         <td class="adminRowL" width="400">{$user.name|lower}</td>
     </tr>
     <tr>
@@ -56,7 +57,8 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_statistics"}</td>
+        <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></td>
+        <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></td>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{t w="totalItems"}</td>

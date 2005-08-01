@@ -41,7 +41,7 @@
                 {if $user.name}
                     {t w="user"}: <b>{$user.name|lower}</b> |
                 {/if}
-                {t w="server"}:
+                {t w="server" lower="yes"}:
                 <a href="http://{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}" class="langRow" target="_blank"><b>{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</b></a>
             </p>
         </td>

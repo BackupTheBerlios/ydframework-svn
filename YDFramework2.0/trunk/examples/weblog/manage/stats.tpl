@@ -38,8 +38,12 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">
-                &raquo; {t w="hits_last_6_months"} (<a href="{$YD_SELF_SCRIPT}?do=showMonths"><b>{t w="all_months"}</b></a>)
+            <th class="adminRowLG">
+                &raquo; {t w="hits_last_6_months"}
+            </th>
+            <th colspan="2" class="adminRowLGR">
+                <a href="{$YD_SELF_SCRIPT}?do=showMonths"><img src="images/more_details.gif" border="0" /></a>
+                <a href="{$YD_SELF_SCRIPT}?do=showMonths"><b>{t w="all_months"}</b></a>
             </th>
         </tr>
         {foreach from=$last6Months item="last6Month"}
@@ -54,8 +58,12 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">
-                &raquo; {t w="hits_last_7_days"} (<a href="{$YD_SELF_SCRIPT}?do=showDays"><b>{t w="all_days"}</b></a>)
+            <th class="adminRowLG">
+                &raquo; {t w="hits_last_7_days"}
+            </th>
+            <th colspan="2" class="adminRowLGR">
+                <a href="{$YD_SELF_SCRIPT}?do=showDays"><img src="images/more_details.gif" border="0" /></a>
+                <a href="{$YD_SELF_SCRIPT}?do=showDays"><b>{t w="all_days"}</b></a>
             </th>
         </tr>
         {foreach from=$last7Days item="last7Day"}
@@ -70,8 +78,10 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">
-                &raquo; {t w="top_10_urls"} (<a href="{$YD_SELF_SCRIPT}?do=showUrls"><b>{t w="all_urls"}</b></a>)
+            <th class="adminRowLG">&raquo; {t w="top_10_urls"}</th>
+            <th colspan="2" class="adminRowLGR">
+                <a href="{$YD_SELF_SCRIPT}?do=showUrls"><img src="images/more_details.gif" border="0" /></a>
+                <a href="{$YD_SELF_SCRIPT}?do=showUrls"><b>{t w="all_urls"}</b></a>
             </th>
         </tr>
         {foreach from=$top10Urls item="top10Url"}
