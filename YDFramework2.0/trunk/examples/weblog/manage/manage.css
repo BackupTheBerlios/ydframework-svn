@@ -226,13 +226,13 @@ td.leftCol {
 
 td.adminGraphD {
 	background: url(images/default-bg.gif);
-	background-position: 0% 50%;
+	background-position: 0% 100%;
 	background-repeat: repeat-x;
 }
 
 td.adminGraphL {
 	background: url(images/nav-bg.gif);
-	background-position: 0% 50%;
+	background-position: 0% 100%;
 	background-repeat: repeat-x;
 }
 
