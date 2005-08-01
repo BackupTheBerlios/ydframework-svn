@@ -77,7 +77,7 @@ textarea.bbtextarea {
 }
 
 td.bbtoolbar {
-    background-color: #EEEEEE;
+	background: url(images/nav-bg-editor.gif);
 }
 
 select.tfS {
