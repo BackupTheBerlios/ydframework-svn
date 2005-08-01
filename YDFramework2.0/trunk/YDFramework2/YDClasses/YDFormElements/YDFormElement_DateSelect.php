@@ -213,6 +213,21 @@
         }
 
         /**
+         *  Function to set the attribute of a form element
+         *
+         *  @param  $key    The name of the attribute
+         *  @param  $val    The value of the attribute
+         */
+        function setAttribute( $key, $val ) {
+
+            $this->_attributes[$key] = $val;
+            
+            $this->day->setAttribute( $key, $val );
+            $this->month->setAttribute( $key, $val );
+            $this->year->setAttribute( $key, $val );
+        }
+
+        /**
          *	This function will return the element as HTML.
          *
          *	@returns	The form element as HTML text.
