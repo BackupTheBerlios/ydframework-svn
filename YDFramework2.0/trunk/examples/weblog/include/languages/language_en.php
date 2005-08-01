@@ -280,4 +280,11 @@ $GLOBALS['t']['item'] = 'Item';
 $GLOBALS['t']['latest_items'] = 'Latest items';
 $GLOBALS['t']['overview'] = 'Overview';
 
+// manage/dbbackup.tpl
+$GLOBALS['t']['a_db_backup'] = 'Database backup';
+$GLOBALS['t']['bck_name'] = 'Database backup filename';
+$GLOBALS['t']['gz_compress'] = 'Compress backup using GZip compression';
+$GLOBALS['t']['backup'] = 'Backup';
+$GLOBALS['t']['err_bck_name'] = 'Database backup filename is required';
+
 ?>

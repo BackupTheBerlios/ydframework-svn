@@ -20,6 +20,7 @@
 
             // Create the YDMysqlDump object
             $this->dump = new YDMysqlDump( $this->db );
+
         }
 
         // Default action

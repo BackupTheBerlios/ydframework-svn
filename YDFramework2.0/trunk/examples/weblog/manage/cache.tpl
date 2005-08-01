@@ -31,5 +31,4 @@
     <p>{$form._cmdSubmit.html}</p>
 {$form.endtag}
 
-
 {include file="__mng_footer.tpl"}

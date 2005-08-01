@@ -91,6 +91,7 @@
                 <tr>
                     <td class="adminRowL">
                         <b>{t w="h_maintenance"}</b><br/>
+                        &raquo; <a href="dbbackup.php">{t w="a_db_backup"}</a><br/>
                         &raquo; <a href="cache.php">{t w="a_cleanup_cache"}</a><br/>
                         &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
                     </td>
