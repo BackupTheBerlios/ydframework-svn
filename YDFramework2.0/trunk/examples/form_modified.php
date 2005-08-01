@@ -45,6 +45,11 @@
             $form->setDefaults( array( 'radio1' => 1, 'radio2' => 2, 'text1' => 'my text one', 'select' => 1, 'checkbox1' => 'on' ) );
             
             if ( $form->validate() ) {
+                
+                YDDebugUtil::dump( $form->isModified( 'text1' ), 'Was text1 modified?' );
+                YDDebugUtil::dump( $form->isModified( 'checkbox1' ), 'Was checkbox1 modified?' );
+                YDDebugUtil::dump( $form->isModified( 'select' ), 'Was select modified?' );
+                
                 YDDebugUtil::dump( $form->getDefaults(), 'Form default values' );
                 YDDebugUtil::dump( $form->getModifiedValues(), 'Form modified values' );
                 YDDebugUtil::dump( $form->getValues(), 'Form values' );

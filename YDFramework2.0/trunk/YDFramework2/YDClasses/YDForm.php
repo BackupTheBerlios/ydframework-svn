@@ -675,6 +675,21 @@
         }
 
         /**
+         *  This function will return if an element have been modified from it's default value.
+         *
+         *  @param $element  The element name.
+         *
+         *  @returns  A boolean indicating if the element value was modified.
+         */
+        function isModified( $name ) {
+            if ( $this->isSubmitted() ) {
+                $element = & $this->getElement( $name );
+                return $element->isModified();
+            }
+            return false;
+        }
+
+        /**
          *  This function will return true if the form is valid. If not, it will return false.
          *
          *  If no rules for the form, the form is considered to be valid.
