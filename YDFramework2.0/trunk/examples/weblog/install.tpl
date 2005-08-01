@@ -12,10 +12,15 @@
 
     <table width="100%" cellspacing="0" cellpadding="18" border="0">
     <tr>
-        <td class="topRow" colspan="2">
-            <p class="title">{$YD_FW_NAME} - Installer</p>
+        <td class="topRow">
+            <p class="titleTop">{$YD_FW_NAME} - Installer</p>
+        </td>
+        <td class="topRowR">
+            <p class="textTop">{$YD_FW_NAMEVERS}</p>
         </td>
     </tr>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="18" border="0">
     <tr>
         <td class="langRowL">
             <p class="langRow">
@@ -50,7 +55,7 @@
 
                         <table width="700" cellspacing="0" cellpadding="0" border="0">
                             <tr>
-                                <th colspan="3" class="adminRowL">Database settings</td>
+                                <th colspan="3" class="adminRowLG">Database settings</td>
                             </tr>
                             <tr>
                                 <td class="adminRowL" width="300">{$form.db_host.label_html}</td>
@@ -74,8 +79,9 @@
                             </tr>
                         </table>
                         <table width="700" cellspacing="0" cellpadding="0" border="0">
+                            <tr><td colspan="3">&nbsp;</td></tr>
                             <tr>
-                                <th colspan="3" class="adminRowL">&nbsp;<br/>Weblog settings</td>
+                                <th colspan="3" class="adminRowLG">Weblog settings</td>
                             </tr>
                             <tr>
                                 <td class="adminRowL" width="300">{$form.weblog_title.label_html}</td>
@@ -95,8 +101,9 @@
                             </tr>
                         </table>
                         <table width="700" cellspacing="0" cellpadding="0" border="0">
+                            <tr><td colspan="3">&nbsp;</td></tr>
                             <tr>
-                                <th class="adminRowL" colspan="3">&nbsp;<br/>Initial user</th>
+                                <th class="adminRowLG" colspan="3">Initial user</th>
                             </tr>
                             <tr>
                                 <td class="adminRowL" width="300">{$form.name.label_html}</td>
