@@ -97,7 +97,8 @@
 
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_db_settings"}</td>
+                <th class="adminRowLG">&raquo; {t w="cfg_db_settings"}</td>
+                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.db_host.label_html}</td>

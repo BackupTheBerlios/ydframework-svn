@@ -152,7 +152,8 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="all_months"}</th>
+            <th colspan="2" class="adminRowLG">&raquo; {t w="all_months"}</th>
+            <th class="adminRowLGR">&raquo; <a href="stats.php"><b>{t w="back"}</b></a></th>
         </tr>
         {foreach from=$months item="month"}
             <tr>
@@ -173,7 +174,8 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="all_days"}</th>
+            <th colspan="2" class="adminRowLG">&raquo; {t w="all_days"}</th>
+            <th class="adminRowLGR">&raquo; <a href="stats.php"><b>{t w="back"}</b></a></th>
         </tr>
         {foreach from=$days item="day"}
             <tr>
@@ -194,8 +196,9 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="all_urls"}</th>
-        </tr>
+            <th colspan="2" class="adminRowLG">&raquo; {t w="all_urls"}</th>
+             <th class="adminRowLGR">&raquo; <a href="stats.php"><b>{t w="back"}</b></a></th>
+       </tr>
         {foreach from=$urls item="url"}
             <tr>
                 <td class="adminRowL" width="200"><a href="../{$url.uri}" target="_blank">{$url.uri}</a>   </td>
@@ -215,7 +218,8 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="all_commenters"}</th>
+            <th colspan="2" class="adminRowLG">&raquo; {t w="all_commenters"}</th>
+            <th class="adminRowLGR">&raquo; <a href="stats.php"><b>{t w="back"}</b></a></th>
         </tr>
         {foreach from=$commenters item="commenter"}
             <tr>

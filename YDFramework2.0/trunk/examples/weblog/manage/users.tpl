@@ -60,13 +60,14 @@
         {$form.id.html}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">&raquo; 
+                <th class="adminRowLG">&raquo; 
                     {if $user_data}
                         {t w="change_user_desc"} {$user_data.name}
                     {else}
                         {t w="add_user"}
                     {/if}
                 </th>
+                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.name.label_html}</td>

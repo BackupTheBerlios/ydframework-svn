@@ -103,14 +103,15 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">
+                <th class="adminRowLG">
                     &raquo;
                     {if $form.title.value == ''}
                         {t w="add_item"}
                     {else}
-                        {t w="change_item_desc"} ({$form.title.value})
+                        {t w="change_item_desc"}
                     {/if}
                 </th>
+                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.title.label_html}</td>

@@ -24,6 +24,7 @@ $GLOBALS['t']['view'] = 'toon';
 $GLOBALS['t']['author'] = 'Auteur';
 $GLOBALS['t']['more'] = 'meer';
 $GLOBALS['t']['err_general'] = 'Er is een probleem';
+$GLOBALS['t']['back'] = 'Ga terug';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';

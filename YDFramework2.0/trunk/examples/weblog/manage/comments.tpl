@@ -119,15 +119,16 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">&raquo; {t w="change_comment_desc"}</th>
+                <th class="adminRowLG">&raquo; {t w="change_comment_desc"}</th>
+                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{t w="item"}</td>
-                <td class="adminRowC" width="400"><a href="items.php?do=edit&id={$comment.item_id}"><b>{$comment.item_title}</b></a></td>
+                <td class="adminRowL" width="400"><a href="items.php?do=edit&id={$comment.item_id}"><b>{$comment.item_title}</b></a></td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{t w="posted_from"}</td>
-                <td class="adminRowC" width="400">{$comment.userip}</td>
+                <td class="adminRowL" width="400">{$comment.userip}</td>
             </tr>
             <tr>
                 <td class="adminRowL">{$form.username.label_html}</td>
