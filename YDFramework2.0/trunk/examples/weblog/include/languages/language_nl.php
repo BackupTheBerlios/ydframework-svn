@@ -23,6 +23,7 @@ $GLOBALS['t']['home'] = 'Home';
 $GLOBALS['t']['view'] = 'toon';
 $GLOBALS['t']['author'] = 'Auteur';
 $GLOBALS['t']['more'] = 'meer';
+$GLOBALS['t']['err_general'] = 'Er is een probleem';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';

@@ -6,7 +6,7 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowL">{t w="general_stats"}</th>
+            <th colspan="3" class="adminRowLG">{t w="general_stats"}</th>
         </tr>
         <tr>
             <td class="adminRowL" width="350">{t w="installed_since"}</td>
@@ -36,9 +36,10 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
 
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">
-                &nbsp;<br/>{t w="hits_last_6_months"} (<a href="{$YD_SELF_SCRIPT}?do=showMonths"><b>{t w="all_months"}</b></a>)
+            <th colspan="3" class="adminRowLG">
+                {t w="hits_last_6_months"} (<a href="{$YD_SELF_SCRIPT}?do=showMonths"><b>{t w="all_months"}</b></a>)
             </th>
         </tr>
         {foreach from=$last6Months item="last6Month"}
@@ -51,9 +52,10 @@
             <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
         {/foreach}
 
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">
-                &nbsp;<br/>{t w="hits_last_7_days"} (<a href="{$YD_SELF_SCRIPT}?do=showDays"><b>{t w="all_days"}</b></a>)
+            <th colspan="3" class="adminRowLG">
+                {t w="hits_last_7_days"} (<a href="{$YD_SELF_SCRIPT}?do=showDays"><b>{t w="all_days"}</b></a>)
             </th>
         </tr>
         {foreach from=$last7Days item="last7Day"}
@@ -66,9 +68,10 @@
             <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
         {/foreach}
 
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">
-                &nbsp;<br/>{t w="top_10_urls"} (<a href="{$YD_SELF_SCRIPT}?do=showUrls"><b>{t w="all_urls"}</b></a>)
+            <th colspan="3" class="adminRowLG">
+                {t w="top_10_urls"} (<a href="{$YD_SELF_SCRIPT}?do=showUrls"><b>{t w="all_urls"}</b></a>)
             </th>
         </tr>
         {foreach from=$top10Urls item="top10Url"}
@@ -83,8 +86,9 @@
             <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
         {/foreach}
 
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="web_browsers"}</th>
+            <th colspan="3" class="adminRowLG">{t w="web_browsers"}</th>
         </tr>
         {foreach from=$browserStats item="browserStat"}
             <tr>
@@ -96,8 +100,9 @@
             <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
         {/foreach}
 
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="operating_systems"}</th>
+            <th colspan="3" class="adminRowLG">{t w="operating_systems"}</th>
         </tr>
         {foreach from=$osStats item="osStat"}
             <tr>
@@ -119,7 +124,7 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowL">{t w="all_months"}</th>
+            <th colspan="3" class="adminRowLG">{t w="all_months"}</th>
         </tr>
         {foreach from=$months item="month"}
             <tr>
@@ -140,7 +145,7 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowL">{t w="all_days"}</th>
+            <th colspan="3" class="adminRowLG">{t w="all_days"}</th>
         </tr>
         {foreach from=$days item="day"}
             <tr>
@@ -161,7 +166,7 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowL">{t w="all_urls"}</th>
+            <th colspan="3" class="adminRowLG">{t w="all_urls"}</th>
         </tr>
         {foreach from=$urls item="url"}
             <tr>

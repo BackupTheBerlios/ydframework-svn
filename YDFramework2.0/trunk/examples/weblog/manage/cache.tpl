@@ -3,13 +3,17 @@
 <p class="title">{t w="h_maintenance"} &raquo; {t w="a_cleanup_cache"}</p>
 
 {if $message}
-    <p class="error">{$message}</p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <td class="adminRowEL">{$message}</td>
+        </tr>
+    </table></p>
 {/if}
 
 {$form.tag}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th class="adminRowL" colspan="3">{t w="a_cleanup_cache"}</th>
+            <th class="adminRowLG" colspan="3">{t w="a_cleanup_cache"}</th>
         </tr>
         <tr>
             <td class="adminRowL" width="30">{$form.cache_tmb.html}</td>

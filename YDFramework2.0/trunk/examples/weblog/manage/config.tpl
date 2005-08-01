@@ -3,17 +3,24 @@
 <p class="title">{t w="h_global_settings"} &raquo; {t w="a_settings"}</p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowL">{t w="cfg_db_settings"}</td>
+            <th colspan="3" class="adminRowLG">{t w="cfg_db_settings"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_db_host"}</td>
@@ -37,8 +44,9 @@
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_weblog_settings"}</td>
+            <th colspan="3" class="adminRowLG">{t w="cfg_weblog_settings"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_weblog_title"}</td>
@@ -62,8 +70,9 @@
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_notification"}</td>
+            <th colspan="3" class="adminRowLG">{t w="cfg_notification"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_notification_email_comment"}</td>
@@ -71,8 +80,9 @@
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_rss"}</td>
+            <th colspan="3" class="adminRowLG">{t w="cfg_rss"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_rss_max_syndicated_items"}</td>
@@ -87,7 +97,7 @@
 
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th colspan="3" class="adminRowL">{t w="cfg_db_settings"}</td>
+                <th colspan="3" class="adminRowLG">{t w="cfg_db_settings"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.db_host.label_html}</td>
@@ -111,8 +121,9 @@
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_weblog_settings"}</td>
+                <th colspan="3" class="adminRowLG">{t w="cfg_weblog_settings"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.weblog_title.label_html}</td>
@@ -136,8 +147,9 @@
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_notification"}</td>
+                <th colspan="3" class="adminRowLG">{t w="cfg_notification"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.email_new_comment.label_html}</td>
@@ -145,8 +157,9 @@
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowL">&nbsp;<br/>{t w="cfg_rss"}</td>
+                <th colspan="3" class="adminRowLG">{t w="cfg_rss"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.max_syndicated_items.label_html}</td>

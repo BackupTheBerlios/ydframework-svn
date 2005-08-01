@@ -101,12 +101,34 @@ td.adminRowL, th.adminRowL {
 }
 
 td.adminRowLG, th.adminRowLG {
-    padding-left: 4px;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    border-bottom: 1px solid #DDDDDD;
+    padding: 4px;
     text-align: left;
     color: #266080;
     background-color: #FF9;
+}
+
+td.adminRowLGR, th.adminRowLGR {
+    border-bottom: 1px solid #DDDDDD;
+    padding: 4px;
+    text-align: right;
+    color: #266080;
+    background-color: #FF9;
+}
+
+td.adminRowELG, th.adminRowELG {
+    border-bottom: 1px solid #DDDDDD;
+    padding: 4px;
+    text-align: left;
+    color: white;
+    background-color: red;
+}
+
+td.adminRowEL, th.adminRowEL {
+    border-bottom: 1px solid #DDDDDD;
+    padding: 4px;
+    text-align: left;
+	background-color: #FEE;
 }
 
 td.adminRowLNB, th.adminRowLNB {

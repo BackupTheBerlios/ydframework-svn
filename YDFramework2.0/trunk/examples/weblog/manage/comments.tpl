@@ -5,11 +5,18 @@
 </p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
@@ -54,12 +61,12 @@
         </tr>
 
         <tr><td colspan="7">&nbsp;</td></tr>
-        <tr>
-            <th class="adminRowLG" colspan="7">
-                &raquo; {t w="a_comments"}
-            </th>
-        </tr>
     {/if}
+    <tr>
+        <th class="adminRowLG" colspan="7">
+            &raquo; {t w="a_comments"}
+        </th>
+    </tr>
     {if $comments->set}
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>

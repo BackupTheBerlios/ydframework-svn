@@ -23,6 +23,7 @@ $GLOBALS['t']['home'] = 'Home';
 $GLOBALS['t']['view'] = 'view';
 $GLOBALS['t']['author'] = 'Author';
 $GLOBALS['t']['more'] = 'more';
+$GLOBALS['t']['err_general'] = 'An error occured';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';

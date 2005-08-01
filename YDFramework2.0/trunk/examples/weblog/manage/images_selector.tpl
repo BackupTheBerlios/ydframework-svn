@@ -64,7 +64,7 @@
         {$form.action.html}
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowL" colspan="3">{t w="upload_image"}</th>
+                <th class="adminRowLG" colspan="3">{t w="upload_image"}</th>
             </tr>
             <tr>
                 <td class="adminRowL" width="640">{$form.image.html}</td>

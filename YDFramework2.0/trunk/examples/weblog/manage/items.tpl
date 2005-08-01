@@ -3,11 +3,18 @@
 <p class="title">{t w="h_contents"} &raquo; {t w="a_items"}</p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
@@ -42,10 +49,12 @@
         {/if}
     {/capture}
 
-    <p><a href="{$YD_SELF_SCRIPT}?do=edit">{t w="add_item"}</a></p>
-
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <th colspan="3" class="adminRowLG">{t w="a_items"}</td>
+        <th class="adminRowLGR"><a href="{$YD_SELF_SCRIPT}?do=edit">&raquo; <b>{t w="add_item"}</b></a></td>
+    </tr>
     {if $items->set}
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
             <th class="adminRowL" width="15%">{t w="author"}</th>
@@ -77,10 +86,12 @@
                 <p class="subline">{t w="total"}: {$items->totalRows}</p>
             </td>
         </tr>
-        </table>
     {else}
-        <p>{t w="no_items_found"}</p>
+        <tr>
+            <td class="adminRowL" colspan="4">{t w="no_items_found"}</td>
+        </tr>
     {/if}
+    </table>
 
 {/if}
 

@@ -3,19 +3,28 @@
 <p class="title">{t w="h_global_settings"} &raquo; {t w="a_users"}</p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
 
-    <p><a href="{$YD_SELF_SCRIPT}?do=edit">{t w="add_user"}</a></p>
-
+    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <th colspan="2" class="adminRowLG">{t w="a_users"}</td>
+        <th colspan="2" class="adminRowLGR"><a href="{$YD_SELF_SCRIPT}?do=edit">&raquo; <b>{t w="add_user"}</b></a></td>
+    </tr>
     {if $users}
-        <table width="100%" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="25%" style="vertical-align: bottom;">{t w="username"}</th>
             <th class="adminRowL" width="30%" style="vertical-align: bottom;">{t w="useremail"}</th>
@@ -38,8 +47,8 @@
                 </td>
             </tr>
         {/foreach}
-        </table>
     {/if}
+    </table>
 
 {/if}
 
@@ -48,7 +57,7 @@
         {$form.id.html}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowL" colspan="3">
+                <th class="adminRowLG" colspan="3">
                     {if $user_data}
                         {t w="change_user_desc"} {$user_data.name}
                     {else}

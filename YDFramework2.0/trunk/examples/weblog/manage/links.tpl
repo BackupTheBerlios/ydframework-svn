@@ -3,11 +3,18 @@
 <p class="title">{t w="h_contents"} &raquo; {t w="a_links"}</p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
@@ -42,10 +49,12 @@
         {/if}
     {/capture}
 
-    <p><a href="{$YD_SELF_SCRIPT}?do=edit">{t w="add_link"}</a></p>
-
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <th colspan="3" class="adminRowLG">{t w="a_links"}</td>
+        <th class="adminRowLGR"><a href="{$YD_SELF_SCRIPT}?do=edit">&raquo; <b>{t w="add_link"}</b></a></td>
+    </tr>
     {if $links}
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
             <th class="adminRowL" width="30%">{t w="link_title"}</th>
             <th class="adminRowL" width="40%">{t w="link_url"}</th>
@@ -69,10 +78,12 @@
                 <p class="subline">{t w="total"}: {$links->totalRows}</p>
             </td>
         </tr>
-        </table>
     {else}
-        <p>{t w="no_links_found"}</p>
+        <tr>
+            <td class="adminRowL" colspan="4">{t w="no_links_found"}</td>
+        </tr>
     {/if}
+    </table>
 
 {/if}
 
@@ -80,7 +91,7 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowL" colspan="3">
+                <th class="adminRowLG" colspan="3">
                     {if $form.title.value == ''}
                         {t w="add_link"}
                     {else}

@@ -3,18 +3,24 @@
 <p class="title">{t w="login"}</p>
 
 {if $form.errors}
-    <p class="error">
-        <b>{t w="err_login"}</b><br/>
-        {foreach from=$form.errors item="error"}
-            {$error}<br/>
-        {/foreach}
-    </p>
+    <p><table width="480" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_login"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {$form.tag}
     <table width="480" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th class="adminRowL" colspan="2">{t w="msg_login"}</th>
+            <th class="adminRowLG" colspan="2">{t w="msg_login"}</th>
         </tr>
         <tr>
             <td class="adminRowL" width="180">{$form.loginName.label_html}</td>

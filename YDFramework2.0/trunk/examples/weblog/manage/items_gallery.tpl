@@ -3,11 +3,18 @@
 <p class="title">{t w="h_contents"} &raquo; {t w="a_items"} &raquo; {$item.title} &raquo; {t w="gallery"}</p>
 
 {if $form.errors}
-    <p class="error">
-        {foreach from=$form.errors item="error"}
-            {$error}<br>
-        {/foreach}
-    </p>
+    <p><table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th class="adminRowELG">{t w="err_general"}</th>
+        </tr>
+        <tr>
+            <td class="adminRowEL">
+                {foreach from=$form.errors item="error"}
+                    {$error}<br/>
+                {/foreach}
+            </td>
+        </tr>
+    </table></p>
 {/if}
 
 {if $YD_ACTION == 'default'}
@@ -67,6 +74,10 @@
                 &raquo; {t w="gallery"}
             </th>
         </tr>
+        <tr>
+            <td class="adminRowL" colspan="5">{$form.image.html}</td>
+            <td class="adminRowR" colspan="2">{$form._cmdSubmit.html}</td>
+        </tr>
         {if $images->set}
             <tr>
                 <th class="adminRowL" width="20%">{t w="date"}</th>
@@ -97,10 +108,6 @@
                 </tr>
             {/foreach}
             {$browsebar}
-            <tr>
-                <td class="adminRowL" colspan="5">{$form.image.html}</td>
-                <td class="adminRowR" colspan="2">{$form._cmdSubmit.html}</td>
-            </tr>
             <tr>
                 <td class="adminRowLNB" colspan="5">
                     <p class="subline">{t w="total"}: {$images->totalRows}</p>
