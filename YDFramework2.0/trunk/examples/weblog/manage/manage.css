@@ -51,6 +51,16 @@ p.titleTop {
     border-bottom: 1px solid #ddd;
 }
 
+input, textarea, select	{
+	margin:2px;
+	padding:2px;
+	border:1px solid #ccc;
+}
+
+input[type=checkbox], input[type=radio] {
+	border: none;
+}
+
 input.tfS {
     width: 300px;
 }
@@ -82,13 +92,14 @@ td.bbtoolbar {
 
 select.tfS {
     width: 200px;
+	border:1px solid #ccc;
 }
 
 input.button {
     width: 120px;
-    color: white;
-    background-color: #417690;
+    color: #417690;
     font-weight: bold;
+	background:white url(images/nav-bg.gif) bottom repeat-x; 
 }
 
 td, th {
@@ -232,3 +243,7 @@ a.no {
 a.helpLink {
     cursor: pointer;
 }
+
+
+input[type=checkbox], input[type=radio] { border:none; }
+input[type=submit], input[type=button] { background:white url(../img/admin/nav-bg.gif) bottom repeat-x; }

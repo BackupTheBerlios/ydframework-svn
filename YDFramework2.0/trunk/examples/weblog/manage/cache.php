@@ -19,9 +19,9 @@
 
             // Create the delete form
             $form = new YDForm( 'clearCacheForm' );
-            $form->addElement( 'checkbox', 'cache_tmb', 'Thumbnail cache' );
-            $form->addElement( 'checkbox', 'cache_web', 'Web download cache' );
-            $form->addElement( 'checkbox', 'cache_tpl', 'Template cache' );
+            $form->addElement( 'checkbox', 'cache_tmb', 'Thumbnail cache', array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox', 'cache_web', 'Web download cache', array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox', 'cache_tpl', 'Template cache', array( 'style' => 'border: none;' ) );
             $form->addElement( 'submit', '_cmdSubmit', t( 'cleanup' ), array( 'class' => 'button' ) );
             $form->setDefaults( array( 'cache_web' => 1, 'cache_tmb' => 1, 'cache_tpl' => 1 ) );
 
