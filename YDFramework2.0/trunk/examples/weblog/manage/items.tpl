@@ -108,11 +108,13 @@
                     {if $form.title.value == ''}
                         {t w="add_item"}
                     {else}
-                        {t w="change_item_desc"}
+                        {t w="change_item_desc"} ({$item.title})
                     {/if}
                 </th>
                 <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
             </tr>
+        <table>
+        <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
                 <td class="adminRowL" width="300">{$form.title.label_html}</td>
                 <td class="adminRowC" width="400">{$form.title.html}</td>
