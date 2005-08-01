@@ -110,6 +110,7 @@
             $this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
             $this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
             $this->registerElement( 'span', 'YDFormElement_Span', 'YDFormElement_Span.php' );
+            $this->registerElement( 'img', 'YDFormElement_Img', 'YDFormElement_Img.php' );
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );

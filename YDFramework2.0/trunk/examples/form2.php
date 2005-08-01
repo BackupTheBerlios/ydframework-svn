@@ -26,6 +26,7 @@
                     'txt2' => 'First text', 'txt3' => "2\nlines",  'hid1' => 'me hidden', 'chk1' => 'x',  'sel1' => 2
                 )
             );
+            
             $text = & $form->addElement( 'text', 'txt1', 'Enter text 1:' );
             $text->_label = 'new label for txt1';
             $form->addElement( 'text', 'txt2', 'Enter text 2:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
@@ -40,9 +41,14 @@
             $form->addElement( 'checkbox', 'chk1', 'Select me please' );
             $form->addElement( 'checkbox', 'chk2', 'Select me please' );
             $form->addElement( 'select', 'sel1', 'Select an option:', array(), array( 1 => 'een', 2=>'twee' ) );
+
+            $form->addElement( 'span', 'span1', 'This is a span. The next element is an image (img).' );
+            $form->addElement( 'img', 'img2', 'http://www.scripting.com/images/xml.gif' );
+
             $form->addElement( 'file', 'fil1', 'Select an file:' );
             $form->addElement( 'submit', 'cmd1', 'Send' );
             $form->addElement( 'reset', 'res1', 'Reset' );
+
             $form->addFilter( '__ALL__', 'upper' );
             $form->addFilter( 'txt1', 'trim' );
             $form->addFilter( 'txt2', 'reverse' );
