@@ -29,9 +29,9 @@
     </tr>
     {if $users}
         <tr>
-            <th class="adminRowL" width="25%" style="vertical-align: bottom;">{t w="username"}</th>
+            <th class="adminRowL" width="20%" style="vertical-align: bottom;">{t w="username"}</th>
             <th class="adminRowL" width="30%" style="vertical-align: bottom;">{t w="useremail"}</th>
-            <th class="adminRowL" width="20%" style="vertical-align: bottom;">{t w="created"}</th>
+            <th class="adminRowL" width="25%" style="vertical-align: bottom;">{t w="created"}</th>
             <th class="adminRowR" width="25%" style="vertical-align: bottom;">{t w="actions"}</th>
         </tr>
         {foreach from=$users item="usr"}
