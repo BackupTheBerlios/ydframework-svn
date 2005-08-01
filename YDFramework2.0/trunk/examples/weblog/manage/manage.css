@@ -104,7 +104,7 @@ input.button {
     width: 120px;
     color: #417690;
     font-weight: bold;
-	background:white url(images/nav-bg.gif) bottom repeat-x; 
+	background: white url(images/nav-bg.gif) bottom repeat-x; 
 }
 
 td, th {
