@@ -51,8 +51,11 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">{t w="a_pages"}</td>
-        <th class="adminRowLGR"><a href="{$YD_SELF_SCRIPT}?do=edit">&raquo; <b>{t w="add_page"}</b></a></td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_pages"}</td>
+        <th class="adminRowLGR">
+            <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
+            <a href="items.php?do=edit"><b>{t w="add_page"}</b></a>
+        </td>
     </tr>
     {if $pages}
         <tr>
@@ -94,7 +97,7 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">
+                <th class="adminRowLG" colspan="3">&raquo; 
                     {if $form.title.value == ''}
                         {t w="add_page"}
                     {else}

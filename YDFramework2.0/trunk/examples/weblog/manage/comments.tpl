@@ -119,7 +119,7 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowL" colspan="3">{t w="change_comment_desc"}</th>
+                <th class="adminRowLG" colspan="3">&raquo; {t w="change_comment_desc"}</th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{t w="item"}</td>

@@ -8,7 +8,7 @@ body, p, .normal, li, td, th {
 }
 
 a {
-    color: #266080;
+    color: #417690;
     text-decoration: underline;
     font-weight: normal;
     cursor: pointer;
@@ -24,7 +24,13 @@ a {
 p.title	{
     font-size: 150%;
     font-weight: normal;
-    color: #266080;
+    color: #417690;
+}
+
+p.titleTop {
+    font-size: 150%;
+    font-weight: normal;
+    color: #f4f379;
 }
 
 .subline {
@@ -81,7 +87,7 @@ select.tfS {
 input.button {
     width: 120px;
     color: white;
-    background-color: #266080;
+    background-color: #417690;
     font-weight: bold;
 }
 
@@ -102,33 +108,38 @@ td.adminRowL, th.adminRowL {
 
 td.adminRowLG, th.adminRowLG {
     border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
     padding: 4px;
     text-align: left;
-    color: #266080;
-    background-color: #FF9;
+    color: #417690;
+	background: url(images/nav-bg.gif);
 }
 
 td.adminRowLGR, th.adminRowLGR {
     border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
     padding: 4px;
     text-align: right;
-    color: #266080;
-    background-color: #FF9;
+    color: #417690;
+	background: url(images/nav-bg.gif);
 }
 
 td.adminRowELG, th.adminRowELG {
     border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
     padding: 4px;
     text-align: left;
-    color: white;
-    background-color: red;
+    color: red;
+	background: url(images/nav-bg.gif);
 }
 
 td.adminRowEL, th.adminRowEL {
     border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
     padding: 4px;
     text-align: left;
-	background-color: #FEE;
+	color: red;
+	background-color: #f8f8f8;
 }
 
 td.adminRowLNB, th.adminRowLNB {
@@ -157,7 +168,7 @@ table {
 }
 
 td.topRow {
-    background-color: #CCC;
+    background-color: #417690;
     padding-bottom: 8px;
 }
 
@@ -166,7 +177,8 @@ p.langRow, a.langRow {
 }
 
 td.langRowL {
-    background-color: #266080;
+    background-color: #417690;
+	background: url(images/default-bg.gif);
     padding-top: 2px;
     padding-bottom: 2px;
     padding-right: 0px;
@@ -174,7 +186,8 @@ td.langRowL {
 }
 
 td.langRowR {
-    background-color: #266080;
+    background-color: #417690;
+	background: url(images/default-bg.gif);
     padding-top: 2px;
     padding-bottom: 2px;
     padding-left: 0px;
@@ -192,7 +205,7 @@ td.leftCol {
 }
 
 td.adminGraphD {
-    background-color: #266080;
+    background-color: #417690;
 }
 
 td.adminGraphL {

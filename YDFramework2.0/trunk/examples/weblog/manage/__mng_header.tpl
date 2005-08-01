@@ -24,7 +24,7 @@
     <table width="100%" cellspacing="0" cellpadding="18" border="0">
     <tr>
         <td class="topRow" colspan="2">
-            <p class="title">{t w="admin"} &raquo; {$weblog_title}</p>
+            <p class="titleTop">{t w="admin"} &raquo; {$weblog_title}</p>
         </td>
     </tr>
     <tr>

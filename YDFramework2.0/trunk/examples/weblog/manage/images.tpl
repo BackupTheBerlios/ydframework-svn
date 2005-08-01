@@ -53,7 +53,7 @@
         {$form.action.html}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="7">{t w="a_images"}</th>
+                <th class="adminRowLG" colspan="7">&raquo; {t w="a_images"}</th>
             </tr>
             <tr>
                 <td class="adminRowL" colspan="5">{$form.image.html}</td>

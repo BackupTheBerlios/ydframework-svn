@@ -52,7 +52,7 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">{t w="a_categories"}</th>
+                <th class="adminRowLG" colspan="3">&raquo; {t w="a_categories"}</th>
             </tr>
             <tr>
                 <td class="adminRowL" colspan="2">{$form.title.html}</td>
@@ -99,7 +99,7 @@
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th class="adminRowLG" colspan="3">
+                <th class="adminRowLG" colspan="3">&raquo; 
                     {if $form.title.value == ''}
                         {t w="add_category"}
                     {else}

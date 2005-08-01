@@ -4,7 +4,7 @@
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">{t w="a_server_info"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</td>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{t w="system"}</td>
@@ -38,7 +38,7 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th colspan="3" class="adminRowLG">{$YD_FW_NAME}</th>
+        <th colspan="3" class="adminRowLG">&raquo; {$YD_FW_NAME}</th>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{$YD_FW_NAME}</td>
@@ -56,7 +56,7 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th colspan="3" class="adminRowL">PHP</th>
+        <th colspan="3" class="adminRowLG">&raquo; PHP</th>
     </tr>
     <tr>
         <td class="adminRowL" width="300"><p>PHP {t w="version"}</td>
@@ -78,7 +78,7 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th class="adminRowLG" width="700">PHP {t w="include_path"}</th>
+        <th class="adminRowLG" width="700">&raquo; PHP {t w="include_path"}</th>
     </tr>
     {foreach from=$includePath key="num" item="path"}
         <tr>

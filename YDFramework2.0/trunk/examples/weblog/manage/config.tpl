@@ -20,7 +20,7 @@
 {if $YD_ACTION == 'default'}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">{t w="cfg_db_settings"}</td>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_db_settings"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_db_host"}</td>
@@ -46,7 +46,7 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">{t w="cfg_weblog_settings"}</td>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_weblog_settings"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_weblog_title"}</td>
@@ -72,7 +72,7 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">{t w="cfg_notification"}</td>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_notification"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_notification_email_comment"}</td>
@@ -82,7 +82,7 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th colspan="3" class="adminRowLG">{t w="cfg_rss"}</td>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_rss"}</td>
         </tr>
         <tr>
             <td class="adminRowL" width="300">{t w="cfg_rss_max_syndicated_items"}</td>
@@ -97,7 +97,7 @@
 
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
-                <th colspan="3" class="adminRowLG">{t w="cfg_db_settings"}</td>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_db_settings"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.db_host.label_html}</td>
@@ -123,7 +123,7 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowLG">{t w="cfg_weblog_settings"}</td>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_weblog_settings"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.weblog_title.label_html}</td>
@@ -149,7 +149,7 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowLG">{t w="cfg_notification"}</td>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_notification"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.email_new_comment.label_html}</td>
@@ -159,7 +159,7 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
-                <th colspan="3" class="adminRowLG">{t w="cfg_rss"}</td>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_rss"}</td>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.max_syndicated_items.label_html}</td>

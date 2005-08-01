@@ -13,7 +13,7 @@
 {$form.tag}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th class="adminRowLG" colspan="3">{t w="a_cleanup_cache"}</th>
+            <th class="adminRowLG" colspan="3">&raquo; {t w="a_cleanup_cache"}</th>
         </tr>
         <tr>
             <td class="adminRowL" width="30">{$form.cache_tmb.html}</td>

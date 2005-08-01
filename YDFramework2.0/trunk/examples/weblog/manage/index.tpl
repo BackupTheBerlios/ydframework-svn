@@ -5,8 +5,11 @@
 {if $items}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">{t w="a_items"}</td>
-        <th class="adminRowLGR"><a href="items.php?do=edit">&raquo; <b>{t w="add_item"}</b></a></td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_items"}</td>
+        <th class="adminRowLGR">
+            <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
+            <a href="items.php?do=edit"><b>{t w="add_item"}</b></a>
+        </td>
     </tr>
     <tr>
         <th class="adminRowL" width="17%">{t w="date"}</th>
@@ -38,7 +41,7 @@
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">{t w="a_server_info"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</td>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{t w="user"}</td>
@@ -53,7 +56,7 @@
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th colspan="3" class="adminRowLG">{t w="a_statistics"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_statistics"}</td>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{t w="totalItems"}</td>
