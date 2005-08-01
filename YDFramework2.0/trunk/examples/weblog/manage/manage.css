@@ -33,6 +33,11 @@ p.titleTop {
     color: #f4f379;
 }
 
+p.textTop {
+    font-weight: normal;
+    color: #f4f379;
+}
+
 .subline {
     color: gray;
     font-size: 8pt;
@@ -178,9 +183,13 @@ table {
     border-width: 0px;
 }
 
-td.topRow {
+td.topRow, td.topRowR {
     background-color: #417690;
     padding-bottom: 8px;
+}
+
+td.topRowR {
+	text-align: right;
 }
 
 p.langRow, a.langRow {
@@ -216,11 +225,15 @@ td.leftCol {
 }
 
 td.adminGraphD {
-    background-color: #417690;
+	background: url(images/default-bg.gif);
+	background-position: 0% 50%;
+	background-repeat: repeat-x;
 }
 
 td.adminGraphL {
-    background-color: #DDD;
+	background: url(images/nav-bg.gif);
+	background-position: 0% 50%;
+	background-repeat: repeat-x;
 }
 
 a.leftColSelected {

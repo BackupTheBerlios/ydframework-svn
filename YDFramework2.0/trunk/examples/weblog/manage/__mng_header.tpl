@@ -23,10 +23,15 @@
 
     <table width="100%" cellspacing="0" cellpadding="18" border="0">
     <tr>
-        <td class="topRow" colspan="2">
+        <td class="topRow">
             <p class="titleTop">{t w="admin"} &raquo; {$weblog_title}</p>
         </td>
+        <td class="topRowR">
+            <p class="textTop">{$YD_FW_NAMEVERS}</p>
+        </td>
     </tr>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="18" border="0">
     <tr>
         <td class="langRowL">
             <p class="langRow">

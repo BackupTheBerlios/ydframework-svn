@@ -22,7 +22,7 @@
 
             // Calculate the widths
             if ( empty( $params['width'] ) ) {
-                $params['width'] = '0';
+                $params['width'] = '1';
                 $params['rest']  = '100';
             } else {
                 $params['rest']  = 100 - intval( $params['width'] );
@@ -30,8 +30,8 @@
 
             // Construct the graph
             return '<table width="100%"  cellspacing="0" cellpadding="0" border="0"><tr>'
-                 . '<td class="adminGraphD" width="' . $params['width'] . '" height="6"></td>'
-                 . '<td class="adminGraphL" width="' . $params['rest']  . '" height="6"></td>'
+                 . '<td class="adminGraphD" width="' . $params['width'] . '" height="10"></td>'
+                 . '<td class="adminGraphL" width="' . $params['rest']  . '" height="10"></td>'
                  . '</tr></table>';
 
         }
