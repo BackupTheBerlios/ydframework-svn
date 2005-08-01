@@ -173,6 +173,8 @@ $GLOBALS['t']['other'] = 'Andere';
 $GLOBALS['t']['totalitems'] = 'Totaal aantal items';
 $GLOBALS['t']['totalcomments'] = 'Totaal aanta commentaren';
 $GLOBALS['t']['items'] = 'item(s)';
+$GLOBALS['t']['top_10_commenters'] = 'De 10 meest actieve commentators';
+$GLOBALS['t']['all_commenters'] = 'Alle commentators';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Email adres';

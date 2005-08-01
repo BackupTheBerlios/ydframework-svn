@@ -446,6 +446,13 @@
             return $osStats;
         }
 
+        // Get the commenter statistics
+        function getCommenterStats( $limit=10 ) {
+            return $this->db->getRecords(
+                'SELECT username, count(*) as hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments GROUP BY username ORDER BY hits DESC', $limit
+            );
+        }
+
         // Get the list of users
         function getUsers( $order='name' ) {
             $sql = $this->_prepareQuery( 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'users', $order );

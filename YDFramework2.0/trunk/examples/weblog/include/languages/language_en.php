@@ -173,6 +173,8 @@ $GLOBALS['t']['other'] = 'Other';
 $GLOBALS['t']['totalitems'] = 'Total number of items';
 $GLOBALS['t']['totalcomments'] = 'Total number of comments';
 $GLOBALS['t']['items'] = 'item(s)';
+$GLOBALS['t']['top_10_commenters'] = 'The 10 most active commenters';
+$GLOBALS['t']['all_commenters'] = 'All commenters';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Email address';

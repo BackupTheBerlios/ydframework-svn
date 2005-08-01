@@ -98,6 +98,24 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
+            <th class="adminRowLG">&raquo; {t w="top_10_commenters"}</th>
+            <th colspan="2" class="adminRowLGR">
+                <a href="{$YD_SELF_SCRIPT}?do=showCommenters"><img src="images/more_details.gif" border="0" /></a>
+                <a href="{$YD_SELF_SCRIPT}?do=showCommenters"><b>{t w="all_commenters"}</b></a>
+            </th>
+        </tr>
+        {foreach from=$commentStats item="commenter"}
+            <tr>
+                <td class="adminRowL">{$commenter.username}</td>
+                <td class="adminRowL" style="vertical-align: middle;">{graph width=$commenter.hits_pct}</td>
+                <td class="adminRowR">{$commenter.hits}</td>
+            </tr>
+        {foreachelse}
+            <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
+        {/foreach}
+
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
             <th colspan="3" class="adminRowLG">&raquo; {t w="web_browsers"}</th>
         </tr>
         {foreach from=$browserStats item="browserStat"}
@@ -183,6 +201,27 @@
                 <td class="adminRowL" width="200"><a href="../{$url.uri}" target="_blank">{$url.uri}</a>   </td>
                 <td class="adminRowL" style="vertical-align: middle;">{graph width=$url.hits_pct}</td>
                 <td class="adminRowR" width="100">{$url.hits}</td>
+            </tr>
+        {foreachelse}
+            <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>
+        {/foreach}
+    </table>
+
+{/if}
+
+{if $YD_ACTION == 'showcommenters'}
+
+    <p class="title">{t w="h_statistics"} &raquo; {t w="all_commenters"}</p>
+
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="all_commenters"}</th>
+        </tr>
+        {foreach from=$commenters item="commenter"}
+            <tr>
+                <td class="adminRowL" width="200">{$commenter.username}</td>
+                <td class="adminRowL" style="vertical-align: middle;">{graph width=$commenter.hits_pct}</td>
+                <td class="adminRowR" width="100">{$commenter.hits}</td>
             </tr>
         {foreachelse}
             <tr><td class="adminRowL" colspan="3">{t w="nothing_found"}</td></tr>

@@ -61,6 +61,7 @@
             $top10Urls    = $this->weblog->getStatsUrls();
             $browserStats = $this->weblog->getStatsBrowser();
             $osStats      = $this->weblog->getStatsOs();
+            $commentStats = $this->weblog->getCommenterStats();
 
             // Assign these to the template
             $this->tpl->assign( 'last6Months',  $this->_calculateGraph( $last6Months ) );
@@ -68,6 +69,7 @@
             $this->tpl->assign( 'top10Urls',    $this->_calculateGraph( $top10Urls ) );
             $this->tpl->assign( 'browserStats', $this->_calculateGraph( $browserStats ) );
             $this->tpl->assign( 'osStats',      $this->_calculateGraph( $osStats ) );
+            $this->tpl->assign( 'commentStats', $this->_calculateGraph( $commentStats ) );
 
             // Display the template
             $this->display();
@@ -104,6 +106,18 @@
             // Get the list of all the days
             $urls = $this->weblog->getStatsUrls( -1 );
             $this->tpl->assign( 'urls', $this->_calculateGraph( $urls ) );
+
+            // Display the template
+            $this->display();
+
+        }
+
+        // The Commenters action
+        function actionShowCommenters() {
+
+            // Get the list of all the days
+            $commenters = $this->weblog->getCommenterStats( -1 );
+            $this->tpl->assign( 'commenters', $this->_calculateGraph( $commenters ) );
 
             // Display the template
             $this->display();
