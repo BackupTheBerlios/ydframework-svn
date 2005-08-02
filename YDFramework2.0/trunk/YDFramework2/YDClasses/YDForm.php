@@ -1192,7 +1192,7 @@
             $this->YDBase();
 
             // Initialize the variables
-            $this->_form = & $form;
+            $this->_form = $form;
             $this->_name = $name;
             $this->_label = $label;
             $this->_attributes = $attributes;
@@ -1282,8 +1282,17 @@
          *
          *      @returns        The type of the form element.
          */
-        function getType( ) {
+        function getType() {
             return $this->_type;
+        }
+        
+        /**
+         *      Gets the name of the form.
+         *
+         *      @returns        The name of the form.
+         */
+        function getForm() {
+            return $this->_form;
         }
 
         /**
@@ -1291,7 +1300,7 @@
          *
          *      @returns        The name of the form element.
          */
-        function getName( ) {
+        function getName() {
             return $this->_name;
         }
 
@@ -1300,7 +1309,7 @@
          *
          *      @returns        The label of the form element.
          */
-        function getLabel( ) {
+        function getLabel() {
             return $this->_label;
         }
 
