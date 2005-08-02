@@ -38,9 +38,7 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th class="adminRowLG">
-                &raquo; {t w="hits_last_6_months"}
-            </th>
+            <th class="adminRowLG">&raquo; {t w="hits_last_6_months"}</th>
             <th colspan="2" class="adminRowLGR">
                 <a href="{$YD_SELF_SCRIPT}?do=showMonths"><img src="images/more_details.gif" border="0" /></a>
                 <a href="{$YD_SELF_SCRIPT}?do=showMonths"><b>{t w="all_months"}</b></a>
@@ -60,9 +58,7 @@
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
-            <th class="adminRowLG">
-                &raquo; {t w="hits_last_7_days"}
-            </th>
+            <th class="adminRowLG">&raquo; {t w="hits_last_7_days"}</th>
             <th colspan="2" class="adminRowLGR">
                 <a href="{$YD_SELF_SCRIPT}?do=showDays"><img src="images/more_details.gif" border="0" /></a>
                 <a href="{$YD_SELF_SCRIPT}?do=showDays"><b>{t w="all_days"}</b></a>

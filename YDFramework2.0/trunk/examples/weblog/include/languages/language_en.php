@@ -288,4 +288,13 @@ $GLOBALS['t']['backup'] = 'Backup';
 $GLOBALS['t']['err_bck_name'] = 'Database backup filename is required';
 $GLOBALS['t']['bck_name_comment'] = 'Use "%DBNAME" for database name and <a href="http://www.php.net/strftime" target="_blank">any strftime options</a> for time specification. The extension will be automagically added. Any other text will be preserved.';
 
+// manage/version_info.tpl
+$GLOBALS['t']['h_diagtools'] = 'Diagnostic tools';
+$GLOBALS['t']['version_check'] = 'Check Version';
+$GLOBALS['t']['installed_version'] = 'Installed version';
+$GLOBALS['t']['development_version'] = 'Development version';
+$GLOBALS['t']['msg_correct_version'] = 'There are no newer versions available';
+$GLOBALS['t']['msg_install_update'] = 'Newer versions are available';
+$GLOBALS['t']['development_changelog'] = 'Development Changelog';
+
 ?>

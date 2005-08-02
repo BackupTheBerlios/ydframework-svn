@@ -288,4 +288,14 @@ $GLOBALS['t']['backup'] = 'Backup';
 $GLOBALS['t']['err_bck_name'] = 'Databank backup bestandsnaam is vereist';
 $GLOBALS['t']['bck_name_comment'] = 'Gebruik "%DBNAME" voor de databank naam en <a href="http://www.php.net/strftime" target="_blank">gelijk welke strftime optie</a> voor de tijdsaanduiding. De extensie wordt automatisch toegevoegd. Alle andere tekst wordt behouden.';
 
+// manage/version_info.tpl
+$GLOBALS['t']['h_diagtools'] = 'Diagnose tools';
+$GLOBALS['t']['a_version_info'] = 'Versie info';
+$GLOBALS['t']['version_check'] = 'Controleer Versie';
+$GLOBALS['t']['installed_version'] = 'Ge&iuml;nstalleerde versie';
+$GLOBALS['t']['development_version'] = 'Ontwikkel versie';
+$GLOBALS['t']['msg_correct_version'] = 'Er zijn geen nieuwere versies beschikbaar';
+$GLOBALS['t']['msg_install_update'] = 'Er zijn nieuwe versies beschikbaar';
+$GLOBALS['t']['development_changelog'] = 'Ontwikkel Logboek';
+
 ?>

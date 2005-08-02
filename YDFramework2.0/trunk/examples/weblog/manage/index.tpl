@@ -5,11 +5,11 @@
 {if $items}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; <a href="items.php"><b>{t w="a_items"}</b></a></td>
+        <th colspan="3" class="adminRowLG">&raquo; <a href="items.php"><b>{t w="a_items"}</b></a></th>
         <th class="adminRowLGR">
             <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
             <a href="items.php?do=edit"><b>{t w="add_item"}</b></a>
-        </td>
+        </th>
     </tr>
     <tr>
         <th class="adminRowL" width="17%">{t w="date"}</th>
@@ -41,28 +41,41 @@
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th class="adminRowLG">&raquo; <a href="serverinfo.php"><b>{t w="a_server_info"}</b></a></td>
-        <th class="adminRowLGR"><a href="serverinfo.php"><img src="images/more_details.gif" border="0" /></a></td>
+        <th class="adminRowLG">&raquo; <a href="serverinfo.php"><b>{t w="a_server_info"}</b></a></th>
+        <th class="adminRowLGR" colspan="2"><a href="serverinfo.php"><img src="images/more_details.gif" border="0" /></a></th>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL" width="300">{t w="username"}</td>
-        <td class="adminRowL" width="400">{$user.name|lower}</td>
+        <td class="adminRowL" width="400" colspan="2">{$user.name|lower}</td>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL">{t w="server"}</td>
-        <td class="adminRowL">{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</td>
+        <td class="adminRowL" colspan="2">{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</td>
+    </tr>
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+        <td class="adminRowL">{t w="installed_version"}</td>
+        <td class="adminRowL">{$YD_FW_REVISION}</td>
+        <td class="adminRowR"><a href="versioninfo.php"><img src="images/more_details.gif" border="0" /></a></td>
     </tr>
 </table>
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr><td colspan="3">&nbsp;</td></tr>
     <tr>
-        <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></td>
-        <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></td>
+        <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></th>
+        <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></th>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL" width="300">{t w="totalItems"}</td>
-        <td class="adminRowL" width="400" colspan="2">{$totalItems} {t w="items"}</td>
+        <td class="adminRowL" width="300">{t w="installed_since"}</td>
+        <td class="adminRowL" width="400" colspan="2">{$installDate|date:"%d %B %Y"|lower}</td>
+    </tr>
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+        <td class="adminRowL">{t w="num_days_online"}</td>
+        <td class="adminRowL" colspan="2">{$daysOnline} {t w="days"}</td>
+    </tr>
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+        <td class="adminRowL">{t w="totalItems"}</td>
+        <td class="adminRowL" colspan="2">{$totalItems} {t w="items"}</td>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL">{t w="totalComments"}</td>

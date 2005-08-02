@@ -4,7 +4,7 @@
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</th>
     </tr>
     <tr>
         <td class="adminRowL" width="300">{t w="system"}</td>

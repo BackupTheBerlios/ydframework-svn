@@ -51,11 +51,11 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_links"}</td>
+        <th colspan="3" class="adminRowLG">&raquo; {t w="a_links"}</th>
         <th class="adminRowLGR">
             <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
             <a href="items.php?do=edit"><b>{t w="add_link"}</b></a>
-        </td>
+        </th>
     </tr>
     {if $links}
         <tr>

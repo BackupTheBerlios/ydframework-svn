@@ -32,6 +32,8 @@
             $totalComments = $this->weblog->getStatsCommentCount();
 
             // Assign these to the template
+            $this->tpl->assign( 'installDate',   $installDate );
+            $this->tpl->assign( 'daysOnline',    $daysOnline );
             $this->tpl->assign( 'totalHits',     $totalHits );
             $this->tpl->assign( 'avg_hitsaday',  $avg_hitsaday );
             $this->tpl->assign( 'totalItems',    $totalItems );
