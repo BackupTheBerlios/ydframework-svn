@@ -23,8 +23,8 @@
     <tr>
         <th colspan="2" class="adminRowLG">&raquo; {t w="a_users"}</th>
         <th colspan="2" class="adminRowLGR">
-            <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
-            <a href="items.php?do=edit"><b>{t w="add_user"}</b></a>
+            <a href="{$YD_SELF_SCRIPT}?do=edit"><img src="images/icon_add.gif" border="0" /></a>
+            <a href="{$YD_SELF_SCRIPT}?do=edit"><b>{t w="add_user"}</b></a>
         </th>
     </tr>
     {if $users}
