@@ -55,7 +55,7 @@
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL">{t w="installed_version"}</td>
         <td class="adminRowL">{$YD_FW_REVISION}</td>
-        <td class="adminRowR"><a href="versioninfo.php"><img src="images/more_details.gif" border="0" /></a></td>
+        <td class="adminRowR" style="padding-right: 2px;"><a href="versioninfo.php"><img src="images/more_details.gif" border="0" /></a></td>
     </tr>
 </table>
 
