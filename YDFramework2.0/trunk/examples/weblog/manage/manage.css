@@ -30,12 +30,12 @@ p.title	{
 p.titleTop {
     font-size: 150%;
     font-weight: normal;
-    color: #f4f379;
+    color: white;
 }
 
 p.textTop {
     font-weight: normal;
-    color: #f4f379;
+    color: white;
 }
 
 .subline {
@@ -184,8 +184,8 @@ table {
 }
 
 td.topRow, td.topRowR {
-    background-color: #417690;
     padding-bottom: 8px;
+	background:#94da3a url(images/nav-toprow.gif) repeat-x;
 }
 
 td.topRowR {
