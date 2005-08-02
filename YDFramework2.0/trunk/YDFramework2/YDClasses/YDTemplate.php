@@ -131,6 +131,7 @@
                 $this->assign( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
                 $this->assign( 'YD_SELF_FILE', YD_SELF_FILE );
                 $this->assign( 'YD_SELF_URI', YD_SELF_URI );
+                $this->assign( 'YD_FW_REVISION', YD_FW_REVISION );
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
                 // Get the template name
