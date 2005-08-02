@@ -43,7 +43,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '1.0';
+            $this->_version = '1.1';
             $this->_copyright = '(c) 2005 Francisco Azevedo, francisco@fusemail.com';
             $this->_description = 'This class defines a mysql backup/restore system.';
 
@@ -52,8 +52,96 @@
             
             // predefined filepath for store content (used if we don't want a string)
             $this->filepath = YD_DIR_TEMP . '/backup.sql';
-            
+
+            // defaults
+            $this->useComments = false;
+            $this->useDrops = true;
+            $this->useStructure = true;
+            $this->useData = true;
+
+            // custom tables
+            $this->tables_to_use = null;
+            $this->tables_to_ignore = null;
         }
+
+        /**
+         *  This function sets the displaying of comments
+         *
+         *  @param $flag       Boolean argument
+         */
+        function displayComments( $flag = true ) {
+
+            // test argument
+            if (!is_bool( $flag )) trigger_error("Please define a boolean argument for displayComments");
+
+            $this->useComments = $flag;
+        }
+
+        /**
+         *  This function sets the displaying of drops
+         *
+         *  @param $flag       Boolean argument
+         */
+        function displayDrops( $flag = true ) {
+
+            // test argument
+            if (!is_bool( $flag )) trigger_error("Please define a boolean argument for displayDrops");
+
+            $this->useDrops = $flag;
+        }
+
+        /**
+         *  This function sets the displaying of the structure
+         *
+         *  @param $flag       Boolean argument
+         */
+        function displayStructure( $flag = true ) {
+
+            // test argument
+            if (!is_bool( $flag )) trigger_error("Please define a boolean argument for displayOnlyStructure");
+
+            $this->useStructure = $flag;
+        }
+
+        /**
+         *  This function sets the displaying of the data
+         *
+         *  @param $flag       Boolean argument
+         */
+        function displayData( $flag = true ) {
+
+            // test argument
+            if (!is_bool( $flag )) trigger_error("Please define a boolean argument for displayData");
+
+            $this->useData = $flag;
+        }
+
+        /**
+         *  This function exclude tables from being exported
+         *
+         *  @param $tables       Array of table names
+         */
+        function excludeTables( $tables = array() ) {
+
+            // test argument
+            if (!is_array( $tables )) trigger_error("excludeTables argument must be an array");
+
+            $this->tables_to_ignore = $tables;
+        }
+
+        /**
+         *  This function sets the only tables we want to export
+         *
+         *  @param $tables       Array of table names
+         */
+        function exportTables( $tables = array() ) {
+
+            // test argument
+            if (!is_array( $tables )) trigger_error("exportTables argument must be an array");
+
+            $this->tables_to_use = $tables;
+        }
+
 
         /**
          *  This function returns the drop statement for a table
@@ -65,11 +153,14 @@
          */
         function _getTableDrop( $table, $separator ) {
         
-            // return drop statement
-            return "DROP TABLE IF EXISTS `" . $table . "`" . $separator;
-        
+            // get drop statement
+            $content = "DROP TABLE IF EXISTS `" . $table . "`" . $separator;
+
+            if (!$this->useComments) return $content;
+
+            return "\n\n--\n-- Drop statement for table '". $table ."'\n--\n\n". $content;
         }
-      
+
         /**
          *  This function returns an array of tables
          *
@@ -103,10 +194,13 @@
         
             // get creation statement of a specific table
             $record = $this->dbinstance->getRecord( "SHOW CREATE TABLE `". $table . "`" );
+
+            $content = $record['create table'] . $separator;
             
             // return only the statement
-            return $record['create table'] . $separator;
-        
+            if (!$this->useComments) return $content;
+
+            return "\n\n--\n-- Table struture of '". $table ."'\n--\n\n". $content;
         } 
       
         /**
@@ -156,8 +250,14 @@
                 $content .= "INSERT INTO `" . $table . "` VALUES (" . implode( ",", $insert ) . ")" . $separator;
             }
             
-            return $content;
-        
+            // return just the data if we don't want comments
+            if (!$this->useComments) return $content;
+
+            // if there's no content return an notification
+            if ($content == '') return "\n--\n-- This table (". $table .") is empty\n--\n\n";
+
+            // return data with comments
+            return "\n\n--\n-- Dumping data for table '". $table ."'\n--\n\n". $content;
         }
 
         /**
@@ -196,18 +296,28 @@
             
             // get tables
             $tables = $this->_getTables();
+
+            // add header if we want comments
+            if ($this->useComments){
+                $content .= "\n--\n-- ". YD_FW_NAMEVERS ." mySQL backup addon v". $this->_version ."\n--";
+                $content .= "\n-- Host : ". $this->dbinstance->getHost() . ", Database : ". $this->dbinstance->getDatabase() ."\n--";
+                $content .= "\n-- Server : ". $this->dbinstance->getServerVersion() ."\n--";
+            }
             
             // cycle tables to retrieve structure and data
             foreach( $tables as $table ) {
             
                 // drop table
-                $content .= $this->_getTableDrop( $table, $separator );
+                if ($this->useDrops)				
+                    $content .= $this->_getTableDrop( $table, $separator );
                 
                 // get table structure information
-                $content .= $this->_getTableStructure( $table, $separator );
+                if ($this->useStructure)
+                    $content .= $this->_getTableStructure( $table, $separator );
                 
                 // get table data
-                $content .= $this->_getTableData( $table, $separator );
+                if ($this->useData)
+                    $content .= $this->_getTableData( $table, $separator );
             }
             
             // return the content if we don't want to download
@@ -236,6 +346,9 @@
          */   
         function restore( $content, $separator=";" ) {
    
+            // delete sql comments
+            $content = preg_replace('/(--)(.*)(\n)/e', "", $content);
+
             // get array of queries
             $content = explode( $separator, $content );
                          
