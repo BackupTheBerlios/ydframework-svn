@@ -39,6 +39,10 @@
                 // Get the backup data
                 $bck_data = $bck->backup();
 
+                // Fix the backup data
+                $bck_data = str_replace( "\n\nINSERT ", "\nINSERT ", $bck_data );
+                $bck_data = str_replace( "TYPE=MyISAM;\nINSERT ", "TYPE=MyISAM;\n\nINSERT ", $bck_data );
+
                 // Compress with GZip
                 if ( $form->getValue( 'bck_gzip' ) == 1 ) {
                     $bck_data = gzencode( $bck_data );
