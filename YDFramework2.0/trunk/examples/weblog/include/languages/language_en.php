@@ -286,5 +286,6 @@ $GLOBALS['t']['bck_name'] = 'Database backup filename';
 $GLOBALS['t']['gz_compress'] = 'Compress backup using GZip compression';
 $GLOBALS['t']['backup'] = 'Backup';
 $GLOBALS['t']['err_bck_name'] = 'Database backup filename is required';
+$GLOBALS['t']['bck_name_comment'] = 'Use "%DBNAME" for database name and <a href="http://www.php.net/strftime" target="_blank">any strftime options</a> for time specification. The extension will be automagically added. Any other text will be preserved.';
 
 ?>

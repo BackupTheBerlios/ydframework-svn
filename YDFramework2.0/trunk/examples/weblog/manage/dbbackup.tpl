@@ -24,7 +24,11 @@
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL" width="300">{$form.bck_name.label_html}</td>
-            <td class="adminRowL" width="400">{$form.bck_name.html}</td>
+            <td class="adminRowL" width="400">
+                {$form.bck_name.html}
+                <br/>
+                <i>{t w="bck_name_comment"}</i>
+            </td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL" width="300">{$form.bck_gzip.label_html}</td>
@@ -32,6 +36,7 @@
         </tr>
     </table>
     <p>{$form._cmdSubmit.html}</p>
+    <p></p>
 {$form.endtag}
 
 {include file="__mng_footer.tpl"}

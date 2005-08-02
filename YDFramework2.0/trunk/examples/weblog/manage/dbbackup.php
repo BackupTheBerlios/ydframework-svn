@@ -21,11 +21,11 @@
         function actionDefault() {
 
             // Create the backup form
-            $form = new YDForm( 'dbBackupForm' );
+            $form = new YDWeblogForm( 'dbBackupForm' );
             $form->addElement( 'text', 'bck_name', t( 'bck_name' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'checkbox', 'bck_gzip', t( 'gz_compress' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'submit', '_cmdSubmit', t( 'backup' ), array( 'class' => 'button' ) );
-            $form->setDefaults( array( 'bck_name' => $this->weblog->db->_db . '.sql.gz', 'bck_gzip' => 1 ) );
+            $form->setDefaults( array( 'bck_name' => '%Y-%m-%d_%DBNAME', 'bck_gzip' => 1 ) );
 
             // Add the rules
             $form->addRule( 'bck_name', 'required', t( 'err_bck_name' ) );
@@ -40,10 +40,21 @@
                 $bck_data = $bck->backup();
 
                 // Compress with GZip
-                $bck_data = gzencode( $bck_data );
+                if ( $form->getValue( 'bck_gzip' ) == 1 ) {
+                    $bck_data = gzencode( $bck_data );
+                }
 
                 // The name of the backup
                 $name = $form->getValue( 'bck_name' );
+                $name = str_replace( '%DBNAME', $this->weblog->db->_db, $name );
+                $name = strftime( $name, time() );
+
+                // Add the extension to the name of the backup
+                if ( $form->getValue( 'bck_gzip' ) == 1 ) {
+                    $name .= '.sql.gz';
+                } else {
+                    $name .= '.sql';
+                }
 
                 // Dump the data
                 header( 'Content-Type: application/force-download; name="' . $name . '"');
