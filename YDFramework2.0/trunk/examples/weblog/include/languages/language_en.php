@@ -255,7 +255,7 @@ $GLOBALS['t']['err_weblog_entries_fp'] = 'Number of entries on the front page is
 $GLOBALS['t']['err_weblog_entries_fp_num'] = 'Number of entries on the front page should be numeric';
 $GLOBALS['t']['err_max_syndicated_items'] = 'Number of syndicated items is required';
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Number of syndicated items should be numeric';
-$GLOBALS['t']['change_config'] = 'Change the configuration';
+$GLOBALS['t']['change_config'] = 'Change';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
 
 // manage/item.tpl

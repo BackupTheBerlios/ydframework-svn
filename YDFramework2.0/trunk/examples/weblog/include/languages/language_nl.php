@@ -255,7 +255,7 @@ $GLOBALS['t']['err_weblog_entries_fp'] = 'Aantal items op de voorpagina is verei
 $GLOBALS['t']['err_weblog_entries_fp_num'] = 'Aantal items op de voorpagina moet een getal zijn';
 $GLOBALS['t']['err_max_syndicated_items'] = 'Aantal gesyndiceerde items is vereist';
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Aantal gesyndiceerde items moet een getal zijn';
-$GLOBALS['t']['change_config'] = 'Wijzig de instellingen';
+$GLOBALS['t']['change_config'] = 'Wijzig';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
 
 // manage/item.tpl

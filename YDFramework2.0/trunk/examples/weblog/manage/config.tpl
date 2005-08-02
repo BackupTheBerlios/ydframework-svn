@@ -89,7 +89,7 @@
             <td class="adminRowL" width="400">{$config.max_syndicated_items}</td>
         </tr>
     </table>
-    <p><a href="{$YD_SELF_SCRIPT}?do=edit">{t w="change_config"}</a></p>
+    <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
 
 {if $YD_ACTION == 'edit'}
