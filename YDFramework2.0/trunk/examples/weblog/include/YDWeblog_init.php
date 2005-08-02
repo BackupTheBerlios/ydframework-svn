@@ -32,10 +32,209 @@
     // Include other libraries
     YDInclude( dirname( __FILE__ ) . '/config.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogTemplate.php' );
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogTranslate.php' );
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogForm.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogAdminRequest.php' );
+
+    // Set the right locale
+    $language = YDConfig::get( 'weblog_language', 'en' );
+    $language = empty( $language ) ? 'en' : $language;
+    YDLocale::set( $language );
+
+    // The t function used for translations
+    function t( $t ) {
+
+        // Return empty string when param is missing
+        if ( empty( $t ) ) {
+            return '';
+        }
+
+        // Load the language file
+        @include_once( dirname( __FILE__ ) . '/languages/language_' . strtolower( YDLocale::get() ) . '.php' );
+
+        // Initialize the language array
+        if ( ! isset( $GLOBALS['t'] ) ) {
+            $GLOBALS['t'] = array();
+        }
+
+        // Return the right translation
+        $t = strtolower( $t );
+        return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
+
+    }
+
+    // Template BBCode modifier
+    function YDTplModBBCode( $text ) {
+        $cls = new YDBBCode();
+        return $cls->toHtml( $text, true, false, false, YDRequest::getCurrentUrl() );
+    }
+
+    // Template t modifier
+    function YDTplModT( $params ) {
+        if ( @ $params['lower'] == 'yes' ) {
+            return isset( $params['w'] ) ? strtolower( t( $params['w'] ) ) : '';
+        } else {
+            return isset( $params['w'] ) ? t( $params['w'] ) : '';
+        }
+    }
+
+    // Template Date modifier
+    function YDTplModDate( $text, $format=null ) {
+        if ( is_null( $format ) ) {
+            $format = '%A, %d %b %Y';
+        }
+        return ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) );
+    }
+
+    // Create a link using the ID and given base
+    function YDTplModLinkWithID( $base, $item, $suffix=null ) {
+        $base .= ( strpos( $base, '?' ) === false ) ? '?id=' : '&id=';
+        if ( is_numeric( $item ) ) {
+            $base .= $item;
+        } else {
+            $base .= isset( $item['id'] ) ? $item['id'] : $item;
+        }
+        if ( ! is_null( $suffix ) ) {
+            $base = $base . $suffix;
+        }
+        return YDUrl::makeLinkAbsolute( $base, YDRequest::getCurrentUrl( true ) );
+    }
+
+    // Provide a link to a weblog item
+    function YDTplModLinkItem( $id, $suffix='' ) {
+        return YDTplModLinkWithID( 'item.php', $id, $suffix );
+    }
+
+    // Provide a link to a weblog image
+    function YDTplModLinkItemImages( $id ) {
+        return YDTplModLinkWithID( 'item.php', $id, '#images' );
+    }
+
+    // Provide a link to a weblog comment
+    function YDTplModLinkItemComment( $id ) {
+        return YDTplModLinkWithID( 'item.php', $id, '#comment' );
+    }
+
+    // Provide a link to a weblog item comment form
+    function YDTplModLinkItemRespond( $id ) {
+        return YDTplModLinkWithID( 'item.php', $id, '#respond' );
+    }
+
+    // Provide a link to a category
+    function YDTplModLinkCategory( $id ) {
+        return YDTplModLinkWithID( 'category.php', $id );
+    }
+
+    // Provide a link to a page
+    function YDTplModLinkPage( $id ) {
+        return YDTplModLinkWithID( 'page.php', $id );
+    }
+
+    // Provide a link to a link
+    function YDTplModLinkLink( $id ) {
+        return YDTplModLinkWithID( 'link.php', $id );
+    }
+
+    // Provide a link to a thumbnail
+    function YDTplModLinkThumb( $img ) {
+        return YDUrl::makeLinkAbsolute(
+            YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/m_' . basename( $img->relative_path )
+        );
+    }
+
+    // Provide a link to a small thumbnail
+    function YDTplModLinkThumbSmall( $img ) {
+        return YDUrl::makeLinkAbsolute(
+            YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . dirname( $img->relative_path ) . '/s_' . basename( $img->relative_path )
+        );
+    }
+
+    // Get a text containing the number of comments
+    function YDTplModTextNumComments( $item, $showIfNone=false ) {
+        if ( $item['num_comments'] == '0' ) {
+            return $showIfNone ? strtolower( t( 'no_comments_yet' ) ) : '';
+        } elseif ( $item['num_comments'] == '1' ) {
+            return $item['num_comments'] . ' ' . strtolower( t( 'comment' ) );
+        } else {
+            return $item['num_comments'] . ' ' . strtolower( t( 'comments' ) );
+        }
+    }
+
+    // Get a text containing the number of images
+    function YDTplModTextNumImages( $item, $showIfNone=false ) {
+        if ( $item['num_images'] == '0' ) {
+            return $showIfNone ? strtolower( t( 'no_images_yet' ) ) : '';
+        } elseif ( $item['num_images'] == '1' ) {
+            return $item['num_images'] . ' ' . strtolower( t( 'image' ) );
+        } else {
+            return $item['num_images'] . ' ' . strtolower( t( 'images' ) );
+        }
+    }
+
+    // The form class to use for the weblog
+    class YDWeblogForm extends YDForm {
+
+        // Class constructor
+        function YDWeblogForm( $name, $method='post', $action='', $target='_self', $attributes=array() ) {
+
+            // Initialize the parent
+            $this->YDForm( $name, $method, $action, $target, $attributes );
+
+            // Set the required
+            $this->setHtmlRequired( '', ' <font color="red">(' . t( 'required' ) . ')</font>' );
+
+            // Register the form element
+            $this->registerElement( 'wlbbtextarea', 'YDWeblogFormElement_BBTextArea' );
+            $this->registerElement( 'wladmintextarea', 'YDFormElement_AdminTextArea' );
+
+        }
+
+    }
+
+    // A BB Text Area form element
+    class YDWeblogFormElement_BBTextArea extends YDFormElement_BBTextArea {
+
+        // Class constructor
+        function YDWeblogFormElement_BBTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
+
+            // Initialize the parent
+            $this->YDFormElement_BBTextArea( $form, $name, $label, $attributes, $options );
+
+            // Create the toolbar
+            $this->clearButtons();
+            $this->addModifier( 'b', 'bold' );
+            $this->addModifier( 'i', 'italic' );
+            $this->addSimplePopup( 'url',   'url',   t( 'ta_enter_url' ) . ':',   'http://' );
+            $this->addSimplePopup( 'email', 'email', t( 'ta_enter_email' ) . ':' );
+            $this->addSimplePopup( 'img',   'img',   t( 'ta_enter_image' ) . ':', 'http://' );
+
+        }
+
+    }
+
+    // Custom bbtext area
+    class YDFormElement_AdminTextArea extends YDWeblogFormElement_BBTextArea {
+
+        // Class constructor
+        function YDFormElement_AdminTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
+
+            // Initialize the parent
+            $this->YDWeblogFormElement_BBTextArea( $form, $name, $label, $attributes, $options );
+
+            // Create the base url
+            $baseurl = 'images.php?do=selectorImages&field=' . rawurlencode( $form . '_' . $name );
+
+            // Parameters for the window
+            $params = 'width=880,height=660,location=0,menubar=0,resizable=1,scrollbars=1,status=1,titlebar=1';
+
+            // Create the toolbar
+            $this->clearButtons();
+            $this->addModifier( 'b', 'bold' );
+            $this->addModifier( 'i', 'italic' );
+            $this->addSimplePopup( 'url',   'url',   t( 'ta_enter_url' ) . ':',   'http://' );
+            $this->addSimplePopup( 'email', 'email', t( 'ta_enter_email' ) . ':' );
+            $this->addPopupWindow( $baseurl, strtolower( t('select_image') ), 'YDImageSelector', $params );
+
+        }
+
+    }
 
 ?>
