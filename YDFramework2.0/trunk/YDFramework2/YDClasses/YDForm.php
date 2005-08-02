@@ -409,7 +409,7 @@
         function & getElement( $name ) {
 
             // Check if the element exists
-            if ( ! array_key_exists( $name, $this->_elements ) ) {
+            if ( ! $this->isElement( $name ) ) {
                 trigger_error( 'The specified element "' . $name . '" does not exist.', YD_ERROR );
             }
 
@@ -419,6 +419,23 @@
             // Return a reference to the element
             return $element;
 
+        }
+        
+        /**
+         *  Checks if a form element name is already defined.
+         *
+         *  @param  $name    The element name
+         *  
+         *  @returns  A boolean indicating if the element exists.
+         */
+        function isElement( $name ) {
+            
+            // Check if the element exists
+            if ( array_key_exists( $name, $this->_elements ) ) {
+                return true;
+            }
+            return false;
+            
         }
 
         /**
