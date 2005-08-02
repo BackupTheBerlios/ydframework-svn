@@ -11,10 +11,10 @@
         $install_path = explode( '/', $install_path );
         $install_path_rel = '';
         for ( $i=1; $i < sizeof( $install_path ); $i++ ) {
-            $install_path_rel .= '../';
             if ( is_file( $install_path_rel . 'install.php' ) ) {
                 break;
             }
+            $install_path_rel .= '../';
         }
         $install_path_rel .= 'install.php';
         header( 'Location: ' . $install_path_rel );
