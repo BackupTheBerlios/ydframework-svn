@@ -43,9 +43,13 @@
          *	@param $url  The URL of the XML/RPC server.
          *	@param $port The PORT of the XML/RPC server.
          */
-        function YDXmlRpcClientCore( $url, $port ) {
+        function YDXmlRpcClientCore( $url, $port = 80) {
             $this->port = $port;
-            $this->IXR_Client( $url );
+
+	    // get host and path
+	    $parse = parse_url( $url );
+	    
+            $this->IXR_Client( $parse['host'], $parse['path'], $port );
         }
 
         /**
