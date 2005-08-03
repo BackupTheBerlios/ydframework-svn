@@ -29,7 +29,7 @@
     // Includes
     include_once( dirname( __FILE__ ) . '/YDRequest.php');
     include_once( dirname( __FILE__ ) . '/YDHttpClient.php');
-    include_once( dirname( __FILE__ ) . '/../3rdparty/IXR_Library.class.php' );
+    include_once( dirname( __FILE__ ) . '/../3rdparty/IXR_Library.inc.php' );
 
     /**
      *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support
