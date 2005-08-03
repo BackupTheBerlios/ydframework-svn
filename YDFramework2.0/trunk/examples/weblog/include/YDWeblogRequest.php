@@ -274,7 +274,9 @@
             $this->caching = false;
             
             // Delete the cache
-            @ $this->clearCache();
+            if ( sizeof( $_POST ) > 0 ) {
+                @ $this->clearCache();
+            }
 
             // Change the template directory
             $this->tpl->template_dir = YD_SELF_DIR;
