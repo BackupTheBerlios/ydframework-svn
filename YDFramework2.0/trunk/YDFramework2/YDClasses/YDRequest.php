@@ -108,13 +108,26 @@
         }
 
         /**
+         *  This function returns the normalized full URL
+         *
+         *  @returns    The normalized full URL of the current request.
+         */
+        function getNormalizedCurrentUrl() {
+            $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+            if ( $_SERVER['SERVER_PORT'] != '80' ) {
+                $url = $url . ':' . $_SERVER['SERVER_PORT'];
+            }
+            return $url . YDRequest::getNormalizedUri();
+        }
+
+        /**
          *	This function will return a normalized URI. This is the URI without the debug information and will all keys
          *	sorted alphabetically.
          *
          *	@returns	Normalized request URI.
          */
         function getNormalizedUri() {
-            $url = parse_url( $this->getCurrentUrl() );
+            $url = parse_url( YDRequest::getCurrentUrl() );
             $params = $_GET;
             ksort( $params );
             if ( isset( $params['YD_DEBUG'] ) ) {
