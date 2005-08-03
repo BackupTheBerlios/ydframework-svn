@@ -34,10 +34,17 @@
             if ( is_file( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' ) ) {
 
                 // Output the cached item
-                include( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' );
-                die();
+                $data = file_get_contents( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' );
+
+                // Include a cache filter if any
+                @include( dirname( __FILE__ ) . '/cache_filter.php' );
+
+                // Add the elapsed time
+                $elapsed = $GLOBALS['timer']->getElapsed();
+                die( $data . YD_CRLF . '<!-- #cached: ' . $elapsed . ' ms -->' );
 
             }
+
         }
 
     }

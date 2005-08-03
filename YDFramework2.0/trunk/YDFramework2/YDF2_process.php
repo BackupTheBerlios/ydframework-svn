@@ -185,7 +185,7 @@
             }
 
             // Add the elapsed time
-            $elapsed = $elapsed = $GLOBALS['timer']->getElapsed();
+            $elapsed = $GLOBALS['timer']->getElapsed();
             echo( YD_CRLF . '<!-- ' . $elapsed . ' ms -->' );
 
             // Stop the execution of the request
