@@ -336,8 +336,9 @@
             unset( $values['password'] );
 
             // Add some default ones
-            $values['weblog_entries_fp'] = 5;
-            $values['email_new_comment'] = 'on';
+            $values['weblog_entries_fp']    = 5;
+            $values['email_new_comment']    = true;
+            $values['use_cache']            = false;
             $values['max_syndicated_items'] = 20;
 
             // Construct the new config text
@@ -354,11 +355,6 @@
                     // Escape strings
                     $key = str_replace( "'", "\\'", $key );
                     $val = str_replace( "'", "\\'", $val );
-
-                    // Fix boolean values
-                    if ( $key == 'email_new_comment' ) {
-                        $val = ( $val == 'on' ) ? true : false;
-                    }
 
                     // Don't enclose numeric values with quotes
                     if ( is_bool( $val ) ) {

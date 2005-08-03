@@ -25,6 +25,7 @@
 
             // Fix the boolean values
             $config['email_new_comment'] = ( $config['email_new_comment'] ) ? 'true' : 'false';
+            $config['use_cache']         = ( $config['use_cache'] ) ? 'true' : 'false';
 
             // Assign it to the template
             $this->tpl->assign( 'config', $config );
@@ -73,8 +74,10 @@
             $form->addElement( 'select', 'weblog_skin', t( 'cfg_weblog_skin' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $skins );
             $form->addElement( 'select', 'weblog_language', t( 'cfg_weblog_language' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $languages );
 
-            $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'max_syndicated_items', t( 'cfg_rss_max_syndicated_items' ), array( 'class' => 'tfM' ) );
+
+            $form->addElement( 'checkbox', 'use_cache', t( 'cfg_use_cache_comment' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
@@ -132,6 +135,7 @@
             $config['weblog_language']      = YDConfig::get( 'weblog_language',      'nl' );
             $config['email_new_comment']    = YDConfig::get( 'email_new_comment',    true );
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
+            $config['use_cache']            = YDConfig::get( 'use_cache',            false );
 
             // Return the configuration
             return $config;
@@ -155,11 +159,6 @@
                     // Escape strings
                     $key = str_replace( "'", "\\'", $key );
                     $val = str_replace( "'", "\\'", $val );
-
-                    // Fix boolean values
-                    if ( $key == 'email_new_comment' ) {
-                        $val = ( $val == 'on' ) ? true : false;
-                    }
 
                     // Don't enclose numeric values with quotes
                     if ( is_bool( $val ) ) {

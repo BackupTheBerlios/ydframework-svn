@@ -12,6 +12,14 @@
             // Initialize the parent
             $this->YDRequest();
 
+            // Check if we allow caching
+            $this->caching = true;
+
+            // Delete the cache if caching is disabled
+            if ( YDConfig::get( 'use_cache', false ) === false ) {
+                $this->clearCache();
+            }
+
             // Start with no userdata and check the authentication
             $this->user = null;
 
@@ -51,6 +59,21 @@
             // Get the browser information
             $this->browser = new YDBrowserInfo();
 
+        }
+
+        // Clear the cache
+        function clearCache() {
+            if ( $handle = opendir( YD_DIR_TEMP ) ) {
+                while ( false !== ( $file = readdir( $handle ) ) ) {
+                    if ( substr( $file, 0, 6 ) == 'YDF_L_' && strrchr( $file, '.' ) ) {
+                        if ( substr( strrchr( $file, '.' ), 1 ) == 'cache' ) {
+                            @unlink( YD_DIR_TEMP . '/' . $file );
+                        }
+                    }
+
+                }
+                closedir( $handle );
+            }
         }
 
         // Function to show a thumbnail
@@ -146,8 +169,26 @@
             // Log a request to the stats
             $this->_logRequest();
 
+            // Parse the template
+            $data = $this->tpl->fetch( $customTpl );
+
+            // Check if caching is enabled
+            if ( YDConfig::get( 'use_cache', false ) ) {
+
+                // Save the cache if needed
+                if ( $this->caching === true ) {
+
+                    // Save the cache
+                    $f = fopen( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache', 'wb' );
+                    fwrite( $f, $data );
+                    fclose( $f );
+
+                }
+
+            }
+
             // Return the parsed templaet
-            return $this->tpl->fetch( $customTpl );
+            return $data;
 
         }
 
@@ -228,6 +269,12 @@
 
             // Initialize the parent
             $this->YDWeblogRequest();
+
+            // Check if we allow caching
+            $this->caching = false;
+            
+            // Delete the cache
+            @ $this->clearCache();
 
             // Change the template directory
             $this->tpl->template_dir = YD_SELF_DIR;

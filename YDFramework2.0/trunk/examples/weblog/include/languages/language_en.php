@@ -257,6 +257,8 @@ $GLOBALS['t']['err_max_syndicated_items'] = 'Number of syndicated items is requi
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Number of syndicated items should be numeric';
 $GLOBALS['t']['change_config'] = 'Change';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
+$GLOBALS['t']['cfg_cache'] = 'Caching';
+$GLOBALS['t']['cfg_use_cache_comment'] = 'Cache public pages';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

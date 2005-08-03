@@ -11,7 +11,10 @@
 
         // Class constructor
         function item() {
+
+            // Initialize the parent
             $this->YDWeblogRequest();
+
         }
 
         // Default action
@@ -73,9 +76,6 @@
                 // Get the form values
                 $values = $form->getValues();
 
-                // Ignore users that use an email address as their name
-                //if ( ! YDValidateRules::email( $values['username'] ) ) {
-
                 // Fix any faulty web addresses
                 if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
                     $values['userwebsite'] = 'http://' . $values['userwebsite'];
@@ -115,10 +115,11 @@
 
                 }
 
+                // Clear the cache
+                $this->clearCache();
+
                 // Redirect to the item
                 $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
-
-                //}
 
             }
 

@@ -257,6 +257,8 @@ $GLOBALS['t']['err_max_syndicated_items'] = 'Aantal gesyndiceerde items is verei
 $GLOBALS['t']['err_max_syndicated_items_num'] = 'Aantal gesyndiceerde items moet een getal zijn';
 $GLOBALS['t']['change_config'] = 'Wijzig';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
+$GLOBALS['t']['cfg_cache'] = 'Caching';
+$GLOBALS['t']['cfg_use_cache_comment'] = 'Cache publieke pagina\'s';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

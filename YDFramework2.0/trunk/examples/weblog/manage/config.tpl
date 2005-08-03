@@ -72,6 +72,16 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_cache"}</th>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="cfg_use_cache_comment"}</td>
+            <td class="adminRowL" width="400">{$config.use_cache}</td>
+        </tr>
+    </table>
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
             <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_notification"}</th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
@@ -145,6 +155,16 @@
             <tr>
                 <td class="adminRowL">{$form.weblog_language.label_html}</td>
                 <td class="adminRowL">{$form.weblog_language.html}</td>
+            </tr>
+        </table>
+        <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_cache"}</th>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.use_cache.label_html}</td>
+                <td class="adminRowL" width="400">{$form.use_cache.html}</td>
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">

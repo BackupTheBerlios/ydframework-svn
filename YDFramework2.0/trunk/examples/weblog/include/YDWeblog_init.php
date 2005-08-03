@@ -20,17 +20,37 @@
         header( 'Location: ' . $install_path_rel );
     }
 
+    // First stab of includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( dirname( __FILE__ ) . '/config.php' );
+
+    // Check if the user wanted to use caching
+    if ( YDConfig::get( 'use_cache', false ) ) {
+
+        // Check if we allow caching
+        if ( sizeof( $_POST ) == 0 ) {
+
+            // Check if there is a cache item for this request
+            if ( is_file( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' ) ) {
+
+                // Output the cached item
+                include( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' );
+                die();
+
+            }
+        }
+
+    }
+
     // Include the standard modules
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDBBCode.php' );
-    YDInclude( 'YDRequest.php' );
     YDInclude( 'YDTemplate.php' );
     YDInclude( 'YDDatabase.php' );
     YDInclude( 'YDFormElements/YDFormElement_BBTextArea.php' );
 
     // Include other libraries
-    YDInclude( dirname( __FILE__ ) . '/config.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
 
