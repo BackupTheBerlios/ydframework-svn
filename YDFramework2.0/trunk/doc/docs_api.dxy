@@ -67,7 +67,9 @@ RECURSIVE              = YES
 EXCLUDE                = "../YDFramework2/3rdparty" \
                          "../YDFramework2/addons/YDPdfReport/fpdf.php" \
                          "../YDFramework2/addons/YDPdfReport/html2pdf.php" \
+                         "../YDFramework2/addons/YDPdfReport/font" \
                          "../YDFramework2/addons/YDXmlForm/xmlize.inc.php" \
+                         "../YDFramework2/addons/YDAjax/xajax.inc.php"
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXAMPLE_PATH           = 
