@@ -290,6 +290,7 @@ $GLOBALS['t']['bck_name_comment'] = 'Use "%DBNAME" for database name and <a href
 
 // manage/version_info.tpl
 $GLOBALS['t']['h_diagtools'] = 'Diagnostic tools';
+$GLOBALS['t']['a_version_info'] = 'Version info';
 $GLOBALS['t']['version_check'] = 'Check Version';
 $GLOBALS['t']['installed_version'] = 'Installed version';
 $GLOBALS['t']['development_version'] = 'Development version';
