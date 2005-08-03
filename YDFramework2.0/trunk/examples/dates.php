@@ -18,6 +18,10 @@
         // Default action
         function actionDefault() {
 
+            YDDebugUtil::dump( YDDate::now(), 'YDDate::now()' );
+            YDDebugUtil::dump( YDDate::nowCustom( "%d" ), 'YDDate::nowCustom( "%d" )' );
+            YDDebugUtil::dump( YDDate::nowCustom( "%d %B %Y" ), 'YDDate::nowCustom( "%d %B %Y" )' );
+
             // Static validation
             YDDebugUtil::dump( YDDate::get( "HUM", time() ), 'YDDate::get( "HUM", time() )' );
             YDDebugUtil::dump( YDDate::get( "EUN_DATE", time() ), 'YDDate::get( "EUN_DATE", time() )' );
@@ -147,9 +151,34 @@
             // Adding values
             YDDebugUtil::dump( $date->addSecond( 70 ), '$date->addSecond( 70 )' );
             YDDebugUtil::dump( $date->addMinute( 80 ), '$date->addMinute( 80 )' );
-            YDDebugUtil::dump( $date->addHour( 27 ), '$date->addHour( 27 )' );
+            YDDebugUtil::dump( $date->addHour( 24 ), '$date->addHour( 24 )' );
+            YDDebugUtil::dump( $date->addHour( 12 ), '$date->addHour( 12 )' );
+            YDDebugUtil::dump( $date->addHour( -10 ), '$date->addHour( -10 )' );
+            YDDebugUtil::dump( $date->addHour( -24 ), '$date->addHour( -24 )' );
+            YDDebugUtil::dump( $date->addMinute( 10 ), '$date->addMinute( 10 )' );
+            YDDebugUtil::dump( $date->addMinute( 60 ), '$date->addMinute( 60 )' );
+            YDDebugUtil::dump( $date->addMinute( 120 ), '$date->addMinute( 120 )' );
+            YDDebugUtil::dump( $date->addMinute( -120 ), '$date->addMinute( -120 )' );
+            YDDebugUtil::dump( $date->addMinute( 360 ), '$date->addMinute( 360 )' );
+            YDDebugUtil::dump( $date->addSecond( 10 ), '$date->addSecond( 10 )' );
+            YDDebugUtil::dump( $date->addSecond( 60 ), '$date->addSecond( 60 )' );
+            YDDebugUtil::dump( $date->addSecond( 3600 ), '$date->addSecond( 3600 )' );
+            YDDebugUtil::dump( $date->addSecond(  ), '$date->addSecond( -10 )' );
+            
             YDDebugUtil::dump( $date->addDay( 40 ), '$date->addDay( 40 )' );
             YDDebugUtil::dump( $date->addDay( -3 ), '$date->addDay( -3 )' );
+
+            YDDebugUtil::dump( $date->addMonth( 1 ), '$date->addMonth( 1 )' );
+            YDDebugUtil::dump( $date->addMonth( 12 ), '$date->addMonth( 12 )' );
+            YDDebugUtil::dump( $date->addMonth( 10 ), '$date->addMonth( 10 )' );
+            YDDebugUtil::dump( $date->addMonth( -4 ), '$date->addMonth( -4 )' );
+            YDDebugUtil::dump( $date->addMonth( -20 ), '$date->addMonth( -20 )' );
+
+            YDDebugUtil::dump( $date->addYear( 1 ), '$date->addYear( 1 )' );
+            YDDebugUtil::dump( $date->addYear( 12 ), '$date->addYear( 12 )' );
+            YDDebugUtil::dump( $date->addYear( 10 ), '$date->addYear( 10 )' );
+            YDDebugUtil::dump( $date->addYear( -4 ), '$date->addYear( -4 )' );
+            YDDebugUtil::dump( $date->addYear( -20 ), '$date->addYear( -20 )' );
 
             // Getting an array
             YDDebugUtil::dump( $date->toArray(), '$date->toArray()' );

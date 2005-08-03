@@ -32,7 +32,7 @@
     /**
      *  This class defines a YDDateFormat object.
      *
-     *  @author  David Bittencourt
+     *  @author  David Bittencourt <muitocomplicado@hotmail.com>
      */
     class YDDateFormat extends YDBase {
         
@@ -50,10 +50,9 @@
          *  @param  $part    The part name: string, parts, regexes or empty.
          *  @param  $value   The part value.
          *
-         *  @internal
          *  @static
          */
-        function _setPart( $name, $part='string', $value ) {
+        function set( $name, $part='string', $value ) {
             
             $all  = YDConfig::get( 'YD_DATE_FORMATS' );
             $name = strtoupper( $name );
@@ -79,10 +78,9 @@
          *
          *  @returns         The part value.
          *
-         *  @internal
          *  @static
          */
-        function _getPart( $name, $part ) {
+        function get( $name, $part ) {
 
             $all  = YDConfig::get( 'YD_DATE_FORMATS' );
             $name = strtoupper( $name );
@@ -116,7 +114,7 @@
          *  @static
          */
         function setString( $name, $value ) {
-            YDDateFormat::_setPart( $name, 'string', $value );
+            YDDateFormat::set( $name, 'string', $value );
         }
         
         /**
@@ -128,7 +126,7 @@
          *  @static
          */
         function setParts( $name, $value=array() ) {
-            YDDateFormat::_setPart( $name, 'parts', $value );
+            YDDateFormat::set( $name, 'parts', $value );
         }
         
         /**
@@ -140,7 +138,7 @@
          *  @static
          */
         function setRegexes( $name, $value=array() ) {
-            YDDateFormat::_setPart( $name, 'regexes', $value );
+            YDDateFormat::set( $name, 'regexes', $value );
         }
         
         /**
@@ -152,68 +150,15 @@
          *  @static
          */
         function setEmpty( $name, $value='' ) {
-            YDDateFormat::_setPart( $name, 'empty', $value );
+            YDDateFormat::set( $name, 'empty', $value );
         }
-        
-        /**
-         *  This function returns the format string.
-         *
-         *  @param  $name    The format name.
-         *
-         *  @returns   The format string.
-         *  
-         *  @static
-         */
-        function getString( $name ) {
-            return (string) YDDateFormat::_getPart( $name, 'string' );
-        }
-        
-        /**
-         *  This function returns the format parts.
-         *
-         *  @param  $name    The format name.
-         *
-         *  @returns   The format parts array.
-         *  
-         *  @static
-         */
-        function getParts( $name ) {
-            return (array) YDDateFormat::_getPart( $name, 'parts' );
-        }
-        
-        /**
-         *  This function returns the format regexes.
-         *
-         *  @param  $name    The format name.
-         *
-         *  @returns   The format regexes array.
-         *  
-         *  @static
-         */
-        function getRegexes( $name ) {
-            return (array) YDDateFormat::_getPart( $name, 'regexes' );
-        }
-        
-        /**
-         *  This function returns the format empty string.
-         *
-         *  @param  $name    The format name.
-         *
-         *  @returns   The format empty string.
-         *  
-         *  @static
-         */
-        function getEmpty( $name ) {
-            return (string) YDDateFormat::_getPart( $name, 'empty' );
-        }
-        
         
     }
     
     /**
      *  This class defines a YDDate object.
      *
-     *  @author  David Bittencourt
+     *  @author  David Bittencourt <muitocomplicado@hotmail.com>
      */
     class YDDate extends YDBase {
         
@@ -257,23 +202,6 @@
         }
 
         /**
-         *  This function returns the timestamp of the object date.
-         *
-         *  @returns  A unix timestamp if valid, -1 otherwise.
-         */
-        function getTimestamp() {
-            
-            $this->reset();
-            
-            return @mktime( $this->hours,
-                            $this->minutes,
-                            $this->seconds,
-                            $this->month,
-                            $this->day,
-                            $this->year );
-        }
-
-        /**
          *  This function returns the date as a formatted string defined by the
          *  custom formats (e.g. 'ISO', 'EUN', 'USA', 'SQL', 'HUM' ).
          *
@@ -294,32 +222,16 @@
             }
             
             if ( $this->isDateEmpty() && $this->isTimeEmpty() ) {
-                return YDDateFormat::getEmpty( $format );
+                return YDDateFormat::get( $format, 'empty' );
             }
             
-            $string = YDDateFormat::getString( $format );
+            $string = YDDateFormat::get( $format, 'string' );
             
             if ( is_null( $string ) ) {
                 trigger_error( 'The format "' . $name . '" is not defined', YD_ERROR );
             }
             
-            // date
-            $string = str_replace( '%a', $this->day_name_abbr,      $string );
-            $string = str_replace( '%A', $this->day_name,           $string );
-            $string = str_replace( '%b', $this->month_name_abbr,    $string );
-            $string = str_replace( '%B', $this->month_name,         $string );
-            $string = str_replace( '%d', $this->day_with_zero,      $string );
-            $string = str_replace( '%m', $this->month_with_zero,    $string );
-            $string = str_replace( '%Y', $this->year,               $string );
-            $string = str_replace( '%w', $this->weekday,            $string );
-            
-            // time
-            $string = str_replace( '%T', '%H:%M:%S',                $string );
-            $string = str_replace( '%H', $this->hours_with_zero,    $string );
-            $string = str_replace( '%M', $this->minutes_with_zero,  $string );
-            $string = str_replace( '%S', $this->seconds_with_zero,  $string );
-            
-            return $string;
+            return $this->getCustom( $string, $date, $format_in );
         
         }
         
@@ -335,6 +247,76 @@
         function now( $format='ISO' ) {
             $date = new YDDate();
             return $date->get( $format );
+        }
+        
+        /**
+         *  This function returns the current date/time as a custom format string.
+         *
+         *  @param $format    The format string.
+         *  
+         *  @returns  A string with the formatted result.
+         *
+         *  @static
+         */
+        function nowCustom( $format ) {
+            $date = new YDDate();
+            return $date->getCustom( $format );
+        }
+
+        /**
+         *  This function returns the date as a custom format string.
+         *
+         *  @param $format     The format string.
+         *  @param $date       (Optional) A date to be converted to another format.
+         *                     Default: current object.
+         *  @param $format_in  (Optional) The format of $date, if passed. Default: 'SQL'.
+         *  
+         *  @returns  A string with the formatted result.
+         *
+         *  @static  If $date is passed.
+         */
+        function getCustom( $format, $date=null, $format_in='SQL' ) {
+            
+            if ( $date !== null ) {
+                $date = new YDDate( $date, $format_in );
+                return $date->getCustom( $format );
+            }
+            
+            // date
+            $format = str_replace( '%a', $this->day_name_abbr,      $format );
+            $format = str_replace( '%A', $this->day_name,           $format );
+            $format = str_replace( '%b', $this->month_name_abbr,    $format );
+            $format = str_replace( '%B', $this->month_name,         $format );
+            $format = str_replace( '%d', $this->day_with_zero,      $format );
+            $format = str_replace( '%m', $this->month_with_zero,    $format );
+            $format = str_replace( '%Y', $this->year,               $format );
+            $format = str_replace( '%w', $this->weekday,            $format );
+            
+            // time
+            $format = str_replace( '%T', '%H:%M:%S',                $format );
+            $format = str_replace( '%H', $this->hours_with_zero,    $format );
+            $format = str_replace( '%M', $this->minutes_with_zero,  $format );
+            $format = str_replace( '%S', $this->seconds_with_zero,  $format );
+            
+            return $format;
+            
+        }
+        
+        /**
+         *  This function returns the timestamp of the object date.
+         *
+         *  @returns  A unix timestamp if valid, -1 otherwise.
+         */
+        function getTimestamp() {
+            
+            $this->reset();
+            
+            return @mktime( $this->hours,
+                            $this->minutes,
+                            $this->seconds,
+                            $this->month,
+                            $this->day,
+                            $this->year );
         }
         
         /**
@@ -431,7 +413,6 @@
                 $this->timestamp_string = '';
             }
             
-            $this->quarter           = $this->getQuarter();
             $this->weekday           = $this->getWeekDay();
             $this->day_name          = $this->getDayName();
             $this->day_name_abbr     = $this->getDayName( true );
@@ -525,7 +506,7 @@
                 
                 $date = trim( $date );
                 
-                if ( $date === YDDateFormat::getEmpty( $format ) ) {
+                if ( $date === YDDateFormat::get( $format, 'empty' ) ) {
                     return $result;
                 }
                 
@@ -551,8 +532,8 @@
                 
                 foreach ( $fam as $name ) {
                 
-                    $p = YDDateFormat::getParts( $name );
-                    $r = YDDateFormat::getRegexes( $name );
+                    $p = (array) YDDateFormat::get( $name, 'parts' );
+                    $r = (array) YDDateFormat::get( $name, 'regexes' );
                     
                     if ( preg_match( YDDate::getRegex( $name, $r ), $date, $date_parts ) ) {
                         
@@ -712,7 +693,7 @@
             if ( ! YDDate::parse( $date, $format, $family, false ) ) {
                 return false;
             }
-            if ( ! $empty && $date === YDDateFormat::getEmpty( $format ) ) {
+            if ( ! $empty && $date === YDDateFormat::get( $format, 'empty' ) ) {
                 return false;
             }
             return true;
@@ -724,7 +705,7 @@
          *
          *  @returns  True if valid, false otherwise.
          */
-        function isValidTime( & $hours, & $minutes, & $seconds ) {
+        function isValidTime( $hours, $minutes, $seconds ) {
             
             if ( $hours < 0 && $hours > 23 ) {
                 return false;
@@ -802,85 +783,6 @@
         }
         
         /**
-         *  This function returns the quarter of the date.
-         *
-         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
-         *                            If null, the date of the object. Default: null.
-         *  @param $format (Optional) The format name. Default: 'ISO'.
-         *
-         *  @returns  The quarter.
-         *
-         *  @static   If $date is passed.
-         */
-        function getQuarter( $date=null, $format='ISO' ) {
-            
-            if ( $date === null ) {
-                $date = $this->parse( $date, $format );
-            } else {
-                $date = YDDate::parse( $date, $format );
-            }
-            
-            switch ( $date['month'] ) {
-                case 1:
-                case 2:
-                case 3:
-                    return 1;
-                case 4:
-                case 5:
-                case 6:
-                    return 2;
-                case 7:
-                case 8:
-                case 9:
-                    return 3;
-                case 10:
-                case 11:
-                case 12:
-                    return 4;
-            }
-            
-            return 0;
-            
-        }
-
-        /**
-         *  This function adds a number of days to the date.
-         *
-         *  @param $value (Optional) The number of days. Default: 1.
-         *
-         *  @returns  The date in the 'ISO' format.
-         */
-        function addDay( $value=1 ) {
-            
-            if ( $value == 0 ) {
-                return $this->get();
-            }
-            
-            if ( ! extension_loaded( 'calendar' ) ) {
-                trigger_error( 'The PHP calendar extension must be enabled', YD_ERROR );
-            }
-            if ( $this->isDateEmpty() ) {
-                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
-            }
-            
-            $julian = GregoriantoJD( $this->month, $this->day, $this->year );
-            $julian += $value;
-               
-            $gregorian = JDtoGregorian( $julian ); 
-               
-            list ( $month, $day, $year ) = split ( '[/]', $gregorian );
-            
-            $this->day   = $day;
-            $this->month = $month;
-            $this->year  = $year;
-            
-            $this->reset();
-            
-            return $this->get();
-           
-        }
-        
-        /**
          *  This function returns a regex string of the format.
          *
          *  @param $format   The format name.
@@ -909,7 +811,7 @@
             }
             
             // format string
-            $string = YDDateFormat::getString( $format );
+            $string = YDDateFormat::get( $format, 'string' );
             
             // time representation
             $string = str_replace( '%T', '%H:%M:%S', $string );
