@@ -972,7 +972,7 @@
             }
 
             // Width and height should be positive integer
-            if ( $width < 1 || $width < 1 ) {
+            if ( $width < 1 || $height < 1 ) {
                 $this->_error();
             }
 
