@@ -290,6 +290,10 @@ $GLOBALS['t']['gz_compress'] = 'Comprimeer backup met GZip compressie';
 $GLOBALS['t']['backup'] = 'Backup';
 $GLOBALS['t']['err_bck_name'] = 'Databank backup bestandsnaam is vereist';
 $GLOBALS['t']['bck_name_comment'] = 'Gebruik "%DBNAME" voor de databank naam en <a href="http://www.php.net/strftime" target="_blank">gelijk welke strftime optie</a> voor de tijdsaanduiding. De extensie wordt automatisch toegevoegd. Alle andere tekst wordt behouden.';
+$GLOBALS['t']['bck_type'] = 'Backup type';
+$GLOBALS['t']['bck_full'] = 'Volledige backup (structuur en data)';
+$GLOBALS['t']['bck_structure_only'] = 'Enkel de structuur';
+$GLOBALS['t']['bck_data_only'] = 'Enkel de data';
 
 // manage/version_info.tpl
 $GLOBALS['t']['h_diagtools'] = 'Diagnose tools';

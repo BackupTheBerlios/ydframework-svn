@@ -20,12 +20,20 @@
         // Default action
         function actionDefault() {
 
+            // The backup types we have
+            $bck_types = array(
+                0 => t( 'bck_full' ) . '<br/>',
+                1 => t( 'bck_structure_only' ) . '<br/>',
+                2 => t( 'bck_data_only' ) . '<br/>'
+            );
+
             // Create the backup form
             $form = new YDWeblogForm( 'dbBackupForm' );
             $form->addElement( 'text', 'bck_name', t( 'bck_name' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'checkbox', 'bck_gzip', t( 'gz_compress' ), array( 'style' => 'border: none;' ) );
+            $form->addElement( 'radio', 'bck_type', t( 'bck_type' ), array( 'style' => 'border: none;' ), $bck_types );
             $form->addElement( 'submit', '_cmdSubmit', t( 'backup' ), array( 'class' => 'button' ) );
-            $form->setDefaults( array( 'bck_name' => '%Y-%m-%d_%DBNAME', 'bck_gzip' => 1 ) );
+            $form->setDefaults( array( 'bck_name' => '%Y-%m-%d_%DBNAME', 'bck_gzip' => 1, 'bck_type' => 0 ) );
 
             // Add the rules
             $form->addRule( 'bck_name', 'required', t( 'err_bck_name' ) );
@@ -36,12 +44,24 @@
                 // Create a backup object
                 $bck = new YDMysqlDump( $this->weblog->db );
 
+                // Configure the backup
+                $bck->displayComments( true );
+                if ( $form->getValue( 'bck_type' ) == '1' ) {
+                    $bck->displayDrops( true );
+                    $bck->displayStructure( true );
+                    $bck->displayData( false );
+                } elseif ( $form->getValue( 'bck_type' ) == '2'  ) {
+                    $bck->displayDrops( false );
+                    $bck->displayStructure( false );
+                    $bck->displayData( true );
+                } else {
+                    $bck->displayDrops( true );
+                    $bck->displayStructure( true );
+                    $bck->displayData( true );
+                }
+
                 // Get the backup data
                 $bck_data = $bck->backup();
-
-                // Fix the backup data
-                $bck_data = str_replace( "\n\nINSERT ", "\nINSERT ", $bck_data );
-                $bck_data = str_replace( "TYPE=MyISAM;\nINSERT ", "TYPE=MyISAM;\n\nINSERT ", $bck_data );
 
                 // Compress with GZip
                 if ( $form->getValue( 'bck_gzip' ) == 1 ) {
@@ -65,7 +85,6 @@
                 header( 'Content-Disposition: attachment; filename="' . $name . ' "');
                 header( 'Cache-Control: public' );
                 header( 'Content-Transfer-Encoding: binary' );
-                header( 'Content-length: ' . strlen( $bck_data ) );
                 echo( $bck_data );
                 die();
 
