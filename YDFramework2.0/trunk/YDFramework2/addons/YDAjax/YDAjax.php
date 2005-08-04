@@ -41,7 +41,7 @@
          *	@param $prefix		Prefix used in ajax functions.
          *	@param $debug		Debug mode.
          */
-        function YDAjax( $requestURI = "", $prefix = "__ydf", $debug = null) {
+        function YDAjax( $requestURI = null, $prefix = "__ydf", $debug = null) {
 
 			// prefix is used in some methods
 			$this->prefix = $prefix;
@@ -58,6 +58,11 @@
 					$this->statusMessagesOn();
 				}
 				
+			}
+
+			// if url is null, we want ydf url. if empty string xajax creates it, otherwise it's a custom url
+			if (is_null($requestURI)){	$url = new YDUrl( YD_SELF_URI );
+										$requestURI = $url->getUrl();
 			}
 		
 			// create ajax object
