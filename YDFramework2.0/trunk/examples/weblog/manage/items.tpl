@@ -109,9 +109,15 @@
                         {t w="add_item"}
                     {else}
                         {t w="change_item_desc"} ({$item.title})
+                        &nbsp;
+                        <a href="../item.php?&id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
                     {/if}
                 </th>
-                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
+                <th class="adminRowLGR">
+                    &raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a>
+                    {if $form.title.value != ''}
+                    {/if}
+                </th>
             </tr>
         <table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">
