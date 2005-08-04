@@ -71,6 +71,7 @@
             $form->addRule( 'username',  'required',  t( 'err_name' ) );
             $form->addRule( 'username',  'not_email', t( 'err_name_email' ) );
             $form->addRule( 'useremail', 'email',     t( 'err_email' ) );
+            $form->addRule( 'useremail', 'required',  t( 'err_email' ) );
             $form->addRule( 'comment',   'required',  t( 'err_comment' ) );
 
             // Process the form
