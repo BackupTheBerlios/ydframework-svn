@@ -101,7 +101,9 @@
                     {if $form.title.value == ''}
                         {t w="add_page"}
                     {else}
-                        {t w="change_page_desc"}
+                        {t w="change_page_desc"} ({$form.title.value})
+                        &nbsp;
+                        <a href="../page.php?&id={$page.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
                     {/if}
                 </th>
                 <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>

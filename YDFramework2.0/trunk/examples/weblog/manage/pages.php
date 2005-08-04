@@ -58,6 +58,9 @@
                 // Get the page by ID
                 $defaults = $this->weblog->getPageById( $id );
 
+                // Assign the values to the template
+                $this->tpl->assign( 'page', $defaults );
+
                 // Set the defaults
                 $this->form->setDefaults( $defaults );
 
