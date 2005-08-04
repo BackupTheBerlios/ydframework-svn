@@ -20,9 +20,17 @@
         header( 'Location: ' . $install_path_rel );
     }
 
+    // Define some constants
+    @define( 'YD_WEBLOG_CACHE_PREFIX', 'YDF_L_' );
+    @define( 'YD_WEBLOG_CACHE_SUFFIX', 'cache' );
+
     // First stab of includes
     YDInclude( 'YDRequest.php' );
     YDInclude( dirname( __FILE__ ) . '/config.php' );
+
+    // Get the cache filename
+    $cache_file = YD_DIR_TEMP . '/' . YD_WEBLOG_CACHE_PREFIX . md5( YDRequest::getNormalizedCurrentUrl() ) . '.' . YD_WEBLOG_CACHE_SUFFIX;
+    @define( 'YD_WEBLOG_CACHE_FNAME', $cache_file );
 
     // Check if the user wanted to use caching
     if ( YDConfig::get( 'use_cache', false ) ) {
@@ -31,10 +39,10 @@
         if ( sizeof( $_POST ) == 0 ) {
 
             // Check if there is a cache item for this request
-            if ( is_file( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' ) ) {
+            if ( is_file( YD_WEBLOG_CACHE_FNAME ) ) {
 
                 // Output the cached item
-                $data = file_get_contents( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache' );
+                $data = file_get_contents( YD_WEBLOG_CACHE_FNAME );
 
                 // Include a cache filter if any
                 @include( dirname( __FILE__ ) . '/cache_filter.php' );

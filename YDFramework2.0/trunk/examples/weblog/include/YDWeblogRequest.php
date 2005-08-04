@@ -65,8 +65,8 @@
         function clearCache() {
             if ( $handle = opendir( YD_DIR_TEMP ) ) {
                 while ( false !== ( $file = readdir( $handle ) ) ) {
-                    if ( substr( $file, 0, 6 ) == 'YDF_L_' && strrchr( $file, '.' ) ) {
-                        if ( substr( strrchr( $file, '.' ), 1 ) == 'cache' ) {
+                    if ( substr( $file, 0, 6 ) == YD_WEBLOG_CACHE_PREFIX && strrchr( $file, '.' ) ) {
+                        if ( substr( strrchr( $file, '.' ), 1 ) == YD_WEBLOG_CACHE_SUFFIX ) {
                             @unlink( YD_DIR_TEMP . '/' . $file );
                         }
                     }
@@ -179,7 +179,7 @@
                 if ( $this->caching === true ) {
 
                     // Save the cache
-                    $f = fopen( YD_DIR_TEMP . '/YDF_L_' . md5( YDRequest::getNormalizedCurrentUrl() ) . '.cache', 'wb' );
+                    $f = fopen( YD_WEBLOG_CACHE_FNAME, 'wb' );
                     fwrite( $f, $data );
                     fclose( $f );
 
