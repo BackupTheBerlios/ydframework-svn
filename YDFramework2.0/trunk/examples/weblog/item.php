@@ -15,6 +15,9 @@
             // Initialize the parent
             $this->YDWeblogRequest();
 
+            // Disable caching
+            $this->caching = false;
+
         }
 
         // Default action
