@@ -56,13 +56,13 @@
 
             // Create the edit form
             $form = new YDWeblogForm( 'commentForm', 'POST', YD_SELF_SCRIPT . '?do=edit' );
-            $form->addElement( 'text',           'username',    t('name'),    array( 'class' => 'tfM' ) );
-            $form->addElement( 'text',           'useremail',   t('mail'),    array( 'class' => 'tfM' ) );
-            $form->addElement( 'text',           'userwebsite', t('website'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'bbtextarea',     'comment',     t('comment'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'datetimeselect', 'created',     t('created_on'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'hidden',         'id' );
-            $form->addElement( 'submit',         '_cmdSubmit',  t('OK'),      array( 'class' => 'button' ) );
+            $form->addElement( 'text',            'username',    t('name'),    array( 'class' => 'tfM' ) );
+            $form->addElement( 'text',            'useremail',   t('mail'),    array( 'class' => 'tfM' ) );
+            $form->addElement( 'text',            'userwebsite', t('website'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'wladmintextarea', 'comment',     t('comment'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'datetimeselect',  'created',     t('created_on'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'hidden',          'id' );
+            $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),      array( 'class' => 'button' ) );
 
             // Add the form rules
             $form->addRule( 'username',  'required', t( 'err_name' ) );
