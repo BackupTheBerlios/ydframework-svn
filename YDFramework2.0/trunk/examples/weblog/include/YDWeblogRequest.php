@@ -70,7 +70,6 @@
                             @unlink( YD_DIR_TEMP . '/' . $file );
                         }
                     }
-
                 }
                 closedir( $handle );
             }
