@@ -119,7 +119,7 @@ $GLOBALS['t']['h_global_settings'] = 'Global Settings';
 $GLOBALS['t']['a_users'] = 'Users';
 $GLOBALS['t']['a_settings'] = 'Settings';
 $GLOBALS['t']['h_maintenance'] = 'Maintenance';
-$GLOBALS['t']['a_cleanup_cache'] = 'Cleanup cache files';
+$GLOBALS['t']['a_cleanup_cache'] = 'Cache files';
 $GLOBALS['t']['a_server_info'] = 'Server info';
 $GLOBALS['t']['h_statistics'] = 'Statistics';
 $GLOBALS['t']['a_statistics'] = 'Statistics';
@@ -137,6 +137,7 @@ $GLOBALS['t']['err_login_all'] = 'Username and/or password are incorrect';
 
 // manage/cache.tpl
 $GLOBALS['t']['cleanup'] = 'Cleanup';
+$GLOBALS['t']['cleanup_cache'] = 'Cleanup cache files';
 $GLOBALS['t']['cache_cleaned_up'] = 'Cache files are cleaned up!';
 
 // manage/serverinfo.tpl

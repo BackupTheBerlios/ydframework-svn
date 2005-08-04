@@ -119,7 +119,7 @@ $GLOBALS['t']['h_global_settings'] = 'Algemene instellingen';
 $GLOBALS['t']['a_users'] = 'Gebruikers';
 $GLOBALS['t']['a_settings'] = 'Instellingen';
 $GLOBALS['t']['h_maintenance'] = 'Onderhoud';
-$GLOBALS['t']['a_cleanup_cache'] = 'Verwijder cache bestanden';
+$GLOBALS['t']['a_cleanup_cache'] = 'Cache bestanden';
 $GLOBALS['t']['a_server_info'] = 'Server info';
 $GLOBALS['t']['h_statistics'] = 'Statistieken';
 $GLOBALS['t']['a_statistics'] = 'Statistieken';
@@ -137,6 +137,7 @@ $GLOBALS['t']['err_login_all'] = 'Gebruikersnaam en/of paswoord zijn foutief';
 
 // manage/cache.tpl
 $GLOBALS['t']['cleanup'] = 'Verwijder';
+$GLOBALS['t']['cleanup_cache'] = 'Verwijder cache bestanden';
 $GLOBALS['t']['cache_cleaned_up'] = 'De cache bestanden zijn verwijderd!';
 
 // manage/serverinfo.tpl
