@@ -442,6 +442,27 @@ class YDAjaxResponse extends xajaxResponse{
 		}
 
 
+        /**
+         *	This method assigns a server result to a element using just the id
+         *
+         *	@param $id			Html element id.
+         *	@param $result		Result value.
+         *	@param $attribute	Custom attribute (auto-detection by default).
+         *	@param $option		Other options (not used).
+         */	
+		function assignId( $id, $result, $attribute = null, $options = array()){
+		
+			// if event is not defined we must create a default one
+			if (is_null( $attribute )) $attribute = 'innerHTML';
+		
+			// escape string
+			$result = addslashes( $result );
+
+			// assign result to form element using the id
+			$this->addScript('document.getElementById("'. $id .'").'. $attribute .' = "'. $result .'";');
+		}
+
+
 		// internal method to assign a value to a BBtextarea element
 		function assignBBtextarea( $formName, $formElementName, $result, $attribute, $options = array()){
 		
