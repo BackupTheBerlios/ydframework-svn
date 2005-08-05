@@ -444,6 +444,17 @@ class YDAjaxResponse extends xajaxResponse{
 
 
         /**
+         *	This method assigns a custom javascript function
+         *
+         *	@param $function	Javascript function
+         */	
+		function assignFunction( $function ){
+		
+			$this->addScript( $function .';');
+		}
+
+
+        /**
          *	This method assigns a server result to a element using just the id
          *
          *	@param $id			Html element id.
