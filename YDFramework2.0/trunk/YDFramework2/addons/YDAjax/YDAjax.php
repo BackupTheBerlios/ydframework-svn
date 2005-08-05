@@ -190,7 +190,8 @@
 								case 'datetimeselect' :	$args[] = $this->getValueDateTimeSelect( $elem );	break;
 								case 'timeselect' :		$args[] = $this->getValueTimeSelect( $elem );		break;
 								case 'span' :			$args[] = $this->getValueSpan( $elem );				break;
-																							
+								case 'select' :			$args[] = $this->getValueSelect( $elem );			break;
+
 								default : die ('Element type "'. $elem->getType() .'" is not supported as dynamic argument');
 							}
 							
@@ -252,7 +253,22 @@
 			// return function invocation
 			return $jsfunction ."()";
 		}
+
+
+		// internal method to create the needed js function to retrieve a select value
+		function getValueSelect( & $element ){
 		
+			// generate function name
+			$jsfunction = $this->prefix . 'get'. $element->getName();
+		
+			// add our custom js function
+			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
+			$this->customjs[$jsfunction] .= '	return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"].value;}' ."\n";
+
+			// return function invocation
+			return $jsfunction ."()";
+		}
+
 
 		// internal method to create the needed js function to retrieve a password value
 		function getValuePassword( & $element ){
