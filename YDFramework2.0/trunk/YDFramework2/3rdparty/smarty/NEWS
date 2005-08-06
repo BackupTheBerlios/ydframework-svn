@@ -1,3 +1,27 @@
+Version 2.6.10 (Aug 5, 2005)
+----------------------------
+
+  - allow secure_dir to be a filename, not just
+    a directory name (monte)
+  - set debug.tpl as a secure_dir, not the entire
+    SMARTY_DIR (monte)
+  - fix proper escaping for literal strings in
+    Smarty_Compiler::_parse_var_props() (boots, messju)
+  - remove ambiguity for numeric values passed to smarty_make_timestamp()
+    (and thus the date_format modifier). numeric values are treated as
+    timestamps now. (andreas, messju)
+  - add passthru attribute feature to html_select_date (Sedgar,
+    monte)
+  - add "middle" parameter to truncate (monte)
+  - make form input label ids optional (monte)
+  - add error message for empty if/elseif statements (eykanal,
+    monte)
+  - cast selected value to string for comparison in html_radios
+    (Exeption, monte)
+  - updated html_select_date's year_as_text-feature to be xhtml compliant
+    (Mark West, messju)
+  - fix handling of selected month html_select_date (Yuri Weseman, messju)
+
 Version 2.6.9 (Mar 31, 2005)
 ----------------------------
 
