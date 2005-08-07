@@ -129,7 +129,7 @@
                 $class = $this->getClassName();
             }
 
-            $path  = $path . $class . $ext;
+            $path  = $path   . $class . $ext;
             $class = $prefix . $class . $sufix;
 
             if ( ! class_exists( $class ) ) {
@@ -470,7 +470,7 @@
          *  @internal
          */
         function _prepareQuery( $only_keys=true ) {
-
+            
             $this->resetProtected();
 
             $keys    = $this->_getFieldsByMethod( 'isKey' );
@@ -561,6 +561,7 @@
                 $this->where( $r . $this->getTable()   . $r . '.' .
                               $r . $field->getColumn() . $r . $value );
             }
+            
         }
 
         /**
@@ -663,7 +664,7 @@
                 }
 
             }
-            
+
             return $results;
 
         }
@@ -679,10 +680,89 @@
          *  @returns  An array with the results.
          */
         function getResults( $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
-
+            
             $results = array();
-            while( $this->fetch( $only_current ) ) {
-                $results[] = $this->getValues( $only_current, $only_fields, $columns, $prefix );
+            $relations_arr = array();
+            
+            $relations_arr['_'] = & $this;
+            
+            if ( ! $only_current ) {
+                
+                $relations = $this->_last;
+
+                foreach ( $relations as $relation ) {
+
+                    $rel = & $this->getRelation( $relation );
+
+                    $f_var = $rel->getForeignVar();
+                    $relations_arr[ $relation . '_' . $f_var ] = & $this->$f_var;
+
+                    if ( $rel->isManyToMany() ) {
+                        $c_var = $rel->getCrossVar();
+                        $relations_arr[ $relation . '_' . $c_var ] = & $this->$c_var;
+                    }
+
+                }
+
+            }
+            
+            foreach ( $this->_results as $k => $res ) {
+                
+                $result = array();
+
+                foreach ( $relations_arr as $name => $relation ) {
+                    
+                    $res = $relation->_results[ $k ];
+                    $protected = $relation->_getFieldsByMethod( 'isProtected' );
+
+                    foreach ( $protected as $field ) {
+                        $res[ $field->getName() ] =  $field->getProtected();
+                    }
+                    
+                    $pfx = '';
+                    if ( $prefix ) {
+                        $pfx = substr( $name, strrpos( $name, '_' )+1, strlen( $name ) ) . '_';
+                    }
+                    
+                    if ( $pfx == '_' ) {
+                        $pfx = '';
+                    }
+                    
+                    foreach ( $res as $field => $value ) {
+                        
+                        if ( substr( $field, 0, 1 ) == '_' ) {
+                            unset( $res[ $field ] );
+                            continue;
+                        }
+                        
+                        if ( $prefix && $pfx != '' ) {
+                            $res[ $pfx . $field ] = $value;
+                            unset( $res[ $field ] );
+                        }
+                        
+                        if ( $only_fields && ! $this->_fields->exists( $field ) ) {
+                            unset( $res[ $pfx . $field ] );
+                        }
+                        
+                        if ( $columns && $this->_fields->exists( $field ) ) {
+                            $field_obj = & $this->getField( $field );
+                            $res[ $pfx . $field_obj->getColumn() ] = $value;
+                            unset( $res[ $pfx . $field ] );
+                        }
+                        
+                    }
+                    
+                    $result = array_merge( $result, $res );
+                    
+                }
+                
+                $results[] = $result;
+                
+            }
+            
+            // Clear the results
+            foreach ( $relations_arr as $name => $relation ) {
+                $relation->resetResults();
             }
 
             return $results;
@@ -750,14 +830,12 @@
                 return;
             }
 
-            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
-            
             $this->_query->insert();
             $this->_query->into( $this->getTable() );
             $this->_query->values( $values );
             $sql = $this->_query->getQuery();
 
-            YDDebugUtil::debug( $sql );
+            YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
             
@@ -787,8 +865,6 @@
             
             $this->_prepareQuery();
 
-            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
-
             $values = $this->getValues( true, true, true );
             $where = $this->_query->getWhere( false );
 
@@ -807,7 +883,7 @@
             $this->_query->set( $values );
             $sql = $this->_query->getQuery();
 
-            YDDebugUtil::debug( $sql );
+            YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
             
@@ -831,9 +907,7 @@
             $this->_executeCallbacks( 'delete', true );
 
             $this->_prepareQuery();
-
-            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
-
+            
             $where = $this->_query->getWhere( false );
 
             if ( ! strlen( trim( $where ) ) &&  ! YDConfig::get( 'YD_DBOBJECT_DELETE' ) ) {
@@ -846,7 +920,7 @@
             $this->_query->table( $this->getTable() );
             $sql = $this->_query->getQuery();
             
-            YDDebugUtil::debug( $sql );
+            YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
 
@@ -873,8 +947,6 @@
 
             // before find callbacks
             $this->_executeCallbacks( 'find', true );
-            
-            YDDebugUtil::debug( $this->getClassName() . YDDebugUtil::r_dump( $this->getValues() ) );
 
             $args = func_get_args();
 
@@ -1110,7 +1182,7 @@
 
                 $obj->resetQuery();
 
-                if ( $obj->_count >= 1 ) {
+                if ( $obj->_count == 1 ) {
                     $obj->setValues( $obj->_results[0] );
                 }
 
@@ -1268,14 +1340,14 @@
                 $relations = $this->_last;
                 
                 foreach ( $relations as $relation ) {
-    
+                    
                     $rel = & $this->getRelation( $relation );
     
                     $f_var = $rel->getForeignVar();
                     $this->$f_var->fetch( true );
-    
+                    
                     if ( $rel->isManyToMany() ) {
-    
+                        
                         $c_var = $rel->getCrossVar();
                         $this->$c_var->fetch( true );
     
@@ -1284,7 +1356,7 @@
                 }
                 
             }
-
+            
             $res = array_shift( $this->_results );
             if ( ! is_null( $res ) ) {
                 $this->setValues( $res );
@@ -1367,7 +1439,7 @@
         function _getValues( $only_fields=false, $columns=false, $prefix='' ) {
 
             $this->resetProtected();
-
+            
             $values = get_object_vars( $this );
             
             $new = array();
@@ -1490,10 +1562,8 @@
          */
         function setValues( $values ) {
 
-            $current = $this->getValues( true, true );
-
-            foreach ( $current as $field => $value ) {
-                if ( ! array_key_exists( $field, $values ) ) {
+            foreach ( get_object_vars( $this ) as $field => $val ) {
+                if ( $this->_fields->exists( $field ) ) {
                     unset( $this->$field );
                 }
             }
@@ -1502,7 +1572,7 @@
             }
 
             $this->resetProtected();
-
+            
         }
 
         /**

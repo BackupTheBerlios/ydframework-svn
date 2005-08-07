@@ -337,6 +337,8 @@
         <para>The result:</para>
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_036.xml" />
+        
+        <note>getResults and getResultsAsAssocArray don't execute any field callback. These methods return the results as fetched from the query. If you want to execute the fields callbacks for each result, you must use a combination of fetch and getValues.</note>
 
         <para>There are a few methods to clear the object variables and it's configurations:</para>
 
