@@ -577,8 +577,8 @@
 
             // Get the actual element value
             $element = & $this->getElement( $name );
-            $type = $element->_type;
-            $value = $element->_value;
+            $type = $element->getType();
+            $value = $element->getValue();
             $applyFilters = $element->_applyFilters;
 
             // Filters should only be applied if the form is submitted and if the element type supports it.
@@ -604,7 +604,7 @@
             if ( $element->hasMethod( 'getTimeStamp' ) ) {
                 if ( ! is_array( $value ) ) {
                     $element->setValue( $value );
-                    $value = $element->_value;
+                    $value = $element->getValue();
                 }
                 @ $value['timestamp'] = $element->getTimeStamp();
             }
