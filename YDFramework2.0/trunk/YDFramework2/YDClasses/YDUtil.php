@@ -63,16 +63,10 @@
         /**
          *	This will add a named marker.
          *
-         *	@remark
-         *		If there is already a marker with that name, a fatal error will be raised.
-         *
          *	@param $name	The name to use for the marker
          */
         function addMarker( $name ) {
-            if ( isset( $this->markers[ $name ] ) ) {
-                trigger_error( 'Marker with name "' . $name . '" is already set.', YD_ERROR );
-            }
-            array_push( $this->markers, array( $name => $this->getElapsed() ) );
+            array_push( $this->markers, array( $name, $this->getElapsed() ) );
         }
 
         /**
@@ -99,22 +93,12 @@
          *	@returns	Array with the elapsed times, differences and marker names.
          */
         function getReport() {
-            $report = array( '** Start' => array( 0, 0, '** Start' ) );
+            $report = array();
+            $report[] = array( 0, 0, '** Start' );
             $previous = 0;
             foreach ( $this->markers as $marker ) {
-                foreach ( $marker as $key=>$val ) {
-                    $diff = $val - $previous;
-                    $previous = $val;
-                    $report[ $key ] = array( $val, $diff, $key );
-                }
-            }
-            foreach ( $report as $key=>$val ) {
-                if ( isset( $report[ $key + 1 ] ) ) {
-                    $report[$key][1] = $report[$key+1][1];
-                }
-                if ( $key == sizeof( $report )-1 ) {
-                    $report[$key][1] = '-';
-                }
+                $report[] = array( $marker[1], $marker[1]-$previous, $marker[0] );
+                $previous = $marker[1];
             }
             return $report;
         }
