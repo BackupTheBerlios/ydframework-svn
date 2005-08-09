@@ -60,6 +60,8 @@
 			// 'mybutton' will be assigned with 'getversion' call with dynamic values from form elements 'arg1' and 'arg2'
 			$ajax->registerElement( 'mybutton', 'compute', array('arg1', 'arg2') );
 
+			// process ajax
+			$ajax->processRequests();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This a calculator example. Fill X and Y');

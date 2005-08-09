@@ -234,10 +234,6 @@
 			
 			// add event and function name to element attributes
 			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $arguments .')');
-
-			// xajax process request
-			$this->processRequests();
-			return;			
 		}
 		
 		

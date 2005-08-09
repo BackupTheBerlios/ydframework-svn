@@ -55,6 +55,8 @@
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$ajax->registerElement( 'mybutton', 'getversion' );
 			
+			// process ajax
+			$ajax->processRequests();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This is a simple ajax example');

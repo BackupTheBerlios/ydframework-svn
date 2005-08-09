@@ -65,6 +65,8 @@
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$ajax->registerElement( 'mybutton', 'compute', array('arg1', 'arg2', 'operation') );
 
+			// process ajax
+			$ajax->processRequests();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This a dynamic calculator example (you can choose operation)');
