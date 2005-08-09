@@ -462,7 +462,7 @@ class YDAjaxResponse extends xajaxResponse{
          */	
 		function assignFunction( $function ){
 		
-			$this->addScript( $function .';');
+			$this->addScript( $function );
 		}
 
 
@@ -533,7 +533,7 @@ class YDAjaxResponse extends xajaxResponse{
 			if (is_null( $attribute )) $attribute = 'innerHTML';
 		
 			// check and convert $result
-			$result = htmlspecialchars( $result );
+			$result = addslashes( $result );
 
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
