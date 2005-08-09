@@ -226,6 +226,7 @@
 					case 'textarea' :	$event = 'onChange'; break;
 					case 'bbtextarea' :	$event = 'onChange'; break;
 					case 'password' :	$event = 'onChange'; break;
+					case 'select' :		$event = 'onChange'; break;
 					
 					// if element doesn't exist return a php error
 					default : trigger_error('Element type ('. $formElement->_type .') is not supported in YDAjax'); break;
@@ -445,7 +446,9 @@ class YDAjaxResponse extends xajaxResponse{
 				case 'radio' :			$this->assignRadio(    $formName, $formElementName, $result, $attribute, $options ); break;
 				case 'password' :		$this->assignPassword( $formName, $formElementName, $result, $attribute, $options ); break;
 				case 'span' :			$this->assignSpan(     $formName, $formElementName, $result, $attribute, $options ); break;
+				case 'select' :			$this->assignSelect(   $formName, $formElementName, $result, $attribute, $options ); break;
 				case 'image' :			$this->addAlert('Input type image cannot be used. Please use a img instead.'); break;
+
 
 				// if element doesn't exist return an js alert
 				default : $this->addAlert('Element type "'. $formElementType .'" is not supported in YDAjax'); break;
@@ -484,6 +487,25 @@ class YDAjaxResponse extends xajaxResponse{
 
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $id .'").'. $attribute .' = "'. $result .'";');
+		}
+
+
+		// internal method to assign a value to a select element
+		function assignSelect( $formName, $formElementName, $result, $attribute, $options = array()){
+		
+			// if attribute event is not defined we must create a default event
+			if (is_null( $attribute )) $attribute = 'value';
+
+			if (!is_array( $result )) $result = array( $result );
+			
+			// compute options
+			$options = '__ydfselect.options.length = 0;';
+			foreach( $result as $key => $value )
+				$options .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("'. $value .'","'. $key .'"); ' ;
+		
+			// assign result to form element
+			$this->addScript('var __ydfselect = document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"];'.
+							 $options );
 		}
 
 
