@@ -263,7 +263,7 @@
          *  @returns  True if current year, false otherwise.
          */
         function isCurrentYear() {
-            if ( $this->year == strftime( "%Y" ) ) {
+            if ( $this->year == (int) strftime( "%Y" ) ) {
                 return true;
             }
             return false;
@@ -442,7 +442,7 @@
             $years  = $e->year - $s->year;
             if ( $e->month < $s->month ) {
                 $years--;
-            } else if ( $e->day < $s->day ) {
+            } else if ( $e->month == $s->month && $e->day < $s->day ) {
                 $years--;
             }
             return $years;
@@ -465,7 +465,7 @@
         }
         
         /**
-         *  This function returns a boolean indicating if the date
+         *  This function returns a boolean indicating if the day
          *  is at the end of the quarter.
          *
          *  @returns  True if at the end of the quarter, false otherwise.
@@ -593,15 +593,15 @@
         /**
          *  This function returns the number of days in the year.
          *
-         *  @param $year  (Optional) If empty, object's year. Default: empty.
+         *  @param $year  (Optional) If empty, object's year. Default: null.
          *
          *  @returns  The number of days in the year.
          *
          *  @static   If $year is passed.
          */
-        function getDaysInYear( $year='' ) {
+        function getDaysInYear( $year=null ) {
             
-            if ( ! $year  ) { $year  = $this->year;  }
+            if ( is_null( $year ) ) { $year  = $this->year;  }
             
             return YDDate::isLeapYear( $year ) ? 366 : 365;
         
@@ -610,17 +610,17 @@
         /**
          *  This function returns the number of days in the month.
          *
-         *  @param $month (Optional) If empty, object's month. Default: empty.
-         *  @param $year  (Optional) If empty, object's year. Default: empty.
+         *  @param $month (Optional) If empty, object's month. Default: null.
+         *  @param $year  (Optional) If empty, object's year. Default: null.
          *
          *  @returns  The number of days in the month.
          *
          *  @static  If $month and $year are passed.
          */
-        function getDaysInMonth( $month='', $year='' ) {
+        function getDaysInMonth( $month=null, $year=null ) {
             
-            if ( ! $month ) { $month = $this->month; }
-            if ( ! $year  ) { $year  = $this->year;  }
+            if ( is_null( $month ) ) { $month = $this->month; }
+            if ( is_null( $year  ) ) { $year  = $this->year;  }
             
             switch ( (int) $month ) {
                 
@@ -637,48 +637,6 @@
                 case 11: return 30;
                 case 12: return 31;
                 
-            }
-            
-            return 0;
-            
-        }
-
-        /**
-         *  This function returns the quarter of the date.
-         *
-         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
-         *                            If null, the date of the object. Default: null.
-         *  @param $format (Optional) The format name. Default: 'ISO'.
-         *
-         *  @returns  The quarter.
-         *
-         *  @static   If $date is passed.
-         */
-        function getQuarter( $date=null, $format='ISO' ) {
-            
-            if ( $date === null ) {
-                $date = $this->parse( $date, $format );
-            } else {
-                $date = YDDate::parse( $date, $format );
-            }
-            
-            switch ( $date['month'] ) {
-                case 1:
-                case 2:
-                case 3:
-                    return 1;
-                case 4:
-                case 5:
-                case 6:
-                    return 2;
-                case 7:
-                case 8:
-                case 9:
-                    return 3;
-                case 10:
-                case 11:
-                case 12:
-                    return 4;
             }
             
             return 0;
@@ -728,6 +686,10 @@
             if ( $this->isDateEmpty() ) {
                 trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
             }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
 
             $this->month += $value;
             
@@ -775,6 +737,10 @@
                 trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
             }
             
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
+            
             $julian = GregoriantoJD( $this->month, $this->day, $this->year );
             $julian += $value;
                
@@ -807,6 +773,10 @@
             
             if ( $this->isDateEmpty() ) {
                 trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
             }
             
             $this->hours += $value;
@@ -845,6 +815,10 @@
                 trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
             }
             
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
+            
             $this->minutes += $value;
             
             $hours = floor( $this->minutes / 60 );
@@ -879,6 +853,10 @@
             
             if ( $this->isDateEmpty() ) {
                 trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
             }
             
             $this->seconds += $value;
@@ -962,20 +940,11 @@
                 $e = & $start;
             } 
             
-            $hours   += 24 - $s->hours + $e->hours;
-            
-            if ( $s->minutes != $e->minutes ) {
-                $minutes += 60 - $s->minutes + $e->minutes;
-            }
-            
-            if ( $s->seconds != $s->seconds ) {
-                $seconds += 60 - $s->seconds + $e->seconds;
-            }
-            
-            if ( $days > 1 ) {
-                $hours += $days * 24;
-            }
-            
+            $hours   += $e->hours - $s->hours;
+            $minutes += $e->minutes - $s->minutes;
+            $seconds += $e->seconds - $s->seconds;
+
+            $hours   += $days * 24;
             $minutes += $hours * 60;
             $seconds += $minutes * 60;
             

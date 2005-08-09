@@ -414,6 +414,7 @@
             }
             
             $this->weekday           = $this->getWeekDay();
+            $this->quarter           = $this->getQuarter();
             $this->day_name          = $this->getDayName();
             $this->day_name_abbr     = $this->getDayName( true );
             $this->month_name        = $this->getMonthName();
@@ -779,6 +780,48 @@
             }
             
             return ( $a == 7 ) ? 0 : $a;
+            
+        }
+        
+        /**
+         *  This function returns the quarter of the date.
+         *
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the date of the object. Default: null.
+         *  @param $format (Optional) The format name. Default: 'ISO'.
+         *
+         *  @returns  The quarter.
+         *
+         *  @static   If $date is passed.
+         */
+        function getQuarter( $date=null, $format='ISO' ) {
+            
+            if ( $date === null ) {
+                $date = $this->parse( $date, $format );
+            } else {
+                $date = YDDate::parse( $date, $format );
+            }
+            
+            switch ( $date['month'] ) {
+                case 1:
+                case 2:
+                case 3:
+                    return 1;
+                case 4:
+                case 5:
+                case 6:
+                    return 2;
+                case 7:
+                case 8:
+                case 9:
+                    return 3;
+                case 10:
+                case 11:
+                case 12:
+                    return 4;
+            }
+            
+            return 0;
             
         }
         
