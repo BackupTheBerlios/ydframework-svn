@@ -10,7 +10,7 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// version invoked by ajax
+	// result call invoked by ajax client
 	function result( $option ){
 
 		// compute message
@@ -24,7 +24,7 @@
 		// create ajax response object
 		$response = new YDAjaxResponse();
 
-		// assign span 'myspanresult' of 'myform' with ydf version name
+		// assign span 'myspanresult' of 'myform' with dynamic message
 		$response->assignResult('myform', 'myspanresult', 'span', $message);
 
 		// return response to client browser
@@ -45,7 +45,7 @@
 		// Default action
 		function actionDefault() {
 
-			// create a form with a span and a button
+			// create a form with a span and two buttons
 			$form = new YDForm('myform');
 			$form->addElement('span',   'myspanresult', '&nbsp;', array('style' => 'WIDTH:350px;BACKGROUND-COLOR:#ccccff') );
 			$form->addElement('button',	'mybutton',     'Get YDFramework version');
@@ -54,13 +54,13 @@
 			// create ajax object
 			$ajax = new YDAjax();
 
-			// define template that we will use (YDAjax will assign all js needed)
+			// define template object (YDAjax will assign all js to this template)
 			$ajax->setTemplate( $this->tpl );
 			
 			// define which default form we will use (this way we don't need to define form in registerElement)
 			$ajax->setForm( $form );
 
-			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
+			// register element mybutton with event result and fixed argument '1' and mybutton2 with event 'result' with argument 2
 			$ajax->registerElement( 'mybutton',  'result', 1 );
 			$ajax->registerElement( 'mybutton2', 'result', 2 );
 			

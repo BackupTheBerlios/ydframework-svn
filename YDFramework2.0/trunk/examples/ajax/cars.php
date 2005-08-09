@@ -9,7 +9,7 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 
-	// version invoked by ajax
+	// getmodel call invoked by ajax client
 	function getmodel( $car ){
 
 		switch ( intval( $car ) ){
@@ -22,7 +22,7 @@
 		// create ajax response object
 		$response = new YDAjaxResponse();
 
-		// assign span 'myspanresult' of 'myform' with ydf version name
+		// assign select element 'model' of 'myform' with an array
 		$response->assignResult('myform', 'model', 'select', $models);
 
 		// return response to client browser
@@ -43,7 +43,7 @@
 		// Default action
 		function actionDefault() {
 
-			// create a form with a span and a button
+			// create a form with two select buttons
 			$form = new YDForm( 'myform' );
 			$form->addElement( 'select', 'car',   '', array(), array( 'Please select your car', 'Ferrari', 'Fiat', 'BMW' ) );
 			$form->addElement( 'select', 'model', '', array() );
@@ -51,13 +51,13 @@
 			// create ajax object
 			$ajax = new YDAjax();
 
-			// define template that we will use (YDAjax will assign all js needed)
+			// define template object (YDAjax will assign all js to this template)
 			$ajax->setTemplate( $this->tpl );
 			
 			// define which default form we will use (this way we don't need to define form in registerElement)
 			$ajax->setForm( $form );
 			
-			// register element mybutton
+			// register element 'car' with event 'getmodel' using dynamic value from 'car' element
 			$ajax->registerElement( 'car', 'getmodel', array( 'car' ) );
 			$ajax->processRequests();
 

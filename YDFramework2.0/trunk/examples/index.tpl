@@ -577,17 +577,56 @@
             </td>
         </tr>
         <tr>
-            <td colspan="2"><b>&nbsp;<br/>YDXMLForm</b></td>
-            <td width="43%"><b>&nbsp;</b></td>
+          <td colspan="2"><b>&nbsp;<br/>
+            YDXMLForm</b></td>
+          <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td valign="top" rowspan="1">&nbsp;</td>
-            <td valign="top">
-                <a href="form_xml.php">Creating forms using XML</a> <br/>
-            </td>
-            <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=form_xml.php">form_xml.php</a>
-            </td>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="form_xml.php">Creating forms using XML</a> <br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=form_xml.php">form_xml.php</a> </td>
+        </tr>
+        <tr>
+          <td colspan="2"><b>&nbsp;<br/>
+            YDAjax</b></td>
+          <td><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/version.php">Simple ajax example</a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/version.php">ajax/version.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/two_buttons.php">Two buttons with different events </a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/two_buttons.php">ajax/two_buttons.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/calculator.php">Sum calculator </a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/calculator.php">ajax/calculator.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/calculator_dynamic.php">Four operations calculator </a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/calculator_dynamic.php">ajax/calculator_dynamic.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/cars.php">Dependency between select elements</a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/cars.php">ajax/cars.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="1">&nbsp;</td>
+          <td valign="top"><a href="ajax/date_calculator.php">Date calculator using a datetimeselect</a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/date_calculator.php">ajax/date_calculator.php</a> </td>
         </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>

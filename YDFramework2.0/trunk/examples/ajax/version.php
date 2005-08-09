@@ -10,7 +10,7 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// version invoked by ajax
+	// getversion invoked by ajax client
 	function getversion(){
 		
 		// create ajax response object
@@ -46,10 +46,10 @@
 			// create ajax object
 			$ajax = new YDAjax();
 
-			// define template that we will use (YDAjax will assign all js needed)
+			// define template object (YDAjax will assign all js to this template)
 			$ajax->setTemplate( $this->tpl );
 			
-			// define which default form we will use (this way we don't need always to define a form in registerElement)
+			// define default form to use (this way we don't need always to define a form in registerElement)
 			$ajax->setForm( $form );
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)

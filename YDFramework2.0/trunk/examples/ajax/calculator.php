@@ -10,7 +10,7 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// version invoked by ajax
+	// compute call invoked by ajax client
 	function compute( $arg1, $arg2 ){
 		
 		$result = $arg1 + $arg2;
@@ -18,7 +18,7 @@
 		// create ajax response object
 		$response = new YDAjaxResponse();
 
-		// assign span 'myspanresult' of 'myform' with ydf version name
+		// assign span 'myspanresult' of 'myform' with sum result
 		$response->assignResult('myform', 'myspanresult', 'span', $result );
 
 		// return response to client browser
@@ -46,18 +46,16 @@
 			$form->addElement('button',	'mybutton',     'Sum');
 			$form->addElement('span',   'myspanresult', '&nbsp;');
 
-
 			// create ajax object
 			$ajax = new YDAjax();
 
-			// define template that we will use (YDAjax will assign all js needed)
+			// define template object (YDAjax will assign all js to this template)
 			$ajax->setTemplate( $this->tpl );
 			
 			// define which default form we will use (this way we don't need to define form in registerElement)
 			$ajax->setForm( $form );
 
-			// register element mybutton 
-			// 'mybutton' will be assigned with 'getversion' call with dynamic values from form elements 'arg1' and 'arg2'
+			// assign 'mybutton' with 'compute' call with dynamic values from form elements 'arg1' and 'arg2'
 			$ajax->registerElement( 'mybutton', 'compute', array('arg1', 'arg2') );
 
 			// process ajax
