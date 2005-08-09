@@ -58,7 +58,7 @@
 
             // Add the list of attributes
             $attribs = array(
-                'name'		=> $this->_form->_name, 'id'		=> $this->_form->_name, 'method' => strtoupper( $this->_form->_method ),
+                'name'		=> $this->_form->_name, 'id'		=> $this->_form->_name, 'method' => $this->_form->_method,
                 'action'	=> $this->_form->_action, 'target'	=> $this->_form->_target
             );
             $attribs = array_merge( $attribs, $this->_form->_attributes );

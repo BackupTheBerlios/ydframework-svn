@@ -86,7 +86,7 @@
             $this->_requiredNote = '';
 
             // Check for post or get variables
-            if ( strtoupper( $this->_method ) == 'GET' ) {
+            if ( $this->_method == 'get' ) {
                 $this->_formVars = $_GET;
             } else {
                 $this->_formVars = $_POST;
