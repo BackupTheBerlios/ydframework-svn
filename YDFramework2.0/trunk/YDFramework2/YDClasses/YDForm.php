@@ -96,6 +96,7 @@
             $this->registerElement( 'bbtextarea', 'YDFormElement_BBTextArea', 'YDFormElement_BBTextArea.php' );
             $this->registerElement( 'button', 'YDFormElement_Button', 'YDFormElement_Button.php' );
             $this->registerElement( 'checkbox', 'YDFormElement_Checkbox', 'YDFormElement_Checkbox.php' );
+            $this->registerElement( 'date', 'YDFormElement_Date', 'YDFormElement_Date.php' );
             $this->registerElement( 'dateselect', 'YDFormElement_DateSelect', 'YDFormElement_DateSelect.php' );
             $this->registerElement( 'datetimeselect', 'YDFormElement_DateTimeSelect', 'YDFormElement_DateTimeSelect.php' );
             $this->registerElement( 'timeselect', 'YDFormElement_TimeSelect', 'YDFormElement_TimeSelect.php' );
