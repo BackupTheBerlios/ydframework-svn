@@ -318,7 +318,7 @@
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
 			$this->customjs[$jsfunction] .= '	var day   = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var month = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value;' ."\n";
+			$this->customjs[$jsfunction] .= '	var month = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' ."\n";
 			$this->customjs[$jsfunction] .= '	var year  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' ."\n";
 			$this->customjs[$jsfunction] .= '	var mydate = new Date( year, month, day ); ' . "\n";
 			$this->customjs[$jsfunction] .= '	return mydate.getTime() / 1000; }';
@@ -355,7 +355,7 @@
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
 			$this->customjs[$jsfunction] .= '	var day      = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var month    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value;' ."\n";
+			$this->customjs[$jsfunction] .= '	var month    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' ."\n";
 			$this->customjs[$jsfunction] .= '	var year     = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' ."\n";
 			$this->customjs[$jsfunction] .= '	var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' ."\n";
 			$this->customjs[$jsfunction] .= '	var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' ."\n";
