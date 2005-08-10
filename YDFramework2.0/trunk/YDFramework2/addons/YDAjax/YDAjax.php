@@ -233,6 +233,9 @@
 				}
 			}
 			
+			// if serverFunction is a class method return the method name, otherwise it's a simple function name
+			if (is_array( $serverFunction )) $serverFunction = $serverFunction[1];
+
 			// add event and function name to element attributes
 			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $arguments .')');
 		}

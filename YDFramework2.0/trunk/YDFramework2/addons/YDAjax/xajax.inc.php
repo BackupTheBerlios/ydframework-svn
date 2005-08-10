@@ -180,7 +180,6 @@ if (!defined ('POST'))
 class xajax
 {
 	var $aFunctions;			// Array of PHP functions that will be callable through javascript wrappers
-	var $aFunctionRequestTypes;	// Array of RequestTypes to be used with each function (key=function name)
 	var $sRequestURI;			// The URI for making requests to the xajax object
 	var $bDebug;				// Show debug messages true/false
 	var $sWrapperPrefix;		// The prefix to prepend to the javascript wraper function name
@@ -342,14 +341,17 @@ class xajax
 	}
 	
 	// registerFunction() registers a PHP function to be callable through xajax
-	// $sFunction is a string containing the function name
+	// $sFunction is a string containing the function name or an indexed array with two elements ( 'Object reference', 'Method name' ) to call function from an object 
 	// $sRequestType is the RequestType (GET/POST) that should be used 
 	//		for this function.  Defaults to POST.
 	// usage: $xajax->registerFunction("myfunction",POST);
 	function registerFunction($sFunction,$sRequestType=POST)
 	{
-		$this->aFunctions[] = $sFunction;
-		$this->aFunctionRequestTypes[$sFunction] = $sRequestType;
+		if( is_array( $sFunction ) ){ 
+			$this->aFunctions[ $sFunction[ 1 ] ] = array( 'call' => $sFunction, 'method' => $sRequestType ); 
+		} else { 
+			 $this->aFunctions[ $sFunction ] = array( 'call' => $sFunction, 'method' => $sRequestType ); 
+		} 	
 	}
 	
 	// generates the javascript wrapper for the specified PHP function
@@ -411,13 +413,13 @@ class xajax
 				$aArgs = $_GET["xajaxargs"];
 		}
 		
-		if (!in_array($sFunctionName, $this->aFunctions))
+		if( !in_array( $sFunctionName, array_keys( $this->aFunctions ) ) ) 
 		{
 			$objResponse = new xajaxResponse();
 			$objResponse->addAlert("Unknown Function $sFunctionName.");
 			$sResponse = $objResponse->getXML();
 		}
-		else if ($this->aFunctionRequestTypes[$sFunctionName] != $requestMode)
+		else if ($this->aFunctions[ $sFunctionName ][ 'method' ] != $requestMode)
 		{
 			$objResponse = new xajaxResponse();
 			$objResponse->addAlert("Incorrect Request Type.");
@@ -436,7 +438,7 @@ class xajax
 					$aArgs[$i] = $this->xmlToArray("xjxquery",$aArgs[$i]);	
 				}
 			}
-			$sResponse = call_user_func_array($sFunctionName, $aArgs);
+			$sResponse = call_user_func_array( $this->aFunctions[ $sFunctionName ][ 'call' ], $aArgs );
 		}
 		
 		header("Content-type: text/xml; charset=utf-8");
@@ -760,6 +762,7 @@ class xajax
 					catch (e2)
 					{
 						req=null;
+
 					}
 				}
 				if(!req && typeof XMLHttpRequest != "undefined")
@@ -1076,8 +1079,8 @@ class xajax
 		<?php
 		$js .= ob_get_contents()."\n";
 		ob_end_clean();
-		foreach($this->aFunctions as $sFunction)
-			$js .= $this->wrap($sFunction,$this->aFunctionRequestTypes[$sFunction]);
+		foreach($this->aFunctions as $name => $sFunction) 
+			$js .= $this->wrap( $name, $sFunction[ 'method' ] ); 
 	
 		if ($this->bDebug == false)
 			$js = $this->compressJavascript($js);
