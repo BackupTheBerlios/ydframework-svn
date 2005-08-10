@@ -9,27 +9,6 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 
-	// getmodel call invoked by ajax client
-	function getmodel( $car ){
-
-		switch ( intval( $car ) ){
-			case 0  : $models = array(); break;
-			case 1  : $models = array( 'F40', 'F50' ); break;
-			case 2  : $models = array( 'Punto', 'Brava', 'Bravo' ); break;
-			default : $models = array( 'Z3', 'Z4', 'M3' ); break;
-		}
-
-		// create ajax response object
-		$response = new YDAjaxResponse();
-
-		// assign select element 'model' of 'myform' with an array
-		$response->assignResult('myform', 'model', 'select', $models);
-
-		// return response to client browser
-		return $response->getXML();
-	}
-	
-
 	// Class definition
 	class cars extends YDRequest {
 
@@ -58,7 +37,7 @@
 			$ajax->setForm( $form );
 			
 			// register element 'car' with event 'getmodel' using dynamic value from 'car' element
-			$ajax->registerElement( 'car', 'getmodel', array( 'car' ) );
+			$ajax->registerElement( 'car', array( & $this, 'getmodel' ), array( 'car' ) );
 			$ajax->processRequests();
 
 			// assign form and display template
@@ -67,6 +46,26 @@
 			$this->tpl->display( 'general' );
 		}
 
+
+		// getmodel call invoked by ajax client
+		function getmodel( $car ){
+
+			switch ( intval( $car ) ){
+				case 0  : $models = array(); break;
+				case 1  : $models = array( 'F40', 'F50' ); break;
+				case 2  : $models = array( 'Punto', 'Brava', 'Bravo' ); break;
+				default : $models = array( 'Z3', 'Z4', 'M3' ); break;
+			}
+
+			// create ajax response object
+			$response = new YDAjaxResponse();
+
+			// assign select element 'model' of 'myform' with an array
+			$response->assignResult('myform', 'model', 'select', $models);
+
+			// return response to client browser
+			return $response->getXML();
+		}
 
 	}
 
