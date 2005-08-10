@@ -733,12 +733,14 @@
          *  It will iterate over all the rules and apply them to each field after having applies the filters.
          *  Errors will be put on the error stack. In the end, it returns false or true.
          *
+         *  @param  $customvalues   (Optional) custom values to use for validation
+         *
          *  @returns    Boolean indicating if the form is valid or not.
          */
-        function validate() {
+        function validate( $customvalues = null ) {
 
             // Form should be submitted
-            if ( $this->isSubmitted() == false ) {
+            if ( is_null( $customvalues ) && $this->isSubmitted() == false ) {
                 return false;
             }
 
@@ -746,6 +748,18 @@
             if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 ) {
                 return true;
             }
+
+            // If custom values are defined parse them
+            if ( ! is_null( $customvalues ) ) {
+                foreach ( $customvalues as $key => $value ) {
+
+                    // Remove the form name from the element name
+                    $key = preg_replace( '/^' . $this->_name . '_/', '', $key );
+
+                    $this->_elements[ $key ]->setValue( $value );
+                }
+            }
+
 
             // Apply the element rules
             foreach ( $this->_rules as $element=>$rules ) {
