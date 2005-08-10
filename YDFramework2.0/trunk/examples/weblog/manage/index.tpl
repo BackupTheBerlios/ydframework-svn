@@ -24,6 +24,8 @@
             <td class="adminRowL">{$item.user_name}</td>
             <td class="adminRowL">{$item.title}</td>
             <td class="adminRowR">
+                <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
+                |
                 <a href="items.php?do=edit&id={$item.id}">{t w="edit"}</a>
                 |
                 <a href="items_gallery.php?id={$item.id}">{if $item.num_images > 0}{$item|@text_num_images:false}{else}<span class="disabled">0 {t w="images" lower=true}</span>{/if}</a>
