@@ -65,7 +65,9 @@
 				return $response->sendFormErrors( $this->form );
 
 			// assign span 'myspanresult' form dump as result
-			$response->assignResult( 'myform', 'myspanresult', 'span', YDDebugUtil::r_dump($formvalues, true) );
+			$response->assignResult( 'myform', 'myspanresult', 'span',   YDDebugUtil::r_dump($this->form->getValues(), true) );
+			$response->assignResult( 'myform', 'mybutton',     'button', 'Send form with YDAjax again :)' );
+
 
 			// return response to client browser
 			return $response->getXML();
