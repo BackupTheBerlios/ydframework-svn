@@ -170,7 +170,7 @@
          *
          *	@returns	The escaped string.
          */
-        function string( $string ) {
+        function escape( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     return pg_escape_string( $string );

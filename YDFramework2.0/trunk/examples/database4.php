@@ -28,7 +28,7 @@
             YDDebugUtil::dump( $db->getRecords( 'select now()' ), 'select now();' );
 
             // Test string escaping
-            YDDebugUtil::dump( $db->string( "Pieter's Framework" ), '$db->string' );
+            YDDebugUtil::dump( $db->escape( "Pieter's Framework" ), '$db->escape' );
 
             // Show number of queries
             YDDebugUtil::dump( $db->getSqlCount(), 'Number of queries' );
@@ -40,10 +40,10 @@
             YDDebugUtil::dump( $db->getTime( '__NOW__' ), 'getTime( \'__NOW__\' )' );
             YDDebugUtil::dump( $db->getDate( '28-FEB-1977' ), 'getDate( \'28-FEB-1977\' )' );
             YDDebugUtil::dump( $db->getTime( '28-FEB-1977' ), 'getTime( \'28-FEB-1977\' )' );
-            YDDebugUtil::dump( $db->sqlString( $db->getDate() ), 'sqlString( getDate() )' );
-            YDDebugUtil::dump( $db->sqlString( $db->getTime() ), 'sqlString( getTime() )' );
-            YDDebugUtil::dump( $db->sqlString( $db->getDate( '__NOW__' ) ), 'sqlString( getDate( \'__NOW__\' ) )' );
-            YDDebugUtil::dump( $db->sqlString( $db->getTime( '__NOW__' ) ), 'sqlString( getTime( \'__NOW__\' ) )' );
+            YDDebugUtil::dump( $db->escapeSql( $db->getDate() ), 'escapeSql( getDate() )' );
+            YDDebugUtil::dump( $db->escapeSql( $db->getTime() ), 'escapeSql( getTime() )' );
+            YDDebugUtil::dump( $db->escapeSql( $db->getDate( '__NOW__' ) ), 'escapeSql( getDate( \'__NOW__\' ) )' );
+            YDDebugUtil::dump( $db->escapeSql( $db->getTime( '__NOW__' ) ), 'escapeSql( getTime( \'__NOW__\' ) )' );
 
             // Test limits
             YDDebugUtil::dump( $db->_prepareSqlForLimit( 'SELECT * FROM TABLE', 10 ) );

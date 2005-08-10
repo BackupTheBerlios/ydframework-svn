@@ -59,7 +59,7 @@
          *
          *  @returns    The escaped string.
          */
-        function string( $string ) {
+        function escape( $string ) {
             $this->db->connect();
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {

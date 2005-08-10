@@ -62,14 +62,14 @@
          *
          *  @returns    The escaped string surrounded by quotes.
          */
-        function sqlString( $string ) {
+        function escapeSql( $string ) {
             if ( is_null( $string ) || strtolower( $string ) == 'null' ) {
                 return 'null';
             }
             if ( strtolower( substr( $string, 0, 7 ) ) == 'to_date' ) {
                 return $string;
             }
-            return $this->quote . $this->string( $string ) . $this->quote;
+            return $this->quote . $this->escape( $string ) . $this->quote;
         }
         
         /**

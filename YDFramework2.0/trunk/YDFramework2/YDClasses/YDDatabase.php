@@ -816,9 +816,43 @@
          *
          *  @param $string  The string to escape.
          *
-         *  @returns    The escaped string.
+         *  @returns     The escaped string.
+         *  
+         *  @deprecated  Will be removed in version 2.0 final. Use escape() instead.
          */
         function string( $string ) {
+            
+            trigger_error( 'The method YDDatabaseDriver::string is deprecated and will be removed in version 2.0 final. Use YDDatabaseDriver::escape instead.', YD_WARNING );
+            
+            return $this->escape( $string );
+        }
+
+        /**
+         *  This function will escape a string so that it's safe to include it in an SQL statement and will surround it
+         *  with the quotes appropriate for the database backend.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns     The escaped string surrounded by quotes.
+         *  
+         *  @deprecated  Will be removed in version 2.0 final. Use escapeSql() instead.
+         */
+        function sqlString( $string ) {
+            
+            trigger_error( 'The method YDDatabaseDriver::sqlString is deprecated and will be removed in version 2.0 final. Use YDDatabaseDriver::escapeSql instead.', YD_WARNING );
+            
+            return $this->escapeSql( $string );
+        
+        }
+
+        /**
+         *  This function will escape a string so that it's safe to include it in an SQL statement.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns    The escaped string.
+         */
+        function escape( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     return str_replace( "'", "''", $string );
@@ -837,10 +871,10 @@
          *
          *  @returns    The escaped string surrounded by quotes.
          */
-        function sqlString( $string ) {
+        function escapeSql( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
-                    return $this->_fmtQuote . $this->string( $string ) . $this->_fmtQuote;
+                    return $this->_fmtQuote . $this->escape( $string ) . $this->_fmtQuote;
                 }
             } else if ( is_null( $string ) ) {
                 return 'null';
@@ -927,11 +961,11 @@
                 if ( $filter ) {
                     if ( substr( $key, 0, 1 ) != '_' ) {
                         array_push( $ifields, $key );
-                        array_push( $ivalues, $this->sqlString( $value ) );
+                        array_push( $ivalues, $this->escapeSql( $value ) );
                     }
                 } else {
                     array_push( $ifields, $key );
-                    array_push( $ivalues, $this->sqlString( $value ) );
+                    array_push( $ivalues, $this->escapeSql( $value ) );
                 }
             }
 
@@ -976,10 +1010,10 @@
             foreach ( $values as $key=>$value ) {
                 if ( $filter ) {
                     if ( substr( $key, 0, 1 ) != '_' ) {
-                        array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
+                        array_push( $uvalues, $key . "=" . $this->escapeSql( $value ) );
                     }
                 } else {
-                    array_push( $uvalues, $key . "=" . $this->sqlString( $value ) );
+                    array_push( $uvalues, $key . "=" . $this->escapeSql( $value ) );
                 }
             }
 
@@ -1222,7 +1256,7 @@
          *
          *  @returns    The escaped string.
          */
-        function string( $string ) {
+        function escape( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     $this->connect();

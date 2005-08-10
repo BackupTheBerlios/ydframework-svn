@@ -170,7 +170,7 @@
          *
          *	@returns	The escaped string.
          */
-        function string( $string ) {
+        function escape( $string ) {
             if ( is_string( $string ) ) {
                 if ( strtolower( $string ) != 'null' ) {
                     return str_replace( "'", "''", $string );
@@ -189,14 +189,14 @@
          *
          *	@returns	The escaped string surrounded by quotes.
          */
-        function sqlString( $string ) {
+        function escapeSql( $string ) {
             if ( is_null( $string ) || strtolower( $string ) == 'null' ) {
                 return 'null';
             }
             if ( strtolower( substr( $string, 0, 7 ) ) == 'to_date' ) {
                 return $string;
             }
-            return $this->_fmtQuote . $this->string( $string ) . $this->_fmtQuote;
+            return $this->_fmtQuote . $this->escape( $string ) . $this->_fmtQuote;
         }
 
         /**

@@ -626,7 +626,7 @@
 
         // Escapes a string
         function str( $t ) {
-            return '\''. $this->db->string( $t ) . '\'';
+            return '\''. $this->db->escape( $t ) . '\'';
         }
 
         // Get a translation from the translation table
