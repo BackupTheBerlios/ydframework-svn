@@ -160,52 +160,6 @@
 			// register function in xajax
 			$this->registerFunction( $serverFunction );
 
-			// initialize arguments
-			$args = array();
-
-			// compute arguments string
-			if (is_null($arguments)) $arguments = "";
-			else{	
-					if (!is_array( $arguments )) $arguments = array( $arguments );
-				
-					foreach ($arguments as $arg){
-
-						// if argument is a number just add it and continue
-						if (is_numeric( $arg )) { $args[] = $arg; continue; }
-					
-						// if there's a form defined, test if this argument is an element
-						if (!is_null( $this->form ) && $this->form->isElement( $arg )){
-						
-							// get element object
-							$elem = & $this->form->getElement( $arg );
-
-							// get element type to invoke the custom js form get the value
-							switch( $elem->getType() ){
-								case 'text' :			$args[] = $this->getValueText( $elem );				break;
-								case 'password' :		$args[] = $this->getValuePassword( $elem );			break;
-								case 'textarea' :		$args[] = $this->getValueTextarea( $elem );			break;
-								case 'radio' :			$args[] = $this->getValueRadio( $elem );			break;
-								case 'checkbox' :		$args[] = $this->getValueCheckbox( $elem );			break;
-								case 'dateselect' :		$args[] = $this->getValueDateSelect( $elem );		break;
-								case 'datetimeselect' :	$args[] = $this->getValueDateTimeSelect( $elem );	break;
-								case 'timeselect' :		$args[] = $this->getValueTimeSelect( $elem );		break;
-								case 'span' :			$args[] = $this->getValueSpan( $elem );				break;
-								case 'select' :			$args[] = $this->getValueSelect( $elem );			break;
-
-								default : die ('Element type "'. $elem->getType() .'" is not supported as dynamic argument');
-							}
-							
-							continue;
-						}
-						
-						// if it's not a form element just parse the argument string (we don't want " and ' on code)
-						$args[] = "'". htmlentities( $arg ) ."'";
-					}
-						
-					// convert arguments (we don't want " and ' on code)
-					$arguments = implode( ",", $args );
-			}
-
 			// get element object
 			$formElement = & $this->form->getElement( $formElementName );
 		
@@ -237,9 +191,65 @@
 			if (is_array( $serverFunction )) $serverFunction = $serverFunction[1];
 
 			// add event and function name to element attributes
-			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $arguments .')');
+			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $this->computeFunctionArguments( $arguments ) .')');
 		}
 		
+
+
+		// internal method. compute js arguments string 
+		function computeFunctionArguments( $arguments ){
+			
+			// if there are not arguments return empty string
+			if (is_null($arguments)) return "";
+
+			// if is one argument and it's the form name, we want the form values
+			if (is_string( $arguments ) && $this->form->_name == $arguments) return "xajax.getFormValues('". $arguments . "')";
+
+			// if there's only one argument compute array of one element
+			if (!is_array( $arguments )) $arguments = array( $arguments );
+
+			// initialize arguments
+			$args = array();
+			
+			foreach ($arguments as $arg){
+
+				// if argument is numeric just add it and continue
+				if (is_numeric( $arg )) { $args[] = $arg; continue; }
+					
+				// if there's a form defined, test if this argument belongs to it
+				if (!is_null( $this->form ) && $this->form->isElement( $arg )){
+						
+					// get element object
+					$elem = & $this->form->getElement( $arg );
+
+					// get element type to invoke the custom js to get the value
+					switch( $elem->getType() ){
+						case 'text' :			$args[] = $this->getValueText( $elem );				break;
+						case 'password' :		$args[] = $this->getValuePassword( $elem );			break;
+						case 'textarea' :		$args[] = $this->getValueTextarea( $elem );			break;
+						case 'radio' :			$args[] = $this->getValueRadio( $elem );			break;
+						case 'checkbox' :		$args[] = $this->getValueCheckbox( $elem );			break;
+						case 'dateselect' :		$args[] = $this->getValueDateSelect( $elem );		break;
+						case 'datetimeselect' :	$args[] = $this->getValueDateTimeSelect( $elem );	break;
+						case 'timeselect' :		$args[] = $this->getValueTimeSelect( $elem );		break;
+						case 'span' :			$args[] = $this->getValueSpan( $elem );				break;
+						case 'select' :			$args[] = $this->getValueSelect( $elem );			break;
+																							
+						default : die ('Element type "'. $elem->getType() .'" is not supported as dynamic argument');
+					}
+							
+				continue;
+				}
+						
+				// if it's not a form element just parse the argument string (we don't want " and ' on code)
+				$args[] = "'". htmlentities( $arg ) ."'";
+			}
+						
+			// convert arguments (we don't want " and ' on code)
+			return implode( ",", $args );
+		}
+
+
 		
 		// internal method to create the needed js function to retrieve a text value
 		function getValueText( & $element ){
@@ -461,6 +471,31 @@ class YDAjaxResponse extends xajaxResponse{
 		}
 
 
+
+        /**
+         *	This method returns the needed xml with form errors.
+         *
+         *	@param $form			Form object.
+         */		
+		function sendFormErrors( & $form ){
+		
+			return $this->sendAlert( "* ". implode("\n* ", array_values( $form->_errors )) );
+		}
+
+
+        /**
+         *	This method returns the needed xml to create a alert
+         *
+         *	@param $message			Message to include in alert.
+         */		
+		function sendAlert( $message ){
+		
+			$this->addAlert( $message );
+			return $this->getXML();
+		}
+
+
+
         /**
          *	This method assigns a custom javascript function
          *
@@ -557,9 +592,6 @@ class YDAjaxResponse extends xajaxResponse{
 			// if attribute event is not defined we must create a default event
 			if (is_null( $attribute )) $attribute = 'innerHTML';
 		
-			// check and convert $result
-			$result = addslashes( $result );
-
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
 		}
@@ -701,9 +733,6 @@ class YDAjaxResponse extends xajaxResponse{
 
 			// if attribute event is not defined we must create a default event
 			if (is_null( $attribute )) $attribute = 'value';
-			
-			// check and convert $result
-			$result = htmlspecialchars( $result );
 			
 			// assign result to form element
 			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
