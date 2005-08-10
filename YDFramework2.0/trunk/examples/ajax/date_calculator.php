@@ -11,35 +11,6 @@
 	YDInclude( 'YDUtil.php' );
 	YDInclude( 'YDDateUtil.php' );
 
-	// result call invoked by ajax client
-	function result( $currentdate, $operation, $number, $type ){
-
-		// create date object with timestamp from the 'currentdate' form element
-		$date = new YDDateUtil();
-		$date->set( intval($currentdate) );
-
-		// if operation is 1 we want subtract the number
-		if ($operation == 1) $number = - intval($number);
-		else                 $number =   intval($number);
-		
-		// add number to date
-		switch ( intval( $type )){
-			case 0 : $date->addMinute( $number ); break;
-			case 1 : $date->addDay( $number );    break;
-			case 2 : $date->addMonth( $number );  break;
-			case 3 : $date->addYear( $number );   break;
-		}
-
-		// create ajax response object
-		$response = new YDAjaxResponse();
-
-		// assign span 'myspanresult' of 'myform' with computed date
-		$response->assignResult('myform', 'myspanresult', 'span', YDStringUtil::formatDate( $date->getTimestamp(), 'datetime' ));
-
-		// return response to client browser
-		return $response->getXML();
-	}
-	
 
 	// Class definition
 	class date_calculator extends YDRequest {
@@ -73,7 +44,7 @@
 			$ajax->setForm( $form );
 
 			// register button 'mybutton' with event 'result' using dynamic values from form elements
-			$ajax->registerElement( 'mybutton',  'result', array( 'currentdate', 'operation', 'number', 'type' ) );
+			$ajax->registerElement( 'mybutton',  array( & $this, 'result' ), array( 'currentdate', 'operation', 'number', 'type' ) );
 			$ajax->processRequests();
 
 			// assign form and display template
@@ -81,6 +52,35 @@
 			$this->tpl->display();
 		}
 
+
+		// result call invoked by ajax client
+		function result( $currentdate, $operation, $number, $type ){
+
+			// create date object with timestamp from the 'currentdate' form element
+			$date = new YDDateUtil();
+			$date->set( intval($currentdate) );
+
+			// if operation is 1 we want subtract the number
+			if ($operation == 1) $number = - intval($number);
+			else                 $number =   intval($number);
+		
+			// add number to date
+			switch ( intval( $type )){
+				case 0 : $date->addMinute( $number ); break;
+				case 1 : $date->addDay( $number );    break;
+				case 2 : $date->addMonth( $number );  break;
+				case 3 : $date->addYear( $number );   break;
+			}
+
+			// create ajax response object
+			$response = new YDAjaxResponse();
+
+			// assign span 'myspanresult' of 'myform' with computed date
+			$response->assignResult('myform', 'myspanresult', 'span', YDStringUtil::formatDate( $date->getTimestamp(), 'datetime' ));
+
+			// return response to client browser
+			return $response->getXML();
+		}
 
 	}
 
