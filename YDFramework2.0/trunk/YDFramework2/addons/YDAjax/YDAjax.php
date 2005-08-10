@@ -213,7 +213,7 @@
 			if (is_null( $event )){
 			
 				// get form element type  TODO: use $formElement->getType() instead
-				switch ( $formElement->_type ){
+				switch ( $formElement->getType() ){
 
 					case 'submit' : trigger_error('Submit buttons cannot be used in ajax because they force submittion.'); break;
 					case 'image' :  trigger_error('Images cannot be used in ajax because they force submittion. Use "img" element instead.'); break;
@@ -229,7 +229,7 @@
 					case 'select' :		$event = 'onChange'; break;
 					
 					// if element doesn't exist return a php error
-					default : trigger_error('Element type ('. $formElement->_type .') is not supported in YDAjax'); break;
+					default : trigger_error('Element type ('. $formElement->getType() .') is not supported in YDAjax'); break;
 				}
 			}
 			
