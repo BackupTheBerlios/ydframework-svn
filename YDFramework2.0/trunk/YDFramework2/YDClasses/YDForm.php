@@ -717,10 +717,12 @@
          *  It will iterate over all the rules and apply them to each field after having applies the filters.
          *  Errors will be put on the error stack. In the end, it returns false or true.
          *
+         *  @param  $customvalues   (Optional) custom values to use for validation
+         *
          *  @returns    Boolean indicating if the form is valid or not.
          */
-        function isValid() {
-            return $this->validate();
+        function isValid( $customvalues = null ) {
+            return $this->validate( $customvalues );
         }
 
 
