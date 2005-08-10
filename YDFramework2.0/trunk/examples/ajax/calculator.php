@@ -10,22 +10,6 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// compute call invoked by ajax client
-	function compute( $arg1, $arg2 ){
-		
-		$result = $arg1 + $arg2;
-
-		// create ajax response object
-		$response = new YDAjaxResponse();
-
-		// assign span 'myspanresult' of 'myform' with sum result
-		$response->assignResult('myform', 'myspanresult', 'span', $result );
-
-		// return response to client browser
-		return $response->getXML();
-	}
-	
-
 	// Class definition
 	class calculator extends YDRequest {
 
@@ -56,7 +40,7 @@
 			$ajax->setForm( $form );
 
 			// assign 'mybutton' with 'compute' call with dynamic values from form elements 'arg1' and 'arg2'
-			$ajax->registerElement( 'mybutton', 'compute', array('arg1', 'arg2') );
+			$ajax->registerElement( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2') );
 
 			// process ajax
 			$ajax->processRequests();
@@ -66,6 +50,23 @@
 			$this->tpl->assign( 'form',  $form->tohtml() );
 			$this->tpl->display( 'general' );
 		}
+
+
+		// compute call invoked by ajax client
+		function compute( $arg1, $arg2 ){
+		
+			$result = $arg1 + $arg2;
+
+			// create ajax response object
+			$response = new YDAjaxResponse();
+
+			// assign span 'myspanresult' of 'myform' with sum result
+			$response->assignResult('myform', 'myspanresult', 'span', $result );
+
+			// return response to client browser
+			return $response->getXML();
+		}
+
 
 	}
 
