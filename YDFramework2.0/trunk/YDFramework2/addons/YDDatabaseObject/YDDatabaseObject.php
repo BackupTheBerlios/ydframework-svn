@@ -548,14 +548,14 @@
                         if ( is_null( $val ) ) {
                             $value_string .= 'NULL';
                         } else {
-                            $value_string .= $this->_query->sqlString( $val );
+                            $value_string .= $this->_query->escapeSql( $val );
                         }
                         $first = false;
                     }
                     $value_string .= ' )';
                     $value = $value_string;
                 } else {
-                    $value = " = " . $this->_query->sqlString( $value );
+                    $value = " = " . $this->_query->escapeSql( $value );
                 }
 
                 $this->where( $r . $this->getTable()   . $r . '.' .

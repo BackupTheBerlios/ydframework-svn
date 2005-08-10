@@ -713,7 +713,7 @@
                     continue;
                 }
                 $columns[] = $this->reserved( $key );
-                $values[]  = $this->sqlString( $value );
+                $values[]  = $this->escapeSql( $value );
             }
             return ' ( ' . implode( ', ', $columns ) . ' ) VALUES ( ' . implode( ', ', $values ) . ' )';
         }
@@ -734,7 +734,7 @@
                 if ( $this->filter && substr( $key, 0, 1 ) == '_' ) {
                     continue;
                 }
-                $update[] = $this->reserved( $key ) . " = " . $this->sqlString( $value );
+                $update[] = $this->reserved( $key ) . " = " . $this->escapeSql( $value );
             }
             return ' SET ' . implode( ', ', $update );
         }
