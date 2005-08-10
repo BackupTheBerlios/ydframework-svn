@@ -29,17 +29,17 @@
             if ( $form->validate() == true ) {
 
                 // Check if we need to delete the thumbnail objects
-                if ( $form->getValue( 'cache_tmb' ) === 'on' ) {
+                if ( $form->getValue( 'cache_tmb' ) ) {
                     $this->_deleteCacheFiles( '*.tmn' );
                 }
 
                 // Check if we need to delete the web objects
-                if ( $form->getValue( 'cache_web' ) === 'on' ) {
+                if ( $form->getValue( 'cache_web' ) ) {
                     $this->_deleteCacheFiles( '*.wch' );
                 }
 
                 // Check if we need to delete the template objects
-                if ( $form->getValue( 'cache_tpl' ) === 'on' ) {
+                if ( $form->getValue( 'cache_tpl' ) ) {
                     $this->_deleteCacheFiles( '*.tpl.php' );
                 }
 

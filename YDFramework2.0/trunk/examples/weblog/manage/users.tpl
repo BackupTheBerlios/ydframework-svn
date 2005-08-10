@@ -37,7 +37,7 @@
         {foreach from=$users item="usr"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$usr.name}</td>
-                <td class="adminRowL"><a href="mailto:{$usr.email}">{$usr.email}</a></td>
+                <td class="adminRowL"><a href="mailto:{$usr.email}">{$usr.email}</a>&nbsp;</td>
                 <td class="adminRowL">{$usr.created|date|lower}</td>
                 <td class="adminRowR">
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$usr.id}">{t w="edit"}</a>
