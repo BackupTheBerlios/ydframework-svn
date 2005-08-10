@@ -635,6 +635,21 @@
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/form.php">ajax/form.php</a> </td>
         </tr>
         <tr>
+            <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>
+            <td width="43%"><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+            <td valign="top">&nbsp;</td>
+            <td valign="top"><a href="xml_example.php">YDXml - working with XML strings</a> <br/>
+              <a href="xml_example.php?do=file">YDXml - working with XML files</a> <br/>
+              <a href="xml_example.php?do=url">YDXml - working with XML urls</a> <br/>
+              <a href="xml_example.php?do=array">YDXml - working with XML arrays</a> <br/>
+              <a href="xml_example.php?do=save">YDXml - saving XML files</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=xml_example.php">xml_example.php</a>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>

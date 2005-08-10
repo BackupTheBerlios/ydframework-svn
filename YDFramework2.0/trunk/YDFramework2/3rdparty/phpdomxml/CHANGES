@@ -1,0 +1,24 @@
+History:
+
+v0.9.0: 1 December 2004, release April 2005
+- Complete rewrite that follow the interface structure as described by w3c.
+	In the mean time php 5.0 has been released with built-in support and a
+	decent implementation of the XML DOM, so this will be the final release
+	of this library. See docs/index.html for more info...
+
+v0.8.5: 18 October 2003
+- Added support for contentType property - defaults to 'text/xml'.
+- Added support for nodeType property.
+- Added preliminary support for cdata-section: when not embedded as textnode
+	it'll parse as cdata tag.
+- Added support for character encoding through the main xml-tag in xml docs.
+	Supported character encodings (through PHP): ISO-8859-1, US-ASCII, UTF-8.
+- Optimized appendChild-method: got rid of unnecessary loops that would build
+	the nextSibling and previousSibling pointers
+- createTextNode was non-compliant and it wrecked the childrens-tree. Fixed!
+- Re-evaluated some pieces of code and fixed some small bugs.
+- Updated license information, documentation and examples.
+
+v0.8: 2002
+- First public release after some thorough testing on production stable
+	web-applications.

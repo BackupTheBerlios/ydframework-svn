@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<xml>
+	<item id="item1">this is a text-node</item>
+	<item id="item2">and here is another one</item>
+	<item id="item3">this is the 3rd element</item>
+	<item id="item4">and this is the last item</item>
+</xml>
