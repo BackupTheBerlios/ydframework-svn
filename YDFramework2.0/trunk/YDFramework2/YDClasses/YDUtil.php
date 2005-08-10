@@ -294,7 +294,7 @@
         function r_dump( $obj, $html=false, $label='' ) {
             $data = var_export( $obj, true );
             if ( $html == true ) {
-                $data = stripslashes( htmlentities( $data ) );
+                $data = str_replace("\n", "<br />", stripslashes( htmlentities( $data ) ) );
                 if ( ! empty( $label ) ) {
                     $data = '<pre><b style="color: navy">' . $label . '</b><br>' . $data . '</pre>';
                 } else {
