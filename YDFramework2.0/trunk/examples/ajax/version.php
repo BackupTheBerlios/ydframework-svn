@@ -10,20 +10,6 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// getversion invoked by ajax client
-	function getversion(){
-		
-		// create ajax response object
-		$response = new YDAjaxResponse();
-
-		// assign span 'myspanresult' of 'myform' with ydf version name
-		$response->assignResult('myform', 'myspanresult', 'span', YD_FW_NAMEVERS);
-
-		// return response to client browser
-		return $response->getXML();
-	}
-	
-
 	// Class definition
 	class version extends YDRequest {
 
@@ -53,7 +39,7 @@
 			$ajax->setForm( $form );
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
-			$ajax->registerElement( 'mybutton', 'getversion' );
+			$ajax->registerElement( 'mybutton', array( & $this, 'getversion' ) );
 			
 			// process ajax
 			$ajax->processRequests();
@@ -62,6 +48,20 @@
 			$this->tpl->assign( 'title', 'This is a simple ajax example');
 			$this->tpl->assign( 'form',  $form->tohtml() );
 			$this->tpl->display( 'general' );
+		}
+
+
+		// getversion invoked by ajax client
+		function getversion(){
+		
+			// create ajax response object
+			$response = new YDAjaxResponse();
+
+			// assign span 'myspanresult' of 'myform' with ydf version name
+			$response->assignResult('myform', 'myspanresult', 'span', YD_FW_NAMEVERS);
+
+			// return response to client browser
+			return $response->getXML();
 		}
 
 	}
