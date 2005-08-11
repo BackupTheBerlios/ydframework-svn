@@ -198,25 +198,59 @@
             
                 foreach ( $array as $key => $child ) {
                     
-                    foreach ( $child as $k => $info ) {
-                    
-                        $root = $prefix.$key.$k;
+                    if ( is_array( $child ) ) {
+                        
+                        foreach ( $child as $k => $info ) {
+                        
+                            $append = true;
+                            $root = $prefix.$key.$k;
+                            $$root = $this->createElement( $key );
+                            
+                            // attributes
+                            if ( isset( $info['@'] ) ) {
+                                foreach ( $info['@'] as $att => $val ) {
+                                    $$root->setAttribute( $att, $val);
+                                }
+                            }
+                            
+                            // children or value
+                            if ( isset( $info['#'] ) ) {
+                                if ( is_array( $info['#'] ) ) {
+                                    $node->appendChild( $$root );
+                                    $this->loadArray( $info['#'], ( $level+1 ), $root );
+                                    $append = false;
+                                } else {
+                                    
+                                    if ( preg_match( "<!\[CDATA\[(.*)\]\]>", $info['#'], $matches ) ) {
+                                        $$root->appendChild(
+                                            $this->createCDATASection( $matches[1] )
+                                        );
+                                        
+                                    } else {
+                                        $$root->appendChild(
+                                            $this->createTextNode( htmlentities( $info['#'] ) )
+                                        );
+                                    }
+                                }
+                            }
+                            
+                            if ( $append ) {
+                                $node->appendChild( $$root );
+                            }
+                            
+                        }
+                        
+                    } else {
+                        
+                        $root = $prefix.$key.'0';
                         $$root = $this->createElement( $key );
                         
-                        // attributes
-                        foreach ( $info['@'] as $att => $val ) {
-                            $$root->setAttribute( $att, $val);
-                        }
+                        $$root->appendChild(
+                            $this->createTextNode( htmlentities( $child ) )
+                        );
                         
-                        // children or value
-                        if ( is_array( $info['#'] ) ) {
-                            $node->appendChild( $$root );
-                            $this->loadArray( $info['#'], ( $level+1 ), $root );
-                        } else {
-                            $$root->appendChild( $this->createTextNode( htmlentities( $info['#'] ) ) );
-                            $node->appendChild( $$root );
-                        }
-                    
+                        $node->appendChild( $$root );
+                        
                     }
                     
                 }
@@ -283,11 +317,11 @@
                     $arr = $child->nodeValue;
                 } else {
                     
-                    $arr[ $child->nodeName ][ $i ] = array( '@' => array(), '#' => '' );
-    
                     if ( $child->hasAttributes() ) {
                         $arr[ $child->nodeName ][ $i ]['@'] = $child->attributes;
                     }
+                    
+                    $arr[ $child->nodeName ][ $i ]['#'] = '';
 
                     if ( $child->hasChildNodes() ) {
                         $arr[ $child->nodeName ][ $i ]['#'] = $this->toArray( $child );
