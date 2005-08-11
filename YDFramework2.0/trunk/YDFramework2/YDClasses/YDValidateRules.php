@@ -375,53 +375,88 @@
         }
 
         /**
-         *	This checks if the array with day, month and year elements is a valid date or not.
+         *	This checks if the array with day, month, year, hours, minutes and seconds
+         *  elements is valid or not.
          *
          *	@param $val		The value to test.
          *	@param $opts	(not required)
          */
         function date( $val, $opts='' ) {
+           
             if ( ! is_array( $val ) ) {
                 return false;
             }
-            if ( ! isset( $val['month'] ) || ! is_numeric( $val['month'] ) ) {
-                return false;
+            
+            iif ( isset( $val['month'] ) ) {
+                if ( ! is_numeric( $val['month'] ) ||
+                       intval( $val['month'] ) < 1 ||
+                       intval( $val['month'] ) > 12 ) {
+                    return false;
+                }
             }
-            if ( ! isset( $val['day'] ) || ! is_numeric( $val['day'] ) ) {
-                return false;
+            if ( isset( $val['day'] ) ) {
+                if ( ! is_numeric( $val['day'] ) ||
+                       intval( $val['day'] ) < 1 ||
+                       intval( $val['day'] ) > 31 ) {
+                    return false;
+                }
             }
-            if ( ! isset( $val['year'] ) || ! is_numeric( $val['year'] ) ) {
-                return false;
+            if ( isset( $val['year'] ) ) {
+                if ( ! is_numeric( $val['year'] ) ) {
+                    return false;
+                }
             }
-            return checkdate( intval( $val['month'] ), intval( $val['day'] ), intval( $val['year'] ) );
+            if ( isset( $val['hours'] ) ) {
+                if ( ! is_numeric( $val['hours'] ) ||
+                       intval( $val['hours'] ) < 0 ||
+                       intval( $val['hours'] ) > 23 ) {
+                    return false;
+                }
+            }
+            if ( isset( $val['minutes'] ) ) {
+                if ( ! is_numeric( $val['minutes'] ) ||
+                       intval( $val['minutes'] ) < 0 ||
+                       intval( $val['minutes'] ) > 59 ) {
+                    return false;
+                }
+            }
+            if ( isset( $val['seconds'] ) ) {
+                if ( ! is_numeric( $val['seconds'] ) ||
+                       intval( $val['seconds'] ) < 0 ||
+                       intval( $val['seconds'] ) > 59 ) {
+                    return false;
+                }
+            }
+            
+            if ( isset( $val['month'] ) && isset( $val['year'] ) && isset( $val['day'] ) ) {
+                return checkdate( intval( $val['month'] ), intval( $val['day'] ), intval( $val['year'] ) );
+            } else {
+                if ( isset( $val['day'] ) && isset( $val['month'] ) ) {
+                    switch ( intval( $val['month'] ) ) {
+                        case 2:
+                            if ( intval( $val['day'] ) > 29 ) return false;
+                        case 4:
+                        case 6:
+                        case 9:
+                        case 11:
+                            if ( intval( $val['day'] ) > 30 ) return false;
+                        
+                    }
+                }
+            }
+            return true;
+            
         }
 
         /**
-         *	This checks if the array with hours and minutes elements is a valid time or not.
+         *	This checks if the array with hours, minutes and seconds elements is a valid time or not.
          *
          *	@param $val		The value to test.
          *	@param $opts	(not required)
          */
         function time( $val, $opts='' ) {
-            if ( ! is_array( $val ) ) {
-                return false;
-            }
-            if ( ! isset( $val['hours'] ) || ! is_numeric( $val['hours'] ) ) {
-                return false;
-            }
-            if ( ! isset( $val['minutes'] ) || ! is_numeric( $val['minutes'] ) ) {
-                return false;
-            }
-            if ( intval( $val['hours'] ) < 0 || intval( $val['hours'] ) > 23 ) {
-                return false;
-            }
-            if ( intval( $val['minutes'] ) < 0 || intval( $val['minutes'] ) > 59 ) {
-                return false;
-            }
-            if ( isset( $val['seconds'] ) && intval( $val['seconds'] ) < 0 || intval( $val['seconds'] ) > 59 ) {
-                return false;
-            }
-            return true;
+            
+            return YDValidateRules::date( $val );
         }
 
         /**
@@ -431,7 +466,8 @@
          *	@param $opts	(not required)
          */
         function datetime( $val, $opts='' ) {
-            return YDValidateRules::date( $val ) && YDValidateRules::time( $val );
+            
+            return YDValidateRules::date( $val );
         }
 
     }

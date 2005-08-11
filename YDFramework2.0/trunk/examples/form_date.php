@@ -40,7 +40,7 @@
             $form->addElement( 'submit', '_cmdSubmit', 'Submit' );
             
             // Add rules
-            $form->addRule( 'date1', 'date', 'date1 must be a valid date' );
+            $form->addRule( array( 'date1', 'date2', 'date3', 'date4', 'date5', 'time1', 'time2', 'time3', 'datetime1', 'date6', 'date7', 'date8' ), 'date', 'must be a valid date' );
             
             if ( $form->validate() ) {
                 YDDebugUtil::dump( $form->getValues(), '$form->getValues()' );
