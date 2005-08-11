@@ -19,18 +19,24 @@
 
             // Create the delete form
             $form = new YDForm( 'clearCacheForm' );
+            $form->addElement( 'checkbox', 'cache_pub', 'Public cache', array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'cache_tmb', 'Thumbnail cache', array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'cache_web', 'Web download cache', array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'cache_tpl', 'Template cache', array( 'style' => 'border: none;' ) );
             $form->addElement( 'submit', '_cmdSubmit', t( 'cleanup' ), array( 'class' => 'button' ) );
-            $form->setDefaults( array( 'cache_web' => 1, 'cache_tmb' => 1, 'cache_tpl' => 1 ) );
+            $form->setDefaults( array( 'cache_pub' => 1, 'cache_web' => 1, 'cache_tmb' => 1, 'cache_tpl' => 1 ) );
 
             // Validate the form
             if ( $form->validate() == true ) {
 
                 // Check if we need to delete the thumbnail objects
-                if ( $form->getValue( 'cache_tmb' ) ) {
-                    $this->_deleteCacheFiles( '*.tmn' );
+                if ( $form->getValue( 'cache_pub' ) ) {
+                    $this->_deleteCacheFiles( YD_WEBLOG_CACHE_PREFIX . '*.' . YD_WEBLOG_CACHE_SUFFIX );
+                }
+
+                // Check if we need to delete the thumbnail objects
+                if ( $form->getValue( 'cache_tmb' ) == 1 ) {
+                    $this->_deleteCacheFiles(  YD_TMP_PRE . 'N_*.*' );
                 }
 
                 // Check if we need to delete the web objects

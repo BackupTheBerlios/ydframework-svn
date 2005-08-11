@@ -16,8 +16,12 @@
             <th class="adminRowLG" colspan="3">&raquo; {t w="cleanup_cache"}</th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="30">{$form.cache_tmb.html}</td>
-            <td class="adminRowL" width="670">{$form.cache_tmb.label_html}</td>
+            <td class="adminRowL" width="30">{$form.cache_pub.html}</td>
+            <td class="adminRowL" width="670">{$form.cache_pub.label_html}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{$form.cache_tmb.html}</td>
+            <td class="adminRowL">{$form.cache_tmb.label_html}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{$form.cache_web.html}</td>
