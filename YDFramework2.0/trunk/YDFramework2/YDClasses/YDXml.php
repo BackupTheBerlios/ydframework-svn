@@ -39,7 +39,7 @@
      *  This class is a wrapper around phpdomxml. Documentation can be found on:
      *  http://phpdomxml.webtweakers.com/
      */
-    class YDXml extends XML {
+    class YDXml extends _XML {
 
         var $version  = '1.0';
         var $encoding = 'ISO-8859-1';
@@ -54,7 +54,7 @@
          */
         function YDXml( $mixed='', $type=YD_XML_FILE ) {
             
-            $this->XML();
+            $this->_XML();
             
             if ( strlen( $mixed ) ) {
                 $this->load( $mixed, $type );

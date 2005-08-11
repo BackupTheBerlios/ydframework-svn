@@ -651,10 +651,10 @@
 	 *
 	 * @package phpdomxml
 	 */
-	class XML extends XML_Document {
+	class _XML extends XML_Document {
 
 		// Constructor
-		function XML($url = '') {
+		function _XML($url = '') {
 
 			// call parent's constructor
 			$this->XML_Document();

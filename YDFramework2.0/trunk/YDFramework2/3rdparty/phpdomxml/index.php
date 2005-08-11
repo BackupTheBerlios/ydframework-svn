@@ -14,7 +14,7 @@
 	}
 
 	// get the feed
-	$rss = new XML('http://sourceforge.net/export/rss2_projsummary.php?group_id=84936');
+	$rss = new _XML('http://sourceforge.net/export/rss2_projsummary.php?group_id=84936');
 
 	// get article items
 	$items = $rss->getElementsByTagName('item');
