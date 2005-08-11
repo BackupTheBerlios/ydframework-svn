@@ -282,7 +282,7 @@
          *
          *  @returns  The XML code as a string.
          */
-        function toString( $pretty=true ) {
+        function toString( $pretty=false ) {
             return "<?xml version=\"" . $this->version . "\" encoding=\"" . $this->encoding . "\"?>" . ( $pretty ? "\n" : "" ) . trim( parent::toString( $pretty ) );
         }
         
