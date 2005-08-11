@@ -6,7 +6,7 @@
     <tr>
         <th colspan="3" class="adminRowLG">&raquo; {t w="a_server_info"}</th>
     </tr>
-    <tr>
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL" width="300">{t w="system"}</td>
         <td class="adminRowL" width="400">{$system}</td>
     </tr>
