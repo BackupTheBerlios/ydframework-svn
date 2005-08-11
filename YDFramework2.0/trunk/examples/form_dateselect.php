@@ -74,11 +74,11 @@
                 YDDebugUtil::dump( $form->getValues(), '$form->getValues()' );
                 YDDebugUtil::dump( $elementDate->getTimeStamp(), '$elementDate->getTimeStamp()' );
                 YDDebugUtil::dump( $elementDate->getTimeStamp( '%d/%m/%Y' ), '$elementDate->getTimeStamp( "%d/%m/%Y" )' );
-                YDDebugUtil::dump( date( 'M-d-Y', $elementDate->getTimeStamp() ), '$elementDate->gdate( getTimeStamp() )' );
+                YDDebugUtil::dump( date( 'M-d-Y', $elementDate->getTimeStamp() ), 'date( "M-d-Y",  $elementDate->getTimeStamp() )' );
                 YDDebugUtil::dump( $elementTime->getTimeStamp(), '$elementTime->getTimeStamp()' );
                 YDDebugUtil::dump( $elementTime->getTimeStamp( '%H:%M' ), '$elementTime->getTimeStamp( "%H:%M" )' );
                 YDDebugUtil::dump( $elementDateTime->getTimeStamp(), '$elementDateTime->getTimeStamp()' );
-                YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%H:%M" )' );
+                YDDebugUtil::dump( $elementDateTime->getTimeStamp( '%d/%m/%Y %H:%M' ), '$elementDateTime->getTimeStamp( "%d/%m/%Y %H:%M" )' );
                 YDDebugUtil::dump( YDStringUtil::formatDate( $elementDateTime, 'datetime', 'pt' ), 'YDStringUtil::formatDate' );
             }
 

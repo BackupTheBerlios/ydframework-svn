@@ -27,13 +27,12 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../YDForm.php');
-    include_once( dirname( __FILE__ ) . '/YDFormElement_Select.php');
+    include_once( dirname( __FILE__ ) . '/YDFormElement_Date.php');
 
     /**
      *	This is the class that define a datetime select form element.
      */
-    class YDFormElement_DateTimeSelect extends YDFormElement {
+    class YDFormElement_DateTimeSelect extends YDFormElement_Date {
 
         /**
          *	This is the class constructor for the YDFormElement_DateTimeSelect class.
@@ -46,293 +45,24 @@
          */
         function YDFormElement_DateTimeSelect( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
-            // Initialize the parent
-            $this->YDFormElement( $form, $name, $label, $attributes, $options );
+            $invalid = array( 'day', 'month', 'year', 'hours', 'minutes', 'seconds', 'date', 'time', 'datetime' );
+            
+            unset( $options[ 'elements' ] );
+            
+            foreach ( $options as $key => $value ) {
+                if ( is_int( $key ) && in_array( $value, $invalid ) ) {
+                    unset( $options[ $key ] );
+                } 
+            }
+            
+            $options = array_merge( $options, array( 'datetime' ) );
 
-            // The default value is an array
-            $this->setValue();
+            // Initialize the parent
+            $this->YDFormElement_Date( $form, $name, $label, $attributes, $options );
 
             // Set the type
             $this->_type = 'datetimeselect';
             
-            if ( ! isset( $this->_options['seconds'] ) ) {
-                $this->_options['seconds'] = false;
-            }
-
-            // Get the names of the days
-            $days = array();
-            for ( $i = 1; $i <= 31; $i++ ) {
-                $days[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
-            }
-
-            // Get the names of the months
-            $months = array();
-            for ( $i = 1; $i <= 12; $i++ ) {
-                $months[$i] = strtolower( strftime( '%B', mktime( 0, 0, 0, $i, 1, 2000 ) ) );
-            }
-
-            // Get the starting year and the ending year
-            $now = getdate();
-            if ( isset( $options['yearstart'] ) && is_numeric( $options['yearstart'] ) ) {
-                if ( ! is_int( $options['yearstart'] ) ) {
-                    $options['yearstart'] = intval( $options['yearstart'] );
-                }
-                $startyear = $options['yearstart'];
-            } else {
-                $startyear = $now['year'] - 5;
-            }
-            if ( isset( $options['yearend'] ) && is_numeric( $options['yearend'] ) ) {
-                if ( ! is_int( $options['yearend'] ) ) {
-                    $options['yearend'] = intval( $options['yearend'] );
-                }
-                $endyear = $options['yearend'];
-            } else {
-                $endyear = $now['year'] + 5;
-            }
-
-            // Get the names of the years
-            $years = array();
-            for ( $i = $startyear; $i <= $endyear; $i++ ) {
-                $years[$i] = $i;
-            }
-
-            // Get the names of the hours
-            $hours = array();
-            for ( $i = 0; $i <= 23; $i++ ) {
-                $hours[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
-            }
-
-            // Get the names of the minutes
-            $minutes = array();
-            for ( $i = 0; $i <= 59; $i++ ) {
-                $minutes[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
-            }
-            
-            // Add the different elements
-            $this->day = new YDFormElement_Select(
-                $this->_form, $this->_name . '[day]', '', $this->_attributes, $days
-            );
-            $this->month = new YDFormElement_Select(
-                $this->_form, $this->_name . '[month]', '', $this->_attributes, $months
-            );
-            $this->year = new YDFormElement_Select(
-                $this->_form, $this->_name . '[year]', '', $this->_attributes, $years
-            );
-            $this->hours = new YDFormElement_Select(
-                $this->_form, $this->_name . '[hours]', '', $this->_attributes, $hours
-            );
-            $this->minutes = new YDFormElement_Select(
-                $this->_form, $this->_name . '[minutes]', '', $this->_attributes, $minutes
-            );
-            $this->seconds = new YDFormElement_Select(
-                $this->_form, $this->_name . '[seconds]', '', $this->_attributes, $minutes
-            );
-
-        }
-        
-        /**
-         *      This function returns a boolean indicating if the element value was
-         *      modified from it's default value.
-         *
-         *      @returns        Boolean indicating if the element was modified.
-         */
-        function isModified() {
-            
-            if ( ! is_null( $this->_default ) ) {
-                if ( intval( $this->_value['day'] )     == intval( $this->_default['day'] ) 
-                  && intval( $this->_value['month'] )   == intval( $this->_default['month'] )
-                  && intval( $this->_value['year'] )    == intval( $this->_default['year'] ) 
-                  && intval( $this->_value['hours'] )   == intval( $this->_default['hours'] ) 
-                  && intval( $this->_value['minutes'] ) == intval( $this->_default['minutes'] )
-                  && intval( $this->_value['seconds'] ) == intval( $this->_default['seconds'] ) ) {
-                        return false;
-                }
-            }
-            return true;
-        }
-
-        /**
-         *      This function sets the default value of the element.
-         *
-         *      @param  $val    The default value of this object.
-         *      @param  $raw    (optional) Boolean indicating if the default value is a raw value.
-         */
-        function setDefault( $val, $raw=false ) {
-            
-            $this->_raw_default = $raw;
-            
-            if ( is_numeric( $val ) ) {
-                if ( ! is_int( $val ) ) {
-                    $val = intval( $val );
-                }
-                $now = getdate( $val );
-                $this->_default = array();
-                $this->_default['day'] = $now['mday'];
-                $this->_default['month'] = $now['mon'];
-                $this->_default['year'] = $now['year'];
-                $this->_default['hours'] = $now['hours'];
-                $this->_default['minutes'] = $now['minutes'];
-                $this->_default['seconds'] = $now['seconds'];
-            } elseif ( ! empty( $val ) ) {
-                $this->_default = $val;
-            }
-            
-            if ( ! isset( $this->_default['seconds'] ) ) {
-                $this->_default['seconds'] = 0;
-            }
-            
-        }
-
-        /**
-         *	This function sets the value for the date element.
-         *
-         *	@param	$val	(optional) The value for this object.
-         */
-        function setValue( $val=array() ) {
-            $now = getdate();
-            if ( is_numeric( $val ) ) {
-                $now = getdate( $val );
-                if ( ! is_int( $val ) ) {
-                    $val = intval( $val );
-                }
-                $this->_value = array();
-                $this->_value['day'] = $now['mday'];
-                $this->_value['month'] = $now['mon'];
-                $this->_value['year'] = $now['year'];
-                $this->_value['hours'] = $now['hours'];
-                $this->_value['minutes'] = $now['minutes'];
-                $this->_value['seconds'] = $now['seconds'];
-            } elseif ( $val == array() ) {
-                $this->_value['day'] = $now['mday'];
-                $this->_value['month'] = $now['mon'];
-                $this->_value['year'] = $now['year'];
-                $this->_value['hours'] = $now['hours'];
-                $this->_value['minutes'] = $now['minutes'];
-                $this->_value['seconds'] = $now['seconds'];
-            } else {
-                $this->_value = $val;
-                if ( ! isset( $this->_value['day'] ) ) {
-                    $this->_value['day'] = $now['mday'];
-                }
-                if ( ! isset( $this->_value['month'] ) ) {
-                    $this->_value['month'] = $now['mon'];
-                }
-                if ( ! isset( $this->_value['year'] ) ) {
-                    $this->_value['year'] = $now['year'];
-                }
-                if ( ! isset( $this->_value['hours'] ) ) {
-                    $this->_value['hours'] = $now['hours'];
-                }
-                if ( ! isset( $this->_value['minutes'] ) ) {
-                    $this->_value['minutes'] = $now['minutes'];
-                }
-                if ( ! isset( $this->_value['seconds'] ) ) {
-                    $this->_value['seconds'] = $now['seconds'];
-                }
-            }
-            
-            if ( ! isset( $this->_value['seconds'] ) ) {
-                $this->_value['seconds'] = 0;
-            }
-            
-            if ( strlen( $this->_value['day'] ) == 1 ) {
-                $this->_value['day_with_zero'] = '0' . $this->_value['day'];
-            } else {
-                $this->_value['day_with_zero'] = $this->_value['day'];
-            }
-            if ( strlen( $this->_value['month'] ) == 1 ) {
-                $this->_value['month_with_zero'] = '0' . $this->_value['month'];
-            } else {
-                $this->_value['month_with_zero'] = $this->_value['month'];
-            }
-            if ( strlen( $this->_value['hours'] ) == 1 ) {
-                $this->_value['hours_with_zero'] = '0' . $this->_value['hours'];
-            } else {
-                $this->_value['hours_with_zero'] = $this->_value['hours'];
-            }
-            if ( strlen( $this->_value['minutes'] ) == 1 ) {
-                $this->_value['minutes_with_zero'] = '0' . $this->_value['minutes'];
-            } else {
-                $this->_value['minutes_with_zero'] = $this->_value['minutes'];
-            }
-            if ( strlen( $this->_value['seconds'] ) == 1 ) {
-                $this->_value['seconds_with_zero'] = '0' . $this->_value['seconds'];
-            } else {
-                $this->_value['seconds_with_zero'] = $this->_value['seconds'];
-            }
-            $this->_value['timestamp_string'] = $this->_value['year']
-                                              . $this->_value['month_with_zero']
-                                              . $this->_value['day_with_zero']
-                                              . $this->_value['hours_with_zero']
-                                              . $this->_value['minutes_with_zero']
-                                              . $this->_value['seconds_with_zero'];
-        }
-
-        /**
-         *	This will return a unix timestamp of the selected time.
-         *
-         *	@param $format	(optional) The format if you want to get a formatted date/time. If null, an integer is
-         *					returned. The syntax is the one as used by the strftime function.
-         *
-         *	@returns	An integer with the current date/time stamp.
-         */
-        function getTimeStamp( $format=null ) {
-            $this->setValue( $this->_value );
-            $tstamp = mktime(
-                $this->_value['hours'], $this->_value['minutes'], $this->_value['seconds'],
-                $this->_value['month'], $this->_value['day'], $this->_value['year']
-            );
-            if ( is_null( $format ) ) {
-                return $tstamp;
-            } else {
-                return strftime( $format, $tstamp );
-            }
-        }
-
-        /**
-         *  Function to set the attribute of a form element
-         *
-         *  @param  $key    The name of the attribute
-         *  @param  $val    The value of the attribute
-         */
-        function setAttribute( $key, $val ) {
-
-            $this->_attributes[$key] = $val;
-            
-            $this->day->setAttribute( $key, $val );
-            $this->month->setAttribute( $key, $val );
-            $this->year->setAttribute( $key, $val );
-            $this->hours->setAttribute( $key, $val );
-            $this->minutes->setAttribute( $key, $val );
-            $this->seconds->setAttribute( $key, $val );
-        }
-
-        /**
-         *	This function will return the element as HTML.
-         *
-         *	@returns	The form element as HTML text.
-         */
-        function toHtml() {
-
-            // Update the value
-            $this->setValue( $this->_value );
-
-            // Convert to HTML
-            $this->day->_value = isset( $this->_value['day'] ) ? $this->_value['day'] : '';
-            $this->month->_value = isset( $this->_value['month'] ) ? $this->_value['month'] : '';
-            $this->year->_value = isset( $this->_value['year'] ) ? $this->_value['year'] : '';
-            $this->hours->_value = isset( $this->_value['hours'] ) ? $this->_value['hours'] : '';
-            $this->minutes->_value = isset( $this->_value['minutes'] ) ? $this->_value['minutes'] : '';
-            $this->seconds->_value = isset( $this->_value['seconds'] ) ? $this->_value['seconds'] : '';
-            
-            $html = $this->day->toHtml() . ' / ' . $this->month->toHtml() . ' / ' . $this->year->toHtml() . ' - ' . $this->hours->toHtml() . ' : ' . $this->minutes->toHtml();
-            
-            if ( $this->_options['seconds'] ) {
-                $html .= ' : ' . $this->seconds->toHtml();
-            }
-            
-            return $html;
-
         }
 
     }

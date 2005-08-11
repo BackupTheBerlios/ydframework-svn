@@ -62,12 +62,12 @@
             $now = getdate();
 
             // Get the starting and ending
-            $yearstart    = $this->_getOption( 'yearstart',   $now['year'] - 5 );
-            $yearend      = $this->_getOption( 'yearend',     $now['year'] + 5 );
-            $monthstart   = $this->_getOption( 'monthstart',  1 );
-            $monthend     = $this->_getOption( 'monthend',    12 );
-            $daystart     = $this->_getOption( 'daystart',    1 );
-            $dayend       = $this->_getOption( 'dayend',      31 );
+            $yearstart     = $this->_getOption( 'yearstart',   $now['year'] - 5 );
+            $yearend       = $this->_getOption( 'yearend',     $now['year'] + 5 );
+            $monthstart    = $this->_getOption( 'monthstart',  1 );
+            $monthend      = $this->_getOption( 'monthend',    12 );
+            $daystart      = $this->_getOption( 'daystart',    1 );
+            $dayend        = $this->_getOption( 'dayend',      31 );
             $hoursstart    = $this->_getOption( 'hoursstart',   0 );
             $hoursend      = $this->_getOption( 'hoursend',     23 );
             $minutesstart  = $this->_getOption( 'minutesstart', 0 );
@@ -76,9 +76,9 @@
             $secondsend    = $this->_getOption( 'secondsend',   59 );
             
             // Get the offsets
-            $yearoffset   = $this->_getOption( 'yearoffset',    1 );
-            $monthoffset  = $this->_getOption( 'monthoffset',   1 );
-            $dayoffset    = $this->_getOption( 'dayoffset',     1 );
+            $yearoffset    = $this->_getOption( 'yearoffset',    1 );
+            $monthoffset   = $this->_getOption( 'monthoffset',   1 );
+            $dayoffset     = $this->_getOption( 'dayoffset',     1 );
             $hoursoffset   = $this->_getOption( 'hoursoffset',    1 );
             $minutesoffset = $this->_getOption( 'minutesoffset',  1 );
             $secondsoffset = $this->_getOption( 'secondsoffset',  1 );
@@ -379,9 +379,14 @@
                 }
             }
             
-            if ( $year == 0 || $month == 0 || $day == 0 ) {
-                // trigger_error( 'Unable to calculate the timestamp of "' . $this->_name . '"', YD_ERROR );
-                return;
+            if ( $year == 0 ) {
+                $year = 1980;
+            }
+            if ( $month == 0 ) {
+                $month = 1;
+            }
+            if ( $day == 0 ) {
+                $day = 1;
             }
             
             $tstamp = mktime( $hours, $minutes, $seconds, $month, $day, $year );
