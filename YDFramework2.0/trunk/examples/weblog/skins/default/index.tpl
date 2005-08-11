@@ -11,11 +11,13 @@
                 </h2>
                 <small>
                     {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a>
+                    {*
                     {if $user.name}
                         | <a href="manage/items.php?do=edit&id={$item.id}" target="_blank">{t w="edit"}</a>
                         | <a href="manage/items.php?do=delete&id={$item.id}"
                              onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
                     {/if}
+                    *}
                 </small>
                 <div class="entry">
                     {$item.body|bbcode}
