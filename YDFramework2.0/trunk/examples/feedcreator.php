@@ -42,19 +42,19 @@
 
             // Output the feed in RSS0.91
             echo( '<h3>RSS 0.91</h3>' );
-            echo( htmlentities( $this->fc->toXml( 'RSS0.91' ) ) );
+            YDDebugUtil::dump( $this->fc->toXml( 'RSS0.91' ) );
 
             // Output the feed in RSS1.0
             echo( '<h3>RSS 1.0</h3>' );
-            echo( htmlentities( $this->fc->toXml( 'RSS1.0' ) ) );
+            YDDebugUtil::dump( $this->fc->toXml( 'RSS1.0' ) );
 
             // Output the feed in the default format (RSS2.0)
             echo( '<h3>RSS 2.0 (default)</h3>' );
-            echo( htmlentities( $this->fc->toXml() ) );
-
+            YDDebugUtil::dump( $this->fc->toXml() );
+            
             // Output the feed in ATOM
             echo( '<h3>ATOM</h3>' );
-            echo( htmlentities( $this->fc->toXml( 'ATOM' ) ) );
+            YDDebugUtil::dump( $this->fc->toXml( 'ATOM' ) );
 
             // Save the XML to disk
             echo( '<h3>Saving as RSS 0.91 to __rss091.xml</h3>' );

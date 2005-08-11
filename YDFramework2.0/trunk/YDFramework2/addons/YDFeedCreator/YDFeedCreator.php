@@ -29,6 +29,7 @@
     // Includes
     include_once( dirname( __FILE__ ) . '/../../YDClasses/YDUrl.php' );
     include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
+    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDXml.php' );
 
     /**
      *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and
@@ -169,110 +170,155 @@
                 );
             }
 
-            // Start with the first XML line
-            $xml = '<?xml version="1.0" encoding="' . $this->_encoding . '"?>';
-
+            $xml = new YDXml();
+            $xml->encoding = $this->_encoding;
+            
             // Formatter for RSS 0.91
             if ( $format == 'RSS0.91' || $format == 'RSS2.0' ) {
+                
+                $feed['rss'][0]['#'] = array();
+                
                 if ( $format == 'RSS0.91' ) {
-                    $xml .= '<rss version="0.91">';
+                    $feed['rss'][0]['@']['version'] = '0.91';
                 } else {
-                    $xml .= '<rss version="2.0">';
+                    $feed['rss'][0]['@']['version'] = '2.0';
                 }
-                $xml .= '<channel>';
-                $xml .= '<title>' . $this->_title . '</title>';
+                
+                $feed['rss'][0]['#']['channel'][0]['#'] = array();
+                
+                $channel = & $feed['rss'][0]['#']['channel'][0]['#'];
+                
+                $channel['title'][0]['#'] = $this->_title;
+                
                 if ( ! empty( $this->_description ) ) {
-                    $xml .= '<description>' . $this->_description . '</description>';
+                    $channel['description'][0]['#'] = $this->_description;
                 }
-                $xml .= '<link>' . htmlentities( $this->_link ) . '</link>';
-                $xml .= '<generator>' . $this->_generator . '</generator>';
-                foreach ( $this->_items as $item ) {
-                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
-                    $xml .= '<item>';
-                    $xml .= '<title>' . $item['title'] . '</title>';
-                    $xml .= '<link>' . $item['link'] . '</link>';
-                    $xml .= '<guid isPermanlink="false">' . $item['guid'] . '</guid>';
-                    if ( ! empty( $item['description'] ) ) {
-                        $xml .= '<description>' . $item['description'] . '</description>';
+                
+                $channel['link'][0]['#'] = htmlentities( $this->_link );
+                $channel['generator'][0]['#'] = $this->_generator;
+                
+                $i=0;
+                foreach ( $this->_items as $arr ) {
+                    
+                    $channel['item'][$i]['#'] = array();
+                    
+                    $item = & $channel['item'][$i]['#'];
+                    
+                    $item['title'][0]['#'] = $arr['title'];
+                    $item['link'][0]['#'] = $arr['link'];
+                    $item['guid'][0]['#'] = $arr['guid'];
+                    $item['guid'][0]['@']['isPermanlink'] = 'false';
+                    
+                    if ( ! empty( $arr['description'] ) ) {
+                        $item['description'] = YDStringUtil::encodeString( $arr['description'], true );
                     }
-                    if ( $format == 'RSS2.0' && ! is_null( $item['enclosure'] ) ) {
-                        $xml .= '<enclosure url="' . YDStringUtil::encodeString( $item['enclosure'], true )
-                             .  '" length="' . YDStringUtil::encodeString( $item['enclosure_size'], true )
-                             .  '" type="' . YDStringUtil::encodeString( $item['enclosure_type'], true )
-                             .  '" />';
+                    
+                    if ( $format == 'RSS2.0' && ! is_null( $arr['enclosure'] ) ) {
+                        
+                        $item['enclosure'][0]['@']['url']    = YDStringUtil::encodeString( $arr['enclosure'], true );
+                        $item['enclosure'][0]['@']['length'] = YDStringUtil::encodeString( $arr['enclosure_size'], true );
+                        $item['enclosure'][0]['@']['type']   = YDStringUtil::encodeString( $arr['enclosure_type'], true );
+                        
                     }
-                    $xml .= '</item>';
+                    $i++;
+                    
                 }
-                $xml .= '</channel>';
-                $xml .= '</rss>';
+                
             }
 
             // Formatter for RSS1.0
             if ( $format == 'RSS1.0' ) {
-                $xml .= '<rdf:RDF';
-                $xml .= ' xmlns="http://purl.org/rss/1.0/"';
-                $xml .= ' xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"';
-                $xml .= ' xmlns:dc="http://purl.org/dc/elements/1.1/">';
-                $xml .= '<channel rdf:about="">';
-                $xml .= '<title>' . $this->_title . '</title>';
-                $xml .= '<description>' . $this->_description . '</description>';
-                $xml .= '<link>' . htmlentities( $this->_link ) . '</link>';
-                $xml .= '<items>';
-                $xml .= '<rdf:Seq>';
+                
+                $feed['rdf:RDF'][0]['#'] = array();
+                $feed['rdf:RDF'][0]['@']['xmlns']     = "http://purl.org/rss/1.0/";
+                $feed['rdf:RDF'][0]['@']['xmlns:rdf'] = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+                $feed['rdf:RDF'][0]['@']['xmlns:dc']  = "http://purl.org/dc/elements/1.1/";
+                
+                $feed['rdf:RDF'][0]['#']['channel'][0]['#'] = array();
+                $feed['rdf:RDF'][0]['#']['channel'][0]['@']['rdf:about'] = '';
+                $channel = & $feed['rdf:RDF'][0]['#']['channel'][0]['#'];
+                
+                $channel['title'][0]['#'] = $this->_title;
+                $channel['description'][0]['#'] = $this->_description;
+                $channel['link'][0]['#'] = htmlentities( $this->_link );
+                $channel['items'][0]['#']['rdf:Seq'][0]['#'] = array();
+                
+                $i = 0;
                 foreach ( $this->_items as $item ) {
-                    $xml .= '<rdf:li rdf:resource="' . $item['link'] . '"/>';
+                    $li = & $channel['items'][0]['#']['rdf:Seq'][0]['#']['rdf:li'][$i];
+                    $li['@']['rdf:resource'] = $item['link'];
+                    $i++;
                 }
-                $xml .= '</rdf:Seq>';
-                $xml .= '</items>';
-                $xml .= '</channel>';
-                foreach ( $this->_items as $item ) {
-                    $item['description'] = YDStringUtil::encodeString( $item['description'], true );
-                    $xml .= '<item rdf:about="' . $item['link'] . '">';
-                    $xml .= '<dc:format>text/html</dc:format>';
-                    $xml .= '<title>' . $item['title'] . '</title>';
-                    $xml .= '<link>' . $item['link'] . '</link>';
-                    if ( ! empty( $item['description'] ) ) {
-                        $xml .= '<description>' . $item['description'] . '</description>';
+                
+                $i = 0;
+                foreach ( $this->_items as $arr ) {
+                
+                    $rss['rdf:RDF'][0]['#']['item'][$i]['@']['rdf:about'] = $arr['link'];
+                    
+                    $item = & $feed['rdf:RDF'][0]['#']['item'][$i]['#'];
+                    $item['dc:format'][0]['#'] = 'text/html';
+                    $item['title'][0]['#'] = $arr['title'];
+                    $item['link'][0]['#']  = $arr['link'];
+                    if ( ! empty( $arr['description'] ) ) {
+                        $item['description'][0]['#'] = $arr['description'];
                     }
-                    $xml .= '</item>';
-
+                    $i++;
+                    
                 }
-                $xml .= '</rdf:RDF>';
+                
             }
 
             // Formatter for ATOM
             if ( $format == 'ATOM' ) {
-                $xml .= '<feed version="0.3" xmlns="http://purl.org/atom/ns#">';
-                $xml .= '<title>' . $this->_title . '</title>';
+                
+                $feed['feed'][0]['#'] = array();
+                $feed['feed'][0]['@']['version'] = "0.3";
+                $feed['feed'][0]['@']['xmlns']   = "http://purl.org/atom/ns#";
+                
+                $feed['feed'][0]['#']['title'][0]['#'] = $this->_title;
                 if ( ! empty( $this->_description ) ) {
-                    $xml .= '<tagline>' . $this->_description . '</tagline>';
+                    $feed['feed'][0]['#']['tagline'][0]['#'] = $this->_description;
                 }
-                $xml .= '<link rel="alternate" type="text/html" href="' . htmlentities( $this->_link ) . '"/>';
-                $xml .= '<id>' . htmlentities( $this->_link ) . '</id>';
-                $xml .= '<generator>' . $this->_generator . '</generator>';
-                foreach ( $this->_items as $item ) {
-                    $xml .= '<entry>';
-                    $xml .= '<title>' . $item['title'] . '</title>';
-                    $xml .= '<link rel="alternate" type="text/html" href="' . $item['link'] . '"/>';
-                    $xml .= '<id>' . $item['guid'] . '</id>';
-                    if ( ! empty( $item['description'] ) ) {
-                        $xml .= '<content type="text/html" mode="escaped" xml:base="' . $item['link'] . '"><![CDATA[ ';
-                        $xml .= $item['description'];
-                        $xml .= ' ]]></content>';
+                
+                $feed['feed'][0]['#']['link'][0]['@']['rel'] = 'alternate';
+                $feed['feed'][0]['#']['link'][0]['@']['type'] = 'text/html';
+                $feed['feed'][0]['#']['link'][0]['@']['href'] = htmlentities( $this->_link );
+                
+                $feed['feed'][0]['#']['id'][0]['#'] = htmlentities( $this->_link );
+                $feed['feed'][0]['#']['generator'][0]['#'] = $this->_generator;
+                
+                $i = 0;
+                foreach ( $this->_items as $arr ) {
+                    
+                    $item = &  $feed['feed'][0]['#']['entry'][$i]['#'];
+                    $item['title'][0]['#'] = $arr['title'];
+                    $item['link'][0]['@']['rel'] = 'alternate';
+                    $item['link'][0]['@']['type'] = 'text/html';
+                    $item['link'][0]['@']['href'] = $arr['link'];
+                    $item['id'][0]['#'] = $arr['guid'];
+                    
+                    if ( ! empty( $arr['description'] ) ) {
+                        $item['content'][0]['@']['type'] = 'text/html';
+                        $item['content'][0]['@']['mode'] = 'escaped';
+                        $item['content'][0]['@']['xml:base'] = $arr['link'];
+                        $item['content'][0]['#'] = '<![CDATA[ ' . $arr['description'] . ' ]]>';
                     }
-                    if ( ! is_null( $item['enclosure'] ) ) {
-                        $xml .= '<link rel="enclosure" href="' . YDStringUtil::encodeString( $item['enclosure'], true )
-                             .  '" length="' . YDStringUtil::encodeString( $item['enclosure_size'], true )
-                             .  '" type="' . YDStringUtil::encodeString( $item['enclosure_type'], true )
-                             .  '" />';
+                    
+                    if ( ! is_null( $arr['enclosure'] ) ) {
+                        
+                        $item['link'][0]['@']['rel'] = 'enclosure';
+                        $item['link'][0]['@']['href'] = YDStringUtil::encodeString( $arr['enclosure'], true );
+                        $item['link'][0]['@']['length'] = YDStringUtil::encodeString( $arr['enclosure_size'], true );
+                        $item['link'][0]['@']['type'] = YDStringUtil::encodeString( $arr['enclosure_type'], true );
+                        
                     }
-                    $xml .= '</entry>';
+                    $i++;
                 }
-                $xml .= '</feed>';
+                
             }
-
-            // Return the XML
-            return $xml;
+            
+            $xml->loadArray( $feed );
+            return $xml->toString();
 
         }
 
