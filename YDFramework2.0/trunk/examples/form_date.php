@@ -26,7 +26,7 @@
             $form->addElement( 'date', 'date2', 'Date2 (monthabbr = true)', '', array( 'monthabbr' => true ) );
             $form->addElement( 'date', 'date3', 'Date3 (monthnumber = true)', '', array( 'monthnumber' => true ) );
             $form->addElement( 'date', 'date4', 'Date4 (monthucfirst = true)', '', array( 'monthucfirst' => true ) );
-            $form->addElement( 'date', 'date5', 'Date5 (yearstart = 2005, yearend=2007)', '', array( 'yearstart' => 2005, 'yearend' => 2007 ) );
+            $form->addElement( 'date', 'date5', 'Date5 (yearstart = 1970, yearend=2007, yeartwodigits = true)', '', array( 'yearstart' => 1970, 'yearend' => 2007, 'yeartwodigits' => true ) );
             $form->addElement( 'date', 'time1', 'Time1', '', array( 'time' ) );
             $form->addElement( 'date', 'time2', 'Time2 (minutesoffset = 10)', '', array( 'time', 'minutesoffset' => 10 ) );
             $form->addElement( 'date', 'time3', 'Time3 (secondsoffset = 15)', '', array( 'time', 'secondsoffset' => 15 ) );

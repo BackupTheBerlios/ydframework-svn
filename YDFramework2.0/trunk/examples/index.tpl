@@ -208,7 +208,7 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="form_dateselect.php">YDForm using a combination of date elements</a> </td>
+            <td valign="top"><a href="form_date.php">YDForm using a combination of date elements</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_date.php">form_date.php</a>
             </td>

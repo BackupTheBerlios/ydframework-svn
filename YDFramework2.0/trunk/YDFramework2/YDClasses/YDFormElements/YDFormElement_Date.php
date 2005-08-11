@@ -84,8 +84,8 @@
             $secondsoffset = $this->_getOption( 'secondsoffset',  1 );
             
             // Get the arrays of values
-            $year    = $this->_getArray( $yearstart,    $yearend,    $yearoffset );
-            $month   = $this->_getArray( $monthstart,   $monthend,   $monthoffset, true );
+            $year    = $this->_getArray( $yearstart,    $yearend,    $yearoffset, 'year' );
+            $month   = $this->_getArray( $monthstart,   $monthend,   $monthoffset, 'month' );
             $day     = $this->_getArray( $daystart,     $dayend,     $dayoffset );
             $hours   = $this->_getArray( $hoursstart,   $hoursend,   $hoursoffset );
             $minutes = $this->_getArray( $minutesstart, $minutesend, $minutesoffset );
@@ -127,26 +127,34 @@
          *      @param  $start     The start value.
          *      @param  $end       The end value.
          *      @param  $offset    The offset value.
-         *      @param  $month    (Optional) If true, returns the month names (if
-         *                        option 'monthnumber' is not set). Default: false.
+         *      @param  $part      (Optional) Specific part.
          *
          *      @returns          An array with the values.
          *      
          *      @internal
          */
-        function _getArray( $start, $end, $offset, $month=false ) {
+        function _getArray( $start, $end, $offset, $part='' ) {
             
             $arr = array();
             for ( $i = $start; $i <= $end; $i = $i + $offset ) {
-                if ( $month && ! isset( $this->_options[ 'monthnumber' ] ) ) {
-                    $format = '%B';
-                    if ( isset( $this->_options[ 'monthabbr' ] ) ) {
-                        $format = '%b';
+                
+                if ( $part == 'month' ) {
+                    if ( ! isset( $this->_options[ 'monthnumber' ] ) ) {
+                        $format = '%B';
+                        if ( isset( $this->_options[ 'monthabbr' ] ) ) {
+                            $format = '%b';
+                        }
+                        $value = strtolower( strftime( $format, mktime( 0, 0, 0, $i, 1, 2000 ) ) );
+                        if ( isset( $this->_options[ 'monthucfirst' ] ) ) {
+                            $value = ucfirst( $value );
+                        }
+                        $arr[$i] = $value;
                     }
-                    $value = strtolower( strftime( $format, mktime( 0, 0, 0, $i, 1, 2000 ) ) );
-                    if ( isset( $this->_options[ 'monthucfirst' ] ) ) {
-                        $value = ucfirst( $value );
-                    }
+                } else if ( $part == 'year' ) {
+                    $value = $i;
+                    if ( isset( $this->_options[ 'yeartwodigits' ] ) ) {
+                        $value = substr( $i, -2 );
+                    } 
                     $arr[$i] = $value;
                 } else {
                     $arr[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;

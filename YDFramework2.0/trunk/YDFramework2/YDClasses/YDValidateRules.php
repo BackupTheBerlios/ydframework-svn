@@ -387,7 +387,7 @@
                 return false;
             }
             
-            iif ( isset( $val['month'] ) ) {
+            if ( isset( $val['month'] ) ) {
                 if ( ! is_numeric( $val['month'] ) ||
                        intval( $val['month'] ) < 1 ||
                        intval( $val['month'] ) > 12 ) {
