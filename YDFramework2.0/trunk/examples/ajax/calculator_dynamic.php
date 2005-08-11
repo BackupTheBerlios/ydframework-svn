@@ -32,19 +32,13 @@
 			$form->addElement('button', 'mybutton',     'Calc');
 
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
-
-			// define which default form we will use (this way we don't need to define form in registerElement)
-			$ajax->setForm( $form );
+			$this->ajax = new YDAjax( $this->tpl, $form );
 
 			// assign 'mybutton' with 'compute' call with dynamic values from form elements 'arg1', 'arg2' and 'operation'
-			$ajax->registerElement( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2', 'operation') );
+			$this->ajax->addEvent( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2', 'operation') );
 
-			// process ajax
-			$ajax->processRequests();
+			// process events added
+			$this->ajax->processEvents();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This a dynamic calculator example (you can choose operation)');
@@ -64,14 +58,11 @@
 				default : $result = '&nbsp;';
 			}
 
-			// create ajax response object
-			$response = new YDAjaxResponse();
-
-			// assign span 'myspanresult' of 'myform' with result from operation
-			$response->assignResult('myform', 'myspanresult', 'span', $result );
+			// assign result to span 
+			$this->ajax->addResult( 'myspanresult', $result );
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
 

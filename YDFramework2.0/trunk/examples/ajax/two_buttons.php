@@ -10,28 +10,6 @@
 	YDInclude( 'YDAjax.php' );
 
 
-	// result call invoked by ajax client
-	function result( $option ){
-
-		// compute message
-		switch ( $option ){
-			case 1 :  $message = YD_FW_NAMEVERS; break;
-			
-			default : YDInclude( 'YDUtil.php' ); 
-			          $message = YDStringUtil::formatDate( time(), '%d %B %Y %H:%M:%S' );
-		}
-		
-		// create ajax response object
-		$response = new YDAjaxResponse();
-
-		// assign span 'myspanresult' of 'myform' with dynamic message
-		$response->assignResult('myform', 'myspanresult', 'span', $message);
-
-		// return response to client browser
-		return $response->getXML();
-	}
-	
-
 	// Class definition
 	class two_buttons extends YDRequest {
 
@@ -52,19 +30,14 @@
 			$form->addElement('button',	'mybutton2',    'Get time');
 
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
-			
-			// define which default form we will use (this way we don't need to define form in registerElement)
-			$ajax->setForm( $form );
+			$this->ajax = new YDAjax( $this->tpl, $form );
 
 			// register element mybutton with event result and fixed argument '1' and mybutton2 with event 'result' with argument 2
-			$ajax->registerElement( 'mybutton',  'result', 1 );
-			$ajax->registerElement( 'mybutton2', 'result', 2 );
-			
-			$ajax->processRequests();
+			$this->ajax->addEvent( 'mybutton',  array( & $this, 'result' ), 1 );
+			$this->ajax->addEvent( 'mybutton2', array( & $this, 'result' ), 2 );
+
+			// process events added
+			$this->ajax->processEvents();
 			
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This is a two buttons example with a different event assigned for each one');
@@ -72,6 +45,25 @@
 			$this->tpl->display( 'general' );
 		}
 
+
+
+		// result call invoked by ajax client
+		function result( $option ){
+
+			// compute message
+			switch ( $option ){
+				case 1 :  $message = YD_FW_NAMEVERS; break;
+			
+				default : YDInclude( 'YDUtil.php' ); 
+				          $message = YDStringUtil::formatDate( time(), '%d %B %Y %H:%M:%S' );
+			}
+
+			// assign span 'myspanresult' of 'myform' with dynamic message
+			$this->ajax->addResult( 'myspanresult', $message );
+
+			// return response to client browser
+			return $this->ajax->processResults();
+		}
 
 	}
 

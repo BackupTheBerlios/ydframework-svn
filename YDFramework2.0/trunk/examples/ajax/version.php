@@ -28,21 +28,14 @@
 			$form->addElement('span',   'myspanresult', '&nbsp;', array('style' => 'WIDTH:350px;BACKGROUND-COLOR:#ccccff') );
 			$form->addElement('button', 'mybutton',     'Get YDFramework version');
 
-			
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
-			
-			// define default form to use (this way we don't need always to define a form in registerElement)
-			$ajax->setForm( $form );
+			$this->ajax = new YDAjax( $this->tpl, $form );
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
-			$ajax->registerElement( 'mybutton', array( & $this, 'getversion' ) );
-			
+			$this->ajax->addEvent( 'mybutton', array( & $this, 'getversion' ) );
+
 			// process ajax
-			$ajax->processRequests();
+			$this->ajax->processEvents();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This is a simple ajax example');
@@ -53,15 +46,12 @@
 
 		// getversion invoked by ajax client
 		function getversion(){
-		
-			// create ajax response object
-			$response = new YDAjaxResponse();
-
-			// assign span 'myspanresult' of 'myform' with ydf version name
-			$response->assignResult('myform', 'myspanresult', 'span', YD_FW_NAMEVERS);
+ 
+			// assign result to 'myspanresult'
+			$this->ajax->addResult('myspanresult', YD_FW_NAMEVERS);
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
 	}

@@ -37,15 +37,11 @@
 			$this->form->addRule( 'myemail', 'email',    'Email is not valid' );
 
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object and form object
-			$ajax->setTemplate( $this->tpl );
-			$ajax->setForm( $this->form );
+			$this->ajax = new YDAjax( $this->tpl, $this->form);
 
 			// assign element 'mybutton' with method 'processform' with 'myform' values as argument
-			$ajax->registerElement( 'mybutton', array( & $this, 'processform' ), 'myform' );
-			$ajax->processRequests();
+			$this->ajax->addEvent( 'mybutton', array( & $this, 'processform' ), 'myform' );
+			$this->ajax->processEvents();
 
 			// assign title, form and display template
 			$this->tpl->assign( 'title', 'YDAjax form submition' );
@@ -57,20 +53,16 @@
 		// processform call invoked by ajax
 		function processform( $formvalues ){
 
-			// create ajax response object
-			$response = new YDAjaxResponse();
-			
 			// if form is not valid, send errors to client side
 			if (!$this->form->validate($formvalues)) 
-				return $response->sendFormErrors( $this->form );
+				return $this->ajax->sendFormErrors( $this->form );
 
 			// assign span 'myspanresult' form dump as result
-			$response->assignResult( 'myform', 'myspanresult', 'span',   YDDebugUtil::r_dump($this->form->getValues(), true) );
-			$response->assignResult( 'myform', 'mybutton',     'button', 'Send form with YDAjax again :)' );
-
+			$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
+			$this->ajax->addResult( 'mybutton',     'Send form with YDAjax again :)' );
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
    }

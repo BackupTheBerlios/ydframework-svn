@@ -35,17 +35,11 @@
 			$form->addElement('button',         'mybutton',      '=');
 
 			// create ajax object
-			$ajax = new YDAjax();
+			$this->ajax = new YDAjax( $this->tpl, $form);
 
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
-			
-			// define which default form we will use (this way we don't need to define form in registerElement)
-			$ajax->setForm( $form );
-
-			// register button 'mybutton' with event 'result' using dynamic values from form elements
-			$ajax->registerElement( 'mybutton',  array( & $this, 'result' ), array( 'currentdate', 'operation', 'number', 'type' ) );
-			$ajax->processRequests();
+			// register button 'mybutton' with event 'result' and arguments form elements
+			$this->ajax->addEvent( 'mybutton',  array( & $this, 'result' ), array( 'currentdate', 'operation', 'number', 'type' ) );
+			$this->ajax->processEvents();
 
 			// assign form and display template
 			$this->tpl->assignForm( 'form', $form );
@@ -72,14 +66,11 @@
 				case 3 : $date->addYear( $number );   break;
 			}
 
-			// create ajax response object
-			$response = new YDAjaxResponse();
-
-			// assign span 'myspanresult' of 'myform' with computed date
-			$response->assignResult('myform', 'myspanresult', 'span', YDStringUtil::formatDate( $date->getTimestamp(), 'datetime' ));
+			// assign span
+			$this->ajax->addResult('myspanresult', YDStringUtil::formatDate( $date->getTimestamp(), 'datetime' ));
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
 	}

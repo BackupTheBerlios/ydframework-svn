@@ -31,40 +31,29 @@
 			$form->addElement('span',   'myspanresult', '&nbsp;');
 
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
-			
-			// define which default form we will use (this way we don't need to define form in registerElement)
-			$ajax->setForm( $form );
+			$this->ajax = new YDAjax( $this->tpl, $form );
 
 			// assign 'mybutton' with 'compute' call with dynamic values from form elements 'arg1' and 'arg2'
-			$ajax->registerElement( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2') );
+			$this->ajax->addEvent( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2') );
 
-			// process ajax
-			$ajax->processRequests();
+			// process events added
+			$this->ajax->processEvents();
 
 			// assign form and display template
-			$this->tpl->assign( 'title', 'This a calculator example. Fill X and Y');
+			$this->tpl->assign( 'title', 'This a calculator example. Fill X and Y' );
 			$this->tpl->assign( 'form',  $form->tohtml() );
 			$this->tpl->display( 'general' );
 		}
 
 
 		// compute call invoked by ajax client
-		function compute( $arg1, $arg2 ){
+		function compute( $x, $y ){
 		
-			$result = $arg1 + $arg2;
-
-			// create ajax response object
-			$response = new YDAjaxResponse();
-
-			// assign span 'myspanresult' of 'myform' with sum result
-			$response->assignResult('myform', 'myspanresult', 'span', $result );
+			// assign result to span
+			$this->ajax->addResult( 'myspanresult', $x + $y );
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
 

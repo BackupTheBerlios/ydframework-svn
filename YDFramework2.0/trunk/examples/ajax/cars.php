@@ -28,17 +28,11 @@
 			$form->addElement( 'select', 'model', '', array() );
 
 			// create ajax object
-			$ajax = new YDAjax();
-
-			// define template object (YDAjax will assign all js to this template)
-			$ajax->setTemplate( $this->tpl );
+			$this->ajax = new YDAjax( $this->tpl, $form );
 			
-			// define which default form we will use (this way we don't need to define form in registerElement)
-			$ajax->setForm( $form );
-			
-			// register element 'car' with event 'getmodel' using dynamic value from 'car' element
-			$ajax->registerElement( 'car', array( & $this, 'getmodel' ), array( 'car' ) );
-			$ajax->processRequests();
+			// register event to 'car' and send its dynamic value to 'getmodel' method
+			$this->ajax->addEvent( 'car', array( & $this, 'getmodel' ), array( 'car' ) );
+			$this->ajax->processEvents();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'Dependency with two select elements:' );
@@ -57,14 +51,11 @@
 				default : $models = array( 'Z3', 'Z4', 'M3' ); break;
 			}
 
-			// create ajax response object
-			$response = new YDAjaxResponse();
-
-			// assign select element 'model' of 'myform' with an array
-			$response->assignResult('myform', 'model', 'select', $models);
+			// assign models to 'model' element
+			$this->ajax->addResult( 'model', $models );
 
 			// return response to client browser
-			return $response->getXML();
+			return $this->ajax->processResults();
 		}
 
 	}

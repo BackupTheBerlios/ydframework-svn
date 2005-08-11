@@ -593,7 +593,7 @@
           <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-          <td valign="top" rowspan="7">&nbsp;</td>
+          <td valign="top" rowspan="11">&nbsp;</td>
           <td valign="top"><a href="ajax/version.php">Simple ajax example</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/version.php">ajax/version.php</a> </td>
@@ -627,6 +627,22 @@
           <td valign="top"><a href="ajax/form.php">Form submittion and validation</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/form.php">ajax/form.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="ajax/persistent_store.php">Persistent server store</a><br/></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/persistent_store.php">ajax/persistent_store.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="ajax/list_options.php">Adding elements to a select box dynamically </a><br/></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/list_options.php">ajax/list_options.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="ajax/list_dynamic.php">Generate a form element on-the-fly</a></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/list_dynamic.php">ajax/list_dynamic.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="ajax/image.php">Image creation and auto-update</a><br/></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/image.php">ajax/image.php</a> </td>
         </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>
