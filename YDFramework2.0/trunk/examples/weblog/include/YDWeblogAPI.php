@@ -450,17 +450,29 @@
 
         // Get the stats from the last 6 months
         function getStatsMonths( $limit=6 ) {
-            return $this->db->getRecords(
+            YDInclude( 'YDDateUtil.php' );
+            $records = $this->db->getRecords(
                 'SELECT DATE_FORMAT(date,\'%Y-%m\') AS YearMonth, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics '
               . ' GROUP BY YearMonth ORDER BY date DESC', $limit
             );
+            foreach ( $records as $key=>$record ) {
+                $date = new YDDateUtil( $record['yearmonth'] . '-01' );
+                $records[$key]['yearmonth'] = $record['yearmonth'] . ' (' . strtolower( $date->getMonthName() ) . ')';
+            }
+            return $records;
         }
 
         // Get the stats from the last 7 days
         function getStatsDays( $limit=7 ) {
-            return $this->db->getRecords(
+            YDInclude( 'YDDateUtil.php' );
+            $records = $this->db->getRecords(
                 'SELECT date, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY date ORDER BY date DESC', $limit
             );
+            foreach ( $records as $key=>$record ) {
+                $date = new YDDateUtil( $record['date'] );
+                $records[$key]['date'] = $record['date'] . ' (' . strtolower( $date->getDayName() ) . ')';
+            }
+            return $records;
         }
 
         // Get the top 10 URLs
