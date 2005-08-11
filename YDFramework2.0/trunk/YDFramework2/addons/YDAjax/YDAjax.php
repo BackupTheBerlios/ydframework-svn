@@ -37,11 +37,13 @@
         /**
          *	This is the class constructor for the YDAjax class.
          *
+         *	@param $template		Default template object
+         *	@param $form			Default form object.
          *	@param $requestURI		Request URI. default to current page.
          *	@param $prefix		Prefix used in ajax functions.
          *	@param $debug		Debug mode.
          */
-        function YDAjax( $requestURI = null, $prefix = "__ydf", $debug = null) {
+        function YDAjax( & $template, & $form, $requestURI = null, $prefix = "__ydf", $debug = null) {
 
 			// prefix is used in some methods
 			$this->prefix = $prefix;
@@ -70,10 +72,16 @@
 			$this->xajax( $requestURI, $this->prefix, $debug );
 			
 			// initilize form
-			$this->form = null;
+			$this->form = & $form;
+
+			// initilize template
+			$this->template = & $template;
 			
 			// custom javascript (we need more than the javascript provided by xajax
 			$this->customjs = array();
+			
+			// response object
+			$this->response = new YDAjaxResponse();
 		}
 		
 
@@ -132,6 +140,7 @@
 			$this->debugOn();
 		}
 
+		
 
         /**
          *	This class enables/disables a browser setStatusMessage (experimental)
@@ -152,10 +161,11 @@
          *	@param $serverFunction	Name of the function in the server (string).
          *	@param $arguments		Default arguments for this function (string or array of strings).
          *	@param $event			Event name (auto-detection by default).
+         *	@param $options			Custom options.
          */		
-		 function registerElement( $formElementName, $serverFunction, $arguments = null, $event = null){
+		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null){
 		 
-		 	if (!isset($formElementName)) die("You must define a formElementName in registerElement");
+		 	if (!isset($formElementName)) die("You must define a formElementName in addEvent");
 		 
 			// register function in xajax
 			$this->registerFunction( $serverFunction );
@@ -173,6 +183,7 @@
 					case 'image' :  trigger_error('Images cannot be used in ajax because they force submittion. Use "img" element instead.'); break;
 					case 'img' :		$event = 'onClick';  break;					
 					case 'button' :		$event = 'onClick';  break;					
+					case 'span' :		$event = 'onClick';  break;
 					case 'dateselect' :	$event = 'onChange'; break;
 					case 'radio' :		$event = 'onChange'; break;
 					case 'checkbox' :	$event = 'onChange'; break;
@@ -191,13 +202,13 @@
 			if (is_array( $serverFunction )) $serverFunction = $serverFunction[1];
 
 			// add event and function name to element attributes
-			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $this->computeFunctionArguments( $arguments ) .')');
+			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $this->computeFunctionArguments( $arguments, $options ) .')');
 		}
 		
 
 
 		// internal method. compute js arguments string 
-		function computeFunctionArguments( $arguments ){
+		function computeFunctionArguments( $arguments, $options ){
 			
 			// if there are not arguments return empty string
 			if (is_null($arguments)) return "";
@@ -207,6 +218,8 @@
 
 			// if there's only one argument compute array of one element
 			if (!is_array( $arguments )) $arguments = array( $arguments );
+
+			if (!is_array( $options )) $options = array( $options );
 
 			// initialize arguments
 			$args = array();
@@ -224,16 +237,16 @@
 
 					// get element type to invoke the custom js to get the value
 					switch( $elem->getType() ){
-						case 'text' :			$args[] = $this->getValueText( $elem );				break;
-						case 'password' :		$args[] = $this->getValuePassword( $elem );			break;
-						case 'textarea' :		$args[] = $this->getValueTextarea( $elem );			break;
-						case 'radio' :			$args[] = $this->getValueRadio( $elem );			break;
-						case 'checkbox' :		$args[] = $this->getValueCheckbox( $elem );			break;
-						case 'dateselect' :		$args[] = $this->getValueDateSelect( $elem );		break;
-						case 'datetimeselect' :	$args[] = $this->getValueDateTimeSelect( $elem );	break;
-						case 'timeselect' :		$args[] = $this->getValueTimeSelect( $elem );		break;
-						case 'span' :			$args[] = $this->getValueSpan( $elem );				break;
-						case 'select' :			$args[] = $this->getValueSelect( $elem );			break;
+						case 'text' :			$args[] = $this->getValueText(           $elem, $options ); break;
+						case 'password' :		$args[] = $this->getValuePassword(       $elem, $options ); break;
+						case 'textarea' :		$args[] = $this->getValueTextarea(       $elem, $options ); break;
+						case 'radio' :			$args[] = $this->getValueRadio(          $elem, $options ); break;
+						case 'checkbox' :		$args[] = $this->getValueCheckbox(       $elem, $options ); break;
+						case 'dateselect' :		$args[] = $this->getValueDateSelect(     $elem, $options ); break;
+						case 'datetimeselect' :	$args[] = $this->getValueDateTimeSelect( $elem, $options ); break;
+						case 'timeselect' :		$args[] = $this->getValueTimeSelect(     $elem, $options ); break;
+						case 'span' :			$args[] = $this->getValueSpan(           $elem, $options ); break;
+						case 'select' :			$args[] = $this->getValueSelect(         $elem, $options ); break;
 																							
 						default : die ('Element type "'. $elem->getType() .'" is not supported as dynamic argument');
 					}
@@ -250,9 +263,38 @@
 		}
 
 
+        /**
+         *	This method will process all events added
+         */	
+		function processEvents(){
+					$this->setTemplate( $this->template );
+			return $this->processRequests();
+		}
+
+
+		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
+		
+			// test if element exist
+			if (!$this->form->isElement( $formElementName )) die("Element $formElementName doesn't exist");
+			
+			// get element
+			$elem = & $this->form->getElement( $formElementName );
+			
+			return $this->response->assignResult( $elem, $result, $attribute, $options);
+		}
+		
+		
+		function processResults(){
+		
+			// if YDAjaxResponse is not defined return
+			if ( is_null( $this->response )) die( "There are no results assigned" );
+			
+			return $this->response->getXML();
+		}
+		
 		
 		// internal method to create the needed js function to retrieve a text value
-		function getValueText( & $element ){
+		function getValueText( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -266,10 +308,25 @@
 
 
 		// internal method to create the needed js function to retrieve a select value
-		function getValueSelect( & $element ){
+		function getValueSelect( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
+
+			// if we want all values and not only the select one
+			if (in_array( 'all', $options )){
+
+				$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' . "\n";
+				$this->customjs[$jsfunction] .= '   var __ydtmparr = new Array();' . "\n";
+				$this->customjs[$jsfunction] .= '   var __ydtmpsel = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
+				$this->customjs[$jsfunction] .= '   for (i = 0; i < __ydtmpsel.length; i++){' . "\n";
+				$this->customjs[$jsfunction] .= '       __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text; ' . "\n";
+				$this->customjs[$jsfunction] .= '   }' . "\n";
+				$this->customjs[$jsfunction] .= '   return __ydtmparr;' . "\n";
+				$this->customjs[$jsfunction] .= '}' . "\n";
+		
+				return $jsfunction ."()";
+			}
 		
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
@@ -281,7 +338,7 @@
 
 
 		// internal method to create the needed js function to retrieve a password value
-		function getValuePassword( & $element ){
+		function getValuePassword( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -295,7 +352,7 @@
 		
 
 		// internal method to create the needed js function to retrieve a textarea value
-		function getValueTextarea( & $element ){
+		function getValueTextarea( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -309,7 +366,7 @@
 		
 		
 		// internal method to create the needed js function to retrieve a span value
-		function getValueSpan( & $element ){
+		function getValueSpan( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -323,7 +380,7 @@
 		
 
 		// internal method to create the needed js function to retrieve a dateselect value
-		function getValueDateSelect( & $element ){
+		function getValueDateSelect( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -342,7 +399,7 @@
 
 
 		// internal method to create the needed js function to retrieve a timeselect value
-		function getValueTimeSelect( & $element ){
+		function getValueTimeSelect( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -360,7 +417,7 @@
 
 
 		// internal method to create the needed js function to retrieve a datetimeselect value
-		function getValueDateTimeSelect( & $element ){
+		function getValueDateTimeSelect( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -381,7 +438,7 @@
 		
 
 		// internal method to create the needed js function to retrieve a checkbox value
-		function getValueCheckbox( & $element ){
+		function getValueCheckbox( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -398,7 +455,7 @@
 		
 
 		// internal method to create the needed js function to retrieve a radio value
-		function getValueRadio( & $element ){
+		function getValueRadio( & $element, $options ){
 		
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
@@ -415,6 +472,10 @@
 		}		
 		
 
+		function sendFormErrors( & $form ){
+		
+			return $this->response->sendFormErrors( $form );
+		}
 
 }
 
@@ -439,8 +500,13 @@ class YDAjaxResponse extends xajaxResponse{
          *	@param $attribute			Custom attribute (auto-detection by default).
          *	@param $option				Other options.
          */		
-		function assignResult( $formName, $formElementName, $formElementType, $result, $attribute = null, $options = array()){
+		function assignResult( & $formElement, $result, $attribute = null, $options = array()){
 	
+			// get informations about the element
+			$formName        = $formElement->getForm();
+			$formElementName = $formElement->getName();
+			$formElementType = $formElement->getType();
+
 			// depending on the type we must invoke the custom function for the element
 			switch( strtolower($formElementType) ){
 
@@ -469,6 +535,7 @@ class YDAjaxResponse extends xajaxResponse{
 			
 			
 		}
+
 
 
 
@@ -538,9 +605,12 @@ class YDAjaxResponse extends xajaxResponse{
 			
 			// compute options
 			$options = '__ydfselect.options.length = 0;';
-			foreach( $result as $key => $value )
+			foreach( $result as $key => $value ){
+				$key   = addslashes( $key );
+				$value = addslashes( $value );
 				$options .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("'. $value .'","'. $key .'"); ' ;
-		
+			}
+
 			// assign result to form element
 			$this->addScript('var __ydfselect = document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"];'.
 							 $options );
@@ -566,9 +636,12 @@ class YDAjaxResponse extends xajaxResponse{
 		
 			// if attribute event is not defined we must create a default event
 			if (is_null( $attribute )) $attribute = 'src';
+			
+			// if we want to display a new image, we must create a new src otherwise the browser won't replace
+			if ($attribute == 'src') $result .= '?'. time();
 
 			// assign result image
-			$this->addScript('document.'. $formName .'_'. $formElementName .'.'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
 		}		
 
 		
@@ -591,6 +664,12 @@ class YDAjaxResponse extends xajaxResponse{
 		
 			// if attribute event is not defined we must create a default event
 			if (is_null( $attribute )) $attribute = 'innerHTML';
+
+			// if result is an array we should export to a valid js string
+			if (is_array( $result )) $result =  str_replace( "\n", "<br>", var_export( $result, true ) ) ;
+
+			// escape string
+			$result = addslashes( $result );
 		
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
@@ -718,6 +797,7 @@ class YDAjaxResponse extends xajaxResponse{
 			
 				$parsed  = getdate( $result );
 				$hours   = $parsed['hours'];
+
 				$minutes = $parsed['minutes'];
 
 			}else $this->addAlert("TimeSelect elements in YDAjax only support timestamps in assignResult");
