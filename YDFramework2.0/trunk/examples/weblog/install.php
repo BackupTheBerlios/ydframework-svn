@@ -254,6 +254,7 @@
                 $item['user_id'] = 1;
                 $item['title'] = 'Your second post';
                 $item['body'] = 'Without an extended body';
+                $item['created'] = time() + 100;
                 $weblog->addItem( $item );
 
                 // Add a comment
