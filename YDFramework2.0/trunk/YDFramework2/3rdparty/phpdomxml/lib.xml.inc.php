@@ -361,10 +361,16 @@
 			// collect children, if any
 			if ($this->hasChildNodes()) {
 				$s .= '>';
-				if ($pretty) $s .= "\n";
+				if ( $pretty && ( $this->firstChild->nodeType == XML_ELEMENT_NODE ||
+				     $this->firstChild->nodeType == XML_COMMENT_NODE ) ) {
+						$s .= "\n";
+				}
 				foreach ($this->childNodes as $child)
 					$s .= $child->toString($pretty, $tabs."\t");
-				if ($pretty) $s .= $tabs;
+				if ( $pretty && ( $this->firstChild->nodeType == XML_ELEMENT_NODE ||
+				     $this->firstChild->nodeType == XML_COMMENT_NODE ) ) {
+						$s .= $tabs;
+				}
 				$s .= '</'.$this->nodeName.'>';
 				if ($pretty) $s .= "\n";
 			} else {
@@ -515,9 +521,9 @@
 
 		function toString($pretty = false, $tabs = '') {
 			$s = '';
-			if ($pretty) $s .= $tabs;
+			//if ($pretty) $s .= $tabs;
 			$s .= $this->nodeValue;
-			if ($pretty) $s .= "\n";
+			//if ($pretty) $s .= "\n";
 			return $s;
 		} // toString
 
@@ -546,9 +552,9 @@
 
 		function toString($pretty = false, $tabs = '') {
 			$s = '';
-			if ($pretty) $s .= $tabs;
+			//if ($pretty) $s .= $tabs;
 			$s .= '<![CDATA['.$this->nodeValue.']]>';
-			if ($pretty) $s .= "\n";
+			//if ($pretty) $s .= "\n";
 			return $s;
 		} // toString
 
@@ -857,7 +863,7 @@
 				$this->parser = @xml_parser_create();
 			
 			// set options
-			xml_set_object($this->parser, &$this);
+			xml_set_object($this->parser, $this);
 			xml_set_element_handler($this->parser, 'openHandler', 'closeHandler');
 			xml_set_character_data_handler($this->parser, 'cdataHandler');
 			xml_set_default_handler($this->parser, 'dataHandler');

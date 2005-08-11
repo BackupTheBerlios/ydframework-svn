@@ -48,7 +48,7 @@
             
             YDDebugUtil::dump( $xml->toString( false ), 'YDXml::toString ugly' );
             
-            YDDebugUtil::dump( $xml->toString(), 'YDXml::toString pretty' );
+            YDDebugUtil::dump( $xml->toString( true ), 'YDXml::toString pretty' );
             
             YDDebugUtil::dump( $xml->traverse(), 'YDXml::traverse' );
             

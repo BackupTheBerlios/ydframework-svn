@@ -266,7 +266,7 @@
          *                  to create it. The file will be emptied before adding the contents.
          *  @param $pretty  (Optional) Saves the "pretty" version of the XML - with indentation.
          */
-        function save( $path, $pretty=true ) {
+        function save( $path, $pretty=false ) {
             
             include_once( dirname( __FILE__ ) . '/YDFileSystem.php' );
             
