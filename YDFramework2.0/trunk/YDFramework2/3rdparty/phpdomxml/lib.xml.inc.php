@@ -355,7 +355,7 @@
 			// collect attributes, if any
 			if ($this->hasAttributes()) {
 				foreach ($this->attributes as $key => $val)
-					$s .= ' '.$key.'="'.$val.'"';
+					$s .= ' '.$key.'="'.htmlentities( $val ).'"';
 			}
 
 			// collect children, if any
@@ -484,7 +484,7 @@
 		function toString($pretty = false, $tabs = '') {
 			$s = '';
 			if ($pretty) $s .= $tabs;
-			$s .= '<!-- '.$this->nodeValue.' -->';
+			$s .= '<!-- '.htmlentities( $this->nodeValue ).' -->';
 			if ($pretty) $s .= "\n";
 			return $s;
 		} // toString
@@ -522,7 +522,7 @@
 		function toString($pretty = false, $tabs = '') {
 			$s = '';
 			//if ($pretty) $s .= $tabs;
-			$s .= $this->nodeValue;
+			$s .= htmlentities( $this->nodeValue );
 			//if ($pretty) $s .= "\n";
 			return $s;
 		} // toString

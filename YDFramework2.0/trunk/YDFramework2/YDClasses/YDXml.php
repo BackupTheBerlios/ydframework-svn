@@ -209,7 +209,7 @@
                             // attributes
                             if ( isset( $info['@'] ) ) {
                                 foreach ( $info['@'] as $att => $val ) {
-                                    $$root->setAttribute( $att, $val);
+                                    $$root->setAttribute( $att, $val );
                                 }
                             }
                             
@@ -228,7 +228,7 @@
                                         
                                     } else {
                                         $$root->appendChild(
-                                            $this->createTextNode( htmlentities( $info['#'] ) )
+                                            $this->createTextNode( $info['#'] )
                                         );
                                     }
                                 }
@@ -245,9 +245,16 @@
                         $root = $prefix.$key.'0';
                         $$root = $this->createElement( $key );
                         
-                        $$root->appendChild(
-                            $this->createTextNode( htmlentities( $child ) )
-                        );
+                        if ( preg_match( "<!\[CDATA\[(.*)\]\]>", $child, $matches ) ) {
+                            $$root->appendChild(
+                                $this->createCDATASection( $matches[1] )
+                            );
+                            
+                        } else {
+                            $$root->appendChild(
+                                $this->createTextNode( $child )
+                            );
+                        }
                         
                         $node->appendChild( $$root );
                         

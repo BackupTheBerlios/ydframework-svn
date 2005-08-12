@@ -80,7 +80,7 @@
          *	@param $title	The title of the feed.
          */
         function setTitle( $title ) {
-            $this->_title = YDStringUtil::encodeString( $title, true );
+            $this->_title = $title;
         }
 
         /**
@@ -90,7 +90,7 @@
          */
         function setDescription( $desc ) {
             $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
-            $this->_description = YDStringUtil::encodeString( $desc, true );
+            $this->_description = $desc;
         }
 
         /**
@@ -134,7 +134,7 @@
             }
 
             $item = array(
-                'title' => YDStringUtil::encodeString( $title, true ), 'link' => htmlentities( $link ),
+                'title' => $title, 'link' => $link,
                 'description' => $desc, 'guid' => $guid, 'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
                 'enclosure_type' => $enclosure_type
             );
@@ -194,7 +194,7 @@
                     $channel['description'][0]['#'] = $this->_description;
                 }
                 
-                $channel['link'][0]['#'] = htmlentities( $this->_link );
+                $channel['link'][0]['#'] = $this->_link;
                 $channel['generator'][0]['#'] = $this->_generator;
                 
                 $i=0;
@@ -210,14 +210,14 @@
                     $item['guid'][0]['@']['isPermanlink'] = 'false';
                     
                     if ( ! empty( $arr['description'] ) ) {
-                        $item['description'] = YDStringUtil::encodeString( $arr['description'], true );
+                        $item['description'] = $arr['description'];
                     }
                     
                     if ( $format == 'RSS2.0' && ! is_null( $arr['enclosure'] ) ) {
                         
-                        $item['enclosure'][0]['@']['url']    = YDStringUtil::encodeString( $arr['enclosure'], true );
-                        $item['enclosure'][0]['@']['length'] = YDStringUtil::encodeString( $arr['enclosure_size'], true );
-                        $item['enclosure'][0]['@']['type']   = YDStringUtil::encodeString( $arr['enclosure_type'], true );
+                        $item['enclosure'][0]['@']['url']    = $arr['enclosure'];
+                        $item['enclosure'][0]['@']['length'] = $arr['enclosure_size'];
+                        $item['enclosure'][0]['@']['type']   = $arr['enclosure_type'];
                         
                     }
                     $i++;
@@ -240,7 +240,7 @@
                 
                 $channel['title'][0]['#'] = $this->_title;
                 $channel['description'][0]['#'] = $this->_description;
-                $channel['link'][0]['#'] = htmlentities( $this->_link );
+                $channel['link'][0]['#'] = $this->_link;
                 $channel['items'][0]['#']['rdf:Seq'][0]['#'] = array();
                 
                 $i = 0;
@@ -282,9 +282,9 @@
                 
                 $feed['feed'][0]['#']['link'][0]['@']['rel'] = 'alternate';
                 $feed['feed'][0]['#']['link'][0]['@']['type'] = 'text/html';
-                $feed['feed'][0]['#']['link'][0]['@']['href'] = htmlentities( $this->_link );
+                $feed['feed'][0]['#']['link'][0]['@']['href'] = $this->_link;
                 
-                $feed['feed'][0]['#']['id'][0]['#'] = htmlentities( $this->_link );
+                $feed['feed'][0]['#']['id'][0]['#'] = $this->_link;
                 $feed['feed'][0]['#']['generator'][0]['#'] = $this->_generator;
                 
                 $i = 0;
@@ -301,15 +301,15 @@
                         $item['content'][0]['@']['type'] = 'text/html';
                         $item['content'][0]['@']['mode'] = 'escaped';
                         $item['content'][0]['@']['xml:base'] = $arr['link'];
-                        $item['content'][0]['#'] = '<![CDATA[ ' . $arr['description'] . ' ]]>';
+                        $item['content'][0]['#'] = '<![CDATA[' . $arr['description'] . ']]>';
                     }
                     
                     if ( ! is_null( $arr['enclosure'] ) ) {
                         
                         $item['link'][0]['@']['rel'] = 'enclosure';
-                        $item['link'][0]['@']['href'] = YDStringUtil::encodeString( $arr['enclosure'], true );
-                        $item['link'][0]['@']['length'] = YDStringUtil::encodeString( $arr['enclosure_size'], true );
-                        $item['link'][0]['@']['type'] = YDStringUtil::encodeString( $arr['enclosure_type'], true );
+                        $item['link'][0]['@']['href'] = $arr['enclosure'];
+                        $item['link'][0]['@']['length'] = $arr['enclosure_size'];
+                        $item['link'][0]['@']['type'] = $arr['enclosure_type'];
                         
                     }
                     $i++;
