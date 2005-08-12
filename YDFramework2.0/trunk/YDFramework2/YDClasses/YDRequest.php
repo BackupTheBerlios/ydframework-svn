@@ -92,10 +92,18 @@
         /**
          *	This function will return the full URL to the current request, including hostname, port and request URI.
          *
+         *  @param  $no_qs  (optional) If set to false, the query string will be omitted. Default is false.
+         *  @param  $use_ip (optional) If set to true, the IP address of the server will be used instead of the
+         *                  hostname. Default is false.
+         *
          *	@returns	The full url of the current request.
          */
-        function getCurrentUrl( $no_qs=false ) {
-            $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+        function getCurrentUrl( $no_qs=false, $use_ip=false ) {
+            if ( $use_ip ) {
+                $url = 'http://' . strtolower( $_SERVER['SERVER_ADDR'] );
+            } else {
+                $url = 'http://' . strtolower( $_SERVER['SERVER_NAME'] );
+            }
             if ( $_SERVER['SERVER_PORT'] != '80' ) {
                 $url = $url . ':' . $_SERVER['SERVER_PORT'];
             }

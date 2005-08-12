@@ -63,9 +63,11 @@
 			}
 
 			// if url is null, we want ydf url. if empty string xajax creates it, otherwise it's a custom url
-			if (is_null($requestURI)){	YDInclude( 'YDUrl.php' );
-							$url = new YDUrl( YD_SELF_URI );
-							$requestURI = $url->getUrl();
+			if (is_null($requestURI)){
+                    YDInclude( 'YDUrl.php' );
+                    YDInclude( 'YDRequest.php' );
+                    $url = new YDUrl( YDRequest::getCurrentUrl( false, true ) );
+                    $requestURI = $url->getUrl();
 			}
 		
 			// create ajax object
