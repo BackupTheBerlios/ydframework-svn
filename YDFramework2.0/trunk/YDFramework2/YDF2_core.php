@@ -375,10 +375,13 @@
             // Add another one
             array_push( $locales, substr( $locale, 0, 2 ) . '_' . strtoupper( substr( $locale, 0, 2 ) ) );
 
+            YDDebugUtil::dump( $locales );
+
             // Set the locale
-            if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) {
-                trigger_error( 'Your platform does not support the locale "' . strtolower( $locale ) . '"', YD_ERROR );
-            }
+            @call_user_func_array( 'setlocale', array_unique( $locales ) )
+            //if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) {
+                //trigger_error( 'Your platform does not support the locale "' . strtolower( $locale ) . '"', YD_ERROR );
+            //}
 
             // Set the locale
             YDConfig::set( YD_LOCALE_KEY, $locale );
