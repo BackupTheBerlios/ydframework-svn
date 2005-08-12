@@ -198,12 +198,12 @@
             <listitem><emphasis role="bold">extension:</emphasis> The filename must match the indicated extension</listitem>
         </itemizedlist>
 
-        <para>We also have three rules that are used by the date/time form elements:</para>
+        <para>We also have rules that are used by the date/time form elements:</para>
 
         <itemizedlist spacing="compact">
-            <listitem><emphasis role="bold">date:</emphasis> value should be a valid date</listitem>
-            <listitem><emphasis role="bold">time:</emphasis> value should be a valid time</listitem>
-            <listitem><emphasis role="bold">datetime:</emphasis> value should be a valid datetime</listitem>
+            <listitem><emphasis role="bold">date:</emphasis> value should be a valid date/time.</listitem>
+            <listitem><emphasis role="bold">time:</emphasis> value should be a valid time (deprecated - use date instead) </listitem>
+            <listitem><emphasis role="bold">datetime:</emphasis> value should be a valid datetime (deprecated - use date instead)</listitem>
         </itemizedlist>
 
         <note>Some rules (for example the rangelength rule) take an additional argument indicating the length. Please refer to the API documentation for an explanation of each rule.</note>

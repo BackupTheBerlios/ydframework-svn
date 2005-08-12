@@ -379,69 +379,188 @@
          *  elements is valid or not.
          *
          *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $opts	An array with the options and elements of the date element.
          */
-        function date( $val, $opts='' ) {
+        function date( $val, $opts=array() ) {
            
             if ( ! is_array( $val ) ) {
                 return false;
             }
             
-            if ( isset( $val['month'] ) ) {
-                if ( ! is_numeric( $val['month'] ) ||
-                       intval( $val['month'] ) < 1 ||
-                       intval( $val['month'] ) > 12 ) {
-                    return false;
+            // If there are no elements defined
+            if ( ! isset( $opts['elements'] ) || empty( $opts['elements'] ) ) {
+                foreach ( $val as $key => $v ) {
+                    $opts['elements'][] = $key;
                 }
             }
-            if ( isset( $val['day'] ) ) {
-                if ( ! is_numeric( $val['day'] ) ||
-                       intval( $val['day'] ) < 1 ||
-                       intval( $val['day'] ) > 31 ) {
+            
+            // If there are no options defined
+            if ( ! isset( $opts['options'] ) || empty( $opts['options'] ) ) {
+                $opts['options']= array();
+            }
+            
+            // Validate the elements values with the options
+            $options  = & $opts['options'];
+            $elements = & $opts['elements'];
+            
+            $year  = false;
+            $month = false;
+            $day   = false;
+            
+            // Year
+            if ( in_array( 'year', $elements ) ) {
+                if ( ! isset( $val['year'] ) || ! is_numeric( $val['year'] ) ) {
                     return false;
                 }
-            }
-            if ( isset( $val['year'] ) ) {
-                if ( ! is_numeric( $val['year'] ) ) {
+                $val['year'] = intval( $val['year'] );
+                if ( isset( $options['yearstart'] )
+                     && $val['year'] < intval( $options['yearstart'] ) ) {
                     return false;
                 }
-            }
-            if ( isset( $val['hours'] ) ) {
-                if ( ! is_numeric( $val['hours'] ) ||
-                       intval( $val['hours'] ) < 0 ||
-                       intval( $val['hours'] ) > 23 ) {
+                if ( isset( $options['yearend'] )
+                     && $val['year'] > intval( $options['yearend'] ) ) {
                     return false;
                 }
-            }
-            if ( isset( $val['minutes'] ) ) {
-                if ( ! is_numeric( $val['minutes'] ) ||
-                       intval( $val['minutes'] ) < 0 ||
-                       intval( $val['minutes'] ) > 59 ) {
+                if ( isset( $options['yearoffset'] )
+                     && $val['year'] % intval( $options['yearoffset'] ) != 0 ) {
                     return false;
                 }
+                $year = true;
             }
-            if ( isset( $val['seconds'] ) ) {
-                if ( ! is_numeric( $val['seconds'] ) ||
-                       intval( $val['seconds'] ) < 0 ||
-                       intval( $val['seconds'] ) > 59 ) {
+            
+            // Month
+            if ( in_array( 'month', $elements ) ) {
+                if ( ! isset( $val['month'] ) || ! is_numeric( $val['month'] ) ) {
+                    return false;
+                }
+                $val['month'] = intval( $val['month'] );
+                if ( $val['month'] < 1 || $val['month'] > 12 ) {
+                    return false;
+                }
+                if ( isset( $options['monthstart'] )
+                     && $val['month'] < intval( $options['monthstart'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['monthend'] )
+                     && $val['month'] > intval( $options['monthend'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['yearoffset'] )
+                     && $val['month'] % intval( $options['monthoffset'] ) != 0 ) {
+                    return false;
+                }
+                $month = true;
+            }
+            
+            // Day
+            if ( in_array( 'day', $elements ) ) {
+                if ( ! isset( $val['day'] ) || ! is_numeric( $val['day'] ) ) {
+                    return false;
+                }
+                $val['day'] = intval( $val['day'] );
+                if ( $val['day'] < 1 || $val['day'] > 31 ) {
+                    return false;
+                }
+                if ( isset( $options['daystart'] )
+                     && $val['day'] < intval( $options['daystart'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['dayend'] )
+                     && $val['day'] > intval( $options['dayend'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['dayoffset'] )
+                     && $val['day'] % intval( $options['dayoffset'] ) != 0 ) {
+                    return false;
+                }
+                $day = true;
+            }
+            
+            // Hours
+            if ( in_array( 'hours', $elements ) ) {
+                if ( ! isset( $val['hours'] ) || ! is_numeric( $val['hours'] ) ) {
+                    return false;
+                }
+                $val['hours'] = intval( $val['hours'] );
+                if ( $val['hours'] < 0 || $val['hours'] > 23 ) {
+                    return false;
+                }
+                if ( isset( $options['hoursstart'] )
+                     && $val['hours'] < intval( $options['hoursstart'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['hoursend'] )
+                     && $val['hours'] > intval( $options['hoursend'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['hoursoffset'] )
+                     && $val['hours'] % intval( $options['hoursoffset'] ) != 0 ) {
                     return false;
                 }
             }
             
-            if ( isset( $val['month'] ) && isset( $val['year'] ) && isset( $val['day'] ) ) {
-                return checkdate( intval( $val['month'] ), intval( $val['day'] ), intval( $val['year'] ) );
-            } else {
-                if ( isset( $val['day'] ) && isset( $val['month'] ) ) {
-                    switch ( intval( $val['month'] ) ) {
-                        case 2:
-                            if ( intval( $val['day'] ) > 29 ) return false;
-                        case 4:
-                        case 6:
-                        case 9:
-                        case 11:
-                            if ( intval( $val['day'] ) > 30 ) return false;
-                        
-                    }
+            // Minutes
+            if ( in_array( 'minutes', $elements ) ) {
+                if ( ! isset( $val['minutes'] ) || ! is_numeric( $val['minutes'] ) ) {
+                    return false;
+                }
+                $val['minutes'] = intval( $val['minutes'] );
+                if ( $val['minutes'] < 0 || $val['minutes'] > 59 ) {
+                    return false;
+                }
+                if ( isset( $options['minutesstart'] )
+                     && $val['minutes'] < intval( $options['minutesstart'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['minutesend'] )
+                     && $val['minutes'] > intval( $options['minutesend'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['minutesoffset'] )
+                     && $val['minutes'] % intval( $options['minutesoffset'] ) != 0 ) {
+                    return false;
+                }
+            }
+            
+            // Seconds
+            if ( in_array( 'seconds', $elements ) ) {
+                if ( ! isset( $val['seconds'] ) || ! is_numeric( $val['seconds'] ) ) {
+                    return false;
+                }
+                $val['seconds'] = intval( $val['seconds'] );
+                if ( $val['seconds'] < 0 || $val['seconds'] > 59 ) {
+                    return false;
+                }
+                if ( isset( $options['secondsstart'] )
+                     && $val['seconds'] < intval( $options['secondsstart'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['secondsend'] )
+                     && $val['seconds'] > intval( $options['secondsend'] ) ) {
+                    return false;
+                }
+                if ( isset( $options['secondsoffset'] )
+                     && $val['seconds'] % intval( $options['secondsoffset'] ) != 0 ) {
+                    return false;
+                }
+            }
+            
+            // Check date if all elements are set
+            if ( $year && $month && $day ) {
+                return checkdate( $val['month'], $val['day'], $val['year'] );
+            }
+            
+            // Check days in month (but can't do it for leap years)
+            if ( $day && $month ) {
+                switch ( $val['month'] ) {
+                    case 2:
+                        if ( $val['day'] > 29 ) return false;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        if ( $val['day'] > 30 ) return false;
+                    
                 }
             }
             return true;
@@ -453,10 +572,11 @@
          *
          *	@param $val		The value to test.
          *	@param $opts	(not required)
+         *
+         *  @deprecated    The date rule should be used instead.
          */
-        function time( $val, $opts='' ) {
-            
-            return YDValidateRules::date( $val );
+        function time( $val, $opts=array() ) {
+            return YDValidateRules::date( $val, $opts );
         }
 
         /**
@@ -464,10 +584,11 @@
          *
          *	@param $val		The value to test.
          *	@param $opts	(not required)
+         *
+         *  @deprecated    The date rule should be used instead.
          */
-        function datetime( $val, $opts='' ) {
-            
-            return YDValidateRules::date( $val );
+        function datetime( $val, $opts=array() ) {
+            return YDValidateRules::date( $val, $opts );
         }
 
     }

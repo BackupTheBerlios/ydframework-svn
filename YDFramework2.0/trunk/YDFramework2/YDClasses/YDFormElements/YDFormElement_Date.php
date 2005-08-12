@@ -149,6 +149,8 @@
                             $value = ucfirst( $value );
                         }
                         $arr[$i] = $value;
+                    } else {
+                        $arr[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
                     }
                 } else if ( $part == 'year' ) {
                     $value = $i;

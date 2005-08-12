@@ -795,6 +795,15 @@
                                 'The callback specified for the rule "' . $rule['rule'] . '" is not valid', YD_ERROR
                             );
                         }
+                        
+                        // Date elements and rules
+                        if ( in_array( $rule['rule'], array( 'date', 'time', 'datetime' ) ) ) {
+                            $el = & $this->getElement( $element );
+                            $type = $el->getType();
+                            if ( in_array( $type, array( 'date', 'dateselect', 'timeselect', 'datetimeselect' ) ) ) {
+                                $rule['options'] = array ( 'options' => $el->getOptions(), 'elements' => $el->_getElements() );
+                            }
+                        }
 
                         // Get the value of a form element
                         $value = $this->getValue( $element );
@@ -1301,6 +1310,15 @@
          */
         function getType() {
             return $this->_type;
+        }
+        
+        /**
+         *      Gets the options of the form element.
+         *
+         *      @returns        The options of the form element.
+         */
+        function getOptions() {
+            return $this->_options;
         }
         
         /**
