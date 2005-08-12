@@ -266,7 +266,7 @@
          *                  to create it. The file will be emptied before adding the contents.
          *  @param $pretty  (Optional) Saves the "pretty" version of the XML - with indentation.
          */
-        function save( $path, $pretty=false ) {
+        function save( $path, $pretty=true ) {
             
             include_once( dirname( __FILE__ ) . '/YDFileSystem.php' );
             
@@ -282,7 +282,7 @@
          *
          *  @returns  The XML code as a string.
          */
-        function toString( $pretty=false ) {
+        function toString( $pretty=true ) {
             return "<?xml version=\"" . $this->version . "\" encoding=\"" . $this->encoding . "\"?>" . ( $pretty ? "\n" : "" ) . trim( parent::toString( $pretty ) );
         }
         
