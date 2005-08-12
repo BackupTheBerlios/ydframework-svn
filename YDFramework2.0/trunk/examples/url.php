@@ -80,7 +80,7 @@
             echo( '<br>New URL: ' . $url->getUrl() );
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
+            $url = new YDUrl( 'http://ydframework.berlios.de/ydf2_changelog_summary.xml' );
 
             // The different parts
             echo( '<br><br>Original URL: ' . $url->_url );
@@ -134,7 +134,7 @@
             YDDebugUtil::dump( $url->getUrl(), 'Original url' );
 
             // Get the contents
-            $url = new YDUrl( 'http://www.yellowduck.be/rss.xml' );
+            $url = new YDUrl( 'http://ydframework.berlios.de/ydf2_changelog_summary.xml' );
             YDDebugUtil::dump( $url->getContents(), 'URL contents' );
 
         }
@@ -155,7 +155,7 @@
         function actionHeaders() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+            $url = new YDUrl( 'http://ydframework.berlios.de/ydf2_changelog_summary.xml' );
 
             // Dump the headers
             YDDebugUtil::dump( $url->getHeaders() );
@@ -166,7 +166,7 @@
         function actionStatus() {
 
             // Create the URL object
-            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+            $url = new YDUrl( 'http://ydframework.berlios.de/ydf2_changelog_summary.xml' );
 
             // Dump the headers
             YDDebugUtil::dump( $url->getStatus() );
