@@ -220,8 +220,7 @@
                                     $this->loadArray( $info['#'], ( $level+1 ), $root );
                                     $append = false;
                                 } else {
-                                    
-                                    if ( preg_match( "<!\[CDATA\[(.*)\]\]>", $info['#'], $matches ) ) {
+                                    if ( preg_match( "/<!\[CDATA\[(.*)\]\]>/s", $info['#'], $matches ) ) {
                                         $$root->appendChild(
                                             $this->createCDATASection( $matches[1] )
                                         );
