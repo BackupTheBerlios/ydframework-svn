@@ -274,8 +274,9 @@
 
 		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
 		
-			// test if element exist
-			if (!$this->form->isElement( $formElementName )) die("Element $formElementName doesn't exist");
+			// if formElementName is not a form element result is assigned to a id
+			if (!$this->form->isElement( $formElementName ))
+				return $this->response->assignId( $formElementName, $result, $attribute, $options);
 			
 			// get element
 			$elem = & $this->form->getElement( $formElementName );
@@ -313,7 +314,7 @@
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
 
-			// if we want all values and not only the select one
+			// if we want all values and not only the selected one
 			if (in_array( 'all', $options )){
 
 				$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' . "\n";
