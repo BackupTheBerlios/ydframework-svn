@@ -37,8 +37,7 @@
 
 			// add write and read events
 			$this->ajax->addEvent( 'write', array( & $this, 'write' ), 'variable' );
-			$this->ajax->addEvent( 'read',  array( & $this, 'read' ) );
-
+			$this->ajax->addEvent( 'read',  array( & $thiget variable and assign span with its value
 			// process all events
 			$this->ajax->processEvents();
 
@@ -52,7 +51,7 @@
 		// read call invoked by ajax
 		function read(){
 
-			// put select inside span
+			// get variable and assign span with its value
 			$this->ajax->addResult( 'spanresult', YDPersistent::get( 'xpto', "Variable doesn't exist") );
 
 			// return response to client browser
@@ -63,7 +62,7 @@
 		// read call invoked by ajax
 		function write( $var ){
 
-			// write valiable
+			// write variable
 			YDPersistent::set( 'xpto', $var );
 
 			// add result string to span

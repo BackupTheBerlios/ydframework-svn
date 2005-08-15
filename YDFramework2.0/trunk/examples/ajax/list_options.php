@@ -32,7 +32,8 @@
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
 
-			// assign element 'mybutton' with method 'getcontries'
+			// assign myspan with addentry call using 'items' select as argument
+			// note that we want all values from 'items' select and not only the selected one
 			$this->ajax->addEvent( 'myspan', array( & $this, 'addentry' ), 'items', null, 'all' );
 
 			// process all events
@@ -48,9 +49,10 @@
 		// addentry call invoked by ajax
 		function addentry( $items ){
 			
+			// add new item
 			$items[ time() ] = 'New option added at '. YDStringUtil::formatDate( time(), '%d %B %Y %H:%M:%S' );
 			
-			// assign new items to select box
+			// assign items to select box 'items'
 			$this->ajax->addResult( 'items', $items ) ;
 
 			// return response to client browser

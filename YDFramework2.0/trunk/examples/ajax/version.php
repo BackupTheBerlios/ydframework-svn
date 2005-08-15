@@ -34,7 +34,7 @@
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'getversion' ) );
 
-			// process ajax
+			// process ajax events
 			$this->ajax->processEvents();
 
 			// assign form and display template

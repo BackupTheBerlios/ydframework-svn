@@ -35,7 +35,7 @@
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
 
-			// assign element 'mybutton' with method 'getcontries'
+			// create events for each span using call 'generatechart' but with different arguments
 			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1 );
 			$this->ajax->addEvent( 'myspan2', array( & $this, 'generatechart' ), 2 );
 			$this->ajax->addEvent( 'myspan3', array( & $this, 'generatechart' ), 3 );
@@ -75,21 +75,21 @@
 			YDInclude( 'YDGraph.php' );
 			
 			// generate chart
-            $values = array();
+			$values = array();
 			for ( $i = 0; $i < 12 ; $i ++)
 				$values[] = rand(20, 60);
 
-            $labels = array( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
+			$labels = array( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
 
-            // Create a new graph
-            $g1 = new YDGraph( 550, 250 );
-            $g1->setLimits( 0, 20 );
-            $g1->setOffset( 5 );
-            $g1->setFormat( 1, ',', '.' );
-            $g1->addSeries($values, $type, 'Series1', SOLID, '#444444', '#4682B4');
-            $g1->setYAxis( '#4682B4', SOLID, 5, 'example' );
-            $g1->setLabels( $labels, '#000000', 1, HORIZONTAL );
-            $g1->plot( dirname( __FILE__ ) . '/' . $name ); 
+			// Create a new graph
+			$g1 = new YDGraph( 550, 250 );
+			$g1->setLimits( 0, 20 );
+			$g1->setOffset( 5 );
+			$g1->setFormat( 1, ',', '.' );
+			$g1->addSeries($values, $type, 'Series1', SOLID, '#444444', '#4682B4');
+			$g1->setYAxis( '#4682B4', SOLID, 5, 'example' );
+			$g1->setLabels( $labels, '#000000', 1, HORIZONTAL );
+			$g1->plot( dirname( __FILE__ ) . '/' . $name ); 
 
 		}
 
