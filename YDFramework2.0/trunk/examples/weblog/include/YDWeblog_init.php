@@ -116,7 +116,10 @@
         if ( is_null( $format ) ) {
             $format = '%A, %d %b %Y';
         }
-        return ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) );
+        //return ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) );
+        return YDStringUtil::encodeString(
+            ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) )
+        );
     }
 
     // Create a link using the ID and given base

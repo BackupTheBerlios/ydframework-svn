@@ -1,0 +1,279 @@
+<?php
+
+// General stuff
+$GLOBALS['t']['not_found'] = 'Non trouv&eacute;';
+$GLOBALS['t']['sorry_not_there'] = 'D&eacute;sol&eacute;, mais vous cherchez quelque chose qui n&#39;est pas l&agrave;.';
+$GLOBALS['t']['sorry_not_found'] = 'D&eacute;sol&eacute;, mais vous cherchez quelque chose qui n&#39;est pas l&agrave;.';
+$GLOBALS['t']['no_items_found'] = 'D&eacute;sol&eacute;, mais vous cherchez quelque chose qui n&#39;est pas l&agrave;.';
+$GLOBALS['t']['by'] = 'par';
+$GLOBALS['t']['required'] = 'requis';
+$GLOBALS['t']['login'] = 'Login';
+$GLOBALS['t']['actions'] = 'Actions';
+$GLOBALS['t']['save'] = 'Sauvegarder';
+$GLOBALS['t']['edit'] = '&eacute;diter';
+$GLOBALS['t']['delete'] = 'supprimer';
+$GLOBALS['t']['previous'] = 'pr&eacute;c&eacute;dent';
+$GLOBALS['t']['next'] = 'suivant';
+$GLOBALS['t']['total'] = 'total';
+$GLOBALS['t']['of'] = 'de';
+$GLOBALS['t']['at'] = '&agrave;';
+$GLOBALS['t']['title'] = 'Titre';
+$GLOBALS['t']['install_warning'] = 'Vous devez retirer les fichiers install.php et install.tpl pour des raisons de s&eacute;curit&eacute;!';
+$GLOBALS['t']['home'] = 'Accueil';
+$GLOBALS['t']['view'] = 'voir';
+$GLOBALS['t']['author'] = 'Auteur';
+$GLOBALS['t']['more'] = 'plus';
+
+// __std_header.tpl
+$GLOBALS['t']['another_powered_by'] = 'Juste un autre weblog propuls&eacute; par le ' . YD_FW_NAME . '!';
+
+// __std_footer.tpl
+$GLOBALS['t']['or'] = 'ou';
+$GLOBALS['t']['powered_by'] = 'Ce weblog est propuls&eacute; par le ';
+$GLOBALS['t']['syndicate_as'] = 'Syndiquez ce weblog via ';
+$GLOBALS['t']['syndicate_comments_as'] = 'Commentaires via ';
+$GLOBALS['t']['design_by'] = 'Design de Michael Heilemann.';
+
+// __std_sidebar.tpl
+$GLOBALS['t']['weblogs'] = 'Weblogs';
+$GLOBALS['t']['weblog'] = 'Weblog';
+$GLOBALS['t']['pages'] = 'Pages';
+$GLOBALS['t']['page'] = 'Page';
+$GLOBALS['t']['archives'] = 'Archives';
+$GLOBALS['t']['archives_gallery'] = 'Galleries photo';
+$GLOBALS['t']['categories'] = 'Cat&eacute;gories';
+$GLOBALS['t']['view_posts_filed_under'] = 'Voir tous les sujets class&eacute;s sous';
+$GLOBALS['t']['links'] = 'Liens';
+$GLOBALS['t']['link_to'] = 'Lien vers';
+$GLOBALS['t']['admin'] = 'Admin';
+
+// archive.tpl
+
+// category.tpl
+$GLOBALS['t']['archive_for_the'] = 'Archive pour la cat&eacute;gorie';
+$GLOBALS['t']['category'] = '';
+
+// index.tpl
+$GLOBALS['t']['posted_in'] = 'post&eacute; dans';
+$GLOBALS['t']['older_items'] = 'Anciennes entr&eacute;es';
+
+// item.tpl
+$GLOBALS['t']['older_post'] = 'Entr&eacute;e pr&eacute;c&eacute;dente';
+$GLOBALS['t']['newer_post'] = 'Entr&eacute;e suivante';
+$GLOBALS['t']['posted_under'] = 'Entr&eacute;e soumise le';
+$GLOBALS['t']['filed_under'] = 'dans la cat&eacute;gorie ';
+$GLOBALS['t']['can_leave_comment'] = 'Vous pouvez <a href="#respond">laisser un commentaire</a>';
+$GLOBALS['t']['trackback'] = ' un lien permanent';
+$GLOBALS['t']['from_your_site'] = 'sur votre propre site.';
+$GLOBALS['t']['to'] = '&agrave;';
+$GLOBALS['t']['says'] = 'a &eacute;crit';
+$GLOBALS['t']['leave_comment'] = 'Laisser un commentaire';
+$GLOBALS['t']['error_comment'] = 'Une erreur est survenue lors de l&#39;ajout de votre commentaire';
+$GLOBALS['t']['name'] = 'Nom';
+$GLOBALS['t']['mail_not_published'] = 'Email (ne sera pas publi&eacute;)';
+$GLOBALS['t']['website'] = 'Website';
+$GLOBALS['t']['submit_comment'] = 'Ajouter le commentaire';
+$GLOBALS['t']['ta_enter_url'] = 'Saisissez l&#39;url';
+$GLOBALS['t']['ta_enter_email'] = 'Entrez l&#39;adresse email';
+$GLOBALS['t']['ta_enter_image'] = 'Entrez l&#39;url compl&#269;te de l&#39;image';
+$GLOBALS['t']['err_name'] = 'Le nom est manquant';
+$GLOBALS['t']['err_name_email'] = 'Le nom ne doit pas être une adressee email';
+$GLOBALS['t']['err_email'] = 'Email manquant ou invalide';
+$GLOBALS['t']['err_comment'] = 'Le commentaire est requis';
+$GLOBALS['t']['with'] = 'for';
+
+// comment_email.tpl
+$GLOBALS['t']['new_comment'] = 'Nouveau commentaire';
+$GLOBALS['t']['item_title'] = 'Titre de l&#39;entr&eacute;e';
+$GLOBALS['t']['wrote'] = '&eacute;crit';
+
+// page.tpl
+$GLOBALS['t']['created_on'] = 'Cr&eacute;e le';
+$GLOBALS['t']['last_modified_on'] = 'Derni&egrave;re modification le';
+
+// Comments
+$GLOBALS['t']['no_comments_yet'] = 'Aucun commentaire';
+$GLOBALS['t']['comment'] = 'Commentaire';
+$GLOBALS['t']['comments'] = 'Commentaires';
+
+// manage/__mng_header.tpl
+$GLOBALS['t']['confirm_delete'] = 'Etes vous certain de vouloir supprimer:';
+$GLOBALS['t']['logoff'] = 'D&eacute;connexion';
+$GLOBALS['t']['view_site'] = 'voir le site';
+$GLOBALS['t']['user'] = 'utilisateur';
+$GLOBALS['t']['server'] = 'serveur';
+$GLOBALS['t']['h_shortcuts'] = 'Raccourcis';
+$GLOBALS['t']['a_admin_home'] = 'Accueil administration';
+$GLOBALS['t']['a_view_site'] = 'voir le site';
+$GLOBALS['t']['h_contents'] = 'Contenu';
+$GLOBALS['t']['a_weblogs'] = 'Weblogs';
+$GLOBALS['t']['a_items'] = 'Entr&eacute;es';
+$GLOBALS['t']['a_comments'] = 'Commentaires';
+$GLOBALS['t']['a_links'] = 'Liens';
+$GLOBALS['t']['a_pages'] = 'Pages';
+$GLOBALS['t']['a_images'] = 'Images';
+$GLOBALS['t']['a_categories'] = 'Cat&eacute;gories';
+$GLOBALS['t']['h_global_settings'] = 'Options g&eacute;n&eacute;rales';
+$GLOBALS['t']['a_users'] = 'Utilisateurs';
+$GLOBALS['t']['a_settings'] = 'Options';
+$GLOBALS['t']['h_maintenance'] = 'Maintenance';
+$GLOBALS['t']['a_cleanup_cache'] = 'Effacer le cache';
+$GLOBALS['t']['a_server_info'] = 'Informations serveur';
+$GLOBALS['t']['h_statistics'] = 'Statistiques';
+$GLOBALS['t']['a_statistics'] = 'Statistiques';
+$GLOBALS['t']['h_logoff'] = 'D&eacute;connexion';
+$GLOBALS['t']['a_logoff'] = 'D&eacute;connexion';
+
+// manage/login.tpl
+$GLOBALS['t']['username'] = 'Utilisateur';
+$GLOBALS['t']['password'] = 'Mot de passe';
+$GLOBALS['t']['msg_login'] = 'Veuillez entrer votre nom d&#39;utilisateur et votre mot de passe';
+$GLOBALS['t']['err_login'] = 'Une erreur est survenue lors de la connexion';
+$GLOBALS['t']['err_username'] = 'Le nom d&#39;utilisateur est manquant';
+$GLOBALS['t']['err_password'] = 'Le mot de passe est incorrect ou erron&eacute;';
+$GLOBALS['t']['err_login_all'] = 'Nom d&#39;utilisateur et/ou mot de passe incorrects';
+
+// manage/cache.tpl
+$GLOBALS['t']['cleanup'] = 'Nettoyer';
+$GLOBALS['t']['cache_cleaned_up'] = 'Les fichiers du cache ont &eacute;t&eacute; supprim&eacute;s!';
+
+// manage/serverinfo.tpl
+$GLOBALS['t']['system'] = 'Syst&egrave;me';
+$GLOBALS['t']['server_name'] = 'Nom de la machine';
+$GLOBALS['t']['server_address'] = 'Adresse du serveur';
+$GLOBALS['t']['server_port'] = 'Port du service';
+$GLOBALS['t']['server_software'] = 'Nom du service';
+$GLOBALS['t']['operating_system'] = 'Syst&egrave;me d&#39;exploitation';
+$GLOBALS['t']['version'] = 'version';
+$GLOBALS['t']['loaded_modules'] = 'Modules charg&eacute;s';
+$GLOBALS['t']['server_api'] = 'API Serveur';
+$GLOBALS['t']['registered_streams'] = 'Flux php d&eacute;clar&eacute;s';
+$GLOBALS['t']['include_path'] = 'R&eacute;pertoire d&#39;inclustion';
+$GLOBALS['t']['full_php_info'] = 'Voir toutes les informations PHP';
+
+// manage/stats.tpl
+$GLOBALS['t']['general_stats'] = 'Statistiques g&eacute;n&eacute;rales';
+$GLOBALS['t']['installed_since'] = 'Install&eacute; depuis le';
+$GLOBALS['t']['num_days_online'] = 'Nombre de jour en ligne';
+$GLOBALS['t']['days'] = 'jour(s)';
+$GLOBALS['t']['hits'] = 'hit(s)';
+$GLOBALS['t']['total_hits'] = 'Nombre total de hits';
+$GLOBALS['t']['avg_hits_per_day'] = 'Nombre moyen de hits par jour';
+$GLOBALS['t']['hits_last_6_months'] = 'Hits les 6 derniers mois';
+$GLOBALS['t']['all_months'] = 'Tous les mois';
+$GLOBALS['t']['hits_last_7_days'] = 'Hits les 7 derniers jours';
+$GLOBALS['t']['all_days'] = 'Tous les jours';
+$GLOBALS['t']['nothing_found'] = 'Non trouv&eacute;';
+$GLOBALS['t']['top_10_urls'] = 'Les 10 URLs les plus visit&eacute;es';
+$GLOBALS['t']['all_urls'] = 'Toutes les URLs';
+$GLOBALS['t']['web_browsers'] = 'Navigateurs';
+$GLOBALS['t']['operating_systems'] = 'Syst&egrave;mes d&#39;exploitation';
+$GLOBALS['t']['other'] = 'Autre';
+$GLOBALS['t']['totalitems'] = 'Nombre total d&#39;entr&eacute;es';
+$GLOBALS['t']['totalcomments'] = 'Nombre total de commentaires';
+$GLOBALS['t']['items'] = 'entr&eacute;e(s)';
+
+// manage/users.tpl
+$GLOBALS['t']['useremail'] = 'Adresse email';
+$GLOBALS['t']['created'] = 'Cr&eacute;e le';
+$GLOBALS['t']['add_user'] = 'Ajouter un utilisateur';
+$GLOBALS['t']['req_useremail'] = 'Adresse email manquante ou invalide';
+$GLOBALS['t']['req_loginpass'] = 'Le mot de passe est requis';
+$GLOBALS['t']['user_dup'] = 'L&#39;utilisateur existe d&eacute;ja';
+$GLOBALS['t']['change_user_desc'] = 'Changer l&#39;utilisateur:';
+
+// manage/images.tpl
+$GLOBALS['t']['upload_image'] = 'Envoyer l&#39;image';
+$GLOBALS['t']['ok'] = 'OK';
+$GLOBALS['t']['size'] = 'Taille';
+$GLOBALS['t']['type'] = 'Type';
+$GLOBALS['t']['dimensions'] = 'Dimensions';
+$GLOBALS['t']['no_images_found'] = 'Aucune image n&#39;a &eacute;t&eacute; trouv&eacute;e';
+
+// manage/categories.tpl
+$GLOBALS['t']['add_category'] = 'Ajouter une cat&eacute;gorie';
+$GLOBALS['t']['number_of_items'] = 'Nombre d\entr&eacute;es';
+$GLOBALS['t']['change_category_desc'] = 'Editer la cat&eacute;gorie';
+$GLOBALS['t']['err_category_title'] = 'Le nom de la cat&eacute;gorie est requise';
+$GLOBALS['t']['err_unique_category'] = 'La cat&eacute;gorie existe d&eacute;ja';
+$GLOBALS['t']['no_categories_found'] = 'Aucune cat&eacute;gorie n&#39;a &eacute;t&eacute; trouv&eacute;e';
+
+// manage/links.tpl
+$GLOBALS['t']['link_title'] = 'Titre du lien';
+$GLOBALS['t']['link_url'] = 'URL du lien';
+$GLOBALS['t']['add_link'] = 'Ajouter un lien';
+$GLOBALS['t']['err_link_title'] = 'Le titre du lien est requis';
+$GLOBALS['t']['err_link_url'] = 'L&#39;URL du lien est requise';
+$GLOBALS['t']['err_unique_link'] = 'L&#39;URL existe d&eacute;ja';
+$GLOBALS['t']['change_link_desc'] = 'Modification du lien';
+$GLOBALS['t']['no_links_found'] = 'Aucun lien n&#39;a &eacute;t&eacute; trouv&eacute;';
+$GLOBALS['t']['num_visits'] = 'Visites';
+
+// manage/pages.tpl
+$GLOBALS['t']['add_page'] = 'Ajouter une page';
+$GLOBALS['t']['page_title'] = 'Titre de la page';
+$GLOBALS['t']['page_body'] = 'Corps de la page';
+$GLOBALS['t']['change_page_desc'] = 'Modification de la page';
+$GLOBALS['t']['err_page_title'] = 'Le titre de la page est requis';
+$GLOBALS['t']['err_page_body'] = 'Le corps de la page est requis';
+$GLOBALS['t']['no_pages_found'] = 'Aucune page n&#39;a &eacute;t&eacute; trouv&eacute;e';
+
+// manage/comments.tpl
+$GLOBALS['t']['date'] = 'Date';
+$GLOBALS['t']['parent'] = 'Entr&eacute;e correspondante';
+$GLOBALS['t']['change_comment_desc'] = 'Modification du commentaire';
+$GLOBALS['t']['mail'] = 'Email';
+$GLOBALS['t']['no_comments_found'] = 'Aucun commentaire n&#39;a &eacute;t&eacute; trouv&eacute;';
+$GLOBALS['t']['posted_from'] = 'Post&eacute; depuis l&#39;adresse IP';
+
+// manage/config.tpl
+$GLOBALS['t']['cfg_db_settings'] = 'Configuration de la base de donn&eacute;es';
+$GLOBALS['t']['cfg_db_host'] = 'Serveur (hostname)';
+$GLOBALS['t']['cfg_db_name'] = 'Nom de la base';
+$GLOBALS['t']['cfg_db_user'] = 'Utilisateur';
+$GLOBALS['t']['cfg_db_pass'] = 'Mot de passe';
+$GLOBALS['t']['cfg_weblog_settings'] = 'Options du Weblog';
+$GLOBALS['t']['cfg_weblog_title'] = 'Titre du Weblog';
+$GLOBALS['t']['cfg_weblog_description'] = 'Description du Weblog';
+$GLOBALS['t']['cfg_weblog_entries_fp'] = 'Nombre d&#39;entr&eacute;es sur la page d&#39;accueil';
+$GLOBALS['t']['cfg_weblog_skin'] = 'Skin du Weblog';
+$GLOBALS['t']['cfg_weblog_language'] = 'Language du Weblog';
+$GLOBALS['t']['cfg_weblog_date_format'] = 'Format des dates';
+$GLOBALS['t']['cfg_notification'] = 'Options de notification';
+$GLOBALS['t']['cfg_notification_email_comment'] = 'Pr&eacute;venir par email des nouveaux commentaires';
+$GLOBALS['t']['cfg_rss'] = 'Options de syndication';
+$GLOBALS['t']['cfg_rss_max_syndicated_items'] = 'Nombre d&#39;entr&eacute;es syndiqu&eacute;es';
+$GLOBALS['t']['err_db_host'] = 'Le serveur (hostname) de la base de donn&eacute;es est requis';
+$GLOBALS['t']['err_db_name'] = 'Le nom de la base de donn&eacute;es est requis';
+$GLOBALS['t']['err_db_user'] = 'L&#39;utilisateur de la base de donn&eacute;es est requis';
+$GLOBALS['t']['err_weblog_title'] = 'Le titre du Weblog est requis';
+$GLOBALS['t']['err_weblog_entries_fp'] = 'Le nombre d&#39;entr&eacute;es sur la page d&#39;accueil est requis';
+$GLOBALS['t']['err_weblog_entries_fp_num'] = 'Le nombre d&#39;entr&eacute;es sur la page d&#39;accueil doit être num&eacute;rique';
+$GLOBALS['t']['err_max_syndicated_items'] = 'Le nombre d&#39;entr&eacute;es syndiqu&eacute;es est requis';
+$GLOBALS['t']['err_max_syndicated_items_num'] = 'Le nombre d&#39;entr&eacute;es syndiqu&eacute;es doit être num&eacute;rique';
+$GLOBALS['t']['change_config'] = 'Modification de la configuration';
+$GLOBALS['t']['cfg_db_prefix'] = 'Pr&eacute;fixe pour les tables de la base de donn&eacute;es';
+
+// manage/item.tpl
+$GLOBALS['t']['item_title'] = 'Titre de l&#39;entr&eacute;e';
+$GLOBALS['t']['item_body'] = 'Corps de l&#39;entr&eacute;e';
+$GLOBALS['t']['item_body_more'] = 'Corps de l&#39;entr&eacute;e (&eacute;tendu)';
+$GLOBALS['t']['select_image'] = 'Selectionnez une image';
+$GLOBALS['t']['view'] = 'voir';
+$GLOBALS['t']['add_item'] = 'Ajouter une entr&eacute;e';
+$GLOBALS['t']['change_item_desc'] = 'Modification de l\entr&eacute;e';
+$GLOBALS['t']['err_item_title'] = 'Le titre de l&#39;entr&eacute;e est requis';
+$GLOBALS['t']['err_item_body'] = 'Le corps de l&#39;entr&eacute;e est requis';
+$GLOBALS['t']['gallery'] = 'Photos';
+
+// item_gallery.tpl
+$GLOBALS['t']['no_images_yet'] = 'Aucune image actuellement';
+$GLOBALS['t']['image'] = 'image';
+$GLOBALS['t']['images'] = 'images';
+$GLOBALS['t']['item'] = 'Entr&eacute;e';
+
+// manage/index.tpl
+$GLOBALS['t']['latest_items'] = 'Derni&egrave;res entr&eacute;es';
+$GLOBALS['t']['overview'] = 'Aper&ccedil;u';
+
+?>
