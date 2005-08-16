@@ -257,6 +257,21 @@
             return $this->exists( $name, true ) ? $this->$name : null; 
         }
 
+        /** 
+         *  This function returns an array with all the values of the object. 
+         * 
+         *  @returns  An array with all the values. 
+         */ 
+        function toArray() { 
+            $array = get_object_vars( $this ); 
+            foreach ( $array as $key => $val ) { 
+                if ( substr( $key, 0, 1 ) == '_' ) { 
+                    unset( $array[ $key ] ); 
+                } 
+            } 
+            return $array; 
+        } 
+
     }
 
     /**
