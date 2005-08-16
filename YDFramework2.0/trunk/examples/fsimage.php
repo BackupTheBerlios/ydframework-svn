@@ -41,6 +41,9 @@
                 // Image size
                 YDDebugUtil::dump( $img->getImageSize(), 'Imagesize' );
 
+                // Save a thumbnail
+                YDDebugUtil::dump( $img->saveThumbnail( 150, 110, 'fsimage.thumb.jpg' ) );
+
             }
 
             // Get the file object for the current file

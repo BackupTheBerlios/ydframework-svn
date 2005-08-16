@@ -808,11 +808,12 @@
          *	like generating thumbnails.
          *
          *	@param $path	Path of the image.
+         *  @param $create  (optional) Force the creation of the file if it doesn't exist. Default: false.
          */
-        function YDFSImage( $path ) {
+        function YDFSImage( $path, $create=false ) {
 
             // Initialize the parent
-            $this->YDFSFile( $path );
+            $this->YDFSFile( $path, $create );
 
             // Get the image size
             $this->image_size = null;
@@ -862,6 +863,8 @@
          *	@param $width	The maximum width of the thumbnail.
          *	@param $height	The maximum height of the thumbnail.
          *	@param $file	The filename to save the thumbnail to.
+         *
+         *  @returns    A new YDFSImage object for the thumbnail.
          */
         function saveThumbnail( $width, $height, $file ) {
 
@@ -869,8 +872,11 @@
             $thumb = $this->_createThumbnail( $width, $height, false );
 
             // Save it to a file
-            $f = new YDFSFile( $file, true );
+            $f = new YDFSImage( $file, true );
             $f->setContents( $thumb );
+
+            // Return the thumbnail
+            return $f;
 
         }
 
