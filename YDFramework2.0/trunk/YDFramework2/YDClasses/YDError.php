@@ -43,6 +43,14 @@
     // The stored errors
     YDConfig::set( YDConfig::get( 'YD_ERROR_STORE_NAME' ), array(), false );
 
+
+    // Global names for the errors
+    $GLOBALS['YD_ERROR_LEVELS'] = array(
+        YD_ERROR_NOTICE  => 'notice',
+        YD_ERROR_WARNING => 'warning',
+        YD_ERROR_FATAL   => 'fatal'
+    );
+
     /**
      *  This class defines an YDError object.
      */
@@ -52,13 +60,14 @@
          *  The class constructor.
          *  Should not be used directly.
          *
-         *  @param  $level     The error level.
-         *  @param  $message   The error message.
-         *  @param  $file      The file where the error was triggered.
-         *  @param  $line      The line of the file.
-         *  @param  $function  The function where it happened.
+         *  @param  $level          The error level.
+         *  @param  $message        The error message.
+         *  @param  $file           The file where the error was triggered.
+         *  @param  $line           The line of the file.
+         *  @param  $function       The function where it happened.
+         *  @param  $stacktrace     The complete stack trace for this error
          */
-        function YDError( $level, $message, $file, $line, $function='' ) {
+        function YDError( $level, $message, $file, $line, $function='', $stacktrace='' ) {
             
             $this->YDBase();
             
@@ -68,12 +77,13 @@
                 YD_ERROR_FATAL   => 'fatal'
             );
             
-            $this->level   = $level;
-            $this->name    = $levels[ $level ];
-            $this->message = $message;
-            $this->file    = $file;
-            $this->line    = $line;
-            $this->func    = $function;
+            $this->level        = $level;
+            $this->name         = $GLOBALS['YD_ERROR_LEVELS'][ $level ];
+            $this->message      = $message;
+            $this->file         = $file;
+            $this->line         = $line;
+            $this->func         = $function;
+            $this->stacktrace   = trim( $stacktrace );
             
         }
         
@@ -184,7 +194,12 @@
             $last = array_pop( $errors );
             
             // Dump last error
-            echo YDError::r_dump( $html, 1 );
+            echo( YDError::r_dump( $html, 1 ) );
+
+            //YDDebugutil::dump( $last );
+
+            // Dump the stacktrace
+            echo( '<b>Stack Trace</b>: ' . nl2br( str_replace( ' ', '&nbsp;', $last->stacktrace ) ) );
             
             // If fatal error, stops the script execution
             if ( $last->level == YD_ERROR_FATAL ) {
@@ -283,10 +298,33 @@
             // Get the current stack
             $stack = debug_backtrace();
             
+            // Get the complete stack trace
+            $stacktrace = strtoupper( $GLOBALS['YD_ERROR_LEVELS'][ $level ] ) . ': ' . $message . YD_CRLF;
+            foreach( array_slice( $stack, 1 ) as $t ) {
+                $stacktrace .= '    @ ';
+                if ( isset( $t['file'] ) ) {
+                    $stacktrace .= basename( $t['file'] ) . ':' . $t['line'];
+                } else {
+                    $stacktrace .= basename( YD_SELF_FILE );
+                }
+                $stacktrace .= ' -- ';
+                if ( isset( $t['class'] ) ) {
+                    $stacktrace .= $t['class'] . $t['type'];
+                }
+                $stacktrace .= $t['function'];
+                if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
+                    $stacktrace .= '(...)';
+                } else {
+                    $stacktrace .= '()';
+                }
+                $stacktrace .= YD_CRLF;
+            }
+
             // Create the error object
             $error = new YDError(
                 $level, $message, $stack[1]['file'], $stack[1]['line'],
-                $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function']
+                $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'],
+                $stacktrace
             );
             
             // Store the error object on the global errors array
