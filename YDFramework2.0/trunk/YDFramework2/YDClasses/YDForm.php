@@ -1318,6 +1318,16 @@
         }
         
         /**
+         *      Gets a specific attribute
+         *
+         *      @param  $att    Attribute to search
+         *      @returns        The value
+         */
+        function getAttribute( $att ) {
+            return isset( $this->_attributes[ $att ] ) ? $this->_attributes[ $att ] : null ;
+        }
+
+        /**
          *      Gets the options of the form element.
          *
          *      @returns        The options of the form element.
