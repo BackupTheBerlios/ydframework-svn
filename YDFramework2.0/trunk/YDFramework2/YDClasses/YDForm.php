@@ -1235,6 +1235,11 @@
             // Indicate if filters need to be applied
             $this->_applyFilters = true;
 
+            // Set the default ID attribute
+            if ( ! isset( $this->_attributes['id'] ) ) {
+                $this->_attributes['id'] = $this->_form . '_' . $this->_name;
+            }
+
         }
 
         /**
