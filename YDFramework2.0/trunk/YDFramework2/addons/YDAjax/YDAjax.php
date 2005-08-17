@@ -40,8 +40,8 @@
          *	@param $template		Default template object
          *	@param $form			Default form object.
          *	@param $requestURI		Request URI. default to current page.
-         *	@param $prefix		Prefix used in ajax functions.
-         *	@param $debug		Debug mode.
+         *	@param $prefix			Prefix used in ajax functions.
+         *	@param $debug			Debug mode.
          */
         function YDAjax( & $template, & $form, $requestURI = null, $prefix = "__ydf", $debug = null) {
 
@@ -49,27 +49,19 @@
 			$this->prefix = $prefix;
 
 			// if debug not defined use ydf configuration
-			if (is_null( $debug )){
-			
-				// test if debug is off
-				if (YDConfig::get("YD_DEBUG") == 0){
-					$debug = false;
-					$this->statusMessagesOff();
-				}else{
-					$debug = true;
-					$this->statusMessagesOn();
-				}
-				
-			}
+			if (!is_null( $debug )) $this->setDebug( $debug );
+			else if (YDConfig::get("YD_DEBUG") == 0)	$this->setDebug( false );
+			else										$this->setDebug( true );
 
 			// if url is null, we want ydf url. if empty string xajax creates it, otherwise it's a custom url
-			if (is_null($requestURI)){
-                    YDInclude( 'YDRequest.php' );
-                    $requestURI = YDRequest::getNormalizedUri();
+			if (is_null($requestURI)){ YDInclude( 'YDRequest.php' );
+			                           $requestURI = YDRequest::getNormalizedUri();
 			}
 		
+			$this->sRequestURI = $requestURI;
+		
 			// create ajax object
-			$this->xajax( $requestURI, $this->prefix, $debug );
+			$this->xajax( $this->sRequestURI, $this->prefix, $debug );
 			
 			// initilize form
 			$this->form = & $form;
@@ -82,12 +74,32 @@
 			
 			// response object
 			$this->response = new YDAjaxResponse();
+			
+			// include effect js headers			
+			$this->showHeadersEffects = false;
 		}
 		
 
 		// internal method. replace "<head>" with "<head> and all ajax javascript more our custom javascript"
 		function assignJavascript($tpl_source, &$smarty){
-		    return eregi_replace("<head>", "<head>\n". $this->getJavascript() . $this->customJavascript(), $tpl_source);
+			
+			$separator = strpos( $this->sRequestURI, '?' ) == false ? '?' : '&';
+		
+			// add xajax includes
+			$html  = "\t<script type=\"text/javascript\">var xajaxRequestUri=\"". $this->sRequestURI ."\";</script>\n";
+			$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."xajaxjs=xajaxjs\"></script>\n";
+			
+			// add efect includes
+			if ($this->showHeadersEffects)
+				$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."ydajax_includes=ydajax_includes\"></script>\n";
+		
+			// add custom function
+			if (!empty($this->customjs))
+				$html .= "\t<script type=\"text/javascript\">" . "\n\t\t" . implode("\n\t\t", array_values($this->customjs)) . "\n\t" . '</script>';
+
+
+			// add headers to template
+		    return eregi_replace("<head>", "<head>\n". $html, $tpl_source);
 		}
 
 
@@ -111,14 +123,6 @@
 		}
 
 		
-		// internal method. returns the extra javacript
-		function customJavascript(){
-
-			if (empty($this->customjs)) return '';
-			
-			return '<script type="text/javascript">' . "\n" . implode("\n", array_values($this->customjs)) . "\n" . '</script>';
-		}
-		
 		
         /**
          *	This class enables/disables debug
@@ -127,8 +131,8 @@
          */
 		function setDebug( $flag = true){
 			
-			if ($flag == true)	$this->debugOn();
-			else				$this->debugOff();
+			if ($flag == true)	{ $this->debugOn();  $this->statusMessagesOn();  }
+			else				{ $this->debugOff(); $this->statusMessagesOff(); }
 		}
 
 
@@ -157,52 +161,39 @@
         /**
          *	This method assign a server function and arguments to a form element event.
          *
-         *	@param $formElementName	Form element name (string).
-         *	@param $serverFunction	Name of the function in the server (string).
+         *	@param $formElementName	Form element name (string) or js function.
+         *	@param $serverFunction	Array with class and method.
          *	@param $arguments		Default arguments for this function (string or array of strings).
          *	@param $event			Event name (auto-detection by default).
          *	@param $options			Custom options.
          */		
 		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null){
 		 
+		 	// check formElementName
 		 	if (!isset($formElementName)) die("You must define a formElementName in addEvent");
 		 
 			// register function in xajax
 			$this->registerFunction( $serverFunction );
 
+			// serverFunction must be an array with a class and the method (get function name)
+			$serverFunctionName = $serverFunction[1];
+
+			// if formElementName is a js function we are not assigning an event to a form element but creating a js function
+			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			
+				// add js function
+				$this->customjs[ $function[1] ] = 'function '. $function[1] .'(){ return '. $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .'); }';
+				return;
+			}
+
 			// get element object
 			$formElement = & $this->form->getElement( $formElementName );
 		
 			// if event is null we must check the form element type to compute the default event
-			if (is_null( $event )){
+			if (is_null( $event )) $event = $this->getDefaultEvent( $formElement->getType() );
 			
-				// get form element type  TODO: use $formElement->getType() instead
-				switch ( $formElement->getType() ){
-
-					case 'submit' : trigger_error('Submit buttons cannot be used in ajax because they force submittion.'); break;
-					case 'image' :  trigger_error('Images cannot be used in ajax because they force submittion. Use "img" element instead.'); break;
-					case 'img' :		$event = 'onClick';  break;					
-					case 'button' :		$event = 'onClick';  break;					
-					case 'span' :		$event = 'onClick';  break;
-					case 'dateselect' :	$event = 'onChange'; break;
-					case 'radio' :		$event = 'onChange'; break;
-					case 'checkbox' :	$event = 'onChange'; break;
-					case 'text' :		$event = 'onChange'; break;
-					case 'textarea' :	$event = 'onChange'; break;
-					case 'bbtextarea' :	$event = 'onChange'; break;
-					case 'password' :	$event = 'onChange'; break;
-					case 'select' :		$event = 'onChange'; break;
-					
-					// if element doesn't exist return a php error
-					default : trigger_error('Element type ('. $formElement->getType() .') is not supported in YDAjax'); break;
-				}
-			}
-			
-			// if serverFunction is a class method return the method name, otherwise it's a simple function name
-			if (is_array( $serverFunction )) $serverFunction = $serverFunction[1];
-
 			// add event and function name to element attributes
-			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunction .'('. $this->computeFunctionArguments( $arguments, $options ) .')');
+			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .')');
 		}
 		
 
@@ -216,14 +207,14 @@
 			// if is one argument and it's the form name, we want the form values
 			if (is_string( $arguments ) && $this->form->_name == $arguments) return "xajax.getFormValues('". $arguments . "')";
 
-			// if there's only one argument compute array of one element
+			// if there's only one argument or option, create arrays
 			if (!is_array( $arguments )) $arguments = array( $arguments );
-
-			if (!is_array( $options )) $options = array( $options );
+			if (!is_array( $options ))   $options   = array( $options );
 
 			// initialize arguments
 			$args = array();
-			
+
+			// cycle arguments to create js function to get values
 			foreach ($arguments as $arg){
 
 				// if argument is numeric just add it and continue
@@ -264,19 +255,135 @@
 
 
         /**
+         *	This method adds confirmation to a element event
+         *
+         *	@param $formElementName	Form element name (string).
+         *	@param $message			Message to display
+         *	@param $event			Event name (auto-detection by default).
+         */		
+		function addConfirmation( $formElementName, $message, $event = ''){
+
+			// check element
+			if (!$this->form->isElement( $formElementName )) die( "Element ". $formElementName ." doesn't exist" );
+
+			// get element
+			$elem = & $this->form->getElement( $formElementName );
+
+			// check default event
+			if ($event == '') $event = $this->getDefaultEvent( $elem->getType() );
+
+			// check if attribute exist
+			$attribute = $elem->getAttribute( $event );
+			if (!$attribute) die( "Element ". $formElementName ." doesn't have attribute ". $event );
+
+			// create confirmation function name
+			$function = $this->prefix .'confirm'. $event . $formElementName;
+
+			// add function to custom js
+			$this->customjs[ $function ] = 'function '. $function .'(){ if (confirm("'. addslashes( $message ) .'")) { return '. $attribute .'; }}';
+
+			// override element attribute
+			$elem->setAttribute( $event, $function . '()'  );
+		}
+
+
+		// returns the default event for a type
+		function getDefaultEvent( $type ){
+
+			switch( $type ){
+				case 'submit' : trigger_error('Submit buttons cannot be used in ajax because they force submittion.'); break;
+				case 'image' :  trigger_error('Images cannot be used in ajax because they force submittion. Use "img" element instead.'); break;
+				case 'img' :		return 'onClick';
+				case 'button' :		return 'onClick';
+				case 'span' :		return 'onClick';
+				case 'dateselect' :	return 'onChange';
+				case 'radio' :		return 'onChange';
+				case 'checkbox' :	return 'onChange';
+				case 'text' :		return 'onChange';
+				case 'textarea' :	return 'onChange';
+				case 'bbtextarea' :	return 'onChange';
+				case 'password' :	return 'onChange';
+				case 'select' :		return 'onChange';
+					
+				// if element doesn't exist return a php error
+				default : trigger_error('Element type ('. $formElement->getType() .') is not supported in YDAjax'); break;
+			}
+		}
+
+
+        /**
+         *	This method creates an alias to a event
+         *
+         *	@param $formElementName	Form element name (string).
+         *	@param $functionName	Javascript function name (string).
+         *	@param $event			Event name (auto-detection by default).
+         */		
+		function addAlias( $formElementName, $functionName, $event = null ){
+
+			// get element object
+			$elem = & $this->form->getElement( $formElementName );
+			
+			// if we don't define a event we must check default one
+			if (is_null( $event )) $event = $this->getDefaultEvent( $elem->getType() );
+			
+			// get attribute from element
+			$attribute = $elem->getAttribute( $event );
+			
+			// check if attribute exist
+			if (!$attribute) $attribute = 'false';
+		
+			$this->customjs[$functionName] = 'function '. $functionName .'(){ return '. $attribute .'; }';
+		}
+
+
+        /**
          *	This method will process all events added
          */	
 		function processEvents(){
-					$this->setTemplate( $this->template );
+			
+			// return code from all js effect libs
+			if (isset($_GET['ydajax_includes'])) return $this->includeJSlibs();
+
+			// change template object internals			
+			$this->setTemplate( $this->template );
+
+			// process all requests and exit
 			return $this->processRequests();
 		}
 
 
+		// internal method to display all js effect libs
+		function includeJSlibs(){
+		
+			YDInclude( 'YDFileSystem.php' );
+
+			$content = '';
+
+			// add contents
+			foreach ( array( 'prototype.js', 'util.js', 'effects.js', 'dragdrop.js', 'controls.js' ) as $filename){
+				$file = new YDFSFile( dirname( __FILE__ ) .'/js/'. $filename );
+				$content .= $file->getContents() ."\n";
+			}
+		
+			header("Content-type: text/javascript");
+			print $content;
+			exit();
+		}
+
+
+        /**
+         *	This method add a result to a form element
+         *
+         *	@param $formElementName	Form element name or a generic id string.
+         *	@param $result			Result string or array
+         *	@param $attribute		Optional attributes (optional)
+         *	@param $options			Specific options (optional)
+         */	
 		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
 		
-			// if formElementName is not a form element result is assigned to a id
+			// test if is a form element
 			if (!$this->form->isElement( $formElementName ))
-				return $this->response->assignId( $formElementName, $result, $attribute, $options);
+				return $this->response->assignId( $formElementName, $result, $attribute, $options );
 			
 			// get element
 			$elem = & $this->form->getElement( $formElementName );
@@ -284,12 +391,16 @@
 			return $this->response->assignResult( $elem, $result, $attribute, $options);
 		}
 		
-		
+
+        /**
+         *	This method will process all results added before with addResult
+         */	
 		function processResults(){
-		
+
 			// if YDAjaxResponse is not defined return
 			if ( is_null( $this->response )) die( "There are no results assigned" );
-			
+
+			// return XML to client browser
 			return $this->response->getXML();
 		}
 		
@@ -314,7 +425,7 @@
 			// generate function name
 			$jsfunction = $this->prefix . 'get'. $element->getName();
 
-			// if we want all values and not only the selected one
+			// if we want all values and not only the select one
 			if (in_array( 'all', $options )){
 
 				$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' . "\n";
@@ -587,6 +698,9 @@ class YDAjaxResponse extends xajaxResponse{
 		
 			// if event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'innerHTML';
+
+			// if result is an array we should export to a valid js string
+			if (is_array( $result )) $result =  str_replace( "\n", "<br>", var_export( $result, true ) ) ;
 		
 			// escape string
 			$result = addslashes( $result );
@@ -602,14 +716,25 @@ class YDAjaxResponse extends xajaxResponse{
 			// if attribute event is not defined we must create a default event
 			if (is_null( $attribute )) $attribute = 'value';
 
-			if (!is_array( $result )) $result = array( $result );
+			// if we want to replace all select options
+			if (is_array( $result )){
 			
-			// compute options
-			$options = '__ydfselect.options.length = 0;';
-			foreach( $result as $key => $value ){
-				$key   = addslashes( $key );
-				$value = addslashes( $value );
-				$options .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("'. $value .'","'. $key .'"); ' ;
+				// compute options
+				$options = '__ydfselect.options.length = 0;';
+				foreach( $result as $key => $value ){
+					$key   = addslashes( $key );
+					$value = addslashes( $value );
+					$options .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("'. $value .'","'. $key .'"); ' ;
+				}
+
+			// if we want to define the selected option
+			}else{
+			
+				$options = 'for (counter = 0; counter < __ydfselect.length; counter++){
+							 	if (__ydfselect[counter].value == "'. addslashes( $result ) .'"){
+								   __ydfselect.selectedIndex = counter;
+								}
+							}';
 			}
 
 			// assign result to form element
@@ -798,7 +923,6 @@ class YDAjaxResponse extends xajaxResponse{
 			
 				$parsed  = getdate( $result );
 				$hours   = $parsed['hours'];
-
 				$minutes = $parsed['minutes'];
 
 			}else $this->addAlert("TimeSelect elements in YDAjax only support timestamps in assignResult");
