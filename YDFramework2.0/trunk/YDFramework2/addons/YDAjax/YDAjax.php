@@ -274,7 +274,7 @@
 
 			// check if attribute exist
 			$attribute = $elem->getAttribute( $event );
-			if (!$attribute) die( "Element ". $formElementName ." doesn't have attribute ". $event );
+			if (is_null($attribute)) die( "Element ". $formElementName ." doesn't have attribute ". $event );
 
 			// create confirmation function name
 			$function = $this->prefix .'confirm'. $event . $formElementName;
