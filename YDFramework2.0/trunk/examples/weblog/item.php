@@ -107,7 +107,11 @@
 
                     // Create the email and send it
                     $eml = new YDEmail();
-                    $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    if ( ! empty( $item['user_email'] ) ) {
+                        $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    } else {
+                        $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    }
                     $eml->setReplyTo( 'no@reply.net' );
                     $eml->addBcc( $item['user_email'] );
                     foreach ( $subscribers as $subscriber ) {
