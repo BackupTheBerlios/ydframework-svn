@@ -43,12 +43,12 @@
     // The stored errors
     YDConfig::set( YDConfig::get( 'YD_ERROR_STORE_NAME' ), array(), false );
 
-
     // Global names for the errors
-    $GLOBALS['YD_ERROR_LEVELS'] = array(
-        YD_ERROR_NOTICE  => 'notice',
-        YD_ERROR_WARNING => 'warning',
-        YD_ERROR_FATAL   => 'fatal'
+    YDConfig::set( 'YD_ERROR_LEVELS', array(
+            YD_ERROR_NOTICE  => 'Notice',
+            YD_ERROR_WARNING => 'Warning',
+            YD_ERROR_FATAL   => 'Fatal'
+        ), false
     );
 
     /**
@@ -71,14 +71,10 @@
             
             $this->YDBase();
             
-            $levels = array(
-                YD_ERROR_NOTICE  => 'notice',
-                YD_ERROR_WARNING => 'warning',
-                YD_ERROR_FATAL   => 'fatal'
-            );
+            $levels = YDConfig::get( 'YD_ERROR_LEVELS' );
             
             $this->level        = $level;
-            $this->name         = $GLOBALS['YD_ERROR_LEVELS'][ $level ];
+            $this->name         = $levels[ $level ];
             $this->message      = $message;
             $this->file         = $file;
             $this->line         = $line;
@@ -196,11 +192,6 @@
             // Dump last error
             echo( YDError::r_dump( $html, 1 ) );
 
-            //YDDebugutil::dump( $last );
-
-            // Dump the stacktrace
-            echo( '<b>Stack Trace</b>: ' . nl2br( str_replace( ' ', '&nbsp;', $last->stacktrace ) ) );
-            
             // If fatal error, stops the script execution
             if ( $last->level == YD_ERROR_FATAL ) {
                 die();
@@ -234,49 +225,52 @@
             $file = $stack[ $back ]['file'];
             $line = $stack[ $back ]['line'];
             
+            // Get the error levels
+            $levels = YDConfig::get( 'YD_ERROR_LEVELS' );
+            
             // Creates the message
             $msg = '';
-            if ( $html ) {
-                $msg .= '<br />' . YD_CRLF;
-                switch ( $last->level ) {
-                    case YD_ERROR_FATAL:   $msg .= '<b>Fatal error: </b>'; break;
-                    case YD_ERROR_WARNING: $msg .= '<b>Warning: </b>'; break;
-                    case YD_ERROR_NOTICE:  $msg .= '<b>Notice: </b>'; break;
-                }
-            } else {
-                $msg .= YD_CRLF;
-                switch ( $last->level ) {
-                    case YD_ERROR_FATAL:   $msg .= 'FATAL ERROR: '; break;
-                    case YD_ERROR_WARNING: $msg .= 'WARNING: '; break;
-                    case YD_ERROR_NOTICE:  $msg .= 'NOTICE: '; break;
-                }
-            }
+            if ( $html ) $msg .= '<br /><b>';
+            $msg .= strtoupper( $levels[ $last->level ] ) . ': ';
+            if ( $html ) $msg .= '</b>';
             $msg .= $last->message . YD_CRLF;
             
+            // File
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'File: ';
             if ( $html ) $msg .= '</b>';
             $msg .= $last->file . YD_CRLF;
             
+            // File line
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'Line: ';
             if ( $html ) $msg .= '</b>';
             $msg .= $last->line . YD_CRLF;
             
+            // Dump
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'Dump: ';
             if ( $html ) $msg .= '</b>';
             $msg .= $file . YD_CRLF;
             
+            // Dump line
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'Line: ';
             if ( $html ) $msg .= '</b>';
             $msg .= $line . YD_CRLF;
             if ( $html ) $msg .= '<br />';
+            
+            // Stack trace
+            if ( $html ) $msg .= '<b>';
+            $msg .= 'Stack Trace: ';
+            if ( $html ) $msg .= '</b>';
+            $msg .= nl2br( str_replace( ' ', '&nbsp;', $last->stacktrace ) );
+            if ( $html ) $msg .= '<br />';
+            $msg .= YD_CRLF;
             
             return $msg;
         
@@ -298,8 +292,11 @@
             // Get the current stack
             $stack = debug_backtrace();
             
+            // Get level names
+            $levels = YDConfig::get( 'YD_ERROR_LEVELS' );
+            
             // Get the complete stack trace
-            $stacktrace = strtoupper( $GLOBALS['YD_ERROR_LEVELS'][ $level ] ) . ': ' . $message . YD_CRLF;
+            $stacktrace = strtoupper( $levels[ $level ] ) . ': ' . $message . YD_CRLF;
             foreach( array_slice( $stack, 1 ) as $t ) {
                 $stacktrace .= '    @ ';
                 if ( isset( $t['file'] ) ) {
