@@ -5,7 +5,7 @@
 
     // Includes
     YDInclude( 'YDRequest.php' );
-    YDInclude( 'YDDateUtil.php' );
+    YDInclude( 'YDDate.php' );
 
     // Class definition
     class dates extends YDRequest {
@@ -53,7 +53,7 @@
             YDDebugUtil::dump( YDDate::isValid( "5.15.2005", "ISO" ), 'YDDate::isValid( "5.15.2005", "ISO" )' );
             YDDebugUtil::dump( YDDate::isValid( "5.15.2005", "SQL" ), 'YDDate::isValid( "5.15.2005", "SQL" )' );
 
-            $date = new YDDateUtil();
+            $date = new YDDate();
 
             // Setting an empty date
             $date->set( "0000-00-00 00:00:00" );
@@ -105,16 +105,6 @@
             YDDebugUtil::dump( $date->isTomorrow(), '$date->isTomorrow()' );
             YDDebugUtil::dump( $date->isYesterday(), '$date->isYesterday()' );
 
-            YDDebugUtil::dump( $date->isMonday(), '$date->isMonday()' );
-            YDDebugUtil::dump( $date->isTuesday(), '$date->isTuesday()' );
-            YDDebugUtil::dump( $date->isWednesday(), '$date->isWednesday()' );
-            YDDebugUtil::dump( $date->isThursday(), '$date->isThursday()' );
-            YDDebugUtil::dump( $date->isFriday(), '$date->isFriday()' );
-
-            YDDebugUtil::dump( $date->isSaturday(), '$date->isSaturday()' );
-            YDDebugUtil::dump( $date->isSunday(), '$date->isSunday()' );
-            YDDebugUtil::dump( $date->isWeekend(), '$date->isWeekend()' );
-
             YDDebugUtil::dump( $date->isCurrentHour(), '$date->isCurrentHour()' );
             YDDebugUtil::dump( $date->isCurrentMinute(), '$date->isCurrentMinute()' );
             YDDebugUtil::dump( $date->isCurrentMonth(), '$date->isCurrentMonth()' );
@@ -141,14 +131,8 @@
             YDDebugUtil::dump( $date2->get(), 'Date 2' );
             YDDebugUtil::dump( $date->getDifference( $date2 ), 'Difference between Dates 1 and 2' );
 
-            // Moving
-            YDDebugUtil::dump( $date->get(), '$date->get()' );
-            $date->nextDay();
-            YDDebugUtil::dump( $date->get(), '$date->nextDay()' );
-            $date->prevDay();
-            YDDebugUtil::dump( $date->get(), '$date->prevDay()' );
-
             // Adding values
+            YDDebugUtil::dump( $date->get(), '$date->get()' );
             YDDebugUtil::dump( $date->addSecond( 70 ), '$date->addSecond( 70 )' );
             YDDebugUtil::dump( $date->addMinute( 80 ), '$date->addMinute( 80 )' );
             YDDebugUtil::dump( $date->addHour( 24 ), '$date->addHour( 24 )' );

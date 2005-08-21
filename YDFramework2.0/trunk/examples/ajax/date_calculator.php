@@ -9,7 +9,7 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 	YDInclude( 'YDUtil.php' );
-	YDInclude( 'YDDateUtil.php' );
+	YDInclude( 'YDDate.php' );
 
 
 	// Class definition
@@ -51,7 +51,7 @@
 		function result( $currentdate, $operation, $number, $type ){
 
 			// create date object with timestamp from the 'currentdate' form element
-			$date = new YDDateUtil();
+			$date = new YDDate();
 			$date->set( intval($currentdate) );
 
 			// if operation is 1 we want subtract the number

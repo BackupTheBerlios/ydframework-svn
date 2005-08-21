@@ -27,7 +27,7 @@
     }
 
     // Custom formats
-    YDConfig::set( 'YD_DATE_FORMATS', array(), false );
+    YDConfig::set( 'YD_DATE_FORMATS', array(), false );    
     
     /**
      *  This class defines a YDDateFormat object.
@@ -358,15 +358,6 @@
         }
 
         /**
-         *  This function returns an array with all the values of the object.
-         *
-         *  @returns  An array with all the values.
-         */
-        function toArray() {
-            return get_object_vars( $this );
-        }
-
-        /**
          *  This function sets the date.
          *
          *  @param $date    (Optional) A YDDate object, timestamp, array or
@@ -566,7 +557,7 @@
             
             if ( ! $match || ! $valid_date || ! $valid_time ) {
                 if ( $error ) {
-                    trigger_error( 'The date "' . $old_date . '" is not valid.', YD_ERROR );
+                    trigger_error( 'The date "' . $old_date . '" is not valid', YD_ERROR );
                 }
                 return false;
             }
@@ -912,6 +903,586 @@
                             (int) $this->hours .':'. (int) $this->minutes .':'. (int) $this->seconds );
             
             }
+            
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date is today.
+         *
+         *  @returns  True if today, false otherwise.
+         */
+        function isToday() {
+            
+            $this->reset();
+            
+            $today = $this->year . $this->month_with_zero . $this->day_with_zero;
+            
+            if ( $today == YDDate::getCustom( "%Y%m%d" ) ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date is tomorrow.
+         *
+         *  @returns  True if tomorrow, false otherwise.
+         */
+        function isTomorrow() {
+            
+            $date = new YDDate();
+            $date->addDay( 1 );
+            
+            $this->reset();
+            
+            $t = $this->year . $this->month_with_zero . $this->day_with_zero;
+            $d = $date->year . $date->month_with_zero . $date->day_with_zero;
+            
+            if ( $t == $d ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date is yesterday.
+         *
+         *  @returns  True if yesterday, false otherwise.
+         */
+        function isYesterday() {
+            
+            $date = new YDDate();
+            $date->addDay( -1 );
+            
+            $this->reset();
+            
+            $t = $this->year . $this->month_with_zero . $this->day_with_zero;
+            $d = $date->year . $date->month_with_zero . $date->day_with_zero;
+            
+            if ( $t == $d ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date
+         *  is in the current year.
+         *
+         *  @returns  True if current year, false otherwise.
+         */
+        function isCurrentYear() {
+            if ( $this->year == YDDate::getCustom( "%Y" ) ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date
+         *  is in the current month.
+         *
+         *  @returns  True if current month, false otherwise.
+         */
+        function isCurrentMonth() {
+            if ( $this->month == YDDate::getCustom( "%m" ) && $this->isCurrentYear() ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date
+         *  is in the current hour.
+         *
+         *  @returns  True if current hour, false otherwise.
+         */
+        function isCurrentHour() {
+            if ( $this->hours == YDDate::getCustom( "%H" ) && $this->isToday() ) {
+                return true;
+            }
+            return false;
+        }
+        
+        /**
+         *  This function returns a boolean indicating if the date
+         *  is in the current minute.
+         *
+         *  @returns  True if current minute, false otherwise.
+         */
+        function isCurrentMinute() {
+            if ( $this->minutes == YDDate::getCustom( "%M" ) && $this->isToday() && $this->isCurrentHour() ) {
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         *  This function returns the number of complete years to the current year.
+         *
+         *  @returns  The number of years to today.
+         */
+        function getYearsToToday() {
+            
+            $date = new YDDate();
+            
+            $this->reset();
+            
+            $e = & $date;
+            $s = & $this;
+            
+            if ( $this->timestamp_string > $date->timestamp_string ) {
+                $s = & $date;
+                $e = & $this;
+            }
+            
+            $years  = $e->year - $s->year;
+            if ( $e->month < $s->month ) {
+                $years--;
+            } else if ( $e->month == $s->month && $e->day < $s->day ) {
+                $years--;
+            }
+            return $years;
+            
+        }
+        
+        /**
+         *  This function sets the date to the beginning of the week.
+         */
+        function beginOfWeek() {
+            
+            $wday = $this->getWeekDay();
+            if ( $wday == 0 ) {
+                $this->addDay( -6 );
+            } else {
+                $this->addDay( -$wday+1 );
+            }
+            
+        }
+        
+        /**
+         *  This function sets the date to the end of the week.
+         */
+        function endOfWeek() {
+            
+            $wday = $this->getWeekDay();
+            $this->addDay( 7-$wday );
+            
+        }
+        
+        /**
+         *  This function returns the year day of the date.
+         *
+         *  @param $date   (Optional) A YDDate object, timestamp, array or string.
+         *                            If null, the date of the object. Default: null.
+         *  @param $format (Optional) The format name. Default: "ISO".
+         *
+         *  @returns  The year day.
+         *
+         *  @static   If $date is passed.
+         */
+        function getYearDay( $date=null, $format="ISO" ) {
+            
+            if ( $date === null ) {
+                $date = $this->parse( $date, $format );
+            } else {
+                $date = YDDate::parse( $date, $format );
+            }
+            
+            $yday = 0;
+            for ( $i=1; $i < $date['month']; $i++ ) {
+                $yday += YDDate::getDaysInMonth( $i, $date['year'] );
+            }
+            
+            return $yday + $date['day'];
+            
+        }
+        
+        /**
+         *  This function returns the number of days in the year.
+         *
+         *  @param $year  (Optional) If empty, object's year. Default: null.
+         *
+         *  @returns  The number of days in the year.
+         *
+         *  @static   If $year is passed.
+         */
+        function getDaysInYear( $year=null ) {
+            
+            if ( is_null( $year ) ) { $year  = $this->year;  }
+            
+            return YDDate::isLeapYear( $year ) ? 366 : 365;
+        
+        }
+
+        /**
+         *  This function returns the number of days in the month.
+         *
+         *  @param $month (Optional) If empty, object's month. Default: null.
+         *  @param $year  (Optional) If empty, object's year. Default: null.
+         *
+         *  @returns  The number of days in the month.
+         *
+         *  @static  If $month and $year are passed.
+         */
+        function getDaysInMonth( $month=null, $year=null ) {
+            
+            if ( is_null( $month ) ) { $month = $this->month; }
+            if ( is_null( $year  ) ) { $year  = $this->year;  }
+            
+            switch ( (int) $month ) {
+                
+                case 1:  return 31;
+                case 2:  return YDDate::isLeapYear( $year ) ? 29 : 28;
+                case 3:  return 31;
+                case 4:  return 30;
+                case 5:  return 31;
+                case 6:  return 30;
+                case 7:  return 31;
+                case 8:  return 31;
+                case 9:  return 30;
+                case 10: return 31;
+                case 11: return 30;
+                case 12: return 31;
+                
+            }
+            
+            return 0;
+            
+        }
+        
+        /**
+         *  This function adds a number of years to the date.
+         *
+         *  If the resulting day is not valid (e.g 30 Feb), the last day of the
+         *  resulting month will be selected.
+         *
+         *  @param $value (Optional) The number of years. Default: 1.
+         *
+         *  @returns  The date in the "ISO" format.
+         */
+        function addYear( $value=1 ) {
+            return $this->addMonth( $value * 12 );
+        }
+
+        /**
+         *  This function adds a number of months to the date.
+         *
+         *  If the resulting day is not valid (e.g 30 Feb), the last day of the
+         *  resulting month will be selected.
+         *
+         *  @param $value (Optional) The number of months. Default: 1.
+         *
+         *  @returns  The date in the "ISO" format.
+         */
+        function addMonth( $value=1 ) {
+            
+            if ( $value == 0 ) {
+                return $this->get();
+            }
+            
+            if ( $this->isDateEmpty() ) {
+                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
+
+            $this->month += $value;
+            
+            $this->year += floor( $this->month / 12 );
+            $this->month = $this->month % 12;
+            
+            if ( $this->month % 12 == 0 ){
+                $this->month = 12;
+                $this->year--;
+            }
+            
+            if ( $this->month < 0 ) {
+                $this->month = 12 + $this->month;
+            }
+            
+            $lastday = YDDate::getDaysInMonth( $this->month, $this->year );
+            
+            if ( $this->day > $lastday ) {
+                $this->day = $lastday;
+            }
+            
+            $this->reset();
+            
+            return $this->get();
+            
+        }
+
+        /**
+         *  This function adds a number of days to the date.
+         *
+         *  @param $value (Optional) The number of days. Default: 1.
+         *
+         *  @returns  The date in the 'ISO' format.
+         */
+        function addDay( $value=1 ) {
+            
+            if ( $value == 0 ) {
+                return $this->get();
+            }
+            
+            if ( ! extension_loaded( 'calendar' ) ) {
+                trigger_error( 'The PHP calendar extension must be enabled', YD_ERROR );
+            }
+            if ( $this->isDateEmpty() ) {
+                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
+            
+            $julian = GregoriantoJD( $this->month, $this->day, $this->year );
+            $julian += $value;
+               
+            $gregorian = JDtoGregorian( $julian ); 
+               
+            list ( $month, $day, $year ) = split ( '[/]', $gregorian );
+            
+            $this->day   = $day;
+            $this->month = $month;
+            $this->year  = $year;
+            
+            $this->reset();
+            
+            return $this->get();
+           
+        }
+
+        /**
+         *  This function adds a number of hours to the date.
+         *
+         *  @param $value (Optional) The number of hours. Default: 1.
+         *
+         *  @returns  The date in the "ISO" format.
+         */
+        function addHour( $value=1 ) {
+            return $this->addMinute( $value * 60 );
+        }
+        
+        /**
+         *  This function adds a number of minutes to the date.
+         *
+         *  @param $value (Optional) The number of minutes. Default: 1.
+         *
+         *  @returns  The date in the "ISO" format.
+         */
+        function addMinute( $value=1 ) {
+            return $this->addSecond( $value * 60 );
+        }
+        
+        /**
+         *  This function adds a number of seconds to the date.
+         *
+         *  @param $value (Optional) The number of seconds. Default: 1.
+         *
+         *  @returns  The date in the "ISO" format.
+         */
+        function addSecond( $value=1 ) {
+            
+            if ( $value == 0 ) {
+                return $this->get();
+            }
+            
+            if ( $this->isDateEmpty() ) {
+                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            if ( ! is_int( $value ) ) {
+                $value = intval( $value );
+            }
+            
+            $this->seconds += $value;
+            $days    = 0;
+            $hours   = 0;
+            $minutes = 0;
+            
+            if ( abs( $this->seconds ) >= 86400 ) {
+                $days = floor( $this->seconds / 86400 );
+                $this->seconds -= $days * 86400;
+            }
+            
+            if ( abs( $this->seconds ) >= 3600 ) {
+                $hours = floor( $this->seconds / 3600 );
+                $this->seconds -= $hours * 3600;
+            }
+            
+            if ( abs( $this->seconds ) >= 60 ) {
+                $minutes = floor( $this->seconds / 60 );
+                $this->seconds -= $minutes * 60;
+            }
+            
+            if ( $this->seconds < 0 ) {
+                $this->seconds = 60 + $this->seconds;
+            }
+            
+            if ( $minutes != 0 ) {
+                $this->minutes += $minutes;
+                $hours += floor( $this->minutes / 60 );
+                $this->minutes = $this->minutes % 60;
+                
+                if ( $this->minutes < 0 ) {
+                    $this->minutes = 60 + $this->minutes;
+                }
+            }
+            
+            if ( $hours != 0 ) {
+                $this->hours += $hours;
+                $days += floor( $this->hours / 24 );
+                $this->hours = $this->hours % 24;
+                
+                if ( $this->hours < 0 ) {
+                    $this->hours = 24 + $this->hours;
+                }
+            }
+            
+            if ( $days != 0 ) {
+                $this->addDay( $days );
+            }
+            
+            $this->reset();
+            
+            return $this->get();
+            
+        }
+        
+        /**
+         *  This function calculates the difference in years, quarters, months, 
+         *  weeks, weekdays, days, hours, minutes and seconds between the object
+         *  and another date passed.
+         *
+         *  @param  $date  The other date to be compared. A YDDate object,
+         *                 timestamp, array or string. If null, the current date.
+         *
+         *  @returns       An array with all the difference information.
+         *
+         *  @todo          Not very efficient for big differences.
+         */
+        function getDifference( $date ) {
+            
+            if ( ! extension_loaded( 'calendar' ) ) {
+                trigger_error( 'The PHP calendar extension must be enabled', YD_ERROR );
+            }
+            if ( $this->isDateEmpty() ) {
+                trigger_error( 'Cannot make calculations with an empty date', YD_ERROR );
+            }
+            
+            $start = $this;
+            $end   = new YDDate( $date );
+            
+            $span = array();
+            $span['years']    = 0;
+            $span['quarters'] = 0;
+            $span['months']   = 0;
+            $span['weeks']    = 0;
+            $span['days']     = 0;
+            $span['weekdays'] = 0;
+            $span['hours']    = 0;
+            $span['minutes']  = 0;
+            $span['seconds']  = 0;
+            
+            if ( $start->timestamp_string == $end->timestamp_string ) {
+                return $span;
+            }
+            
+            $julian_start = GregoriantoJD( $start->month, $start->day, $start->year );
+            $julian_end   = GregoriantoJD( $end->month,   $end->day,   $end->year );
+            
+            $days     = abs( $julian_end - $julian_start );
+            
+            $years    = 0;
+            $quarters = 0;
+            $months   = 0;
+            $weeks    = 0;
+            $weekdays = 0;
+            $hours    = 0;
+            $minutes  = 0;
+            $seconds  = 0;
+            
+            $neg = 1;
+            $s = & $start;
+            $e = & $end;
+            if ( $start->timestamp_string > $end->timestamp_string ) {
+                $neg = -1;
+                $s = & $end;
+                $e = & $start;
+            } 
+            
+            $hours   += $e->hours - $s->hours;
+            $minutes += $e->minutes - $s->minutes;
+            $seconds += $e->seconds - $s->seconds;
+
+            $hours   += $days * 24;
+            $minutes += $hours * 60;
+            $seconds += $minutes * 60;
+            
+            $count      = $days;
+            $weekend    = ( $s->getWeekDay() == 0 || $s->getWeekDay() == 6 ) ? true : false;
+            $monthend   = ( $s->day == YDDate::getDaysInMonth( $s->month, $s->year ) ) ? true : false;
+            $quarterend = ( $s->month == 3 * $s->getQuarter() && $monthend ) ? true : false;
+            $yearend    = ( $s->month === 12 && $s->day === 31 ) ? true : false;
+            
+            while ( $count > 0 ) {
+                
+                if ( ! ( $s->getWeekDay() == 0 || $s->getWeekDay() == 6 ) ) {
+                    if ( $weekend ) {
+                        $weeks++;
+                    }
+                    $weekdays++;
+                    $weekend = false;
+                } else {
+                    $weekend = true;
+                }
+                
+                if ( ! ( $s->day == YDDate::getDaysInMonth( $s->month, $s->year ) ) ) {
+                    if ( $monthend ) {
+                        $months++;
+                    }
+                    $monthend = false;
+                } else {
+                    $monthend = true;
+                }
+                
+                if ( ! ( $s->month == 3 * $s->getQuarter() && $monthend ) ) {
+                    if ( $quarterend ) {
+                        $quarters++;
+                    }
+                    $quarterend = false;
+                } else {
+                    $quarterend = true;
+                }
+                
+                if ( ! ( $s->month === 12 && $s->day === 31 ) ) {
+                    if ( $yearend ) {
+                        $years++;
+                    }
+                    $yearend = false;
+                } else {
+                    $yearend = true;
+                }
+                
+                $s->addDay( 1 );
+                $count--;
+            }
+            
+            $span['years']    = $neg * $years;
+            $span['quarters'] = $neg * $quarters;
+            $span['months']   = $neg * $months;
+            $span['weeks']    = $neg * $weeks;
+            $span['days']     = $neg * $days;
+            $span['weekdays'] = $neg * $weekdays;
+            $span['hours']    = $neg * $hours;
+            $span['minutes']  = $neg * $minutes;
+            $span['seconds']  = $neg * $seconds;
+            
+            return $span;
             
         }
         

@@ -39,14 +39,6 @@ $date->get()'2005-08-03 19:06:24'
 $date->isToday()true
 $date->isTomorrow()false
 $date->isYesterday()false
-$date->isMonday()false
-$date->isTuesday()false
-$date->isWednesday()true
-$date->isThursday()false
-$date->isFriday()false
-$date->isSaturday()false
-$date->isSunday()false
-$date->isWeekend()false
 $date->isCurrentHour()true
 $date->isCurrentMinute()true
 $date->isCurrentMonth()true
@@ -75,8 +67,6 @@ array (
   'seconds' => 3146400,
 )
 $date->get()'2005-08-03 19:06:24'
-$date->nextDay()'2005-08-04 19:06:24'
-$date->prevDay()'2005-08-03 19:06:24'
 $date->addSecond( 70 )'2005-08-03 19:07:34'
 $date->addMinute( 80 )'2005-08-03 20:27:34'
 $date->addHour( 24 )'2005-08-04 20:27:34'
