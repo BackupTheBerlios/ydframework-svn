@@ -112,6 +112,8 @@
             $this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
             $this->registerElement( 'span', 'YDFormElement_Span', 'YDFormElement_Span.php' );
             $this->registerElement( 'img', 'YDFormElement_Img', 'YDFormElement_Img.php' );
+            $this->registerElement( 'link', 'YDFormElement_Link', 'YDFormElement_Link.php' );
+            $this->registerElement( 'div', 'YDFormElement_Div', 'YDFormElement_Div.php' );
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
