@@ -69,8 +69,9 @@
 			// initilize template
 			$this->template = & $template;
 			
-			// custom javascript (we need more than the javascript provided by xajax
+			// custom javascript (we need more than the javascript provided by xajax)
 			$this->customjs = array();
+			$this->customjsVariables = array();
 			
 			// response object
 			$this->response = new YDAjaxResponse();
@@ -93,10 +94,19 @@
 			if ($this->showHeadersEffects)
 				$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."ydajax_includes=ydajax_includes\"></script>\n";
 		
-			// add custom function
-			if (!empty($this->customjs))
-				$html .= "\t<script type=\"text/javascript\">" . "\n\t\t" . implode("\n\t\t", array_values($this->customjs)) . "\n\t" . '</script>';
+			// add custom js code
+			if (!empty($this->customjsVariables) || !empty($this->customjs)){
+	
+				$html .= "\t<script type=\"text/javascript\">\n";
+				
+				foreach( $this->customjsVariables as $variable => $declaration )
+					$html .= "\t\tvar ". $variable ." = ". $declaration .";\n";
 
+				foreach( $this->customjs as $function => $declaration )
+					$html .= "\t\tfunction ". $function ."{". $declaration ."}\n";
+			
+				$html .= "\t</script>\n";
+			}
 
 			// add headers to template
 		    return eregi_replace("<head>", "<head>\n". $html, $tpl_source);
@@ -167,10 +177,7 @@
          *	@param $event			Event name (auto-detection by default).
          *	@param $options			Custom options.
          */		
-		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null){
-		 
-		 	// check formElementName
-		 	if (!isset($formElementName)) die("You must define a formElementName in addEvent");
+		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = array()){
 		 
 			// register function in xajax
 			$this->registerFunction( $serverFunction );
@@ -178,25 +185,41 @@
 			// serverFunction must be an array with a class and the method (get function name)
 			$serverFunctionName = $serverFunction[1];
 
+			if (!is_array( $options )) $options = array( $options );
+
 			// if formElementName is a js function we are not assigning an event to a form element but creating a js function
 			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
-			
-				// add js function
-				$this->customjs[ $function[1] ] = 'function '. $function[1] .'(){ return '. $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .'); }';
+				$this->customjs[ $function[0] ] = $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .');';
 				return;
 			}
 
 			// get element object
 			$formElement = & $this->form->getElement( $formElementName );
-		
+			
 			// if event is null we must check the form element type to compute the default event
 			if (is_null( $event )) $event = $this->getDefaultEvent( $formElement->getType() );
+
+			// parse event
+			$event = strtolower( $event );
 			
-			// add event and function name to element attributes
-			$formElement->setAttribute($event, $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .')');
+			// get function name
+			$functionName = $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .');';
+
+			// get previous attribute
+			$previous = is_null( $formElement->getAttribute($event) ) ? '' : trim( $formElement->getAttribute($event) );
+
+			// if previous don't have a last ';' you should add ir
+			if (strlen( $previous ) > 0 && $previous[ strlen( $previous ) - 1 ] != ';' ) $previous .= ';';
+
+			if (in_array('replace', $options))
+				return $formElement->setAttribute( $event, $functionName );
+
+			if (in_array('prepend', $options))
+				return $formElement->setAttribute( $event, $functionName . $previous );
+			
+			$formElement->setAttribute( $event, $previous . $functionName );
 		}
 		
-
 
 		// internal method. compute js arguments string 
 		function computeFunctionArguments( $arguments, $options ){
@@ -257,33 +280,76 @@
         /**
          *	This method adds confirmation to a element event
          *
-         *	@param $formElementName	Form element name (string).
+         *	@param $formElementName	Form element name or js function.
          *	@param $message			Message to display
          *	@param $event			Event name (auto-detection by default).
+         *	@param $dependence		Element name or array of names that this element depends of
          */		
-		function addConfirmation( $formElementName, $message, $event = ''){
+		function addConfirmation( $formElementName, $message, $event = null, $dependence = null){
+
+			if (!is_null( $dependence )){
+				$jsvariable = $this->prefix . 'change'. $formElementName .'var';
+				$this->addDependence( $dependence, $jsvariable );
+			}
 
 			// check element
-			if (!$this->form->isElement( $formElementName )) die( "Element ". $formElementName ." doesn't exist" );
+			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			
+				if (!isset( $this->customjs[ $function[0] ] )) die( "Function ". $function[0] ." is not defined." );
+				
+				// if this is a dependent element
+				if (!is_null( $dependence )) $this->customjs[ $function[0] ] = 'if ('. $jsvariable .' == false || confirm("'. addslashes( $message ) .'")) { '. $this->customjs[ $function[0] ] .' }';
+				else                         $this->customjs[ $function[0] ] = 'if (confirm("'. addslashes( $message ) .'")) { '. $this->customjs[ $function[0] ] .' }';
+
+				return;				
+			}
 
 			// get element
 			$elem = & $this->form->getElement( $formElementName );
 
 			// check default event
-			if ($event == '') $event = $this->getDefaultEvent( $elem->getType() );
+			if (is_null($event)) $event = $this->getDefaultEvent( $elem->getType() );
 
 			// check if attribute exist
 			$attribute = $elem->getAttribute( $event );
 			if (is_null($attribute)) die( "Element ". $formElementName ." doesn't have attribute ". $event );
 
 			// create confirmation function name
-			$function = $this->prefix .'confirm'. $event . $formElementName;
+			$function = $this->prefix .'confirm'. $event . $formElementName .'()';
 
-			// add function to custom js
-			$this->customjs[ $function ] = 'function '. $function .'(){ if (confirm("'. addslashes( $message ) .'")) { return '. $attribute .'; }}';
+			// if this is a dependent element
+			if (!is_null( $dependence )) $this->customjs[ $function ] = 'if ('. $jsvariable .' == false || confirm("'. addslashes( $message ) .'")) { '. $attribute .' }';
+			else                         $this->customjs[ $function ] = 'if (confirm("'. addslashes( $message ) .'")) { '. $attribute .' }';
 
 			// override element attribute
-			$elem->setAttribute( $event, $function . '()'  );
+			$elem->setAttribute( strtolower($event), $function );
+		}
+
+
+		// internal method. This adds dependence to form elements
+		function addDependence( $dependence, $jsvariable ){
+		
+			// add variable to custom variables
+			$this->customjsVariables[ $jsvariable ] = 'false';
+		
+			if (!is_array( $dependence )) $dependence = array( $dependence );
+		
+			// cycle form elements
+			foreach ( $dependence as $formElementName ){
+
+				if (!$this->form->isElement( $formElementName )) die( "Form element ". $formElementName ." doesn't exist");
+				
+				// get element
+				$elem = & $this->form->getElement( $formElementName );
+				
+				// get previous attribute onchange
+				$attribute = (is_null( $elem->getAttribute( 'onchange' ))) ? '' : $elem->getAttribute( 'onchange' );
+				
+				// compute new attribute 'onchange'
+				$elem->setAttribute('onchange', $jsvariable .' = true;'. $attribute );
+			}
+		
+		
 		}
 
 
@@ -293,17 +359,17 @@
 			switch( $type ){
 				case 'submit' : trigger_error('Submit buttons cannot be used in ajax because they force submittion.'); break;
 				case 'image' :  trigger_error('Images cannot be used in ajax because they force submittion. Use "img" element instead.'); break;
-				case 'img' :		return 'onClick';
-				case 'button' :		return 'onClick';
-				case 'span' :		return 'onClick';
-				case 'dateselect' :	return 'onChange';
-				case 'radio' :		return 'onChange';
-				case 'checkbox' :	return 'onChange';
-				case 'text' :		return 'onChange';
-				case 'textarea' :	return 'onChange';
-				case 'bbtextarea' :	return 'onChange';
-				case 'password' :	return 'onChange';
-				case 'select' :		return 'onChange';
+				case 'img' :		return 'onclick';
+				case 'button' :		return 'onclick';
+				case 'span' :		return 'onclick';
+				case 'dateselect' :	return 'onchange';
+				case 'radio' :		return 'onchange';
+				case 'checkbox' :	return 'onchange';
+				case 'text' :		return 'onchange';
+				case 'textarea' :	return 'onchange';
+				case 'bbtextarea' :	return 'onchange';
+				case 'password' :	return 'onchange';
+				case 'select' :		return 'onchange';
 					
 				// if element doesn't exist return a php error
 				default : trigger_error('Element type ('. $formElement->getType() .') is not supported in YDAjax'); break;
@@ -314,11 +380,22 @@
         /**
          *	This method creates an alias to a event
          *
-         *	@param $formElementName	Form element name (string).
+         *	@param $formElementName	Form element name or js function.
          *	@param $functionName	Javascript function name (string).
          *	@param $event			Event name (auto-detection by default).
          */		
 		function addAlias( $formElementName, $functionName, $event = null ){
+
+			// check element
+			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			
+				if (!isset( $this->customjs[ $formElementName ] )) die( "Function ". $formElementName ." is not defined." );
+				
+				$this->customjs[ $functionName ] = $this->customjs[ $formElementName ];
+				
+				return;				
+			}
+
 
 			// get element object
 			$elem = & $this->form->getElement( $formElementName );
@@ -332,7 +409,7 @@
 			// check if attribute exist
 			if (!$attribute) $attribute = 'false';
 		
-			$this->customjs[$functionName] = 'function '. $functionName .'(){ return '. $attribute .'; }';
+			$this->customjs[$functionName] = $attribute;
 		}
 
 
@@ -409,13 +486,13 @@
 		function getValueText( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function to retrieve this text element value (it will replace possible js functions for this element because we cannot have 2 functions with the same name)
-			$this->customjs[$jsfunction] = 'function '. $jsfunction .'(){ return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value; }';
+			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 
 
@@ -423,29 +500,26 @@
 		function getValueSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 
 			// if we want all values and not only the select one
 			if (in_array( 'all', $options )){
 
-				$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' . "\n";
-				$this->customjs[$jsfunction] .= '   var __ydtmparr = new Array();' . "\n";
-				$this->customjs[$jsfunction] .= '   var __ydtmpsel = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
-				$this->customjs[$jsfunction] .= '   for (i = 0; i < __ydtmpsel.length; i++){' . "\n";
-				$this->customjs[$jsfunction] .= '       __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text; ' . "\n";
-				$this->customjs[$jsfunction] .= '   }' . "\n";
-				$this->customjs[$jsfunction] .= '   return __ydtmparr;' . "\n";
+				$this->customjs[$jsfunction]  = 'var __ydtmparr = new Array();' . "\n";
+				$this->customjs[$jsfunction] .= 'var __ydtmpsel = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
+				$this->customjs[$jsfunction] .= 'for (i = 0; i < __ydtmpsel.length; i++){' . "\n";
+				$this->customjs[$jsfunction] .= '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;' . "\n";
 				$this->customjs[$jsfunction] .= '}' . "\n";
+				$this->customjs[$jsfunction] .= 'return __ydtmparr;';
 		
-				return $jsfunction ."()";
+				return $jsfunction;
 			}
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
-			$this->customjs[$jsfunction] .= '	return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"].value;}' ."\n";
+			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"].value;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 
 
@@ -453,13 +527,13 @@
 		function getValuePassword( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'function '. $jsfunction .'(){ return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value; }';
+			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 		
 
@@ -467,13 +541,13 @@
 		function getValueTextarea( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'function '. $jsfunction .'(){ return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value; }';
+			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 		
 		
@@ -481,13 +555,13 @@
 		function getValueSpan( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'function '. $jsfunction .'(){ return document.getElementById("'. $element->getForm() .'_'. $element->getName().'").innerHTML; }';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getForm() .'_'. $element->getName().'").innerHTML;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}		
 		
 
@@ -495,18 +569,17 @@
 		function getValueDateSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
-			$this->customjs[$jsfunction] .= '	var day   = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var month = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' ."\n";
-			$this->customjs[$jsfunction] .= '	var year  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var mydate = new Date( year, month, day ); ' . "\n";
-			$this->customjs[$jsfunction] .= '	return mydate.getTime() / 1000; }';
+			$this->customjs[$jsfunction]  = 'var day   = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var month = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' . "\n";
+			$this->customjs[$jsfunction] .= 'var year  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day ); ' . "\n";
+			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 
 
@@ -514,17 +587,16 @@
 		function getValueTimeSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
-			$this->customjs[$jsfunction] .= '	var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var mydate = new Date( 1970, 1, 1, hours, minutes ); ' . "\n";
-			$this->customjs[$jsfunction] .= '	return mydate.getTime() / 1000; }';
+			$this->customjs[$jsfunction]  = 'var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var mydate = new Date( 1970, 1, 1, hours, minutes ); ' . "\n";
+			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}		
 
 
@@ -532,20 +604,19 @@
 		function getValueDateTimeSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
-			$this->customjs[$jsfunction] .= '	var day      = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var month    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' ."\n";
-			$this->customjs[$jsfunction] .= '	var year     = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' ."\n";
-			$this->customjs[$jsfunction] .= '	var mydate = new Date( year, month, day, hours, minutes ); ' . "\n";
-			$this->customjs[$jsfunction] .= '	return mydate.getTime() / 1000; }';
+			$this->customjs[$jsfunction]  = 'var day      = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var month    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' . "\n";
+			$this->customjs[$jsfunction] .= 'var year     = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day, hours, minutes ); ' . "\n";
+			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}				
 		
 
@@ -553,16 +624,15 @@
 		function getValueCheckbox( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){' ."\n";
-			$this->customjs[$jsfunction] .=	'	if (document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].checked) ' ."\n";
-			$this->customjs[$jsfunction] .=	'		return 1; ' ."\n";
-			$this->customjs[$jsfunction] .=	'	return 0; }' ."\n";
+			$this->customjs[$jsfunction]  =	'if (document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].checked)' . "\n";
+			$this->customjs[$jsfunction] .=	'	return 1;' . "\n";
+			$this->customjs[$jsfunction] .=	'return 0;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}
 		
 
@@ -570,23 +640,29 @@
 		function getValueRadio( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName();
+			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 			
 			// add custom js function
-			$this->customjs[$jsfunction]  = 'function '. $jsfunction .'(){ ' ."\n";
-			$this->customjs[$jsfunction] .= '	var __ydftmp = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"]; ' ."\n";
-			$this->customjs[$jsfunction] .= '	for (counter = 0; counter < __ydftmp.length; counter++) ' ."\n";
-			$this->customjs[$jsfunction] .= '		if (__ydftmp[counter].checked) return __ydftmp[counter].value; ' ."\n";
-			$this->customjs[$jsfunction] .= '	return false; } ' ."\n";
+			$this->customjs[$jsfunction]  = 'var __ydftmp = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
+			$this->customjs[$jsfunction] .= 'for (counter = 0; counter < __ydftmp.length; counter++)' . "\n";
+			$this->customjs[$jsfunction] .= '	if (__ydftmp[counter].checked) return __ydftmp[counter].value;' . "\n";
+			$this->customjs[$jsfunction] .= 'return false;';
 
 			// return function invocation
-			return $jsfunction ."()";
+			return $jsfunction;
 		}		
-		
 
-		function sendFormErrors( & $form ){
+
+        /**
+         *	This method returns the needed xml with form errors.
+         *
+         *	@param $form			Form object.
+         *	@param $id				Optional id to assign error messages
+         *	@param $separator		Optional message separator string
+         */	
+		function sendFormErrors( & $form, $id = null, $separator = "* " ){
 		
-			return $this->response->sendFormErrors( $form );
+			return $this->response->sendFormErrors( $form, $id, $separator );
 		}
 
 }
@@ -649,16 +725,24 @@ class YDAjaxResponse extends xajaxResponse{
 		}
 
 
-
-
         /**
          *	This method returns the needed xml with form errors.
          *
          *	@param $form			Form object.
+         *	@param $id				Optional id to assign error messages
+         *	@param $separator		Optional message separator string
          */		
-		function sendFormErrors( & $form ){
+		function sendFormErrors( & $form, $id, $separator){
 		
-			return $this->sendAlert( "* ". implode("\n* ", array_values( $form->_errors )) );
+			// we are sending a js message
+			if (is_null( $id ))
+				return $this->sendAlert( $separator . implode("\n". $separator, array_values( $form->_errors )) );
+
+			// we are sending a html message
+			$separator = htmlentities( $separator );
+
+			$this->assignId( $id, $separator . implode( "<br />". $separator, array_values( $form->_errors )) );
+			return $this->getXML();
 		}
 
 
