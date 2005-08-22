@@ -37,7 +37,8 @@
 
 			// add write and read events
 			$this->ajax->addEvent( 'write', array( & $this, 'write' ), 'variable' );
-			$this->ajax->addEvent( 'read',  array( & $thiget variable and assign span with its value
+			$this->ajax->addEvent( 'read',  array( & $this, 'read' ) );
+
 			// process all events
 			$this->ajax->processEvents();
 

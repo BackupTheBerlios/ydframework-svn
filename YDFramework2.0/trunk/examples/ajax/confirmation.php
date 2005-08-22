@@ -40,7 +40,7 @@
 			// create an alias (submitCall). you can see a new function submitCall() is js client code
 			// note that, addAlias is defined AFTER addConfirmation, then submitCall() will have confirmation too
 			// alias BEFORE addConfirmation will assign submitCall() with a clean event
-			$this->ajax->addAlias( 'mybutton', 'submitCall' );
+			$this->ajax->addAlias( 'mybutton', 'submitCall()' );
 
 			// process ajax events
 			$this->ajax->processEvents();
