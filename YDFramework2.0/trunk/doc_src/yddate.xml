@@ -3,12 +3,134 @@
 
     <title>Using YDDate to work with date and time elements</title>
 
-    <para>The following example shows you how the YDDate class can be used.</para>
-
+    <para>In this chapter, we will see how to use the YDDate class to handle formatting, validation and calculation of date and time elements.</para>
+    
+    <para>The YDDate object has the following properties:</para>
+    
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold">year:</emphasis> the year number (e.g. 2005)</listitem>
+        <listitem><emphasis role="bold">month:</emphasis> the month number (e.g. 4)</listitem>
+        <listitem><emphasis role="bold">month_with_zero:</emphasis> the month number with zero (e.g. 04)</listitem>
+        <listitem><emphasis role="bold">month_name:</emphasis> the month name using the locale settings (e.g. April)</listitem>
+        <listitem><emphasis role="bold">month_name_abbr:</emphasis> the abbreviated month name using the locale settings (e.g. Apr)</listitem>
+        
+        <listitem><emphasis role="bold">day:</emphasis> the day number (e.g. 9)</listitem>
+        <listitem><emphasis role="bold">day_with_zero:</emphasis> the day number with zero (e.g. 09)</listitem>
+        <listitem><emphasis role="bold">day_name:</emphasis> the weekday name using the locale settings (e.g. Friday)</listitem>
+        <listitem><emphasis role="bold">day_name_abbr:</emphasis> the abbreviated weekday name using the locale settings (e.g. Fri)</listitem>
+        <listitem><emphasis role="bold">hours:</emphasis> the hours (e.g. 8)</listitem>
+        <listitem><emphasis role="bold">hours_with_zero:</emphasis> the hours with zero (e.g. 08)</listitem>
+        <listitem><emphasis role="bold">minutes:</emphasis> the minutes (e.g. 55)</listitem>
+        <listitem><emphasis role="bold">minutes_with_zero:</emphasis> the minutes with zero</listitem>
+        <listitem><emphasis role="bold">seconds:</emphasis> the seconds (e.g. 53)</listitem>
+        <listitem><emphasis role="bold">seconds_with_zero:</emphasis> the seconds with zero</listitem>
+        <listitem><emphasis role="bold">timestamp:</emphasis> the number of seconds between the date and the Unix Epoch (January 1 1970 00:00:00 GMT) - if older, the value will be null</listitem>
+        <listitem><emphasis role="bold">timestamp_string:</emphasis> the mysql timestamp format (YYYYMMDDHHMMSS)</listitem>
+        <listitem><emphasis role="bold">weekday:</emphasis> the weekday number (0=Sunday, 1=Monday, ...)</listitem>
+        <listitem><emphasis role="bold">quarter:</emphasis> the year quarter</listitem>
+        <listitem><emphasis role="bold">leap:</emphasis> a boolean indicating if the year is a leap year</listitem>
+    </itemizedlist>
+    
+    <para>The date can be set the following ways:</para>
+    
     <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_001.xml" />
-
-    <para>This script returns the following ouput:</para>
-
-    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_001_output.xml" />
+    
+    <para>The date can be retrieved the following ways:</para>
+    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_002.xml" />
+    
+    <para>There are a few methods to help you work with dates:</para>
+    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_003.xml" />
+    
+    <sect1 id="ydate_formats">
+        
+        <title>Using formats</title>
+        
+        <para>There are a few formats already defined:</para>
+        
+        <itemizedlist>
+            <listitem><emphasis role="bold">ISO:</emphasis> YYYY-MM-DD HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">ISO_DATE:</emphasis> YYYY-MM-DD</listitem>
+            <listitem><emphasis role="bold">ISO_TIME:</emphasis> HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">SQL:</emphasis> YYYYMMDDHHMMSS</listitem>
+            <listitem><emphasis role="bold">SQL_NOSEC:</emphasis> YYYYMMDDHHMM</listitem>
+            <listitem><emphasis role="bold">SQL_DATE:</emphasis> YYYYMMDD</listitem>
+            <listitem><emphasis role="bold">SQL_TIME:</emphasis> HHMMSS</listitem>
+            <listitem><emphasis role="bold">EUN:</emphasis> DD.MM.YYYY HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">EUN_DATE:</emphasis> DD.MM.YYYY</listitem>
+            <listitem><emphasis role="bold">EUN_TIME:</emphasis> HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">USA:</emphasis> MM/DD/YYYY HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">USA_DATE:</emphasis> MM/DD/YYYY</listitem>
+            <listitem><emphasis role="bold">USA_TIME:</emphasis> HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">HUM:</emphasis> A, DD B YYYY HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">HUM_NOWEEK:</emphasis> DD B YYYY HH:MM:SS</listitem>
+            <listitem><emphasis role="bold">HUM_DATE:</emphasis> A, DD B YYYY</listitem>
+            <listitem><emphasis role="bold">HUM_DATE_NOWEEK:</emphasis> DD B YYYY</listitem>
+            <listitem><emphasis role="bold">HUM_TIME:</emphasis> HH:MM:SS</listitem>
+        </itemizedlist>
+        
+        <para>YYYY = year, MM = month or minutes, DD = day, HH = hours, SS = seconds, A = abbreviated weekday name, B = abbreviated month name</para>
+        
+        <para>You can get and set dates using these different formats:</para>
+        
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_004.xml" />
+        
+    </sect1>
+    
+    <sect1 id="ydate_validating">
+        
+        <title>Validating dates</title>
+        
+        <para>There are few methods to check if dates and times are valid:</para>
+        
+        <itemizedlist>
+            <listitem><emphasis role="bold">isValid:</emphasis> checks if a date is valid using a format</listitem>
+            <listitem><emphasis role="bold">isValidDate:</emphasis> checks if a date is valid</listitem>
+            <listitem><emphasis role="bold">isValidTime:</emphasis> checks if a time is valid</listitem>
+        </itemizedlist>
+        
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_005.xml" />
+        
+    </sect1>
+    
+    <sect1 id="ydate_calculations">
+        
+        <title>Date calculations</title>
+        
+        <para>The following methods are used for date calculations:</para>
+        
+        <itemizedlist>
+            <listitem><emphasis role="bold">addDay:</emphasis> adds a number of days to the date</listitem>
+            <listitem><emphasis role="bold">addMonth:</emphasis> adds a number of months to the date</listitem>
+            <listitem><emphasis role="bold">addYear:</emphasis> adds a number of years to the date</listitem>
+            <listitem><emphasis role="bold">addHour:</emphasis> adds a number of hours to the date</listitem>
+            <listitem><emphasis role="bold">addMinute:</emphasis> adds a number of minutes to the date</listitem>
+            <listitem><emphasis role="bold">addSecond:</emphasis> adds a number of seconds to the date</listitem>
+            <listitem><emphasis role="bold">getDifference:</emphasis> returns an array with the difference of days, months, years, hours, etc between two dates</listitem>
+        </itemizedlist>
+        
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_006.xml" />
+        
+    </sect1>
+    
+    <sect1 id="ydate_creating">
+        
+        <title>Creating your own formats</title>
+        
+        <para>There's a class called YDDateFormat that is used for creating the formats used by YDDate. These formats are global to all YDDate objects, so you can create your own formats once and use them in any YDDate object many times you want.</para>
+        
+        <para>The YDDateFormat have the following static methods:</para>
+        
+        <itemizedlist>
+            <listitem><emphasis role="bold">setString:</emphasis> defines the format string</listitem>
+            <listitem><emphasis role="bold">setParts:</emphasis> defines the format parts</listitem>
+            <listitem><emphasis role="bold">setRegexes:</emphasis> defines the format regexes replacements</listitem>
+            <listitem><emphasis role="bold">setEmpty:</emphasis> defines the format empty date</listitem>
+        </itemizedlist>
+        
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddate_007.xml" />
+        
+    </sect1>
 
 </chapter>

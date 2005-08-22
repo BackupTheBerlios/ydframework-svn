@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: date calculations</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    $date1 = new YDDate( '2005-08-22 08:56:12' );
+    $date2 = new YDDate( '2005-09-26 18:56:12' );
+    
+    // Difference between Dates 1 and 2
+    $arr = $date1->getDifference( $date2 );
+    
+    print_r( $arr );
+    /*
+    array (
+      'years' => 0,
+      'quarters' => 0,
+      'months' => 1,
+      'weeks' => 4,
+      'days' => 35,
+      'weekdays' => 25,
+      'hours' => 850,
+      'minutes' => 51000,
+      'seconds' => 3060000,
+    )
+    */
+    
+    // The current datetime
+    $date = new YDDate(); // 2005-08-22 08:56:12
+
+    $date->addSecond( 70 );   // '2005-08-22 08:57:22'
+    $date->addMinute( 80 );   // '2005-08-22 10:17:22'
+    $date->addHour( 24 );     // '2005-08-23 10:17:22'
+    $date->addHour( 12 );     // '2005-08-23 22:17:22'
+    $date->addHour( -10 );    // '2005-08-23 12:17:22'
+    $date->addHour( -24 );    // '2005-08-22 12:17:22'
+    $date->addMinute( 10 );   // '2005-08-22 12:27:22'
+    $date->addMinute( 60 );   // '2005-08-22 13:27:22'
+    $date->addMinute( 120 );  // '2005-08-22 15:27:22'
+    $date->addMinute( -120 ); // '2005-08-22 13:27:22'
+    $date->addMinute( 360 );  // '2005-08-22 19:27:22'
+    $date->addSecond( 10 );   // '2005-08-22 19:27:32'
+    $date->addSecond( 60 );   // '2005-08-22 19:28:32'
+    $date->addSecond( 3600 ); // '2005-08-22 20:28:32'
+    $date->addSecond( -10 );  // '2005-08-22 20:28:33'
+    $date->addDay( 40 );      // '2005-10-01 20:28:33'
+    $date->addDay( -3 );      // '2005-09-28 20:28:33'
+    $date->addMonth( 1 );     // '2005-10-28 20:28:33'
+    $date->addMonth( 12 );    // '2006-10-28 20:28:33'
+    $date->addMonth( 10 );    // '2007-08-28 20:28:33'
+    $date->addMonth( -4 );    // '2007-04-28 20:28:33'
+    $date->addMonth( -20 );   // '2005-08-28 20:28:33'
+    $date->addYear( 1 );      // '2006-08-28 20:28:33'
+    $date->addYear( 12 );     // '2018-08-28 20:28:33'
+    $date->addYear( 10 );     // '2028-08-28 20:28:33'
+    $date->addYear( -4 );     // '2024-08-28 20:28:33'
+    $date->addYear( -20 );    // '2004-08-28 20:28:33'
+
+?>]]></programlisting>
+</example>

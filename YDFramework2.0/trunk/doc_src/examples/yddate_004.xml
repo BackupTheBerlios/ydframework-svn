@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using formats</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // The current datetime
+    $date = new YDDate(); // 2005-06-23 14:23:00
+    
+    $date->get( 'ISO' ); // 2005-06-23 14:23:00
+    $date->get( 'ISO_DATE' ); // 2005-06-23
+    $date->get( 'ISO_TIME' ); // 14:23:00
+    
+    $date->get( 'SQL' ); // 20050623142300
+    $date->get( 'SQL_DATE' ); // 20050623
+    
+    $date->get( 'EUN' ); // 23.06.2005 14:23:00
+    $date->get( 'EUN_DATE' ); // 23.06.2005
+    
+    $date->get( 'USA' ); // 06/23/2005 14:23:00
+    $date->get( 'USA_DATE' ); // 06/23/2005
+    
+    $date->get( 'HUM' ); // Mon, 23 Jun 2005 14:23:00
+    $date->get( 'HUM_NOWEEK' ); // 23 Jun 2005 14:23:00
+    $date->get( 'HUM_DATE' ); // Mon, 23 Jun 2005
+    $date->get( 'HUM_DATE_NOWEEK' ); // 23 Jun 2005
+    
+    // Setting dates using formats
+    
+    $date->set( '2005-06-23 14:23:00', 'ISO' );
+    $date->set( '2005-06-23', 'ISO_DATE' );
+    $date->set( '2005-06-23', 'ISO', true ); // parses all ISO family for a match
+    
+    $date->set( '20050623142300', 'SQL' );
+    $date->set( '20050623', 'SQL', true );
+    
+    $date->set( '23.06.2005', 'EUN' );
+    $date->set( '06/23/2005', 'USA' );
+    $date->set( 'Mon, 23 Jun 2005', 'HUM' ); // uses locale settings
+
+?>]]></programlisting>
+</example>

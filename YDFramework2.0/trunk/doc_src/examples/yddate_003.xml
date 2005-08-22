@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: other methods</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // The current datetime
+    $date = new YDDate();
+    
+    // Set the date to the beginning of the week
+    $date->beginOfWeek();
+    
+    // Set the date to the end of the week
+    $date->endOfWeek();
+    
+    // Get the weekday name
+    $name = $date->getDayName();
+    $abbr = $date->getDayName( true ); // abbreviated
+    
+    // Get the month name
+    $name = $date->getMonthName();
+    $abbr = $date->getMonthName( true ); // abbreviated
+    
+    // Get the number of days in a month
+    $num = $date->getDaysInMonth();
+    $num = $date->getDaysInMonth( 9, 2005 );
+    
+    // Get the number of days in a year
+    $num = $date->getDaysInYear();
+    $num = $date->getDaysInYear( 2005 );
+    
+    // Get the year quarter
+    $quarter = $date->getQuarter();
+    
+    // Get the year day
+    $num = $date->getYearDay();
+    
+    // Get the number of year from the date to today (good for defining ages)
+    $num = $date->getYearsToToday();
+    
+    // Boolean indicating if the date is in the current hour, minute, etc
+    $boo = $date->isCurrentHour();
+    $boo = $date->isCurrentMinute();
+    $boo = $date->isCurrentMonth();
+    $boo = $date->isCurrentYear();
+    $boo = $date->isToday(); // isCurrentDay
+    
+    // Boolean indicating if the date is tomorrow
+    $boo = $date->isTomorrow();
+    
+    // Boolean indicating if the date is yesterday
+    $boo = $date->isYesterday();
+    
+    // Boolean indicating if the date is empty
+    $boo = $date->isEmpty();
+    $boo = $date->isDateEmpty();
+    $boo = $date->isTimeEmpty();
+    
+    // Boolean indicating if the year is a leap year
+    $boo = $date->isLeapYear();
+    $boo = $date->isLeapYear( 2005 );
+
+?>]]></programlisting>
+</example>
