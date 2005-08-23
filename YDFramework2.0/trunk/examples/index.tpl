@@ -571,6 +571,7 @@
                 <a href="graph.php?do=demo10">Impuls chart</a> <br/>
                 <a href="graph.php?do=demo11">Impuls and dots chart</a> <br/>
                 <a href="graph.php?do=demo12">Impuls, dots and lines chart</a> <br/>
+                <a href="graph.php?do=demo13">Pie chart</a> <br/>
             </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=graph.php">graph.php</a>

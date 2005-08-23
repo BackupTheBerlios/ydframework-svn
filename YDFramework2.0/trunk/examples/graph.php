@@ -6,6 +6,7 @@
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDGraph.php' );
+    YDInclude( 'YDGraphPie.php' );
 
     // Class definition
     class graph extends YDRequest {
@@ -19,7 +20,11 @@
             $this->vCht4 = array(60,40,20,34,26,52,41,20,34,43,64,40);
             $this->vCht5 = array(12,21,12,27,14,23,21,5,29,23,12,29);
             $this->vCht6 = array(5,7,3,15,7,8,2,2,2,11,22,3);
+            $this->vCht7 = array(5,7,3,15);
+            $this->vCht8 = array(1500, 2000, 4555, 5000, 200, 1514);
+            $this->vColors8 = array( '#990000', '#AAAAFF', '#F4A460', '#70DB93', '#B2DFEE' );
             $this->vLabels = array('Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec');
+            $this->vLabels8 = array( 'Brazil', 'Belgium', 'Portugal', 'Holland', 'France', 'Germany' );
 
         }
 
@@ -236,6 +241,17 @@
             $ochart->setXAxis('#006600', MEDIUM_SOLID, 1, "", '%s');
             $ochart->setYAxis('#006600', SOLID, 5, "Y Axis", '%d');
             $ochart->setLabels($this->vLabels, '#000000', 1, HORIZONTAL);
+            $ochart->plot();
+        }
+        
+        // PIE CHART
+        function actionDemo13() {
+            
+            $ochart = new YDGraphPie(300,200,7 );
+            $ochart->setTitle("Countries","#000000",2);
+            $ochart->setValues($this->vCht8, SOLID );
+            $ochart->setLabels($this->vLabels8, '#000000', 2 );
+            $ochart->setColors($this->vColors8 );
             $ochart->plot();
         }
 
