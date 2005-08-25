@@ -70,7 +70,7 @@
                 <td class="adminRowL">{$page.user_name}</td>
                 <td class="adminRowL">{$page.title}</td>
                 <td class="adminRowR">
-                    <a href="../page.php?&id={$page.id}" target="_blank">{t w="view"}</a>
+                    <a href="../page.php?id={$page.id}" target="_blank">{t w="view"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$page.id}">{t w="edit"}</a>
                     |
@@ -103,7 +103,7 @@
                     {else}
                         {t w="change_page_desc"} ({$form.title.value})
                         &nbsp;
-                        <a href="../page.php?&id={$page.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
+                        <a href="../page.php?id={$page.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
                     {/if}
                 </th>
                 <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>

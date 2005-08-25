@@ -71,7 +71,7 @@
                 <td class="adminRowL">{$item.user_name}</td>
                 <td class="adminRowL">{$item.title}</td>
                 <td class="adminRowR">
-                    <a href="../item.php?&id={$item.id}" target="_blank">{t w="view"}</a>
+                    <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{t w="edit"}</a>
                     |
@@ -110,7 +110,7 @@
                     {else}
                         {t w="change_item_desc"} ({$item.title})
                         &nbsp;
-                        <a href="../item.php?&id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
+                        <a href="../item.php?id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
                     {/if}
                 </th>
                 <th class="adminRowLGR">

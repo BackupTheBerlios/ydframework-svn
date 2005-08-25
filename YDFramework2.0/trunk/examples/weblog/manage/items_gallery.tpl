@@ -58,7 +58,7 @@
                 &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
                 ({$item.title})
                 &nbsp;
-                <a href="../item.php?&id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
+                <a href="../item.php?id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
             </th>
         </tr>
 

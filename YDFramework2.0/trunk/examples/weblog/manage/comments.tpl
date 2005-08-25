@@ -58,7 +58,7 @@
                 &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
                 ({$item.title})
                 &nbsp;
-                <a href="../item.php?&id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
+                <a href="../item.php?id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
             </th>
         </tr>
 
@@ -83,7 +83,7 @@
                 <td class="adminRowL">{$comment.username}</td>
                 <td class="adminRowL">{$comment.comment|bbcode|strip_tags|truncate}</td>
                 <td class="adminRowR">
-                    <a href="../item.php?&id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
+                    <a href="../item.php?id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
                     |
