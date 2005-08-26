@@ -79,6 +79,7 @@
             $this->m_showtotal   = false;
             $this->m_total       = null;
             $this->m_formattotal = true;
+            $this->m_totalstring = 'Total: ';
             
         }
         
@@ -232,7 +233,7 @@
                 if ( $this->m_formattotal ) {
                     $sum = number_format( $sum, $this->m_numberOfDecimals, $this->m_decimalSeparator, $this->m_thousandsSeparator );
                 }
-                imagestring( $this->m_image, $this->m_labelsFont, $w+20, $h+20, 'Total: ' . $sum, $this->m_labelsTextColor );
+                imagestring( $this->m_image, $this->m_labelsFont, $w+20, $h+20, $this->m_totalstring . $sum, $this->m_labelsTextColor );
             }
             
             if( strlen($file) > 0 ){
@@ -336,7 +337,7 @@
         /**
          *  This function sets a custom total value
          *
-         *  @param $total       The total value
+         *  @param $total       (optional) The total value. If null, the sum of all values passed with setValues. Default: null.
          *  @param $format      (optional) Format the value with the definitions of setFormat. Default: false.
          */
         function setTotal( $total=null, $format=false ) {
@@ -347,9 +348,13 @@
         
         /**
          *  This function defines if the total value should be shown or not
+         *
+         *  @param  $string  (optional)  The string to be added before the total value. Default: "Total: ".
+         *  @param  $show    (optional)  Boolean indicating if the total should be displayed or not. Default: true.
          */
-        function showTotal( $show=true ) {
-            $this->m_showtotal = (boolean) $show;
+        function showTotal( $string='Total: ', $show=true ) {
+            $this->m_showtotal   = (boolean) $show;
+            $this->m_totalstring = $string;
         }
         
     }
