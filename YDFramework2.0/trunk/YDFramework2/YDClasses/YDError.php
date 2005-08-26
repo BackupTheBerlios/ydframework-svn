@@ -40,8 +40,12 @@
     // The error reporting level
     YDConfig::set( 'YD_ERROR_REPORTING', YD_ERROR_NONE, false );
     
+    // The error catch number
+    YDConfig::set( 'YD_ERROR_CATCH', array(), true );
+    YDConfig::set( 'YD_ERROR_CATCH_TEMP', array(), true );
+    
     // The stored errors
-    YDConfig::set( YDConfig::get( 'YD_ERROR_STORE_NAME' ), array(), false );
+    YDConfig::set( YDConfig::get( 'YD_ERROR_STORE_NAME' ), array(), true );
 
     // Global names for the errors
     YDConfig::set( 'YD_ERROR_LEVELS', array(
@@ -64,10 +68,11 @@
          *  @param  $message        The error message.
          *  @param  $file           The file where the error was triggered.
          *  @param  $line           The line of the file.
-         *  @param  $function       The function where it happened.
-         *  @param  $stacktrace     The complete stack trace for this error
+         *  @param  $function       (optional) The function where it happened.
+         *  @param  $stacktrace     (optional) The complete stack trace for this error
+         *  @param  $custom         (optional) A custom value
          */
-        function YDError( $level, $message, $file, $line, $function='', $stacktrace='' ) {
+        function YDError( $level, $message, $file, $line, $function='', $stacktrace='', $custom=null ) {
             
             $this->YDBase();
             
@@ -79,22 +84,59 @@
             $this->file         = $file;
             $this->line         = $line;
             $this->func         = $function;
+            $this->custom       = $custom;
+            $this->run_file     = null;
+            $this->run_line     = null;
+            $this->md5          = md5( $level . $message . $file . $line . $function . $stacktrace . mt_rand() );
             $this->stacktrace   = trim( $stacktrace );
             
         }
         
         /**
-         *  This function checks if the $mixed parameter is an error object.
+         *  This function catch the last stored error.
          *
-         *  @param  $mixed  The variable to be checked.
+         *  @param  $error  (optional) Variable or array of variables to check if they are errors. If null, all triggered errors.
+         *  @param  $level  (optional) All errors bellow this $level will be catched. Default: YD_ERROR_FATAL.
          *
-         *  @returns     A boolean indicating if $mixed is an error object.
+         *  @returns     A YDError object or false.
          *
          *  @static
          */
-        function isError( $mixed ) {
-            if ( is_object( $mixed ) && is_a( $mixed, 'YDError' ) ) {
-                return true;
+        function catch( $error=null, $level=YD_ERROR_FATAL ) {
+            
+            $catch = YDConfig::get( 'YD_ERROR_CATCH' );
+            $catch_temp = YDConfig::get( 'YD_ERROR_CATCH_TEMP' );
+            
+            if ( is_null( $error ) ) {
+                $c = & $catch;
+                $errors = YDError::getAll();
+            } else { 
+                $c = & $catch_temp;
+                if ( is_array( $error ) ) {
+                    $errors = $error;
+                } else {
+                    $errors = array( $error );
+                }
+            }
+            
+            foreach ( $errors as $e ) {
+                
+                if ( is_object( $e ) && is_a( $e, 'YDError' ) && $e->level <= $level && ! in_array( $e->md5, $c ) ) {
+                    
+                    if ( ! is_null( $error ) ) {
+                        YDConfig::set( 'YD_ERROR_CATCH_TEMP', array_merge( $catch_temp, array( $e->md5 ) ) );
+                    } 
+                    YDConfig::set( 'YD_ERROR_CATCH', array_merge( $catch, array( $e->md5 ) ) );
+                    
+                    $stack = debug_backtrace();
+                    $e->run_file = $stack[ 0 ]['file'];
+                    $e->run_line = $stack[ 0 ]['line'];
+                    
+                    return $e;
+                }
+            }
+            if ( ! is_null( $error ) ) {
+                YDConfig::set( 'YD_ERROR_CATCH_TEMP', array(), true );
             }
             return false;
         }
@@ -116,39 +158,42 @@
          *  This function creates a notice error.
          *
          *  @param  $message  The error message.
+         *  @param  $custom   (optional) A custom value
          *
          *  @returns     An YDError object.
          *
          *  @static
          */
-        function notice( $message ) {
-            return YDError::_error( YD_ERROR_NOTICE, $message );
+        function notice( $message, $custom=null ) {
+            return YDError::_error( YD_ERROR_NOTICE, $message, $custom );
         }
 
         /**
          *  This function creates a warning error.
          *
          *  @param  $message  The error message.
+         *  @param  $custom   (optional) A custom value
          *
          *  @returns     An YDError object.
          *
          *  @static
          */
-        function warning( $message ) {
-            return YDError::_error( YD_ERROR_WARNING, $message );
+        function warning( $message, $custom=null ) {
+            return YDError::_error( YD_ERROR_WARNING, $message, $custom );
         }
 
         /**
          *  This function creates a fatal error.
          *
          *  @param  $message  The error message.
+         *  @param  $custom   (optional) A custom value
          *
          *  @returns     An YDError object.
          *
          *  @static
          */
-        function fatal( $message ) {
-            return YDError::_error( YD_ERROR_FATAL, $message );
+        function fatal( $message, $custom=null ) {
+            return YDError::_error( YD_ERROR_FATAL, $message, $custom );
         }
 
         /**
@@ -158,6 +203,8 @@
          */
         function clear() {
             YDConfig::set( YDConfig::get( 'YD_ERROR_STORE_NAME' ), array(), true );
+            YDConfig::set( 'YD_ERROR_CATCH', array(), true );
+            YDConfig::set( 'YD_ERROR_CATCH_TEMP', array(), true );
         }
         
         /**
@@ -167,63 +214,49 @@
          *
          *  @static
          */
-        function get() {
+        function getAll() {
             return YDConfig::get( YDConfig::get( 'YD_ERROR_STORE_NAME' ) );
         }
         
         /**
-         *  This function dumps the last stored error.
+         *  This function dumps the error.
          *
          *  @param  $html  (optional) Dump an HTML error. Default: true.
          */
         function dump( $html=true ) {
-            
-            // Get the stored errors
-            $errors = YDError::get();
-            
-            // If no errors, returns empty
-            if ( ! sizeof( $errors ) ) {
-                return '';
-            }
-            
-            // Get last error
-            $last = array_pop( $errors );
-            
-            // Dump last error
-            echo( YDError::r_dump( $html, 1 ) );
-
-            // If fatal error, stops the script execution
-            if ( $last->level == YD_ERROR_FATAL ) {
-                die();
-            }
-            
+            echo $this->_dump( $html );
         }
         
         /**
-         *  This function returns the dump of the last stored error.
+         *  This function returns the dump string of the error.
+         *
+         *  @param  $html  (optional) Dump an HTML error. Default: true.
+         *
+         *  @returns  The dump information.
+         */
+        function r_dump( $html=true ) {
+            return $this->_dump( $html );
+        }
+        
+        /**
+         *  This function returns the dump information of the error.
          *
          *  @param  $html  (optional) Dump an HTML error. Default: true.
          *  @param  $back  (optional) The backtrace level.
          *
-         *  @returns   The last error dump information.
+         *  @returns   The dump information.
+         *
+         *  @internal
          */
-        function r_dump( $html=true, $back=0 ) {
-            
-            // Get the stored errors
-            $errors = YDError::get();
-            
-            // If no errors, returns empty
-            if ( ! sizeof( $errors ) ) {
-                return '';
-            }
-            
-            // Get last error
-            $last = array_pop( $errors );
-            
+        function _dump( $html=true, $back=1 ) {
+        
             // Get the file and line of the dump
             $stack = debug_backtrace();
             $file = $stack[ $back ]['file'];
             $line = $stack[ $back ]['line'];
+            
+            $this->run_file = $this->run_file ? $this->run_file : $file;
+            $this->run_line = $this->run_line ? $this->run_line : $line;
             
             // Get the error levels
             $levels = YDConfig::get( 'YD_ERROR_LEVELS' );
@@ -231,23 +264,23 @@
             // Creates the message
             $msg = '';
             if ( $html ) $msg .= '<br /><b>';
-            $msg .= strtoupper( $levels[ $last->level ] ) . ': ';
+            $msg .= strtoupper( $levels[ $this->level ] ) . ': ';
             if ( $html ) $msg .= '</b>';
-            $msg .= $last->message . YD_CRLF;
+            $msg .= $this->message . YD_CRLF;
             
             // File
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'File: ';
             if ( $html ) $msg .= '</b>';
-            $msg .= $last->file . YD_CRLF;
+            $msg .= $this->file . YD_CRLF;
             
             // File line
             if ( $html ) $msg .= '<br />';
             if ( $html ) $msg .= '<b>';
             $msg .= 'Line: ';
             if ( $html ) $msg .= '</b>';
-            $msg .= $last->line . YD_CRLF;
+            $msg .= $this->line . YD_CRLF;
             
             // Dump
             if ( $html ) $msg .= '<br />';
@@ -268,14 +301,14 @@
             if ( $html ) $msg .= '<b>';
             $msg .= 'Stack Trace: ';
             if ( $html ) $msg .= '</b>';
-            $msg .= nl2br( str_replace( ' ', '&nbsp;', $last->stacktrace ) );
+            $msg .= nl2br( str_replace( ' ', '&nbsp;', $this->stacktrace ) );
             if ( $html ) $msg .= '<br />';
             $msg .= YD_CRLF;
             
             return $msg;
         
         }
-
+        
         /**
          *  This function creates an YDError object and store it.
          *
@@ -287,7 +320,7 @@
          *  @internal
          *  @static
          */
-        function _error( $level, $message ) {
+        function _error( $level, $message, $custom=null ) {
 
             // Get the current stack
             $stack = debug_backtrace();
@@ -321,18 +354,21 @@
             $error = new YDError(
                 $level, $message, $stack[1]['file'], $stack[1]['line'],
                 $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'],
-                $stacktrace
+                $stacktrace, $custom
             );
             
             // Store the error object on the global errors array
             YDConfig::set(
                 YDConfig::get( 'YD_ERROR_STORE_NAME' ),
-                array_merge( YDConfig::get( YDConfig::get( 'YD_ERROR_STORE_NAME' ) ), array( $error ) )
+                array_merge( YDError::getAll(), array( $error ) )
             );
             
             // If reporting for this level is on, dump the error
             if ( $level <= YDConfig::get( 'YD_ERROR_REPORTING' ) ) {
-                YDError::dump();
+                echo $error->_dump( true, 2 );
+                if ( $level == YD_ERROR_FATAL ) {
+                    die();
+                }
             }
             
             // Return the error object

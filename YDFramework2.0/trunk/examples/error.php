@@ -36,13 +36,13 @@
             $res = $my->test(); 
 
             // Check for errors
-            if ( YDError::isError( $res ) ) {
-                YDDebugUtil::dump( $res, '$res' );
-                $res->level; // 3 
-                $res->name; // fatal 
-                $res->message; // We couldn't do something 
-                $res->file; // ..../MyClass.php 
-                $res->line; // x 
+            while ( $err = YDError::catch( $res ) ) {
+                YDDebugUtil::dump( $err, '$err' );
+                $err->level; // 3 
+                $err->name; // fatal 
+                $err->message; // We couldn't do something 
+                $err->file; // ..../MyClass.php 
+                $err->line; // x 
             } 
 
             // We can also set automatic reporting 
@@ -52,12 +52,12 @@
             YDError::reporting( YD_ERROR_NONE );    // don't display errors 
 
             // We can get the last errors array 
-            $errors = YDError::get(); 
+            $errors = YDError::getAll(); 
             YDDebugUtil::dump( $errors, '$errors' );
 
             // Or we could dump the error 
-            if ( YDError::isError( $res ) ) { 
-                YDError::dump(); // dump the last error 
+            if ( $err = YDError::catch( $res ) ) { 
+                $err->dump();
             } 
 
         }
