@@ -23,7 +23,7 @@
             
             // Add a first set of elements
             $form->addElement( 'date', 'date1', 'Date1', '' );
-            $form->addElement( 'date', 'date2', 'Date2 (monthabbr = true)', '', array( 'monthabbr' => true ) );
+            $form->addElement( 'date', 'date2', 'Date2 (monthabbr = true)', array( 'id' => 'mydate' ), array( 'monthabbr' => true ) );
             $form->addElement( 'date', 'date3', 'Date3 (monthnumber = true)', '', array( 'monthnumber' => true ) );
             $form->addElement( 'date', 'date4', 'Date4 (monthucfirst = true)', '', array( 'monthucfirst' => true ) );
             $form->addElement( 'date', 'date5', 'Date5 (yearstart = 1970, yearend=2007, yeartwodigits = true)', '', array( 'yearstart' => 1970, 'yearend' => 2007, 'yeartwodigits' => true ) );

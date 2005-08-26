@@ -1413,7 +1413,7 @@
                 'type'        => $this->_type,
                 'labelname'   => $this->_label,
                 'attributes'  => $this->_attributes,
-                'label'       => '<label for="' . $this->_form . '_' . $this->_name . '">' . $this->_label . '</label>',
+                'label'       => '<label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label>',
                 'options'     => $this->_options,
                 'placeLabel'  => $this->_placeLabel,
                 'html'        => $this->toHtml(),

@@ -139,8 +139,6 @@
 
             // Create the list of attributes
             $attribs = array(
-                'name' => $this->_form . '_' . $this->_name,
-                'id' => $this->_form . '_' . $this->_name,
                 'class' => 'bbtextarea',
             );
             //if ( ! isset( $attribs['width'] ) ) { $attribs['width'] = '640'; }
@@ -200,10 +198,10 @@
                 $out .= '<td class="bbtoolbar">';
                 foreach ( $this->_buttons as $button ) {
                     if ( $button['type'] == 'modifier' )  {
-                        $out .= '<a href="#" onclick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
+                        $out .= '<a href="#" onclick="void( doButton( \'' . addslashes( $attribs['id'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
                     }
                     if ( $button['type'] == 'simplepopup' )  {
-                        $out .= '<a href="#" onclick="void( doButton( \'' . addslashes( $attribs['name'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
+                        $out .= '<a href="#" onclick="void( doButton( \'' . addslashes( $attribs['id'] ) . '\', \'' . addslashes( $button['name'] ) . '\') ); return false;">[ ' . $button['label'] . ' ]</a> ';
                     }
                     if ( $button['type'] == 'popupwindow' )  {
                         $out .= '<a href="#" onclick="void( openWin( \'' . addslashes( $button['url'] ) . '\', \'' . addslashes( $button['name'] ) . '\', \'' . addslashes( $button['params'] ) . '\' ) ); return false;">[ ' . $button['label'] . ' ]</a> ';

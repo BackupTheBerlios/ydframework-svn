@@ -94,8 +94,11 @@
             // Add the elements
             foreach ( $elements as $element ) {
                 
+                $attrib = $this->_attributes;
+                $attrib['id'] .= '[' . $element . ']';
+                
                 $this->$element = new YDFormElement_Select(
-                    $this->_form, $this->_name . '[' . $element . ']', '', $this->_attributes, $$element
+                    $this->_form, $this->_name . '[' . $element . ']', '', $attrib, $$element
                 );
                 
             }
