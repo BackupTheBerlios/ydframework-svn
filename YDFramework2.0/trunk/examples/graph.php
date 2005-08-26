@@ -252,9 +252,23 @@
             $ochart->setValues($this->vCht8, SOLID );
             $ochart->setLabels($this->vLabels8, '#000000', 2 );
             $ochart->setColors($this->vColors8 );
+            $ochart->showTotal();
             $ochart->plot();
         }
 
+        // PIE CHART
+        function actionDemo14() {
+            
+            $ochart = new YDGraphPie(300,200,7 );
+            $ochart->setTitle("Countries","#000000",2);
+            $ochart->setValues($this->vCht8, SOLID );
+            $ochart->setLabels($this->vLabels8, '#000000', 2 );
+            $ochart->setColors($this->vColors8 );
+            $ochart->setTotal( '14 k' );
+            $ochart->plot();
+        }
+        
+        
     }
 
     // Process the request

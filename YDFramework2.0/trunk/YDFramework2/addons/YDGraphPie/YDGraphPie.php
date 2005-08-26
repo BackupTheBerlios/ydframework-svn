@@ -76,6 +76,10 @@
             $this->m_thousandsSeparator = ',';
             $this->m_decimalSeparator = '.';
             
+            $this->m_showtotal   = false;
+            $this->m_total       = null;
+            $this->m_formattotal = true;
+            
         }
         
         /**
@@ -220,6 +224,16 @@
                 imagestring( $this->m_image, $this->m_labelsFont, $w+40, $h+$align, str_repeat( ' ', ( $max_len - strlen( $percent ) ) ) . $percent . "% " . $this->m_labels[$i], $this->m_labelsTextColor );
                 
             }
+
+            if ( $this->m_showtotal ) {
+                if ( isset( $this->m_total ) ) {
+                    $sum = $this->m_total;
+                } 
+                if ( $this->m_formattotal ) {
+                    $sum = number_format( $sum, $this->m_numberOfDecimals, $this->m_decimalSeparator, $this->m_thousandsSeparator );
+                }
+                imagestring( $this->m_image, $this->m_labelsFont, $w+20, $h+20, 'Total: ' . $sum, $this->m_labelsTextColor );
+            }
             
             if( strlen($file) > 0 ){
                 switch ( YDConfig::get( 'YD_GRAPH_TYPE' ) ) {
@@ -317,6 +331,25 @@
          */
         function setColors( & $colors ) {
             $this->m_colors = & $colors;
+        }
+        
+        /**
+         *  This function sets a custom total value
+         *
+         *  @param $total       The total value
+         *  @param $format      (optional) Format the value with the definitions of setFormat. Default: false.
+         */
+        function setTotal( $total=null, $format=false ) {
+            $this->m_total = $total;
+            $this->m_showtotal = true;
+            $this->m_formattotal = $format;
+        }
+        
+        /**
+         *  This function defines if the total value should be shown or not
+         */
+        function showTotal( $show=true ) {
+            $this->m_showtotal = (boolean) $show;
         }
         
     }
