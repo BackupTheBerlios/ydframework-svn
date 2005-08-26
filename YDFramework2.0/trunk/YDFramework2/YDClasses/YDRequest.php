@@ -199,7 +199,7 @@
          */
         function redirect( $url ) {
             if ( strpos( strtoupper( $_SERVER['SERVER_SOFTWARE'] ), 'IIS' ) ) {
-               header( 'Refresh: 0; ' . $url ); 
+               header( 'Refresh: 0; URL=' . $url ); 
             } else { 
                header( 'Location: '. $url ); 
             } 
