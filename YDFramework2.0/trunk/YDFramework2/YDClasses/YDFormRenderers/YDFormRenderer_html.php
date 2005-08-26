@@ -57,11 +57,11 @@
             $form = $this->_form->toArray();
 
             // Start with the form element
-            $html = $form['tag'];
+            $html = $form['tag'] . YD_CRLF;
             
             // Add form errors if any
             if ( isset( $form['errors']['__ALL__'] ) ) {
-                $html .= '<p>' . $this->_form->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_form->_htmlErrorEnd . '</p>';
+                $html .= '<p>' . $this->_form->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_form->_htmlErrorEnd . '</p>' . YD_CRLF;
             }
 
             // Remove some things from the array
@@ -79,7 +79,7 @@
                     if ( $element['required'] ) { $reqCount++; };
                 }
                 if ( $reqCount > 0 ) {
-                    $html .= '<p>' . $this->_form->_requiredNote . '</p>';
+                    $html .= '<p>' . $this->_form->_requiredNote . '</p>' . YD_CRLF;
                 }
             }
 
@@ -89,30 +89,31 @@
                     continue;
                 }
                 if ( $element['type'] == 'hidden' ) {
-                    $html .= $element['html'];
+                    $html .= $element['html'] . YD_CRLF;
                 } else {
                     $html .= '<p>';
                     if ( $element['placeLabel'] == 'after' ) {
-                        $html .= $element['html'] . $element['label_html'];
+                        $html .= $element['html'] . YD_CRLF . $element['label_html'];
                         if ( ! empty( $element['error'] ) ) {
-                            $html .= '<br />' . $element['error_html'];
+                            $html .= YD_CRLF . '<br />' . $element['error_html'];
                         }
                     } else if ( $element['placeLabel'] == 'before' ) {
                         $html .= $element['label_html'];
                         if ( ! empty( $element['label'] ) ) {
                             $html .= '<br />';
                         }
+                        $html .= YD_CRLF;
                         if ( ! empty( $element['error'] ) ) {
-                            $html .= $element['error_html'] . '<br />';
+                            $html .= $element['error_html'] . '<br />' . YD_CRLF;
                         }
                         $html .= $element['html'];
                     } else {
                         if ( ! empty( $element['error'] ) ) {
-                            $html .= $element['error_html'] . '<br />';
+                            $html .= $element['error_html'] . '<br />' . YD_CRLF;
                         }
                         $html .= $element['html'];
                     }
-                    $html .= '</p>';
+                    $html .= '</p>' . YD_CRLF;
                 }
             }
 
@@ -124,7 +125,7 @@
                 }
             }
             if ( sizeof( $buttons ) > 0 ) {
-                $html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>';
+                $html .= '<p>' . implode( '&nbsp;', $buttons ) . '</p>' . YD_CRLF;
             }
 
             // Close the form tag
