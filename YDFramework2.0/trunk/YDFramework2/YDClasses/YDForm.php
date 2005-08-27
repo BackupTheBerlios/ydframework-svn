@@ -160,6 +160,7 @@
             // Add the renderers
             $this->registerRenderer( 'array', 'YDFormRenderer_array', 'YDFormRenderer_array.php' );
             $this->registerRenderer( 'html', 'YDFormRenderer_html', 'YDFormRenderer_html.php' );
+            $this->registerRenderer( 'xml', 'YDFormRenderer_xml', 'YDFormRenderer_xml.php' );
 
         }
 

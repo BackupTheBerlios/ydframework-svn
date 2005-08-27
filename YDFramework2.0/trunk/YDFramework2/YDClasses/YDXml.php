@@ -56,9 +56,9 @@
             
             $this->_XML();
             
-            if ( strlen( $mixed ) ) {
+            if ( ! empty( $mixed ) ) {
                 $this->load( $mixed, $type );
-            }
+            } 
             
         }
         
@@ -99,7 +99,7 @@
          */
         function load( $mixed, $type=YD_XML_FILE ) {
             
-            if ( ! strlen( $mixed ) ) {
+            if ( empty( $mixed ) ) {
                 trigger_error( 'No file, string, array or url specified', YD_ERROR );
             }
             
