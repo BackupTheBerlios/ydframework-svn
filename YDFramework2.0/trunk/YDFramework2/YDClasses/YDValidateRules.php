@@ -72,7 +72,7 @@
          *	@param $opts	The minimum length of the variable.
          */
         function minlength( $val, $opts ) {
-            if ( strlen( $val ) >= $opts ) {
+            if ( strlen( $val ) >= intval( $opts ) ) {
                 return true;
             } else {
                 return false;
@@ -87,6 +87,50 @@
          */
         function rangelength( $val, $opts ) {
             if ( ( strlen( $val ) >= intval( $opts[0] ) ) && ( strlen( $val ) <= intval( $opts[1] ) ) ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         *	This function returns true if the escaped variable is smaller than the specified length, otherwise, it returns
+         *	false.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	Array containing the maximum length and the database driver object.
+         */
+        function maxlength_escape( $val, $opts ) {
+            if ( strlen( $opts[1]->escape( $val ) ) <= intval( $opts[0] ) ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        /**
+         *	This function returns true if the escaped variable is bigger than the specified length, otherwise, it returns
+         *	false.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	Array containing the minimum length and the database driver object.
+         */
+        function minlength_escape( $val, $opts ) {
+            if ( strlen( $opts[1]->escape( $val ) ) >= intval( $opts[0] ) ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         *  This function returns true if the length of the escaped variable is contained in the indicated range.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	Array containing the minimum length, maximum length and the database driver object.
+         */
+        function rangelength_escape( $val, $opts ) {
+            if ( ( strlen( $opts[2]->escape( $val ) ) >= intval( $opts[0] ) ) && ( strlen( $opts[2]->escape( $val ) ) <= intval( $opts[1] ) ) ) {
                 return true;
             } else {
                 return false;

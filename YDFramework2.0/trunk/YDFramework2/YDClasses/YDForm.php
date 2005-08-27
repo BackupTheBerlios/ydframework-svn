@@ -147,6 +147,9 @@
             $this->registerRule( 'date', array( 'YDValidateRules', 'date' ), 'YDValidateRules.php' );
             $this->registerRule( 'time', array( 'YDValidateRules', 'time' ), 'YDValidateRules.php' );
             $this->registerRule( 'datetime', array( 'YDValidateRules', 'datetime' ), 'YDValidateRules.php' );
+            $this->registerRule( 'minlength_escape', array( 'YDValidateRules', 'minlength_escape' ), 'YDValidateRules.php' );
+            $this->registerRule( 'maxlength_escape', array( 'YDValidateRules', 'maxlength_escape' ), 'YDValidateRules.php' );
+            $this->registerRule( 'rangelength_escape', array( 'YDValidateRules', 'rangelength_escape' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );
