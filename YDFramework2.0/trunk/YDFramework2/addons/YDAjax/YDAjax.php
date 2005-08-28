@@ -665,6 +665,16 @@
 			return $this->response->sendFormErrors( $form, $id, $separator );
 		}
 
+
+        /**
+         *	This method adds custom javascript code
+         *
+         *	@param $jsstring	Javascript code
+         */	
+		function addScript( $jsstring ){
+
+			return $this->response->addScript( $jsstring );
+		}
 }
 
 
@@ -755,18 +765,6 @@ class YDAjaxResponse extends xajaxResponse{
 		
 			$this->addAlert( $message );
 			return $this->getXML();
-		}
-
-
-
-        /**
-         *	This method assigns a custom javascript function
-         *
-         *	@param $function	Javascript function
-         */	
-		function assignFunction( $function ){
-		
-			$this->addScript( $function );
 		}
 
 
