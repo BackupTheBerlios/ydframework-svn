@@ -88,7 +88,7 @@
             $this->run_file     = null;
             $this->run_line     = null;
             $this->md5          = md5( $level . $message . $file . $line . $function . $stacktrace . mt_rand() );
-            $this->stacktrace   = trim( $stacktrace );
+            $this->stacktrace   = $stacktrace;
             
         }
         
@@ -301,7 +301,11 @@
             if ( $html ) $msg .= '<b>';
             $msg .= 'Stack Trace: ';
             if ( $html ) $msg .= '</b>';
-            $msg .= nl2br( str_replace( ' ', '&nbsp;', $this->stacktrace ) );
+            if ( $html ) {
+                $msg .= nl2br( str_replace( ' ', '&nbsp;', $this->stacktrace ) );
+            } else {
+                $msg .= $this->stacktrace;
+            }
             if ( $html ) $msg .= '<br />';
             $msg .= YD_CRLF;
             
@@ -329,7 +333,7 @@
             $levels = YDConfig::get( 'YD_ERROR_LEVELS' );
             
             // Get the complete stack trace
-            $stacktrace = strtoupper( $levels[ $level ] ) . ': ' . $message . YD_CRLF;
+            $stacktrace = YD_CRLF;
             foreach( array_slice( $stack, 1 ) as $t ) {
                 $stacktrace .= '    @ ';
                 if ( isset( $t['file'] ) ) {
