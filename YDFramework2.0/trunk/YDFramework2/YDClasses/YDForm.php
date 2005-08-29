@@ -753,7 +753,7 @@
             }
 
             // Check if there are any rules, if not, form is valid and return true
-            if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 ) {
+            if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 && sizeof( $this->_comparerules ) == 0) {
                 return true;
             }
 
@@ -880,7 +880,7 @@
                                 array_push( $values, $this->getValue( $element ) );
                             }
                         }
-
+                        
                         // Check if the value is the same for each element
                         if ( sizeof( array_unique( $values ) ) > 1 ) {
                             $this->_errors[ $rule['elements'][0] ] =  $rule['error'];
