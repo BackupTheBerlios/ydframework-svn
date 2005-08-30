@@ -231,7 +231,26 @@
 
             // Return the new array
             return $output;
-        } 
+        }
+        
+        /**
+         *  This function will implode a 1-level array in a string.
+         *
+         *  @param $input      The array to implode.
+         *  @param $glue       (optional) The key/value glue. Default: =
+         *  @param $separator  (optional) The items separator. Default: ,
+         *
+         *  @returns       The imploded string.
+         *
+         *  @static
+         */
+        function implode( $input, $glue='=', $separator=',' ) {
+            $return = '';
+            foreach ( $input as $k => $v ) {
+                $return .= $separator . $k . $glue . $v;
+            }
+            return substr( $return, 1 ); 
+        }
 
     }
 
