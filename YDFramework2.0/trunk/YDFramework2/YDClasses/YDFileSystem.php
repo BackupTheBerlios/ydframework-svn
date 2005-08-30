@@ -339,14 +339,18 @@
             // Loop over the different elements
             foreach ( $args as $arg ) {
 
+                if ( ! strlen( $arg ) ) {
+                    continue;
+                }
+                
+                // Normalize the path elements
+                $arg = str_replace( '/', YDPath::getDirectorySeparator(), $arg );
+                $arg = str_replace( '\\', YDPath::getDirectorySeparator(), $arg );
+                
                 // Check for an absolute path
                 if ( YDPath::isAbsolute( $arg ) ) {
                     $path = $arg;
                 } else {
-
-                    // Normalize the path elements
-                    $path = str_replace( '/', YDPath::getDirectorySeparator(), $path );
-                    $path = str_replace( '\\', YDPath::getDirectorySeparator(), $path );
 
                     // Remove the trailing directory separator
                     if ( substr( $arg, -1, 1 ) == YDPath::getDirectorySeparator() ) {
