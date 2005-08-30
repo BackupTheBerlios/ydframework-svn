@@ -34,6 +34,7 @@
 			
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax->ignoreEffects();
 
 			// add write and read events
 			$this->ajax->addEvent( 'write', array( & $this, 'write' ), 'variable' );

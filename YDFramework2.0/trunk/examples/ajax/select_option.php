@@ -30,6 +30,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax->ignoreEffects();
 
 			// assign event to mytext
 			$this->ajax->addEvent( 'mytext', array( & $this, 'setSelect' ), 'mytext', 'onkeyup' );

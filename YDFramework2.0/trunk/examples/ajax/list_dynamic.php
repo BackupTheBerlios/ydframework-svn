@@ -30,6 +30,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax->ignoreEffects();
 
 			// assign element 'mybutton' with method 'getcontries'
 			$this->ajax->addEvent( 'myspan', array( & $this, 'getcontries' ) );

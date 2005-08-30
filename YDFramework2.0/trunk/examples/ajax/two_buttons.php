@@ -31,6 +31,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax->ignoreEffects();
 
 			// register element mybutton with event result and fixed argument '1' and mybutton2 with event 'result' with argument 2
 			$this->ajax->addEvent( 'mybutton',  array( & $this, 'result' ), 1 );

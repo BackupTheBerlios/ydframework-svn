@@ -34,6 +34,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax->ignoreEffects();
 
 			// create events for each span using call 'generatechart' but with different arguments
 			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1 );

@@ -29,6 +29,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax->ignoreEffects();
 			
 			// register event to 'car' and send its dynamic value to 'getmodel' method
 			$this->ajax->addEvent( 'car', array( & $this, 'getmodel' ), array( 'car' ) );

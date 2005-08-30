@@ -38,6 +38,7 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form);
+			$this->ajax->ignoreEffects();
 
 			// assign element 'mybutton' with method 'processform' with 'myform' values as argument
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'processform' ), 'myform' );
