@@ -177,7 +177,7 @@
                 $msg .= '<line>' . htmlentities( $stack[1]['line'] ) . '</line>';
                 $msg .= '<function>' . htmlentities( $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'] ) . '</function>';
                 $msg .= '<message>' . htmlentities( trim( $text ) ) . '</message>';
-                $msg .= '</entry>';
+                $msg .= '</entry>' . YD_CRLF;
                 $msg .= '</log>';
 
                 // Write to the file
@@ -186,7 +186,7 @@
                 $f = fopen( YDConfig::get( 'YD_LOG_FILE' ), 'r+' );
                 clearstatcache();
                 if ( filesize( YDConfig::get( 'YD_LOG_FILE' ) ) == 0 ) {
-                    fwrite( $f, '<?xml version=\'1.0\'?>' . YD_CRLF . '<log creator="' . htmlentities( YD_FW_NAMEVERS ) . '"></log>' );
+                    fwrite( $f, '<?xml version=\'1.0\'?>' . YD_CRLF . '<log creator="' . htmlentities( YD_FW_NAMEVERS ) . '">' . YD_CRLF . '</log>' );
                 }
                 fseek( $f, -6, SEEK_END );
                 fwrite( $f, $msg );
