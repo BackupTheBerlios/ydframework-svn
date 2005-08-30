@@ -27,7 +27,8 @@
     }
 
     // Include the needed libraries. 
-	YDInclude( dirname( __FILE__ ) . '/xajax.inc.php');
+	require_once( dirname( __FILE__ ) . '/xajax.inc.php');
+    YDInclude( 'YDUtil.php' );
 
     /**
      *  Class definition for the YDAjax addon.
@@ -72,16 +73,18 @@
 			// custom javascript (we need more than the javascript provided by xajax)
 			$this->customjs = array();
 			$this->customjsVariables = array();
-			
+			$this->customjsTop = array();
+			$this->customjsBottom = array();			
+
 			// response object
 			$this->response = new YDAjaxResponse();
 			
-			// include effect js headers			
-			$this->showHeadersEffects = false;
+			// effects added
+			$this->includeEffects = true;
 		}
 		
 
-		// internal method. replace "<head>" with "<head> and all ajax javascript more our custom javascript"
+		// internal method. replace "<head>" with "<head> and all ajax javascript (containing our custom javascript too)
 		function assignJavascript($tpl_source, &$smarty){
 			
 			$separator = strpos( $this->sRequestURI, '?' ) == false ? '?' : '&';
@@ -90,21 +93,33 @@
 			$html  = "\t<script type=\"text/javascript\">var xajaxRequestUri=\"". $this->sRequestURI ."\";</script>\n";
 			$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."xajaxjs=xajaxjs\"></script>\n";
 			
-			// add efect includes
-			if ($this->showHeadersEffects)
+			// add effect includes
+			if ($this->includeEffects)
 				$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."ydajax_includes=ydajax_includes\"></script>\n";
 		
-			// add custom js code
-			if (!empty($this->customjsVariables) || !empty($this->customjs)){
-	
+			// add js code
+			if (!empty($this->customjsVariables) || !empty($this->customjs) || !empty($this->customjsTop) || !empty($this->customjsBottom)){
+
+				// add initial js tag
 				$html .= "\t<script type=\"text/javascript\">\n";
-				
+
+				// add custom TOP code
+				if (!empty($this->customjsTop))
+					$html .= "\t\t". implode( "\n\t\t", $this->customjsTop ) ."\n";
+
+				// add variables
 				foreach( $this->customjsVariables as $variable => $declaration )
 					$html .= "\t\tvar ". $variable ." = ". $declaration .";\n";
 
+				// add functions
 				foreach( $this->customjs as $function => $declaration )
 					$html .= "\t\tfunction ". $function ."{". $declaration ."}\n";
-			
+
+				// add custom BOTTOM code
+				if (!empty($this->customjsBottom))
+					$html .= "\t\t". implode( "\n\t\t", $this->customjsBottom ) ."\n";
+
+				// add end tag
 				$html .= "\t</script>\n";
 			}
 
@@ -114,26 +129,91 @@
 
 
         /**
-         *	This class assigns ajax with a template object
+         *	This function adds custom javascript to the template.
          *
-         *	@param $template		Template object.
+         *	@param $js	Javascript code.
+         *	@param $order	Zone to place code (top, bottom, topBefore, topAfter, bottomBefore, bottomAfer)
          */
-		function setTemplate( & $template ){
-			$template->register_outputfilter( array( &$this, "assignJavascript") );
+		function addJavascript( $js, $order = 'top' ){
+		
+			switch( strtolower($order) ){
+				case 'top' :
+				case 'topafter' :  array_push( $this->customjsTop, $js ); break;
+				case 'topbefore' : array_unshift( $this->customjsTop, $js ); break;
+				
+				case 'bottom' :    
+				case 'bottomafter' :  array_push( $this->customjsBottom, $js ); break;
+				case 'bottombefore' : array_unshift( $this->customjsBottom, $js ); break;
+				
+				default : die( "Order ". $order ." is not supported" );
+			}
 		}
 
 
         /**
-         *	This class assigns ajax with a form object
+         *	This function adds custom javascript to a response.
          *
-         *	@param $template		Template object.
+         *	@param $js		Javascript code.
+         */
+		function addScript( $js ){
+
+			return $this->response->addScript( $js );
+		}
+
+
+        /**
+         *	This function enables/disables the js effects headers inclusion in template
+         *
+         *	@param $js		Javascript code.
+         */
+		function ignoreEffects( $flag = true ){
+
+			$this->includeEffects = (bool) !$flag;
+		}
+		
+
+        /**
+         *	This function creates a effect object
+         *
+         *	@param $effect			Effect name (string)
+         *	@param $elementToAffect		Form element name where the effect will be assigned
+         *	@param $persistent		(Optional) If true, all next effects will wait to this effect stop
+         *	@param $options			(Optional) Custom js options
+         */
+		function createEffect( $effect, $elementToAffect, $persistent = false, $options = array() ){
+
+			$effect = strtolower( $effect );
+			
+			if (!in_array( $effect, array( 'fadeout', 'fadein', 'zoomin' ) ))
+				die( 'Effect '. $effect .' is not supported');
+
+			// include js effect headers
+			$this->includeEffects = true;
+
+			// if elementToAffect is null we affect the same element
+			if (is_null( $elementToAffect )) $elementToAffect = "this";
+
+			// if is a form element we get formname_element  TODO: get id ($elem->getAttribute('id')), else is a id
+			else if ( $this->form->isElement( $elementToAffect ) ){
+//				$elementToAffect = & $this->form->getElement( $elementToAffect );
+//				$elementToAffect = $elementToAffect->getAttribute('id');
+				$elementToAffect = $this->form->_name .'_'. $elementToAffect;
+			}
+
+			return array( 'element' => $elementToAffect, 'type' => $effect, 'persistent' => $persistent, 'options' => $options );
+		}
+
+
+        /**
+         *	This class assigns ajax with a different form object
+         *
+         *	@param $form		Form object.
          */
 		function setForm( & $form ){
 			$this->form = $form;
 		}
 
-		
-		
+
         /**
          *	This class enables/disables debug
          *
@@ -154,30 +234,20 @@
 			$this->debugOn();
 		}
 
-		
 
         /**
-         *	This class enables/disables a browser setStatusMessage (experimental)
+         *	This method assigns a server function and arguments to a form element event.
          *
-         *	@param $flag		Boolean argument
-         */
-		function setStatusMessage( $flag = true ){
-
-			if ($flag == true)	$this->statusMessagesOn();
-			else				$this->statusMessagesOff();
-		}
-		
-		
-        /**
-         *	This method assign a server function and arguments to a form element event.
-         *
-         *	@param $formElementName	Form element name (string) or js function.
-         *	@param $serverFunction	Array with class and method.
-         *	@param $arguments		Default arguments for this function (string or array of strings).
-         *	@param $event			Event name (auto-detection by default).
+         *	@param $formElementName		Form element name (string) or js function.
+         *	@param $serverFunction		Array with class and method.
+         *	@param $arguments		Default arguments for this function (null, string or array of strings).
+         *	@param $event			Event name (auto-detection by default when using null).
          *	@param $options			Custom options.
+         *	@param $effects			Effect or array of effects to execute on event (but before ajax call).
          */		
-		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = array()){
+		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){ 
+		 
+		 	if (!is_array($options)) $options = array( $options );
 		 
 			// register function in xajax
 			$this->registerFunction( $serverFunction );
@@ -186,10 +256,33 @@
 			$serverFunctionName = $serverFunction[1];
 
 			if (!is_array( $options )) $options = array( $options );
+			
+			// get function name
+			$functionName = $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .');';
+
+			// process effects
+			if (!is_null( $effects )){
+		
+				// if is one effect, we should create an array of effects
+				if (isset( $effects['element'] )) $effects = array( $effects );
+
+				// get last effect and delete it from array
+				$effectLAST = array_pop( $effects );
+			
+				// compute js form effects (only the first ones)
+				$effectsJs = $this->getJsEffect( $effectLAST, $functionName );
+
+				// cycle effects (from last to first) and create js				
+				foreach( array_reverse($effects) as $effect )
+					$effectsJs = $this->getJsEffect( $effect, $effectsJs );
+
+				// function is now the effect js created
+				$functionName = $effectsJs;
+			}
 
 			// if formElementName is a js function we are not assigning an event to a form element but creating a js function
 			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
-				$this->customjs[ $function[0] ] = $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .');';
+				$this->customjs[ $function[0] ] = $functionName;
 				return;
 			}
 
@@ -201,14 +294,11 @@
 
 			// parse event
 			$event = strtolower( $event );
-			
-			// get function name
-			$functionName = $this->sWrapperPrefix . $serverFunctionName .'('. $this->computeFunctionArguments( $arguments, $options ) .');';
 
 			// get previous attribute
 			$previous = is_null( $formElement->getAttribute($event) ) ? '' : trim( $formElement->getAttribute($event) );
 
-			// if previous don't have a last ';' you should add ir
+			// if previous attribute don't have ';' in the end we should add it
 			if (strlen( $previous ) > 0 && $previous[ strlen( $previous ) - 1 ] != ';' ) $previous .= ';';
 
 			if (in_array('replace', $options))
@@ -220,6 +310,89 @@
 			$formElement->setAttribute( $event, $previous . $functionName );
 		}
 		
+		
+		// internal method. return js for a effect
+		function getJsEffect( $effect, $function ){
+
+			// add persistense settings if there's a function
+			if ($function != "" && $effect['persistent'])
+				$effect['options']['afterFinish'] = 'function(effect) {'. $function .'}';
+
+			switch( $effect['type'] ){
+				case 'fadeout' :	// add fadeout custom options
+									if (!isset( $effect['options']['from'] ))		$effect['options']['from'] = 0.99;
+									if (!isset( $effect['options']['to'] ))			$effect['options']['to'] = 0;
+									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
+									
+									$effect['options']['beforeStart'] = 'function(effect){ effect.element.style.opacity = '. $effect['options']['from'] .' }';
+				
+									$options = YDArrayUtil::implode( $effect['options'], ':', ',' );
+				
+									return "new Effect.Opacity('". $effect['element'] ."', Object.extend( {". $options ."} ) )";
+
+				case 'fadein' :		// add fadein custom options
+									if (!isset( $effect['options']['from'] ))		$effect['options']['from'] = 0;
+									if (!isset( $effect['options']['to'] ))			$effect['options']['to'] = 0.99;
+									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
+									
+									$effect['options']['beforeStart'] = 'function(effect){ effect.element.style.opacity = '. $effect['options']['from'] .' }';
+
+									$options = YDArrayUtil::implode( $effect['options'], ':', ',' );
+
+									return "new Effect.Opacity('". $effect['element'] ."', Object.extend( {". $options ."} ) )";
+			
+				case 'zoomin' : 	// add zoomin custom options
+									if (!isset( $effect['options']['from'] ))		$effect['options']['from'] = 0;
+									if (!isset( $effect['options']['to'] ))			$effect['options']['to'] = 0.99;
+									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
+									if (!isset( $effect['options']['scaleFrom'] ))			$effect['options']['scaleFrom'] = 0;
+									if (!isset( $effect['options']['scaleFromCenter'] ))	$effect['options']['scaleFromCenter'] = 'true';
+									
+									
+									return "new Effect.Parallel([ new Effect.Scale('". $effect['element'] ."', 100, { sync: true, scaleFrom: ". $effect['options']['scaleFrom'] .", scaleFromCenter: ". $effect['options']['scaleFromCenter'] ."}), 
+																  new Effect.Opacity('". $effect['element'] ."', { sync: true, to: ". $effect['options']['to'] .", from: ". $effect['options']['from'] ." } ) ], 
+																{ duration: ". $effect['options']['duration'] ." }
+															 );" ;
+			}
+
+		}
+
+
+        /**
+         *	This method hides a html element
+         *
+         *	@param $element     Form element name or generic html id
+         *	@param $hidden      Boolean flag (true = hide, false = show)
+         *	@param $onlyIfIE    Hide element only if browser is IE (Optional)
+         */	
+		function hideElement( $element, $hidden = true, $onlyIfIE = false ){
+
+			// if is a form element, get its id. otherwise use element as id
+			if ($this->form->isElement( $element )){
+				$element = & $this->form->getElement( $element );
+				$element = $element->getAttribute('id');
+			}
+
+			$bi = new YDBrowserInfo();
+
+			if ( ($onlyIfIE == true && $bi->browser == 'ie') || $onlyIfIE == false){
+				if ($hidden) $this->response->addScript( "document.getElementById('". $element ."').style.display = 'none';" );
+				else         $this->response->addScript( "document.getElementById('". $element ."').style.display = 'block';" );
+			}
+			
+		}
+		
+
+        /**
+         *	This method adds a effect to a response
+         *
+         *	@param $effectObj	Effect element
+         */	
+		function addEffect( $effectObj ){
+		
+			$this->response->addScript(  $this->getJsEffect( $effectObj, '')  );
+		}
+
 
 		// internal method. compute js arguments string 
 		function computeFunctionArguments( $arguments, $options ){
@@ -280,7 +453,7 @@
         /**
          *	This method adds confirmation to a element event
          *
-         *	@param $formElementName	Form element name or js function.
+         *	@param $formElementName		Form element name or js function.
          *	@param $message			Message to display
          *	@param $event			Event name (auto-detection by default).
          *	@param $dependence		Element name or array of names that this element depends of
@@ -353,7 +526,7 @@
 		}
 
 
-		// returns the default event for a type
+		// internal method. Returns the default event for a type
 		function getDefaultEvent( $type ){
 
 			switch( $type ){
@@ -362,6 +535,7 @@
 				case 'img' :		return 'onclick';
 				case 'button' :		return 'onclick';
 				case 'span' :		return 'onclick';
+				case 'link' :		return 'onclick';
 				case 'dateselect' :	return 'onchange';
 				case 'radio' :		return 'onchange';
 				case 'checkbox' :	return 'onchange';
@@ -372,16 +546,16 @@
 				case 'select' :		return 'onchange';
 					
 				// if element doesn't exist return a php error
-				default : trigger_error('Element type ('. $formElement->getType() .') is not supported in YDAjax'); break;
+				default : trigger_error('Element type ('. $type .') is not supported in YDAjax'); break;
 			}
 		}
 
 
         /**
-         *	This method creates an alias to a event
+         *	This method creates an alias (a js function) to a event
          *
-         *	@param $formElementName	Form element name or js function.
-         *	@param $functionName	Javascript function name (string).
+         *	@param $formElementName		Form element name or js function.
+         *	@param $functionName		Javascript function name (string).
          *	@param $event			Event name (auto-detection by default).
          */		
 		function addAlias( $formElementName, $functionName, $event = null ){
@@ -395,7 +569,6 @@
 				
 				return;				
 			}
-
 
 			// get element object
 			$elem = & $this->form->getElement( $formElementName );
@@ -422,14 +595,14 @@
 			if (isset($_GET['ydajax_includes'])) return $this->includeJSlibs();
 
 			// change template object internals			
-			$this->setTemplate( $this->template );
+			$this->template->register_outputfilter( array( &$this, "assignJavascript") );
 
 			// process all requests and exit
 			return $this->processRequests();
 		}
 
 
-		// internal method to display all js effect libs
+		// internal method. Displays all js effect libs
 		function includeJSlibs(){
 		
 			YDInclude( 'YDFileSystem.php' );
@@ -451,7 +624,7 @@
         /**
          *	This method add a result to a form element
          *
-         *	@param $formElementName	Form element name or a generic id string.
+         *	@param $formElementName		Form element name or a generic id string.
          *	@param $result			Result string or array
          *	@param $attribute		Optional attributes (optional)
          *	@param $options			Specific options (optional)
@@ -461,21 +634,18 @@
 			// test if is a form element
 			if (!$this->form->isElement( $formElementName ))
 				return $this->response->assignId( $formElementName, $result, $attribute, $options );
-			
+
 			// get element
 			$elem = & $this->form->getElement( $formElementName );
-			
+
 			return $this->response->assignResult( $elem, $result, $attribute, $options);
 		}
-		
+
 
         /**
-         *	This method will process all results added before with addResult
+         *	This method will process all results added with addResult
          */	
 		function processResults(){
-
-			// if YDAjaxResponse is not defined return
-			if ( is_null( $this->response )) die( "There are no results assigned" );
 
 			// return XML to client browser
 			return $this->response->getXML();
@@ -657,7 +827,7 @@
          *	This method returns the needed xml with form errors.
          *
          *	@param $form			Form object.
-         *	@param $id				Optional id to assign error messages
+         *	@param $id			Optional id to assign error messages
          *	@param $separator		Optional message separator string
          */	
 		function sendFormErrors( & $form, $id = null, $separator = "* " ){
@@ -667,13 +837,25 @@
 
 
         /**
-         *	This method adds custom javascript code
+         *	This method adds a js alert to ajax response
          *
-         *	@param $jsstring	Javascript code
-         */	
-		function addScript( $jsstring ){
+         *	@param $message			Message to include in alert.
+         */		
+		function addAlert( $message ){
+			
+			$this->response->addAlert( YDStringUtil::stripSpecialCharacters( $message ) );
+		}
 
-			return $this->response->addScript( $jsstring );
+
+        /**
+         *	This method returns the needed xml to create a js alert
+         *
+         *	@param $message			Message to include in alert.
+         */		
+		function sendAlert( $message ){
+			
+			$this->addAlert( $message );
+			return $this->response->getXML();
 		}
 }
 
@@ -691,12 +873,10 @@ class YDAjaxResponse extends xajaxResponse{
         /**
          *	This method assign a server result to a form element in the client side.
          *
-         *	@param $formName			Name of the form.
-         *	@param $formElementName		Name of the form element.
-         *	@param $formElementType		Form element type.
+         *	@param $formElement			Form element object.
          *	@param $result				Result value.
          *	@param $attribute			Custom attribute (auto-detection by default).
-         *	@param $option				Other options.
+         *	@param $options				Other options.
          */		
 		function assignResult( & $formElement, $result, $attribute = null, $options = array()){
 	
@@ -730,8 +910,6 @@ class YDAjaxResponse extends xajaxResponse{
 				// if element doesn't exist return an js alert
 				default : $this->addAlert('Element type "'. $formElementType .'" is not supported in YDAjax'); break;
 			}
-			
-			
 		}
 
 
@@ -739,14 +917,16 @@ class YDAjaxResponse extends xajaxResponse{
          *	This method returns the needed xml with form errors.
          *
          *	@param $form			Form object.
-         *	@param $id				Optional id to assign error messages
+         *	@param $id			Optional id to assign error messages
          *	@param $separator		Optional message separator string
          */		
 		function sendFormErrors( & $form, $id, $separator){
 		
 			// we are sending a js message
-			if (is_null( $id ))
-				return $this->sendAlert( $separator . implode("\n". $separator, array_values( $form->_errors )) );
+			if (is_null( $id )){
+				$this->addAlert( $separator . implode("\n". $separator, array_values( $form->_errors )) );
+				return $this->getXML();
+			}
 
 			// we are sending a html message
 			$separator = htmlentities( $separator );
@@ -757,21 +937,9 @@ class YDAjaxResponse extends xajaxResponse{
 
 
         /**
-         *	This method returns the needed xml to create a alert
-         *
-         *	@param $message			Message to include in alert.
-         */		
-		function sendAlert( $message ){
-		
-			$this->addAlert( $message );
-			return $this->getXML();
-		}
-
-
-        /**
          *	This method assigns a server result to a element using just the id
          *
-         *	@param $id			Html element id.
+         *	@param $id		Html element id.
          *	@param $result		Result value.
          *	@param $attribute	Custom attribute (auto-detection by default).
          *	@param $option		Other options (not used).
@@ -785,7 +953,7 @@ class YDAjaxResponse extends xajaxResponse{
 			if (is_array( $result )) $result =  str_replace( "\n", "<br>", var_export( $result, true ) ) ;
 		
 			// escape string
-			$result = addslashes( $result );
+			$result = addslashes( htmlentities($result) );
 
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $id .'").'. $attribute .' = "'. $result .'";');
@@ -966,7 +1134,6 @@ class YDAjaxResponse extends xajaxResponse{
 		}		
 		
 
-
 		// internal method to assign a value to a datetimeselect element
 		function assignDateTimeSelect( $formName, $formElementName, $result, $attribute, $options = array()){
 		
@@ -1050,7 +1217,6 @@ class YDAjaxResponse extends xajaxResponse{
 
 
 		}
-		
 		
 }
 ?>
