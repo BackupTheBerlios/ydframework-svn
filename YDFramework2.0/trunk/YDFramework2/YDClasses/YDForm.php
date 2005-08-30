@@ -752,11 +752,6 @@
                 return false;
             }
 
-            // Check if there are any rules, if not, form is valid and return true
-            if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 && sizeof( $this->_comparerules ) == 0) {
-                return true;
-            }
-
             // If custom values are defined parse them
             if ( ! is_null( $customvalues ) ) {
                 foreach ( $customvalues as $key => $value ) {
@@ -768,6 +763,10 @@
                 }
             }
 
+            // Check if there are any rules, if not, form is valid and return true
+            if ( sizeof( $this->_rules ) == 0 && sizeof( $this->_formrules ) == 0 && sizeof( $this->_comparerules ) == 0) {
+                return true;
+            }
 
             // Apply the element rules
             foreach ( $this->_rules as $element=>$rules ) {
