@@ -589,7 +589,7 @@
           <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-          <td valign="top" rowspan="13">&nbsp;</td>
+          <td valign="top" rowspan="14">&nbsp;</td>
           <td valign="top"><a href="ajax/version.php">Simple ajax example</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/version.php">ajax/version.php</a> </td>
@@ -648,6 +648,10 @@
           <td valign="top"><a href="ajax/select_option.php">Select element change on-the-fly</a><br/></td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/select_option.php">ajax/select_option.php</a> </td>
           </tr>
+        <tr>
+          <td valign="top"><a href="ajax/image2.php">Image creation with effects</a><br/></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/image2.php">ajax/image2.php</a> </td>
+        </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>
             <td width="43%"><b>&nbsp;</b></td>
