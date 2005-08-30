@@ -9,15 +9,13 @@
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDAjax.php' );
 	
-
     // Class definition
     class list_options extends YDRequest {
 
 		function list_options() {
 
 			$this->YDRequest();
-			$this->tpl = new YDTemplate();
-
+			$this->tpl  = new YDTemplate();
 			$this->form = new YDForm('myform');
 		}
 
@@ -31,10 +29,13 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax->ignoreEffects();
 
-			// assign myspan with addentry call using 'items' select as argument
-			// note that we want all values from 'items' select and not only the selected one
+			// assign element 'mybutton' with method 'getcontries'
 			$this->ajax->addEvent( 'myspan', array( & $this, 'addentry' ), 'items', null, 'all' );
+
+			// if you want to see what's going on, use YDAjax::dump()
+			// $this->ajax->dump();
 
 			// process all events
 			$this->ajax->processEvents();
@@ -49,11 +50,17 @@
 		// addentry call invoked by ajax
 		function addentry( $items ){
 			
-			// add new item
-			$items[ time() ] = 'New option added at '. YDStringUtil::formatDate( time(), '%d %B %Y %H:%M:%S' );
+			// create element name
+			$element = time();
 			
-			// assign items to select box 'items'
-			$this->ajax->addResult( 'items', $items ) ;
+			// add element name and value to previous items
+			$items[ $element ] = 'New option added at '. YDStringUtil::formatDate( time(), '%d %B %Y %H:%M:%S' );
+			
+			// assign items to select box (because it's an array, will replace all values)
+			$this->ajax->addResult( 'items', $items );
+
+			// define the last element as the element selected (because it's a string will define a new selection)
+			$this->ajax->addResult( 'items', $element );
 
 			// return response to client browser
 			return $this->ajax->processResults();
