@@ -759,7 +759,12 @@
                     // Remove the form name from the element name
                     $key = preg_replace( '/^' . $this->_name . '_/', '', $key );
 
+                    // Set the value
                     $this->_elements[ $key ]->setValue( $value );
+                    
+                    // Set the default value
+                    $this->setDefault( $key, $value );
+                    
                 }
             }
 
