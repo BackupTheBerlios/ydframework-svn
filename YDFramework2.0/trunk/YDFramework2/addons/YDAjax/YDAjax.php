@@ -944,7 +944,7 @@ class YDAjaxResponse extends xajaxResponse{
          *	@param $attribute	Custom attribute (auto-detection by default).
          *	@param $option		Other options (not used).
          */	
-		function assignId( $id, $result, $attribute = null, $options = array()){
+		function assignId( $id, $result, $attribute = null, $options = null){
 		
 			// if event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'innerHTML';
@@ -953,8 +953,8 @@ class YDAjaxResponse extends xajaxResponse{
 			if (is_array( $result )) $result =  str_replace( "\n", "<br>", var_export( $result, true ) ) ;
 		
 			// escape string
-			$result = addslashes( htmlentities($result) );
-
+			$result = addslashes( $result );
+			
 			// assign result to form element using the id
 			$this->addScript('document.getElementById("'. $id .'").'. $attribute .' = "'. $result .'";');
 		}
