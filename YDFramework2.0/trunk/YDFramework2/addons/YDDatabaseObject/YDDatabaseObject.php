@@ -48,7 +48,13 @@
      *  Default: (empty)
      */
     YDConfig::set( 'YD_DBOBJECT_SUFIX',  '', false );
-
+    
+    /**
+     *  Use the class name prefix and sufix for the filenames
+     *  Default: false
+     */
+    YDConfig::set( 'YD_DBOBJECT_FILE',  false, false );
+    
     /**
      *  This config defines if a DELETE query with no conditions can be executed.
      *  Default: false.
@@ -127,17 +133,22 @@
 
             if ( ! strlen( $class ) ) {
                 $class = $this->getClassName();
+            } else {
+                
+                if ( (boolean) YDConfig::get( 'YD_DBOBJECT_FILE' ) ) {
+                    $path .= $prefix . $class . $sufix . $ext;
+                } else {
+                    $path .= $class . $ext;
+                }
+                $class = $prefix . $class . $sufix;
+                
+                if ( ! class_exists( $class ) ) {
+                    YDInclude( $path );
+                }
             }
-
-            $path  = $path   . $class . $ext;
-            $class = $prefix . $class . $sufix;
-
-            if ( ! class_exists( $class ) ) {
-                YDInclude( $path );
-            }
-
+            
             if ( $params !== false ) { 
-                $obj = new $class($params); 
+                $obj = new $class( $params ); 
             } else { 
                 $obj = new $class(); 
             } 

@@ -224,11 +224,12 @@
             <listitem><emphasis role="bold">YD_DBOBJECT_EXT:</emphasis> the file extension name. Default: php.</listitem>
             <listitem><emphasis role="bold">YD_DBOBJECT_PREFIX:</emphasis> the class name prefix for all YDDatabaseObject classes. Default: (no prefix).</listitem>
             <listitem><emphasis role="bold">YD_DBOBJECT_SUFIX:</emphasis> the class name sufix for all YDDatabaseObject classes. Default: (no sufix).</listitem>
+            <listitem><emphasis role="bold">YD_DBOBJECT_FILE:</emphasis> if true, the YDDatabaseObject filenames must use the sufix and prefix defined by YD_DBOBJECT_PREFIX and YD_DBOBJECT_SUFIX. Default: false.</listitem>
         </itemizedlist>
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_022.xml" />
 
-        <para>The classes names must start with the prefix and end with the sufix, but the filenames doesn't require them. For the above example the class name is YDDBOBJ_user but the filename is user.php.</para>
+        <para>The classes names must start with the prefix and end with the sufix, but the filenames only require them if the YD_DBOBJECT_FILE config is true. For the above example the class name is YDDBOBJ_user but the filename is user.php.</para>
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_023.xml" />
 
