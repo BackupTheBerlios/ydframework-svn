@@ -336,7 +336,10 @@
          *	@param $opts	The maximum number of words allowed.
          */
         function maxwords( $val, $opts ) {
-            return $opts <= explode( ' ', trim( $val ) );
+            if ( $opts < sizeof( explode( ' ', trim( $val ) ) ) ) {
+                return false;
+            }
+            return true;
         }
 
         /**
@@ -346,7 +349,10 @@
          *	@param $opts	The minimum number of words allowed.
          */
         function minwords( $val, $opts ) {
-            return $opts >= explode( ' ', trim( $val ) );
+            if ( $opts > sizeof( explode( ' ', trim( $val ) ) ) ) {
+                return false;
+            }
+            return true;
         }
 
         /**
