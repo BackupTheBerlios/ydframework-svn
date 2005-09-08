@@ -81,6 +81,9 @@
 			
 			// effects added
 			$this->includeEffects = true;
+			
+			// default charset for responses
+			$this->responseCharset = "iso-8859-15";
 		}
 		
 
@@ -147,6 +150,17 @@
 				
 				default : die( "Order ". $order ." is not supported" );
 			}
+		}
+
+
+        /**
+         *	This function sets response charset
+         *
+         *	@param $code		Charset code (eg: "utf-8").
+         */
+		function setCharset( $code ){
+
+			$this->responseCharset = $code;
 		}
 
 

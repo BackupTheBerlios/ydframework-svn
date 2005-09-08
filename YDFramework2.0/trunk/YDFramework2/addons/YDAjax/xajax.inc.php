@@ -441,7 +441,7 @@ class xajax
 			$sResponse = call_user_func_array( $this->aFunctions[ $sFunctionName ][ 'call' ], $aArgs );
 		}
 		
-		header("Content-type: text/xml; charset=utf-8");
+		header("Content-type: text/xml; charset=". $this->responseCharset );
 		print $sResponse;
 		
 		exit();
