@@ -139,11 +139,12 @@
 
             // Create the list of attributes
             $attribs = array(
+                'name' => $this->_form . '_' . $this->_name,
                 'class' => 'bbtextarea',
             );
             //if ( ! isset( $attribs['width'] ) ) { $attribs['width'] = '640'; }
             $attribs = array_merge( $this->_attributes, $attribs );
-
+            
             // Get the HTML
             $out = '';
             if ( sizeof( $this->_buttons ) > 0 ) {
