@@ -40,11 +40,12 @@
          *
          *	@param $template		Default template object
          *	@param $form			Default form object.
-         *	@param $requestURI		Request URI. default to current page.
-         *	@param $prefix			Prefix used in ajax functions.
-         *	@param $debug			Debug mode.
+         *	@param $requestURI		(Optional) Request URI. default to current page.
+         *	@param $prefix			(Optional) Prefix used in ajax functions.
+         *	@param $debug			(Optional) Debug mode.
+         *	@param $encoding		(Optional) Charset code.
          */
-        function YDAjax( & $template, & $form, $requestURI = null, $prefix = "__ydf", $debug = null) {
+        function YDAjax( & $template, & $form, $requestURI = null, $prefix = "__ydf", $debug = null, $encoding = "iso-8859-15") {
 
 			// prefix is used in some methods
 			$this->prefix = $prefix;
@@ -77,13 +78,11 @@
 			$this->customjsBottom = array();			
 
 			// response object
-			$this->response = new YDAjaxResponse();
+			$this->response = new YDAjaxResponse( $encoding );
+			$this->responseCharset = $encoding;
 			
 			// effects added
 			$this->includeEffects = true;
-			
-			// default charset for responses
-			$this->responseCharset = "iso-8859-15";
 		}
 		
 
@@ -150,18 +149,6 @@
 				
 				default : die( "Order ". $order ." is not supported" );
 			}
-		}
-
-
-        /**
-         *	This function sets response charset
-         *
-         *	@param $code		Charset code (eg: "utf-8").
-         */
-		function setCharset( $code ){
-
-			$this->responseCharset = $code;
-			$this->response->setCharset( $code );
 		}
 
 
@@ -880,8 +867,8 @@
 	
 class YDAjaxResponse extends xajaxResponse{
 	
-		function YDAjaxResponse(){
-			$this->xajaxResponse();
+		function YDAjaxResponse( $encoding ){
+			$this->xajaxResponse( $encoding );
 		}
 		
 		

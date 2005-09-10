@@ -41,19 +41,12 @@
 class xajaxResponse
 {
 	var $xml;
-	var $enconding = "iso-8859-15";
 
 	// Constructor
-	function xajaxResponse()
+	function xajaxResponse( $encoding )
 	{
-		$this->xml = "<?xml version=\"1.0\" encoding=\"". $this->enconding ."\"?>";
+		$this->xml = "<?xml version=\"1.0\" encoding=\"". $encoding ."\"?>";
 		$this->xml .= "<xajax>";
-	}
-
-
-	function setCharset( $code ){
-	
-		$this->encoding = $code;
 	}
 	
 	// addAssign() adds an assign command message to your xml response
