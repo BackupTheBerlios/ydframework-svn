@@ -161,6 +161,7 @@
 		function setCharset( $code ){
 
 			$this->responseCharset = $code;
+			$this->response->setCharset( $code );
 		}
 
 
