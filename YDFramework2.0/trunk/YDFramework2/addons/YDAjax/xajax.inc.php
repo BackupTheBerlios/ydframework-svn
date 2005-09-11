@@ -415,13 +415,13 @@ class xajax
 		
 		if( !in_array( $sFunctionName, array_keys( $this->aFunctions ) ) ) 
 		{
-			$objResponse = new xajaxResponse();
+			$objResponse = new xajaxResponse( $this->responseCharset );
 			$objResponse->addAlert("Unknown Function $sFunctionName.");
 			$sResponse = $objResponse->getXML();
 		}
 		else if ($this->aFunctions[ $sFunctionName ][ 'method' ] != $requestMode)
 		{
-			$objResponse = new xajaxResponse();
+			$objResponse = new xajaxResponse( $this->responseCharset );
 			$objResponse->addAlert("Incorrect Request Type.");
 			$sResponse = $objResponse->getXML();
 		}
