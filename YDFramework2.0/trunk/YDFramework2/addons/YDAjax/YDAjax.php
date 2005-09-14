@@ -26,9 +26,34 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-    // Include the needed libraries. 
+
+    /**
+     *  This config defines the ajax response enconding
+     *  Default: iso-8859-15.
+     */
+    YDConfig::set( 'YD_AJAX_ENCODING', "iso-8859-15", false );
+
+
+    /**
+     *  This config defines the prefix for javascript functions
+     *  Default: __ydf.
+     */
+    YDConfig::set( 'YD_AJAX_PREFIX', "__ydf", false );
+
+
+    /**
+     *  This config defines if ajax code must be placed in template head (true) or bottom (false).
+     *  Default: true.
+     */
+    YDConfig::set( 'YD_AJAX_CODETOP', true, false );
+
+
+    /**
+     *  Include the needed libraries. 
+     */
 	require_once( dirname( __FILE__ ) . '/xajax.inc.php');
-    YDInclude( 'YDUtil.php' );
+    YDInclude( 'YDRequest.php' );
+
 
     /**
      *  Class definition for the YDAjax addon.
@@ -40,27 +65,18 @@
          *
          *	@param $template		Default template object
          *	@param $form			Default form object.
-         *	@param $requestURI		(Optional) Request URI. default to current page.
-         *	@param $prefix			(Optional) Prefix used in ajax functions.
-         *	@param $debug			(Optional) Debug mode.
-         *	@param $encoding		(Optional) Charset code.
          */
-        function YDAjax( & $template, & $form, $requestURI = null, $prefix = "__ydf", $debug = null, $encoding = "iso-8859-15") {
+        function YDAjax( & $template, & $form){
 
 			// prefix is used in some methods
-			$this->prefix = $prefix;
+			$this->prefix = YDConfig::get( 'YD_AJAX_PREFIX' );
 
-			// if debug not defined use ydf configuration
-			if (!is_null( $debug )) $this->setDebug( $debug );
-			else if (YDConfig::get("YD_DEBUG") == 0)	$this->setDebug( false );
-			else										$this->setDebug( true );
+			// if ydf debug is set, lets use it
+			if (YDConfig::get("YD_DEBUG") == 0) $debug = false;
+			else                                $debug = true;
 
-			// if url is null, we want ydf url. if empty string xajax creates it, otherwise it's a custom url
-			if (is_null($requestURI)){ YDInclude( 'YDRequest.php' );
-			                           $requestURI = YDRequest::getNormalizedUri();
-			}
-		
-			$this->sRequestURI = $requestURI;
+			// create default url
+			$this->sRequestURI = YDRequest::getNormalizedUri();
 		
 			// create ajax object
 			$this->xajax( $this->sRequestURI, $this->prefix, $debug );
@@ -72,14 +88,14 @@
 			$this->template = & $template;
 			
 			// custom javascript (we need more than the javascript provided by xajax)
-			$this->customjs = array();
+			$this->customjs          = array();
 			$this->customjsVariables = array();
-			$this->customjsTop = array();
-			$this->customjsBottom = array();			
+			$this->customjsTop       = array();
+			$this->customjsBottom    = array();
 
 			// response object
-			$this->response = new YDAjaxResponse( $encoding );
-			$this->responseCharset = $encoding;
+			$this->response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
+			$this->responseCharset = YDConfig::get( 'YD_AJAX_ENCODING' );
 			
 			// effects added
 			$this->includeEffects = true;
@@ -125,8 +141,10 @@
 				$html .= "\t</script>\n";
 			}
 
-			// add headers to template
-		    return eregi_replace("<head>", "<head>\n". $html, $tpl_source);
+			// add js code to template
+			if ( YDConfig::get( 'YD_AJAX_CODETOP' )) return eregi_replace( "<head>", "<head>\n". $html, $tpl_source );
+			
+			return eregi_replace( "</body>", $html ."\n</body>", $tpl_source );
 		}
 
 
@@ -924,16 +942,10 @@ class YDAjaxResponse extends xajaxResponse{
          */		
 		function sendFormErrors( & $form, $id, $separator){
 		
-			// we are sending a js message
-			if (is_null( $id )){
-				$this->addAlert( $separator . implode("\n". $separator, array_values( $form->_errors )) );
-				return $this->getXML();
-			}
-
-			// we are sending a html message
-			$separator = htmlentities( $separator );
-
-			$this->assignId( $id, $separator . implode( "<br />". $separator, array_values( $form->_errors )) );
+			// if id is null we are sending a js alert. otherwise we are assign errors to a id
+			if (is_null( $id )) $this->addAlert(      $separator . implode( "\n".     $separator, array_values( $form->_errors )) );
+			else                $this->assignId( $id, $separator . implode( "<br />". $separator, array_values( $form->_errors )) );
+			
 			return $this->getXML();
 		}
 
