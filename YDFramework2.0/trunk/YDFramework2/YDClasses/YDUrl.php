@@ -30,6 +30,8 @@
     YDConfig::set( 'YD_HTTP_USES_GZIP', 1, false );
     YDConfig::set( 'YD_HTTP_CACHE_TIMEOUT', 3600, false );
     YDConfig::set( 'YD_HTTP_CACHE_USEHEAD', 1, false );
+    
+    include_once( dirname( __FILE__ ) . '/YDRequest.php' );
 
     /**
      *  This class defines a url.
@@ -590,54 +592,52 @@
          *  @returns    The link converted to an absolute one.
          *
          *  @static
-         *
-         *  @internal
          */
          function makeLinkAbsolute( $rel_uri, $base=null ) {
-             if ( substr( strtolower( $rel_uri ), 0, 7 ) == 'http://' ) {
-                 return $rel_uri;
-             }
-             if ( is_null( $base ) ) {
-                 $base = YDRequest::getCurrentUrl( true );
-             }
-             preg_match( "'^([^:]+://[^/]+)/'", $base, $m );
-             $base_start = $m[1];
-             if ( preg_match( "'^/'", $rel_uri ) ) {
-                 return $base_start . $rel_uri;
-             }
-             $base = preg_replace( "{[^/]+$}", '', $base );
-             $base .= $rel_uri;
-             $base = preg_replace( "{^[^:]+://[^/]+}", '', $base );
-             $base_array = explode( '/', $base );
-             if ( count( $base_array ) && ! strlen( $base_array[0] ) ) {
-                 array_shift( $base_array );
-             }
-             $i = 1;
-             while ( $i < count( $base_array ) ) {
-                 if ( $base_array[$i-1] == "." ) {
-                     array_splice( $base_array, $i - 1, 1 );
-                     if ( $i > 1 ) {
-                         $i--;
-                     }
-                 } elseif ( $base_array[$i] == ".." && $base_array[$i - 1]!= ".." ) {
-                     array_splice( $base_array, $i - 1, 2 );
-                     if ( $i > 1 ) {
-                         $i--;
-                         if ( $i == count( $base_array ) ) {
-                             array_push( $base_array, "" );
-                         }
-                     }
-                 } else {
-                     $i++;
-                 }
-             }
-             if ( count( $base_array ) && isset( $base_array[-1] ) && $base_array[-1] == "." ) {
-                 $base_array[-1] = "";
-             }
-             while ( count( $base_array ) && preg_match( "/^\.\.?$/", $base_array[0] ) ) {
-                 array_shift( $base_array );
-             }
-             return $base_start . '/' . implode( "/", $base_array );
+            if ( substr( strtolower( $rel_uri ), 0, 7 ) == 'http://' ) {
+                return rtrim( $rel_uri, '/.' );
+            }
+            if ( is_null( $base ) ) {
+                $base = YDRequest::getCurrentUrl( true );
+            }
+            preg_match( "'^([^:]+://[^/]+)/'", $base, $m );
+            $base_start = $m[1];
+            if ( preg_match( "'^/'", $rel_uri ) ) {
+                return rtrim( $base_start . $rel_uri, '/.' );
+            }
+            $base = preg_replace( "{[^/]+$}", '', $base );
+            $base .= $rel_uri;
+            $base = preg_replace( "{^[^:]+://[^/]+}", '', $base );
+            $base_array = explode( '/', $base );
+            if ( count( $base_array ) && ! strlen( $base_array[0] ) ) {
+                array_shift( $base_array );
+            }
+            $i = 1;
+            while ( $i < count( $base_array ) ) {
+                if ( $base_array[$i-1] == "." ) {
+                    array_splice( $base_array, $i - 1, 1 );
+                    if ( $i > 1 ) {
+                     $i--;
+                    }
+                } elseif ( $base_array[$i] == ".." && $base_array[$i - 1]!= ".." ) {
+                    array_splice( $base_array, $i - 1, 2 );
+                    if ( $i > 1 ) {
+                        $i--;
+                        if ( $i == count( $base_array ) ) {
+                            array_push( $base_array, "" );
+                        }
+                    }
+                } else {
+                    $i++;
+                }
+            }
+            if ( count( $base_array ) && isset( $base_array[-1] ) && $base_array[-1] == "." ) {
+                $base_array[-1] = "";
+            }
+            while ( count( $base_array ) && preg_match( "/^\.\.?$/", $base_array[0] ) ) {
+                array_shift( $base_array );
+            }
+            return rtrim( $base_start . '/' . implode( "/", $base_array ), '/.' );
         }
 
         /**
