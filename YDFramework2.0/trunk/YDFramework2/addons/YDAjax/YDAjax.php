@@ -49,6 +49,13 @@
 
 
     /**
+     *  This config defines custom debug value
+     *  Default: null.
+     */
+    YDConfig::set( 'YD_AJAX_DEBUG', null, false );
+
+
+    /**
      *  Include the needed libraries. 
      */
 	require_once( dirname( __FILE__ ) . '/xajax.inc.php');
@@ -71,9 +78,10 @@
 			// prefix is used in some methods
 			$this->prefix = YDConfig::get( 'YD_AJAX_PREFIX' );
 
-			// if ydf debug is set, lets use it
-			if (YDConfig::get("YD_DEBUG") == 0) $debug = false;
-			else                                $debug = true;
+			// if YD_AJAX_DEBUG is set, lets use it. otherwise verify YD_DEBUG
+			if (!is_null( YDConfig::get( 'YD_AJAX_DEBUG' ) )) $debug = YDConfig::get( 'YD_AJAX_DEBUG' );
+			else if (YDConfig::get("YD_DEBUG") == 0)          $debug = false;
+			else                                              $debug = true;
 
 			// create default url
 			$this->sRequestURI = YDRequest::getNormalizedUri();
