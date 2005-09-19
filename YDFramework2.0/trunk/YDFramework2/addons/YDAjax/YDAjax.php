@@ -84,10 +84,10 @@
 			else                                              $debug = true;
 
 			// create default url
-			$this->sRequestURI = YDRequest::getNormalizedUri();
+			$this->ajaxURL = YDRequest::getNormalizedUri();
 		
 			// create ajax object
-			$this->xajax( $this->sRequestURI, $this->prefix, $debug );
+			$this->xajax( "", $this->prefix, $debug );
 			
 			// initilize form
 			$this->form = & $form;
@@ -113,15 +113,15 @@
 		// internal method. replace "<head>" with "<head> and all ajax javascript (containing our custom javascript too)
 		function assignJavascript($tpl_source, &$smarty){
 			
-			$separator = strpos( $this->sRequestURI, '?' ) == false ? '?' : '&';
+			$separator = strpos( $this->ajaxURL, '?' ) == false ? '?' : '&';
 		
 			// add xajax includes
-			$html  = "\t<script type=\"text/javascript\">var xajaxRequestUri=\"". $this->sRequestURI ."\";</script>\n";
-			$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."xajaxjs=xajaxjs\"></script>\n";
+			$html  = "\t<script type=\"text/javascript\">var xajaxRequestUri=\"". $this->ajaxURL ."\";</script>\n";
+			$html .= "\t<script type=\"text/javascript\" src=\"". $this->ajaxURL . $separator ."xajaxjs=xajaxjs\"></script>\n";
 			
 			// add effect includes
 			if ($this->includeEffects)
-				$html .= "\t<script type=\"text/javascript\" src=\"". $this->sRequestURI . $separator ."ydajax_includes=ydajax_includes\"></script>\n";
+				$html .= "\t<script type=\"text/javascript\" src=\"". $this->ajaxURL . $separator ."ydajax_includes=ydajax_includes\"></script>\n";
 		
 			// add js code
 			if (!empty($this->customjsVariables) || !empty($this->customjs) || !empty($this->customjsTop) || !empty($this->customjsBottom)){
@@ -351,19 +351,15 @@
 									if (!isset( $effect['options']['from'] ))		$effect['options']['from'] = 0.99;
 									if (!isset( $effect['options']['to'] ))			$effect['options']['to'] = 0;
 									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
-									
-									$effect['options']['beforeStart'] = 'function(effect){ effect.element.style.opacity = '. $effect['options']['from'] .' }';
-				
+
 									$options = YDArrayUtil::implode( $effect['options'], ':', ',' );
-				
+
 									return "new Effect.Opacity('". $effect['element'] ."', Object.extend( {". $options ."} ) )";
 
 				case 'fadein' :		// add fadein custom options
 									if (!isset( $effect['options']['from'] ))		$effect['options']['from'] = 0;
 									if (!isset( $effect['options']['to'] ))			$effect['options']['to'] = 0.99;
 									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
-									
-									$effect['options']['beforeStart'] = 'function(effect){ effect.element.style.opacity = '. $effect['options']['from'] .' }';
 
 									$options = YDArrayUtil::implode( $effect['options'], ':', ',' );
 
@@ -375,7 +371,6 @@
 									if (!isset( $effect['options']['duration'] ))	$effect['options']['duration'] = 1;
 									if (!isset( $effect['options']['scaleFrom'] ))			$effect['options']['scaleFrom'] = 0;
 									if (!isset( $effect['options']['scaleFromCenter'] ))	$effect['options']['scaleFromCenter'] = 'true';
-									
 									
 									return "new Effect.Parallel([ new Effect.Scale('". $effect['element'] ."', 100, { sync: true, scaleFrom: ". $effect['options']['scaleFrom'] .", scaleFromCenter: ". $effect['options']['scaleFromCenter'] ."}), 
 																  new Effect.Opacity('". $effect['element'] ."', { sync: true, to: ". $effect['options']['to'] .", from: ". $effect['options']['from'] ." } ) ], 
