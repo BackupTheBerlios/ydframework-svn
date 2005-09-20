@@ -191,7 +191,35 @@ class HttpClient {
             if ($location || $uri) {
                 $url = parse_url($location.$uri);
                 // This will FAIL if redirect is to a different site
-                return $this->get($url['path']);
+                if( !empty( $url['path'] ) ) {
+                    return $this->get($url['path']);
+                } else {
+                    // Note from Rene (rene@fsfe.org): Now it won't fail anymore.
+                    // Quick&Dirty hack... don't blame me... :)
+                    $u = new YDUrl( $this->headers['location'] );
+                    $c = new YDHttpClient( $u->getHost() );
+                    
+                    $c->setUserAgent( $this->user_agent );
+                    $c->setAuthorization( $this->username, $this->password );
+                    $c->setCookies( $this->cookies );
+                    $c->useGzip( $this->use_gzip );
+                    $c->setPersistCookies( $this->persist_cookies );
+                    $c->setPersistReferers( $this->persist_referers );
+                    $c->setHandleRedirects( $this->handle_redirects );
+                    $c->setMaxRedirects( $this->max_redirects );
+                    $c->setHeadersOnly( $this->headers_only );
+                    $c->setDebug( $this->debug );
+                    
+                    $r = $c->get( '/' . $u->getPath() );
+                    
+                    $this->status  = $c->getStatus();
+                    $this->content = $c->getContent();
+                    $this->headers = $c->getHeaders();
+                    $this->errormsg= $c->getError();
+                    $this->cookies = $c->getCookies();
+                    
+                    return $r;
+                }
             }
         }
         return true;
