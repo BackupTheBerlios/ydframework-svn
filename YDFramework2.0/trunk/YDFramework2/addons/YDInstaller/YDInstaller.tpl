@@ -9,9 +9,10 @@
 
 {literal}
 
-
 body {
     width: 700px;
+    margin: 18px;
+    padding: 0px;
 }
 
 #header {
@@ -30,11 +31,6 @@ body {
     margin: 30px 0px;
 } 
 
-body {
-    margin: 18px;
-    padding: 0px;
-}
-
 body, p, .normal, li, td, th {
     font-size: 10pt;
     line-height: 16pt;
@@ -52,7 +48,7 @@ a {
 }
 
 select, input, textarea, body, p, .normal, li, td {
-    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Verdana, Arial, Sans-Serif;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Verdana, Arial, Sans-Serif;
 }
 
 .disabled {
