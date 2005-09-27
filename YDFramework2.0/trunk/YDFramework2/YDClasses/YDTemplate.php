@@ -33,7 +33,6 @@
 
     // Includes
     include_once( dirname( __FILE__ ) . '/YDRequest.php');
-    include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
 
     // Configure the default for this class
     YDConfig::set( 'YD_TEMPLATE_ENGINE', 'smarty', false );
@@ -200,8 +199,13 @@
              *	@internal
              */
             function _getTemplateName( $file='' ) {
+                
+                $ext = '';
+                if ( strrchr( $file, '.' ) ) {
+                    $ext  = substr( strrchr( $file, '.' ), 1 );
+                }
                 if ( file_exists( $file ) ) {
-                    if ( '.' . YDPath::getExtension( $file ) != YD_TPL_EXT ) {
+                    if ( '.' . $ext != YD_TPL_EXT ) {
                         trigger_error(
                             'The specified file ' . $file . ' is not a valid template file (wrong file extension)',
                             YD_ERROR
@@ -209,16 +213,16 @@
                     }
                     return realpath( $file );
                 }
-                $this->template_dir = YDPath::getFullPath( $this->template_dir );
+                $this->template_dir = realpath( $this->template_dir );
                 if ( empty( $file ) ) {
-                    $file = YDPath::getFileNameWithoutExtension( YD_SELF_FILE );
+                    $file = basename( YD_SELF_FILE, '.' . substr( strrchr( YD_SELF_FILE, '.' ), 1 ) );
                 }
-                if ( is_file( YDPath::join( $this->template_dir, $file . YD_TPL_EXT ) ) ) {
+                if ( is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $file . YD_TPL_EXT ) ) {
                     $tplName = $file . YD_TPL_EXT;
                 } else {
                     $tplName = $file;
                 }
-                if ( ! is_file( YDPath::join( $this->template_dir, $tplName ) ) ) {
+                if ( ! is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $tplName ) ) {
                     trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
                 }
                 return $tplName;
@@ -429,8 +433,13 @@
              *	@internal
              */
             function _getTemplateName( $file='' ) {
+                
+                $ext = '';
+                if ( strrchr( $file, '.' ) ) {
+                    $ext  = substr( strrchr( $file, '.' ), 1 );
+                }
                 if ( file_exists( $file ) ) {
-                    if ( '.' . YDPath::getExtension( $file ) != YD_TPL_EXT ) {
+                    if ( '.' . $ext != YD_TPL_EXT ) {
                         trigger_error(
                             'The specified file ' . $file . ' is not a valid template file (wrong file extension)',
                             YD_ERROR
@@ -438,16 +447,16 @@
                     }
                     return realpath( $file );
                 }
-                $this->template_dir = YDPath::getFullPath( $this->template_dir );
+                $this->template_dir = realpath( $this->template_dir );
                 if ( empty( $file ) ) {
-                    $file = YDPath::getFileNameWithoutExtension( YD_SELF_FILE );
+                    $file = basename( YD_SELF_FILE, '.' . substr( strrchr( YD_SELF_FILE, '.' ), 1 ) );
                 }
-                if ( is_file( YDPath::join( $this->template_dir, $file . YD_TPL_EXT ) ) ) {
+                if ( is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $file . YD_TPL_EXT ) ) {
                     $tplName = $file . YD_TPL_EXT;
                 } else {
                     $tplName = $file;
                 }
-                if ( ! is_file( YDPath::join( $this->template_dir, $tplName ) ) ) {
+                if ( ! is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $tplName ) ) {
                     trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
                 }
                 return $tplName;

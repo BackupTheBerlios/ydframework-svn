@@ -63,6 +63,7 @@
     YDInclude( 'YDBBCode.php' );
     YDInclude( 'YDTemplate.php' );
     YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDFileSystem.php' );
     YDInclude( 'YDFormElements/YDFormElement_BBTextArea.php' );
 
     // Include other libraries
