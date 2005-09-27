@@ -24,8 +24,9 @@
             $config = $this->getConfig();
 
             // Fix the boolean values
-            $config['email_new_comment'] = ( $config['email_new_comment'] ) ? 'true' : 'false';
-            $config['use_cache']         = ( $config['use_cache'] ) ? 'true' : 'false';
+            $config['email_new_comment'] = ( $config['email_new_comment'] ) ? t('yes') : t('no');
+            $config['use_cache']         = ( $config['use_cache'] ) ? t('yes') : t('no');
+            $config['friendly_urls']     = ( $config['friendly_urls'] ) ? t('yes') : t('no');
 
             // Assign it to the template
             $this->tpl->assign( 'config', $config );
@@ -78,6 +79,8 @@
             $form->addElement( 'text', 'max_syndicated_items', t( 'cfg_rss_max_syndicated_items' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'checkbox', 'use_cache', t( 'cfg_use_cache_comment' ), array( 'style' => 'border: none;' ) );
+
+            $form->addElement( 'checkbox', 'friendly_urls', t( 'cfg_friendly_urls' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
@@ -136,6 +139,7 @@
             $config['email_new_comment']    = YDConfig::get( 'email_new_comment',    true );
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );
+            $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );
 
             // Return the configuration
             return $config;

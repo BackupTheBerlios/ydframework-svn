@@ -116,7 +116,6 @@
         if ( is_null( $format ) ) {
             $format = '%A, %d %b %Y';
         }
-        //return ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) );
         return YDStringUtil::encodeString(
             ucwords( strtolower( YDTemplate_modifier_date_format( $text, $format ) ) )
         );
@@ -124,11 +123,19 @@
 
     // Create a link using the ID and given base
     function YDTplModLinkWithID( $base, $item, $suffix=null ) {
+        $ori_base = $base;
         $base .= ( strpos( $base, '?' ) === false ) ? '?id=' : '&id=';
         if ( is_numeric( $item ) ) {
             $base .= $item;
         } else {
-            $base .= isset( $item['id'] ) ? $item['id'] : $item;
+            $base .= ( is_array( $item ) && isset( $item['id'] ) ) ? $item['id'] : $item;
+        }
+        if ( YDConfig::get( 'friendly_urls', false ) ) {
+            if ( $ori_base == 'item_gallery.php' ) {
+                $base = str_replace( 'item_gallery.php?id=', 'image/', $base );
+            } else {
+                $base = str_replace( '.php?id=', '_', $base ) . '.php';
+            }
         }
         if ( ! is_null( $suffix ) ) {
             $base = $base . $suffix;
@@ -144,6 +151,11 @@
     // Provide a link to a weblog image
     function YDTplModLinkItemImages( $id ) {
         return YDTplModLinkWithID( 'item.php', $id, '#images' );
+    }
+
+    // Provide a link to a weblog image
+    function YDTplModLinkItemGallery( $id ) {
+        return YDTplModLinkWithID( 'item_gallery.php', $id );
     }
 
     // Provide a link to a weblog comment

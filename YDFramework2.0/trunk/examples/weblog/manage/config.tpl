@@ -68,6 +68,10 @@
             <td class="adminRowL">{t w="cfg_weblog_language"}</td>
             <td class="adminRowL">{$config.weblog_language}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_friendly_urls"}</td>
+            <td class="adminRowL">{$config.friendly_urls}</td>
+        </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
@@ -155,6 +159,10 @@
             <tr>
                 <td class="adminRowL">{$form.weblog_language.label_html}</td>
                 <td class="adminRowL">{$form.weblog_language.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.friendly_urls.label_html}</td>
+                <td class="adminRowL">{$form.friendly_urls.html}</td>
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">

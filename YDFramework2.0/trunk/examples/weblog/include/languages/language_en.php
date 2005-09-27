@@ -25,6 +25,8 @@ $GLOBALS['t']['author'] = 'Author';
 $GLOBALS['t']['more'] = 'more';
 $GLOBALS['t']['err_general'] = 'An error occured';
 $GLOBALS['t']['back'] = 'Go back';
+$GLOBALS['t']['yes'] = 'yes';
+$GLOBALS['t']['no'] = 'no';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';
@@ -260,6 +262,7 @@ $GLOBALS['t']['change_config'] = 'Change';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
 $GLOBALS['t']['cfg_cache'] = 'Caching';
 $GLOBALS['t']['cfg_use_cache_comment'] = 'Cache public pages';
+$GLOBALS['t']['cfg_friendly_urls'] = 'Friendly URLs';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

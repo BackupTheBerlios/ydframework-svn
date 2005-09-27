@@ -37,3 +37,12 @@ php_flag zlib.output_compression On
 # Auto include the Framework files (doesn't work when overriding constants)
 #php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
 #php_value auto_append_file "C:/YDFramework2/YDF2_process.php"
+
+# Rewrite rules for the friendly URLs
+RewriteEngine on
+Options +FollowSymlinks
+RewriteRule ^item_([0-9]+).php?$ item.php?id=$1 [L]
+RewriteRule ^page_([0-9]+).php?$ page.php?id=$1 [L]
+RewriteRule ^category_([0-9]+).php?$ category.php?id=$1 [L]
+RewriteRule ^link_([0-9]+).php?$ link.php?id=$1 [L]
+RewriteRule ^image/(.*) item_gallery.php?id=$1 [L]

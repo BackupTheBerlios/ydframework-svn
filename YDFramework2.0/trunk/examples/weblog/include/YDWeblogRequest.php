@@ -45,6 +45,7 @@
             $this->tpl->register_modifier( 'bbcode', 'YDTplModBBCode' );
             $this->tpl->register_modifier( 'date', 'YDTplModDate' );
             $this->tpl->register_modifier( 'link_item', 'YDTplModLinkItem' );
+            $this->tpl->register_modifier( 'link_item_gallery', 'YDTplModLinkItemGallery' );
             $this->tpl->register_modifier( 'link_item_images', 'YDTplModLinkItemImages' );
             $this->tpl->register_modifier( 'link_item_comment', 'YDTplModLinkItemComment' );
             $this->tpl->register_modifier( 'link_item_respond', 'YDTplModLinkItemRespond' );
@@ -223,6 +224,17 @@
             $values['date'] = strftime( '%Y-%m-%d' );
             $values['browser'] = $this->browser->browser;
             $values['platform'] = $this->browser->platform;
+
+            // Fix the short URLs so that they all look the same
+            if ( YDConfig::get( 'friendly_urls', true ) ) {
+                if ( substr( $values['uri'], 0, 6 ) == 'image/' ) {
+                    $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
+                } elseif ( substr( $values['uri'], 0, 7 ) == 'archive' ) {
+                } else {
+                    $values['uri'] = substr( $values['uri'], 0, strpos( $values['uri'], '_' ) )
+                                   . substr( $values['uri'], strpos( $values['uri'], '.php?id=' ) );
+                }
+            }
 
             // Add them to the database
             $this->weblog->logRequestToStats( $values );

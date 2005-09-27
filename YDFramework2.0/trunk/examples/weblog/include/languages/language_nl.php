@@ -25,6 +25,8 @@ $GLOBALS['t']['author'] = 'Auteur';
 $GLOBALS['t']['more'] = 'meer';
 $GLOBALS['t']['err_general'] = 'Er is een probleem';
 $GLOBALS['t']['back'] = 'Ga terug';
+$GLOBALS['t']['yes'] = 'ja';
+$GLOBALS['t']['no'] = 'nee';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';
@@ -260,6 +262,7 @@ $GLOBALS['t']['change_config'] = 'Wijzig';
 $GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
 $GLOBALS['t']['cfg_cache'] = 'Caching';
 $GLOBALS['t']['cfg_use_cache_comment'] = 'Cache publieke pagina\'s';
+$GLOBALS['t']['cfg_friendly_urls'] = 'Vriendelijke URLs';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

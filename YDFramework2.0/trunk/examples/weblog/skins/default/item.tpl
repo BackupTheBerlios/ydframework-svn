@@ -53,7 +53,7 @@
                 {foreach from=$image_row item="image"}
                     <td width="33%" align="center" style="vertical-align: middle;" height="100">
                         {if $image}
-                            <a href="item_gallery.php?id={$image->relative_path}"><img src="{$image|link_thumb}" alt="{$image->getBaseName()}"></a>
+                            <a href="{$image->relative_path|@link_item_gallery}"><img src="{$image|link_thumb}" alt="{$image->getBaseName()}"></a>
                         {else}
                             &nbsp;
                         {/if}
@@ -64,7 +64,7 @@
                 {foreach from=$image_row item="image"}
                     <td width="33%" align="center">
                         {if $image}
-                            <p><a href="item_gallery.php?id={$image->relative_path}">{$image->getBasenameNoExt()}</a><br/>&nbsp;</p>
+                            <p><a href="{$image->relative_path|@link_item_gallery}">{$image->getBasenameNoExt()}</a><br/>&nbsp;</p>
                         {else}
                             &nbsp;
                         {/if}
