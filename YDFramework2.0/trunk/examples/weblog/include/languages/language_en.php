@@ -36,6 +36,7 @@ $GLOBALS['t']['or'] = 'or';
 $GLOBALS['t']['powered_by'] = 'This weblog is powered by the';
 $GLOBALS['t']['syndicate_as'] = 'Syndicate this weblog as ';
 $GLOBALS['t']['syndicate_comments_as'] = 'Comments as ';
+$GLOBALS['t']['syndicate_gallery_as'] = 'Galleries as ';
 $GLOBALS['t']['design_by'] = 'Design by Michael Heilemann.';
 
 // __std_sidebar.tpl

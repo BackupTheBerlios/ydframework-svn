@@ -46,6 +46,18 @@
             $this->feed->outputXml( 'ATOM' );
         }
 
+        // RSS / Gallery action
+        function actionRssGallery() {
+            $this->initGalleryFeed();
+            $this->feed->outputXml( 'RSS2.0' );
+        }
+
+        // ATOM / Gallery action
+        function actionAtomGallery() {
+            $this->initGalleryFeed();
+            $this->feed->outputXml( 'ATOM' );
+        }
+
         // Function to init the main feed
         function initMainFeed() {
 
@@ -84,6 +96,31 @@
                 $this->feed->addItem(
                     $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ), YDTplModBBCode( $body )
                 );
+            }
+
+        }
+
+        // Function to init the gallery feed
+        function initGalleryFeed() {
+
+            // Get the weblog items
+            $items = $this->weblog->getItems();
+
+            // Initialize the feed
+            $this->feed = new YDFeedCreator();
+            $this->feed->setTitle( YDConfig::get( 'weblog_title', 'Untitled Weblog' ) . ' - ' . t('archives_gallery') );
+            $this->feed->setDescription( YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
+            $this->feed->setLink( YDUrl::makeLinkAbsolute( 'index.php' ) );
+
+            // Add the items
+            foreach ( $items as $item ) {
+                if ( sizeof( $item['images'] ) > 0 ) {
+                    $body = '';
+                    foreach ( $item['images'] as $image ) {
+                        $body .= '<img src="' . YDTplModLinkThumb( $image ) . '"/> ';
+                    }
+                    $this->feed->addItem( $item['title'], YDTplModLinkItemGallery( $item ), YDTplModBBCode( $body ) );
+                }
             }
 
         }

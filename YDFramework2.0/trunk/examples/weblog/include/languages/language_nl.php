@@ -36,6 +36,7 @@ $GLOBALS['t']['or'] = 'of';
 $GLOBALS['t']['powered_by'] = 'Deze weblog is aangedreven door het';
 $GLOBALS['t']['syndicate_as'] = 'Syndiceer deze weblog als ';
 $GLOBALS['t']['syndicate_comments_as'] = 'Commentaren als ';
+$GLOBALS['t']['syndicate_gallery_as'] = 'Foto albums als ';
 $GLOBALS['t']['design_by'] = 'Design door Michael Heilemann.';
 
 // __std_sidebar.tpl

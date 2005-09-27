@@ -145,6 +145,8 @@
             $this->tpl->assign( 'weblog_link_atom',            YDUrl::makeLinkAbsolute( 'xml.php?do=atom' ) );
             $this->tpl->assign( 'weblog_link_comments_rss',    YDUrl::makeLinkAbsolute( 'xml.php?do=rsscomments' ) );
             $this->tpl->assign( 'weblog_link_comments_atom',   YDUrl::makeLinkAbsolute( 'xml.php?do=atomcomments' ) );
+            $this->tpl->assign( 'weblog_link_gallery_rss',     YDUrl::makeLinkAbsolute( 'xml.php?do=rssgallery' ) );
+            $this->tpl->assign( 'weblog_link_gallery_atom',    YDUrl::makeLinkAbsolute( 'xml.php?do=atomgallery' ) );
             $this->tpl->assign( 'weblog_link_archive',         YDUrl::makeLinkAbsolute( 'archive.php' ) );
             $this->tpl->assign( 'weblog_link_archive_gallery', YDUrl::makeLinkAbsolute( 'archive_gallery.php' ) );
 
