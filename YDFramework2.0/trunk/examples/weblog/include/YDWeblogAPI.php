@@ -79,6 +79,15 @@
                 $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'items ADD body_more LONGTEXT AFTER body' );
             }
 
+            // Get the list of indexes
+            $indexes = $this->db->getValuesByName( 'show keys from ' . YDConfig::get( 'db_prefix', '' ) . 'users', 'key_name' );
+            if ( in_array( 'email', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'users DROP INDEX email' );
+            }
+            if ( ! in_array( 'name', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'users ADD UNIQUE name (name)' );
+            }
+
         }
 
         // Function to log a request to the statistics
