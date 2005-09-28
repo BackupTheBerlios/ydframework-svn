@@ -365,11 +365,11 @@
             }
 
             // If there is nothing that matches, use the default
+            if ( isset( $this->_defaults[ $name ] ) ) {
+                $instance->setDefault( $this->_defaults[ $name ] );
+                unset( $this->_defaults[ $name ] );
+            }
             if ( sizeof( $elementVars ) == 0 )  {
-                if ( isset( $this->_defaults[ $name ] ) ) {
-                    $instance->setDefault( $this->_defaults[ $name ] );
-                    unset( $this->_defaults[ $name ] );
-                }
                 if ( ! $this->isSubmitted() ) {
                     if ( ! is_null( $instance->_default ) ) {
                         $instance->setValue( $instance->getDefault() );

@@ -74,7 +74,8 @@
          */
         function isModified() {
             if ( ! is_null( $this->_default ) ) {
-                if ( $this->_value && ! empty( $this->_default ) ) {
+                $default = ! empty( $this->_default ) ? 1 : 0;
+                if ( $this->_value == $default ) {
                     return false;
                 }
             } else {

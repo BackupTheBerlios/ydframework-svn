@@ -23,7 +23,7 @@
             $form->registerFilter( 'reverse', 'strrev' );
             $form->setDefaults( 
                 array( 
-                    'txt2' => 'First text', 'txt3' => "2\nlines",  'hid1' => 'me hidden', 'chk1' => 'x',  'sel1' => 2
+                    'txt2' => 'First text', 'txt3' => "2\nlines",  'hid1' => 'me hidden', 'chk1' => 'x', 'chk2' => false, 'sel1' => 2
                 )
             );
             
@@ -53,7 +53,7 @@
             $form->addFilter( 'txt1', 'trim' );
             $form->addFilter( 'txt2', 'reverse' );
             $form->addRule( 'txt1', 'required', 'txt1 is required' );
-            $form->addRule( 'chk2', 'required', 'chk2 is required' );
+            $form->addRule( 'chk2', 'exact', 'chk2 is required', 1 );
             $form->addFormRule( array( & $this, 'formrule' ), 'txt1 is required' );
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
                 YDDebugUtil::dump( $form->_regElements, 'Registered elements' );
@@ -69,6 +69,7 @@
                 YDDebugUtil::dump( $form->toArray() );
             }
             if ( $form->validate() ) {
+                YDDebugUtil::dump( $form->getModifiedValues(), 'Form modified values' );
                 YDDebugUtil::dump( $form->getValues(), 'Form values' );
             } else {
                 $form->display();
