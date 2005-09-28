@@ -229,9 +229,9 @@
 
             // Fix the short URLs so that they all look the same
             if ( YDConfig::get( 'friendly_urls', true ) ) {
-                if ( substr( $values['uri'], 0, 6 ) == 'image/' ) {
+                if ( YDStringUtil::startswith( $values['uri'], 'image/', false ) ) {
                     $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
-                } elseif ( substr( $values['uri'], 0, 7 ) == 'archive' ) {
+                } elseif ( YDStringUtil::startswith( $values['uri'], 'archive' ) ) {
                 } else {
                     $values['uri'] = substr( $values['uri'], 0, strpos( $values['uri'], '_' ) )
                                    . substr( $values['uri'], strpos( $values['uri'], '.php?id=' ) );
