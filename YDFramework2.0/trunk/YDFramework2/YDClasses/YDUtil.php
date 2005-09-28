@@ -594,7 +594,7 @@
         function encodeToAscii( $string ) { 
             $result = ''; 
             for ( $i=0; $i < strlen( $string ); $i++ ) { 
-                $result .= "&#" . ord( substr( $string, $i, 1) ); 
+                $result .= "&#" . ord( substr( $string, $i, 1) ) . ';'; 
             } 
             return $result; 
         }
