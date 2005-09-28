@@ -734,6 +734,42 @@
 
         }
 
+        /**
+         *  This function will check if the specified string starts with the indicated text or not. You can specify if
+         *  this needs to happen case-sensitively or not.
+         *
+         *  @param  $string         The string to check.
+         *  @param  $substring      The string with which it needs to start.
+         *  @param  $case_sensitive (optional) Whether the comparison needs to be case-sensitive or not. Default is true.
+         *
+         *  @returns    Boolean indicating if the string starts with the specified text or not.
+         */
+        function startsWith( $string, $substring, $case_sensitive=true ) {
+            if ( ! $case_sensitive ) {
+                $string = strtolower( $string );
+                $substring = strtolower( $substring );
+            }
+            return ( substr( $string, 0, strlen( $substring ) ) == $substring );
+        }
+
+        /**
+         *  This function will check if the specified string ends with the indicated text or not. You can specify if
+         *  this needs to happen case-sensitively or not.
+         *
+         *  @param  $string         The string to check.
+         *  @param  $substring      The string with which it needs to ends.
+         *  @param  $case_sensitive (optional) Whether the comparison needs to be case-sensitive or not. Default is true.
+         *
+         *  @returns    Boolean indicating if the string ends with the specified text or not.
+         */
+        function endsWith( $string, $substring, $case_sensitive=true ) {
+            if ( ! $case_sensitive ) {
+                $string = strtolower( $string );
+                $substring = strtolower( $substring );
+            }
+            return ( substr( $string, -strlen( $substring ) ) == $substring );
+        }
+
     }
 
     /**
