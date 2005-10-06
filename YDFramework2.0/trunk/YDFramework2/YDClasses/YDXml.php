@@ -311,12 +311,12 @@
             
             foreach ( $node->childNodes as $child ) {
                 
-                if ( $child->nodeName != $last ) {
-                    $i = 0;
-                }
-                
                 if ( $child->nodeType == XML_COMMENT_NODE ) {
                     continue;
+                }
+                
+                if ( $child->nodeName != $last ) {
+                    $i = 0;
                 }
                 
                 if ( $child->nodeType != XML_ELEMENT_NODE ) {
