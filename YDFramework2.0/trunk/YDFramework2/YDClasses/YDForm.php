@@ -702,7 +702,7 @@
         /**
          *  This function will return if an element have been modified from it's default value.
          *
-         *  @param $element  The element name.
+         *  @param $name  The element name.
          *
          *  @returns  A boolean indicating if the element value was modified.
          */

@@ -318,6 +318,7 @@
          *
          *  @param  $level    The error level.
          *  @param  $message  The error message.
+         *  @param  $custom   (optional)
          *
          *  @returns     An YDError object.
          *  
