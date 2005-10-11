@@ -316,7 +316,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="9" valign="top">
+            <td rowspan="10" valign="top">
             <p>&nbsp;</p></td>
             <td valign="top"><a href="database.php">Database connectivity - Native functions</a> </td>
             <td valign="top">
@@ -382,6 +382,14 @@
             </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database_backup.php">database_backup.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <a href="database_tree.php">Database trees</a><br/>
+            </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=database_tree.php">database_tree.php</a>
             </td>
         </tr>
         <tr>
