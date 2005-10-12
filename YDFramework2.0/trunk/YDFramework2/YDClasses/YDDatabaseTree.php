@@ -482,7 +482,10 @@
             // Get the complete tree
             $data = $this->getTreeWithChildren();
 
-            $n = 0;     // Need a variable to hold the running n tally
+            // Keep the original data (we need to optimize the updates)
+            $data_ori = $data;
+
+            $n     = 0; // Need a variable to hold the running n tally
             $level = 0; // Need a variable to hold the running level tally
 
             // Invoke the recursive function. Start it processing on the fake "root node" generated in 
@@ -498,6 +501,7 @@
                     continue;
                 }
 
+                /*
                 // The query
                 $query = sprintf(
                     'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
@@ -506,6 +510,25 @@
 
                 // Execute the query
                 $this->db->executeSql( $query );
+                */
+
+                // Check if something was updated
+                if (
+                    $data[$id]->nlevel != $data_ori[$id]->nlevel ||
+                    $data[$id]->nleft  != $data_ori[$id]->nleft ||
+                    $data[$id]->nright != $data_ori[$id]->nright
+                ) {
+
+                    // The query
+                    $query = sprintf(
+                        'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
+                        $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
+                    );
+
+                    // Execute the query
+                    $this->db->executeSql( $query );
+
+                }
 
             }
 
