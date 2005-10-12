@@ -127,6 +127,9 @@
         // Add a number of nodes
         function actionAdd() {
 
+            // Get a reference to the tree
+            $tree = & $this->tree;
+        
             // Add an item
             $values = array( 'title' => 'New Node - ' . time(), 'parent_id' => 8 );
             $id = $tree->addNode( $values );
@@ -152,7 +155,7 @@
             $tree->rebuild();
 
             // Get the path to the new element
-            YDDebugUtil::dump( $tree->getPath( $id ), '$tree->getPath( $id )' );
+            YDDebugUtil::dump( $tree->getPath( $id, true ), '$tree->getPath( $id )' );
 
         }
 
