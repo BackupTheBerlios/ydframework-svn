@@ -121,10 +121,11 @@
          *                          meaning if fetching entire tree.
          *  @param $childrenOnly    (optional) True if only returning children data. False if returning all descendant
          *                          data.
+         *  @param $max_level       (optional) Maximum level to retrieve. Default is all.
          *
          *  @returns The descendants of the passed now
          */
-        function getDescendants( $id = 0, $includeSelf=false, $childrenOnly=false ) {
+        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null ) {
 
             // Get the ID field
             $idField = $this->fields['id'];
@@ -160,19 +161,28 @@
                 }
 
             } else {
-                if ($nleft > 0 && $includeSelf) {
+                
+                // Include all
+                if ( $nleft > 0 && $includeSelf ) {
                     $query = sprintf(
                         'select %s from %s where nleft >= %d and nright <= %d order by nleft',
                          $this->_getFieldsAsString(), $this->table, $nleft, $nright
                     );
-                } else if ($nleft > 0) {
+                } else if ( $nleft > 0 ) {
                     $query = sprintf(
                         'select %s from %s where nleft > %d and nright < %d order by nleft',
                         $this->_getFieldsAsString(), $this->table, $nleft, $nright
                     );
                 } else {
-                    $query = sprintf( 'select %s from %s order by nleft', $this->_getFieldsAsString(), $this->table );
+                    $query = sprintf( 'select %s from %s where id > 0 order by nleft', $this->_getFieldsAsString(), $this->table );
                 }
+                
+            }
+
+            // Add the level constraint
+            if ( ! is_null( $max_level ) ) {
+                $max_level = ( $includeSelf ) ? $max_level : $max_level + 1;
+                $query = str_replace( 'where ', 'where nlevel <= ' . $max_level . ' and ', $query );
             }
 
             // Get the results as an array
@@ -629,11 +639,11 @@
                 array_push( $nodes_to_delete, $child['id'] );
             }
 
+            // Add the current node
+            array_push( $nodes_to_delete, $id  );
+
             // Check if there is something to delete
             if ( sizeof( $nodes_to_delete ) > 0 ) {
-
-                // Add the current node
-                array_push( $nodes_to_delete, $id  );
 
                 // The query to execute
                 $query = 'delete from ' . $this->table . ' where id in ( ' . join( ', ', $nodes_to_delete ) . ' )';
