@@ -182,6 +182,7 @@
             // Add the level constraint
             if ( ! is_null( $max_level ) ) {
                 $max_level = ( $includeSelf ) ? $max_level : $max_level + 1;
+                $max_level = ( $includeSelf ) ? $node['nlevel'] + $max_level - 1 : $node['nlevel'] + $max_level;
                 $query = str_replace( 'where ', 'where nlevel <= ' . $max_level . ' and ', $query );
             }
 
