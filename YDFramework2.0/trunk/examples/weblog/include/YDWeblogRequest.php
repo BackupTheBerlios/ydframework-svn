@@ -210,7 +210,6 @@
 
             // Return the file path
             return  $this->tpl->template_dir . $name . YD_TPL_EXT;
-            return  'skins/' . $this->skin . '/' . $name . YD_TPL_EXT;
 
         }
 
