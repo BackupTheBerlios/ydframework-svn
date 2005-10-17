@@ -310,4 +310,3 @@ $GLOBALS['t']['msg_install_update'] = 'De nouvelles versions sont disponibles';
 $GLOBALS['t']['development_changelog'] = 'Log de modifications';
 
 ?>
-
