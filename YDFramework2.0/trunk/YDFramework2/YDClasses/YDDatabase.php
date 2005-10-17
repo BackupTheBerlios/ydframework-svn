@@ -1076,6 +1076,8 @@
          *  @internal
          */
         function _logSql( $sql ) {
+            $trace = debug_backtrace();
+            $sql = $sql . ' [' . $trace[2]['file'] . ':' . $trace[2]['line'] . ']';
             array_push( $GLOBALS['YD_SQL_QUERY'], YDStringUtil::removeWhiteSpace( $sql ) );
         }
 
