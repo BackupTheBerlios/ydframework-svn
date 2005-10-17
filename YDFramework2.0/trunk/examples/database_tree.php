@@ -80,6 +80,9 @@
         // Default action
         function actionDefault() {
 
+            // Show the link to the sitemap action
+            echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap">Sitemap</a>' );
+
             // Get a reference to the tree
             $tree = & $this->tree;
 
@@ -129,33 +132,36 @@
 
             // Get a reference to the tree
             $tree = & $this->tree;
+
+            // Get the node ID
+            $id = ( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) ? $_GET['id'] : 1;
         
             // Add an item
-            $values = array( 'title' => 'New Node - ' . time(), 'parent_id' => 8 );
+            $values = array( 'title' => 'New Node - ' . time(), 'parent_id' => $id );
             $id = $tree->addNode( $values );
 
             // Add some subnodes
             $values = array( 'title' => 'New Subnode - ', 'parent_id' => $id );
-            foreach ( range( 1, 10 ) as $step ) {
+            foreach ( range( 1, 2 ) as $step ) {
                 $values_tmp = $values;
                 $values_tmp['title'] = $values_tmp['title'] . $step;
                 $id2 = $tree->addNode( $values_tmp );
-                foreach ( range( 1, 10 ) as $step2 ) {
+                foreach ( range( 1, 2 ) as $step2 ) {
                     $values_tmp2 = $values;
                     $values_tmp2['parent_id'] = $id2;
-                    $values_tmp2['title'] = $values_tmp2['title'] . $step2;
+                    $values_tmp2['title'] = 'New Sub Subnode - ' . $step2;
                     $tree->addNode( $values_tmp2 );
                 }
             }
 
             // Move the node
-            $tree->moveNode( $id, 4 );
+            //$tree->moveNode( $id, 4 );
 
             // Rebuild the tree
             $tree->rebuild();
-
-            // Get the path to the new element
-            YDDebugUtil::dump( $tree->getPath( $id, true ), '$tree->getPath( $id )' );
+            
+            // Redirect to the sitemap
+            $this->redirectToAction( 'sitemap' );
 
         }
 
@@ -167,7 +173,154 @@
 
             // Delete a node
             $tree->deleteNode( $_GET['id'] );
+            
+            // Redirect to the sitemap
+            $this->redirectToAction( 'sitemap' );
 
+        }
+
+        // Real life example
+        function actionExample() {
+
+            // Get the node ID
+            $id = ( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) ? $_GET['id'] : 1;
+
+            // Get the node
+            $node     = $this->tree->getNode( $id );
+            $path     = $this->tree->getPath( $id );
+            $children = $this->tree->getChildren( $id );
+
+            // Show the path
+            echo( '<p><b>Path:</b> ' );
+            foreach ( $path as $path_item ) {
+                echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $path_item['id'] . '">' . $path_item['title'] . '</a> &raquo; ' );
+            }
+            echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $node['id'] . '">' . $node['title'] . '</a>' );
+            echo( '</p>' );
+
+            // Show the item
+            echo( '<p><b>' . $node['title'] . '</b></p> ' );
+
+            // Show the children
+            if ( $children ) {
+                echo( '<p><b>Children:</b><br/> ' );
+                foreach ( $children as $child ) {
+                    echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $child['id'] . '">' . $child['title'] . '</a><br/>' );
+                }
+                echo( '</p>' );
+            }
+
+        }
+        
+        // Function to show a sitemap
+        function actionSiteMap() {
+
+            // Get a reference to the tree
+            $tree = & $this->tree;
+
+            // Get the maximum level
+            $max_level = ( isset( $_GET['max_level'] ) && is_numeric( $_GET['max_level'] ) ) ? $_GET['max_level'] : null;
+
+            // Get the node ID
+            $id = ( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) ? $_GET['id'] : 1;
+
+            // Get the node, path and children
+            $node     = $this->tree->getNode( $id );
+            $path     = $this->tree->getPath( $id );
+            $path_str = $this->_convertToUrlString( $path );
+            $children = $this->tree->getChildren( $id );
+            
+            // Show the map
+            echo( '<h2>Sitemap Tree Example</h2>' );
+            $path = array();
+            foreach ( $tree->getDescendants( 1, true, false, $max_level ) as $child ) {
+                
+                /*
+                // Create the text path
+                if ( sizeof( $path ) >= $child['nlevel']+1 ) {
+                    //YDDebugUtil::dump( 'remove last'); 
+                    array_pop( $path );
+                }
+                if ( sizeof( $path ) == $child['nlevel']-1 ) {
+                    array_push( $path, $child );
+                }
+                if ( sizeof( $path ) == $child['nlevel'] ) {
+                    array_pop( $path );   
+                    array_push( $path, $child );
+                }
+                $tmp_path = $path;
+                array_shift( $tmp_path );
+                $child['path'] = $this->_convertToUrlString( $tmp_path );
+                */
+                
+                // Show the current title in bold and italic
+                //if ( $child['id'] == $id || in_array( $child['id'], array_keys( $path ) ) ) {
+                //    $child['title'] = sprintf( '<b><i>%s</i></b>', $child['title'] );
+                //}
+                //if ( $child['id'] == $id ) {
+                //    $child['title'] = sprintf( '<b><i>%s</i></b>', $child['title'] );
+                //}
+                
+                // Show the links
+                //YDDebugUtil::dump( $child['nlevel'], '$child[\'nlevel\']' );
+                //YDDebugUtil::dump( $node['nlevel'],  '$node[\'nlevel\']' );
+
+                // Get the initial difference
+                @define( 'INIT_DIFF', $child['nlevel'] - $node['nlevel'] );
+
+                echo( '[ <a href="' . YD_SELF_SCRIPT . '?do=delete&id=' . $child['id'] . '">delete</a> | ' );
+                echo( '<a href="' . YD_SELF_SCRIPT . '?do=add&id=' . $child['id'] . '">add children</a> ] ' );
+                echo( str_repeat( '&nbsp;', ( $child['nlevel'] - $node['nlevel'] - INIT_DIFF )*4 ) );
+                //echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap&id=' . $child['id'] . '&path=' . $child['path'] . '">' . $child['title'] . '</a> ' );
+                echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap&id=' . $child['id'] . '">' . $child['title'] . '</a> ' );
+                echo( '(ID: ' . $this->_convertToUrlID( $child['title'] ) . ' or ' . $child['id'] . ')<br/>' );
+
+            }
+
+            // Show the path
+            echo( '<p><b>Path:</b> ' );
+            foreach ( $path as $path_item ) {
+                echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap&id=' . $path_item['id'] . '">' . $path_item['title'] . '</a> &raquo; ' );
+            }
+            echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap&id=' . $node['id'] . '">' . $node['title'] . '</a>' );
+            echo( '</p>' );
+
+            // Show the item
+            echo( '<p><b>' . $node['title'] . '</b></p> ' );
+
+            // Show the children
+            if ( $children ) {
+                echo( '<p><b>Children:</b><br/> ' );
+                foreach ( $children as $child ) {
+                    echo( '<a href="' . YD_SELF_SCRIPT . '?do=sitemap&id=' . $child['id'] . '">' . $child['title'] . '</a><br/>' );
+                }
+                echo( '</p>' );
+            }
+            
+            // Get the ID from the path info
+            if ( isset( $_GET['path'] ) ) {
+                $descendants = $tree->getDescendants();
+                $path = explode( '/', trim( strtolower( $_GET['path'] ), ' /' ) );
+                $item_id = null;
+                foreach ( $path as $key=>$path_item ) {
+                    foreach ( $descendants as $descendant ) {
+                        if ( $this->_convertToUrlID( $descendant['title'] ) == $path_item && $descendant['nlevel'] == strval( $key + 2 ) ) {
+                            if ( $key == sizeof( $path )-1 ) {
+                                //YDDebugUtil::dump( 'last item' );
+                                $item_id = $descendant['id'];
+                                break;
+                            }
+                            continue;
+                        }
+                    }
+                }
+                if ( ! is_null( $item_id ) ) {
+                    YDDebugUtil::dump( 'Found: ' . $_GET['path'] . ' = ID ' . $item_id );
+                } else {
+                    YDDebugUtil::dump( 'Not Found: ' . $_GET['path'] );
+                }
+            }
+            
         }
 
         /*
@@ -207,6 +360,33 @@
 
         }
         */
+        
+        // Convert a string to an URL ID
+        function _convertToUrlID( $str ) {
+            $str = strtoupper($str); 
+            $str = strip_tags( strtolower( $str ) ); 
+            $str = preg_replace( '/[àáâãäå]/i','a', $str); 
+            $str = preg_replace( '/[ç]/i','c', $str); 
+            $str = preg_replace( '/[òóôõöø]/i','o', $str); 
+            $str = preg_replace( '/èéêë]/i','e', $str); 
+            $str = preg_replace( '/[ìíîï]/i','i', $str); 
+            $str = preg_replace( '/[ùúûüÿ]/i','u', $str);    
+            $str = preg_replace( '/[ñ]/i','n', $str);    
+            $str = preg_replace( '/[\s]+/i',' ', $str); 
+            $str = preg_replace( '/[\' ]/' ,'-' , $str ); 
+            $str = preg_replace( '/[^a-z0-9_\s-]/i' ,'' , $str );
+            $str = preg_replace( '/[-]+/i','-', $str); 
+            return $str; 
+        }
+
+        // Function to convert a path to an URL string
+        function _convertToUrlString( $path ) {
+            $url = array();
+            foreach ( $path as $item ) {
+                array_push( $url, $this->_convertToUrlID( $item['title'] ) );
+            }
+            return implode( '/', $url ) . '/';
+        }
 
     }
 
