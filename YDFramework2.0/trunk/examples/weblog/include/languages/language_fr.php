@@ -295,12 +295,12 @@ $GLOBALS['t']['backup'] = 'Sauvegarder';
 $GLOBALS['t']['err_bck_name'] = 'Le nom du fichier de sauvegarde est requis';
 $GLOBALS['t']['bck_name_comment'] = 'Vous pouvez utiliser "%DBNAME" pour obtenir le nom de la base et <a href="http://www.php.net/strftime" target="_blank">toute option de la fonction strftime</a> pour spécifier une date. L\'extension sera automatiquement ajoutée. Tout autre texte sera préservé.';
 $GLOBALS['t']['bck_type'] = 'Type de sauvegarde';
-$GLOBALS['t']['bck_full'] = 'Sauvgarde Complète (structure et données)';
+$GLOBALS['t']['bck_full'] = 'Sauvegarde Complète (structure et données)';
 $GLOBALS['t']['bck_structure_only'] = 'Structure seule';
 $GLOBALS['t']['bck_data_only'] = 'Données seules';
 
 // manage/version_info.tpl
-$GLOBALS['t']['h_diagtools'] = 'Outils de diagnostique';
+$GLOBALS['t']['h_diagtools'] = 'Outils de diagnostic';
 $GLOBALS['t']['a_version_info'] = 'Informations de version';
 $GLOBALS['t']['version_check'] = 'Vérifier la version';
 $GLOBALS['t']['installed_version'] = 'Version installée';
