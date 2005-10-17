@@ -255,7 +255,7 @@
                 trigger_error( $error['message'], YD_ERROR );
             }
             $result = @OCIExecute( $stmt );
-            if ( $result === false ) {
+            if ( $result === false && $this->_failOnError === true ) {
                 $error = ocierror( $stmt );
                 if ( ! empty( $error['sqltext'] ) ) {
                     $error['message'] .= ' (SQL: ' . $error['sqltext'] . ')';

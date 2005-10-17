@@ -460,13 +460,14 @@
         /**
          *  This is the class constructor for the YDDatabaseDriver class.
          *
-         *  @param $db      Database name to use for the connection.
-         *  @param $user    (optional) User name to use for the connection.
-         *  @param $pass    (optional) Password to use for the connection.
-         *  @param $host    (optional) Host name to use for the connection.
-         *  @param $options (optional) Options to pass to the driver.
+         *  @param $db              Database name to use for the connection.
+         *  @param $user            (optional) User name to use for the connection.
+         *  @param $pass            (optional) Password to use for the connection.
+         *  @param $host            (optional) Host name to use for the connection.
+         *  @param $options         (optional) Options to pass to the driver.
+         *  @param $failOnError     (optional) Trigger fatal error on database error. Default is true.
          */
-        function YDDatabaseDriver( $db, $user='', $pass='', $host='', $options=array() ) {
+        function YDDatabaseDriver( $db, $user='', $pass='', $host='', $options=array(), $failOnError=true ) {
 
             // Initialize YDBase
             $this->YDBase();
@@ -478,6 +479,9 @@
             $this->_host = $host;
             $this->_options = $options;
             $this->_driver = 'unknown';
+
+            // Fail on errors or not
+            $this->_failOnError = $failOnError;
 
             // The connection object
             $this->_conn = null;
@@ -1281,7 +1285,7 @@
             $this->_logSql( $sql );
             $this->connect();
             $result = @mysql_query( $sql, $this->_conn );
-            if ( $result === false ) {
+            if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
             }
             return $result;

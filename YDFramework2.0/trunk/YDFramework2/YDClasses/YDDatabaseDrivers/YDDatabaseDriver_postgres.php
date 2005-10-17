@@ -194,7 +194,7 @@
             $this->_logSql( $sql );
             $this->connect();
             $result = @pg_query( $this->_conn, $sql );
-            if ( $result === false ) {
+            if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( pg_last_error( $conn ), YD_ERROR );
             }
             return $result;
