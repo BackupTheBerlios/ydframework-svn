@@ -27,7 +27,7 @@
     }
 
     // Includes
-
+    YDInclude( 'YDDatabase.php' );
 
     /**
      *  This class implements a database tree as described on:
@@ -48,6 +48,8 @@
             $this->db    = $db;
             $this->table = $table;
             $this->fields = array( 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField );
+            $this->_use_query_cache = true;
+            $this->_query_cache = array();
         }
 
         /**
@@ -91,6 +93,67 @@
             return $obj;
         }
 
+        /*
+         *  Function to convert an object to a node array
+         *
+         *  @param $node    The node to convert to a node array.
+         *
+         *  @return The node as a node array.
+         */
+        function _toNodeArray( $node ) {
+            return $node;
+        }
+
+        /*
+         *  Function to convert a node array to a object
+         *
+         *  @param $node    The node to convert to an object.
+         *
+         *  @return The node as an object.
+         */
+        function _fromNodeArray( $node ) {
+            return $node;
+        }
+
+        /**
+         *  Function to clear the query cache.
+         *
+         *  @internal
+         */
+        function _clearCache() {
+            $this->_query_cache = array();
+        }
+
+        /**
+         *  This function is a cache-enabled version of the $db->getRecord function.
+         *
+         *  @internal
+         */
+        function _getRecord( $query ) {
+            if ( $this->_use_query_cache && isset( $this->_query_cache[ '[_getRecord]' . $query ] ) ) {
+                return $this->_query_cache[ '[_getRecord]' . $query ];
+            } else {
+                $result = $this->db->getRecord( $query );
+                $this->_query_cache[ '[_getRecord]' . $query ] = $result;
+                return $result;
+            }
+        }
+
+        /**
+         *  This function is a cache-enabled version of the $db->getRecords function.
+         *
+         *  @internal
+         */
+        function _getRecords( $query ) {
+            if ( $this->_use_query_cache && isset( $this->_query_cache[ '[_getRecords]' . $query ] ) ) {
+                return $this->_query_cache[ '[_getRecords]' . $query ];
+            } else {
+                $result = $this->db->getRecords( $query );
+                $this->_query_cache[ '[_getRecords]' . $query ] = $result;
+                return $result;
+            }
+        }
+
         /**
          *  Fetch the node data for the node identified by $id.
          *
@@ -107,7 +170,7 @@
             );
 
             // Execute the query and return the record
-            return $this->db->getRecord( $query );
+            return $this->_fromNodeArray( $this->_getRecord( $query ) );
 
         }
 
@@ -131,7 +194,7 @@
             $idField = $this->fields['id'];
 
             // Get the node
-            $node = $this->getNode( $id );
+            $node = $this->_toNodeArray( $this->getNode( $id ) );
 
             // Find nleft, nright and parent_id
             if ( ! $node ) {
@@ -187,12 +250,12 @@
             }
 
             // Get the results as an array
-            $records = $this->db->getRecords( $query );
+            $records = $this->_getRecords( $query );
 
             // Reformat the array
             $arr = array();
             foreach ( $records as $record ) {
-                $arr[ $record[$idField] ] = $record;
+                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
             }
 
             // Return the result
@@ -228,7 +291,7 @@
             $idField = $this->fields['id'];
 
             // Get the node
-            $node = $this->getNode( $id );
+            $node = $this->_toNodeArray( $this->getNode( $id ) );
 
             // No node, return empty array
             if ( ! $node ) {
@@ -249,12 +312,12 @@
             }
 
             // Get the results as an array
-            $records = $this->db->getRecords( $query );
+            $records = $this->_getRecords( $query );
 
             // Reformat the array
             $arr = array();
             foreach ( $records as $record ) {
-                $arr[ $record[$idField] ] = $record;
+                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
             }
 
             // Return the result
@@ -273,7 +336,7 @@
         function isDescendantOf( $descendant_id, $ancestor_id ) {
 
             // Get the node
-            $node = $this->getNode( $ancestor_id );
+            $node = $this->_toNodeArray( $this->getNode( $ancestor_id ) );
 
             // No node, return empty array
             if ( ! $node ) {
@@ -287,7 +350,7 @@
             );
 
             // Execute the query and get the record
-            $record = $this->db->getRecord( $query );
+            $record = $this->_getRecord( $query );
 
             // Return the result
             if ( $record ) {
@@ -315,7 +378,7 @@
             );
 
             // Execute the query and get the record
-            $record = $this->db->getRecord( $query );
+            $record = $this->_getRecord( $query );
 
             // Return the result
             if ( $record ) {
@@ -342,7 +405,7 @@
                 $query = sprintf('select count(*) as num_descendants from %s', $this->table );
 
                 // Execute the query and get the record
-                $record = $this->db->getRecord( $query );
+                $record = $this->_getRecord( $query );
 
                 // Return the number of descendants for the node
                 if ( $record ) {
@@ -381,7 +444,7 @@
             );
 
             // Execute the query and get the record
-            $record = $this->db->getRecord( $query );
+            $record = $this->_getRecord( $query );
 
             // Return the number of descendants for the node
             if ( $record ) {
@@ -404,7 +467,7 @@
         function getImmediateFamily( $id ) {
 
             // Get the node
-            $node = $this->getNode($id);
+            $node = $this->_toNodeArray( $this->getNode( $id ) );
 
             // The ID and parent field
             $idField = $this->fields['id'];
@@ -426,13 +489,13 @@
             }
 
             //  Get the result
-            $records = $this->db->getRecords( $query );
+            $records = $this->_getRecords( $query );
 
             // Get the result
             $arr = array();
             foreach ( $records as $record ) {
                 $record['num_descendants'] = ( $record['nright'] - $record['nleft'] - 1 ) / 2;
-                $arr[ $record[$idField] ] = $record;
+                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
             }
 
             // Return the result
@@ -458,7 +521,7 @@
             );
 
             // Get the records
-            $records = $this->db->getRecords( $query );
+            $records = $this->_getRecords( $query );
 
             // create a root node to hold child data about first level items
             $root = new YDBase();
@@ -490,6 +553,9 @@
          */
         function rebuild() {
 
+            // Clear the cache
+            $this->_clearCache();
+
             // Get the complete tree
             $data = $this->getTreeWithChildren();
 
@@ -511,17 +577,6 @@
                 if ( $id == 0 ) {
                     continue;
                 }
-
-                /*
-                // The query
-                $query = sprintf(
-                    'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
-                    $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
-                );
-
-                // Execute the query
-                $this->db->executeSql( $query );
-                */
 
                 // Check if something was updated
                 if (
@@ -583,6 +638,9 @@
          */
         function addNode( $values, $parent_id=null ) {
 
+            // Clear the cache
+            $this->_clearCache();
+
             // Add the parent field if needed
             $parentField = $this->fields['parent'];
             if ( ! is_null( $parent_id ) && ! isset( $values[ $parentField ] ) ) {
@@ -622,6 +680,9 @@
          *  @param $id  The ID of the node to delete.
          */
         function deleteNode( $id ) {
+
+            // Clear the cache
+            $this->_clearCache();
 
             // Get the node details
             $node = $this->getNode( $id );
@@ -666,6 +727,9 @@
          *  @param  $parent_id  The ID of the new parent node
          */
         function moveNode( $id, $parent_id ) {
+
+            // Clear the cache
+            $this->_clearCache();
 
             // The ID and parent field
             $idField = $this->fields['id'];
