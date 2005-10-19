@@ -492,7 +492,16 @@
             $this->_fmtQuote = "'";
 
         }
-        
+
+        /**
+         *  Functioo to indicate if an SQL error should die the script or not.
+         *
+         *  @param $val     (optional) True if you want the script to die on an error, false otherwise.
+         */
+        function setFailOnError( $val=true ) { 
+            $this->_failOnError = ( bool ) $val; 
+        }
+
         /**
          *  This funciton returns the database name.
          *
