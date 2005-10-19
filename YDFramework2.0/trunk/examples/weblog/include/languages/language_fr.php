@@ -36,7 +36,7 @@ $GLOBALS['t']['or'] = 'ou';
 $GLOBALS['t']['powered_by'] = 'Ce weblog est propulsé par le ';
 $GLOBALS['t']['syndicate_as'] = 'Syndiquez ce weblog via ';
 $GLOBALS['t']['syndicate_comments_as'] = 'Commentaires via ';
-$GLOBALS['t']['syndicate_gallery_as'] = 'Galleries photo via ';
+$GLOBALS['t']['syndicate_gallery_as'] = 'Galeries photo via ';
 $GLOBALS['t']['design_by'] = 'Design de Michael Heilemann.';
 
 // __std_sidebar.tpl
@@ -76,16 +76,16 @@ $GLOBALS['t']['leave_comment'] = 'Laisser un commentaire';
 $GLOBALS['t']['error_comment'] = 'Une erreur est survenue lors de l\'ajout de votre commentaire';
 $GLOBALS['t']['name'] = 'Nom';
 $GLOBALS['t']['mail_not_published'] = 'Email (ne sera pas publié)';
-$GLOBALS['t']['website'] = 'Website';
+$GLOBALS['t']['website'] = 'Site web';
 $GLOBALS['t']['submit_comment'] = 'Ajouter le commentaire';
 $GLOBALS['t']['ta_enter_url'] = 'Saisissez l\'url';
 $GLOBALS['t']['ta_enter_email'] = 'Entrez l\'adresse email';
 $GLOBALS['t']['ta_enter_image'] = 'Entrez l\'url complète de l\'image';
 $GLOBALS['t']['err_name'] = 'Le nom est manquant';
-$GLOBALS['t']['err_name_email'] = 'Le nom ne doit pas être une adressee email';
+$GLOBALS['t']['err_name_email'] = 'Le nom ne doit pas être une adresse email';
 $GLOBALS['t']['err_email'] = 'Email manquant ou invalide';
 $GLOBALS['t']['err_comment'] = 'Le commentaire est requis';
-$GLOBALS['t']['with'] = 'for';
+$GLOBALS['t']['with'] = 'pour';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'Nouveau commentaire';
@@ -93,7 +93,7 @@ $GLOBALS['t']['item_title'] = 'Titre de l\'entrée';
 $GLOBALS['t']['wrote'] = 'écrit';
 
 // page.tpl
-$GLOBALS['t']['created_on'] = 'Crée le';
+$GLOBALS['t']['created_on'] = 'Créé le';
 $GLOBALS['t']['last_modified_on'] = 'Dernière modification le';
 
 // Comments
@@ -103,7 +103,7 @@ $GLOBALS['t']['comments'] = 'Commentaires';
 
 // manage/__mng_header.tpl
 $GLOBALS['t']['confirm_delete'] = 'Etes vous certain de vouloir supprimer:';
-$GLOBALS['t']['logoff'] = 'Déconnexion logout';
+$GLOBALS['t']['logoff'] = 'Déconnexion';
 $GLOBALS['t']['view_site'] = 'voir le site';
 $GLOBALS['t']['user'] = 'utilisateur';
 $GLOBALS['t']['server'] = 'serveur';
@@ -141,7 +141,6 @@ $GLOBALS['t']['err_login_all'] = 'Nom d\'utilisateur et/ou mot de passe incorrec
 // manage/cache.tpl
 $GLOBALS['t']['cleanup'] = 'Nettoyer';
 $GLOBALS['t']['cache_cleaned_up'] = 'Les fichiers du cache ont été supprimés!';
-$GLOBALS['t']['cache_cleaned_up'] = 'Cache files are cleaned up!';
 
 // manage/serverinfo.tpl
 $GLOBALS['t']['system'] = 'Système';
@@ -153,8 +152,8 @@ $GLOBALS['t']['operating_system'] = 'Système d\'exploitation';
 $GLOBALS['t']['version'] = 'version';
 $GLOBALS['t']['loaded_modules'] = 'Modules chargés';
 $GLOBALS['t']['server_api'] = 'API Serveur';
-$GLOBALS['t']['registered_streams'] = 'Flux php déclarés';
-$GLOBALS['t']['include_path'] = 'Répertoire d\'inclustion';
+$GLOBALS['t']['registered_streams'] = 'Flux PHP déclarés';
+$GLOBALS['t']['include_path'] = 'Répertoire d\'inclusion';
 $GLOBALS['t']['full_php_info'] = 'Voir toutes les informations PHP';
 
 // manage/stats.tpl
@@ -183,11 +182,11 @@ $GLOBALS['t']['all_commenters'] = 'Tous les commentateurs';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Adresse email';
-$GLOBALS['t']['created'] = 'Crée le';
+$GLOBALS['t']['created'] = 'Créé le';
 $GLOBALS['t']['add_user'] = 'Ajouter un utilisateur';
 $GLOBALS['t']['req_useremail'] = 'Adresse email manquante ou invalide';
 $GLOBALS['t']['req_loginpass'] = 'Le mot de passe est requis';
-$GLOBALS['t']['user_dup'] = 'L\'utilisateur existe déja';
+$GLOBALS['t']['user_dup'] = 'L\'utilisateur existe déjà';
 $GLOBALS['t']['change_user_desc'] = 'Changer l\'utilisateur:';
 
 // manage/images.tpl
@@ -202,8 +201,8 @@ $GLOBALS['t']['no_images_found'] = 'Aucune image n\'a été trouvée';
 $GLOBALS['t']['add_category'] = 'Ajouter une catégorie';
 $GLOBALS['t']['number_of_items'] = 'Nombre d\'entrées';
 $GLOBALS['t']['change_category_desc'] = 'Editer la catégorie';
-$GLOBALS['t']['err_category_title'] = 'Le nom de la catégorie est requise';
-$GLOBALS['t']['err_unique_category'] = 'La catégorie existe déja';
+$GLOBALS['t']['err_category_title'] = 'Le nom de la catégorie est requis';
+$GLOBALS['t']['err_unique_category'] = 'La catégorie existe déjà';
 $GLOBALS['t']['no_categories_found'] = 'Aucune catégorie n\'a été trouvée';
 
 // manage/links.tpl
@@ -212,7 +211,7 @@ $GLOBALS['t']['link_url'] = 'URL du lien';
 $GLOBALS['t']['add_link'] = 'Ajouter un lien';
 $GLOBALS['t']['err_link_title'] = 'Le titre du lien est requis';
 $GLOBALS['t']['err_link_url'] = 'L\'URL du lien est requise';
-$GLOBALS['t']['err_unique_link'] = 'L\'URL existe déja';
+$GLOBALS['t']['err_unique_link'] = 'L\'URL existe déjà';
 $GLOBALS['t']['change_link_desc'] = 'Modification du lien';
 $GLOBALS['t']['no_links_found'] = 'Aucun lien n\'a été trouvé';
 $GLOBALS['t']['num_visits'] = 'Visites';
@@ -245,7 +244,7 @@ $GLOBALS['t']['cfg_weblog_title'] = 'Titre du Weblog';
 $GLOBALS['t']['cfg_weblog_description'] = 'Description du Weblog';
 $GLOBALS['t']['cfg_weblog_entries_fp'] = 'Nombre d\'entrées sur la page d\'accueil';
 $GLOBALS['t']['cfg_weblog_skin'] = 'Thème du Weblog';
-$GLOBALS['t']['cfg_weblog_language'] = 'Language du Weblog';
+$GLOBALS['t']['cfg_weblog_language'] = 'Langage du Weblog';
 $GLOBALS['t']['cfg_weblog_date_format'] = 'Format des dates';
 $GLOBALS['t']['cfg_notification'] = 'Options de notification';
 $GLOBALS['t']['cfg_notification_email_comment'] = 'Prévenir par email des nouveaux commentaires';
@@ -269,7 +268,7 @@ $GLOBALS['t']['cfg_friendly_urls'] = 'URLs sympathiques';
 $GLOBALS['t']['item_title'] = 'Titre de l\'entrée';
 $GLOBALS['t']['item_body'] = 'Corps de l\'entrée';
 $GLOBALS['t']['item_body_more'] = 'Corps de l\'entrée (étendu)';
-$GLOBALS['t']['select_image'] = 'Selectionnez une image';
+$GLOBALS['t']['select_image'] = 'Sélectionnez une image';
 $GLOBALS['t']['view'] = 'voir';
 $GLOBALS['t']['add_item'] = 'Ajouter une entrée';
 $GLOBALS['t']['change_item_desc'] = 'Modification de l\'entrée';
