@@ -114,7 +114,7 @@
             YDPersistent::_init();
 
             // If the $_GET variable exists, return that one
-            if ( YDConfig::set( 'YD_ALLOW_OVERRIDE_QS', false ) === true ) {
+            if ( YDConfig::get( 'YD_ALLOW_OVERRIDE_QS', false ) === true ) {
                 if ( isset( $_GET[$name] ) === true ) {
                     YDPersistent::set( $name, $_GET[$name], $passwd );
                 }
