@@ -13,7 +13,7 @@
             {if $page == $recordset->page}
                 {$page}
             {else}
-                <a href="{$recordset->getCurrentUrl()}">{$page}</a>
+                <a href="{$recordset->getPageUrl($page)}">{$page}</a>
             {/if}
         {/foreach}
         {if ! $recordset->isLastPage}
