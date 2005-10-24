@@ -830,6 +830,15 @@
          *  @internal
          */
         function _initImageSize() {
+        
+            // Check for the getimagesize function
+            if ( ! function_exists( 'getimagesize' ) ) {
+                trigger_error(
+                    'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
+                    . 'using the YDFSImage::getImageSize function.', YD_ERROR
+                );
+            }
+        
             if ( is_null( $this->image_size ) ) {
                 $this->image_size = getimagesize( $this->getAbsolutePath() );
             }
@@ -891,15 +900,10 @@
          *				the second element is the height in pixels.
          */
         function getImageSize() {
-
-            // Check for the getimagesize function
-            if ( ! function_exists( 'getimagesize' ) ) {
-                trigger_error(
-                    'The "getimagesize" function does not exists. Make sure that the GD libraries are loaded before '
-                    . 'using the YDFSImage::getImageSize function.', YD_ERROR
-                );
-            }
-
+        
+            // Init image_size
+            $this->_initImageSize();
+            
             // Get the first two elements
             $imgSize = array_slice( $this->image_size, 0, 2 );
 
