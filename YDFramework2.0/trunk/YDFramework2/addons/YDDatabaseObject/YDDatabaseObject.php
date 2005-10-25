@@ -323,23 +323,24 @@
          *  This function registers a callback method.
          *
          *  @param $method  The method name.
-         *  @param $action  The action that triggers the call.
+         *  @param $action  The action or array of actions that trigger the call.
          *  @param $before  (optional) Execute callback before the action. Default: false.
          */
         function registerCallback( $method, $action, $before=false ) {
-            
-            if ( ! $this->_callbacks->exists( strtolower( $action ) ) ) {
-                trigger_error(  $this->getClassName() . ' -
-                                Incorrect action for callback "' . $method . '".', YD_ERROR );
-            }
             
             $sub = $before ? 'before' : 'after';
             
             if ( ! is_array( $action ) ) {
                 $action = array( $action );
             }
+            
             foreach ( $action as $ac ) {
                 
+                if ( ! $this->_callbacks->exists( strtolower( $ac ) ) ) {
+                    trigger_error(  $this->getClassName() . ' -
+                                    Incorrect action for callback "' . $method . '".', YD_ERROR );
+                }
+            
                 $act = & $this->_callbacks->$ac;
                 $act[ $sub ][ $method ] = '';
             }
@@ -851,6 +852,7 @@
             $result = $this->_db->executeSql( $sql );
             
             if ( is_numeric( $result ) && $auto_field ) {
+                $result = $this->_db->getLastInsertID();
                 $this->set( $auto_field->getName(), $result );
             }
             
