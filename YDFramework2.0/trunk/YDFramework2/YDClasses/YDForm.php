@@ -832,8 +832,12 @@
                                 $mandatory = false;
                             } else if ( is_string( $value ) && ! strlen( $value ) ) {
                                 $mandatory = false;
-                            } else if ( is_array( $value ) && empty( $value ) ) {
-                                $mandatory = false;
+                            } else if ( is_array( $value ) ) {
+                                if ( empty( $value ) ) {
+                                    $mandatory = false;
+                                } else if ( isset( $value['name'] ) && empty( $value['name'] ) ) {
+                                    $mandatory = false;
+                                }
                             }
                         }
 
