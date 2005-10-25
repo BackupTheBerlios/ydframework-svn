@@ -995,10 +995,11 @@
 
                 // Local table
                 $l_table = $this->getTable();
-                $l_key = $rel->getLocalKey();
+                $l_key   = $rel->getLocalKey();
 
                 if ( ! $l_key ) {
-                    $l_key = current( $this->_getFieldsByMethod( 'isKey', false ) );
+                    $l_key = current( $this->_getFieldsByMethod( 'isKey', true ) );
+                    $l_key = $l_key->name;
                 }
                 
                 $l_field = & $this->getField( $l_key );
@@ -1007,15 +1008,16 @@
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
                 $f_table = $this->$f_var->getTable();
-                $f_key = $rel->getForeignKey();
+                $f_key   = $rel->getForeignKey();
 
                 if ( ! $f_key ) {
-                    $f_key   = current( $this->$f_var->_getFieldsByMethod( 'isKey', false ) );
+                    $f_key = current( $this->$f_var->_getFieldsByMethod( 'isKey', true ) );
+                    $f_key = $f_key->name;
                 }
                 
                 $f_field = & $this->$f_var->getField( $f_key );
                 $f_column = $f_field->getColumn();
-
+                
                 // Prepare the query in the foreign object
                 $this->$f_var->_prepareQuery( true );
 
@@ -1032,7 +1034,7 @@
                     // Join foreign table
                     $this->_query->join( $rel->getForeignJoin(), $f_table );
                     $this->_query->on( $r . $l_table . $r . '.' . $r . $l_column . $r . ' = ' .
-                                     $r . $f_table . $r . '.' . $r . $f_column . $r );
+                                       $r . $f_table . $r . '.' . $r . $f_column . $r );
 
                 } else {
 
@@ -1077,7 +1079,7 @@
                     // Join cross table
                     $this->_query->join( $rel->getCrossJoin(), $c_table );
                     $this->_query->on( $r . $l_table . $r . '.' . $r . $l_column  . $r . ' = ' .
-                                     $r . $c_table . $r . '.' . $r . $c_lcolumn . $r );
+                                       $r . $c_table . $r . '.' . $r . $c_lcolumn . $r );
 
                     // Cross table additional conditions
                     if ( $where = $rel->getCrossConditions() ) {
@@ -1090,7 +1092,7 @@
                     // Join foreign table
                     $this->_query->join( $rel->getForeignJoin(), $f_table );
                     $this->_query->on( $r . $c_table . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
-                                            $r . $f_table . $r . '.' . $r . $f_column  . $r );
+                                       $r . $f_table . $r . '.' . $r . $f_column  . $r );
 
                 }
 
