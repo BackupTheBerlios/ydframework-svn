@@ -854,16 +854,17 @@
          *
          *	@param $width	The maximum width of the thumbnail.
          *	@param $height	The maximum height of the thumbnail.
-         *	@param $cache	(optional) Indicate if the thumbnails should be cached. By default, caching is turned on.
+         *	@param $cache	(optional) Indicate if the thumbnail should be cached. By default, caching is turned on.
+         *	@param $crop	(optional) Indicate if the thumbnail should be cropped to the exact size. By default, false.
          */
-        function outputThumbnail( $width, $height, $cache=true ) {
+        function outputThumbnail( $width, $height, $cache=true, $crop=false ) {
 
             // Output right headers
             $content_type = $this->getMimeType();
             header( 'Content-type: ' . $content_type );
 
             // Output the thumbnail
-            echo( $this->_createThumbnail( $width, $height, $cache ) );
+            echo( $this->_createThumbnail( $width, $height, $cache, $crop ) );
 
             // Stop the execution
             die();
@@ -876,13 +877,14 @@
          *	@param $width	The maximum width of the thumbnail.
          *	@param $height	The maximum height of the thumbnail.
          *	@param $file	The filename to save the thumbnail to.
+         *	@param $crop	(optional) Indicate if the thumbnail should be cropped to the exact size. By default, false.
          *
          *  @returns    A new YDFSImage object for the thumbnail.
          */
-        function saveThumbnail( $width, $height, $file ) {
+        function saveThumbnail( $width, $height, $file, $crop=false ) {
 
             // Create the thumbnail
-            $thumb = $this->_createThumbnail( $width, $height, false );
+            $thumb = $this->_createThumbnail( $width, $height, false, $crop );
 
             // Save it to a file
             $f = new YDFSImage( $file, true );
@@ -975,10 +977,11 @@
          *	@param $width	The maximum width of the thumbnail.
          *	@param $height	The maximum height of the thumbnail.
          *	@param $cache	(optional) Indicate if the thumbnails should be cached. By default, caching is turned off.
+         *	@param $crop	(optional) Indicate if the thumbnails should be cropped to the exact size. By default, false.
          *
          *	@internal
          */
-        function & _createThumbnail( $width, $height, $cache=true ) {
+        function & _createThumbnail( $width, $height, $cache=true, $crop=false ) {
 
             // Check if the GD library is loaded.
             if ( ! extension_loaded( 'gd' ) ) {
@@ -1031,19 +1034,30 @@
             // Get the current image size
             $ori_width  = imageSX( $src_img );
             $ori_heigth = imageSY( $src_img );
-
+            
             // Calculate the new image size
             if ( $width >= $ori_width || $height >= $ori_heigth ) {
                 $thumb_w = $ori_width;
                 $thumb_h = $ori_heigth;
-            } else {
-                if ( $ori_width > $ori_heigth ) {
-                    $thumb_w = $width;
-                    $thumb_h = $ori_heigth * ( $width / $ori_width );
-                }
-                if ( $ori_width < $ori_heigth ) {
-                    $thumb_w = $ori_width * ( $height / $ori_heigth );
-                    $thumb_h = $height;
+            } else { 
+                if ( $crop ) {
+                    if ( $ori_width > $ori_heigth ) {
+                        $thumb_w = ceil( $ori_width * ( $height / $ori_heigth ) );
+                        $thumb_h = $height;
+                    }
+                    if ( $ori_width < $ori_heigth ) {
+                        $thumb_w = $width;
+                        $thumb_h = ceil( $ori_heigth * ( $width / $ori_width ) );
+                    }
+                } else {
+                    if ( $ori_width > $ori_heigth ) {
+                        $thumb_w = $width;
+                        $thumb_h = ceil( $ori_heigth * ( $width / $ori_width ) );
+                    }
+                    if ( $ori_width < $ori_heigth ) {
+                        $thumb_w = ceil( $ori_width * ( $height / $ori_heigth ) );
+                        $thumb_h = $height;
+                    }
                 }
                 if ( $ori_width == $ori_heigth ) {
                     $thumb_w = $width;
@@ -1052,11 +1066,28 @@
             }
 
             // Resample the image
-            $dst_img = imagecreatetruecolor( $thumb_w,$thumb_h ); 
+            $dst_img = imagecreatetruecolor( $thumb_w, $thumb_h ); 
             if ( $img_type == 'png' ) {
                 imagecopyresized( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
             } else {
                 imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
+            }
+            
+            if ( $crop && ( $width != $thumb_w || $height != $thumb_h ) ) {
+
+                $crp_img = imagecreatetruecolor( $width, $height ); 
+                
+                $x = ( $thumb_w == $width  ) ? 0 : ceil( ( $thumb_w-$width  ) / 2 );
+                $y = ( $thumb_h == $height ) ? 0 : ceil( ( $thumb_h-$height ) / 2 );
+
+                if ( $img_type == 'png' ) {
+                    imagecopyresized( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
+                } else {
+                    imagecopyresampled( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
+                }
+                
+                $dst_img = $crp_img;
+                
             }
 
             // Get the resulting image

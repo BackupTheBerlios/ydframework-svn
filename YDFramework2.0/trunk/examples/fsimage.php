@@ -80,6 +80,12 @@
             $img = new YDFSImage( 'fsimage.gif' );
             $img->outputThumbnail( 150, 110 );
         }
+        
+        // Action to create and show thumbnail
+        function actionThumbnail6() {
+            $img = new YDFSImage( 'fsimage.jpg' );
+            $img->outputThumbnail( 100, 100, false, true );
+        }
 
         // Action to create and show thumbnail
         function actionThumbnailSave() {
