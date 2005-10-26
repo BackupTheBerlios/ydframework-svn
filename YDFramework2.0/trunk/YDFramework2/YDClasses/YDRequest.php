@@ -58,26 +58,11 @@
          */
         function getActionName() {
 
-            // First, we check the path info. The first item is the name of the action, the rest is arg0 - ... in the
-            // $_GET parameters.
-            if ( ! empty( $_SERVER['PATH_INFO'] ) ) {
-                $pathInfo = explode( '/', substr( $_SERVER['PATH_INFO'], 1 ) );
-                $action = ( sizeof( $pathInfo ) > 0 ) ? $pathInfo[0] : 'actionDefault';
-                foreach ( array_slice( $pathInfo, 1 ) as $idx=>$val ) {
-                    $_GET[ 'arg' . $idx ] = $val;
-                }
-
-            // Then we check the $_GET parameters
-            } elseif ( ! empty( $_GET[ 'do' ] ) ) {
-                $action = 'action' . $_GET[ 'do' ];
-
-            // Else, we keep the default
-            } else {
-                $action = 'actionDefault';
-            }
+            // Get the name of the action
+            $action = strtolower( empty( $_GET[ 'do' ] ) ? 'actionDefault' : 'action' . $_GET[ 'do' ] );
 
             // We convert to lowercase
-            $action = strtolower( $action );
+            //$action = strtolower( $action );
 
             // Remove the action prefix
             if ( strpos( $action, 'action' ) === 0 ) {
