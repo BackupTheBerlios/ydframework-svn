@@ -28,7 +28,15 @@
 
     // Includes
     include_once( dirname( __FILE__ ) . '/YDUtil.php');
-
+    
+    // YDFSImage cropping specific constants
+    define( 'YD_FS_CROP_UNCHANGED', 1 );
+    define( 'YD_FS_CROP_ENLARGED',  2 );
+    define( 'YD_FS_CROP_BORDERED',  3 );
+    
+    // Config when cropping smaller images
+    YDConfig::set( 'YD_FS_CROP', YD_FS_CROP_ENLARGED, false );
+    
     // The mime types mapping
     $GLOBALS['YD_FS_MIME_MAPPING'] = array(
         'ez' => 'application/andrew-inset',
@@ -1033,33 +1041,50 @@
 
             // Get the current image size
             $ori_width  = imageSX( $src_img );
-            $ori_heigth = imageSY( $src_img );
+            $ori_height = imageSY( $src_img );
             
             // Calculate the new image size
-            if ( $width >= $ori_width || $height >= $ori_heigth ) {
+            if ( $width >= $ori_width || $height >= $ori_height ) {
+                
                 $thumb_w = $ori_width;
-                $thumb_h = $ori_heigth;
-            } else { 
-                if ( $crop ) {
-                    if ( $ori_width > $ori_heigth ) {
-                        $thumb_w = ceil( $ori_width * ( $height / $ori_heigth ) );
+                $thumb_h = $ori_height;
+                
+                if ( $crop && YDConfig::get( 'YD_FS_CROP', YD_FS_CROP_ENLARGED ) === YD_FS_CROP_ENLARGED ) {
+                    if ( $width > $height ) {
+                        $thumb_w = ceil( $ori_width * ( $ori_height / $height ) );
                         $thumb_h = $height;
                     }
-                    if ( $ori_width < $ori_heigth ) {
+                    if ( $width < $height ) {
                         $thumb_w = $width;
-                        $thumb_h = ceil( $ori_heigth * ( $width / $ori_width ) );
+                        $thumb_h = ceil( $ori_height * ( $ori_width / $width ) );
                     }
-                } else {
-                    if ( $ori_width > $ori_heigth ) {
+                    if ( $width == $height ) {
                         $thumb_w = $width;
-                        $thumb_h = ceil( $ori_heigth * ( $width / $ori_width ) );
-                    }
-                    if ( $ori_width < $ori_heigth ) {
-                        $thumb_w = ceil( $ori_width * ( $height / $ori_heigth ) );
                         $thumb_h = $height;
                     }
                 }
-                if ( $ori_width == $ori_heigth ) {
+                
+            } else { 
+                if ( $crop ) {
+                    if ( $ori_width > $ori_height ) {
+                        $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
+                        $thumb_h = $height;
+                    }
+                    if ( $ori_width < $ori_height ) {
+                        $thumb_w = $width;
+                        $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
+                    }
+                } else {
+                    if ( $ori_width > $ori_height ) {
+                        $thumb_w = $width;
+                        $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
+                    }
+                    if ( $ori_width < $ori_height ) {
+                        $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
+                        $thumb_h = $height;
+                    }
+                }
+                if ( $ori_width == $ori_height ) {
                     $thumb_w = $width;
                     $thumb_h = $height;
                 }
@@ -1068,22 +1093,58 @@
             // Resample the image
             $dst_img = imagecreatetruecolor( $thumb_w, $thumb_h ); 
             if ( $img_type == 'png' ) {
-                imagecopyresized( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
+                imagecopyresized( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_height );
             } else {
-                imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_heigth );
+                imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_height );
             }
             
             if ( $crop && ( $width != $thumb_w || $height != $thumb_h ) ) {
+            
+                $x = ceil( ( $thumb_w-$width  ) / 2 );
+                $y = ceil( ( $thumb_h-$height ) / 2 );
 
-                $crp_img = imagecreatetruecolor( $width, $height ); 
+                $default = true;
                 
-                $x = ( $thumb_w == $width  ) ? 0 : ceil( ( $thumb_w-$width  ) / 2 );
-                $y = ( $thumb_h == $height ) ? 0 : ceil( ( $thumb_h-$height ) / 2 );
-
-                if ( $img_type == 'png' ) {
-                    imagecopyresized( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
-                } else {
-                    imagecopyresampled( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
+                if ( $ori_width < $width || $ori_height < $height ) {
+                
+                    switch ( YDConfig::get( 'YD_FS_CROP', YD_FS_CROP_ENLARGED ) ) {
+                    
+                        case YD_FS_CROP_UNCHANGED:
+                        
+                            if ( $ori_width < $width && $ori_height < $height ) {
+                                $crp_img = $dst_img;
+                                $default = false;
+                            } else if ( $ori_width < $width ) {
+                                $x = 0;
+                                $width = $ori_width;
+                            } else if ( $ori_height < $height ) {
+                                $y = 0;
+                                $height = $ori_height;
+                            }
+                            break;
+                        
+                        case YD_FS_CROP_ENLARGED:
+                            $x = ceil( ( $width-$thumb_w  ) / 2 );
+                            $y = ceil( ( $height-$thumb_h ) / 2 );
+                            break;
+                        
+                        case YD_FS_CROP_BORDERED:
+                            break;
+                            
+                    }
+                    
+                }
+                
+                if ( $default ) {
+                
+                    $crp_img = imagecreatetruecolor( $width, $height ); 
+                    
+                    if ( $img_type == 'png' ) {
+                        imagecopyresized( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
+                    } else {
+                        imagecopyresampled( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
+                    }
+                    
                 }
                 
                 $dst_img = $crp_img;

@@ -70,9 +70,9 @@
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_004.xml" />
 
-        <para>One of the most common things people creating web applications do with images is creating thumbnails. Creating thumbnails looks easy, but it can quickly get difficult. To help you with this, the Yellow Duck Framework has some built-in functions that take care of all the difficult work you normally have to perform to create thumbnails. Additionally, the Yellow Duck Framework allows you to create thumbnails from a GIF image, which the standard GD library included with PHP is not capable of.</para>
+        <para>One of the most common things people creating web applications do with images is creating thumbnails. Creating thumbnails looks easy, but it can quickly get difficult. To help you with this, the Yellow Duck Framework has some built-in functions that take care of all the difficult work you normally have to perform to create thumbnails.</para>
 
-        <para>To generate thumbnails, there are two functions from the YDFSImage class you can use. They use the algorithm, but only differ in what they do with the output.</para>
+        <para>To generate thumbnails, there are two functions from the YDFSImage class you can use. They use the same algorithm, but only differ in what they do with the output.</para>
 
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold">outputThumbnail:</emphasis> creates a thumbnail and outputs it directly to the browser</listitem>
@@ -88,6 +88,14 @@
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfilesystem_006.xml" />
 
         <para>The image cache files are stored in the temp directory which is put in the YDFramework2 directory.</para>
+        
+        <para>There's also a parameter called $crop in this two functions. If set to true (default false) the thumbnail will be cropped to match the exact width and height defined. When working with images with smaller widths and/or heights than the ones wanted, the crop funcionality have three ways of dealing with them and is up to the user to define which one to use. This is defined by the YD_FS_CROP config variable and it must have one of the following constant values:</para>
+        
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">YD_FS_CROP_UNCHANGED:</emphasis> the smaller side(s) gets unchanged. The thumbnail wont have the exact defined size.</listitem>
+            <listitem><emphasis role="bold">YD_FS_CROP_ENLARGED:</emphasis> the image is enlarged to reach the desired size and then gets cropped to match it. The resulting thumbnail may lose image quality. This is the default value for YD_FS_CROP.</listitem>
+            <listitem><emphasis role="bold">YD_FS_CROP_BORDERED:</emphasis> a black border is added to the smaller side(s) so the thumbnail gets the exact size.</listitem>
+        </itemizedlist>
 
     </sect1>
 
