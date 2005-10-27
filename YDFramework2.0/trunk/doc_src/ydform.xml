@@ -195,7 +195,7 @@
             <listitem><emphasis role="bold">maxfilesize:</emphasis> The file size must not exceed the given number of bytes</listitem>
             <listitem><emphasis role="bold">mimetype:</emphasis> The file must have a correct mimetype</listitem>
             <listitem><emphasis role="bold">filename:</emphasis> The filename must match the given regex</listitem>
-            <listitem><emphasis role="bold">extension:</emphasis> The filename must match the indicated extension</listitem>
+            <listitem><emphasis role="bold">extension:</emphasis> The filename must match the indicated extension (case insensitive)</listitem>
         </itemizedlist>
 
         <para>We also have rules that are used by the date/time form elements:</para>
