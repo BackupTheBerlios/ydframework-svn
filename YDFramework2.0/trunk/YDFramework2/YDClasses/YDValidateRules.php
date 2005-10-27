@@ -305,10 +305,19 @@
          *	@param $opts	The array in which the value should be.
          */
         function i_in_array( $val, $opts ) {
-            foreach ( $val as $i=>$j ) {
-                if ( is_string( $val ) ) {
-                    $val[$i] = strtolower( $i );
+            foreach ( $opts as $i=>$j ) {
+                if ( is_string( $j ) ) {
+                    $opts[$i] = strtolower( $j );
                 }
+            }
+            if ( is_array( $val ) ) {
+                foreach ( $val as $i=>$j ) {
+                    if ( is_string( $j ) ) {
+                        $val[$i] = strtolower( $j );
+                    }
+                }
+            } else {
+                $val = strtolower( $val );
             }
             return in_array( $val, $opts, true );
         }
@@ -321,10 +330,19 @@
          *	@param $opts	The array in which the value should not be.
          */
         function i_not_in_array( $val, $opts ) {
-            foreach ( $val as $i=>$j ) {
-                if ( is_string( $val ) ) {
-                    $val[$i] = strtolower( $i );
+            foreach ( $opts as $i=>$j ) {
+                if ( is_string( $j ) ) {
+                    $opts[$i] = strtolower( $j );
                 }
+            }
+            if ( is_array( $val ) ) {
+                foreach ( $val as $i=>$j ) {
+                    if ( is_string( $j ) ) {
+                        $val[$i] = strtolower( $j );
+                    }
+                }
+            } else {
+                $val = strtolower( $val );
             }
             return ! in_array( $val, $opts, true );
         }
@@ -410,7 +428,7 @@
         }
 
         /**
-         *	This rule checks if a file upload has the right file extension.
+         *	This rule checks if a file upload has the right file extension (case insensitive). 
          *
          *	@param $val		The value to test.
          *	@param $opts	The file extension it should match (can also be an array of extensions).
@@ -421,7 +439,7 @@
                 $opts = array( $opts );
             }
             $ext = YDPath::getExtension( $val['name'] );
-            return in_array( $ext, $opts );
+            return YDValidateRules::i_in_array( $ext, $opts );
         }
 
         /**
