@@ -452,11 +452,11 @@
                     $file = basename( YD_SELF_FILE, '.' . substr( strrchr( YD_SELF_FILE, '.' ), 1 ) );
                 }
                 if ( is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $file . YD_TPL_EXT ) ) {
-                    $tplName = $file . YD_TPL_EXT;
+                    $tplName = rtrim( $this->template_dir, '/\\' ) . '/' . $file . YD_TPL_EXT;
                 } else {
-                    $tplName = $file;
+                    $tplName = rtrim( $this->template_dir, '/\\' ) . '/' . $file;
                 }
-                if ( ! is_file( rtrim( $this->template_dir, '/\\' ) . '/' . $tplName ) ) {
+                if ( ! is_file( $tplName ) ) {
                     trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
                 }
                 return $tplName;
