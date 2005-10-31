@@ -274,7 +274,7 @@
         function debug() {
             $args = func_get_args();
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 ) {
-                echo( YD_CRLF . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . ' -->' . YD_CRLF );
+                echo( YD_CRLF . '<!-- [ YD_DEBUG ] ' . implode( ' ', $args ) . '-->' . YD_CRLF );
             }
             if ( YDConfig::get( 'YD_DEBUG' ) == 2 ) {
                 echo( '<table border="0" cellspacing="0" cellpadding="4"><tr>' );
@@ -332,33 +332,42 @@
          */
         function stackTrace() {
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
-                $err = '';
-                $err .= 'URI: ' . YD_SELF_URI . YD_CRLF;
-                $err .= 'Debug backtrace:' . YD_CRLF;
-                foreach( debug_backtrace() as $t ) {
-                    $err .= '    @ ';
-                    if ( isset( $t['file'] ) ) {
-                        $err .= basename( $t['file'] ) . ':' . $t['line'];
-                    } else {
-                        $err .= basename( YD_SELF_FILE );
-                    }
-                    $err .= ' -- ';
-                    if ( isset( $t['class'] ) ) {
-                        $err .= $t['class'] . $t['type'];
-                    }
-                    $err .= $t['function'];
-                    if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
-                        $err .= '(...)';
-                    } else {
-                        $err .= '()';
-                    }
-                    $err .= YD_CRLF;
-                }
+                $err = 'URI: ' . YD_SELF_URI . YD_CRLF . YDDebugUtil::getStackTrace();
                 if ( ini_get( 'display_errors' ) == 1 ) {
                     echo( '<pre>' . YD_CRLF . htmlentities( $err ) . '</pre>' );
                 }
                 error_log( $err, 0 );
             }
+        }
+
+        /**
+         *	Function to get a formatted stack trace.
+         *
+         *	@static
+         */
+        function getStackTrace() {
+            $err = '';
+            $err .= 'Debug backtrace:' . YD_CRLF;
+            foreach( debug_backtrace() as $t ) {
+                $err .= '    @ ';
+                if ( isset( $t['file'] ) ) {
+                    $err .= basename( $t['file'] ) . ':' . $t['line'];
+                } else {
+                    $err .= basename( YD_SELF_FILE );
+                }
+                $err .= ' -- ';
+                if ( isset( $t['class'] ) ) {
+                    $err .= $t['class'] . $t['type'];
+                }
+                $err .= $t['function'];
+                if ( isset( $t['args'] ) && sizeof( $t['args'] ) > 0 ) {
+                    $err .= '(...)';
+                } else {
+                    $err .= '()';
+                }
+                $err .= YD_CRLF;
+            }
+            return $err;
         }
 
     }
