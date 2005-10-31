@@ -1044,50 +1044,46 @@
             $ori_height = imageSY( $src_img );
             
             // Calculate the new image size
-            if ( $width >= $ori_width || $height >= $ori_height ) {
-                
-                $thumb_w = $ori_width;
-                $thumb_h = $ori_height;
-                
-                if ( $crop && YDConfig::get( 'YD_FS_CROP', YD_FS_CROP_ENLARGED ) === YD_FS_CROP_ENLARGED ) {
-                    if ( $width > $height ) {
-                        $thumb_w = ceil( $ori_width * ( $ori_height / $height ) );
-                        $thumb_h = $height;
-                    }
-                    if ( $width < $height ) {
-                        $thumb_w = $width;
-                        $thumb_h = ceil( $ori_height * ( $ori_width / $width ) );
-                    }
-                    if ( $width == $height ) {
-                        $thumb_w = $width;
-                        $thumb_h = $height;
-                    }
-                }
-                
-            } else { 
-                if ( $crop ) {
-                    if ( $ori_width > $ori_height ) {
-                        $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
-                        $thumb_h = $height;
-                    }
-                    if ( $ori_width < $ori_height ) {
-                        $thumb_w = $width;
-                        $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
-                    }
-                } else {
-                    if ( $ori_width > $ori_height ) {
-                        $thumb_w = $width;
-                        $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
-                    }
-                    if ( $ori_width < $ori_height ) {
-                        $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
-                        $thumb_h = $height;
-                    }
+            if ( $crop ) {
+            
+                if ( $ori_width > $ori_height ) {
+                    $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
+                    $thumb_h = $height;
+                } 
+                if ( $ori_width < $ori_height ) {
+                    $thumb_w = $width;
+                    $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
                 }
                 if ( $ori_width == $ori_height ) {
                     $thumb_w = $width;
                     $thumb_h = $height;
                 }
+                
+                if ( ( $width >= $ori_width || $height >= $ori_height ) && YDConfig::get( 'YD_FS_CROP' ) != YD_FS_CROP_ENLARGED ) {
+                    $thumb_w = $ori_width;
+                    $thumb_h = $ori_height;
+                }
+            
+            } else {
+            
+                if ( $ori_width > $ori_height ) {
+                    $thumb_w = $width;
+                    $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
+                }
+                if ( $ori_width < $ori_height ) {
+                    $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
+                    $thumb_h = $height;
+                }
+                if ( $ori_width == $ori_height ) {
+                    $thumb_w = $width;
+                    $thumb_h = $height;
+                }
+                
+                if ( $width >= $ori_width || $height >= $ori_height ) {
+                    $thumb_w = $ori_width;
+                    $thumb_h = $ori_height;
+                }
+            
             }
 
             // Resample the image
@@ -1100,9 +1096,9 @@
             
             if ( $crop && ( $width != $thumb_w || $height != $thumb_h ) ) {
             
-                $x = ceil( ( $thumb_w-$width  ) / 2 );
-                $y = ceil( ( $thumb_h-$height ) / 2 );
-
+                $x = ceil( abs( $thumb_w-$width  ) / 2 );
+                $y = ceil( abs( $thumb_h-$height ) / 2 );
+                
                 $default = true;
                 
                 if ( $ori_width < $width || $ori_height < $height ) {
@@ -1124,10 +1120,6 @@
                             break;
                         
                         case YD_FS_CROP_ENLARGED:
-                            $x = ceil( ( $width-$thumb_w  ) / 2 );
-                            $y = ceil( ( $height-$thumb_h ) / 2 );
-                            break;
-                        
                         case YD_FS_CROP_BORDERED:
                             break;
                             
@@ -1150,7 +1142,7 @@
                 $dst_img = $crp_img;
                 
             }
-
+            
             // Get the resulting image
             ob_start();
             if ( $img_type == 'gif' ) {
