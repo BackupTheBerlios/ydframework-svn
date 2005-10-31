@@ -145,7 +145,7 @@
                 $debug = YD_CRLF . YD_CRLF;
 
                 // Create the timings report
-                $debug .= 'Processing time(s):' . YD_CRLF . YD_CRLF;
+                $debug .= 'PROCESSING TIME:' . YD_CRLF . YD_CRLF;
                 $debug .= "\tElapsed\t  Diff\t  Marker" . YD_CRLF;
                 $timings = $GLOBALS['timer']->getReport();
                 foreach ( $timings as $timing ) {
@@ -154,12 +154,13 @@
                 $debug .= YD_CRLF;
 
                 // Create the include file details
-                $debug .= 'Total size include files: ' . $includeFilesSize . YD_CRLF . YD_CRLF;
-                $debug .= 'Included files: ' . YD_CRLF . YD_CRLF . "\t" . implode( "\n\t", $includeFiles ) . YD_CRLF . YD_CRLF;
+                $debug .= 'INCLUDED FILES (' . sizeof( $includeFiles ) . ' files - ' . $includeFilesSize . ')' . YD_CRLF . YD_CRLF;
+                $debug .= "\t" . implode( "\n\t", $includeFiles ) . YD_CRLF . YD_CRLF;
 
                 // Create the list of include directories
-                $debug .= 'Includes search path:' . YD_CRLF . YD_CRLF;
-                foreach ( explode( YD_PATHDELIM, ini_get( 'include_path' ) ) as $path ) {
+                $include_dirs = explode( YD_PATHDELIM, ini_get( 'include_path' ) );
+                $debug .= 'INCLUDES SEARCH PATH (' . sizeof( $include_dirs ) . ' directories)' . YD_CRLF . YD_CRLF;
+                foreach ( $include_dirs as $path ) {
                     if ( realpath( $path ) ) {
                         $debug .= "\t" . realpath( $path ) . YD_CRLF;
                     } else {
@@ -168,12 +169,9 @@
                 }
                 $debug .= YD_CRLF;
 
-                // If there is a database instance
-                $debug .= 'Number of SQL queries: ' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . YD_CRLF . YD_CRLF;
-
                 // Add the queries if any
                 if ( sizeof( $GLOBALS['YD_SQL_QUERY'] ) > 0 ) {
-                    $debug .= 'Executed SQL queries: ' . YD_CRLF . YD_CRLF;
+                    $debug .= 'EXECUTED SQL QUERIES (' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . ' queries)' . YD_CRLF . YD_CRLF;
                     foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
                         $debug .= "\t" . ($key+1) . ': ' . trim( $query ) . YD_CRLF . YD_CRLF;
                     }
