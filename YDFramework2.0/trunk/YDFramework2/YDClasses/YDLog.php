@@ -176,7 +176,7 @@
                 $msg .= '<uri>' . htmlentities( YD_SELF_URI ) . '</uri>';
                 $msg .= '<line>' . htmlentities( $stack[1]['line'] ) . '</line>';
                 $msg .= '<function>' . htmlentities( $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'] ) . '</function>';
-                $msg .= '<message>' . htmlentities( trim( $text ) ) . '</message>';
+                $msg .= '<message>' . htmlentities( $text ) . '</message>';
                 $msg .= '</entry>' . YD_CRLF;
                 $msg .= '</log>';
 
@@ -191,6 +191,25 @@
                 fseek( $f, -6, SEEK_END );
                 fwrite( $f, $msg );
                 fclose( $f );
+
+            }
+
+            // Use another function if not text or XML
+            if ( ! in_array( strtoupper( YDConfig::get( 'YD_LOG_FORMAT' ) ), array( 'XML', 'TEXT' ) ) ) {
+
+                // Get the values
+                $values = array();
+                $values['date']     = time(); //strftime( '%Y-%m-%d %H:%M:%S' );
+                $values['level']    = strtoupper( $level );
+                $values['file']     = $stack[1]['file'];
+                $values['basefile'] = basename( $stack[1]['file'] );
+                $values['uri']      =  YD_SELF_URI;
+                $values['line']     = $stack[1]['line'];
+                $values['function'] = $stack[2]['class'] . $stack[2]['type'] . $stack[2]['function'];
+                $values['message']  = $text;
+
+                // Log the values
+                call_user_func( 'YDLogWrite_' . strtoupper( YDConfig::get( 'YD_LOG_FORMAT' ) ), $values );
 
             }
 
