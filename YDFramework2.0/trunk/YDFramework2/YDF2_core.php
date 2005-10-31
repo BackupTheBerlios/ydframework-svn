@@ -392,9 +392,6 @@
 
             // Set the locale
             @call_user_func_array( 'setlocale', array_unique( $locales ) );
-            //if ( ! call_user_func_array( 'setlocale', array_unique( $locales ) ) ) {
-                //trigger_error( 'Your platform does not support the locale "' . strtolower( $locale ) . '"', YD_ERROR );
-            //}
 
             // Set the locale
             YDConfig::set( YD_LOCALE_KEY, $locale );
