@@ -74,18 +74,18 @@
             );
 
             // Add any missing body_more field
-            $fields = $this->db->getValuesByName( 'show fields from ' . YDConfig::get( 'db_prefix', '' ) . 'items', 'field' );
+            $fields = $this->db->getValuesByName( 'show fields from #_items', 'field' );
             if ( ! in_array( 'body_more', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'items ADD body_more LONGTEXT AFTER body' );
+                $this->db->executeSql( 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
             }
 
             // Get the list of indexes
-            $indexes = $this->db->getValuesByName( 'show keys from ' . YDConfig::get( 'db_prefix', '' ) . 'users', 'key_name' );
+            $indexes = $this->db->getValuesByName( 'show keys from #_users', 'key_name' );
             if ( in_array( 'email', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'users DROP INDEX email' );
+                $this->db->executeSql( 'ALTER TABLE #_users DROP INDEX email' );
             }
             if ( ! in_array( 'name', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE ' . YDConfig::get( 'db_prefix', '' ) . 'users ADD UNIQUE name (name)' );
+                $this->db->executeSql( 'ALTER TABLE #_users ADD UNIQUE name (name)' );
             }
 
         }
@@ -104,14 +104,14 @@
                 $where =implode( ' and ', $where );
 
                 // Generate the SQL statement
-                $sql = $this->db->_createSqlUpdate( YDConfig::get( 'db_prefix', '' ) . 'statistics', $values, $where );
+                $sql = $this->db->_createSqlUpdate( '#_statistics', $values, $where );
                 $sql = str_replace( ' WHERE', ',hits=hits+1 WHERE', $sql );
 
                 // Execute the SQL
                 $affected = $this->db->executeSql( $sql );
                 if ( $affected === 0 ) {
                     $values['hits'] = '1';
-                    $this->db->executeInsert( YDConfig::get( 'db_prefix', '' ) . 'statistics', $values );
+                    $this->db->executeInsert( '#_statistics', $values );
                 }
 
             }
@@ -129,7 +129,7 @@
             // Get the item indexes for the indicated weblog (cached to minimize the number of SQL queries)
             $cacheName = 'YD_CACHE_WEBLOG_ITEMIDS_' . md5( strtolower( $order ) );
             if ( ! isset( $GLOBALS[ $cacheName ] ) ) {
-                $sql = $this->_prepareQuery( 'SELECT id FROM ' . YDConfig::get( 'db_prefix', '' ) . 'items', $order );
+                $sql = $this->_prepareQuery( 'SELECT id FROM #_items', $order );
                 $item_ids = $this->db->getValuesByName( $sql, 'id' );
                 $GLOBALS[ $cacheName ] = $item_ids;
             }
@@ -224,8 +224,8 @@
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
             $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
-                 . 'c.title as category, u.email as user_email, u.name as user_name FROM ' . YDConfig::get( 'db_prefix', '' ) . 'items i, ' . YDConfig::get( 'db_prefix', '' ) . 'categories c, '
-                  . YDConfig::get( 'db_prefix', '' ) . 'users u WHERE i.category_id = c.id AND i.user_id = u.id ';
+                 . 'c.title as category, u.email as user_email, u.name as user_name FROM #_items i, #_categories c, '
+                 . '#_users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );
             return $this->_fixItems( $this->db->getRecords( $sql, $limit, $offset ) );
         }
@@ -237,27 +237,27 @@
 
         // Add an item
         function addItem( $values ) {
-            return $this->_executeInsert( YDConfig::get( 'db_prefix', '' ) . 'items', $values );
+            return $this->_executeInsert( '#_items', $values );
         }
 
         // Update an item
         function updateItem( $values ) {
-            return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'items', $values, 'id = ' . $this->str( $values['id'] ) );
+            return $this->db->executeUpdate( '#_items', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
         // Delete an item
         function deleteItem( $item_id ) {
-            $sql = $this->_prepareQuery( 'DELETE FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments WHERE item_id = ' . $this->str( $item_id ) );
+            $sql = $this->_prepareQuery( 'DELETE FROM #_comments WHERE item_id = ' . $this->str( $item_id ) );
             $this->db->executeSql( $sql );
-            return $this->_deleteFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'items', $item_id );
+            return $this->_deleteFromTableUsingID( '#_items', $item_id );
         }
 
         // Get the comments for an item
         function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1 ) {
             if ( $item_id ) {
-                $sql = $this->_prepareQuery( 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments WHERE item_id = ' . $this->str( $item_id ), $order );
+                $sql = $this->_prepareQuery( 'SELECT * FROM #_comments WHERE item_id = ' . $this->str( $item_id ), $order );
             } else {
-                $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments c, ' . YDConfig::get( 'db_prefix', '' ) . 'items i WHERE c.item_id = i.id', $order );
+                $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id', $order );
             }
             $records = $this->db->getRecords( $sql, $limit, $offset );
             foreach ( $records as $key=>$record ) {
@@ -268,7 +268,7 @@
 
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
-            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments c, ' . YDConfig::get( 'db_prefix', '' ) . 'items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
+            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
             $record  = $this->db->getRecord( $sql );
             $record['comment'] = trim( strip_tags( $record['comment'] ) );
             return $record;
@@ -276,23 +276,23 @@
 
         // Add a comment
         function addComment( $values ) {
-            $values['userip'] = $_SERVER["REMOTE_ADDR"];
-            $result = $this->_executeInsert( YDConfig::get( 'db_prefix', '' ) . 'comments', $values );
-            $sql = 'UPDATE ' . YDConfig::get( 'db_prefix', '' ) . 'items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
+            $values['userip'] = $_SERVER['REMOTE_ADDR'];
+            $result = $this->_executeInsert( '#_comments', $values );
+            $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
             $this->db->executeSql( $sql );
             return $result;
         }
 
         // Update a comment
         function updateComment( $values ) {
-            return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'comments', $values, 'id = ' . $this->str( $values['id'] ) );
+            return $this->db->executeUpdate( '#_comments', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
         // Delete a comment
         function deleteComment( $comment_id ) {
             $comment = $this->getCommentById( $comment_id );
-            $result = $this->_deleteFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'comments', $comment_id );
-            $sql = 'UPDATE ' . YDConfig::get( 'db_prefix', '' ) . 'items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
+            $result = $this->_deleteFromTableUsingID( '#_comments', $comment_id );
+            $sql = 'UPDATE #_items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
             $this->db->executeSql( $sql );
             return $result;
         }
@@ -300,7 +300,7 @@
         // Get the comment subscriber list
         function getCommentSubscribers( $item_id ) {
             $sql = $this->_prepareQuery(
-                'SELECT DISTINCT useremail FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments WHERE item_id = ' . $this->str( $item_id )
+                'SELECT DISTINCT useremail FROM #_comments WHERE item_id = ' . $this->str( $item_id )
               . ' AND NOT ISNULL( useremail ) AND useremail <> \'\''
             );
             return $this->db->getValuesByName( $sql, 'useremail' );
@@ -308,8 +308,8 @@
 
         // Get the categories
         function getCategories( $order='title' ) {
-            $result = $this->_selectFromTable( YDConfig::get( 'db_prefix', '' ) . 'categories', $order );
-            $sql = $this->_prepareQuery( 'SELECT category_id, COUNT(*) AS num_items FROM ' . YDConfig::get( 'db_prefix', '' ) . 'items i GROUP BY category_id' );
+            $result = $this->_selectFromTable( '#_categories', $order );
+            $sql = $this->_prepareQuery( 'SELECT category_id, COUNT(*) AS num_items FROM #_items i GROUP BY category_id' );
             $num_items = $this->db->getAsAssocArray( $sql, 'category_id', 'num_items' );
             foreach ( $result as $key=>$val ) {
                 if ( isset( $num_items[ $val['id'] ] ) ) {
@@ -323,18 +323,18 @@
 
         // Get the categories as an associative array
         function getCategoriesAsAssoc( $order='title' ) {
-            $sql = $this->_prepareQuery( 'SELECT id, title FROM ' . YDConfig::get( 'db_prefix', '' ) . 'categories', $order );
+            $sql = $this->_prepareQuery( 'SELECT id, title FROM #_categories', $order );
             return $this->db->getAsAssocArray( $sql, 'id', 'title' );
         }
 
         // Get a category by it's ID
         function getCategoryById( $category_id ) {
-            return $this->_selectFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'categories', $category_id );
+            return $this->_selectFromTableUsingID( '#_categories', $category_id );
         }
 
         // Get a category by it's name
         function getCategoryByName( $name ) {
-            $sql = $this->_prepareQuery( 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'categories WHERE title = ' . $this->str( $name ) );
+            $sql = $this->_prepareQuery( 'SELECT * FROM #_categories WHERE title = ' . $this->str( $name ) );
             return $this->db->getRecord( $sql );
         }
 
@@ -345,25 +345,24 @@
 
         // Add a category
         function addCategory( $values ) {
-            return $this->_executeInsert( YDConfig::get( 'db_prefix', '' ) . 'categories', $values );
+            return $this->_executeInsert( '#_categories', $values );
         }
 
         // Update a category
         function updateCategory( $values ) {
-            return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'categories', $values, 'id = ' . $this->str( $values['id'] ) );
+            return $this->db->executeUpdate( '#_categories', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
         // Delete a category
         function deleteCategory( $category_id ) {
-            return $this->_deleteFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'categories', $category_id );
+            return $this->_deleteFromTableUsingID( '#_categories', $category_id );
         }
 
         // Get the pages
         function getPages( $order='title' ) {
             $sql = $this->_prepareQuery(
-                'SELECT p.id, p.title, p.body, p.created, p.modified, u.email as user_email, u.name as user_name FROM '
-                . YDConfig::get( 'db_prefix', '' ) . 'pages p, '
-                . YDConfig::get( 'db_prefix', '' ) . 'users u WHERE p.user_id = u.id'
+                'SELECT p.id, p.title, p.body, p.created, p.modified, u.email as user_email, u.name as user_name '
+              . 'FROM #_pages p, #_users u WHERE p.user_id = u.id'
             );
             return $this->db->getRecords( $sql );
         }
@@ -372,96 +371,95 @@
         function getPageByID( $page_id ) {
             $sql = $this->_prepareQuery(
                 'SELECT p.id, p.title, p.body, p.created, p.modified, u.email as user_email, u.name as user_name FROM '
-                . YDConfig::get( 'db_prefix', '' ) . 'pages p,'
-                . YDConfig::get( 'db_prefix', '' ) . 'users u WHERE p.user_id = u.id AND p.id = ' . $this->str( $page_id )
+                . '#_pages p, #_users u WHERE p.user_id = u.id AND p.id = ' . $this->str( $page_id )
             );
             return $this->db->getRecord( $sql );
         }
 
         // Add a page
         function addPage( $values ) {
-            return $this->_executeInsert( YDConfig::get( 'db_prefix', '' ) . 'pages', $values );
+            return $this->_executeInsert( '#_pages', $values );
         }
 
         // Update a page
         function updatePage( $values ) {
-            return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'pages', $values, 'id = ' . $this->str( $values['id'] ) );
+            return $this->db->executeUpdate( '#_pages', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
         // Delete a page
         function deletePage( $page_id ) {
-            return $this->_deleteFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'pages', $page_id );
+            return $this->_deleteFromTableUsingID( '#_pages', $page_id );
         }
 
         // Get the links
         function getLinks( $order='title' ) {
-            return $this->_selectFromTable( YDConfig::get( 'db_prefix', '' ) . 'links', $order );
+            return $this->_selectFromTable( '#_links', $order );
         }
 
         // Get a link by it's ID
         function getLinkByID( $link_id ) {
-            return $this->_selectFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'links', $link_id );
+            return $this->_selectFromTableUsingID( '#_links', $link_id );
         }
 
         // Get a link by it's url
         function getLinkByUrl( $url ) {
-            $sql = $this->_prepareQuery( 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'links WHERE url = ' . $this->str( $url ) );
+            $sql = $this->_prepareQuery( 'SELECT * FROM #_links WHERE url = ' . $this->str( $url ) );
             return $this->db->getRecord( $sql );
         }
 
         // Add a link
         function addLink( $values ) {
-            return $this->_executeInsert( YDConfig::get( 'db_prefix', '' ) . 'links', $values );
+            return $this->_executeInsert( '#_links', $values );
         }
 
         // Update a link
         function updateLink( $values ) {
-            return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'links', $values, 'id = ' . $this->str( $values['id'] ) );
+            return $this->db->executeUpdate( '#_links', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
         // Delete a link
         function deleteLink( $link_id ) {
-            return $this->_deleteFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'links', $link_id );
+            return $this->_deleteFromTableUsingID( '#_links', $link_id );
         }
 
         // Function to increase the link num_visits
         function updateLinkNumVisits( $link_id ) {
-            $sql = 'UPDATE ' . YDConfig::get( 'db_prefix', '' ) . 'links SET num_visits = num_visits+1 WHERE id = ' . $this->str( $link_id );
+            $sql = 'UPDATE #_links SET num_visits = num_visits+1 WHERE id = ' . $this->str( $link_id );
             $this->db->executeSql( $sql );
         }
 
         // Check the user login
         function checkLogin( $user, $password ) {
             return $this->db->getRecord(
-                'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'users WHERE name = ' . $this->str( $user ) . ' AND password = ' . $this->str( $password )
+                'SELECT * FROM #_users WHERE name = ' . $this->str( $user ) . ' AND password = ' . $this->str( $password )
             );
         }
 
         // Get the install date
         function getInstallDate() {
-            return strtotime( $this->db->getValue( 'SELECT created FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics_init LIMIT 1' ) );
+            return strtotime( $this->db->getValue( 'SELECT created FROM #_statistics_init LIMIT 1' ) );
         }
 
         // Get the total num of hits
         function getTotalHits() {
-            return $this->db->getValue( 'SELECT SUM(hits) FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics' );
+            return $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics' );
         }
 
         // Get the number of items
         function getStatsItemCount() {
-            return $this->db->getValue( 'SELECT count(*) FROM ' . YDConfig::get( 'db_prefix', '' ) . 'items' );
+            return $this->db->getValue( 'SELECT count(*) FROM #_items' );
         }
 
         // Get the number of comments
         function getStatsCommentCount() {
-            return $this->db->getValue( 'SELECT count(*) FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments' );
+            return $this->db->getValue( 'SELECT count(*) FROM #_comments' );
         }
 
         // Get the stats from the last 6 months
         function getStatsMonths( $limit=6 ) {
             YDInclude( 'YDDate.php' );
             $records = $this->db->getRecords(
-                'SELECT DATE_FORMAT(date,\'%Y-%m\') AS YearMonth, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics '
+                'SELECT DATE_FORMAT(date,\'%Y-%m\') AS YearMonth, SUM(hits) AS hits FROM #_statistics '
               . ' GROUP BY YearMonth ORDER BY date DESC', $limit
             );
             foreach ( $records as $key=>$record ) {
@@ -475,7 +473,7 @@
         function getStatsDays( $limit=7 ) {
             YDInclude( 'YDDate.php' );
             $records = $this->db->getRecords(
-                'SELECT date, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY date ORDER BY date DESC', $limit
+                'SELECT date, SUM(hits) AS hits FROM #_statistics GROUP BY date ORDER BY date DESC', $limit
             );
             foreach ( $records as $key=>$record ) {
                 $date = new YDDate( $record['date'] );
@@ -487,7 +485,7 @@
         // Get the top 10 URLs
         function getStatsUrls( $limit=10 ) {
             return $this->db->getRecords(
-                'SELECT uri, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY uri ORDER BY hits DESC', $limit
+                'SELECT uri, SUM(hits) AS hits FROM #_statistics GROUP BY uri ORDER BY hits DESC', $limit
             );
         }
 
@@ -498,7 +496,7 @@
                 'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'), 'unknown' => t('other')
             );
             $browserStats = $this->db->getRecords(
-                'SELECT browser, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY browser ORDER BY hits DESC'
+                'SELECT browser, SUM(hits) AS hits FROM #_statistics GROUP BY browser ORDER BY hits DESC'
             );
             if ( sizeof( $browserStats ) > 0 ) {
                 foreach ( $browserStats as $key=>$val ) {
@@ -514,7 +512,7 @@
                 'win' => 'Windows', 'mac' => 'Macintosh', 'linux' => 'Linux', 'unix' => 'Unix', 'other' => 'Other', 'unknown' => t('other')
             );
             $osStats = $this->db->getRecords(
-                'SELECT platform, SUM(hits) AS hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'statistics GROUP BY platform ORDER BY hits DESC'
+                'SELECT platform, SUM(hits) AS hits FROM #_statistics GROUP BY platform ORDER BY hits DESC'
             );
             if ( sizeof( $osStats ) > 0 ) {
                 foreach ( $osStats as $key=>$val ) {
@@ -527,32 +525,32 @@
         // Get the commenter statistics
         function getCommenterStats( $limit=10 ) {
             return $this->db->getRecords(
-                'SELECT username, count(*) as hits FROM ' . YDConfig::get( 'db_prefix', '' ) . 'comments GROUP BY username ORDER BY hits DESC', $limit
+                'SELECT username, count(*) as hits FROM #_comments GROUP BY username ORDER BY hits DESC', $limit
             );
         }
 
         // Get the list of users
         function getUsers( $order='name' ) {
-            $sql = $this->_prepareQuery( 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'users', $order );
+            $sql = $this->_prepareQuery( 'SELECT * FROM #_users', $order );
             return $this->db->getRecords( $sql );
         }
 
         // Function to get a user by it's ID
         function getUserByID( $user_id ) {
-            return $this->_selectFromTableUsingID( YDConfig::get( 'db_prefix', '' ) . 'users', $user_id );
+            return $this->_selectFromTableUsingID( '#_users', $user_id );
         }
 
         // Function to get a user by his name
         function getUserByName( $user_name ) {
-            $sql = 'SELECT * FROM ' . YDConfig::get( 'db_prefix', '' ) . 'users WHERE LOWER( name ) = ' . $this->str( strtolower( $user_name ) );
+            $sql = 'SELECT * FROM #_users WHERE LOWER( name ) = ' . $this->str( strtolower( $user_name ) );
             return $this->db->getRecord( $sql );
         }
 
         // Replace the user with another one
         function replaceUser( $old, $new ) {
-            $sql = 'UPDATE ' . YDConfig::get( 'db_prefix', '' ) . 'items SET user_id = ' . $this->str( $new ) . ' WHERE user_id = ' . $this->str( $old );
+            $sql = 'UPDATE #_items SET user_id = ' . $this->str( $new ) . ' WHERE user_id = ' . $this->str( $old );
             $this->db->executeSql( $sql );
-            $sql = 'UPDATE ' . YDConfig::get( 'db_prefix', '' ) . 'pages SET user_id = ' . $this->str( $new ) . ' WHERE user_id = ' . $this->str( $old );
+            $sql = 'UPDATE #_pages SET user_id = ' . $this->str( $new ) . ' WHERE user_id = ' . $this->str( $old );
             $this->db->executeSql( $sql );
         }
 
@@ -574,21 +572,21 @@
                 $user['created']= time();
                 $user['modified'] = time();
                 unset( $user['id'] );
-                return $this->db->executeInsert( YDConfig::get( 'db_prefix', '' ) . 'users', $user );
+                return $this->db->executeInsert( '#_users', $user );
             } else {
                 if ( empty( $user['created'] ) ) {
                     $user['created']= time();
                 }
                 $user['modified'] = time();
                 unset( $user['name'] );
-                return $this->db->executeUpdate( YDConfig::get( 'db_prefix', '' ) . 'users', $user, 'id = ' . $this->str( $user['id'] ) );
+                return $this->db->executeUpdate( '#_users', $user, 'id = ' . $this->str( $user['id'] ) );
             }
 
         }
 
         // Delete a user from the database
         function deleteUser( $user_id ) {
-            $sql = 'DELETE FROM ' . YDConfig::get( 'db_prefix', '' ) . 'users WHERE id = ' . $this->str( $user_id );
+            $sql = 'DELETE FROM #_users WHERE id = ' . $this->str( $user_id );
             $this->db->executeSql( $sql );
         }
 

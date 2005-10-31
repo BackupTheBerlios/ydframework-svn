@@ -28,6 +28,9 @@
     YDInclude( 'YDRequest.php' );
     YDInclude( dirname( __FILE__ ) . '/config.php' );
 
+    // Update the database prefix
+    YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix', '' ) );
+
     // Get the cache filename
     $cache_file = YD_DIR_TEMP . '/' . YD_WEBLOG_CACHE_PREFIX . md5( YDRequest::getNormalizedCurrentUrl() ) . '.' . YD_WEBLOG_CACHE_SUFFIX;
     @define( 'YD_WEBLOG_CACHE_FNAME', $cache_file );
