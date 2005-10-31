@@ -38,6 +38,7 @@
     // Configure the default for this class
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC, false );
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
+    YDConfig::set( 'YD_DB_TABLEPREFIX', '', false );
 
     /**
      *  This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
@@ -1293,6 +1294,7 @@
          *  @internal
          */
         function & _connectAndExec( $sql ) {
+            $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
             $this->_logSql( $sql );
             $this->connect();
             $result = @mysql_query( $sql, $this->_conn );

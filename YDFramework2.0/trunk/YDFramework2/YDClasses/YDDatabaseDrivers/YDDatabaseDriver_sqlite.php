@@ -189,6 +189,7 @@
          *	@internal
          */
         function & _connectAndExec( $sql ) {
+            $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
             $this->_logSql( $sql );
             $this->connect();
             $result = @sqlite_query( $sql, $this->_conn );
