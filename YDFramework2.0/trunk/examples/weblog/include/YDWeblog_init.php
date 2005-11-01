@@ -74,6 +74,20 @@
     YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
 
+    // Check if the weblog application is locked or not
+    $db = YDDatabase::getInstance(
+        'mysql',
+        YDConfig::get( 'db_name', 'YDWeblog' ), YDConfig::get( 'db_user', 'root' ),
+        YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
+    );
+    $tables = $db->getRecords( 'show tables' );
+    $table_field_name = 'tables_in_' . strtolower( YDConfig::get( 'db_name', 'YDWeblog' ) );
+    foreach ( $tables as $table ) {
+        if ( strtolower( $table[$table_field_name] ) == YDConfig::get( 'db_prefix', '' ) . 'locked' ) {
+            die( 'Weblog application is being updated. Please come again later.' );
+        }
+    }
+
     // Set the right locale
     $language = YDConfig::get( 'weblog_language', 'en' );
     $language = empty( $language ) ? 'en' : $language;

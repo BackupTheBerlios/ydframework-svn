@@ -100,7 +100,7 @@
                 <tr>
                     <td class="adminRowL">
                         <b>{t w="h_diagtools"}</b><br/>
-                        &raquo; <a href="versioninfo.php">{t w="a_version_info"}</a><br/>
+                        &raquo; <a href="autoupdate.php">{t w="a_version_info"}</a><br/>
                         &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
                     </td>
                 </tr>

@@ -300,7 +300,7 @@ $GLOBALS['t']['bck_data_only'] = 'Données seules';
 
 // manage/version_info.tpl
 $GLOBALS['t']['h_diagtools'] = 'Outils de diagnostic';
-$GLOBALS['t']['a_version_info'] = 'Informations de version';
+$GLOBALS['t']['a_version_info'] = 'Auto Update';
 $GLOBALS['t']['version_check'] = 'Vérifier la version';
 $GLOBALS['t']['installed_version'] = 'Version installée';
 $GLOBALS['t']['development_version'] = 'Version de développement';
