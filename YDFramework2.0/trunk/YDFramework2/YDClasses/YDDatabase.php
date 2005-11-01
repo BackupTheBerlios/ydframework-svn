@@ -27,9 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDUrl.php' );
     include_once( dirname( __FILE__ ) . '/YDUtil.php' );
-    //include_once( dirname( __FILE__ ) . '/YDPersistent.php');
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -168,6 +166,7 @@
             $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
 
             // Publish the URL as an object
+            include_once( dirname( __FILE__ ) . '/YDUrl.php' );
             $this->url = new YDUrl( YD_SELF_URI );
 
         }

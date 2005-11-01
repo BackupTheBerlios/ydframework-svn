@@ -27,7 +27,7 @@
     }
 
     // Includes
-    YDInclude( 'YDDatabase.php' );
+    include_once( dirname( __FILE__ ) . '/YDDatabase.php' );
 
     /**
      *  This class implements a database tree as described on:
