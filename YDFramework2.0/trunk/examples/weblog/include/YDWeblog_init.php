@@ -61,6 +61,7 @@
     }
 
     // Include the standard modules
+    YDInclude( 'YDUrl.php' );
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDBBCode.php' );
