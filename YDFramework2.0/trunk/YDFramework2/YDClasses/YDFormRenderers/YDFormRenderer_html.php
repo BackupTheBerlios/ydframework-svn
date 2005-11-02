@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../YDForm.php');
+    include_once( YD_DIR_HOME_CLS . '/YDForm.php');
 
     /**
      *        This is the class that is able to render a form object to HTML.

@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDUtil.php');
+    include_once( YD_DIR_HOME_CLS . '/YDUtil.php');
     
     // YDFSImage cropping specific constants
     define( 'YD_FS_CROP_UNCHANGED', 1 );

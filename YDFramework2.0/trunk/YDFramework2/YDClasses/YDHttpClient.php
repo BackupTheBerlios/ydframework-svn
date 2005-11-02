@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../3rdparty/HttpClient.class.php' );
+    include_once( YD_DIR_HOME . '/3rdparty/HttpClient.class.php' );
 
     // Configure the default for this class
     YDConfig::set( 'YD_HTTP_USES_GZIP', 1, false );

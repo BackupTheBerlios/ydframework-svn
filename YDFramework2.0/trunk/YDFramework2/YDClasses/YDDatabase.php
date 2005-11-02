@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDUtil.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDUtil.php' );
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -166,7 +166,7 @@
             $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
 
             // Publish the URL as an object
-            include_once( dirname( __FILE__ ) . '/YDUrl.php' );
+            include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
             $this->url = new YDUrl( YD_SELF_URI );
 
         }
@@ -435,7 +435,7 @@
                 if ( is_file( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
                     include_once( $regDrivers[ strtolower( $driver ) ]['file'] );
                 } else {
-                    include_once( dirname( __FILE__ ) . '/YDDatabaseDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
+                    include_once( YD_DIR_HOME_CLS . '/YDDatabaseDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
                 }
             }
 

@@ -27,8 +27,8 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../YDForm.php');
-    include_once( dirname( __FILE__ ) . '/YDFormElement_Select.php');
+    include_once( YD_DIR_HOME_CLS . '/YDForm.php');
+    include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Select.php');
 
     /**
      *  This is the class that define a datetime select form element.

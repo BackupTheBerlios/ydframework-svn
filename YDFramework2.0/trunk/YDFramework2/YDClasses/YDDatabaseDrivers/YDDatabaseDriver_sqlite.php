@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../YDDatabase.php');
+    include_once( YD_DIR_HOME_CLS . '/YDDatabase.php');
 
     /**
      *	This class defines a database driver for SQLite.

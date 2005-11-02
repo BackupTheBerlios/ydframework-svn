@@ -434,7 +434,7 @@
          *	@param $opts	The file extension it should match (can also be an array of extensions).
          */
         function extension( $val, $opts ) {
-            include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
+            include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
             if ( ! is_array( $opts ) ) {
                 $opts = array( $opts );
             }

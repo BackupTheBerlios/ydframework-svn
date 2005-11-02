@@ -32,7 +32,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDRequest.php');
+    include_once( YD_DIR_HOME_CLS . '/YDRequest.php');
 
     // Configure the default for this class
     YDConfig::set( 'YD_TEMPLATE_ENGINE', 'smarty', false );

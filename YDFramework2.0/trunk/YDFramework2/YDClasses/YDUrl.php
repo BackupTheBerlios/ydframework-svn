@@ -30,8 +30,9 @@
     YDConfig::set( 'YD_HTTP_USES_GZIP', 1, false );
     YDConfig::set( 'YD_HTTP_CACHE_TIMEOUT', 3600, false );
     YDConfig::set( 'YD_HTTP_CACHE_USEHEAD', 1, false );
-    
-    include_once( dirname( __FILE__ ) . '/YDRequest.php' );
+
+    // Includes
+    include_once( YD_DIR_HOME_CLS . '/YDRequest.php' );
 
     /**
      *  This class defines a url.
@@ -434,7 +435,7 @@
             if ( $cache == true ) {
 
                 // Include the filesystem library
-                include_once( dirname( __FILE__ ) . '/YDFileSystem.php');
+                include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
 
                 // Check if we need to use the HTTP HEAD function
                 if ( YDConfig::get( 'YD_HTTP_CACHE_USEHEAD' ) == 1 ) {
@@ -684,7 +685,7 @@
          *	@returns	A new HttpClient class instance.
          */
         function _getHttpClient() {
-            include_once( dirname( __FILE__ ) . '/YDHttpClient.php');
+            include_once( YD_DIR_HOME_CLS . '/YDHttpClient.php');
             if ( $this->getScheme() != 'http' ) {
                 trigger_error( 'getContents: Only HTTP URLs are supported.', YD_ERROR );
             }

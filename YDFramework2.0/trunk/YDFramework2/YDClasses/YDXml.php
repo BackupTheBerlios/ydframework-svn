@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../3rdparty/phpdomxml/lib.xml.inc.php' );
+    include_once( YD_DIR_HOME . '/3rdparty/phpdomxml/lib.xml.inc.php' );
     
     // YDXml constants
     define( 'YD_XML_FILE',   1 );
@@ -107,7 +107,7 @@
                 
                 case YD_XML_URL:
                 
-                    include_once( dirname( __FILE__ ) . '/YDUrl.php' );
+                    include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
                     
                     $url = new YDUrl( $mixed );
                     $contents = $url->getContents(); // false cache?
@@ -115,7 +115,7 @@
             
                 case YD_XML_FILE:
                 
-                    include_once( dirname( __FILE__ ) . '/YDFileSystem.php' );
+                    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
                     
                     $file = new YDFSFile( $mixed );
                     $contents = $file->getContents();
@@ -274,7 +274,7 @@
          */
         function save( $path, $pretty=true ) {
             
-            include_once( dirname( __FILE__ ) . '/YDFileSystem.php' );
+            include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
             
             $file = new YDFSFile( $path, true );
             $file->setContents( $this->toString( $pretty ) );

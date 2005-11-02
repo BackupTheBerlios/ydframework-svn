@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDEncryption.php');
+    include_once( YD_DIR_HOME_CLS . '/YDEncryption.php');
 
     // Constants
     YDConfig::set( 'YD_PERSISTENT_STORE_NAME', strtoupper( str_replace( ' ', '_', YD_FW_NAME ) ) . '_PERSISTENT_STORE', false );
