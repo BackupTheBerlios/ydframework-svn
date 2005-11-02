@@ -58,10 +58,8 @@
 
             $available = $this->product[$id]['quantity'];
             
-            $id_enc = YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id );
-
             if ( $add ) {
-                $incart = $this->getItemCount( $id );
+                $incart = $this->getItem( $id );
             }
 
             $available -= isset( $incart ) ? $incart : 0;
@@ -109,12 +107,11 @@
         function toArray() {
 
             $arr = array();
-
-            foreach ( $this->item as $id_enc => $quantity_enc ) {
             
-                $id       = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id_enc );
-                $quantity = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity_enc );
+            $items = parent::toArray();
 
+            foreach ( $items as $id => $quantity ) {
+            
                 $arr[$id] = $this->product[$id];
                 $arr[$id]['total'] = $quantity * $arr[$id]['price'];
                 $arr[$id]['count'] = $quantity;
@@ -129,12 +126,9 @@
         function getTotal() {
 
             $total = 0;
+            $items = parent::toArray();
 
-            foreach ( $this->item as $id_enc => $quantity_enc ) {
-            
-                $id       = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id_enc );
-                $quantity = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity_enc );
-            
+            foreach ( $items as $id => $quantity ) {
                 $total += $this->product[$id]['price'] * $quantity;
             }
 

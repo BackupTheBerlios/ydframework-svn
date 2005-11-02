@@ -54,7 +54,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '1.0';
+            $this->_version = '2.0';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a shopping cart object.';
 
@@ -88,7 +88,7 @@
 
                 if ( ! is_null( $quantity ) ) {
 
-                    $result = $this->getItemCount( $id ) - (int) $quantity;
+                    $result = $this->getItem( $id ) - (int) $quantity;
 
                     if ( $result > 0 ) {
                         return $this->setItem( $id, $result );
@@ -96,7 +96,7 @@
 
                 }
 
-                unset( $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
+                unset( $this->item[ YDCart::encrypt( $id ) ] );
                 return true;
 
             }
@@ -118,11 +118,11 @@
         function setItem( $id, $quantity, $add=false ) {
             
             if ( $add && $this->inCart( $id ) ) {
-                $quantity += YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
+                $quantity += YDCart::decrypt( $this->item[ YDCart::encrypt( $id ) ] );
             }
             
             if ( $quantity > 0 ) {
-                $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] = YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity );
+                $this->item[ YDCart::encrypt( $id ) ] = YDCart::encrypt( $quantity );
                 return $quantity;
             } else {
                 return $this->remItem( $id );
@@ -131,12 +131,36 @@
 
 
         /**
-         *	This function will return the array of items of the basket.
+         *	This function will return the decrypted array of items.
          *
-         *  @returns  The cart's items array.
+         *  @returns  The decrypted array.
          */
-        function getItems() {
-            return $this->item;
+        function toArray() {
+            $arr = array();
+            foreach ( $this->item as $id => $quantity ) {
+                $arr[ YDCart::decrypt( $id ) ] = YDCart::decrypt( $quantity );
+            }
+            return $arr;
+        }
+        
+        /**
+         *	This function encrypts a value using the YD_CART_PASSWORD.
+         *
+         *  @returns  The encrypted value
+         *  @static
+         */
+        function encrypt( $value ) {
+            return YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $value );
+        }
+        
+        /**
+         *	This function decrypts a value using the YD_CART_PASSWORD.
+         *
+         *  @returns  The decrypted value
+         *  @static
+         */
+        function decrypt( $value ) {
+            return YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $value );
         }
 
         /**
@@ -182,9 +206,9 @@
          *
          *  @returns	The item's quantity in the cart.
          */
-        function getItemCount( $id ) {
+        function getItem( $id ) {
             if ( $this->inCart( $id ) ) {
-                return YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
+                return YDCart::decrypt( $this->item[ YDCart::encrypt( $id ) ] );
             }
             return 0;
         }
