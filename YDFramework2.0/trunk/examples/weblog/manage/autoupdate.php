@@ -114,6 +114,11 @@
                 '@define( \'YD_FW_REVISION\', \'' . YD_FW_REVISION . '\' );',
                 '@define( \'YD_FW_REVISION\', \'' . $this->getLastRevision() . '\' );'
             );
+            YDUpdateTools::replaceInFile(
+                '%YD_FW_HOME%/YDF2_init.php',
+                '@define( \'YD_FW_REVISION\', \'unknown\' );',
+                '@define( \'YD_FW_REVISION\', \'' . $this->getLastRevision() . '\' );'
+            );
         }
 
     }
