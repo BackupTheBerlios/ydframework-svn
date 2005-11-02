@@ -96,28 +96,19 @@
      *	@param $file	File to be included.
      */
     function YDInclude( $file ) {
-
-        // If it's a file, include it
         if ( is_file( $file ) ) {
             include_once( $file );
             return;
         }
-
-        // Loop over the include paths
         foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
-            if ( $include != false ) {
-                if ( is_file( $include . '/' . $file ) ) {
-                    include_once( $include . '/' . $file );
-                    return;
-                }
+            if ( $include != false && is_file( $include . '/' . $file ) ) {
+                include_once( $include . '/' . $file );
+                return;
             }
         }
-
-        // Trigger an error if include failed
         trigger_error(
             'Failed to include the file: ' . $file . ' The file was not found in the include path.', YD_ERROR
         );
-
     }
 
     /**
@@ -127,7 +118,7 @@
      */
     function YDGlobalTimerMarker( $name ) {
         if ( ! isset( $GLOBALS['timer'] ) ) {
-            YDInclude( 'YDUtil.php' );
+            include_once( dirname( __FILE__ ) . '/YDClasses/YDUtil.php' );
             $GLOBALS['timer'] = new YDTimer();
         }
         $GLOBALS['timer']->addMarker( $name );
@@ -145,11 +136,7 @@
             if ( is_array( $value ) ) {
                 $result = array();
                 foreach ( $value as $key=>$val) {
-                    if ( is_array( $val ) ) {
-                        $result[ $key ] = YDRemoveMagicQuotes( $val );
-                    } else {
-                        $result[ $key ] = stripslashes( $val );
-                    }
+                    $result[ $key ] = is_array( $val ) ? YDRemoveMagicQuotes( $val ) : stripslashes( $val );
                 }
                 return $result;
             } else {
@@ -298,16 +285,13 @@
          *	@param	$override	(optional) Override the current value or not. Default is true.
          */
         function set( $name, $value, $override=true ) {
-
-            // Set the new variable
             if ( YDConfig::exists( $name ) ) {
-                    if ( $override ) {
+                if ( $override ) {
                     $GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
                 }
             } else {
                 $GLOBALS[ YD_CONFIG_VAR ][ $name ] = $value;
             }
-
         }
 
         /**
@@ -321,18 +305,7 @@
          *	@returns	The value of the configuration variable.
          */
         function get( $name, $default=null ) {
-
-            // Check if the key exists
-            if ( ! YDConfig::exists( $name ) ) {
-
-                // Return the default
-                return $default;
-
-            }
-
-            // Return the value
-            return $GLOBALS[ YD_CONFIG_VAR ][ $name ];
-
+            return YDConfig::exists( $name ) ? $GLOBALS[ YD_CONFIG_VAR ][ $name ] : $default;
         }
 
         /**
@@ -341,26 +314,16 @@
          *	@returns	Boolean indicating if the configuration value is set or not.
          */
         function exists( $name ) {
-
-            // Initialize the global configuration if needed
             YDConfig::_init();
-
-            // Return true or false
             return isset( $GLOBALS[ YD_CONFIG_VAR ][ $name ] );
-
         }
 
         /**
          *	This function dumps the contents of the configuration.
          */
         function dump() {
-
-            // Initialize the global configuration if needed
             YDConfig::_init();
-
-            // Dump the configuration
             YDDebugUtil::dump( $GLOBALS[ YD_CONFIG_VAR ], 'YDConfig contents' );
-
         }
 
     }
@@ -402,13 +365,8 @@
          *	@returns	The current locale.
          */
         function get() {
-
-            // Set the default locale
             YDConfig::set( YD_LOCALE_KEY, 'en', false );
-
-            // Return the setting
             return strtolower( YDConfig::get( YD_LOCALE_KEY ) );
-
         }
 
     }
@@ -422,13 +380,10 @@
          *	Class constructor for the YDBase class.
          */
         function YDAddOnModule() {
-
-            // The variables that should always be there
             $this->_author = 'unknown author';
             $this->_version = '1.0';
             $this->_copyright = 'no copyright';
             $this->_description = 'no description';
-
         }
 
     }

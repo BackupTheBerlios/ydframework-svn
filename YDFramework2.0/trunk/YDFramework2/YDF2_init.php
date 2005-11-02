@@ -64,9 +64,8 @@
 
     // Directory paths
     @define( 'YD_DIR_HOME', dirname( __FILE__ ) );
-    if ( ! defined( 'YD_DIR_TEMP' ) ) {
-        define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
-    }
+    @define( 'YD_DIR_HOME_CLS', YD_DIR_HOME . '/YDClasses' );
+    @define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
 
     // File and URL constants
     @define( 'YD_SELF_SCRIPT', $_SERVER['PHP_SELF'] );
@@ -100,11 +99,11 @@
 
     // Update the include path
     $includePath = YD_SELF_DIR;
-    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME_CLS;
     $includePath .= YD_PATHDELIM . YD_DIR_HOME;
-    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDFormElements';
-    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDFormRenderers';
-    $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/YDClasses/YDDatabaseDrivers';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME_CLS . '/YDFormElements';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME_CLS . '/YDFormRenderers';
+    $includePath .= YD_PATHDELIM . YD_DIR_HOME_CLS . '/YDDatabaseDrivers';
     if ( is_dir( YD_SELF_DIR . '/includes' ) ) {
         $includePath .= YD_PATHDELIM . YD_SELF_DIR . '/includes';
     }
@@ -112,10 +111,7 @@
     $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/addons';
     if ( $handle = opendir( YD_DIR_HOME . '/addons' ) ) {
         while ( false !== ( $file = readdir( $handle ) ) ) {
-           if (
-               substr( $file, 0, 1 ) != '.' &&
-               is_dir( YD_DIR_HOME . '/addons/' . $file )
-           ) {
+           if ( substr( $file, 0, 1 ) != '.' && is_dir( YD_DIR_HOME . '/addons/' . $file ) ) {
                 $includePath .= YD_PATHDELIM . YD_DIR_HOME . '/addons/' . $file;
            }
         }
