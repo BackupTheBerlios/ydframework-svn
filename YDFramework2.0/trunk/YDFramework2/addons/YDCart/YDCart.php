@@ -25,6 +25,12 @@
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
+    
+    // Includes
+    include_once( YD_DIR_HOME_CLS . '/YDEncryption.php' );
+    
+    // Constants
+    YDConfig::set( 'YD_CART_PASSWORD', 'YD_CART_PASSWORD', false );
 
     /**
      *	This class defines a shopping cart object.
@@ -52,10 +58,10 @@
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a shopping cart object.';
 
-            if ( ! isset( $_SESSION[$session_var] ) ) {
-                $_SESSION[$session_var] = & $this->item;
+            if ( ! isset( $_SESSION[ $session_var ] ) ) {
+                $_SESSION[ $session_var ] = & $this->item;
             } else {
-                $this->item = & $_SESSION[$session_var];
+                $this->item = & $_SESSION[ $session_var ];
             }
 
         }
@@ -82,15 +88,15 @@
 
                 if ( ! is_null( $quantity ) ) {
 
-                    $result = $this->item[$id] - (int) $quantity;
+                    $result = $this->getItemCount( $id ) - (int) $quantity;
 
                     if ( $result > 0 ) {
-                        return $this->item[$id] = $result;
+                        return $this->setItem( $id, $result );
                     }
 
                 }
 
-                unset( $this->item[$id] );
+                unset( $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
                 return true;
 
             }
@@ -110,11 +116,14 @@
          *  @returns 			Current number of items or the result.
          */
         function setItem( $id, $quantity, $add=false ) {
+            
             if ( $add && $this->inCart( $id ) ) {
-                $quantity += $this->item[$id];
+                $quantity += YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
             }
+            
             if ( $quantity > 0 ) {
-                return $this->item[$id] = $quantity;
+                $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] = YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity );
+                return $quantity;
             } else {
                 return $this->remItem( $id );
             }
@@ -154,7 +163,7 @@
          *  @returns	Boolean indicating if the product is already in the cart.
          */
         function inCart( $id ) {
-            return array_key_exists( $id, $this->item );
+            return array_key_exists( YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ), $this->item );
         }
 
         /**
@@ -175,7 +184,7 @@
          */
         function getItemCount( $id ) {
             if ( $this->inCart( $id ) ) {
-                return $this->item[$id];
+                return YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $this->item[ YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id ) ] );
             }
             return 0;
         }

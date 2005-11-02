@@ -57,9 +57,11 @@
         function _getAvailable( $id, $quantity, $add ) {
 
             $available = $this->product[$id]['quantity'];
+            
+            $id_enc = YDEncryption::encrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id );
 
             if ( $add ) {
-                $incart = isset( $this->item[$id] ) ? $this->item[$id] : 0;
+                $incart = $this->getItemCount( $id );
             }
 
             $available -= isset( $incart ) ? $incart : 0;
@@ -85,21 +87,15 @@
             if ( $add ) {
 
                 if ( $quantity ) {
-
-                    if ( $this->inCart( $id ) ) {
-                        $this->item[$id] += $quantity;
-                    } else {
-                        $this->item[$id] = $quantity;
-                    }
-
-                } 
-
+                    parent::setItem( $id, $quantity, true );
+                }
                 return $quantity;
 
             } 
 
             if ( $quantity ) {
-                return $this->item[$id] = $quantity;
+                parent::setItem( $id, $quantity );
+                return $quantity;
             }
 
         }
@@ -114,7 +110,10 @@
 
             $arr = array();
 
-            foreach ( $this->item as $id => $quantity ) {
+            foreach ( $this->item as $id_enc => $quantity_enc ) {
+            
+                $id       = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id_enc );
+                $quantity = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity_enc );
 
                 $arr[$id] = $this->product[$id];
                 $arr[$id]['total'] = $quantity * $arr[$id]['price'];
@@ -131,7 +130,11 @@
 
             $total = 0;
 
-            foreach ( $this->item as $id => $quantity ) {
+            foreach ( $this->item as $id_enc => $quantity_enc ) {
+            
+                $id       = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $id_enc );
+                $quantity = YDEncryption::decrypt( YDConfig::get( 'YD_CART_PASSWORD' ), $quantity_enc );
+            
                 $total += $this->product[$id]['price'] * $quantity;
             }
 
