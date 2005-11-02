@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/YDDatabase.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
 
     /**
      *  This class implements a database tree as described on:
@@ -560,8 +560,9 @@
             $data = $this->getTreeWithChildren();
 
             // Keep the original data (we need to optimize the updates)
-            $data_ori = $data;
+            $data_ori = array_merge( $data );
 
+            // Keep track of the number and level
             $n     = 0; // Need a variable to hold the running n tally
             $level = 0; // Need a variable to hold the running level tally
 
@@ -572,28 +573,28 @@
 
             // At this point the the root node will have nleft of 0, nlevel of 0 and nright of (tree size * 2 + 1)
             foreach ( $data as $id=>$row ) {
-
-                // skip the root node
                 if ( $id == 0 ) {
                     continue;
                 }
-
-                // Check if something was updated
-                if (
-                    $data[$id]->nlevel != $data_ori[$id]->nlevel ||
-                    $data[$id]->nleft  != $data_ori[$id]->nleft ||
-                    $data[$id]->nright != $data_ori[$id]->nright
-                ) {
-
-                    // The query
+                if ( version_compare( phpversion(), '5' ) >= 0 ) {
                     $query = sprintf(
                         'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
                         $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
                     );
-
-                    // Execute the query
                     $this->db->executeSql( $query );
-
+                } else {
+                    die( 'with optimizations' );
+                    if (
+                        $data[$id]->nlevel != $data_ori[$id]->nlevel ||
+                        $data[$id]->nleft  != $data_ori[$id]->nleft ||
+                        $data[$id]->nright != $data_ori[$id]->nright
+                    ) {
+                        $query = sprintf(
+                            'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
+                            $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
+                        );
+                        $this->db->executeSql( $query );
+                    }
                 }
 
             }
