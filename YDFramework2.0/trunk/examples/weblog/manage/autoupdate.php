@@ -156,13 +156,12 @@
         function installFile( $file, $action ) {
             YDUpdateLog::info( 'Installing [' . $action . ']: ' . YDUpdateTools::shortPath( $file ) );
             if ( $action == 'D' ) {
-                unlink( YDUpdateTools::realPath( $file ) );
+                @unlink( YDUpdateTools::realPath( $file ) );
             } elseif ( $action == 'A' ) {
-                rename( YDUpdateTools::tempPath( $file ), YDUpdateTools::realPath( $file ) );
+                @copy( YDUpdateTools::tempPath( $file ), YDUpdateTools::realPath( $file ) );
             } else {
                 if ( file_exists( YDUpdateTools::realPath( $file ) ) ) {
-                    unlink( YDUpdateTools::realPath( $file ) );
-                    rename( YDUpdateTools::tempPath( $file ), YDUpdateTools::realPath( $file ) );
+                    @copy( YDUpdateTools::tempPath( $file ), YDUpdateTools::realPath( $file ) );
                 } else {
                     YDUpdateLog::warning( 'Skipped: ' . YDUpdateTools::shortPath( $file ) . ' (not installed)' );
                 }
