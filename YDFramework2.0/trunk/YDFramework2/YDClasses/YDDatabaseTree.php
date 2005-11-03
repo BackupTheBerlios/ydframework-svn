@@ -583,7 +583,6 @@
                     );
                     $this->db->executeSql( $query );
                 } else {
-                    die( 'with optimizations' );
                     if (
                         $data[$id]->nlevel != $data_ori[$id]->nlevel ||
                         $data[$id]->nleft  != $data_ori[$id]->nleft ||
