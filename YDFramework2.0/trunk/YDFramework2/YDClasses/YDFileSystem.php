@@ -1054,15 +1054,6 @@
                     $thumb_w = $width;
                     $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
                 }
-                if ( $ori_width == $ori_height ) {
-                    $thumb_w = $width;
-                    $thumb_h = $height;
-                }
-                
-                if ( ( $width >= $ori_width || $height >= $ori_height ) && YDConfig::get( 'YD_FS_CROP' ) != YD_FS_CROP_ENLARGED ) {
-                    $thumb_w = $ori_width;
-                    $thumb_h = $ori_height;
-                }
             
             } else {
             
@@ -1074,16 +1065,27 @@
                     $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
                     $thumb_h = $height;
                 }
-                if ( $ori_width == $ori_height ) {
-                    $thumb_w = $width;
-                    $thumb_h = $height;
-                }
+            
+            }
+            
+            if ( $ori_width == $ori_height ) {
+                $thumb_w = $width;
+                $thumb_h = $height;
+            }
+            
+            if ( ( $width >= $ori_width || $height >= $ori_height ) && ( ! $crop || ( $crop && YDConfig::get( 'YD_FS_CROP' ) != YD_FS_CROP_ENLARGED ) ) ) {
                 
-                if ( $width >= $ori_width || $height >= $ori_height ) {
+                if ( $width >= $ori_width && $height < $ori_height ) {
+                    $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
+                    $thumb_h = $height;
+                } else if ( $width < $ori_width && $height >= $ori_height ) {
+                    $thumb_w = $width;
+                    $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
+                } else {
                     $thumb_w = $ori_width;
                     $thumb_h = $ori_height;
                 }
-            
+                
             }
 
             // Resample the image
