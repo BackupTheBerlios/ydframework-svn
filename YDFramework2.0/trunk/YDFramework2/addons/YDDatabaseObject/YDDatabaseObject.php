@@ -178,16 +178,11 @@
          *  This function registers the table name.
          *
          *  @param $name  The table name.
-         *  @param $alias (optional) The table alias.
          */
-        function & registerTable( $name, $alias='' ) {
+        function & registerTable( $name ) {
             
             $this->_table = $name;
             $this->_alias = $name;
-            
-            if ( strlen( $alias ) ) {
-                $this->_alias = $alias;
-            }
             
         }
 
