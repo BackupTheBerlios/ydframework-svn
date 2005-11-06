@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the correct table aliases in relations</title>
+    <programlisting><![CDATA[<?php
+
+    class user extends YDDatabaseObject {
+
+        function user() {
+
+            // All other configuration
+            // ...
+
+            // Registering a many-to-many relation
+            $group = & $this->registerRelation( 'group' );
+
+            // Sets the foreign class
+            $group->setForeignClass( 'group' );
+
+            // Sets the foreign var
+            $group->setForeignVar( 'grp' );
+
+            // Sets the cross class
+            $group->setCrossClass( 'user_group' );
+
+
+        }
+    }
+    
+    // User instance
+    $user = YDDatabaseObject::getInstance( 'user' );
+    
+    // Load all relations objects
+    $user->loadAll();
+    
+    // Adding some expressions using the correct table aliases
+    
+    // Replaces #. with the $user table alias (in this case, 'user')
+    // user_group is the table alias for the cross table
+    $user->where( '#.id = user_group.user' ); 
+    
+    // grp is the table alias for the foreign table
+    $user->where( 'user_group.group = grp.id' ); 
+    $user->having( 'grp.active = 1' );
+    
+    // Adding expressions in relations objects
+    $user->group->where( 'grp.inactive = 0' );
+    
+    // Replaces #. with the foreign var (in this case, 'grp')
+    $user->group->select( '#.value' ); 
+    $user->group->where( '#.value > 10' ); // same thing
+    
+?>]]></programlisting>
+</example>

@@ -178,9 +178,17 @@
          *  This function registers the table name.
          *
          *  @param $name  The table name.
+         *  @param $alias (optional) The table alias.
          */
-        function & registerTable( $name ) {
+        function & registerTable( $name, $alias='' ) {
+            
             $this->_table = $name;
+            $this->_alias = $name;
+            
+            if ( strlen( $alias ) ) {
+                $this->_alias = $alias;
+            }
+            
         }
 
         /**
@@ -405,6 +413,13 @@
         function getTable() {
             return $this->_table;
         }
+        
+        /**
+         *  @returns  The table alias.
+         */
+        function getAlias() {
+            return $this->_alias;
+        }
 
         /**
          *  @returns  A reference to the database class.
@@ -485,6 +500,8 @@
             
             $this->resetProtected();
 
+            $alias   = $this->getAlias();
+            
             $keys    = $this->_getFieldsByMethod( 'isKey' );
             $fields  = get_object_vars( $this->_fields );
             $selects = get_object_vars( $this->_selects );
@@ -506,7 +523,7 @@
             foreach ( $groups as $n => $group ) {
                 $field = $group['expr'];
                 if ( $field_obj = & $this->getField( $field ) ) {
-                    $groups[ $n ]['expr']  = $r . $this->getTable()       . $r . '.';
+                    $groups[ $n ]['expr']  = $r . $alias . $r . '.';
                     $groups[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
                 }
             }
@@ -516,7 +533,7 @@
             foreach ( $orders as $n => $order ) {
                 $field = $order['expr'];
                 if ( $field_obj = & $this->getField( $field ) ) {
-                    $orders[ $n ]['expr']  = $r . $this->getTable()       . $r . '.';
+                    $orders[ $n ]['expr']  = $r . $alias . $r . '.';
                     $orders[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
                 }
             }
@@ -570,8 +587,17 @@
                     $value = " = " . $this->_query->escapeSql( $value );
                 }
 
-                $this->where( $r . $this->getTable()   . $r . '.' .
-                              $r . $field->getColumn() . $r . $value );
+                $this->where( $r . $alias . $r . '.' . $r . $field->getColumn() . $r . $value );
+            }
+            
+            // Replace #. with table alias in WHERE, HAVING and SELECT
+            foreach ( array( 'where', 'having', 'select' ) as $statement ) {
+                $stas = & $this->_query->$statement;
+                foreach ( $stas as $n => $sta ) {
+                    $expr = $sta['expr'];
+                    $expr = str_replace( '#.', $r . $alias . $r . '.', $expr );
+                    $stas[ $n ]['expr'] = $expr;
+                }
             }
             
         }
@@ -978,7 +1004,10 @@
             $slices = array();
 
             // Add local table
-            $this->_query->table( $this->getTable() );
+			$l_table = $this->getTable();
+            $l_alias = $this->getAlias();
+			
+            $this->_query->table( $l_table, $l_alias );
             
             // Prepare query in local object
             $this->_prepareQuery( true );
@@ -995,21 +1024,27 @@
                 $this->load( $relation );
                 $rel = & $this->getRelation( $relation );
 
-                // Local table
-                $l_table = $this->getTable();
-                $l_key   = $rel->getLocalKey();
-
+                // Local key
+                $l_key = $rel->getLocalKey();
                 if ( ! $l_key ) {
                     $l_key = current( $this->_getFieldsByMethod( 'isKey', true ) );
                     $l_key = $l_key->name;
                 }
-                
                 $l_field = & $this->getField( $l_key );
+                if ( ! $l_field ) {
+                    trigger_error( 'Invalid local key "' . $l_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                }
                 $l_column = $l_field->getColumn();
 
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
                 $f_table = $this->$f_var->getTable();
+				
+                // Foreign table alias
+                $this->$f_var->_alias = $f_var;
+                $f_alias = $f_var;
+				
+                // Foreign table key
                 $f_key   = $rel->getForeignKey();
 
                 if ( ! $f_key ) {
@@ -1018,6 +1053,9 @@
                 }
                 
                 $f_field = & $this->$f_var->getField( $f_key );
+                if ( ! $f_field ) {
+                    trigger_error( 'Invalid foreign key "' . $f_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                }
                 $f_column = $f_field->getColumn();
                 
                 // Prepare the query in the foreign object
@@ -1034,17 +1072,21 @@
                 if ( ! $rel->isManyToMany() ) {
 
                     // Join foreign table
-                    $this->_query->join( $rel->getForeignJoin(), $f_table );
-                    $this->_query->on( $r . $l_table . $r . '.' . $r . $l_column . $r . ' = ' .
-                                       $r . $f_table . $r . '.' . $r . $f_column . $r );
+                    $this->_query->join( $rel->getForeignJoin(), $f_table, $f_alias );
+                    $this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column . $r . ' = ' .
+                                       $r . $f_alias . $r . '.' . $r . $f_column . $r );
 
                 } else {
 
                     // Many to many relation
                     
-                    // Cross-table
+                    // Cross table
                     $c_var   = $rel->getCrossVar();
                     $c_table = $this->$c_var->getTable();
+                    
+                    // Cross table alias
+                    $this->$c_var->_alias = $c_var;
+                    $c_alias = $c_var;
 
                     // Default cross foreign and local key
                     $c_fkey  = $f_table . '_' . $f_key;
@@ -1062,14 +1104,20 @@
                     
                     // Cross foreign field column name
                     $c_ffield = & $this->$c_var->getField( $c_fkey );
+                    if ( ! $c_ffield ) {
+                        trigger_error( 'Invalid cross foreign key "' . $c_fkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                    }
                     $c_fcolumn = $c_ffield->getColumn();
                     
                     // Cross local field column name
                     $c_lfield = & $this->$c_var->getField( $c_lkey );
+                    if ( ! $c_lfield ) {
+                        trigger_error( 'Invalid cross local key "' . $c_lkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                    }
                     $c_lcolumn = $c_lfield->getColumn();
 
                     // Prepare the query in the cross object
-                    $this->$c_var->_prepareQuery( true );
+                    $this->$c_var->_prepareQuery( true, $c_alias );
 
                     // Add the cross slice
                     $slices[ $pos ] = $c_var;
@@ -1080,8 +1128,8 @@
 
                     // Join cross table
                     $this->_query->join( $rel->getCrossJoin(), $c_table );
-                    $this->_query->on( $r . $l_table . $r . '.' . $r . $l_column  . $r . ' = ' .
-                                       $r . $c_table . $r . '.' . $r . $c_lcolumn . $r );
+                    $this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column  . $r . ' = ' .
+                                       $r . $c_alias . $r . '.' . $r . $c_lcolumn . $r );
 
                     // Cross table additional conditions
                     if ( $where = $rel->getCrossConditions() ) {
@@ -1093,8 +1141,8 @@
 
                     // Join foreign table
                     $this->_query->join( $rel->getForeignJoin(), $f_table );
-                    $this->_query->on( $r . $c_table . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
-                                       $r . $f_table . $r . '.' . $r . $f_column  . $r );
+                    $this->_query->on( $r . $c_alias . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
+                                       $r . $f_alias . $r . '.' . $r . $f_column  . $r );
 
                 }
 
@@ -1121,7 +1169,7 @@
                 }
 
             }
-
+            
             $result = $this->findSql( $this->_query->getQuery(), $slices );
             
             // after find callbacks
@@ -1241,6 +1289,8 @@
                 return;
             }
             $r = $this->_query->getReserved();
+            
+            $alias = $this->getAlias();
 
             foreach ( $args as $field ) {
 
@@ -1252,7 +1302,7 @@
                     $expr = $select->getExpression();
                 } else {
                     $field_obj = & $this->getField( $field );
-                    $expr = $r . $this->getTable() . $r . '.' . $r . $field_obj->getColumn() . $r;
+                    $expr = $r . $alias . $r . '.' . $r . $field_obj->getColumn() . $r;
                 }
                 $this->_query->expr( $expr, $field );
             }
@@ -1425,7 +1475,7 @@
          *  This function resets the count of the results.
          */
         function resetCount() {
-            $this->_count   = 0;
+            $this->_count = 0;
         }
 
         /**
@@ -2052,7 +2102,7 @@
             return $this->foreign_obj->getTable();
         
         }
-
+        
         /**
          *  This function set the foreign field name.
          *

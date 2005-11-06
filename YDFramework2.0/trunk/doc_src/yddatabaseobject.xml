@@ -98,9 +98,11 @@
 
             <title>Registering the table name</title>
 
-            <para>The registerTable method defines the table name that can be retrieved with the getTable method.</para>
+            <para>The registerTable method defines the table name and can be retrieved by the getTable method. The characters "#_" will be replaced by the table prefix defined by the YD_DB_TABLEPREFIX config variable.</para>
 
             <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_013.xml" />
+            
+            <para>The table alias will be the same as the table name, except when working with relations (see more in that section).</para>
 
         </sect2>
 
@@ -550,6 +552,20 @@
 
                 <para>As you can see a relation can be defined setting only the relation name and if it is a many-to-many relation (default: false).</para>
 
+            </sect3>
+            
+            <sect3 id="yddatabaseobject_relations_config_alias">
+            
+                <title>Using table aliases in relations</title>
+
+                <para>By default, the table alias is the same as the table name. But this is a problem when having the same class used more than once in a class. For example, a class that has a relation with the "user" class to define the "author" of an article, and another relation with the same "user" class to define the "editor".</para>
+                
+                <para>To handle this situations when working with relations, the table aliases are always replaced. They are replaced by the foreign var value and cross var value (if used). If the foreign or cross vars are not defined, the classes names are used instead.</para>
+                
+                <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddatabaseobject_068.xml" />
+                
+                <para>The character "#." is always replaced by the current object table alias. It's better to use this approach so the WHERE, SELECT and HAVING statements in a class will have the correct aliases for any class that links with it.</para>
+            
             </sect3>
 
         </sect2>
