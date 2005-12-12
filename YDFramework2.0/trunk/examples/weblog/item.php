@@ -53,12 +53,6 @@
             $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'id' => 'submit' ) );
             $form->addElement( 'hidden', 'item_id' );
 
-            // Add the form filters
-            $form->addFilter( 'username',    'utf8_decode' );
-            $form->addFilter( 'useremail',   'utf8_decode' );
-            $form->addFilter( 'userwebsite', 'utf8_decode' );
-            $form->addFilter( 'comment',     'utf8_decode' );
-
             // Set the defaults
             $defaults = array();
             $defaults['item_id']     = $id;

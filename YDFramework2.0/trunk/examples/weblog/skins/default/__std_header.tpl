@@ -6,7 +6,6 @@
 
     <title>{$weblog_title}</title>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="generator" content="{$YD_FW_NAMEVERS}" />
 
     <link rel="stylesheet" href="{$skin_dir}/default.css" type="text/css" media="screen" />
