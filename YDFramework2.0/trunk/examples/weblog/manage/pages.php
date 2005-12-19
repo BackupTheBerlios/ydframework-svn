@@ -49,11 +49,17 @@
         // Edit a category
         function actionEdit() {
 
+            // Add a field for the last modified date/time
+            $this->form->addElement( 'datetimeselect', 'modified', t('last_modified_on'), array( 'class' => 'tfM' ) );
+
             // Get the ID from the query string
             $id = $this->getIdFromQS();
 
             // If there is something, set the defaults
             if ( $id != -1 ) {
+
+                // Get the current date/time
+                $defaults['modified'] = gmmktime();
 
                 // Get the page by ID
                 $defaults = $this->weblog->getPageById( $id );
@@ -74,6 +80,7 @@
 
                 // Update the datetimes
                 $values['created'] =  $values['created']['timestamp'];
+                $values['modified'] = $values['modified']['timestamp'];
 
                 // If there is an ID, we do an edit
                 if ( $values['id'] ) {

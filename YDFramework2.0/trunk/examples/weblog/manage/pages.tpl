@@ -123,6 +123,10 @@
                 <td class="adminRowL">{$form.created.label_html}</td>
                 <td class="adminRowL">{$form.created.html}</td>
             </tr>
+            <tr>
+                <td class="adminRowL">{$form.modified.label_html}</td>
+                <td class="adminRowL">{$form.modified.html}</td>
+            </tr>
         </table>
         {$form.id.html}
         <p>{$form._cmdSubmit.html}</p>
