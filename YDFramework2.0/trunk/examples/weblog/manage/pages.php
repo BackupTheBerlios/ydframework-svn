@@ -58,11 +58,11 @@
             // If there is something, set the defaults
             if ( $id != -1 ) {
 
-                // Get the current date/time
-                $defaults['modified'] = gmmktime();
-
                 // Get the page by ID
                 $defaults = $this->weblog->getPageById( $id );
+
+                // Get the current date/time
+                $defaults['modified'] = gmmktime();
 
                 // Assign the values to the template
                 $this->tpl->assign( 'page', $defaults );
