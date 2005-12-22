@@ -42,10 +42,17 @@
 
 
     /**
-     *  This config defines if ajax code must be placed in template head (true) or bottom (false).
+     *  This config defines the html tag to use
+     *  Default: <head>
+     */
+    YDConfig::set( 'YD_AJAX_TAG', "<head>", false );
+
+
+    /**
+     *  This config defines if ajax code must be placed after tag (true) or before tag (false).
      *  Default: true.
      */
-    YDConfig::set( 'YD_AJAX_CODETOP', true, false );
+    YDConfig::set( 'YD_AJAX_AFTERTAG', true, false );
 
 
     /**
@@ -149,10 +156,12 @@
 				$html .= "\t</script>\n";
 			}
 
+			// get html tag to use
+			$tag = YDConfig::get( 'YD_AJAX_TAG' );
+
 			// add js code to template
-			if ( YDConfig::get( 'YD_AJAX_CODETOP' )) return eregi_replace( "<head>", "<head>\n". $html, $tpl_source );
-			
-			return eregi_replace( "</body>", $html ."\n</body>", $tpl_source );
+			if ( YDConfig::get( 'YD_AJAX_AFTERTAG' )) return eregi_replace( $tag, $tag  ."\n". $html, $tpl_source );
+			else                                      return eregi_replace( $tag, $html ."\n". $tag,  $tpl_source );
 		}
 
 
