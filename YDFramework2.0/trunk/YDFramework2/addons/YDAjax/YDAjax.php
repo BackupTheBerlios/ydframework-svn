@@ -43,16 +43,16 @@
 
     /**
      *  This config defines the html tag to use
-     *  Default: <head>
+     *  Default: </head>
      */
-    YDConfig::set( 'YD_AJAX_TAG', "<head>", false );
+    YDConfig::set( 'YD_AJAX_TAG', "</head>", false );
 
 
     /**
      *  This config defines if ajax code must be placed after tag (true) or before tag (false).
-     *  Default: true.
+     *  Default: false.
      */
-    YDConfig::set( 'YD_AJAX_AFTERTAG', true, false );
+    YDConfig::set( 'YD_AJAX_AFTERTAG', false, false );
 
 
     /**
