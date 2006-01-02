@@ -1456,7 +1456,7 @@
             $files = array();
             foreach ( $this->_getSubdirectories( $this->_path ) as $dir ) {
                 $dir = new YDFSDirectory( $dir );
-                $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes ), $sort_by_date, $sort_order );
+                $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes, $sort_by_date, $sort_order ) );
             }
             return $files;
         }
