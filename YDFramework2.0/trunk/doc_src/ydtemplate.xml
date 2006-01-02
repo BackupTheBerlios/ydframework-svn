@@ -36,7 +36,7 @@
             </imageobject>
         </mediaobject></para>
 
-        <para>As you can see, we assigned two variables to our template instance. Each variable you want to use in the template engine needs to be assigned to the template instance before you can use it. Assigning a variable to a template implies that we link a template variable name to a PHP object. These objects can be anything from an array to a simple string. Assigning objects to a template is not supported.</para>
+        <para>As you can see, we assigned two variables to our template instance. Each variable you want to use in the template engine needs to be assigned to the template instance before you can use it. Assigning a variable to a template implies that we link a template variable name to a PHP object. These objects can be anything from an array to a simple string.</para>
 
         <para>Once we assigned all the variables, we can issue the <literal>fetch</literal> function of the template class to get the result of the parsed template. This function takes one argument, which is the name of the template. If you want to immediately show the template result, you can use the <literal>display</literal> function instead.</para>
 
