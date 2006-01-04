@@ -34,6 +34,8 @@
 
         // Delete note action
         function actionDeleteNote() {
+        }
+
     }
 
     // Process the request
