@@ -130,30 +130,53 @@
             } else {
                 $this->pagesize = ( $pagesize >= 1 ) ? $pagesize : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
             }
+            
+            // Keep the original page value
+            $this->pageorig = $this->page;
+            
+            // Set the total of pages and rows
+            $this->setTotalRows( sizeof( $this->records ), true );
+            
+            // Publish the URL as an object
+            include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
+            $this->url = new YDUrl( YD_SELF_URI );
 
+        }
+        
+        /**
+         *  This function replaces the total number of rows with a defined value.
+         *
+         *  @param  $value    The total number of rows.
+         *  @param  $offset   (optional) If true, the current set will be a slice of
+         *                    the records based on the page size and the current page. Otherwise,
+         *                    the offset value will be zero and the "pagesize" number of rows will be used.
+         *                    Default: false.
+         */
+        function setTotalRows( $value, $offset=false ) {
+            
+            // Set the number of records an integer
+            $value = intval( $value );
+            
             // Get the number of pages
-            $this->totalPages = ceil( sizeof( $this->records ) / ( float ) $this->pagesize );
-            $this->totalRows = sizeof( $this->records );
-
+            $this->totalPages = ceil( $value / ( float ) $this->pagesize );
+            $this->totalRows  = $value;
+            
+            // Get the original page number
+            $this->page = $this->pageorig;
+            
             // Set the number of pages correctly to zero for an empty recordset
             if ( $this->totalPages == 0 ) {
                 $this->page = 0;
             }
-
+            
             // Fix the page number if bigger than the amount of pages
             if ( $this->page > $this->totalPages ) {
                 $this->page = $this->totalPages;
             }
-
+            
             // Get the offset
-            $this->offset = $this->pagesize * ( $this->page - 1 );
-
-            // Get the subset of the records we need
-            $this->set = array_slice( $this->records, $this->offset, $this->pagesize );
-
-            // Get the total number of rows on a page
-            $this->totalRowsOnPage = sizeof( $this->set );
-
+            $this->offset = $offset ? ( $this->pagesize * ( $this->page - 1 ) ) : 0;
+            
             // Get the previous and next page
             $this->pagePrevious = ( $this->page <= 1 ) ? false : $this->page - 1;
             $this->pageNext = ( $this->page >= $this->totalPages ) ? false : $this->page + 1;
@@ -164,11 +187,13 @@
 
             // Add the list of pages as an array
             $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
+            
+            // Get the subset of the records we need
+            $this->set = array_slice( $this->records, $this->offset, $this->pagesize );
 
-            // Publish the URL as an object
-            include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
-            $this->url = new YDUrl( YD_SELF_URI );
-
+            // Get the total number of rows on a page
+            $this->totalRowsOnPage = sizeof( $this->set );
+            
         }
 
         /**
