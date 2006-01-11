@@ -110,6 +110,7 @@
             $this->registerElement( 'submit', 'YDFormElement_Submit', 'YDFormElement_Submit.php' );
             $this->registerElement( 'text', 'YDFormElement_Text', 'YDFormElement_Text.php' );
             $this->registerElement( 'textarea', 'YDFormElement_TextArea', 'YDFormElement_TextArea.php' );
+            $this->registerElement( 'textareacounter', 'YDFormElement_TextAreaCounter', 'YDFormElement_TextAreaCounter.php' );
             $this->registerElement( 'span', 'YDFormElement_Span', 'YDFormElement_Span.php' );
             $this->registerElement( 'img', 'YDFormElement_Img', 'YDFormElement_Img.php' );
             $this->registerElement( 'link', 'YDFormElement_Link', 'YDFormElement_Link.php' );

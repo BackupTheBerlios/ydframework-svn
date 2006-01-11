@@ -31,6 +31,8 @@
             $text->_label = 'new label for txt1';
             $form->addElement( 'text', 'txt2', 'Enter text 2:', array( 'class' => 'textInputClass', 'name' => 'x' ) );
             $form->addElement( 'textarea', 'txt3', 'Enter text 2:' );
+            $form->addElement( 'textareacounter', 'txtcounter_1', 'Textarea counter 1', array(), array( 'maxlength' => 10, 'before' => ' (', 'after' => ' characters remaining)' ) );
+            $form->addElement( 'textareacounter', 'txtcounter_2', 'Textarea counter 2' );
             $form->addElement( 'radio', 'rad1', 'Select a value 1:', array(), array( 1 => 'een', 2=>'twee' ) );
             $form->addElement( 'radio', 'rad2', 'Select a value 2:', array(), array( 1 => 'een<br/>', 2=>'twee' ) );
             $form->addElement( 'hidden', 'hid1', '' );
