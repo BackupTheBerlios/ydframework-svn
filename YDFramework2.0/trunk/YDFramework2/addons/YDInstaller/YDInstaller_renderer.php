@@ -103,7 +103,7 @@
                         $html .= $element['html'];
                         $html .= '</td>' . YD_CRLF;
                         
-                    } else if ( $element['type'] == 'textarea' ) {
+                    } else if ( $element['type'] == 'textarea' || $element['type'] == 'textareacounter' ) {
                         
                         $html .= '<td class="textarea" colspan="2">';
                         if ( ! empty( $element['label'] ) ) {
