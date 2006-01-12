@@ -90,6 +90,9 @@
 
                 } else {
 
+                    // Set the user
+                    $values['user_id'] = $this->user['id'];
+
                     // Add it to the database
                     $this->weblog->addPage( $values );
 

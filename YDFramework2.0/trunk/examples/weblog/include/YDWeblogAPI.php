@@ -242,6 +242,7 @@
 
         // Update an item
         function updateItem( $values ) {
+            unset( $values['user_id'] );
             return $this->db->executeUpdate( '#_items', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
@@ -383,6 +384,7 @@
 
         // Update a page
         function updatePage( $values ) {
+            unset( $values['user_id'] );
             return $this->db->executeUpdate( '#_pages', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
