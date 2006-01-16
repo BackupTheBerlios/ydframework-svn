@@ -83,7 +83,7 @@
             
             $buttons = array();
             foreach ( $form as $name=>$element ) {
-                
+               
                 if ( $element['isButton'] === true ) {
                     $buttons[] = $element['html'];
                     continue;
@@ -112,7 +112,25 @@
                         $html .= $element['html'];
                         $html .= '</td>' . YD_CRLF;
                         
+
                     } else {
+                    
+                        switch ( $element['type'] ) {
+                            case 'password':
+                                $class = 'text'; break;
+                            case 'reset':
+                                $class = 'button'; break;
+                            case 'date':
+                            case 'dateselect':
+                            case 'datetimeselect':
+                            case 'timeselect':
+                                $class = 'select'; break;
+                            case 'textarea':
+                            case 'textareacounter':
+                                $class = 'textarea'; break;
+                            default:
+                                $class = $element['type'];
+                        }
                         
                         if ( $element['placeLabel'] == 'before' ) {
                         
@@ -120,13 +138,13 @@
                             $html .= $element['label_html'];
                             $html .= '</td>' . YD_CRLF;
                             
-                            $html .= '<td class="right" width="400">';
+                            $html .= '<td class="right ' . $class . '" width="400">';
                             $html .= $element['html'];
                             $html .= '</td>' . YD_CRLF;
                             
                         } else {
                             
-                            $html .= '<td class="left" colspan="2">';
+                            $html .= '<td class="left ' . $class . '" colspan="2">';
                             $html .= $element['html'];
                             
                             if ( $element['placeLabel'] == 'after' ) {
@@ -147,12 +165,12 @@
             
             if ( sizeof( $buttons ) > 0 ) {
                 
-                $html .= '<tr colspan="2"><td>&nbsp;</td></tr>' . YD_CRLF;
+                $html .= '<tr><td colspan="2">&nbsp;</td></tr>' . YD_CRLF;
                 
-                $html .= '<tr colspan="2">' . YD_CRLF;
+                $html .= '<tr>' . YD_CRLF;
                     
-                $html .= '<td width="300">';
-                $html .= implode( '&nbsp;', $buttons );
+                $html .= '<td width="700" colspan="2">';
+                $html .= implode( ' ', $buttons );
                 $html .= '</td>' . YD_CRLF;
                 
                 $html .= '</tr>' . YD_CRLF;

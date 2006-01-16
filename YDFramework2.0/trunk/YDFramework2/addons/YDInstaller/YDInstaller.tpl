@@ -3,10 +3,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>{$_title}</title>
-
+{foreach from=$_css_link item="css"}
+<link rel="stylesheet" type="text/css" href="{$css}" media="all" />
+{/foreach}
 <style type="text/css" media="all">
 <!--
-
 {literal}
 
 body {
@@ -31,9 +32,14 @@ body {
     margin: 30px 0px;
 } 
 
-body, p, .normal, li, td, th {
+body, p, .normal, li, td, th, span {
     font-size: 10pt;
-    line-height: 16pt;
+    line-height: 13pt;
+}
+
+form {
+    padding: 0; 
+    margin: 0;
 }
 
 p {
@@ -77,31 +83,49 @@ select, input, textarea, body, p, .normal, li, td {
 input, textarea, select {
     margin:2px;
     padding:2px;
-    border:1px solid #ccc;
+    border-right:1px solid #ccc;
+    border-bottom:1px solid #ccc;
+    border-left:2px solid #999;
+    border-top:2px solid #999;
+    background: #FFF;
+    font-size: 10pt;
 }
 
-input[type=checkbox], input[type=radio] {
+td.checkbox input, td.radio input {
     border: none;
 }
 
-input.button {
-    padding: 2px 10px;
-    background: white;
+td.radio input {
+    margin-right: 5px;
+    margin-left: 0px;
+    vertical-align: middle;
 }
 
 input.submit {
     background: white;
     padding: 2px 10px;
     font-weight: bold;
+    border-left:1px solid #ccc;
+    border-top:1px solid #ccc;
+    border-right:2px solid #999;
+    border-bottom:2px solid #999;
+}
+
+input.button {
+    padding: 2px 10px;
+    background: white;
+    border-left:1px solid #ccc;
+    border-top:1px solid #ccc;
+    border-right:2px solid #999;
+    border-bottom:2px solid #999;
 }
 
 textarea {
-    width: 400px;
+    width: 700px;
     height: 200px;
-    font-size: 8pt;
 }
 
-td.right input {
+td.text input {
     width: 400px;
 }
 
@@ -181,21 +205,28 @@ li {
     margin: 0px 0px 2px 2px;
     padding: 0px 0px 2px 2px;
 }
-
 {/literal}
-
 {foreach from=$_css item="css"}
 
 {$css}
-    
+   
 {/foreach}
 -->
 </style>
-
-{foreach from=$_css_link item="css"}
-<link rel="stylesheet" type="text/css" href="{$css}" media="all">
+{foreach from=$_js_link item="js"}
+<script src="{$js}"></script>
 {/foreach}
+{if $_js}
+<script type="text/javascript" language="JavaScript">
+<!--
+{foreach from=$_js item="js"}
 
+{$js}
+   
+{/foreach}
+-->
+</script>
+{/if}
 </head>
 
 <body>

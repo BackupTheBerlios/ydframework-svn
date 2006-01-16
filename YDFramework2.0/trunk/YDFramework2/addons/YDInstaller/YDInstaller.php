@@ -127,6 +127,8 @@
             $this->assign( '_items', $this->_items );
             $this->assign( '_css', $this->_css );
             $this->assign( '_css_link', $this->_css_link );
+            $this->assign( '_js', $this->_js );
+            $this->assign( '_js_link', $this->_js_link );
             $this->assign( '_title', $this->_title );
             $this->assign( '_description', $this->_description );
             $this->assign( '_errors', $this->_errors );
@@ -263,16 +265,7 @@
                 'attributes' => YDForm::_convertToHtmlAttrib( $attributes )
             );
         }
-        
-        /**
-         *  This function adds CSS code to the installer template header.
-         *
-         *  @param  $code        The CSS code
-         */
-        function addCss( $code ) {
-            $this->_css[] = $code;
-        }
-        
+    
         /**
          *  This function adds an alert to the installer body.
          *
@@ -300,15 +293,6 @@
             preg_match( '/<code>(.*)<\/code>/s', highlight_string( $code, true ), $match );
             $this->addHtml( '<p class="code">' . trim( $match[1] ) . '</p>' );
             
-        }
-        
-        /**
-         *  This function adds a CSS link to the installer template header.
-         *
-         *  @param  $url  The url.
-         */
-        function addCssLink( $url ) {
-            $this->_css_link[] = $url;
         }
         
         /**
@@ -343,16 +327,54 @@
         }
         
         /**
+         *  This function adds CSS code to the installer template header.
+         *
+         *  @param  $code        The CSS code
+         */
+        function addCss( $code ) {
+            $this->_css[] = $code;
+        }
+        
+        /**
+         *  This function adds a CSS link to the installer template header.
+         *
+         *  @param  $url  The url.
+         */
+        function addCssLink( $url ) {
+            $this->_css_link[] = $url;
+        }
+        
+        /**
+         *  This function adds javascript code to the template header.
+         *
+         *  @param  $code        The javascript code
+         */
+        function addJavascript( $code ) {
+            $this->_js[] = $code;
+        }
+        
+        /**
+         *  This function adds a javascript link to the template header.
+         *
+         *  @param  $url        The url
+         */
+        function addJavascriptLink( $url ) {
+            $this->_js_link[] = $url;
+        }
+        
+        /**
          *  This function adds a submit button.
          *
          *  @param  $label      The label text
          *  @param  $attributes (optional) Array of attributes
+         *
+         *  @returns  A reference to the form element
          */
-        function addSubmit( $label, $attributes=array() ) {
+        function & addSubmit( $label, $attributes=array() ) {
             
             $attributes['class'] = isset( $attributes['class'] ) ? $attributes['class'] . ' submit' : 'submit';
             
-            $this->addField( 'submit', '_cmdSubmit', $label, $attributes );
+            return $this->addField( 'submit', '_cmdSubmit_' . mt_rand( 0, 99999 ), $label, $attributes );
         }
         
         /**
@@ -361,14 +383,16 @@
          *  @param  $label      The label text
          *  @param  $action     The action name
          *  @param  $attributes (optional) Array of attributes
+         *
+         *  @returns  A reference to the form element
          */
-        function addButtonToAction( $label, $action='', $attributes=array() ) {
+        function & addButtonToAction( $label, $action='', $attributes=array() ) {
             
             $attributes['class'] = isset( $attributes['class'] ) ? $attributes['class'] . ' button' : 'button';
             
             $attributes['onclick'] = "javascript:document.location.href='?do=" . $action . "';";
             
-            $this->addField( 'button', '_cmdButton', $label, $attributes );
+            return $this->addField( 'button', '_cmdButton_' . mt_rand( 0, 99999 ), $label, $attributes );
         }
         
         /**
@@ -377,13 +401,15 @@
          *  @param  $label      The label text
          *  @param  $url        The url
          *  @param  $attributes (optional) Array of attributes
+         *
+         *  @returns  A reference to the form element
          */
-        function addButtonToLink( $label, $url='', $attributes=array() ) {
+        function & addButtonToLink( $label, $url='', $attributes=array() ) {
             
             $attributes['class'] = isset( $attributes['class'] ) ? $attributes['class'] . ' button' : 'button';
             
             $attributes['onclick'] = "javascript:document.location.href='" . $url . "';";
-            $this->addField( 'button', '_cmdButton', $label, $attributes );
+            return $this->addField( 'button', '_cmdButton_' . mt_rand( 0, 99999 ), $label, $attributes );
         }
         
         /**
@@ -391,12 +417,14 @@
          *
          *  @param  $label      The label text
          *  @param  $attributes (optional) Array of attributes
+         *
+         *  @returns  A reference to the form element
          */
-        function addButton( $label, $attributes=array() ) {
+        function & addButton( $label, $attributes=array() ) {
             
             $attributes['class'] = isset( $attributes['class'] ) ? $attributes['class'] . ' button' : 'button';
             
-            $this->addField( 'button', '_cmdButton', $label, $attributes );
+            return $this->addField( 'button', '_cmdButton_' . mt_rand( 0, 99999 ), $label, $attributes );
         }
         
         /**
@@ -408,8 +436,10 @@
          *  @param  $button_action     (optional) If true, adds a button to an installer
          *                             action, otherwise, adds a button to an url. Default: true.
          *  @param  $attributes        (optional) Array of attributes
+         *
+         *  @returns  A reference to the submit form element
          */
-        function addNavButtons( $submit_label='Continue', $button_label='', $button_info='', $button_action=true, $attributes=array() ) {
+        function & addNavButtons( $submit_label='Continue', $button_label='', $button_info='', $button_action=true, $attributes=array() ) {
             
             if ( strlen( $button_label ) ) {
                 if ( $button_action ) {
@@ -418,7 +448,7 @@
                     $this->addButtonToLink( $button_label, $button_info, $attributes );
                 }
             }
-            $this->addSubmit( $submit_label, $attributes );
+            return $this->addSubmit( $submit_label, $attributes );
             
         }
         
