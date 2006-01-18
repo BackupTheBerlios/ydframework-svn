@@ -45,6 +45,37 @@
         </table>
 
     </sect1>
+    
+    <sect1 id="config_vars_ydf2process">
+
+        <title>YDF2_process.php</title>
+
+        <para>These are the configuration variables that are defined in the <literal>YDF2_process.php</literal> file.</para>
+
+        <table pgwide="1">
+            <title>Configuration variables for <literal>YDF2_process.php</literal></title>
+            <tgroup cols="3" align="left">
+                <colspec colname='c1' colwidth="1*" />
+                <colspec colname='c2' colwidth="2*" />
+                <colspec colname='c3' colwidth="1*" />
+                <thead>
+                    <row>
+                        <entry valign="top">Name</entry>
+                        <entry valign="top">Description</entry>
+                        <entry valign="top">Default</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry valign="top">YD_AUTO_EXECUTE</entry>
+                        <entry valign="top">The executor class is instantiated automatically.</entry>
+                        <entry valign="top"><literal>true</literal></entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+
+    </sect1>
 
     <sect1 id="config_vars_yddatabase">
 

@@ -25,6 +25,9 @@
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
+    
+    // Auto execute config value. Default: true.
+    YDConfig::set( 'YD_AUTO_EXECUTE', true, false );
 
     /**
      *	This is the executor class that contains all the logic for executing requests. It will instantiate the request
@@ -193,10 +196,14 @@
 
     }
 
-    // Instantiate the executor class
-    $clsInst = new YDExecutor( YD_SELF_FILE );
+    if ( YDConfig::get( 'YD_AUTO_EXECUTE', true ) == true ) { 
+    
+        // Instantiate the executor class
+        $clsInst = new YDExecutor( YD_SELF_FILE );
 
-    // Execute the execute function
-    $clsInst->execute();
+        // Execute the execute function
+        $clsInst->execute();
 
+    }
+    
 ?>
