@@ -155,7 +155,7 @@
         function setTotalRows( $value, $offset=false ) {
             
             // Return if total is 0
-            if ( strval( $val ) == '0' ) {
+            if ( strval( $value ) == '0' ) {
                 return;
             }
 
