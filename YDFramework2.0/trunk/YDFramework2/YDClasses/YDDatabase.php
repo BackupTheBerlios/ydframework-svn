@@ -28,6 +28,7 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDUtil.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDPersistent.php');
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -37,6 +38,7 @@
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC, false );
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
     YDConfig::set( 'YD_DB_TABLEPREFIX', '', false );
+    YDConfig::set( 'YD_DB_ALLOW_PERSISTENT_SORT', false, false );
 
     /**
      *  This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
@@ -100,21 +102,46 @@
             // The complete list of all records
             $this->records = $records;
 
-            // Sort the records
-            if ( ! empty( $_GET[$sortvar] ) ) {
+            // Check if persistent sort is allowed or not
+            if ( YDConfig::get( 'YD_DB_ALLOW_PERSISTENT_SORT' ) ) {
 
-                // Set the sortfield and direction
-                $this->sortfield = $_GET[$sortvar];
+                // Sort the records persistent
+                if ( YDPersistent::get( $sortvar, '' ) != '' ) {
 
-                // Get the sort direction
-                if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
-                    $this->sortdirection = 'DESC';
-                } else {
-                    $this->sortdirection = 'ASC';
+                    // Set the sortfield and direction
+                    $this->sortfield = YDPersistent::get( $sortvar );
+
+                    // Get the sort direction
+                    if ( strtoupper( YDPersistent::get( $this->sortdir, 'DESC' ) ) == 'DESC' ) {
+                        $this->sortdirection = 'DESC';
+                    } else {
+                        $this->sortdirection = 'ASC';
+                    }
+
+                    // Perform the sorting
+                    $this->records = $this->sort( $this->sortfield, $this->sortdirection );
+
                 }
 
-                // Perform the sorting
-                $this->records = $this->sort( $this->sortfield, $this->sortdirection );
+            } else {
+
+                // Sort the records
+                if ( ! empty( $_GET[$sortvar] ) ) {
+
+                    // Set the sortfield and direction
+                    $this->sortfield = $_GET[$sortvar];
+
+                    // Get the sort direction
+                    if ( isset( $_GET[$this->sortdir] ) && ( $_GET[$this->sortdir] == 'DESC' ) ) {
+                        $this->sortdirection = 'DESC';
+                    } else {
+                        $this->sortdirection = 'ASC';
+                    }
+
+                    // Perform the sorting
+                    $this->records = $this->sort( $this->sortfield, $this->sortdirection );
+
+                }
 
             }
 
