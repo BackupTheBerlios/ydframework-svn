@@ -478,7 +478,7 @@
             foreach ( $fields as $field ) {
                 $name = $field->getName();
                 if ( call_user_func( array( & $this->_fields->$name, $method ) ) ) {
-                    $filtered[] = $object ? $field : $field->getColumn();
+                    $filtered[] = $object ? $field : $name;
                 }
             }
             return $filtered;
@@ -615,6 +615,7 @@
 
             if ( ! $this->exists( $f_var ) ) {
                 $this->set( $f_var, YDDatabaseObject::getInstance( $f_class ) );
+				$this->$f_var->_alias = $f_var;
             }
 
             if ( $relation->isManyToMany() ) {
@@ -624,6 +625,7 @@
 
                 if ( ! $this->exists( $c_var ) ) {
                     $this->set( $c_var, YDDatabaseObject::getInstance( $c_class ) );
+					$this->$c_var->_alias = $c_var;
                 }
 
             }
