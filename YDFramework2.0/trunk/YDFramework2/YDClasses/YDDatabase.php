@@ -154,6 +154,11 @@
          */
         function setTotalRows( $value, $offset=false ) {
             
+            // Return if total is 0
+            if ( strval( $val ) == '0' ) {
+                return;
+            }
+
             // Set the number of records an integer
             $value = intval( $value );
             
