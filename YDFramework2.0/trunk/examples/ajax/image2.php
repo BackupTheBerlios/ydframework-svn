@@ -14,6 +14,8 @@
 
 		function image2() {
 
+			if (!extension_loaded('gd')) die('GD extension must be loaded. See http://www.php.net/gd');
+
 			$this->YDRequest();
 			$this->tpl  = new YDTemplate();
 			$this->form = new YDForm('myform');
