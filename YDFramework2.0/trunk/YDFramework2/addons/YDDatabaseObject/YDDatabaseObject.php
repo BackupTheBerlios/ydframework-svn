@@ -598,36 +598,45 @@
         }
 
         /**
-         *  This function loads a relation object into the YDDatabaseObject.
-         *
-         *  @param $relation  The relation name.
+         *  This function loads relations objects into the YDDatabaseObject.
+         *  You can add relations names as parameters to load the relations.
          */
-        function load( $relation ) {
+        function load() {
 
-            if ( ! $this->_relations->exists( $relation ) ) {
-                trigger_error(  $this->getClassName() . ' -
-                                The relation "' . $relation . '" is not defined.', YD_ERROR );
+            $args = func_get_args();
+
+            if ( ! sizeof( $args ) ) {
+                $this->loadAll();
             }
-
-            $relation = & $this->getRelation( $relation );
-            $f_var    = $relation->getForeignVar();
-            $f_class  = $relation->getForeignClass();
-
-            if ( ! $this->exists( $f_var ) ) {
-                $this->set( $f_var, YDDatabaseObject::getInstance( $f_class ) );
-				$this->$f_var->_alias = $f_var;
-            }
-
-            if ( $relation->isManyToMany() ) {
-
-                $c_var    = $relation->getCrossVar();
-                $c_class  = $relation->getCrossClass();
-
-                if ( ! $this->exists( $c_var ) ) {
-                    $this->set( $c_var, YDDatabaseObject::getInstance( $c_class ) );
-					$this->$c_var->_alias = $c_var;
+            
+            foreach ( $args as $relation ) {
+        
+                if ( ! $this->_relations->exists( $relation ) ) {
+                    trigger_error(  $this->getClassName() . ' -
+                                    The relation "' . $relation . '" is not defined.', YD_ERROR );
                 }
 
+                $rel     = & $this->getRelation( $relation );
+                $f_var   = $rel->getForeignVar();
+                $f_class = $rel->getForeignClass();
+
+                if ( ! $this->exists( $f_var ) ) {
+                    $this->set( $f_var, YDDatabaseObject::getInstance( $f_class ) );
+    				$this->$f_var->_alias = $f_var;
+                }
+
+                if ( $rel->isManyToMany() ) {
+
+                    $c_var   = $rel->getCrossVar();
+                    $c_class = $rel->getCrossClass();
+
+                    if ( ! $this->exists( $c_var ) ) {
+                        $this->set( $c_var, YDDatabaseObject::getInstance( $c_class ) );
+    					$this->$c_var->_alias = $c_var;
+                    }
+
+                }
+            
             }
 
         }
