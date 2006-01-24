@@ -645,6 +645,15 @@
         }
 
         /**
+         *  This function returns all active error messages
+         *
+         *  @returns    An array containing all active error messages
+         */
+        function getErrors() {
+            return array_values( $this->_errors );
+        }
+
+        /**
          *  This function will check if the form was submitted or not.
          *
          *  @returns    Boolean indicating if the form was submitted or not.
