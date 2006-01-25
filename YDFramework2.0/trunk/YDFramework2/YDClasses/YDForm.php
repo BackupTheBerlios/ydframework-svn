@@ -654,6 +654,15 @@
         }
 
         /**
+         *      Gets the name of the form.
+         *
+         *      @returns        The name of the form.
+         */
+        function getName() {
+            return $this->_name;
+        }
+
+        /**
          *  This function will check if the form was submitted or not.
          *
          *  @returns    Boolean indicating if the form was submitted or not.
