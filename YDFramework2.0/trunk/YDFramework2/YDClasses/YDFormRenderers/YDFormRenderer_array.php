@@ -73,6 +73,7 @@
             $form['endtag'] = '</form>';
 
             // Add the errors
+            $form['name']   = $this->_form->_name;
             $form['errors'] = $this->_form->_errors;
             $form['errors_unique_messages' ] = array_unique( array_values( $this->_form->_errors ) );
 
