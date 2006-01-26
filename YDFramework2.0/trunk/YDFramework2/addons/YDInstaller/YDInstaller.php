@@ -27,11 +27,11 @@
 
     YDConfig::set( 'YD_LOG_FILE', 'YDInstaller_log.xml', false );
     
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDTemplate.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDForm.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDLog.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDPersistent.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDTemplate.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDForm.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDLog.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDPersistent.php' );
 
     /**
      *  This class defines a YDInstaller object.

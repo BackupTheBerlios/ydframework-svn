@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../YDDatabaseQuery.php' );
+    include_once( YD_DIR_HOME_ADD . '/YDDatabaseQuery/YDDatabaseQuery.php' );
 
     /**
      *  This class defines a YDSqlQueryDriver_oracle object.

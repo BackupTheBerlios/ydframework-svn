@@ -27,9 +27,9 @@
     }
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDUrl.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDXml.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDXml.php' );
 
     /**
      *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and

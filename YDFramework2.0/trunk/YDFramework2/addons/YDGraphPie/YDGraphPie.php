@@ -34,7 +34,7 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
     
-    include_once( dirname( __FILE__ ) .'/../YDGraph/YDGraph.php' );
+    include_once( YD_DIR_HOME_ADD .'/YDGraph/YDGraph.php' );
     
     /**
      * This class implements an addon module that is able to draw pie graphs using the GD library.
