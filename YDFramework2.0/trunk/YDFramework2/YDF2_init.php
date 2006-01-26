@@ -65,6 +65,7 @@
     // Directory paths
     @define( 'YD_DIR_HOME', dirname( __FILE__ ) );
     @define( 'YD_DIR_HOME_CLS', YD_DIR_HOME . '/YDClasses' );
+    @define( 'YD_DIR_HOME_ADD', YD_DIR_HOME . '/addons' );
     @define( 'YD_DIR_TEMP', YD_DIR_HOME . '/temp' );
 
     // File and URL constants
