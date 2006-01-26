@@ -68,8 +68,8 @@
     YDConfig::set( 'YD_DBOBJECT_UPDATE', false, false );
 
     // Includes
-    include_once( dirname( __FILE__ ) . '/../../YDClasses/YDDatabase.php' );
-    include_once( dirname( __FILE__ ) . '/../YDDatabaseQuery/YDDatabaseQuery.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
+    include_once( YD_DIR_HOME_ADD . '/YDDatabaseQuery/YDDatabaseQuery.php' );
 
     /**
      *  This class defines a YDDatabaseObject object.
@@ -585,8 +585,8 @@
                 $this->where( $r . $alias . $r . '.' . $r . $field->getColumn() . $r . $value );
             }
             
-            // Replace #. with table alias in WHERE, HAVING and SELECT
-            foreach ( array( 'where', 'having', 'select' ) as $statement ) {
+            // Replace #. with table alias in WHERE, HAVING, SELECT, ORDER and GROUP
+            foreach ( array( 'where', 'having', 'select', 'order', 'group' ) as $statement ) {
                 $stas = & $this->_query->$statement;
                 foreach ( $stas as $n => $sta ) {
                     $expr = $sta['expr'];
@@ -622,7 +622,7 @@
 
                 if ( ! $this->exists( $f_var ) ) {
                     $this->set( $f_var, YDDatabaseObject::getInstance( $f_class ) );
-    				$this->$f_var->_alias = $f_var;
+                    $this->$f_var->_alias = $f_var;
                 }
 
                 if ( $rel->isManyToMany() ) {
@@ -632,7 +632,7 @@
 
                     if ( ! $this->exists( $c_var ) ) {
                         $this->set( $c_var, YDDatabaseObject::getInstance( $c_class ) );
-    					$this->$c_var->_alias = $c_var;
+                        $this->$c_var->_alias = $c_var;
                     }
 
                 }
@@ -739,11 +739,11 @@
                     $rel = & $this->getRelation( $relation );
 
                     $f_var = $rel->getForeignVar();
-                    $relations_arr[ $relation . '_' . $f_var ] = & $this->$f_var;
+                    $relations_arr[ $f_var ] = & $this->$f_var;
 
                     if ( $rel->isManyToMany() ) {
                         $c_var = $rel->getCrossVar();
-                        $relations_arr[ $relation . '_' . $c_var ] = & $this->$c_var;
+                        $relations_arr[ $c_var ] = & $this->$c_var;
                     }
 
                 }
@@ -765,10 +765,10 @@
                     
                     $pfx = '';
                     if ( $prefix ) {
-                        $pfx = substr( $name, strrpos( $name, '_' )+1, strlen( $name ) ) . '_';
+                        $pfx = $name . '_';
                     }
                     
-                    if ( $pfx == '_' ) {
+                    if ( $pfx == '_' || $pfx == '__' ) {
                         $pfx = '';
                     }
                     
@@ -805,7 +805,7 @@
             }
             
             // Clear the results
-            foreach ( $relations_arr as $name => $relation ) {
+            foreach ( $relations_arr as $relation ) {
                 $relation->resetResults();
             }
 
@@ -865,7 +865,7 @@
             $values = $this->getValues( true, true, true );
 
             $auto_field = current( $this->_getFieldsByMethod( 'isAutoIncrement' ) );
-
+            
             if ( ! $auto && $auto_field ) {
                 unset( $values[ $auto_field->getColumn() ] );
             }
@@ -1010,9 +1010,9 @@
             $slices = array();
 
             // Add local table
-			$l_table = $this->getTable();
+            $l_table = $this->getTable();
             $l_alias = $this->getAlias();
-			
+            
             $this->_query->table( $l_table, $l_alias );
             
             // Prepare query in local object
@@ -1045,11 +1045,11 @@
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
                 $f_table = $this->$f_var->getTable();
-				
+                
                 // Foreign table alias
                 $this->$f_var->_alias = $f_var;
                 $f_alias = $f_var;
-				
+                
                 // Foreign table key
                 $f_key   = $rel->getForeignKey();
 
@@ -1123,7 +1123,7 @@
                     $c_lcolumn = $c_lfield->getColumn();
 
                     // Prepare the query in the cross object
-                    $this->$c_var->_prepareQuery( true, $c_alias );
+                    $this->$c_var->_prepareQuery( true );
 
                     // Add the cross slice
                     $slices[ $pos ] = $c_var;
@@ -1133,7 +1133,7 @@
                     $this->_query->select = array_merge( $this->_query->select, $this->$c_var->_query->select );
 
                     // Join cross table
-                    $this->_query->join( $rel->getCrossJoin(), $c_table );
+                    $this->_query->join( $rel->getCrossJoin(), $c_table, $c_alias );
                     $this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column  . $r . ' = ' .
                                        $r . $c_alias . $r . '.' . $r . $c_lcolumn . $r );
 
@@ -1146,7 +1146,7 @@
                     }
 
                     // Join foreign table
-                    $this->_query->join( $rel->getForeignJoin(), $f_table );
+                    $this->_query->join( $rel->getForeignJoin(), $f_table, $f_alias );
                     $this->_query->on( $r . $c_alias . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
                                        $r . $f_alias . $r . '.' . $r . $f_column  . $r );
 
