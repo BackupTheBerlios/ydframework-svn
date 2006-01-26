@@ -71,6 +71,7 @@
             unset( $form['errors'] );
             unset( $form['errors_unique_messages'] );
             unset( $form['requirednote'] );
+            unset( $form['name'] );
 
             // Add the required note if there are required items
             if ( ! empty( $this->_form->_requiredNote ) ) {

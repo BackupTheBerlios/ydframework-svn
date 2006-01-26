@@ -76,6 +76,7 @@
             unset( $form['errors'] );
             unset( $form['errors_unique_messages'] );
             unset( $form['requirednote'] );
+            unset( $form['name'] );
 
             // Add the elements
             
