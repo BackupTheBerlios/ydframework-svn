@@ -1501,7 +1501,7 @@
         function resetObject() {
             
             $vars = get_object_vars( $this );
-            foreach ( $vars as $var ) {
+            foreach ( $vars as $var => $value ) {
                 if ( substr( $var, 0, 1 ) != '_' ) {
                     unset( $this->$var );
                 }
