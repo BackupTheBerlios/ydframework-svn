@@ -20,7 +20,7 @@
         Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
     */
-
+ 
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
