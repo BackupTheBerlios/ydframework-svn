@@ -1626,14 +1626,18 @@
                 
                 $curr = & $output;
                 
-                foreach ( $key as $field_key ) {
-                    
-                    if ( ! isset( $curr[ $res[ $field_key ] ] ) ) {
-                        $curr[ $res[ $field_key ] ] = array();
+                if ( ! empty( $key ) ) {
+                    foreach ( $key as $field_key ) {
+                        
+                        if ( ! isset( $curr[ $res[ $field_key ] ] ) ) {
+                            $curr[ $res[ $field_key ] ] = array();
+                        }
+                        $curr = & $curr[ $res[ $field_key ] ];
+                        // unset( $res[ $field_key ] );
+                        
                     }
-                    $curr = & $curr[ $res[ $field_key ] ];
-                    // unset( $res[ $field_key ] );
-                    
+                } else {
+                    $curr = & $curr[];
                 }
                 
                 if ( empty( $val ) ) {
