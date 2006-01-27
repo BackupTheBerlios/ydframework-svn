@@ -882,6 +882,7 @@
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
+            $success = ( $result == -1 || $result === false ) ? false : true;
             
             if ( is_numeric( $result ) && $auto_field ) {
                 $result = $this->_db->getLastInsertID();
@@ -889,7 +890,7 @@
             }
             
             // after insert callbacks
-            $this->_executeCallbacks( 'insert', false );
+            $this->_executeCallbacks( 'insert', false, $success );
             
             $this->resetQuery();
 
@@ -931,9 +932,10 @@
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
+            $success = ( $result == -1 || $result === false ) ? false : true;
             
             // after update callbacks
-            $this->_executeCallbacks( 'update', false );
+            $this->_executeCallbacks( 'update', false, $success );
             
             $this->resetQuery();
 
@@ -968,9 +970,10 @@
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
             $result = $this->_db->executeSql( $sql );
+            $success = ( $result == -1 || $result === false ) ? false : true;
 
             // after delete callbacks
-            $this->_executeCallbacks( 'delete', false );
+            $this->_executeCallbacks( 'delete', false, $success );
 
             $this->resetQuery();
 
@@ -1177,9 +1180,10 @@
             }
             
             $result = $this->findSql( $this->_query->getQuery(), $slices );
+            $success = ( $result == -1 || $result === false ) ? false : true;
             
             // after find callbacks
-            $this->_executeCallbacks( 'find', false );
+            $this->_executeCallbacks( 'find', false, $success );
             
             return $result;
 
@@ -1720,10 +1724,11 @@
          *
          *  @param  $action  The action name.
          *  @param  $before  (optional) Execute the before actions. Default: false.
+         *  @param  $success (optional) Boolean indicating if the action was successful. Default: null - no result.
          *
          *  @internal
          */
-        function _executeCallbacks( $action, $before=false ) {
+        function _executeCallbacks( $action, $before=false, $success=null ) {
             
             if ( ! $this->_callbacks->exists( strtolower( $action ) ) ) {
                 trigger_error(  $this->getClassName() . ' -
@@ -1739,10 +1744,19 @@
                     trigger_error(  $this->getClassName() . ' -
                                     The ' . $action . ' callback method "' . $callback . '" is not defined.', YD_ERROR );
                 }
-                call_user_func( array( & $this, $callback ), $action, $before );
+                call_user_func( array( & $this, $callback ), $action, $before, $success );
                 
             }
             
+        }
+        
+        /**
+         *  This function indicates if an SQL error should die the script or not.
+         *
+         *  @param $val     (optional) True if you want the script to die on an error, false otherwise.
+         */
+        function setFailOnError( $val=true ) { 
+            $this->_db->setFailOnError( $val );
         }
 
     }
