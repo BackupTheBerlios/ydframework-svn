@@ -274,15 +274,15 @@
          *
          *	@code
          *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/cool.html' );
-         *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum'];
-         *	$r = $url->getSubDirectories('forum');  // returns: [];
-         *	$r = $url->getSubDirectories('test');   // returns: [];
+         *	$r = $url->getPathSubdirectories('ydf2');   // returns: ['forum'];
+         *	$r = $url->getPathSubdirectories('forum');  // returns: [];
+         *	$r = $url->getPathSubdirectories('test');   // returns: [];
          *
          *	// it gets the sub-directories of the first ocurrence:
          *	$url = new YDUrl( 'http://www.yellowduck.be/ydf2/forum/ydf2/forum/cool.html' );
-         *	$r = $url->getSubDirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
-         *	$r = $url->getSubDirectories('forum');  // returns: ['ydf2', 'forum'];
-         *	$r = $url->getSubDirectories('test');   // returns: [];
+         *	$r = $url->getPathSubdirectories('ydf2');   // returns: ['forum', 'ydf2', 'forum'];
+         *	$r = $url->getPathSubdirectories('forum');  // returns: ['ydf2', 'forum'];
+         *	$r = $url->getPathSubdirectories('test');   // returns: [];
          *	@endcode
          *
          *	@param	$dir	The directory to get the subdirectories from.
