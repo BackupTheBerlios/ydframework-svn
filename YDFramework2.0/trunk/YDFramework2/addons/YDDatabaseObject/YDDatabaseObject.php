@@ -1465,7 +1465,7 @@
             // before reset callbacks
             $this->_executeCallbacks( 'reset', true );
             
-            $this->resetValues();
+            $this->resetObject();
             $this->resetQuery();
             $this->resetResults();
             $this->resetCount();
@@ -1489,10 +1489,24 @@
         }
 
         /**
-         *  This function resets the object's values.
+         *  This function resets the object's field values.
          */
         function resetValues() {
             $this->setValues( array() );
+        }
+        
+        /**
+         *  This function resets the all object's values.
+         */
+        function resetObject() {
+            
+            $vars = get_object_vars( $this );
+            foreach ( $vars as $var ) {
+                if ( substr( $var, 0, 1 ) != '_' ) {
+                    unset( $this->$var );
+                }
+            }
+            
         }
 
         /**
