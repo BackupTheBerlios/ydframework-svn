@@ -56,7 +56,7 @@
             
             // Setup the module
             $this->_author = "David Bittencourt";
-            $this->_version = "1.0";
+            $this->_version = "1.3";
             $this->_copyright = "(c) 2005 David Bittencourt, muitocomplicado@hotmail.com";
             $this->_description = "This class implements a pie chart rendering utility";
             
