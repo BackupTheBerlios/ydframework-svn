@@ -1446,13 +1446,13 @@
          */
         function resetAll() {
             
-            $this->reset();
-            
             $relations = array_keys( get_object_vars( $this->_relations ) );
 
             foreach ( $relations as $relation ) {
                 $this->resetRelation( $relation );
             }
+            
+            $this->reset();
             
         }
 
@@ -1501,10 +1501,21 @@
         function resetObject() {
             
             $vars = get_object_vars( $this );
+            
+            $relation_vars = array();
+            foreach ( $this->_relations as $rel ) {
+                $relation_vars[] = $rel->getForeignVar();
+                if ( $rel->isManyToMany() ) {
+                    $relation_vars[] = $rel->getCrossVar();
+                }
+            }
+            
             foreach ( $vars as $var => $value ) {
-                if ( substr( $var, 0, 1 ) != '_' ) {
+                
+                if ( substr( $var, 0, 1 ) != '_' && ! in_array( $var, $relation_vars ) ) {
                     unset( $this->$var );
                 }
+                
             }
             
         }
