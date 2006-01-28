@@ -1285,6 +1285,16 @@
         function setAttribute( $key, $val ) {
             $this->_attributes[$key] = $val;
         }
+		
+        /**
+         *  Function to set the option of a form element
+         *
+         *  @param  $key    The name of the option
+         *  @param  $val    The value of the option
+         */
+        function setOption( $key, $val ) {
+            $this->_options[$key] = $val;
+        }		
 
         /**
          *  This function sets the value for the element.
