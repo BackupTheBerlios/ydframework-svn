@@ -97,7 +97,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.21';
+            $this->_version = '4.22';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -1559,19 +1559,23 @@
             return $new;
 
         }
-        
+
         /**
          *  This function retrieves an associative array of values of the 
          *  indicated fields.
          *
-         *  @param $val      (optional) The fields to retrieve. Default: all.
-         *  @param $prefix   (optional) The text to prepend to the field name. Default: (empty).
+         *  @param $val          (optional) The fields to retrieve. Default: all.
+         *  @param $only_current (optional) Returns only the current object values. Default: false.
+         *  @param $only_fields  (optional) Returns only defined fields. Default: false.
+         *  @param $columns      (optional) Returns the columns names instead of the fields names.
+         *  @param $prefix       (optional) If true all foreign values will be prefixed with
+         *                                  the foreign and cross var. Default: true.
          *
          *  @returns  An associative array with the values.
          */
-        function getValuesAsAssocArray( $val=array(), $prefix='' ) {
+        function getValuesAsAssocArray( $val=array(), $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
             
-            $values = $this->getValues();
+            $values = $this->getValues( $only_current, $only_fields, $columns, $prefix );
             $output = array();
             
             if ( empty( $val ) ) {
@@ -1583,7 +1587,7 @@
             }
             
             foreach ( $val as $v ) {
-                $output[ $prefix . $v ] = $values[ $v ];
+                $output[ $v ] = $values[ $v ];
             }
             
             return $output;
@@ -1594,13 +1598,17 @@
          *  This function retrieves all the results that weren't fetched as an
          *  associative array using the indicated fields for keys and values
          *
-         *  @param $key      (optional) The fields to use for the keys. Default: all keys.
-         *  @param $val      (optional) The fields to use for the values. Default: all fields.
-         *  @param $prefix   (optional) The text to prepend to the field name. Default: (empty).
+         *  @param $key          (optional) The fields to use for the keys. Default: all keys.
+         *  @param $val          (optional) The fields to use for the values. Default: all fields.
+         *  @param $only_current (optional) Returns only the current object values. Default: false.
+         *  @param $only_fields  (optional) Returns only defined fields. Default: false.
+         *  @param $columns      (optional) Returns the columns names instead of the fields names.
+         *  @param $prefix       (optional) If true all foreign values will be prefixed with
+         *                                  the foreign and cross var. Default: true.
          *
          *  @returns  An associative array with the results.
          */
-        function getResultsAsAssocArray( $key=array(), $val=array(), $prefix='' ) {
+        function getResultsAsAssocArray( $key=array(), $val=array(), $only_current=false, $only_fields=false, $columns=false, $prefix=true ) {
 
             if ( ! is_array( $val ) ) {
                 if ( empty( $val ) ) {
@@ -1618,7 +1626,7 @@
                 $key = array( $key );
             }
             
-            $results = $this->getResults();
+            $results = $this->getResults( $only_current, $only_fields, $columns, $prefix );
             $output = array();
             $curr = null;
             
@@ -1642,13 +1650,13 @@
                 
                 if ( empty( $val ) ) {
                     foreach ( $res as $field => $field_val ) {
-                        $curr[ $prefix . $field ] = $field_val;
+                        $curr[ $field ] = $field_val;
                     }
                 } else if ( sizeof( $val ) == 1 ) {
                     $curr = $res[ $val[0] ];
                 } else {
                     foreach ( $val as $field_val ) {
-                        $curr[ $prefix . $field_val ] = $res[ $field_val ];
+                        $curr[ $field_val ] = $res[ $field_val ];
                     }
                 }
                 
