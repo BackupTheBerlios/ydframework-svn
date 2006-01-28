@@ -99,8 +99,8 @@ $user->phone->resetQuery();
 $user->select( 'id', 'name', 'country' );
 $user->phone->select( 'number', 'ord' );
 
-$user->where( $user->getTable() . ".country LIKE 'b%'" );
-$user->order( $user->phone->getTable() . '.ord' );
+$user->where( $user->getAlias() . ".country LIKE 'b%'" );
+$user->order( $user->phone->getAlias() . '.ord' );
 $user->limit( 2 );
 
 $user->find( 'phone' );
