@@ -66,8 +66,17 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
-            // Get the HTML
-            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+            // If is not a autocompleter element
+            if (!isset($this->_options['autocompleter'])) return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+
+            // trick to make this text box with the same width as autocompleter. TODO: parse 'style' attribute for widtth
+            if (isset( $attribs['size'] )){
+                $attribs['style'] = "width:" . $attribs['size'];
+                unset( $attribs['size'] );
+            }
+
+            // if is a autocompleter we must add an extra div. TODO: automagically apply width to text element and div
+            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><div style="z-index=999;'. $attribs['style'] .'" id="' .  $attribs['name'] . '_div"><ul></ul></div>';
 
         }
 
