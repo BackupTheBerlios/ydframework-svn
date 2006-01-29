@@ -29,13 +29,10 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
-			$this->ajax->ignoreEffects();
 
-			// assign element 'mybutton' with method 'getcontries'
+			// assign element 'mybutton' with method 'getcontries'. 
+			// option 'all' means that the argument 'items' must send all values (to 'addentry') and not only the current selected value
 			$this->ajax->addEvent( 'myspan', array( & $this, 'addentry' ), 'items', null, 'all' );
-
-			// if you want to see what's going on, use YDAjax::dump()
-			// $this->ajax->dump();
 
 			// process all events
 			$this->ajax->processEvents();

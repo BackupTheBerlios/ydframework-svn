@@ -29,9 +29,8 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
-			$this->ajax->ignoreEffects();
 			
-			// register event to 'car' and send its dynamic value to 'getmodel' method
+			// register event to element 'car' and send to 'getmodel' method its dynamic value
 			$this->ajax->addEvent( 'car', array( & $this, 'getmodel' ), array( 'car' ) );
 			$this->ajax->processEvents();
 
@@ -52,7 +51,7 @@
 				default : $models = array( 'Z3', 'Z4', 'M3' ); break;
 			}
 
-			// assign models to 'model' element
+			// assign models to 'model' select form element
 			$this->ajax->addResult( 'model', $models );
 
 			// return response to client browser

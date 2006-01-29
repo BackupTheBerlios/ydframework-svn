@@ -9,6 +9,8 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 
+//  YDConfig::set( 'YD_AJAX_ENCODING', "iso-8859-15" );
+//	YDConfig::set( 'YD_AJAX_DEBUG', true );
 
 	// Class definition
 	class version extends YDRequest {
@@ -25,18 +27,18 @@
 
 			// create a form with a span and a button
 			$form = new YDForm('myform');
-			$form->addElement('span',   'myspanresult', '&nbsp;', array('style' => 'WIDTH:350px;BACKGROUND-COLOR:#ccccff') );
+			$form->addElement('span',   'myspanresult', '&nbsp;', array('style' => 'BACKGROUND-COLOR:#ccccff') );
 			$form->addElement('button', 'mybutton',     'Get YDFramework version');
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
-			$this->ajax->ignoreEffects();
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'getversion' ) );
 
 			// process ajax events
 			$this->ajax->processEvents();
+
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'This is a simple ajax example');

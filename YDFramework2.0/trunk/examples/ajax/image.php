@@ -19,7 +19,6 @@
 
 			$this->YDRequest();
 			$this->tpl = new YDTemplate();
-
 			$this->form = new YDForm('myform');
 		}
 
@@ -31,14 +30,13 @@
 			$this->form->addElement( 'span',    'myspan1',  'Click here to change chart 1' );
 			$this->form->addElement( 'span',    'myspan2',  'Click here to change chart 2' );
 			$this->form->addElement( 'span',    'myspan3',  'Click here to change both charts' );
-			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => 550, 'height' => 250, 'style' => 'visibility:hidden' ) );
-			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250, 'style' => 'visibility:hidden' ) );
+			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => 550, 'height' => 250) );
+			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250) );
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
-			$this->ajax->ignoreEffects();
 
-			// create events for each span using call 'generatechart' but with different arguments
+			// create events for each span using call 'generatechart' but with different static arguments
 			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1 );
 			$this->ajax->addEvent( 'myspan2', array( & $this, 'generatechart' ), 2 );
 			$this->ajax->addEvent( 'myspan3', array( & $this, 'generatechart' ), 3 );
@@ -64,15 +62,12 @@
 			if ( $chartnumber == 1 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage1', 'ajaxchart1.png' ) ;
 			if ( $chartnumber == 2 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage2', 'ajaxchart2.png' ) ;
 
-			// display images
-			if ( $chartnumber == 1 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage1', 'visible', 'style.visibility' ) ;
-			if ( $chartnumber == 2 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage2', 'visible', 'style.visibility' ) ;
-
 			// return response to client browser
 			return $this->ajax->processResults();
 		}
 
-		
+
+		// method to create graphs
 		function createGraph( $name, $type ){
 		
 			YDInclude( 'YDGraph.php' );

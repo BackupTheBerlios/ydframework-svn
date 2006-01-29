@@ -17,7 +17,6 @@
 
 			$this->YDRequest();
 			$this->tpl = new YDTemplate();
-
 			$this->form = new YDForm('myform');
 		}
 
@@ -30,7 +29,6 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
-			$this->ajax->ignoreEffects();
 
 			// assign element 'mybutton' with method 'getcontries'
 			$this->ajax->addEvent( 'myspan', array( & $this, 'getcontries' ) );
@@ -51,10 +49,10 @@
 			// include Select lib
 			YDInclude( 'YDFormElement_Select.php' );
 
-			// create new select element
-			$contries = new YDFormElement_Select( $this->form->_name, 'contries', '', '', array( 'Portugal', 'Brasil', 'Belgium' ) );
+			// create new select element assigned to form 'myform'
+			$contries = new YDFormElement_Select( $this->form->getName(), 'contries', '', '', array( 'Portugal', 'Brasil', 'Belgium' ) );
 			
-			// put select inside span
+			// assign form element code with span
 			$this->ajax->addResult( 'myspan', $contries->toHtml() ) ;
 
 			// disable previous event (myspan was assigned with a call to 'getcountries')

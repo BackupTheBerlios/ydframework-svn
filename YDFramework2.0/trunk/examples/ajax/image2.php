@@ -9,6 +9,7 @@
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDAjax.php' );
 
+
     // Class definition
     class image2 extends YDRequest {
 
@@ -19,10 +20,6 @@
 			$this->YDRequest();
 			$this->tpl  = new YDTemplate();
 			$this->form = new YDForm('myform');
-
-			// image dimensions
-			$this->width  = 550;
-			$this->height = 250;			
 		}
 
 
@@ -30,29 +27,34 @@
 		function actionDefault() {
 
 			// create form elements
-			$this->form->addElement( 'link',    'myspan1',  'Click here to change chart 1', '', '#' );
-			$this->form->addElement( 'link',    'myspan2',  'Click here to change chart 2', '', '#' );
-			$this->form->addElement( 'link',    'myspan3',  'Click here to change both charts', '', '#' );
-			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => $this->width, 'height' => $this->height ) );
-			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => $this->width, 'height' => $this->height ) );
+			$this->form->addElement( 'link',    'myspan1',  'Rebuild chart 1', '', '#' );
+			$this->form->addElement( 'link',    'myspan2',  'Rebuild chart 2', '', '#' );
+			$this->form->addElement( 'link',    'myspan3',  'Rebuild both charts', '', '#' );
+			$this->form->addElement( 'link',    'myspan4',  'Rebuild chart 1 and apply "resize" with "modify(50, 100) to chart 2"', '', '#' );
+			$this->form->addElement( 'link',    'myspan5',  'Apply fade to chart 1 using the response (not on ajax call)', '', '#' );
+
+			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => 550, 'height' => 250 ) );
+			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250 ) );
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax->useWaitingMessage();
 
-			// create effects
-			$ef1 = $this->ajax->createEffect( 'fadeOut', 'myimage1', true );
-			$ef2 = $this->ajax->createEffect( 'fadeOut', 'myimage2', true );
+			// create effect
+			$ef1 = new YDAjaxEffect( 'myimage2', 'resize',   "modify(50, 100)" );
 
-			// assign element 'mybutton' with method 'getcontries'
-			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1, null, null, $ef1 );
-			$this->ajax->addEvent( 'myspan2', array( & $this, 'generatechart' ), 2, null, null, $ef2 );
-			$this->ajax->addEvent( 'myspan3', array( & $this, 'generatechart' ), 3, null, null, array( $ef1, $ef2 ) );
-
+			// create events for each span
+			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1);
+			$this->ajax->addEvent( 'myspan2', array( & $this, 'generatechart' ), 2);
+			$this->ajax->addEvent( 'myspan3', array( & $this, 'generatechart' ), 3);
+			$this->ajax->addEvent( 'myspan4', array( & $this, 'generatechart' ), 1, null, null, $ef1 );
+			$this->ajax->addEvent( 'myspan5', array( & $this, 'response2' ) );
+			
 			// process all events
 			$this->ajax->processEvents();
 
 			// assign title, form and display template
-			$this->tpl->assign( 'title', 'This example will generate new graphs (on the server side) and replace them (in the client side) with YDAjax' );
+			$this->tpl->assign( 'title', 'This example will demonstrates the Waiting Message and effects creation' );
 			$this->tpl->assign( 'form',  $this->form->render('html') );
 			$this->tpl->display( 'general' );
 		}
@@ -69,15 +71,26 @@
 			if ( $chartnumber == 1 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage1', 'ajaxchart1.png' ) ;
 			if ( $chartnumber == 2 || $chartnumber == 3 ) $this->ajax->addResult( 'myimage2', 'ajaxchart2.png' ) ;
 
-			// apply effects (fadeIn) to images
-			if ( $chartnumber == 1 || $chartnumber == 3 ) $this->ajax->addEffect(  $this->ajax->createEffect( 'fadeIn', 'myimage1' )  );
-			if ( $chartnumber == 2 || $chartnumber == 3 ) $this->ajax->addEffect(  $this->ajax->createEffect( 'fadeIn', 'myimage2', false, array( 'duration' => 0.2 ) ) );
-
 			// return response to client browser
 			return $this->ajax->processResults();
 		}
 
+
+		// response2 call invoked by ajax
+		function response2(){
 		
+			// create fade effect
+			$fade = new YDAjaxEffect( 'myimage1', 'opacity', "custom(1, 0.5)" );
+		
+			// add it to the response
+			$this->ajax->addEffect( $fade );
+		
+			// return response to client browser
+			return $this->ajax->processResults();
+		}
+		
+		
+		// method for graphs creation
 		function createGraph( $name, $type ){
 		
 			YDInclude( 'YDGraph.php' );
@@ -90,7 +103,7 @@
 			$labels = array( 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' );
 
 			// Create a new graph
-			$g1 = new YDGraph( $this->width, $this->height );
+			$g1 = new YDGraph(550, 250 );
 			$g1->setLimits( 0, 20 );
 			$g1->setOffset( 5 );
 			$g1->setFormat( 1, ',', '.' );

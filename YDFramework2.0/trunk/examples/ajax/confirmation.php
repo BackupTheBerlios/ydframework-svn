@@ -30,7 +30,6 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
-			$this->ajax->ignoreEffects();
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'getversion' ) );

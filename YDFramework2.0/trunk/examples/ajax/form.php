@@ -17,7 +17,6 @@
 
 			$this->YDRequest();
 			$this->tpl = new YDTemplate();
-
 			$this->form = new YDForm('myform');
         }
 
@@ -38,7 +37,6 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form);
-			$this->ajax->ignoreEffects();
 
 			// assign element 'mybutton' with method 'processform' with 'myform' values as argument
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'processform' ), 'myform' );
@@ -51,17 +49,19 @@
         }
 
 
-		// processform call invoked by ajax
+		// process form call invoked by ajax
 		function processform( $formvalues ){
 
-			// if form is not valid, send errors to client side
-			if (!$this->form->validate($formvalues)) 
-				return $this->ajax->sendFormErrors( $this->form );
-
-			// assign span 'myspanresult' form dump as result
-			$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
-			$this->ajax->addResult( 'mybutton',     'Send form with YDAjax again :)' );
-
+			// if form is not valid, send errors to client side using an alert
+			if (!$this->form->validate( $formvalues )){
+				$this->ajax->addAlert( implode( "\n", $this->form->getErrors() ) );
+			
+			}else{
+				// assign span 'myspanresult' with form values and change 'mybutton' caption
+				$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
+				$this->ajax->addResult( 'mybutton',     'Send form with YDAjax again :)' );
+			}
+			
 			// return response to client browser
 			return $this->ajax->processResults();
 		}
