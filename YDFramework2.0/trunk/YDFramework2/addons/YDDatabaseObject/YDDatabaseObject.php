@@ -1587,7 +1587,9 @@
             }
             
             foreach ( $val as $v ) {
-                $output[ $v ] = $values[ $v ];
+                if ( array_key_exists( $v, $values ) ) {
+                    $output[ $v ] = $values[ $v ];
+                }
             }
             
             return $output;
@@ -1637,26 +1639,38 @@
                 if ( ! empty( $key ) ) {
                     foreach ( $key as $field_key ) {
                         
-                        if ( ! isset( $curr[ $res[ $field_key ] ] ) ) {
-                            $curr[ $res[ $field_key ] ] = array();
+                        if ( ! array_key_exists( $field_key, $res ) ) {
+                            trigger_error(  $this->getClassName() . ' -
+                                            "' . $field_key . '" is not defined in the results array', YD_ERROR );
+                        } else {
+                            if ( ! array_key_exists( $res[ $field_key ], $curr ) ) {
+                                $curr[ $res[ $field_key ] ] = array();
+                            }
+                            $curr = & $curr[ $res[ $field_key ] ];
+                            // unset( $res[ $field_key ] );
                         }
-                        $curr = & $curr[ $res[ $field_key ] ];
-                        // unset( $res[ $field_key ] );
-                        
                     }
                 } else {
                     $curr = & $curr[];
                 }
                 
                 if ( empty( $val ) ) {
-                    foreach ( $res as $field => $field_val ) {
-                        $curr[ $field ] = $field_val;
+                    if ( sizeof( $res ) ) {
+                        foreach ( $res as $field => $field_val ) {
+                            $curr[ $field ] = $field_val;
+                        }
+                    } else {
+                        $curr = array();
                     }
                 } else if ( sizeof( $val ) == 1 ) {
-                    $curr = $res[ $val[0] ];
+                    if ( array_key_exists( $val[0], $res ) ) {
+                        $curr = $res[ $val[0] ];
+                    }
                 } else {
                     foreach ( $val as $field_val ) {
-                        $curr[ $field_val ] = $res[ $field_val ];
+                        if ( array_key_exists( $field_val, $res ) ) {
+                            $curr[ $field_val ] = $res[ $field_val ];
+                        }
                     }
                 }
                 
