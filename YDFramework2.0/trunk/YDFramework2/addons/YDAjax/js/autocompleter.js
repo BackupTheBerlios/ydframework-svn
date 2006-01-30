@@ -1,4 +1,16 @@
 
+
+var currentAjaxAutocompleter;
+
+function autocompleterOpen( values ){
+	return currentAjaxAutocompleter.displayDiv( values );
+}
+
+function autocompleterClose(){
+	return currentAjaxAutocompleter.hideDiv();
+}
+
+
 // IF suggentions is null.. we must define an autosuggest function inside ajax()
 function AutoSuggest( elementID, divID, suggestions, widthPX )
 {
@@ -185,6 +197,7 @@ function AutoSuggest( elementID, divID, suggestions, widthPX )
 		this.div.style.display = 'none';
 		this.highlighted = -1;
 	};
+
 
 	/********************************************************
 	Modify the HTML in the dropdown to move the highlight.

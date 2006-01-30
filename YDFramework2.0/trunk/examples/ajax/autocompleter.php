@@ -32,9 +32,9 @@
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
 
-			// add autocompleter using 'arg1' and sending to 'getCountry' all we have in 'arg1'
-			$this->ajax->addCompleter( 'arg1', array( & $this, 'getCountry' ), array('arg1', 1) );
-			$this->ajax->addCompleter( 'arg3', array( & $this, 'getCountry' ), array('arg3', 3) );
+			// add autocompleter using 'arg1'/'arg3' and sending to 'getCountry' all we have in 'arg1'/'arg3'
+			$this->ajax->addCompleter( 'arg1', array( & $this, 'getCountry' ), array('arg1') );
+			$this->ajax->addCompleter( 'arg3', array( & $this, 'getCountry' ), array('arg3') );
 
 			// process events added
 			$this->ajax->processEvents();
@@ -47,7 +47,7 @@
 
 
 		// compute call invoked by ajax client
-		function getCountry( $text, $autocompleter ){
+		function getCountry( $text ){
 		
 			// simple db emulation
 			$db =  array("Alabama","Alaska","American Samoa","Arizona","Arkansas","California","Brasil",
@@ -70,9 +70,8 @@
 			foreach( $db as $el )
 				if (eregi("^". $text ."+", $el)) $result[] = $el;
 	
-			// assign result to completer
-			if ($autocompleter == 1) $this->ajax->addCompleterResult( 'arg1', $result );
-			else                     $this->ajax->addCompleterResult( 'arg3', $result );
+			// assign result to current completer
+			$this->ajax->addCompleterResult( $result );
 
 			// return response to client browser
 			return $this->ajax->processResults();

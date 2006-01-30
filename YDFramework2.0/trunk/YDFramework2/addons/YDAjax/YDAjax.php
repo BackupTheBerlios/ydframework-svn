@@ -300,34 +300,26 @@
 			
 			// add js code for autocompleter
 			$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
-			$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){" .  $this->computeFunction( $textID, $serverFunctionName, $arguments, $options, $effects ) . "}";
+			$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $options, $effects ) . "}";
 		}
 
 
-		function addCompleterResult( $textElement , $result ){
+		function addCompleterResult( $result ){
+			
+			// if element is not an array we must create one
+			if (!is_array( $result )) $result = array( $result );
 		
-			// get element object
-			$formElement = & $this->form->getElement( $textElement );
-// TODO getOption			
-			$op = $formElement->getOptions();
-
-			if ( !isset( $op['autocompleter'] ) ) return;
-			
-			// compute autocompleter variable name
-			$atvar = YDConfig::get( 'YD_AJAX_PREFIX' ) .'at'. $formElement->getName();
-			
-			// compute temporary js result array name
-			$jsvar = "__ydtmpat". $textElement;
-			
 			// test it result is empty
-			if (empty( $result ))
-				return $this->addScript( $atvar . '.hideDiv();' );
+			if (empty( $result )) return $this->addScript( 'autocompleterClose();' );
+
+			// compute js variable name for results array
+			$jsvar = $this->prefix . "atresulttmp";
 
 			// assign js array values
 			$js = "var ". $jsvar ." = new Array('". implode( "','", $result ) . "');";
 
 			// send array and method to display autocompleter
-			return $this->addScript( $js . $atvar . '.displayDiv('. $jsvar .');' );
+			return $this->addScript( $js . 'autocompleterOpen('. $jsvar .');' );
 		}
 		
 
