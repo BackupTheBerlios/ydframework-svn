@@ -111,6 +111,7 @@
 			
 			// autocompleter code
 			$this->autocompleterCode = '';
+			$this->autocompleterCss  = '';
 			$this->autocompleterCodeFunctions = array();
 		}
 		
@@ -118,8 +119,11 @@
 		// internal method. replace "<head>" with "<head> and all ajax javascript (containing our custom javascript too)
 		function _assignJavascript($tpl_source, &$smarty){
 			
+			// load autocompleter css
+			$html  = $this->autocompleterCss;
+			
 			// start javascript code
-			$html  = "\n<script type=\"text/javascript\">\n";
+			$html .= "\n<script type=\"text/javascript\">\n";
 			
 			// use default url
 			$html .= "var xajaxRequestUri     = \"". YDRequest::getNormalizedUri() ."\";\n";
@@ -158,9 +162,8 @@
 
 			if ($onload != '') $html .= "\nwindow.onload = function() {\n\t". $onload . "\n}";
 
-
 			// send js function to hide waiting message
-			$html .= "\n" . $this->waitingMessageCodeFunction . "\n";
+			$html .= $this->waitingMessageCodeFunction . "\n";
 
 			// loop xajax functions created on-the-fly
 			foreach($this->aFunctions as $sFunction => $bExists)
@@ -265,7 +268,7 @@
 			$this->wtFunction = $this->wtID ."show()";
 
 			// create js function to show div
-			$this->waitingMessageCodeFunction ="function ". $this->wtFunction ."{document.getElementById('". $this->wtID ."id').style.display='block';}";
+			$this->waitingMessageCodeFunction ="\nfunction ". $this->wtFunction ."{document.getElementById('". $this->wtID ."id').style.display='block';}";
 		}
 
 
@@ -281,8 +284,11 @@
 
 		function addCompleter($formElementName, $serverFunctionName, $arguments, $options = null, $effects = null){
 		
-			if (empty($this->autocompleterCodeFunctions))
+			if (empty($this->autocompleterCodeFunctions)){
+				// load js code and css
 				$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
+				$this->autocompleterCss  = "\n<style>\n". file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') ."\n</style>";
+			}
 		
 			// get form element object
 			$formElement = & $this->form->getElement( $formElementName );
