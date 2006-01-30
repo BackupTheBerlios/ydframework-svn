@@ -49,8 +49,11 @@ function AutoSuggest( elementID, divID, suggestions, widthPX )
 	
 		if (mouseISout){ me.hideDiv(); }
 	}	
-		
-		
+	
+
+	this.elem.onclick = function() { 
+			me.hideDiv();
+	}
 
 	//The browsers' own autocomplete feature can be problematic, since it will 
 	//be making suggestions from the users' past input.

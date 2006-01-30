@@ -88,7 +88,7 @@
                 $attribs['style'] .= $name .':'. $value .';';
 
             // if is a autocompleter we must add an extra div. TODO: automagically apply width to text element and div
-            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><div style="z-index:999;'. $attribs['style'] .'" id="' .  $attribs['name'] . '_div"><ul></ul></div>';
+            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><div style="display:none; z-index:999;'. $attribs['style'] .'" id="' .  $attribs['name'] . '_div"><ul></ul></div>';
 
         }
 
