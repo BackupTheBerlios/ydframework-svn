@@ -1372,6 +1372,16 @@
         }
 
         /**
+         *      Gets a specific option
+         *
+         *      @param  $att    Attribute to search
+         *      @returns        The value
+         */
+        function getOption( $option ) {
+            return isset( $this->_options[ $option ] ) ? $this->_options[ $option ] : null ;
+        }
+
+        /**
          *      Gets the options of the form element.
          *
          *      @returns        The options of the form element.
