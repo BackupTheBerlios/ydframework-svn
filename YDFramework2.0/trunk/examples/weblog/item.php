@@ -74,51 +74,56 @@
                 // Get the form values
                 $values = $form->getValues();
 
-                // Fix any faulty web addresses
-                if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
-                    $values['userwebsite'] = 'http://' . $values['userwebsite'];
-                }
+                // Simple spam protection
+                if ( ! empty( $values['userwebsite'] ) && strpos( $values['userwebsite'], '.' ) !== false ) {
 
-                // Save the username, useremail and userwebsite
-                setcookie( 'YD_USER_NAME',    $values['username'],    time() + 31536000, '/' );
-                setcookie( 'YD_USER_EMAIL',   $values['useremail'],   time() + 31536000, '/' );
-                setcookie( 'YD_USER_WEBSITE', $values['userwebsite'], time() + 31536000, '/' );
-
-                // Add the values to the database
-                $comment_id = $this->weblog->addComment( $values );
-
-                // Send an email if configured
-                if ( YDConfig::get( 'email_new_comment', true ) ) {
-
-                    // Include the YDEmail library
-                    YDInclude( 'YDEmail.php' );
-
-                    // Get the list of subscriptions
-                    $subscribers = $this->weblog->getCommentSubscribers( $id );
-
-                    // Add the comment to the email template
-                    $this->tpl->assign( 'eml_comment', $values );
-
-                    // Create the email and send it
-                    $eml = new YDEmail();
-                    if ( ! empty( $item['user_email'] ) ) {
-                        $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
-                    } else {
-                        $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    // Fix any faulty web addresses
+                    if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
+                        $values['userwebsite'] = 'http://' . $values['userwebsite'];
                     }
-                    $eml->setReplyTo( 'no@reply.net' );
-                    $eml->addBcc( $item['user_email'] );
-                    foreach ( $subscribers as $subscriber ) {
-                        $eml->addBcc( $subscriber );
+
+                    // Save the username, useremail and userwebsite
+                    setcookie( 'YD_USER_NAME',    $values['username'],    time() + 31536000, '/' );
+                    setcookie( 'YD_USER_EMAIL',   $values['useremail'],   time() + 31536000, '/' );
+                    setcookie( 'YD_USER_WEBSITE', $values['userwebsite'], time() + 31536000, '/' );
+
+                    // Add the values to the database
+                    $comment_id = $this->weblog->addComment( $values );
+
+                    // Send an email if configured
+                    if ( YDConfig::get( 'email_new_comment', true ) ) {
+
+                        // Include the YDEmail library
+                        YDInclude( 'YDEmail.php' );
+
+                        // Get the list of subscriptions
+                        $subscribers = $this->weblog->getCommentSubscribers( $id );
+
+                        // Add the comment to the email template
+                        $this->tpl->assign( 'eml_comment', $values );
+
+                        // Create the email and send it
+                        $eml = new YDEmail();
+                        if ( ! empty( $item['user_email'] ) ) {
+                            $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                        } else {
+                            $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                        }
+                        $eml->setReplyTo( 'no@reply.net' );
+                        $eml->addBcc( $item['user_email'] );
+                        foreach ( $subscribers as $subscriber ) {
+                            $eml->addBcc( $subscriber );
+                        }
+                        $eml->setSubject( 'New comment: ' . strip_tags( $item['title'] ) );
+                        $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
+                        $eml->send();
+
                     }
-                    $eml->setSubject( 'New comment: ' . strip_tags( $item['title'] ) );
-                    $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
-                    $eml->send();
+
+                    // Clear the cache
+                    $this->clearCache();
 
                 }
-
-                // Clear the cache
-                $this->clearCache();
 
                 // Redirect to the item
                 $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
