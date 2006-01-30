@@ -69,14 +69,26 @@
             // If is not a autocompleter element
             if (!isset($this->_options['autocompleter'])) return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
-            // trick to make this text box with the same width as autocompleter. TODO: parse 'style' attribute for widtth
-            if (isset( $attribs['size'] )){
-                $attribs['style'] = "width:" . $attribs['size'];
-                unset( $attribs['size'] );
-            }
+            // trick to make this text box with the same width as autocompleter.
+            // create a style array and a default width for text and div
+            $style = array();
+            $style['width'] = '143px';
+
+            // if user has defined a custom style we must parse it to check if width was defined
+            if (isset($attribs['style']))
+                foreach (explode(";", $attribs['style'] ) as $att)
+                    if (trim( $att ) != ''){
+                        list($name, $value) =  split(":", $att);
+                        $style[ strtolower($name) ] = trim( $value );
+                    }
+
+            // compute style attribute
+            $attribs['style'] = '';
+            foreach ($style as $name => $value)
+                $attribs['style'] .= $name .':'. $value .';';
 
             // if is a autocompleter we must add an extra div. TODO: automagically apply width to text element and div
-            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><div style="z-index=999;'. $attribs['style'] .'" id="' .  $attribs['name'] . '_div"><ul></ul></div>';
+            return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><div style="z-index:999;'. $attribs['style'] .'" id="' .  $attribs['name'] . '_div"><ul></ul></div>';
 
         }
 
