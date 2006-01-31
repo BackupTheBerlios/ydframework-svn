@@ -368,17 +368,20 @@
 
 				// cycle effects (from last to first) and create js				
 				foreach( $effects as $effect ){
+
+					// element id
+					$id = $this->form->getName() .'_'. $effect->getId();
 				
 					if (!in_array( $effect->getVariable(), $this->effects )){
 					
-						// TODO: change to $element->getID();
-						if ( $this->form->isElement( $effect->getId() ) )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $this->form->getName() .'_'. $effect->getId() );
+						// check if element is a form element
+						if ( $this->form->isElement( $effect->getId() ) )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
 						else												$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
 				
 					}
 
 					// function is now the effect js created
-					$functionName .= $effect->getJSBody();
+					$functionName .= $effect->getJSBody( $id );
 				}
 			}
 
@@ -402,12 +405,15 @@
 			// initialize js to send
 			$js = '';
 		
+			// element id
+			$id = $this->form->getName() .'_'. $effect->getId();
+		
 			// if some html id has not already an effect applyed we must send effect header
 			if (!in_array( $effect->getVariable(), $this->effects ))
-				$js = $effect->getJSHead( $this->form->getName() .'_'. $effect->getId() );
+				$js = $effect->getJSHead( $id );
 
 			// send	js
-			$this->response->addScript( $js . $effect->getJSBody() );
+			$this->response->addScript( $js . $effect->getJSBody( $id ) );
 		}
 
 
@@ -1267,10 +1273,10 @@
          *	@param $method		Effect method (String).
          *	@param $duration	(Optional) Duration in ms.
          */	
-		function YDAjaxEffect( $id, $name, $method, $duration = 400){
+		function YDAjaxEffect( $id, $name, $method = '', $duration = 400){
 
 			$this->id = $id;
-			$this->name = $name;
+			$this->name = strtolower( $name );
 			$this->method = $method;
 			$this->duration = $duration;
 			
@@ -1314,9 +1320,6 @@
 			// if custom id is not defined we must use the standard id
 			if (is_null( $id )) $id = $this->id;
 			
-			// initialize js header
-			$header = '';
-			
 			// switch effect type
 			switch( $this->name ){
 			
@@ -1328,8 +1331,12 @@
 
 				case 'opacity' :	$header = $this->js .' = new fx.Opacity("'. $id .'", {duration: '. $this->duration .'});';
 									break;
+									
+				case 'show' :
+				case 'hide' :       $header = '';
+                                    break;
 
-				
+				default :           die( 'Effect type '. $this->name .' is not supported by YDAjaxEffect' );
 			}
 
 			// return js header
@@ -1340,10 +1347,20 @@
         /**
          *	This method returns the js effect body
          */	
-		function getJSBody(){
+		function getJSBody( $id = null ){
+
+			// if custom id is not defined we must use the standard id
+			if (is_null( $id )) $id = $this->id;
+
+			switch( $this->name ){
 			
-			// return the method invocation
-			return $this->js .'.'. $this->method .';';
+				// return the method invocation for standard effects
+				case 'fadesize' :
+				case 'resize' :
+				case 'opacity' : return $this->js .'.'. $this->method .';';
+				case 'show' :    return 'document.getElementById("'. $id .'").style.display = "block";';
+				case 'hide' :    return 'document.getElementById("'. $id .'").style.display = "none";';
+			}
 		}
 
 
