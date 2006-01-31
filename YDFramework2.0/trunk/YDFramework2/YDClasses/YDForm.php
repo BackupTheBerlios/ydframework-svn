@@ -116,6 +116,7 @@
             $this->registerElement( 'img', 'YDFormElement_Img', 'YDFormElement_Img.php' );
             $this->registerElement( 'link', 'YDFormElement_Link', 'YDFormElement_Link.php' );
             $this->registerElement( 'div', 'YDFormElement_Div', 'YDFormElement_Div.php' );
+            $this->registerElement( 'autocompleter', 'YDFormElement_Autocompleter', 'YDFormElement_Autocompleter.php' );
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );

@@ -281,35 +281,11 @@
 		}
 
 
-
-		function addCompleter($formElementName, $serverFunctionName, $arguments, $options = null, $effects = null){
-		
-			if (empty($this->autocompleterCodeFunctions)){
-				// load js code and css
-				$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
-				$this->autocompleterCss  = "\n<style>\n". file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') ."\n</style>";
-			}
-		
-			// get form element object
-			$formElement = & $this->form->getElement( $formElementName );
-
-			$formElement->setOption('autocompleter', true);
-
-			// compute variable name for this autocompleter
-			$variable = $this->prefix . "at" .  $formElement->getName();
-
-			// compute html text id
-			$textID = $this->form->_name . '_' . $formElement->_name;
-
-			// compute div id
-			$divID = $this->form->_name . '_' . $formElement->_name .'_div';
-			
-			// add js code for autocompleter
-			$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
-			$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $options, $effects ) . "}";
-		}
-
-
+        /**
+         *	This method assigns the current autocompleter with a result array
+         *
+         *	@param $result		Autocompleter results array
+         */		
 		function addCompleterResult( $result ){
 			
 			// if element is not an array we must create one
@@ -465,6 +441,7 @@
 
 					// get element type to invoke the custom js to get the value
 					switch( $elem->getType() ){
+						case 'autocompleter' :
 						case 'text' :			$args[] = $this->_getValueText(           $elem, $options ); break;
 						case 'password' :		$args[] = $this->_getValuePassword(       $elem, $options ); break;
 						case 'textarea' :		$args[] = $this->_getValueTextarea(       $elem, $options ); break;
@@ -631,6 +608,41 @@
          *	This method will process all events added
          */	
 		function processEvents(){
+
+			// find autocompleters
+			foreach( $this->form->_elements as $formElement){
+			
+				if ($formElement->getType() != 'autocompleter') continue;
+				
+				if (empty($this->autocompleterCodeFunctions)){
+					// load js code and css
+					$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
+					$this->autocompleterCss  = "\n<style>\n". file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') ."\n</style>";
+				}
+		
+				// compute variable name for this autocompleter
+				$variable = $this->prefix ."at".  $formElement->getName();
+
+				// compute html text id
+				$textID = $formElement->getAttribute( 'id' );
+			
+				// compute div id
+				$divID = $textID .'_div';
+
+				// get function call
+				$serverFunctionName = $formElement->getAjaxCall();
+
+				// get ajax arguments
+				$arguments = $formElement->getAjaxArguments();
+
+				// get ajax effects
+				$effects = $formElement->getAjaxEffects();
+
+			
+				// add js code for autocompleter
+				$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
+				$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
+			}
 
 			// change template object internals			
 			$this->template->register_outputfilter( array( &$this, "_assignJavascript") );

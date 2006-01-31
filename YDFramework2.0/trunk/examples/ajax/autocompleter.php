@@ -25,16 +25,12 @@
 
 			// create a form with a 2 texts, a button and a span for result
 			$form = new YDForm('myform');
-			$form->addElement('text',   'arg1', 'Country with standard style:' );
-			$form->addElement('text',   'arg2', 'Just a simple text box without autocompleter');
-			$form->addElement('text',   'arg3', 'Country with custom style:', array('style' => 'width:300px; background-color:#CCFFFF;') );
+			$form->addElement('autocompleter', 'arg1', 'Country with standard style:', '', array( &$this, 'getCountry' ) );
+			$form->addElement('text',          'arg2', 'Just a simple text box without autocompleter');
+			$form->addElement('autocompleter', 'arg3', 'Country with custom style:', array('style' => 'width:300px; background-color:#CCFFFF;'), array( &$this, 'getCountry' ) );
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $form );
-
-			// add autocompleter using 'arg1'/'arg3' and sending to 'getCountry' all we have in 'arg1'/'arg3'
-			$this->ajax->addCompleter( 'arg1', array( & $this, 'getCountry' ), array('arg1') );
-			$this->ajax->addCompleter( 'arg3', array( & $this, 'getCountry' ), array('arg3') );
 
 			// process events added
 			$this->ajax->processEvents();
@@ -48,7 +44,7 @@
 
 		// compute call invoked by ajax client
 		function getCountry( $text ){
-		
+
 			// simple db emulation
 			$db =  array("Alabama","Alaska","American Samoa","Arizona","Arkansas","California","Brasil",
 						"Colorado","Connecticut","Delaware","District of Columbia",
@@ -70,7 +66,7 @@
 			foreach( $db as $el )
 				if (eregi("^". $text ."+", $el)) $result[] = $el;
 	
-			// assign result to current completer
+			// assign result to current completer (YDAjax automagically detects the autocompleter that made this call)
 			$this->ajax->addCompleterResult( $result );
 
 			// return response to client browser
