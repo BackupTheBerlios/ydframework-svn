@@ -35,7 +35,7 @@
 
 
     /**
-     *  This config defines the prefix for javascript functions
+     *  This config defines the prefix for javascript functions and variables
      *  Default: __ydf.
      */
     YDConfig::set( 'YD_AJAX_PREFIX', "__ydf", false );
@@ -116,7 +116,7 @@
 		}
 		
 
-		// internal method. replace "<head>" with "<head> and all ajax javascript (containing our custom javascript too)
+		// internal method. replace "</head>" with "all ajax javascript (containing our custom javascript too) and string </head>"
 		function _assignJavascript($tpl_source, &$smarty){
 			
 			// load autocompleter css
@@ -140,7 +140,7 @@
 			// get standard xajax code
 			$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js');
 
-			// include generic effects lib .. yes, it must MUST be always included
+			// include generic effects lib .. yes, it must be ALWAYS included
 			$html .= "\n". file_get_contents( dirname( __FILE__ ) . '/js/prototype.lite.js_moo.fx.js_moo.fx.pack.js');
 
 			// send autocompleter code
@@ -160,6 +160,7 @@
 				// send autocompleter functions code
 				$onload  .= implode( "\n\t", $this->autocompleterCodeFunctions );
 
+			// if there are on load js just export it
 			if ($onload != '') $html .= "\nwindow.onload = function() {\n\t". $onload . "\n}";
 
 			// send js function to hide waiting message
@@ -200,8 +201,8 @@
         /**
          *	This function adds custom javascript to the template.
          *
-         *	@param $js	Javascript code.
-         *	@param $order	Zone to place code (top, bottom, topBefore, topAfter, bottomBefore, bottomAfer)
+         *	@param $js      Javascript code.
+         *	@param $order   Zone to place code (top, bottom, topBefore, topAfter, bottomBefore, bottomAfer)
          */
 		function addJavascript( $js, $order = 'top' ){
 		
@@ -261,7 +262,7 @@
 			foreach ($options as $name => $value)
 				$this->waitingMessageCode .= $this->wtID .".". $name ." = '". $value . "';";
 			
-			// close function
+			// append div box to document body
 			$this->waitingMessageCode .= "document.body.appendChild(". $this->wtID .");";
 
 			// create function name to show div
@@ -1135,7 +1136,7 @@
 
 
 		// internal method to assign a value to a dateselect element
-		function assignDateSelect( $formElement, $result, $attribute, $options = array()){
+		function assignDateSelect( $formElement, $result, $attribute, $options = array() ){
 
 			$formName        = $formElement->getForm();
 			$formElementName = $formElement->getName();
@@ -1161,7 +1162,7 @@
 		
 
 		// internal method to assign a value to a datetimeselect element
-		function assignDateTimeSelect( $formElement, $result, $attribute, $options = array()){
+		function assignDateTimeSelect( $formElement, $result, $attribute, $options = array() ){
 
 			$formName        = $formElement->getForm();
 			$formElementName = $formElement->getName();
@@ -1191,7 +1192,7 @@
 
 		
 		// internal method to assign a value to a timeselect element
-		function assignTimeSelect( $formElement, $result, $attribute, $options = array()){
+		function assignTimeSelect( $formElement, $result, $attribute, $options = array() ){
 
 			$formName        = $formElement->getForm();
 			$formElementName = $formElement->getName();
@@ -1215,7 +1216,7 @@
 		
 
 		// internal method to assign a value to a button element
-		function assignButton( $formElement, $result, $attribute, $options = array()){
+		function assignButton( $formElement, $result, $attribute, $options = array() ){
 
 			$formName        = $formElement->getForm();
 			$formElementName = $formElement->getName();
@@ -1229,7 +1230,7 @@
 		
 		
 		// internal method to assign a value to a checkbox element
-		function assignCheckbox( $formElement, $result, $attribute, $options = array()){
+		function assignCheckbox( $formElement, $result, $attribute, $options = array() ){
 
 			$formName        = $formElement->getForm();
 			$formElementName = $formElement->getName();
@@ -1270,10 +1271,10 @@
          *
          *	@param $id			Html element id.
          *	@param $name		Effect name (String).
-         *	@param $method		Effect method (String).
+         *	@param $method		Effect method (String). For effects 'hide' and 'show' method is not needed
          *	@param $duration	(Optional) Duration in ms.
          */	
-		function YDAjaxEffect( $id, $name, $method = '', $duration = 400){
+		function YDAjaxEffect( $id, $name, $method = '', $duration = 400 ){
 
 			$this->id = $id;
 			$this->name = strtolower( $name );
