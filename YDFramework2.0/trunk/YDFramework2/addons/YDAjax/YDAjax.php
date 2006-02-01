@@ -323,6 +323,8 @@
 			// serverFunction must be an array with a class and the method (get function name)
 			$functionName = $this->computeFunction( $formElementName, $serverFunction, $arguments, $options, $effects );
 
+			if (!$this->form->isElement( $formElementName )) return;
+
 			// get element object
 			$formElement = & $this->form->getElement( $formElementName );
 			
