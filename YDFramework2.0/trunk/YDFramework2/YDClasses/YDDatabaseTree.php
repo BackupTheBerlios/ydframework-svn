@@ -576,25 +576,25 @@
                 if ( $id == 0 ) {
                     continue;
                 }
-                if ( version_compare( phpversion(), '5' ) >= 0 ) {
+//                if ( version_compare( phpversion(), '5' ) >= 0 ) {
                     $query = sprintf(
                         'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
                         $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
                     );
                     $this->db->executeSql( $query );
-                } else {
-                    if (
-                        $data[$id]->nlevel != $data_ori[$id]->nlevel ||
-                        $data[$id]->nleft  != $data_ori[$id]->nleft ||
-                        $data[$id]->nright != $data_ori[$id]->nright
-                    ) {
-                        $query = sprintf(
-                            'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
-                            $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
-                        );
-                        $this->db->executeSql( $query );
-                    }
-                }
+//                } else {
+//                    if (
+//                        $data[$id]->nlevel != $data_ori[$id]->nlevel ||
+//                        $data[$id]->nleft  != $data_ori[$id]->nleft ||
+//                        $data[$id]->nright != $data_ori[$id]->nright
+//                    ) {
+//                        $query = sprintf(
+//                            'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
+//                            $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
+//                        );
+//                        $this->db->executeSql( $query );
+//                    }
+//                }
 
             }
 
