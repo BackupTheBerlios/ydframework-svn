@@ -471,10 +471,13 @@
         /**
          *  This function is an alias of YDRequest::redirectToAction.
          *
-         *  @param  $action  The action name
+         *	@param $action	(optional) Name of the action to redirect to. If no action is specified, it will redirect to
+         *					the default action.
+         *	@param $params	(optional) The $_GET parameters as an associative array that need to be added to the URL
+         *					before redirecting. They will automatically get URL encoded.
          */
-        function goTo( $action='' ) {
-            $this->redirectToAction( $action );
+        function goTo( $action='default', $params=array() ) {
+            $this->redirectToAction( $action, $params );
         }
         
         /**
