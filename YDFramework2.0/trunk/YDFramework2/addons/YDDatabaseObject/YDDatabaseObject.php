@@ -97,7 +97,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.22';
+            $this->_version = '4.23';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -259,10 +259,11 @@
          *
          *  @param $name      The field name.
          *  @param $expr      The select expression.
+         *  @param $all       (optional) Indicates if the select should be added in all queries. Default: true.
          *
          *  @returns      A reference to the select object.
          */
-        function & registerSelect( $name, $expr ) {
+        function & registerSelect( $name, $expr, $all=true ) {
             
             $name = strtolower( $name );
             
@@ -270,7 +271,7 @@
                 trigger_error(  $this->getClassName() . ' -
                                 The select name "' . $name . '" is already defined.', YD_ERROR );
             }
-            return $this->_selects->set( $name, new YDDatabaseObject_Select( $name, $expr ) );
+            return $this->_selects->set( $name, new YDDatabaseObject_Select( $name, $expr, $all ) );
         }
 
         /**
@@ -509,7 +510,9 @@
                     $this->select( $field->getName() );
                 }
                 foreach ( $selects as $select ) {
-                    $this->select( $select->getName() );
+                    if ( $select->isAllQueries() ) {
+                        $this->select( $select->getName() );
+                    }
                 }
             }
 
@@ -2433,6 +2436,7 @@
 
         var $name;
         var $expr;
+        var $all;
         var $reserved;
         var $callback;
 
@@ -2441,13 +2445,15 @@
          *
          *  @param $name  The select name.
          *  @param $expr  The select expression.
+         *  @param $all   (optional) Indicates if the select should be added in all queries. Default: true.
          */
-        function YDDatabaseObject_Select( $name, $expr ) {
+        function YDDatabaseObject_Select( $name, $expr, $all=true ) {
 
             $this->YDBase();
 
             $this->setName( $name );
             $this->setExpression( $expr );
+            $this->setAllQueries( $all );
 
         }
 
@@ -2482,7 +2488,22 @@
         function getExpression() {
             return $this->get( 'expr' );
         }
-            
+        
+        /**
+         *  This function defines if the select should be added in all queries.
+         *
+         *  @param $all  Boolean indicating if the select should be added in all queries.
+         */
+        function setAllQueries( $all ) {
+            $this->set( 'all', $all );
+        }
+
+        /**
+         *  @returns  True, if the select should be added in all queries, false otherwise.
+         */
+        function isAllQueries() {
+            return $this->get( 'all' );
+        }
 
         /**
          *  This function sets the callback method.
