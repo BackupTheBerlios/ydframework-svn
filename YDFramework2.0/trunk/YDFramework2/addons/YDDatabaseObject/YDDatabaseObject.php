@@ -87,6 +87,7 @@
         var $_count     = 0;
         var $_results   = array();
         var $_last      = array();
+        var $_all       = true;
 
         /**
          *  The class constructor.
@@ -97,7 +98,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.23';
+            $this->_version = '4.24';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -484,7 +485,7 @@
             }
             return $filtered;
         }
-
+        
         /**
          *  This function prepares a query based on the object values.
          *
@@ -505,7 +506,7 @@
             $r = $this->_query->getReserved();
 
             // prepare select
-            if ( $this->_query->getSelect() == '*' ) {
+            if ( $this->_query->getSelect() == '*' && $this->_all ) {
                 foreach ( $fields as $field ) {
                     $this->select( $field->getName() );
                 }
@@ -515,7 +516,7 @@
                     }
                 }
             }
-
+            
             // prepare group by
             $groups = & $this->_query->group;
             foreach ( $groups as $n => $group ) {
@@ -996,9 +997,6 @@
          */
         function find() {
 
-            // before find callbacks
-            $this->_executeCallbacks( 'find', true );
-
             $args = func_get_args();
 
             $relations = array();
@@ -1006,14 +1004,19 @@
                 $relations = $args;
             }
             
+            if ( empty( $relations ) && $this->_all == false ) {
+                $this->_all = true;
+            }
+            $all = $this->_all;
+            
             $this->_last = $relations;
+            
+            // before find callbacks
+            $this->_executeCallbacks( 'find', true );
 
             $r = $this->_query->getReserved();
             $this->_query->select();
             $this->_query->resetFrom();
-
-            $pos = 0;
-            $slices = array();
 
             // Add local table
             $l_table = $this->getTable();
@@ -1025,9 +1028,11 @@
             $this->_prepareQuery( true );
             
             // Add the local slice
+            $pos = 0;
+            $slices = array();
             $slices[ $pos ] = '';
             $pos = $pos + sizeof( $this->_query->select );
-
+            
             // If there are any relations
 
             foreach ( $relations as $relation ) {
@@ -1051,6 +1056,10 @@
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
                 $f_table = $this->$f_var->getTable();
+                
+                if ( $this->$f_var->_all == true ) {
+                    $all = true;
+                }
                 
                 // Foreign table alias
                 $this->$f_var->_alias = $f_var;
@@ -1095,6 +1104,10 @@
                     // Cross table
                     $c_var   = $rel->getCrossVar();
                     $c_table = $this->$c_var->getTable();
+                    
+                    if ( $this->$c_var->_all == true ) {
+                        $all = true;
+                    }
                     
                     // Cross table alias
                     $this->$c_var->_alias = $c_var;
@@ -1182,6 +1195,11 @@
 
             }
             
+            if ( $all == false ) {
+                trigger_error(  $this->getClassName() . ' -
+                                The SELECT statement is empty', YD_ERROR );
+            }
+            
             $result = $this->findSql( $this->_query->getQuery(), $slices );
             $success = ( $result == -1 || $result === false ) ? false : true;
             
@@ -1219,6 +1237,23 @@
             reset( $slices );
 
             $var = current( $slices );
+            
+            if ( $var != '' ) {
+            
+                $this->resetResults();
+                $this->_count = $results ? sizeof( $results ) : 0;
+                
+                if ( $this->_count > 0 ) {
+                    $this->_results = array_fill( 0, $this->_count, array() );
+                }
+                
+                $this->resetQuery();
+
+                if ( $this->_count == 1 ) {
+                    $this->setValues( $this->_results[0] );
+                }
+                
+            }
 
             while ( $var !== false ) {
 
@@ -1232,7 +1267,7 @@
                 } else {
                     $obj = & $this->$var;
                 }
-
+                
                 $obj->resetResults();
                 $obj->_count = $results ? sizeof( $results ) : 0;
 
@@ -1299,13 +1334,22 @@
             $args = func_get_args();
 
             if ( ! sizeof( $args ) ) {
+                $this->_query->resetSelect();
+                $this->_all = false;
                 return;
             }
+            
+            $this->_all = true;
             $r = $this->_query->getReserved();
             
             $alias = $this->getAlias();
 
             foreach ( $args as $field ) {
+            
+                if ( $field == '*' ) {
+                     $this->_query->resetSelect();
+                     continue;
+                }
 
                 if ( ! $this->_fields->exists( $field ) && ! $this->_selects->exists( $field ) ) {
                     trigger_error(  $this->getClassName() . ' -
@@ -1528,6 +1572,7 @@
          */
         function resetQuery() {
             $this->_query->reset();
+            $this->_all = true;
         }
 
         /**
