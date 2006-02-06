@@ -234,10 +234,13 @@
         /**
          *	This function sets YDAjax to automagically handle a waiting message
          *
-         *	@param $html	  (Optional) Html to use in the message.
-         *	@param $options   (Optional) Js options for the html object
+         *	@param $html        (Optional) Html to use in the message.
+         *	@param $options     (Optional) Js options for the html object
+         *	@param $effectStart (Optional) YDAjaxEffect object on page load (by default a simple 'hide' will be used)
+         *	@param $effectShow  (Optional) YDAjaxEffect object when submitting requests (by default a simple 'show' will be used)
+         *	@param $effectHide  (Optional) YDAjaxEffect object on response (by default a simple 'hide' will be used)
          */
-		function useWaitingMessage( $html = '<h3>&nbsp; Please wait ... &nbsp;<\/h3>', $options = array() ){
+		function useWaitingMessage( $html = '<h3>&nbsp; Please wait ... &nbsp;<\/h3>', $options = array(), $effectStart = null, $effectShow = null, $effectHide = null ){
 		
 			// if we already had invoke this method, then we don't need to add another js code for message creation
 			if (isset($this->wtID)) return;
@@ -245,18 +248,20 @@
 			// create js variable name for html message element
 			$this->wtID = $this->prefix . "waitingmessage";
 
-			// check options
+			// check custom options
 			if (!isset($options['style.backgroundColor'])) $options['style.backgroundColor'] = '#cccccc';
-			if (!isset($options['style.top']))             $options['style.top'] = '40%';
-			if (!isset($options['style.left']))            $options['style.left'] = '44%';
+			if (!isset($options['style.top']))             $options['style.top']             = '40%';
+			if (!isset($options['style.left']))            $options['style.left']            = '44%';
+
+			// static values
+			$options['id']             = $this->wtID ."id";
+			$options['innerHTML']      = $html;
+			$options['style.position'] = "absolute";
+			$options['style.position'] = "absolute";
+			$options['style.zindex']   = 9999;
 
 			// create js for html element creation
 			$this->waitingMessageCode  = "\n\tvar ". $this->wtID ." = document.createElement('div');";
-			$this->waitingMessageCode .= $this->wtID .".id = '". $this->wtID ."id';";
-			$this->waitingMessageCode .= $this->wtID .".innerHTML='". $html ."';";
-			$this->waitingMessageCode .= $this->wtID .".style.position= 'absolute';";
-			$this->waitingMessageCode .= $this->wtID .".style.zindex = '9999';";
-			$this->waitingMessageCode .= $this->wtID .".style.display = 'none';";
 			
 			// add custom options
 			foreach ($options as $name => $value)
@@ -265,11 +270,26 @@
 			// append div box to document body
 			$this->waitingMessageCode .= "document.body.appendChild(". $this->wtID .");";
 
+			// create start effect
+			if (is_null( $effectStart ))
+				$effectStart = new YDAjaxEffect( '', 'hide', '', 0 );
+
+			// append start code
+			$this->waitingMessageCode .= $effectStart->getJSHead($this->wtID ."id") . $effectStart->getJSBody($this->wtID ."id");
+
 			// create function name to show div
 			$this->wtFunction = $this->wtID ."show()";
 
+			// create show effect
+			if (is_null( $effectShow ))
+				$effectShow = new YDAjaxEffect( '', 'show', '', 0 );
+
+			// save hide effect to be used on response
+			if (is_null( $effectHide )) $this->effectHide = new YDAjaxEffect( '', 'hide', '', 0 );
+			else                        $this->effectHide = $effectHide;
+
 			// create js function to show div
-			$this->waitingMessageCodeFunction ="\nfunction ". $this->wtFunction ."{document.getElementById('". $this->wtID ."id').style.display='block';}";
+			$this->waitingMessageCodeFunction ="\nfunction ". $this->wtFunction ."{". $effectShow->getJSHead($this->wtID ."id") . $effectShow->getJSBody($this->wtID ."id") ."}";
 		}
 
 
@@ -548,8 +568,6 @@
 				// compute new atribute 'onchange'
 				$elem->setAttribute('onchange', $jsvariable .' = true;'. $attribute );
 			}
-		
-		
 		}
 
 
@@ -688,9 +706,9 @@
 		function processResults(){
 
 			// add script to hide waiting message if it's used
-			if (isset($this->wtID)) 
-				$this->response->addScript("document.getElementById('". $this->wtID ."id').style.display='none';");
-	
+			if (isset($this->wtID))
+				$this->response->addScript( $this->effectHide->getJSHead($this->wtID ."id") . $this->effectHide->getJSBody($this->wtID ."id") );
+
 			// return XML to client browser
 			return $this->response->getXML();
 		}
@@ -700,7 +718,7 @@
 		function _getValueText( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function to retrieve this text element value (it will replace possible js functions for this element because we cannot have 2 functions with the same name)
 			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
@@ -714,7 +732,7 @@
 		function _getValueSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 
 			// if we want all values and not only the select one
 			if (in_array( 'all', $options )){
@@ -741,7 +759,7 @@
 		function _getValuePassword( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
@@ -755,7 +773,7 @@
 		function _getValueTextarea( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
@@ -769,7 +787,7 @@
 		function _getValueSpan( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").innerHTML;';
@@ -783,7 +801,7 @@
 		function _getValueDateSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'var day   = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
@@ -801,7 +819,7 @@
 		function _getValueTimeSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;' . "\n";
@@ -818,7 +836,7 @@
 		function _getValueDateTimeSelect( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction]  = 'var day      = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
@@ -838,7 +856,7 @@
 		function _getValueCheckbox( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
 			$this->customjs[$jsfunction]  =	'if (document.getElementById("'. $element->getAttribute('id') .'").checked)' . "\n";
@@ -854,7 +872,7 @@
 		function _getValueRadio( & $element, $options ){
 		
 			// generate function name
-			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
+			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 			
 			// add custom js function
 			$this->customjs[$jsfunction]  = 'var __ydftmp = document.getElementById("'. $element->getAttribute('id') .'");' . "\n";
@@ -876,7 +894,6 @@
 			
 			$this->response->addAlert( $message );
 		}
-
 
 	}
 
@@ -922,7 +939,6 @@
 				case 'span' :			$this->assignSpan(           $formElement, $result, $attribute, $options ); break;
 				case 'select' :			$this->assignSelect(         $formElement, $result, $attribute, $options ); break;
 				case 'image' :			$this->addAlert('Input type image cannot be used. Please use a img instead.'); break;
-
 
 				// if element doesn't exist return an js alert
 				default : $this->addAlert('Element type "'. $formElement->getType() .'" is not supported in YDAjax'); break;
