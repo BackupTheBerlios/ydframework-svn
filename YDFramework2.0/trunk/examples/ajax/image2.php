@@ -38,7 +38,6 @@
 
 			// create ajax object
 			$this->ajax = new YDAjax( $this->tpl, $this->form );
-			$this->ajax->useWaitingMessage();
 
 			// create effect
 			$ef1 = new YDAjaxEffect( 'myimage2', 'resize',   "modify(50, 100)" );
