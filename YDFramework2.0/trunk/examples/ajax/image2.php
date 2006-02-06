@@ -31,7 +31,7 @@
 			$this->form->addElement( 'link',    'myspan2',  'Rebuild chart 2', '', '#' );
 			$this->form->addElement( 'link',    'myspan3',  'Rebuild both charts', '', '#' );
 			$this->form->addElement( 'link',    'myspan4',  'Rebuild chart 1 and apply "resize" with "modify(50, 100) to chart 2"', '', '#' );
-			$this->form->addElement( 'link',    'myspan5',  'Apply fade to chart 1 using the response (not on ajax call)', '', '#' );
+			$this->form->addElement( 'link',    'myspan5',  'Apply fade to chart 1 using the response (not on ajax call) and simulate a slow server', '', '#' );
 
 			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => 550, 'height' => 250 ) );
 			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250 ) );
@@ -79,12 +79,15 @@
 		// response2 call invoked by ajax
 		function response2(){
 		
+			// simulate slow server (to better see the waiting message)
+			sleep( 3 );
+		
 			// create fade effect
 			$fade = new YDAjaxEffect( 'myimage1', 'opacity', "custom(1, 0.5)" );
 		
 			// add it to the response
 			$this->ajax->addEffect( $fade );
-		
+
 			// return response to client browser
 			return $this->ajax->processResults();
 		}

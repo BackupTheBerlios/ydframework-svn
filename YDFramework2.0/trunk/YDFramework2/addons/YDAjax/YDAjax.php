@@ -647,7 +647,6 @@
 				// get ajax effects
 				$effects = $formElement->getAjaxEffects();
 
-			
 				// add js code for autocompleter
 				$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
 				$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
@@ -704,7 +703,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function to retrieve this text element value (it will replace possible js functions for this element because we cannot have 2 functions with the same name)
-			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
 
 			// return function invocation
 			return $jsfunction;
@@ -721,7 +720,7 @@
 			if (in_array( 'all', $options )){
 
 				$this->customjs[$jsfunction]  = 'var __ydtmparr = new Array();' . "\n";
-				$this->customjs[$jsfunction] .= 'var __ydtmpsel = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
+				$this->customjs[$jsfunction] .= 'var __ydtmpsel = document.getElementById("'. $element->getAttribute('id') .'");' . "\n";
 				$this->customjs[$jsfunction] .= 'for (i = 0; i < __ydtmpsel.length; i++){' . "\n";
 				$this->customjs[$jsfunction] .= '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;' . "\n";
 				$this->customjs[$jsfunction] .= '}' . "\n";
@@ -731,7 +730,7 @@
 			}
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"].value;';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
 
 			// return function invocation
 			return $jsfunction;
@@ -745,7 +744,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
 
 			// return function invocation
 			return $jsfunction;
@@ -759,7 +758,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'return document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].value;';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").value;';
 
 			// return function invocation
 			return $jsfunction;
@@ -773,7 +772,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getForm() .'_'. $element->getName().'").innerHTML;';
+			$this->customjs[$jsfunction] = 'return document.getElementById("'. $element->getAttribute('id') .'").innerHTML;';
 
 			// return function invocation
 			return $jsfunction;
@@ -787,9 +786,9 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var day   = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var month = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' . "\n";
-			$this->customjs[$jsfunction] .= 'var year  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' . "\n";
+			$this->customjs[$jsfunction]  = 'var day   = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var month = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;' . "\n";
+			$this->customjs[$jsfunction] .= 'var year  = document.getElementById("'. $element->getAttribute('id') .'[year]").value;' . "\n";
 			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day ); ' . "\n";
 			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
@@ -805,8 +804,8 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' . "\n";
+			$this->customjs[$jsfunction]  = 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;' . "\n";
 			$this->customjs[$jsfunction] .= 'var mydate = new Date( 1970, 1, 1, hours, minutes ); ' . "\n";
 			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
@@ -822,11 +821,11 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var day      = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[day]"].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var month    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[month]"].value - 1;' . "\n";
-			$this->customjs[$jsfunction] .= 'var year     = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[year]"].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var hours    = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[hours]"].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var minutes  = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'[minutes]"].value;' . "\n";
+			$this->customjs[$jsfunction]  = 'var day      = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var month    = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;' . "\n";
+			$this->customjs[$jsfunction] .= 'var year     = document.getElementById("'. $element->getAttribute('id') .'[year]").value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;' . "\n";
+			$this->customjs[$jsfunction] .= 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;' . "\n";
 			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day, hours, minutes ); ' . "\n";
 			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
 
@@ -842,7 +841,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  =	'if (document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName().'"].checked)' . "\n";
+			$this->customjs[$jsfunction]  =	'if (document.getElementById("'. $element->getAttribute('id') .'").checked)' . "\n";
 			$this->customjs[$jsfunction] .=	'	return 1;' . "\n";
 			$this->customjs[$jsfunction] .=	'return 0;';
 
@@ -858,7 +857,7 @@
 			$jsfunction = $this->prefix . 'get'. $element->getName() .'()';
 			
 			// add custom js function
-			$this->customjs[$jsfunction]  = 'var __ydftmp = document.forms["'. $element->getForm() .'"].elements["'. $element->getForm() .'_'. $element->getName() .'"];' . "\n";
+			$this->customjs[$jsfunction]  = 'var __ydftmp = document.getElementById("'. $element->getAttribute('id') .'");' . "\n";
 			$this->customjs[$jsfunction] .= 'for (counter = 0; counter < __ydftmp.length; counter++)' . "\n";
 			$this->customjs[$jsfunction] .= '	if (__ydftmp[counter].checked) return __ydftmp[counter].value;' . "\n";
 			$this->customjs[$jsfunction] .= 'return false;';
@@ -934,12 +933,12 @@
         /**
          *	This method assigns a server result to a element using just the id
          *
-         *	@param $id		Html element id.
+         *	@param $id			Html element id.
          *	@param $result		Result value.
          *	@param $atribute	Custom atribute (auto-detection by default).
          *	@param $option		Other options (not used).
          */	
-		function assignId( $id, $result, $attribute = null, $options = null){
+		function assignId( $id, $result, $attribute, $options ){
 		
 			// if atribute is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'innerHTML';
@@ -956,10 +955,7 @@
 
 
 		// internal method to assign a value to a select element
-		function assignSelect( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignSelect( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -986,16 +982,12 @@
 			}
 
 			// assign result to form element
-			$this->addScript('var __ydfselect = document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"];'.
-							 $options );
+			$this->addScript('var __ydfselect = document.getElementById("'. $formElement->getAttribute('id') .'");'. $options );
 		}
 
 
 		// internal method to assign a value to a BBtextarea element
-		function assignBBtextarea( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignBBtextarea( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1004,15 +996,12 @@
 			$result = htmlspecialchars( $result );
 
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 		
 		
 		// internal method to assign a value to a img element
-		function assignImg( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignImg( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )){
@@ -1025,15 +1014,12 @@
 			}
 
 			// assign result image
-			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}		
 
 		
 		// internal method to assign a value to a text element
-		function assignText( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignText( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1042,15 +1028,12 @@
 			$result = htmlspecialchars( $result );
 
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 
 
 		// internal method to assign a value to a span element
-		function assignSpan( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignSpan( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'innerHTML';
@@ -1062,15 +1045,12 @@
 			$result = addslashes( $result );
 		
 			// assign result to form element using the id
-			$this->addScript('document.getElementById("'. $formName .'_'. $formElementName .'").'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 		
 				
 		// internal method to assign a value to a textarea element
-		function assignTextarea( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignTextarea( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1079,15 +1059,12 @@
 			$result = htmlspecialchars( $result );
 
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 		
 
 		// internal method to assign a value to a radio element
-		function assignRadio( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignRadio( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1096,7 +1073,7 @@
 			$result = htmlspecialchars( $result );
 
 			// we must cycle all radio instances of this radio element
-			$this->addScript('__ydftmp = document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"];
+			$this->addScript('__ydftmp = document.getElementById("'. $formElement->getAttribute('id') .'");
 							 for (counter = 0; counter < __ydftmp.length; counter++)
 							 	if (__ydftmp[counter].value == "'. $result .'") __ydftmp[counter].checked = true;
 								else __ydftmp[counter].checked = false;');
@@ -1104,10 +1081,7 @@
 		
 
 		// internal method to assign a value to a password element
-		function assignPassword( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignPassword( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1116,15 +1090,12 @@
 			$result = htmlspecialchars( $result );
 
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}		
 		
 
 		// internal method to assign a value to a hidden element
-		function assignHidden( $formElement, $result, $attribute, $options = array()){
-
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+		function assignHidden( & $formElement, $result, $attribute, $options ){
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
@@ -1133,129 +1104,113 @@
 			$result = htmlspecialchars( $result );
 
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 
 
 		// internal method to assign a value to a dateselect element
-		function assignDateSelect( $formElement, $result, $attribute, $options = array() ){
+		function assignDateSelect( & $formElement, $result, $attribute, $options ){
 
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
-			
+			// result must be a timestamp
+			if (!is_integer( $result ))
+				return $this->addAlert("DateSelect elements in YDAjax only support timestamps in assignResult");
+
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
 		
-			// if result is a timestamp get values
-			if (is_integer( $result )){
-			
-				$parsed = getdate( $result );
-				$day    = $parsed['mday'];
-				$month  = $parsed['mon'];
-				$year   = $parsed['year'];
-
-			}else $this->addAlert("DateSelect elements in YDAjax only support timestamps in assignResult");
+			// get timestamp individual values
+			$parsed = getdate( $result );
+			$day    = $parsed['mday'];
+			$month  = $parsed['mon'];
+			$year   = $parsed['year'];
 			
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[day]"].'.   $attribute .' = "'. $day .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[month]"].'. $attribute .' = "'. $month .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[year]"].'.  $attribute .' = "'. $year .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[day]").'.   $attribute .' = "'. $day .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[month]").'. $attribute .' = "'. $month .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[year]").'.  $attribute .' = "'. $year .'";');
 		}		
 		
 
 		// internal method to assign a value to a datetimeselect element
-		function assignDateTimeSelect( $formElement, $result, $attribute, $options = array() ){
+		function assignDateTimeSelect( & $formElement, $result, $attribute, $options ){
 
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+			// result must be a timestamp
+			if (!is_integer( $result ))
+				return $this->addAlert("DateSelect elements in YDAjax only support timestamps in assignResult");
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
-		
-			// if result is a timestamp get values
-			if (is_integer( $result )){
 			
-				$parsed  = getdate( $result );
-				$day     = $parsed['mday'];
-				$month   = $parsed['mon'];
-				$year    = $parsed['year'];
-				$hours   = $parsed['hours'];
-				$minutes = $parsed['minutes'];
+			// get timestamp individual values
+			$parsed  = getdate( $result );
+			$day     = $parsed['mday'];
+			$month   = $parsed['mon'];
+			$year    = $parsed['year'];
+			$hours   = $parsed['hours'];
+			$minutes = $parsed['minutes'];
 
-			}else $this->addAlert("DateSelect elements in YDAjax only support timestamps in assignResult");
-			
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[day]"].'.      $attribute .' = "'. $day     .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[month]"].'.    $attribute .' = "'. $month   .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[year]"].'.     $attribute .' = "'. $year    .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[hours]"].'.    $attribute .' = "'. $hours   .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[minutes]"].'.  $attribute .' = "'. $minutes .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[day]").'.      $attribute .' = "'. $day     .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[month]").'.    $attribute .' = "'. $month   .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[year]").'.     $attribute .' = "'. $year    .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[hours]").'.    $attribute .' = "'. $hours   .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[minutes]").'.  $attribute .' = "'. $minutes .'";');
 		}		
 
 		
 		// internal method to assign a value to a timeselect element
-		function assignTimeSelect( $formElement, $result, $attribute, $options = array() ){
+		function assignTimeSelect( & $formElement, $result, $attribute, $options ){
 
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
+			//  result must be a timestamp
+			if (!is_integer( $result ))
+				return $this->addAlert("TimeSelect elements in YDAjax only support timestamps in assignResult");
 
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
 		
-			// if result is a timestamp get values
-			if (is_integer( $result )){
-			
-				$parsed  = getdate( $result );
-				$hours   = $parsed['hours'];
-				$minutes = $parsed['minutes'];
-
-			}else $this->addAlert("TimeSelect elements in YDAjax only support timestamps in assignResult");
+			// get timestamp individual values
+			$parsed  = getdate( $result );
+			$hours   = $parsed['hours'];
+			$minutes = $parsed['minutes'];
 			
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[hours]"].'.   $attribute .' = "'. $hours   .'";');
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'[minutes]"].'. $attribute .' = "'. $minutes .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[hours]").'.   $attribute .' = "'. $hours   .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'[minutes]").'. $attribute .' = "'. $minutes .'";');
 		}	
 		
 
 		// internal method to assign a value to a button element
-		function assignButton( $formElement, $result, $attribute, $options = array() ){
+		function assignButton( & $formElement, $result, $attribute, $options ){
 
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
-			
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'value';
 			
 			// assign result to form element
-			$this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+			$this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 		}
 		
 		
 		// internal method to assign a value to a checkbox element
-		function assignCheckbox( $formElement, $result, $attribute, $options = array() ){
+		function assignCheckbox( & $formElement, $result, $attribute, $options ){
 
-			$formName        = $formElement->getForm();
-			$formElementName = $formElement->getName();
-			
 			// if atribute event is not defined we must create a default one
 			if (is_null( $attribute )) $attribute = 'checked';
 
 			if ($attribute != 'checked')
-				return $this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].'. $attribute .' = "'. $result .'";');
+				return $this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").'. $attribute .' = "'. $result .'";');
 
 			// if atribute is 'checked' and result is true, check this checkbox
 			if (is_bool($result) && $result == true)
-				return $this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].checked = true;');
+				return $this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").checked = true;');
 
 			// if atribute is 'checked' and result is false, clean checkbox selection
 			if (is_bool($result) && $result == false)
-				return $this->addScript('document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"].checked = false;');
+				return $this->addScript('document.getElementById("'. $formElement->getAttribute('id') .'").checked = false;');
 
 			// if atribute is 'checked' and result is 'toggle', checkbox will have the opposite value
 			if ($result == "toggle")
-				return $this->addScript('var __ydftmp = document.forms["'. $formName .'"].elements["'. $formName .'_'. $formElementName .'"];
+				return $this->addScript('var __ydftmp = document.getElementById("'. $formElement->getAttribute('id') .'");
 										 if (__ydftmp.checked == false) {__ydftmp.checked = true;} else {__ydftmp.checked = false;}');
-
 
 		}
 		
