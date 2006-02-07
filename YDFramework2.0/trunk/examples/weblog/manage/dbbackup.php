@@ -38,6 +38,9 @@
             // Add the rules
             $form->addRule( 'bck_name', 'required', t( 'err_bck_name' ) );
 
+            // Add the filters
+            $form->addFilters( array( 'bck_name' ), 'strip_html' );
+
             // Validate the form
             if ( $form->validate() == true ) {
 

@@ -97,6 +97,12 @@
             $form->addRule( 'max_syndicated_items', 'required', t( 'err_max_syndicated_items' ) );
             $form->addRule( 'max_syndicated_items', 'numeric', t( 'err_max_syndicated_items_num' ) );
 
+            // Add the filters
+            $form->addFilters( 
+                array( 'db_host', 'db_name', 'db_user', 'db_prefix', 'weblog_title', 'weblog_description' ),
+                'strip_html'
+            );
+
             // Process the form
             if ( $form->validate() === true ) {
 

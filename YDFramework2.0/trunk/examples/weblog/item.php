@@ -68,6 +68,9 @@
             $form->addRule( 'useremail', 'required',  t( 'err_email' ) );
             $form->addRule( 'comment',   'required',  t( 'err_comment' ) );
 
+            // Add the filters
+            $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
+
             // Process the form
             if ( $form->validate() === true ) {
 

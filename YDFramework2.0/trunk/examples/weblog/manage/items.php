@@ -55,6 +55,9 @@
             $form->addRule( 'title',  'required', t( 'err_item_title' ) );
             $form->addRule( 'body',   'required', t( 'err_item_body' ) );
 
+            // Add the filters
+            $form->addFilters( array( 'title' ), 'strip_html' );
+
             // Get the ID from the query string
             $id = $this->getIdFromQS();
 

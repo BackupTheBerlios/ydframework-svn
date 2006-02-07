@@ -50,6 +50,7 @@
 
             // Apply filters
             $form->addFilter( '__ALL__', 'trim' );
+            $form->addFilters( array( 'name', 'email' ), 'strip_html' );
 
             // Add the rules
             $form->addRule( 'email', 'email', t('req_useremail') );

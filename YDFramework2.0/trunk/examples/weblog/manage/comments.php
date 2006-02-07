@@ -69,6 +69,9 @@
             $form->addRule( 'useremail', 'email',    t( 'err_email' ) );
             $form->addRule( 'comment',   'required', t( 'err_comment' ) );
 
+            // Add the filters
+            $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
+
             // Get the ID from the query string
             $id = $this->getIdFromQS();
 
