@@ -28,7 +28,6 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDUtil.php' );
-    include_once( YD_DIR_HOME_CLS . '/YDPersistent.php');
 
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
@@ -88,6 +87,9 @@
          *                      "sortdir"
          */
         function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size', $sortvar='sortfld', $sortdir='sortdir' ) {
+
+            // Include the YDPersistent library
+            include_once( YD_DIR_HOME_CLS . '/YDPersistent.php');
 
             // Define the query string variables
             $this->pagevar = $pagevar;
