@@ -75,6 +75,31 @@
         }
 
         /**
+         *  Get the value of a query string variable.
+         *
+         *  @param  $name    The name of the query string variable.
+         *  @param  $default (optional) The default value if the query string variable is not existing.
+         *
+         *  @returns    The value of the query string variable as a string.
+         */
+        function getQueryStringParameter( $name, $default='' ) {
+            return isset( $_GET[ $name ] ) ? $_GET[ $name ] : strval( $default );
+        }
+
+        /**
+         *  Get the value of a query string variable as an integer.
+         *
+         *  @param  $name    The name of the query string variable.
+         *  @param  $default (optional) The default value if the query string variable is not existing.
+         *
+         *  @returns    The value of the query string variable as an integer.
+         */
+        function getQueryStringParameterAsInt( $name, $default=null ) {
+            $value = $this->getQueryStringParameter( $name, $default );
+            return is_numeric( $value ) ? intval( $value ) : $default;
+        }
+
+        /**
          *	This function will return the full URL to the current request, including hostname, port and request URI.
          *
          *  @param  $no_qs  (optional) If set to false, the query string will be omitted. Default is false.
