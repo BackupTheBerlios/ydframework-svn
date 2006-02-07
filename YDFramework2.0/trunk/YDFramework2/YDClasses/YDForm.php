@@ -159,6 +159,7 @@
             $this->registerFilter( 'lower', 'strtolower' );
             $this->registerFilter( 'upper', 'strtoupper' );
             $this->registerFilter( 'utf8_decode', 'utf8_decode' );
+            $this->registerFilter( 'strip_html', 'strip_tags' );
 
             // Add the renderers
             $this->registerRenderer( 'array', 'YDFormRenderer_array', 'YDFormRenderer_array.php' );
