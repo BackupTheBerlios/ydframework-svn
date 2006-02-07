@@ -130,8 +130,10 @@
                 $includeFilesSize = 0;
                 $includeFilesWithSize = array();
                 foreach ( $includeFiles as $key=>$includeFile ) {
-                    $includeFilesSize += filesize( $includeFile );
-                    $includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
+                    if ( is_file( $includeFile ) ) {
+                        $includeFilesSize += filesize( $includeFile );
+                        $includeFilesWithSize[ filesize( $includeFile ) ] = realpath( $includeFile );
+                    }
                 }
                 $includeFilesSize = YDStringUtil::formatFileSize( $includeFilesSize );
 
