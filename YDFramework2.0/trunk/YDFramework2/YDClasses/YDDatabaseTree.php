@@ -47,7 +47,10 @@
         function YDDatabaseTree( $db, $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
             $this->db    = $db;
             $this->table = $table;
-            $this->fields = array( 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField );
+            $this->fields = array(
+                'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
+                'nleft' => 'nleft', 'nright' => 'nright', 'nlevel' => 'nlevel'
+            );
             $this->_use_query_cache = true;
             $this->_query_cache = array();
         }
@@ -60,9 +63,7 @@
          *  @internal
          */
         function _getFields() {
-            return array(
-                $this->fields['id'], $this->fields['parent'], $this->fields['sort'], 'nleft', 'nright', 'nlevel'
-            );
+            return array_values( $this->fields );
         }
 
         /**
@@ -155,19 +156,52 @@
         }
 
         /**
+         *  Add a field to the list of fields to will get returned by this class.
+         *
+         *  @param  $name   The name of the field that should be added.
+         */
+        function addField( $name ) {
+            if ( ! in_array( $name, $this->fields ) ) {
+                $this->fields[ $name ] = $name;
+            }
+        }
+
+        /**
+         *  Add a number of fields to the list of fields to will get returned by this class.
+         *
+         *  @param  $names   The name of the field that should be added.
+         */
+        function addFields( $names ) {
+            if ( is_array( $names ) ) {
+                foreach ( $names as $name ) {
+                    $this->addField( $name );
+                }
+            }
+        }
+
+        /**
          *  Fetch the node data for the node identified by $id.
          *
          *  @param $id  The ID of the node to fetch
          *
          *  @returns An object containing the node's data, or false if node not found
          */
-        function getNode( $id ) {
+        function getNode( $id, $field=null ) {
+
+            // Get the name of the field
+            $field = is_null( $field ) ? $this->fields['id'] : $field;
+            $field = empty( $field )   ? $this->fields['id'] : $field;
 
             // The query to execute
-            $query = sprintf(
-                'select %s from %s where %s = %d',
-                $this->_getFieldsAsString(), $this->table, $this->fields['id'], $id
-            );
+            if ( is_int( $id ) ) {
+                $query = sprintf(
+                    'select %s from %s where %s = %d', $this->_getFieldsAsString(), $this->table, $field, $id
+                );
+            } else {
+                $query = sprintf(
+                    'select %s from %s where %s = \'%s\'', $this->_getFieldsAsString(), $this->table, $field, $id
+                );
+            }
 
             // Execute the query and return the record
             return $this->_fromNodeArray( $this->_getRecord( $query ) );
