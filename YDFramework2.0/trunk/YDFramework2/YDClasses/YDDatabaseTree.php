@@ -180,6 +180,15 @@
         }
 
         /**
+         *  Set the sort field.
+         *
+         *  @param $sortField      (optional) Name of the field to sort data. Default is title.
+         */
+        function setSortField( $sortField='title' ) {
+            $this->fields[ 'sort' ] = $sortField;
+        }
+
+        /**
          *  Fetch the node data for the node identified by $id.
          *
          *  @param $id  The ID of the node to fetch
