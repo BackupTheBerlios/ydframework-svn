@@ -490,6 +490,20 @@
         }
 
         /**
+         *  This function adds the filter to every element specified in the array.
+         *
+         *  @param $elements Array of elements to add the filter to.
+         *  @param  $filter     The name of the filter to apply.
+         */
+        function addFilters( $elements, $filter ) {
+            if ( is_array( $elements ) ) {
+                foreach ( $elements as $element ) {
+                    $this->addFilter( $element, $filter );
+                }
+            }
+        }
+
+        /**
          *  Add a rule to the form for the specified field.
          *
          *  @param  $element    The element to apply the rule on. If you specify an array, it will add the rule for each
