@@ -84,6 +84,7 @@ $GLOBALS['t']['ta_enter_image'] = 'Entrez l\'url complète de l\'image';
 $GLOBALS['t']['err_name'] = 'Le nom est manquant';
 $GLOBALS['t']['err_name_email'] = 'Le nom ne doit pas être une adresse email';
 $GLOBALS['t']['err_email'] = 'Email manquant ou invalide';
+$GLOBALS['t']['err_website'] = 'Le site web n\'est pas une URL valide';
 $GLOBALS['t']['err_comment'] = 'Le commentaire est requis';
 $GLOBALS['t']['with'] = 'pour';
 

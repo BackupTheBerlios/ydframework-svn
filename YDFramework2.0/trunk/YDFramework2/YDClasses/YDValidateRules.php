@@ -659,6 +659,52 @@
             return YDValidateRules::date( $val, $opts );
         }
 
+        /**
+         *  This checks if the specified text is a valid HTTP url. It should start with http:// and it should have at
+         *  least one dot in there.
+         *
+         *  @param $val     The value to test.
+         *  @param $opts    (not required)
+         */
+        function httpurl( $val, $opts=array() ) {
+
+            // Return true if empty
+            if ( empty( $val ) ) {
+                return true;
+            }
+
+            // Convert to lowercase and trim
+            $val = strtolower( trim( $val ) );
+
+            // Add http:// if needed
+            if ( substr( $val, 0, 7 ) != 'http://' ) {
+                $val = 'http://' . $val;
+            }
+
+            // Check if it starts with http://
+            if ( ! YDStringUtil::startsWith( $val, 'http://' ) ) {
+                return false;
+            }
+
+            // Check the hostname
+            $host = substr( $val, 7 );
+            if ( strpos( $host, '/' ) !== false ) {
+                $host = trim( substr( $host, 0, strpos( $host, '/' ) ) );
+            }
+            if ( strpos( $host, ':' ) !== false ) {
+                $host = trim( substr( $host, 0, strpos( $host, ':' ) ) );
+            }
+
+            // Localhost is allowed
+            if ( $host == 'localhost' ) {
+                return true;
+            }
+
+            // Check that we have at least a dot
+            return ( strpos( $host, '.' ) === false ) ? false : true;
+
+        }
+
     }
 
 ?>

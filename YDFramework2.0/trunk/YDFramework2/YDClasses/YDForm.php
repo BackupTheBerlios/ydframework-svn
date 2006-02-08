@@ -153,6 +153,7 @@
             $this->registerRule( 'minlength_escape', array( 'YDValidateRules', 'minlength_escape' ), 'YDValidateRules.php' );
             $this->registerRule( 'maxlength_escape', array( 'YDValidateRules', 'maxlength_escape' ), 'YDValidateRules.php' );
             $this->registerRule( 'rangelength_escape', array( 'YDValidateRules', 'rangelength_escape' ), 'YDValidateRules.php' );
+            $this->registerRule( 'httpurl', array( 'YDValidateRules', 'httpurl' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );
