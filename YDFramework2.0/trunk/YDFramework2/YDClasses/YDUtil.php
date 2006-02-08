@@ -779,34 +779,6 @@
             return ( substr( $string, -strlen( $substring ) ) == $substring );
         }
 
-        /**
-         *  Converts a query string array to a query string.
-         *
-         *  @param  $values The array to convert.
-         *
-         *  @returns    A string with the query string variables.
-         */
-        function convertToQueryString( $values ) {
-
-            // Start with an empty result
-            $result = '';
-
-            // Add the parameters
-            foreach ( $values as $key1=>$val1 ) {
-                if ( is_array( $val1 ) ) {
-                    foreach ( $val1 as $key2=>$val2 ) {
-                        $result .= rawurlencode( $key1 . '[' . $key2 . ']' ) . '=' . rawurlencode( $val2 ) . '&';
-                    }
-                } else {
-                    $result .= rawurlencode( $key1 ) . '=' . rawurlencode( $val1 ) . '&';
-                }
-            }
-
-            // Return the URL
-            return rtrim( $result, '&' );
-
-        }
-
     }
 
     /**
