@@ -24,7 +24,7 @@
             $this->form->addRule( 'url', 'required', t( 'err_link_url' ) );
 
             // Add the filters
-            $form->addFilters( array( 'title', 'url' ), 'strip_html' );
+            $this->form->addFilters( array( 'title', 'url' ), 'strip_html' );
 
         }
 

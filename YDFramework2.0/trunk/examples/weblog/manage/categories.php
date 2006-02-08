@@ -22,7 +22,7 @@
             $this->form->addRule( 'title', 'required', t( 'err_category_title' ) );
 
             // Add the filters
-            $form->addFilters( array( 'title' ), 'strip_html' );
+            $this->form->addFilters( array( 'title' ), 'strip_html' );
 
         }
 

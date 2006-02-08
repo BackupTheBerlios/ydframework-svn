@@ -25,7 +25,7 @@
             $this->form->addRule( 'body', 'required', t( 'err_page_body' ) );
 
             // Add the filters
-            $form->addFilters( array( 'title' ), 'strip_html' );
+            $this->form->addFilters( array( 'title' ), 'strip_html' );
 
         }
 
