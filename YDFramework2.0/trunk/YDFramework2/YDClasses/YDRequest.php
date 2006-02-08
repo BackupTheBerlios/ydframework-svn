@@ -83,7 +83,7 @@
          *  @returns    The value of the query string variable as a string.
          */
         function getQueryStringParameter( $name, $default='' ) {
-            return isset( $_GET[ $name ] ) ? $_GET[ $name ] : strval( $default );
+            return isset( $_GET[ $name ] ) ? $_GET[ $name ] : $default;
         }
 
         /**
