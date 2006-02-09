@@ -945,4 +945,53 @@
 
     }
 
+    /**
+     *  This class allows you to generate GUIDs (global unique identifier).
+     *
+     *  More info: http://www.ietf.org/rfc/rfc4122.txt
+     */
+    class YDGuidUtil extends YDBase {
+
+        /**
+         *  Generate a new GUID.
+         *
+         *  @returns    A new GUID as a string.
+         */
+        function create() {
+            return md5( uniqid( rand(), true ) . $_ENV['COMPUTERNAME'] . $_SERVER['SERVER_ADDR'] );
+        }
+
+        /**
+         *  Generate a new formatted GUID.
+         *
+         *  @returns    A formatted GUID as a string.
+         */
+        function createFormatted() {
+            return YDGuidUtil::format( YDGuidUtil::create() );
+//            YDDebugUtil::dump( $g );
+//            return sprintf(
+//                '%s-%s-%s-%s-%s',
+//                substr( $g, 0, 8 ), substr( $g, 8, 4 ), substr( $g, 12, 4 ), substr( $g, 16, 4 ), substr( $g, 20 )
+//            );
+//            //substr( $g, 0, 8 ) . '-' . substr( $g, 8, 4 ) . '-' . substr( $g, 12, 4 ) . '-' . substr( $g, 16, 4 ) . '-' . substr( $g, 20 );
+        }
+
+        /**
+         *  Formats a GUID.
+         *
+         *  @param $g    GUID to format.
+         *
+         *  @returns    A formatted GUID as a string.
+         */
+         function format( $g ) {
+            $g = str_replace( '-', '', $g );
+            return sprintf(
+                '%s-%s-%s-%s-%s',
+                substr( $g, 0, 8 ), substr( $g, 8, 4 ), substr( $g, 12, 4 ), substr( $g, 16, 4 ), substr( $g, 20 )
+            );
+         }
+
+
+    }
+
 ?>

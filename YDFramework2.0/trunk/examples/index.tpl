@@ -689,7 +689,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="14" valign="top">&nbsp;</td>
+            <td rowspan="15" valign="top">&nbsp;</td>
             <td valign="top"><a href="constants.php">YDFramework2 constants</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=constants.php">constants.php</a>
@@ -757,6 +757,12 @@
             <td valign="top"><a href="error.php">Using the YDError class</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=error.php">error.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="guidutil.php">Using the YDGuidUtil class</a></td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=guidutil.php">guidutil.php</a>
             </td>
         </tr>
         </table>
