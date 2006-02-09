@@ -427,9 +427,20 @@
 
 			// initialize js to send
 			$js = '';
-		
-			// element id
-			$id = $this->form->getName() .'_'. $effect->getId();
+
+			// test if effect id is a form element
+			if ( $this->form->isElement( $effect->getId() ) ){
+				
+				// get element
+				$elem = & $this->form->getElement( $effect->getId() );		
+
+				// element id
+				$id = $elem->getAttribute( 'id' );
+			}else{
+			
+				// if effect id is not a form element then its a html id
+				$id = $effect->getId();
+			}
 		
 			// if some html id has not already an effect applyed we must send effect header
 			if (!in_array( $effect->getVariable(), $this->effects ))
