@@ -98,7 +98,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.24';
+            $this->_version = '4.25';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -1686,7 +1686,7 @@
                 if ( $this->exists( $field ) && ! is_object( $this->$field ) && substr( $field, 0, 1 ) != '_' ) {
                     if ( ! $only_fields  || ( $only_fields && $this->_fields->exists( $field ) ) ) {
                         $key = $prefix . $field;
-                        if ( $columns ) {
+                        if ( $columns && $this->_fields->exists( $field ) ) {
                             $key = $prefix . $this->getColumn( $field );
                         }
                         $new[ $key ] = $value;
