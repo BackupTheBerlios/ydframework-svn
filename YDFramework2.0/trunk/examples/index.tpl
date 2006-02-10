@@ -629,7 +629,7 @@
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/date_calculator.php">ajax/date_calculator.php</a> </td>
         </tr>
         <tr>
-          <td valign="top"><a href="ajax/form.php">Form submittion and validation</a><br/>
+          <td valign="top"><a href="ajax/form.php">Form submission and validation</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/form.php">ajax/form.php</a> </td>
         </tr>
