@@ -559,7 +559,7 @@
          *
          *  @internal
          */
-        function _prepareQuery( $only_keys=true ) {
+        function _prepareQuery( $only_keys=true, $update=false ) {
             
             $this->resetProtected();
 
@@ -614,43 +614,47 @@
                 
             }
             
-            if ( $only_keys ) {
-                $fields = $keys;
-            }
+            if ( ! $update || ( $update && $only_keys ) ) {
             
-            foreach ( $fields as $field ) {
-
-                $name = $field->getName();
+                if ( $only_keys ) {
+                    $fields = $keys;
+                }
                 
-                if ( ! $this->exists( $name ) ) {
-                    continue;
-                }
+                foreach ( $fields as $field ) {
 
-                $value = $this->get( $name );
-
-                if ( is_null( $value ) ) {
-                    $value = ' IS NULL ';
-                } else if ( is_array( $value ) ) {
-                    $value_string = ' IN ( ';
-                    $first = true;
-                    foreach ( $value as $val ) {
-                        if ( ! $first ) {
-                            $value_string .= ', ';
-                        }
-                        if ( is_null( $val ) ) {
-                            $value_string .= 'NULL';
-                        } else {
-                            $value_string .= $this->_query->escapeSql( $val );
-                        }
-                        $first = false;
+                    $name = $field->getName();
+                    
+                    if ( ! $this->exists( $name ) ) {
+                        continue;
                     }
-                    $value_string .= ' )';
-                    $value = $value_string;
-                } else {
-                    $value = " = " . $this->_query->escapeSql( $value );
-                }
 
-                $this->where( $this->getColumn( $name, true ) . $value );
+                    $value = $this->get( $name );
+
+                    if ( is_null( $value ) ) {
+                        $value = ' IS NULL ';
+                    } else if ( is_array( $value ) ) {
+                        $value_string = ' IN ( ';
+                        $first = true;
+                        foreach ( $value as $val ) {
+                            if ( ! $first ) {
+                                $value_string .= ', ';
+                            }
+                            if ( is_null( $val ) ) {
+                                $value_string .= 'NULL';
+                            } else {
+                                $value_string .= $this->_query->escapeSql( $val );
+                            }
+                            $first = false;
+                        }
+                        $value_string .= ' )';
+                        $value = $value_string;
+                    } else {
+                        $value = " = " . $this->_query->escapeSql( $value );
+                    }
+
+                    $this->where( $this->getColumn( $name, true ) . $value );
+                }
+                
             }
             
             // Replace #. with table alias in WHERE, HAVING, SELECT, ORDER and GROUP
@@ -1002,11 +1006,20 @@
             // before update callbacks
             $this->_executeCallbacks( 'update', true );
             
-            $this->_prepareQuery();
+            $this->_prepareQuery( true, true );
 
+            $keys   = $this->_getFieldsByMethod( 'isKey' );
             $values = $this->getValues( true, true, true );
-            $where = $this->_query->getWhere( false );
-
+            $where  = $this->_query->getWhere( false );
+            
+            // remove the keys from the values
+            if ( sizeof( $keys ) ) {
+                foreach ( $keys as $field ) {
+                    unset( $values[ $field->getName() ] );
+                }
+            }
+            
+            // return if no values to set
             if ( ! sizeof( $values ) ) {
                 return;
             }
