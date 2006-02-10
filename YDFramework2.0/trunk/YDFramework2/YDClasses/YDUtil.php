@@ -958,7 +958,7 @@
          *  @returns    A new GUID as a string.
          */
         function create() {
-            return md5( uniqid( rand(), true ) . $_ENV['COMPUTERNAME'] . $_SERVER['SERVER_ADDR'] );
+            return md5( uniqid( rand(), true ) . $_SERVER['SERVER_NAME'] . $_SERVER['SERVER_ADDR'] );
         }
 
         /**
@@ -968,12 +968,6 @@
          */
         function createFormatted() {
             return YDGuidUtil::format( YDGuidUtil::create() );
-//            YDDebugUtil::dump( $g );
-//            return sprintf(
-//                '%s-%s-%s-%s-%s',
-//                substr( $g, 0, 8 ), substr( $g, 8, 4 ), substr( $g, 12, 4 ), substr( $g, 16, 4 ), substr( $g, 20 )
-//            );
-//            //substr( $g, 0, 8 ) . '-' . substr( $g, 8, 4 ) . '-' . substr( $g, 12, 4 ) . '-' . substr( $g, 16, 4 ) . '-' . substr( $g, 20 );
         }
 
         /**
