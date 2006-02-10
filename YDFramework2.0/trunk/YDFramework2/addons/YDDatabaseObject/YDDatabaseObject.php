@@ -443,6 +443,34 @@
             $null = null;
             return $null;
         }
+        
+        /**
+         *  This function returns the column name of a defined field.
+         *
+         *  @param $field  The field name.
+         *  @param $alias  (optional) If true, returns the table alias 
+         *                 with the column name. Default: false.
+         *
+         *  @returns  The column name with or without the table alias.
+         */
+        function getColumn( $field, $alias=false ) {
+            
+            if ( $f =& $this->getField( $field ) ) {
+            
+                $str = '';
+                $r = '';
+            
+                if ( $alias ) {
+                    $r = $this->_query->getReserved();
+                    $str = $r . $this->getAlias() . $r . '.';
+                }
+                
+                return $str . $r . $f->getColumn() . $r;
+            
+            }
+            
+            return;
+        }
 
         /**
          *  This function returns a reference to a defined relation.
@@ -530,20 +558,16 @@
             // prepare group by
             $groups = & $this->_query->group;
             foreach ( $groups as $n => $group ) {
-                $field = $group['expr'];
-                if ( $field_obj = & $this->getField( $field ) ) {
-                    $groups[ $n ]['expr']  = $r . $alias . $r . '.';
-                    $groups[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
+                if ( $expr = $this->getColumn( $group['expr'], true ) ) {
+                    $groups[ $n ]['expr'] = $expr;
                 }
             }
 
             // prepare order by
             $orders = & $this->_query->order;
             foreach ( $orders as $n => $order ) {
-                $field = $order['expr'];
-                if ( $field_obj = & $this->getField( $field ) ) {
-                    $orders[ $n ]['expr']  = $r . $alias . $r . '.';
-                    $orders[ $n ]['expr'] .= $r . $field_obj->getColumn() . $r;
+                if ( $expr = $this->getColumn( $order['expr'], true ) ) {
+                    $orders[ $n ]['expr'] = $expr;
                 }
             }
 
@@ -568,11 +592,13 @@
             
             foreach ( $fields as $field ) {
 
-                if ( ! $this->exists( $field->getName() ) ) {
+                $name = $field->getName();
+                
+                if ( ! $this->exists( $name ) ) {
                     continue;
                 }
 
-                $value = $this->get( $field->getName() );
+                $value = $this->get( $name );
 
                 if ( is_null( $value ) ) {
                     $value = ' IS NULL ';
@@ -596,7 +622,7 @@
                     $value = " = " . $this->_query->escapeSql( $value );
                 }
 
-                $this->where( $r . $alias . $r . '.' . $r . $field->getColumn() . $r . $value );
+                $this->where( $this->getColumn( $name, true ) . $value );
             }
             
             // Replace #. with table alias in WHERE, HAVING, SELECT, ORDER and GROUP
@@ -803,8 +829,7 @@
                         }
                         
                         if ( $columns && $this->_fields->exists( $field ) ) {
-                            $field_obj = & $this->getField( $field );
-                            $res[ $pfx . $field_obj->getColumn() ] = $value;
+                            $res[ $pfx . $this->getColumn( $field ) ] = $value;
                             unset( $res[ $pfx . $field ] );
                         }
                         
@@ -1057,11 +1082,10 @@
                     $l_key = current( $this->_getFieldsByMethod( 'isKey', true ) );
                     $l_key = $l_key->name;
                 }
-                $l_field = & $this->getField( $l_key );
-                if ( ! $l_field ) {
+                
+                if ( ! $l_column = $this->getColumn( $l_key ) ) {
                     trigger_error( 'Invalid local key "' . $l_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
                 }
-                $l_column = $l_field->getColumn();
 
                 // Foreign table
                 $f_var   = $rel->getForeignVar();
@@ -1083,11 +1107,9 @@
                     $f_key = $f_key->name;
                 }
                 
-                $f_field = & $this->$f_var->getField( $f_key );
-                if ( ! $f_field ) {
+                if ( ! $f_column = $this->$f_var->getColumn( $f_key ) ) {
                     trigger_error( 'Invalid foreign key "' . $f_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
                 }
-                $f_column = $f_field->getColumn();
                 
                 // Prepare the query in the foreign object
                 $this->$f_var->_prepareQuery( true );
@@ -1138,18 +1160,14 @@
                     }
                     
                     // Cross foreign field column name
-                    $c_ffield = & $this->$c_var->getField( $c_fkey );
-                    if ( ! $c_ffield ) {
+                    if ( ! $c_fcolumn = $this->$c_var->getColumn( $c_fkey ) ) {
                         trigger_error( 'Invalid cross foreign key "' . $c_fkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
                     }
-                    $c_fcolumn = $c_ffield->getColumn();
                     
                     // Cross local field column name
-                    $c_lfield = & $this->$c_var->getField( $c_lkey );
-                    if ( ! $c_lfield ) {
+                    if ( ! $c_lcolumn = $this->$c_var->getColumn( $c_lkey ) ) {
                         trigger_error( 'Invalid cross local key "' . $c_lkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
                     }
-                    $c_lcolumn = $c_lfield->getColumn();
 
                     // Prepare the query in the cross object
                     $this->$c_var->_prepareQuery( true );
@@ -1350,9 +1368,6 @@
             }
             
             $this->_all = true;
-            $r = $this->_query->getReserved();
-            
-            $alias = $this->getAlias();
 
             foreach ( $args as $field ) {
             
@@ -1368,8 +1383,7 @@
                 if ( $select = & $this->getSelect( $field ) ) {
                     $expr = $select->getExpression();
                 } else {
-                    $field_obj = & $this->getField( $field );
-                    $expr = $r . $alias . $r . '.' . $r . $field_obj->getColumn() . $r;
+                    $expr = $this->getColumn( $field, true );
                 }
                 $this->_query->expr( $expr, $field );
             }
@@ -1606,8 +1620,7 @@
                     if ( ! $only_fields  || ( $only_fields && $this->_fields->exists( $field ) ) ) {
                         $key = $prefix . $field;
                         if ( $columns ) {
-                            $field_obj = & $this->getField( $field );
-                            $key = $prefix . $field_obj->getColumn();
+                            $key = $prefix . $this->getColumn( $field );
                         }
                         $new[ $key ] = $value;
                     }
