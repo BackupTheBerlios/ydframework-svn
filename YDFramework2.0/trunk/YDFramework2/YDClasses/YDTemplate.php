@@ -36,6 +36,7 @@
 
     // Configure the default for this class
     YDConfig::set( 'YD_TEMPLATE_ENGINE', 'smarty', false );
+    YDConfig::set( 'YD_TEMPLATE_DIR', YD_SELF_DIR, false );
 
     // Use the right class implementation
     if ( strtolower( YDConfig::get( 'YD_TEMPLATE_ENGINE', 'smarty' ) == 'smarty' ) ) {
@@ -58,7 +59,7 @@
                 $this->Smarty();
 
                 // Set the default template directory
-                $this->template_dir = YD_SELF_DIR;
+                $this->template_dir = YDConfig::get( 'YD_TEMPLATE_DIR', YD_SELF_DIR );
 
                 $this->compile_dir = YD_DIR_TEMP;
                 $this->use_sub_dirs = false;
@@ -309,7 +310,7 @@
                 $this->YDBase();
 
                 // Set the default template directory
-                $this->template_dir = YD_SELF_DIR;
+                $this->template_dir = YDConfig::get( 'YD_TEMPLATE_DIR', YD_SELF_DIR );
 
                 // The variables to use
                 $this->vars = array();
