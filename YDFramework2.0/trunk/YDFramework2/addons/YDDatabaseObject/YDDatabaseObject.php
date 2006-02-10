@@ -298,10 +298,11 @@
         /**
          *  This function registers a protected field.
          *
-         *  @param $name   The field name.
-         *  @param $value  The protected value.
+         *  @param $name       The field name.
+         *  @param $value      The protected value.
+         *  @param $comparison (optional) The comparison keyword. Accepts: = == <= < >= >
          */
-        function registerProtected( $name, $value ) {
+        function registerProtected( $name, $value, $comparison='=' ) {
             
             $name = strtolower( $name );
             
@@ -310,6 +311,7 @@
                                 The field "' . $name . '" is not defined.', YD_ERROR );
             }
             $this->_fields->$name->setProtected( $value );
+            $this->_fields->$name->setComparison( $comparison );
         }
 
         /**
@@ -389,7 +391,33 @@
             $protected = $this->_getFieldsByMethod( 'isProtected' );
 
             foreach ( $protected as $field ) {
-                $this->set( $field->getName(), $field->getProtected() );
+            
+                $compa = $field->getComparison();
+                $value = $field->getProtected();
+                $field = $field->getName();
+                
+                switch ( $compa ) {
+                    
+                    case '<':
+                    case '<=':
+                        if ( ! $this->exists( $field ) || $this->get( $field ) >= $value ) {
+                            $this->set( $field, $value );
+                        }
+                        break;
+                    case '>':
+                    case '>=':
+                        if ( ! $this->exists( $field ) || $this->get( $field ) <= $value ) {
+                            $this->set( $field, $value );
+                        }
+                        break;
+                    case '=':
+                    case '==':
+                    default:
+                        $this->set( $field, $value );
+                        break;
+                        
+                }
+            
             }
 
         }
@@ -800,7 +828,33 @@
                     $protected = $relation->_getFieldsByMethod( 'isProtected' );
 
                     foreach ( $protected as $field ) {
-                        $res[ $field->getName() ] =  $field->getProtected();
+            
+                        $compa = $field->getComparison();
+                        $value = $field->getProtected();
+                        $field = $field->getName();
+                        
+                        switch ( $compa ) {
+                            
+                            case '<':
+                            case '<=':
+                                if ( ! array_key_exists( $field, $res ) || $res[ $field ] >= $value ) {
+                                    $res[ $field ] = $value;
+                                }
+                                break;
+                            case '>':
+                            case '>=':
+                                if ( ! array_key_exists( $field, $res ) || $res[ $field ] <= $value ) {
+                                    $res[ $field ] = $value;
+                                }
+                                break;
+                            case '=':
+                            case '==':
+                            default:
+                                $res[ $field ] = $value;
+                                break;
+                                
+                        }
+            
                     }
                     
                     $pfx = '';
@@ -1896,6 +1950,7 @@
         var $protected;
         var $default;
         var $callback;
+        var $comparison;
 
         /**
          *  The class constructor.
@@ -1968,6 +2023,7 @@
 
             if ( $is ) {
                 $this->unsetDefault();
+                $this->unsetComparison();
             }
         }
 
@@ -1985,6 +2041,35 @@
             return $this->getDefault();
         }
 
+        /**
+         *  This function sets the comparison keyword.
+         *
+         *  @param $keyword  (optional) The comparison keyword. Default: =
+         */
+        function setComparison( $keyword='=' ) {
+            
+            $this->set( 'comparison', '=' );
+        
+            if ( in_array( $keyword, array( '=', '==', '<', '<=', '>', '>=' ) ) ) {
+                $this->set( 'comparison', $keyword );
+            }
+            
+        }
+        
+        /**
+         *  @returns  The comparison keyword.
+         */
+        function getComparison() {
+            return $this->get( 'comparison' );
+        }
+        
+        /**
+         *  This function unsets the comparison keyword.
+         */
+        function unsetComparison() {
+            $this->set( 'comparison', '=' );
+        }
+        
         /**
          *  @returns  If a field has a default value defined.
          */
