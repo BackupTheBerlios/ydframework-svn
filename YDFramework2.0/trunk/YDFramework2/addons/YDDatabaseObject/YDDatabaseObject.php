@@ -441,7 +441,7 @@
                 return $this->_fields->$name;
             }
             $null = null;
-            return null;
+            return $null;
         }
 
         /**
