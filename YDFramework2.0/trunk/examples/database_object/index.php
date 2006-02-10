@@ -236,9 +236,6 @@
             $user = YDDatabaseObject::getInstance( 'user' );
             $user->load( 'phone' ); // now we have a phone object in $user
             
-            $user->resetQuery(); // resets default query statements
-            $user->phone->resetQuery();
-            
             $user->select( 'id', 'name', 'country' );
             $user->phone->select( 'number', 'ord' );
 

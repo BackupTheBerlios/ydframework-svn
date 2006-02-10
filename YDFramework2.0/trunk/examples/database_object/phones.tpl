@@ -93,9 +93,6 @@ YDDebugUtil::dump( $phone_results );
 $user = YDDatabaseObject::getInstance( 'user' );
 $user->load( 'phone' ); // now we have a phone object in $user
 
-$user->resetQuery(); // resets default query statements
-$user->phone->resetQuery();
-
 $user->select( 'id', 'name', 'country' );
 $user->phone->select( 'number', 'ord' );
 
@@ -111,8 +108,6 @@ YDDebugUtil::dump( $results );
     <p>The results:</p>
 
     <pre>{$find3_results}</pre>
-    
-    <p>The <b>resetQuery</b> method clears all the default query elements for the following query. By default, all fields of the related objects in the search are added to the select statement, so executing a <b>resetQuery</b> will clear all of them and you can add only the fields you want to retrieve.</p>
     
     <p>The example above only uses <b>select</b>, <b>where</b>, <b>order</b> and <b>limit</b> but there is also <b>group</b>, <b>having</b> and the possibility of adding values to the objects fields so your filters can be more complex.</p>
 
