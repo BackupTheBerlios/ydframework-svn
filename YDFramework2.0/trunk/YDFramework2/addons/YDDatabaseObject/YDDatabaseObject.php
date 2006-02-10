@@ -179,11 +179,15 @@
          *  This function registers the table name.
          *
          *  @param $name  The table name.
+         *
+         *  @returns  A reference to the alias.
          */
         function & registerTable( $name ) {
             
             $this->_table = $name;
             $this->_alias = $name;
+            
+            return $this->_alias;
             
         }
 
@@ -436,6 +440,8 @@
             if ( $this->_fields->exists( $name ) ) {
                 return $this->_fields->$name;
             }
+            $null = null;
+            return null;
         }
 
         /**
@@ -449,6 +455,8 @@
             if ( $this->_relations->exists( $name ) ) {
                 return $this->_relations->$name;
             }
+            $null = null;
+            return $null;
         }
 
         /**
@@ -462,6 +470,8 @@
             if ( $this->_selects->exists( $name ) ) {
                 return $this->_selects->$name;
             }
+            $null = null;
+            return $null;
         }
 
         /**
