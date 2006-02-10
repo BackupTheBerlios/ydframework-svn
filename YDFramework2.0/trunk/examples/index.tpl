@@ -204,7 +204,7 @@
         <tr>
             <td valign="top"><a href="form2.php">Form handling and validation (new style)</a> </td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=form2.php">form.php</a>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=form2.php">form2.php</a>
             </td>
         </tr>
         <tr>

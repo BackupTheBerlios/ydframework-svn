@@ -9,9 +9,6 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 
-//  YDConfig::set( 'YD_AJAX_ENCODING', "iso-8859-15" );
-//	YDConfig::set( 'YD_AJAX_DEBUG', true );
-
 	// Class definition
 	class version extends YDRequest {
 

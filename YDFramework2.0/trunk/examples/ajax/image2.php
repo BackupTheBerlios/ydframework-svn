@@ -31,7 +31,7 @@
 			$this->form->addElement( 'link',    'myspan2',  'Rebuild chart 2', '', '#' );
 			$this->form->addElement( 'link',    'myspan3',  'Rebuild both charts', '', '#' );
 			$this->form->addElement( 'link',    'myspan4',  'Rebuild chart 1 and apply "resize" with "modify(50, 100) to chart 2"', '', '#' );
-			$this->form->addElement( 'link',    'myspan5',  'Apply fade to chart 1 using the response (not on ajax call) and simulate a slow server', '', '#' );
+			$this->form->addElement( 'link',    'myspan5',  'Apply fade to chart 1 using the response (not on ajax call) and simulate a slow server (1 sec)', '', '#' );
 
 			$this->form->addElement( 'img',     'myimage1', '', array( 'width' => 550, 'height' => 250 ) );
 			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250 ) );
@@ -53,7 +53,7 @@
 			$this->ajax->processEvents();
 
 			// assign title, form and display template
-			$this->tpl->assign( 'title', 'This example will demonstrates the Waiting Message and effects creation' );
+			$this->tpl->assign( 'title', 'This example demonstrates effects creation' );
 			$this->tpl->assign( 'form',  $this->form->render('html') );
 			$this->tpl->display( 'general' );
 		}
@@ -79,7 +79,7 @@
 		function response2(){
 		
 			// simulate slow server (to better see the waiting message)
-			sleep( 3 );
+			sleep( 1 );
 		
 			// create fade effect
 			$fade = new YDAjaxEffect( 'myimage1', 'opacity', "custom(1, 0.5)" );

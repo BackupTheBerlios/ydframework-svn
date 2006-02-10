@@ -23,7 +23,7 @@
 		// Default action
 		function actionDefault() {
 
-			// create a form with a 2 texts, a button and a span for result
+			// create a form with a 2 autocompleters and a simple text element
 			$form = new YDForm('myform');
 			$form->addElement('autocompleter', 'arg1', 'Country with standard style:', '', array( &$this, 'getCountry' ) );
 			$form->addElement('text',          'arg2', 'Just a simple text box without autocompleter');

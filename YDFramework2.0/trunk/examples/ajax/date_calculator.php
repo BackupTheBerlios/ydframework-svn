@@ -60,10 +60,10 @@
 		
 			// add number to date
 			switch ( intval( $type )){
-				case 0 : $date->addMinute( $number ); break;
-				case 1 : $date->addDay( $number );    break;
-				case 2 : $date->addMonth( $number );  break;
-				case 3 : $date->addYear( $number );   break;
+				case 0 :  $date->addMinute( $number ); break;
+				case 1 :  $date->addDay( $number );    break;
+				case 2 :  $date->addMonth( $number );  break;
+				default : $date->addYear( $number );
 			}
 
 			// assign span with date
