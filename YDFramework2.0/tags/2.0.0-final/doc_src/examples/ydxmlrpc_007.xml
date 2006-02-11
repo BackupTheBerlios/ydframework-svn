@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering a class method as an XML/RPC method</title>
+    <programlisting><![CDATA[function registerMethod(
+    'echo', 'this:xmlrpcEcho', array( 'string', 'string' )
+);]]></programlisting>
+</example>

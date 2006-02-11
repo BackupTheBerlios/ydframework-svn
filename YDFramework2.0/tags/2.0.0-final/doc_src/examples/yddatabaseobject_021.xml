@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting the class information</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Getting the table name
+    $table_user = $user->getTable();
+
+    // Getting the database connection
+    $db = & $user->getDatabase();
+    $db->getRecords( 'SELECT * FROM ' . $table_user );
+
+    // Getting a field object
+    $country = & $user->getField( 'country' );
+    $country->setCallback( 'getContinent' );
+
+    // Getting a select object
+    $birth_year = & $user->getSelect( 'birth_year' );
+    $birth_year->setCallback( 'getYearFormatted' );
+
+    // Getting a relation object
+    $group = & $user->getRelation( 'groups' );
+    $group->setForeignClass( 'active_group' );
+
+?>]]></programlisting>
+</example>

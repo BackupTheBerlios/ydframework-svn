@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: date calculations</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // Setting the ISO format
+    
+    YDDateFormat::setString( 'ISO', '%Y-%m-%d %T' );
+    YDDateFormat::setEmpty(  'ISO', '0000-00-00 00:00:00' );
+    YDDateFormat::setParts(  'ISO', array(
+        'year'    => 1,
+        'month'   => 3,
+        'day'     => 5,
+        'hours'   => 7,
+        'minutes' => 9,
+        'seconds' => 11 ) );
+    
+    // Setting the USA format
+    
+    YDDateFormat::setString( 'USA', '%m/%d/%Y %T' );
+    YDDateFormat::setParts(  'USA', array(
+        'month'   => 1,
+        'day'     => 3,
+        'year'    => 5,
+        'hours'   => 7,
+        'minutes' => 9,
+        'seconds' => 11 ) );
+    
+    // Setting the SQL format
+    
+    YDDateFormat::setString( 'SQL', '%Y%m%d%H%M%S' );
+    YDDateFormat::setEmpty(  'SQL', '00000000000000' );
+    YDDateFormat::setParts(  'SQL', array(
+        'year'    => 1,
+        'month'   => 2,
+        'day'     => 3,
+        'hours'   => 4,
+        'minutes' => 5,
+        'seconds' => 6 ) );
+        
+    YDDateFormat::setRegexes( 'SQL', array(
+        's'  => '([0-5]{1}[0-9]{1})',           // seconds and minutes
+        'h'  => '([0-1]{1}[0-9]{1}|2[0-3]{1})', // hours
+        'd'  => '([0-2]{1}[0-9]{1}|30|31)',     // day
+        'm'  => '(0[0-9]{1}|1[0-2]{1})',        // month
+        ) );
+
+?>]]></programlisting>
+</example>

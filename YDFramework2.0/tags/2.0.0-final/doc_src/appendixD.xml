@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<appendix id="appendixD">
+
+    <title>Releasing beta and final versions</title>
+
+    <para>This chapter gives you a small overview of how a release is done in the <link linkend="appendixB">subversion repository</link>.</para>
+
+    <sect1 id="appendixD_svn_layout">
+
+        <title>SVN Repository layout</title>
+
+        <para>The layout of the SVN repository follows the standards as for any SVN repository. For each major release (e.g. YDFramework-1.0, YDFramework-2.0), a folder is setup in the SVN repository. For each of these folders, the structure is always the same:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>trunk: here you will find the very latest version of the source code</listitem>
+            <listitem>tags: here you will find all the released beta and full versions</listitem>
+            <listitem>branches: here you will find milestones and special versions</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="appendixD_release">
+
+        <title>Making a new release</title>
+
+        <warning>To be able to make a new release, you first need to have developer access to the SVN repository.</warning>
+
+        <para>Making a release is done by making a copy of the current trunk to the "tags" branch in the repository:</para>
+
+        <programlisting><![CDATA[svn copy "svn+ssh://developername@svn.berlios.de/svnroot/repos/ydframework/YDFramework2.0/trunk" \
+         "svn+ssh://developername@svn.berlios.de/svnroot/repos/ydframework/YDFramework2.0/tags/2.0.0-final" \
+      -m "Releasing version 2.0.0-final."
+
+Committed revision xxx.
+]]></programlisting>
+
+        <para>This will mark the current trunk as version "2.0.0-final".</para>
+
+    </sect1>
+
+    <sect1 id="appendixD_release_archive">
+
+        <title>Making a new release archive</title>
+
+        <para>When we put a new released version online, we make a .tar.gz copy of that build.</para>
+
+        <para>For more info on how to create that, please contact Pieter Claerhout.</para>
+
+    </sect1>
+
+</appendix>

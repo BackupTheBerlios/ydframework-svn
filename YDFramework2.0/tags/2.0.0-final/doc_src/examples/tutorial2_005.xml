@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The statistics table</title>
+    <programlisting><![CDATA[CREATE TABLE statistics (
+  id int(11) NOT NULL auto_increment,
+  date date NOT NULL default '0000-00-00',
+  uri varchar(255) NOT NULL default '0',
+  browser varchar(10) NOT NULL default '',
+  platform varchar(10) NOT NULL default '',
+  hits int(11) NOT NULL default '0',
+  PRIMARY KEY  (id)
+) TYPE=MyISAM;]]></programlisting>
+</example>

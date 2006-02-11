@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: updating database information</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // The new values
+    // These should be specified as an associative array, using the column name
+    // as the field name, and the value as the field value.
+    $values = array();
+    $values['ConfigName'] = 'email';
+    $values['ConfigValue'] = 'pieter@yellowduck.be';
+
+    // Execute the update for all rows
+    $db->executeUpdate( 'configuration', $values );
+
+    // Execute the update for a specific row
+    $db->executeUpdate(
+        'configuration', $values, 'configname = ' . $db->sqlString( 'email' )
+    );
+
+?> ]]></programlisting>
+</example>

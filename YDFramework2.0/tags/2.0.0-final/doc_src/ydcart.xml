@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydcart">
+
+    <title>Addon: YDCart, a shopping cart</title>
+
+    <para>The YDCart class implements a shopping cart. Each shopping cart can contain a number of products (specified by name or ID), and each product has a certain quantity in the cart.</para>
+
+    <para>The implementation we use is smart enough to remember the contents of the cart during a session and enables you to easily build webshop-type applications.</para>
+
+    <sect1 id="ydcart_store">
+
+        <title>Where is the data stored?</title>
+
+        <para>The YDCart class uses a session variable that keeps track of the contents of the cart.</para>
+
+        <para>The name of the session variable which is used can be configured during the instantiation of the YDCart class. The default name for the session variable is "YDCart". This is demonstrated with the following code sample:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydcart_001.xml" />
+
+        <note>If you want to use different YDCart objects in the same application that should each get their proper contents, you need to give each one an individual name or their contents will mixed.</note>
+
+    </sect1>
+
+    <sect1 id="ydcart_contents">
+
+        <title>Looking at the contents of the cart</title>
+
+        <para>There are several methods that can show what is currently in the cart. This is a short overview of the different functions you can use to look at the contents of the cart:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">getItems:</emphasis> Returns the list of items in the cart. The result is an associative array with as keys the names of the products, and as values the quantity of each product in the cart.</listitem>
+            <listitem><emphasis role="bold">isEmpty:</emphasis> Returns true if the cart is empty, false if there are items in the cart.</listitem>
+            <listitem><emphasis role="bold">inCart:</emphasis> Checks if the specified product is in the cart or not.</listitem>
+            <listitem><emphasis role="bold">getCount:</emphasis> Returns the number of distinct products that are in the cart (and doesn't take in account the quantity of each one of them).</listitem>
+            <listitem><emphasis role="bold">getItemCount:</emphasis> Returns the product's quantity in the cart.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydcart_alter">
+
+        <title>Altering the contents of the cart</title>
+
+        <para>To change the content of the cart, we can use the following methods:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">addItem:</emphasis> Add the product to the cart. If no quantity is specified, only 1 instance of hte product will be added.</listitem>
+            <listitem><emphasis role="bold">remItem:</emphasis> Removes the product from the cart. If no quantity is specified, all instances of the product will be removed. If a quantity is specified, only the specified number of instances will be removed.</listitem>
+            <listitem><emphasis role="bold">setItem:</emphasis> Sets the quantity for the specified product in the cart.</listitem>
+            <listitem><emphasis role="bold">emptyCart:</emphasis> Empties the cart and removes all items.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+</chapter>

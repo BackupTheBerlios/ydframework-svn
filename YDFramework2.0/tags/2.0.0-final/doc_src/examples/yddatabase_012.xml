@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: deleting database information</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = YDDatabase::getInstance( 'sqlite', 'mydb.db' );
+
+    // Remove all rows
+    $db->executeDelete( 'configuration' );
+
+    // Remove a specific row
+    $db->executeDelete( 'configuration', 'id = 1' );
+
+?>]]></programlisting>
+</example>

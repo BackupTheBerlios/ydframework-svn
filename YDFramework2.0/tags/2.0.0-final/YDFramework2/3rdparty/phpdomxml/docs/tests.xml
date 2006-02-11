@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<batches>
+	<batch id="batch1">
+		<title>Creating a DOM from file and by using methods</title>
+		<test file="creation1.inc.php">
+			<comment>
+				<![CDATA[
+				Although very basic, this code tests several aspects of phpdomxml:
+				it <b>creates</b> a new DOM by <b>loading</b> and <b>parsing</b> an
+				external file. The resulting object is then showed by using the
+				<tt>toString</tt> method on the root-level element of the created
+				object. <tt>toString</tt> excepts one optional argument: a boolean,
+				telling the method to create pretty layout (true) or layout without
+				whitespace (the default no argurment, or false).
+				]]>
+			</comment>
+		</test>
+		<test file="creation2.inc.php">
+			<comment>
+				<![CDATA[
+				Another way to create the same document would be by using dom-methods.
+				For this, several methods need to be used: <tt>createElement</tt> to
+				create a node element, <tt>createTextNode</tt> to create a text node,
+				<tt>appendChild</tt> to append a child to a parent node and finally
+				<tt>setAttribute</tt> to set an attribute of a node.
+				]]>
+			</comment>
+		</test>
+		<test file="creation3.inc.php">
+			<comment>
+				<![CDATA[
+				When data is retreived from a list, you'll have to be careful not to
+				overwrite previously created elements. <tt>appendChild</tt> uses a
+				reference to the appended child when adding it to the parent object.
+				So if the variable name is reused, the previous child will be killed.
+				The solution to this is using php's
+				<a href="http://us2.php.net/manual/en/language.variables.variable.php">variable variables</a>,
+				as shown in the code below (at line 23 and on).
+				]]>
+			</comment>
+		</test>
+	</batch>
+	<batch id="batch2">
+		<title>Dynamic DOM creation with XML_Node's insertBefore method</title>
+		<test file="insert1.inc.php">
+			<comment>
+				<![CDATA[
+				This code tests the functionality of the <tt>insertBefore</tt> method of the
+				<tt>XML_Node</tt> interface. <tt>insertBefore</tt> inserts a new child (1st argument)
+				in the node list, before a given reference child (2nd argument). In the process
+				<tt>nextSibling</tt>, <tt>previousSibling</tt> and <tt>childNodes</tt> are
+				re-assigned or rebuilt.<br />
+				The first code snippet builds the DOM object, using <tt>insertBefore</tt>, and
+				shows the object with <tt>toString</tt>. <tt>toString</tt> parses the object
+				with the <tt>childNodes</tt> array, so when the output verifies with what you
+				expect, the <tt>childNodes</tt> array is built correctly from within the
+				<tt>insertBefore</tt> method.
+				]]>
+			</comment>
+		</test>
+		<test file="insert2.inc.php">
+			<comment>
+				<![CDATA[
+				This code snippet parses the DOM object with <tt>nextSibling</tt>, starting
+				at <tt>firstChild</tt>, to check if references are correctly set.
+				]]>
+			</comment>
+		</test>
+		<test file="insert3.inc.php">
+			<comment>
+				<![CDATA[
+				This code snippet parses the DOM object with <tt>previousSibling</tt>, starting
+				at <tt>lastChild</tt>, to check if references are correctly set.
+				]]>
+			</comment>
+		</test>
+	</batch>
+	<batch id="batch3">
+		<title>CharacterData interface tests</title>
+		<test file="cdata1.inc.php">
+			<comment>
+				<![CDATA[
+				This series of code snippets test the functionality of the
+				<tt>XML_CharacterData</tt> interface.<br />The first test creates a simple comment
+				tag and shows the result.
+				]]>
+			</comment>
+		</test>
+		<test file="cdata2.inc.php">
+			<comment>
+				<![CDATA[
+				This snippet inserts a piece of text in the previously created comment, using
+				the <tt>insertData</tt> method, and shows the new comment after the insertion.
+				]]>
+			</comment>
+		</test>
+		<test file="cdata3.inc.php">
+			<comment>
+				<![CDATA[
+				Tests the <tt>substringData</tt> method, which grabs a piece of the data with a given
+				length (2nd argument), starting at a given offset (1st argument).
+				]]>
+			</comment>
+		</test>
+		<test file="cdata4.inc.php">
+			<comment>
+				<![CDATA[
+				The <tt>appendData</tt> method adds a piece of data at the end of the existing data.
+				]]>
+			</comment>
+		</test>
+		<test file="cdata5.inc.php">
+			<comment>
+				<![CDATA[
+				The <tt>deleteData</tt> method deletes a piece of data, starting at given offset
+				(1st argument) and with given length (2nd argument).
+				]]>
+			</comment>
+		</test>
+		<test file="cdata6.inc.php">
+			<comment>
+				<![CDATA[
+				The <tt>replaceData</tt> method replaces a piece of data with the supplied string.
+				This method expects three arguments: the offset, the length of the data to be replaced,
+				and the new text to insert.
+				]]>
+			</comment>
+		</test>
+	</batch>
+	<batch id="batch4">
+		<title>XML_Node's removeChild method test</title>
+		<test file="remove1.inc.php">
+			<comment>
+				<![CDATA[
+				This code tests the <tt>removeChild</tt> method of the <tt>XML_Node</tt> interface.
+				<tt>removeChild</tt> removes the supplied child from it's parent in the XML-tree.
+				The first code snippet loads a piece of XML and displays it.
+				]]>
+			</comment>
+		</test>
+		<test file="remove2.inc.php">
+			<comment>
+				<![CDATA[
+				This second code snippet retreives one item from the XML-tree, using the <tt>getElementById</tt>
+				method, and displays it.
+				]]>
+			</comment>
+		</test>
+		<test file="remove3.inc.php">
+			<comment>
+				<![CDATA[
+				And this code snippet finally removes the selected item from the tree and displays
+				the new XML structure.
+				]]>
+			</comment>
+		</test>
+	</batch>
+	<batch id="batch5">
+		<title>Read and show Slashdot's RDF-feed</title>
+		<test file="rss1.inc.php" output="raw">
+			<comment>
+				<![CDATA[
+				 This code reads the <a href="http://www.w3.org/RDF/">Resource Description Framework (RDF)</a> of Slashdot
+				 and presents it in the browser, using a small piece of javascript. A list of all items in the RDF is
+				 retreived using the <tt>getElementdBytagName</tt> method. In a loop, all items are traversed and
+				 the properties of each item are put in an associative array for easier access.
+				]]>
+			</comment>
+		</test>
+	</batch>
+</batches>

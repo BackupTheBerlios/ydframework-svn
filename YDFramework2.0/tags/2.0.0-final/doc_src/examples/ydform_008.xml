@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: custom form renderers</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDForm.php' );
+
+    /**
+     *  This is the class that is able to render a form object to HTML.
+     */
+    class YDFormRenderer_html extends YDFormRenderer {
+
+        /**
+         *  This is the class constructor for the YDFormRenderer_html class.
+         *
+         *  @param $form        The form that needs to be rendered.
+         */
+        function YDFormRenderer_html( $form ) {
+
+            // Initialize the parent
+            $this->YDFormRenderer( $form );
+
+        }
+
+        /**
+         *  This function will render the form.
+         *
+         *  @returns    The rendered form.
+         */
+        function render() {
+
+            // Return the form as an array
+            return $this->_form->toArray();
+
+        }
+
+    }
+
+?>]]></programlisting>
+
+</example>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: updating existing information</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->id = 123;
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+    // Change the data
+    $user->name = 'John Fulano';
+    $user->email = 'johnfulano@host.com';
+
+    // Uses the keys to update the user info
+    $user->update();
+
+?>]]></programlisting>
+</example>

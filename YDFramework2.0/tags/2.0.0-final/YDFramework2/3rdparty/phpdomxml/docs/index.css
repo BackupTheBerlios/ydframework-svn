@@ -1,0 +1,155 @@
+
+body {
+	background-color : #fff;
+	font-family : helvetica, verdana, arial, tahoma;
+	font-size : 9pt;
+	color : #666;
+	line-height : 14pt;
+	margin : 0;
+}
+
+#container {
+	width : 500px;
+	text-align : justify;
+	margin-left : 30px;
+	padding : 10px 30px 10px 30px;
+	border-left : 1px solid #f0f0f0;
+	border-right : 1px solid #f0f0f0;
+	background-color : #fefefe;
+}
+
+h1 {
+	font-size : 12pt;
+	color : #000;
+}
+
+h2 {
+	font-size : 10pt;
+	color : #000;
+	background-color : #fff8f8;
+	padding : 2px;
+	border : 1px dashed #d08080;
+	margin-top : 20px;
+}
+
+a {
+	color : #00d;
+	text-decoration : none;
+}
+
+a:hover {
+	color : #e33;
+}
+
+hr {
+	border : none;
+	height : 1px;
+	border-top : 1px solid #666;
+}
+
+table.code {
+	width : 100%;
+	font-family : lucida console, monospace, courier new;
+	font-size : 8pt;
+	line-height : 9pt;
+	border : 1px dashed #d0d080;
+	background-color : #fffffa;
+}
+
+table.code td.lines {
+	width : 20px;
+	background-color : #f0f0f0;
+	border-right : 1px dashed #808080;
+	padding-right : 5px;
+	text-align : right;
+}
+
+table.code td.code {
+	padding-left : 10px;
+}
+
+pre {
+	font-family : lucida console, monospace, courier new;
+	font-size : 8pt;
+	line-height : 9pt;
+	border : 1px dashed #aaa;
+	padding : 10px;
+	background-color : #fff;
+}
+
+tt {
+	color : #600;
+}
+
+ul {
+	margin-left : 0px;
+	padding-left : 0px;
+}
+
+ul li {
+	margin-left : 0px;
+	list-style : none;
+	margin-top : 10px;
+	border : 1px dashed #ddd;
+	background-color : #fcfcfc;
+	padding : 10px;
+}
+
+ul li p {
+	font-weight : bold;
+}
+
+.check {
+	color : #c00;
+	font-weight : bold;
+}
+
+.extra {
+	color : #090;
+	font-weight : bold;
+}
+
+.desc {
+	color : #999;
+	font-style : italic;
+}
+
+.desc ul {
+	padding : 0px;
+}
+
+.desc li {
+	list-style-type : circle;
+}
+
+ul ul li {
+	list-style-type : square;
+	border : none;
+	margin-top : 0px;
+	padding-top : 0px;
+	padding-bottom : 5px;
+	margin-left : 20px;
+}
+
+ul ul li .check {
+	font-weight : normal;
+}
+
+ul ul li .extra {
+	font-weight : normal;
+}
+
+.name {
+	font-family : monospace;
+	color : #000;
+}
+
+.title {
+	border-bottom : 1px dashed #000;
+	cursor : help;
+}
+
+.copyright {
+	font-size : 8pt;
+	font-style : italic;
+}

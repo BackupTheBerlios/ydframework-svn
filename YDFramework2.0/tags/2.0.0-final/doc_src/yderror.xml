@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="yderror">
+
+    <title>Error handling</title>
+
+    <para>This chapter will explain how errors can be reported and handled in the Yellow Duck Framework. Error handling in the YDFramework is based on the same error mechanism as all the other functions in PHP use.</para>
+
+    <sect1 id="yderror_error_types">
+
+        <title>Types of errors</title>
+
+        <para>In the Yellow Duck Framework, we differentiate between fatal errors, warnings and notices.</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">Fatal error:</emphasis> Fatal run-time errors. These indicate errors that can not be recovered from, such as a memory allocation problem. Execution of the script is halted.</listitem>
+            <listitem><emphasis role="bold">Warning:</emphasis> Run-time warnings (non-fatal errors). Execution of the script is not halted.</listitem>
+            <listitem><emphasis role="bold">Notice:</emphasis> Run-time notices. Indicate that the script encountered something that could indicate an error, but could also happen in the normal course of running a script.</listitem>
+        </itemizedlist>
+
+        <para>On top of the errors from the Yellow Duck Framework, the PHP scripts themselves can also generate error information.</para>
+
+    </sect1>
+
+    <sect1 id="yderror_which_are_shown">
+
+        <title>Which error messages are shown?</title>
+
+        <para>By default, the Yellow Duck Framework will show all errors, warnings and notices.</para>
+
+        <para>If you want to change which errors are shown, you can add the following code after the inclusion of the YDF2_init.php file:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_001.xml" />
+
+        <para>More information about this can be found in the PHP manual:</para>
+
+        <para><ulink url="http://www.php.net/manual/en/function.error-reporting.php" /></para>
+
+    </sect1>
+
+    <sect1 id="yderror_raising_errors">
+
+        <title>Raising errors</title>
+
+        <para>For raising errors in the Yellow Duck Framework, you should always use the trigger_error function. This function takes two arguments, being the error message and the type of error to raise. Here's an example:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_002.xml" />
+
+    </sect1>
+
+    <sect1 id="yderror_print_stacktrace">
+
+        <title>Printing a stack trace</title>
+
+        <para>When a fatal error occurs and debugging is turned on, a stack trace is printed as well. This will looks as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yderror_003.xml" />
+
+        <para>You can also print a stack trace yourself by simple calling the YDStackTrace function.</para>
+
+    </sect1>
+
+</chapter>

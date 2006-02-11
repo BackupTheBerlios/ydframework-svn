@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<programlisting>&lt;Directory "C:/Program Files/Apache/htdocs"&gt;
+    AllowOverride All
+&lt;/Directory&gt;</programlisting>

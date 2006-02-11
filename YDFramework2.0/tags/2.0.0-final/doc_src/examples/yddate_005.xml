@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: validating dates and times</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // The current datetime
+    $date = new YDDate(); // 2005-06-23 14:23:00
+    
+    $boo = YDDate::isValid( '2005-06-23 14:23:00', 'ISO' ); // true
+    $boo = YDDate::isValid( '2005-06-23 14:23:00', 'EUN' ); // false
+    $boo = YDDate::isValid( '2005-06-23 14:23:00', 'USA' ); // false
+    $boo = YDDate::isValid( '2005-06-23 14:23:00', 'SQL' ); // false
+    
+    // Checks the empty string format
+    $boo = YDDate::isValid( '0000-00-00 00:00:00', 'SQL', true, true ); // true
+    $boo = YDDate::isValid( '0000-00-00 00:00:00', 'SQL', true, false ); // false
+    
+    $boo = YDDate::isValidDate( 23, 6, 2005 ); // true
+    $boo = YDDate::isValidDate( 31, 2, 2005 ); // false
+
+    $boo = YDDate::isValidTime( 14, 23, 00 ); // true
+    $boo = YDDate::isValidTime( 55, 23, 00 ); // false
+    $boo = YDDate::isValidTime( 00, 00, 00 ); // true
+
+?>]]></programlisting>
+</example>

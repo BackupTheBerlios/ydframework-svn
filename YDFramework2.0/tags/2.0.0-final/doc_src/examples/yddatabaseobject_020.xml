@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering callback methods</title>
+    <programlisting><![CDATA[<?php
+
+    // Register callback
+    $this->registerCallback( 'debug', 'insert' ); // after insert
+    $this->registerCallback( 'debug', 'delete' ); // after delete
+    $this->registerCallback( 'debug', 'delete', true ); // before delete
+    $this->registerCallback( 'debug', 'update', true ); // before update
+    
+    // Unregister callbacks
+    $this->unregisterCallback( 'debug' ); // unregister "debug" from all actions
+    $this->unregisterCallback( 'debug', 'insert' ); // unregister "debug" only from action "insert"
+
+?>]]></programlisting>
+</example>

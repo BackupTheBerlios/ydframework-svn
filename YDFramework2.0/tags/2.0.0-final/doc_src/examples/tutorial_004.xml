@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: index.tpl (with the default action implemented)</title>
+    <programlisting>&lt;html&gt;
+
+&lt;head&gt;
+
+    &lt;title&gt;{$YD_FW_NAMEVERS}&lt;/title&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+
+    {if $YD_ACTION == 'default'}
+
+        &lt;h3&gt;Notes&lt;/h3&gt;
+
+        &lt;p&gt;&lt;a href="{$YD_SELF_SCRIPT}?do=AddNote"&gt;Add a new note&lt;/a&gt;&lt;/p&gt;
+
+        {if $entries}
+            {foreach from=$entries item=entry}
+                &lt;p&gt;
+                &lt;b&gt;{$entry.title}&lt;/b&gt;
+                &lt;a href="{$YD_SELF_SCRIPT}?do=DeleteNote&amp;id={$entry.id}"&gt;delete&lt;/a&gt;
+                &lt;br /&gt;
+                {$entry.body}
+                &lt;/p&gt;
+            {/foreach}
+        {else}
+            &lt;p&gt;No notes were found.&lt;/p&gt;
+        {/if}
+
+    {/if}
+
+&lt;/body&gt;
+
+&lt;/html&gt;</programlisting>
+</example>

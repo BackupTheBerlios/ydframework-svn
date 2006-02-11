@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: PostgreSQL database schema</title>
+    <programlisting><![CDATA[create table Notes (
+    NoteID serial not null,
+    NoteTitle character varying( 255 ),
+    NoteContents text
+);]]></programlisting>
+</example>

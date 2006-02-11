@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: loading relations</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Load relation phone
+    // This relation is saved for the next actions
+    $user->load( 'phone' );
+
+    // Set a criteria
+    $user->id = 123;
+
+    // Search for phones that match the criteria
+    // In this case, the relation we are searching is the phone relation.
+    $user->find( 'phone' );
+
+    // Here we are searching the group relation
+    // This relation is saved for the next actions
+    $user->find( 'group' );
+
+?>]]></programlisting>
+</example>

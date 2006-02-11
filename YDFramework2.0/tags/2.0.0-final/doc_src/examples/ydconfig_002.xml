@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Output: config.php</title>
+    <programlisting><![CDATA[get - MyConfigVar1
+'value cfg1'
+
+get - MyConfigVar2
+'value cfg2'
+
+get - MyConfigVar3
+'value cfg3'
+
+exists - MyConfigVar1
+true
+
+exists - MyConfigVar2
+true
+
+exists - MyConfigVar3
+true
+
+exists - xx
+false
+
+get - MyConfigVar1 - changed1
+'value cfg1'
+
+get - MyConfigVar2 - changed1
+'value cfg2'
+
+get - MyConfigVar3 - changed1
+'value cfg3'
+
+get - MyConfigVar1 - changed2
+'value cfg1 changed'
+
+get - MyConfigVar2 - changed2
+'value cfg2 changed'
+
+get - MyConfigVar3 - changed2
+'value cfg3 changed'
+
+YDConfig contents
+array (
+  'YD_DEBUG' => 0,
+  'MyConfigVar1' => 'value cfg1 changed',
+  'MyConfigVar2' => 'value cfg2 changed',
+  'MyConfigVar3' => 'value cfg3 changed',
+)]]></programlisting>
+</example>

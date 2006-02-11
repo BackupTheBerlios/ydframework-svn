@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the resulting SQL query</title>
+    <programlisting><![CDATA[SELECT DISTINCT `id`, `name` AS `user_name`, SUM( `value` ) AS `total` FROM `user`
+WHERE ( `id`= 144 OR ( `name` LIKE 'David%' AND `id` > 13 ) ) GROUP BY `id` DESC HAVING `total` > 100
+ORDER BY `name`, `total` DESC LIMIT 100 OFFSET 50]]></programlisting>
+</example>

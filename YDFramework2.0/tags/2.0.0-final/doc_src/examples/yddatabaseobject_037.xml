@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: resetting the data of our object</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->country = 'Spain'
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+    // Consider that the search have found 3 rows with users Pieter, David and Francisco
+
+    $user->resetResults(); // no more results
+    $user->resetCount();   // the last results count equals zero
+    $user->resetValues();  // delete all object variables
+
+?>]]></programlisting>
+</example>

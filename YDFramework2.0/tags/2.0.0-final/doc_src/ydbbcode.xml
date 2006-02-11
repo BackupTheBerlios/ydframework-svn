@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydbbcode">
+
+    <title>Addon: YDBBCode</title>
+
+    <para>The YDBBCode class implements a class that helps convert BB style tags to HTML. It's not really designed to be easy to extend, but it's more geared towards speed and efficiency. BBCode is a specific way of adding markup tags to text to indicate the formatting and is very popular in forums.</para>
+
+    <para>The following BBCode is understood by the YDBBCode class:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydbbcode_001.xml" />
+
+    <para>The codes above will be converted to the following HTML code:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydbbcode_002.xml" />
+
+    <para>Additionally, as you can see, newlines are converted to <![CDATA[<br />]]> tags. The class will also converted non ascii characters to HTML entities.</para>
+
+    <para>The following code sample illustrates the code behind the conversion shown above:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydbbcode_003.xml" />
+
+    <para>The YDBBCode class also contains a static function that highlights ordinary links such as email links and web links and converts them into clickable links. For this purpose, you can use the YDBBCode::convertLinks method. This function can be used statically.</para>
+
+    <para>If you want to add your own BBCode tags, you can use the addRule function to add them. The add rule function takes two arguments, one which is the regular expression defining the BBCode tags, the other one the replacement string. The following code sample shows you have the standard tags are defined:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydbbcode_004.xml" />
+
+</chapter>

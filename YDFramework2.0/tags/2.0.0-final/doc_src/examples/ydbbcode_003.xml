@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDBBCode class</title>
+    <programlisting><![CDATA[// The converter
+$conv = new YDBBCode();
+
+// Show the code converted to HTML
+echo( $conv->toHtml( $data ) );]]></programlisting>
+</example>

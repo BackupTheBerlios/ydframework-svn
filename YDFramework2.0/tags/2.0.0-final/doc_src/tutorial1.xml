@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="tutorial1">
+
+    <title>Enhancing the tutorial application to use a database backend</title>
+
+    <para>In this chapter, we will enhance the tutorial application to make it use a database backend instead of using the filesystem. We will also add the capability to edit items.</para>
+
+    <sect1 id="tutorial1_changes">
+
+        <title>What we are going to change</title>
+
+        <para>In this second part of the tutorial, we will make some substantial changes to our application.</para>
+
+        <para>First of all, we are going to replace the filesystem backend of serialized files with a database backend. This will give us a number of advantages over the filesystem based approach:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>The performance will be a lot better as a database is optimized for stuff like this, while a filesystem backend is not.</listitem>
+            <listitem>We can now easily add sorting.</listitem>
+            <listitem>We can now easily add an edit action to allow someone to edit the contents of a note.</listitem>
+        </itemizedlist>
+
+        <para>As you will see, the overall structure of the application will stay generally the same, but we will need to change the implementation of the different actions. In real life, people will not see that the software was changed as it will still run unmodified from their perspective.</para>
+
+        <para>Once that is done, we will add an option to edit the items in the notebook.</para>
+
+    </sect1>
+
+    <sect1 id="tutorial1_db_structure">
+
+        <title>The database structure</title>
+
+        <para>The first thing we need to is to create the database structure. Depending on the database backend you want to use, you will need to execute a different SQL script. The following SQL scripts define the database for MySQL, SQLite and PostgreSQL.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_db_001.xml" />
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_db_002.xml" />
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_db_003.xml" />
+
+        <para>Please refer to the documentation of your database for instructions on how to create this database.</para>
+
+    </sect1>
+
+    <sect1 id="tutorial1_move_to_db_backend">
+
+        <title>Step 1 - Moving to a database backend</title>
+
+        <para>There are a few things we have to consider before we dive into the code. Let's go over them.</para>
+
+        <para>The first thing is that we need to decide which database backend we are going to use. In this example, we will use the SQLite database backend. However, your installation might now have the SQLite library loaded, or you might prefer a different database engine.</para>
+
+        <para>The next thing we need to consider is how we will store the database connection information. For sake of easyness, we will define them as global variables in the script. It would however be a lot better if we would move them to a separate include file so that they can be shared over different scripts. For most websites, there will be different scripts that want to access the database, and in such cases, you want to prevent to hardcode the database connection information in the code.</para>
+
+        <para>For every database connection, you need to have similar information, however, not all database backends need all information. Here's an overview of the connection data for the different database backends:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_db_004.xml" />
+
+        <para>That information is then passed on the the <literal>YDDatabase::getInstance</literal> function to obtain a database connection. This is shown in the following code sample:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_db_005.xml" />
+
+        <para>We can then use the <literal>getRecords</literal> function from the database to get a list of records from the database. If you pass it a SELECT SQL statement, you will get an array back with the database records. By defaults, each record will be an associative array with the names of the fields as the keys, and the values of the fields as the array values. This array can be passed on to a template object and be visualized.</para>
+
+        <para>For adding a new note, we first validate the form, and then use the <literal>getValues</literal> function from the form object to get the values of the form. This is then inserted directly into the database using the <literal>executeInsert</literal> function.</para>
+
+        <para>After these changes, the code should look as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_001.xml" />
+
+        <para>The new template file now looks a follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_002.xml" />
+
+    </sect1>
+
+    <sect1 id="tutorial1_add_edit_action">
+
+        <title>Step 2 - Adding the edit action</title>
+
+        <para>To add an edit action, we need to add the following code</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_003.xml" />
+
+        <para>The new template file now looks a follows after adding the edit action:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/tutorial1_004.xml" />
+
+        <para>What is interesting as well is that we are sharing the same form object for both the edit and add action. These forms are practically identical and share common fields and rules. That's a good way to save typing and prevent errors if you try to use the same form object for both actions. The only difference is that for the edit action, we add a hidden field with the ID of the record, so that the database knows which record to update.</para>
+
+    </sect1>
+
+    <sect1 id="tutorial1_conclusion">
+
+        <title>Conclusion</title>
+
+        <para>As you could see, moving from a filesystem based backend to a database backend was quite trivial. After replacing the filesystem code with database code, we got the database access working.</para>
+
+        <para>Adding the edit action was quite easy as well. We needed to add a new action that took care of updating the information in the database, and we needed to make sure the form was visible in the template.</para>
+
+    </sect1>
+
+</chapter>

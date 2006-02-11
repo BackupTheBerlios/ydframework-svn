@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: triggering errors</title>
+    <programlisting><![CDATA[<?php
+
+    trigger_error( 'Fatal error', YD_ERROR );
+    trigger_error( 'A warning', YD_WARNING );
+    trigger_error( 'A notice', YD_NOTICE );
+
+?>]]></programlisting>
+</example>

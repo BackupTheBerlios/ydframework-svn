@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating thumbnails using the YDFSImage class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Get the file object for the current file
+    $img = new YDFSImage( dirname( __FILE__ ) . '/fsimage.jpg' );
+
+    // Create a thumbnail and save it to fsimage.thumb.jpg
+    $img->saveThumbnail( 150, 110, 'fsimage.thumb.jpg' );
+
+    //  Create a thumbnail and output it directly to the webbrowser
+    $img->outputThumbnail( 150, 110 );
+
+?>]]></programlisting>
+
+</example>

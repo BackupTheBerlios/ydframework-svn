@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting dates</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // The current datetime
+    $date = new YDDate();
+
+    // Timestamp
+    $date->set( 1531534 ); // integer input
+
+    // Unix epoch
+    $date->set( 0 );
+    
+    // Array
+    $arr = array( 'year' => 2005,
+                  'month' => 12,
+                  'day' => 23,
+                  'hours' => 21,
+                  'minutes' => 45,
+                  'seconds' => 0 );
+    $date->set( $arr );
+    
+    // Directly in the date variables
+    $date->year = 2005;
+    $date->month = 12;
+    $date->day = 31;
+    
+    // From another YDDate object
+    $date2 = new YDDate();
+    $date2->year = 2004;
+    $date->set( $date2 );
+    
+    // Using formatted strings
+    $date = new YDDate( '2004-05-23', 'ISO' );
+    $date->set( '2005-05-25', 'ISO' );
+
+?>]]></programlisting>
+</example>

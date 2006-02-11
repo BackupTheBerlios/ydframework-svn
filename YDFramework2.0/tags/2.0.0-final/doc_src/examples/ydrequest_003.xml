@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: index_no_ydrequest.php (not using the <literal>YDRequest</literal> class)</title>
+    <programlisting>&lt;?php
+    
+    // Initialize the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' ); 
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDBBCode.php' );
+    YDInclude( 'YDFileSystem.php' );
+
+    // The original data
+    $file = new YDFSFile( 'bbcode.txt' );
+    $data = $file->getContents();
+
+    // The converter
+    $conv = new YDBBCode();
+
+    // Show the converted data
+    echo( '&lt;pre&gt;' . htmlentities( $data ) . '&lt;/pre&gt;' );
+    echo( '&lt;pre&gt;' . htmlentities( $conv-&gt;toHtml( $data ) ) . '&lt;/pre&gt;' );
+    echo( '&lt;p&gt;' . $conv-&gt;toHtml( $data ) . '&lt;/p&gt;' );
+
+?&gt;</programlisting>
+</example>

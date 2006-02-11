@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<log>
+<logentry
+   revision="1406">
+<author>david_db</author>
+<date>2005-08-10T15:17:13.163617Z</date>
+<msg>Added a view link to the items on the Admin Home of the weblog.</msg>
+</logentry>
+<logentry
+   revision="1405">
+<author>david_db</author>
+<date>2005-08-10T15:07:50.708918Z</date>
+<msg>Fixed a few methods in YDDatabaseObject and YDDatabaseQuery that were using the deprecated sqlString method.</msg>
+</logentry>
+<logentry
+   revision="1404">
+<author>david_db</author>
+<date>2005-08-10T05:55:43.634662Z</date>
+<msg>Updated the YDDatabase section of the user guide about the escape and escapeSql methods.</msg>
+</logentry>
+<logentry
+   revision="1403">
+<author>david_db</author>
+<date>2005-08-10T05:47:20.941900Z</date>
+<msg>Fixed the weblog cache clean up and added the &amp;nbsp; to the e-mail column of the users listing.</msg>
+</logentry>
+<logentry
+   revision="1402">
+<author>david_db</author>
+<date>2005-08-10T05:44:26.865326Z</date>
+<msg>Added the escape and escapeSql to YDDatabase drivers and YDDatabaseQuery drivers. The string and sqlString methods are deprecated and they will display a warning to use the new methods instead. Updated the examples and the YDWeblogAPI.</msg>
+</logentry>
+<logentry
+   revision="1401">
+<author>ximian</author>
+<date>2005-08-09T21:56:02.404353Z</date>
+<msg>added YDAjax examples to index examples file and fixed some comments in YDAjax examples</msg>
+</logentry>
+<logentry
+   revision="1400">
+<author>ximian</author>
+<date>2005-08-09T21:27:49.472845Z</date>
+<msg>3 new examples added to YDAjax:
+- two_buttons
+- cars
+- date_calculator</msg>
+</logentry>
+<logentry
+   revision="1399">
+<author>ximian</author>
+<date>2005-08-09T21:17:07.677771Z</date>
+<msg>js Date object in getValueDateTimeSelect and getValueDateSelect need months between 0 and 11</msg>
+</logentry>
+<logentry
+   revision="1398">
+<author>ximian</author>
+<date>2005-08-09T21:14:55.806024Z</date>
+<msg>YDAjaxResponse select form elements support</msg>
+</logentry>
+<logentry
+   revision="1397">
+<author>ximian</author>
+<date>2005-08-09T21:11:12.949186Z</date>
+<msg>fixed assignSpan slashes and assignFunction </msg>
+</logentry>
+<logentry
+   revision="1396">
+<author>ximian</author>
+<date>2005-08-09T21:08:57.953884Z</date>
+<msg>fixed ajax event assign for more than one element</msg>
+</logentry>
+<logentry
+   revision="1395">
+<author>david_db</author>
+<date>2005-08-09T20:33:23.925398Z</date>
+<msg>Added YDFormElement_Date to handle all combinations of date/time/datetime selects.
+
+More info: http://ydframework.berlios.de/forum/viewtopic.php?t=239</msg>
+</logentry>
+<logentry
+   revision="1394">
+<author>david_db</author>
+<date>2005-08-09T17:34:38.299320Z</date>
+<msg>- Fixed YDDateUtil: getDifference and getYearsToToday.
+- Moved back getQuarter from YDDateUtil to YDDate and returned the quarter info to the YDDate properties.
+- Updated YDDateUtil: addSecond, addMinute, addHour, addDay and addMonth - the value passed must be integer.
+- Modified YDDateUtil: getDaysInMonth and getDaysInYear - the default parameters are null so we can have year 0.</msg>
+</logentry>
+<logentry
+   revision="1393">
+<author>david_db</author>
+<date>2005-08-09T16:45:06.347089Z</date>
+<msg>Lowercased POST and GET in YDForm to be XHTML compliant.</msg>
+</logentry>
+<logentry
+   revision="1392">
+<author>ximian</author>
+<date>2005-08-08T21:34:06.013299Z</date>
+<msg>added first ajax examples using YDAjax</msg>
+</logentry>
+<logentry
+   revision="1391">
+<author>ximian</author>
+<date>2005-08-08T20:55:38.353900Z</date>
+<msg>fixed xajax file</msg>
+</logentry>
+<logentry
+   revision="1390">
+<author>david_db</author>
+<date>2005-08-07T20:26:18.553745Z</date>
+<msg>Update in YDDatabaseObject: getResults and getResultsAsAssocArray don't execute any field callback anymore. These methods return the results as fetched from the query. If you want to execute the fields callbacks for each result, you must use a combination of fetch and getValues. This modification was a big improvement to performance.</msg>
+</logentry>
+<logentry
+   revision="1389">
+<author>david_db</author>
+<date>2005-08-07T19:58:57.074874Z</date>
+<msg>Fixed YDTimer::addMarker and YDTimer::getReport to handle markers with the same name.</msg>
+</logentry>
+<logentry
+   revision="1388">
+<author>david_db</author>
+<date>2005-08-07T16:12:43.668795Z</date>
+<msg>Replaced direct calls to form elements $_value in YDForm with getValue().</msg>
+</logentry>
+<logentry
+   revision="1387">
+<author>david_db</author>
+<date>2005-08-06T23:17:52.823111Z</date>
+<msg>Updated Smarty to version 2.6.10.</msg>
+</logentry>
+<logentry
+   revision="1386">
+<author>ximian</author>
+<date>2005-08-05T21:32:55.824846Z</date>
+<msg>new method YDAjax::getValueSelect to retrieve a value from a select form element</msg>
+</logentry>
+<logentry
+   revision="1385">
+<author>ximian</author>
+<date>2005-08-05T21:29:00.371219Z</date>
+<msg>new method YDAjaxResponse::assignFunction to assign a custom js function</msg>
+</logentry>
+<logentry
+   revision="1384">
+<author>ximian</author>
+<date>2005-08-05T21:25:49.254763Z</date>
+<msg>fixed needed include</msg>
+</logentry>
+<logentry
+   revision="1383">
+<author>ximian</author>
+<date>2005-08-04T21:32:16.969164Z</date>
+<msg>new method YDAjaxResponse::assignId to assign a server result to a element by its id</msg>
+</logentry>
+<logentry
+   revision="1382">
+<author>ximian</author>
+<date>2005-08-04T21:27:37.058244Z</date>
+<msg>By default, YDAjax should use YDUrl to create its url</msg>
+</logentry>
+</log>

@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="other">
+
+    <title>Other classes and modules</title>
+
+    <para>In this chapter, we will discuss some of the smaller classes and modules. There are a whole bunch of small extra things in the Yellow Duck Framework that take care of some very specific functions. Most of these classes are not rocket science, but they make that you don't have to reinvent the wheel every time you need them.</para>
+
+    <note>All the classes ending with "Util" are stored in the YDUtil include file.</note>
+
+    <sect1 id="other_ydarrayutil">
+
+        <title>YDArrayUtil</title>
+
+        <para>The YDArrayUtil module houses all the different function related to handling of arrays. Currently, there is only one function in this module which converts a single-dimension array to a two-dimension array (table). Let's take a look at an example.</para>
+
+        <para>The original array looked as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_001.xml" />
+
+        <para>Let's say we want to convert it to a table with 3 columns, we can do the following:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_002.xml" />
+
+        <para>The new array will look as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_003.xml" />
+
+        <para>There is a switch for the convertToTable that can fill the last row with null values so that it matches the correct number of columns.</para>
+
+        <para>This function was primarly made for use in things such as image galleries that need to display their contents in columns. It can of course be used for a lot more than just image galleries.</para>
+
+        <para>The second function, convertToNested, converts the given array to a nested array using the values from the specified column name. Let's have a look at the following sample array:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_004.xml" />
+
+        <para>The array shown above has for each subarray a value named group. Let's say we want to use the value of the group column to create the nested array, we can use the following function call:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_005.xml" />
+
+        <para>This will give us the following result:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_006.xml" />
+
+        <note>The original column will not be stripped from the element. You can still reference it just like before.</note>
+
+        <para>Another function of YDArrayUtil is map which rearranges arrays in a custom way – according to a given map. Imagine having an array that could result from a YDDatabaseObject query, for instance the one you know already:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_007.xml" />
+
+        <para>Sometimes it would be useful to simplify or rearrange that structure according to your needs. The function map allows you to restructure such an array, for example the following way:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_008.xml" />
+
+        <para>Or:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_009.xml" />
+
+        <para>The map function takes three arguments: the original array, the key to group by and a map that defines the structure of the result. This map variable can be an array or a string, depending on how complex or simple the resulting array needs to be. In any case, the resulting array will only consist of what is defined by the map variable. So in the case of the first example, the function call would look like this:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_010.xml" />
+
+        <para>Note that the map variable is an array, whereas to get the result of the second example you need to call the function with a simple string as map variable:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_011.xml" />
+
+    </sect1>
+
+    <sect1 id="other_ydbrowserinfo">
+
+        <title>YDBrowserInfo</title>
+
+        <para>The YDBrowserInfo object returns information about the browser that performed the request. The YDBrowserInfo will check the headers and extract information such as the version of the browser, the name of the browser and the platform on which the browser is running.</para>
+
+        <para>The following code sample demonstrates how to use this class:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_012.xml" />
+
+        <para>If you execute this script, the following data will be outputted:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_013.xml" />
+
+        <para>The browser property will contain one of the following values: ie, safari, opera, firefox, mozilla or other.</para>
+
+        <para>The platform property will contain one of the following values: win, mac, linux, unix or other.</para>
+
+        <para>The agent property will contain the full HTTP user agent string as provided by the browser.</para>
+
+        <para>The version property will contain the actual version number of the browser.</para>
+
+        <para>If the browser has one or more versions of the <ulink url="http://www.microsoft.com/net/">Microsoft .NET Framework</ulink> installed, the dotnet property of the YDBrowserInfo object will contain an array with all the versions that are installed.</para>
+
+        <para>The getBrowserLanguages function looks at the HTTP_ACCEPT_LANGUAGE header and returns an ordered list of all the different content languages the browser understand. The first element in this array should always be the preferred one.</para>
+
+        <para>The getLanguage function helps you to choose a language from a list of supported languages based on the supported languages from the browser. The getLanguage function will check the HTTP_ACCEPT_LANGUAGE header to find out which languages the browser supports. It will then check that against a list of languages that we gave as teh parameter to this function and will return the name of the most appropriate langauage. This function will also take into consideration the right priority of the languages specified by the browser. If no list of supported languages was specified, the framework will assume that only English is supported.</para>
+
+        <para>This class is very handy to display specific contents based on the browser of the user. You might e.g. specify a different stylesheet for Macintosh users compared to the stylesheet used for Windows users.</para>
+
+    </sect1>
+
+    <sect1 id="other_ydobjectutil">
+
+        <title>YDObjectUtil</title>
+
+        <para>The YDObjectUtil module provides you with some class and object related static functions. The following functions are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">isSubClass:</emphasis> This function will check if the specified object is subclassed from the specified class name or is an instance of the specified class.</listitem>
+            <listitem><emphasis role="bold">getAncestors:</emphasis> This function will list you the parent classes of a specific class.</listitem>
+            <listitem><emphasis role="bold">failOnMissingMethod:</emphasis> This function will raise a fatal exception if the specified object doens't contain the specified function.</listitem>
+            <listitem><emphasis role="bold">serialize:</emphasis> This function returns a stream containing a byte-stream representation of an object that can be stored anywhere.</listitem>
+            <listitem><emphasis role="bold">unserialize:</emphasis> This function takes a single serialized variable (the output from the YDObjectUtil::serialize() function) and converts it back into a PHP value.</listitem>
+        </itemizedlist>
+
+        <note>All these functions have to be called statically and thus do not require an instance of the YDObjectUtil class.</note>
+
+    </sect1>
+
+    <sect1 id="other_ydstringutil">
+
+        <title>YDStringUtil</title>
+
+        <para>The YDStringUtil houses different functions related to string processing. The following methods are available:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">formatFilesize:</emphasis> This function will format a filesize to the most appropriate unit. The following units are recognized:
+                <itemizedlist spacing="compact">
+                    <listitem>bytes</listitem>
+                    <listitem>KB (kilobyte)</listitem>
+                    <listitem>MB (megabyte)</listitem>
+                    <listitem>GB (gigabyte)</listitem>
+                    <listitem>TB (terabyte)</listitem>
+                    <listitem>PB (petabyte)</listitem>
+                    <listitem>EB (exabyte)</listitem>
+                </itemizedlist>
+            </listitem>
+            <listitem><emphasis role="bold">formatDate:</emphasis> This function will format a timestamp or a date/time form element to a textual string using the strftime function.</listitem>
+            <listitem><emphasis role="bold">encodeString:</emphasis> This function will encode all characters which have an ordinal bigger than 128 to numeric HTML entities, which can be safely included in e.g. XML output.</listitem>
+            <listitem><emphasis role="bold">truncate:</emphasis> This function will truncate a string. It allows you to specify the maximum number of charaters, the text to add if the item needs to be truncated and an indicating if splitting in the middle of a word is allowed or not.</listitem>
+            <listitem><emphasis role="bold">normalizeNewlines:</emphasis> This function normalizes all the newlines to the correct newline character for the current platform.</listitem>
+            <listitem><emphasis role="bold">removeWhiteSpace:</emphasis> This function will remove all newlines and all spaces at the beginning and end of each line.</listitem>
+        </itemizedlist>
+
+        <para>The following code example indicates how the different functions can be used:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_014.xml" />
+
+        <para>This script will output the following:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/other_015.xml" />
+
+    </sect1>
+
+</chapter>

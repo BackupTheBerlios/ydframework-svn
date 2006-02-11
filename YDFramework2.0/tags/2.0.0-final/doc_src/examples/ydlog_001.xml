@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: sample text logfile</title>
+    <programlisting><![CDATA[2004-12-09 20:49:12 | DEBUG | a debug message
+2004-12-09 20:49:12 | INFO | an informational message
+2004-12-09 20:49:12 | WARNING | a warning message
+2004-12-09 20:49:12 | ERROR | an error message]]></programlisting>
+
+</example>

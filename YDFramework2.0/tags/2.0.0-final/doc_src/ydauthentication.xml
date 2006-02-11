@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydauthentication">
+
+    <title>Handling authentication</title>
+
+    <para>The Yellow Duck Framework has integrated support for various ways of handling authentication. In this chapter, we will go over three common scenarios that indicate the way the authentication works. For some background information on how this fits in the request processing, please take a look at the chapter "How requests are processed".</para>
+
+    <sect1 id="ydauthentication_general">
+
+        <title>General idea behind authentication handling</title>
+
+        <para>In every request class, you can enable authentication. If you enable authentication for a request class, the framework will execute certain functions to check if the authentication before the request is processed.</para>
+
+        <para>You can enable authentication in a request class by using the following code:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydauthentication_001.xml" />
+
+        <para>It will then use the function "isAuthenticated" from the request class to find out if the user is already authenticated. If not, the function "authenticationFailed" is executed which can e.g. redirect to the login. page which takes care of the rest. After executing the "authenticationFailed" function, the execution of the script is stopped.</para>
+
+        <para>If the "isAuthenticated" function returns true, the class function "authenticationSucceeded" is executed, after which the execution of the request continues. This function can for example set a session variable indicating that we are logged in or can add an entry to the database.</para>
+
+    </sect1>
+
+   <sect1 id="ydauthentication_example_01">
+
+        <title>Example 1 - Form based authentication</title>
+
+        <para>In this example, we use a form to allow the user to enter a username and password.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydauthentication_002.xml" />
+
+        <para>The way this class works is as follows. The isAuthenticated function will check if the user is currently logged in or not by checking a session variable and returns true or false indicating this. If the authentication failed, the authenticationFailed function will execute the login action by executing actionLogin.</para>
+
+        <para>The actionLogin function will be skipped if the user is already logged in. If not, a login form is shown with fields for entering the username and password.</para>
+
+        <para>Once this form gets submitted, it will check the username and password and setup the session variables. After that, the default action gets executed.</para>
+
+    </sect1>
+
+    <sect1 id="ydauthentication_example_02">
+
+        <title>Example 2 - Basic HTTP authentication</title>
+
+        <para>The following example demonstrates how you can implement a class that has support for basic HTTP authentication:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydauthentication_003.xml" />
+
+        <para>The isAuthenticated function will check the headers send by the server to see if there was a user name specified. PHP by default puts the username in the $_SERVER['PHP_AUTH_USER'] variable. In the example above, we have hardcoded the username and password, but this could e.g. be replaced by a database query. If the username and password match, true is returned indicating that the user is succesfully authenticated, otherwise false is returned.</para>
+
+        <para>When authentication fails, the authenticationFailed will return the headers that force a popup windows to appear which asks for a username and password. The realm is the name that will be shown in the dialog box.</para>
+
+        <para>For each request that needs HTTP authentication, you would subclass from this class instead of from the standard YDRequest class.</para>
+
+    </sect1>
+
+    <sect1 id="ydauthentication_example_03">
+
+        <title>Example 3 - IP based authentication</title>
+
+        <para>This third example checks the IP number of the client and only allows access if you are surfing from localhost.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydauthentication_004.xml" />
+
+        <para>As you can see here, the isAuthenticated function will check the $_SERVER['REMOTE_ADDR'] variable for the IP address of the client, and returns true if it is 127.0.0.1, otherwise, it will return false.</para>
+
+        <para>If the authentication fails, the authenticationFailed function is executed which will just output a message indicating that localhost access only is allowed.</para>
+
+        <para>This example could be enhanced by having the isAuthenticated function check against a database table or DNS server.</para>
+
+        <para>For each request that is allowed from localhost only, you would subclass from this class instead of from the standard YDRequest class.</para>
+
+    </sect1>
+
+</chapter>

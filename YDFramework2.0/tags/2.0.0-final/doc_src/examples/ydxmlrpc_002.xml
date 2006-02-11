@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: XML data for an XML/RPC response</title>
+    <programlisting><![CDATA[<?xml version="1.0"?>
+<methodResponse>
+    <params>
+        <param>
+            <value>
+                <struct>
+                    <member>
+                        <name>tideDate</name>
+                        <value><string>2004-05-11</string></value>
+                    </member>
+                    <member>
+                        <name>tideDay</name>
+                        <value><string>di</string></value>
+                    </member>
+                    <member>
+                        <name>tideLow1</name>
+                        <value><string>01:07:00</string></value>
+                    </member>
+                    <member>
+                        <name>tideLow2</name>
+                        <value><string>13:39:00</string></value>
+                    </member>
+                </struct>
+            </value>
+        </param>
+    </params>
+</methodResponse>]]></programlisting>
+</example>

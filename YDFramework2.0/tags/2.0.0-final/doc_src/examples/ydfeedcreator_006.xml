@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: adding items to the feed</title>
+    <programlisting><![CDATA[<?php
+
+    $fc->addItem(
+        'Title 1 & Co.',
+        'http://localhost/ydf/#1',
+        'Description 1 & Co.'
+    );
+    $fc->addItem(
+        'Title 2 & Co.',
+        'http://localhost/ydf/#2',
+        'Description <b>2</b> & Co.'
+    );
+
+?>]]></programlisting>
+</example>

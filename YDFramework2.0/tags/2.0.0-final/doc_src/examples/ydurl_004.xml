@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDUrl::getPathSubsegments function</title>
+    <programlisting><![CDATA[$url = new YDUrl( 'http://www.yellowduck.be/ydf/forum/cool.html' );
+
+// returns: ['forum', 'cool.html']
+$r = $url->getPathSubsegments('ydf2');
+
+// returns: ['cool.html']
+$r = $url->getPathSubsegments('forum');
+
+// returns: []
+$r = $url->getPathSubsegments('test');
+
+// it gets the sub-directories of the first ocurrence:
+$url = new YDUrl( 'http://www.yellowduck.be/ydf/forum/ydf/forum/cool.html' );
+
+// returns: ['forum', 'ydf2', 'forum', 'cool.html']
+$r = $url->getPathSubsegments('ydf2');
+
+// returns: ['ydf2', 'forum', 'cool.html']
+$r = $url->getPathSubsegments('forum');
+
+// returns: []
+$r = $url->getPathSubsegments('test');]]></programlisting>
+</example>

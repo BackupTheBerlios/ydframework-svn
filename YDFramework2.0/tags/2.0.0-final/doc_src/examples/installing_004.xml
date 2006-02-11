@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<programlisting># Denying direct access to the templates
+&lt;FilesMatch "(.tpl|config.php)$"&gt;
+    Order allow,deny
+    Deny from all
+&lt;/FilesMatch&gt;
+
+# Disable directory browsing
+Options -Indexes</programlisting>

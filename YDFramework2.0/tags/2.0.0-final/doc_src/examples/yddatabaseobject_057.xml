@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the syntax of the registerRelation function</title>
+    <programlisting><![CDATA[<?php
+
+    function & registerRelation( $name, $manytomany=false, $foreign_class='', $cross_class='' ) {
+
+?>]]></programlisting>
+</example>

@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: setting the right class name</title>
+    <programlisting><![CDATA[// file: user.php
+
+<?php
+
+    class YDDBOBJ_user extends YDDatabaseObject {
+
+        function YDDBOBJ_user() {
+
+            // Init the parent
+            $this->YDDatabaseObject();
+
+            // ...
+
+        }
+
+    }
+
+?>]]></programlisting>
+</example>

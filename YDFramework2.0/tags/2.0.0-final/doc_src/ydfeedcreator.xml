@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydfeedcreator">
+
+    <title>Addon: YDFeedCreator, creating RSS and ATOM feeds</title>
+
+    <para>RSS and ATOM are XML-based file formats intended to allow lists of information, known as "feeds", to be synchronised between publishers and consumers. Feeds are composed of a number of items, known as "entries", each with an extensible set of attached metadata. For example, each entry has a title.</para>
+
+    <sect1 id="ydfeedcreator_what_is">
+
+        <title>What is RSS and ATOM?</title>
+
+        <para>The primary use case that Atom and RSS address is for syndicating Web content such as Weblogs and news headlines to other Web sites and directly to consumers. However, nothing precludes it from being used for other purposes and types of content.</para>
+
+        <para>RSS is the oldest of the two, and has undergone different revisisions. Currently, there are 3 major versions of RSS, which is version 0.91, version 1.0 and version 2.0. RSS 1.0 is also referenced as RDF Site Summary. Let's have a look at the XML contents for each one of them:</para>
+
+        <para>This is an example of an RSS 0.91 XML file:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_001.xml" />
+
+        <para>This code sample shows you the source of a RSS 1.0 XML file:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_002.xml" />
+
+        <para>The code for an RSS 2.0 feed looks as follows:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_003.xml" />
+
+        <para>Atom looks similar, but has again some very subtle differences:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_004.xml" />
+
+        <para>As you can see with the different examples, the idea is always the same. First, you have the properties of the feed itself, which contains a title, a link, the actual URL of the XML file and so. Then you have one or more entries which again have their own set of properties.</para>
+
+        <para>The YDFeedCreator class in the Yellow Duck Framework provides you with an object oriented way of generating these XML files. Note: The YDFeedCreator class will try to make all the data you put in the feed XML compliant, but sometimes, this is not possible. You might end up with feed that are not 100% valid in that sense.</para>
+
+        <note>Atom feeds have the most strict specification and expects you to make all the HTML contents you put in e.g. the item descriptions valid XML.</note>
+
+    </sect1>
+
+    <sect1 id="ydfeedcreator_setup">
+
+        <title>Setting up the feed</title>
+
+        <para>When we want to make a new feed, we first have to setup the feed itself. The following code sample illustrates this:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_005.xml" />
+
+        <para>In the above code sample, we first created a new instance of the YDFeedCreator class. Please note that we didn't specify the format of the feed yet, as we will do this only when the actual feed get's created.</para>
+
+        <para>The second and third line define the title and the description of the feed. The description of the feed is the only one that supports embedded HTML. If you specified HTML in the title of the feed, this will be removed automatically. The description is an optional item for the feed and can be omitted.</para>
+
+        <para>The last line defines the source of the feed. This is normally a a link to the website where the XML data came from. This is not the same as the actual URL of the XML data.</para>
+
+    </sect1>
+
+    <sect1 id="ydfeedcreator_adding_items">
+
+        <title>Adding items</title>
+
+        <para>Now that the feed is setup correctly, we can start adding items to it. When you add an item, we can use the following code to do this:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydfeedcreator_006.xml" />
+
+        <para>By using the addItem function of the YDFeedCreator object, we can add new items to the feed. Each item requires a number of parameters.</para>
+
+        <para>For each feed item, a title and a link are required. The link is the actual URL pointing to the entry itself on the original website. Additionally, you can add a description as well which can contain HTML data, although, it's not required.</para>
+
+        <para>As the last argument, you can specify a GUID (Global Unique Identifier) for your item. This is the identifier that uniquely identifies this item. If you omit this, the Yellow Duck Framework will create one automatically for you.</para>
+
+        <para>The automatic GUID is created by making the checksum of the link of the original website, the link of the item and the title of the item. If you don't want to use the automatic GUID creation, you can create your own.</para>
+
+    </sect1>
+
+    <sect1 id="ydfeedcreator_outputting">
+
+        <title>Outputting the feed</title>
+
+        <para>After setting up the feed, and adding the items, we can create the XML version of the feed. This is done by using either the toXml or outputXml class functions.</para>
+
+        <para>The toXml will convert the feed to XML and will return as string representation of the feed. The outputXml function will also convert the feed to XML, but will output it directly to the browser using the correct HTTP headers to indicate that the contents being send is XML and not HTML.</para>
+
+        <para>Both functions take one argument which defines which kind of XML needs to be outputted. If no format is specified, it will assume that you want to output RSS 2.0. The following formats are supported:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>RSS0.91</listitem>
+            <listitem>RSS1.0</listitem>
+            <listitem>RSS2.0</listitem>
+            <listitem>RSS2.0</listitem>
+        </itemizedlist>
+
+        <para>There is also a little helper function called getColoredXml which will return a HTML version of the XML version of the feed with colored XML tags. This is mainly used for debugging purposes. This function takes the same arguments as the toXml and outputXml functions.</para>
+
+        <note>When you use the outputXml function, conditional HTTP is supported. By using etags, the YDFeedCreator class makes sure it doesn't send unneccesary data over when it shouldn't. The getXml function does not have this ability.</note>
+
+    </sect1>
+
+</chapter>

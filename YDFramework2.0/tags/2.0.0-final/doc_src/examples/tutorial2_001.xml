@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The comments table</title>
+    <programlisting><![CDATA[CREATE TABLE comments (
+  id int(11) NOT NULL auto_increment,
+  item_id int(11) NOT NULL default '1',
+  username varchar(255) NOT NULL default '',
+  useremail varchar(255) NOT NULL default '',
+  userwebsite varchar(255) default NULL,
+  userip varchar(20) default NULL,
+  comment longtext NOT NULL,
+  created int(11) default NULL,
+  modified int(11) default NULL,
+  PRIMARY KEY  (id),
+  KEY item_id (item_id)
+) TYPE=MyISAM;]]></programlisting>
+</example>

@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDUrl class</title>
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    YDInclude( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    require_once( 'YDUrl.php' );
+    require_once( 'YDRequest.php' );
+
+    // Class definition
+    class url extends YDRequest {
+
+        // Class constructor
+        function url() {
+            $this->YDRequest();
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // Create the URL object
+            $url = new YDUrl( 'http://usr:pass@host.be:81/dir/test/?do=x&id=1#10' );
+
+            // The different parts
+            echo( '<br>URL: ' . $url->getUrl() );
+            echo( '<br>Scheme: ' . $url->getScheme() );
+            echo( '<br>Host: ' . $url->getHost() );
+            echo( '<br>Port: ' . $url->getPort() );
+            echo( '<br>User: ' . $url->getUser() );
+            echo( '<br>Password: ' . $url->getPassword() );
+            echo( '<br>Path: ' . $url->getPath() );
+            echo( '<br>Path segments: ' . implode( ', ', $url->getPathSegments() ) );
+            echo( '<br>Path dirs: ' . implode( ', ', $url->getPathDirectories() ) );
+            echo( '<br>Query: ' . $url->getQuery() );
+            echo( '<br>Fragment: ' . $url->getFragment() );
+            echo( '<br>Getting query variable ' . $url->getQueryVar( 'do' ) );
+            echo( '<br>Setting query variable: ' . $url->setQueryVar( 'do', 'y' ) );
+            echo( '<br>New URL: ' . $url->getUrl() );
+            echo( '<br>Deleting query variable: ' . $url->deleteQueryVar( 'do' ) );
+            echo( '<br>New URL: ' . $url->getUrl() );
+
+            // Get the contents
+            YDDebugUtil::dump( $url->getContents(), 'URL contents' );
+
+        }
+
+        // Function to get the header for a URL
+        function actionHeaders() {
+
+            // Create the URL object
+            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+
+            // Dump the headers
+            YDDebugUtil::dump( $url->getHeaders() );
+
+        }
+
+        // Function to get the status for a URL
+        function actionStatus() {
+
+            // Create the URL object
+            $url = new YDUrl( 'http://www.yellowduck.be/index.xml' );
+
+            // Dump the headers
+            YDDebugUtil::dump( $url->getStatus() );
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+</example>

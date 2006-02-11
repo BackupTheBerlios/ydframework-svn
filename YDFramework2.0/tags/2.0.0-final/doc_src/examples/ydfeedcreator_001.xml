@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: an RSS 0.91 XML file</title>
+    <programlisting><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="0.91">
+    <channel>
+        <title>Yellow Duck Framework</title>
+        <description>News about the YDF</description>
+        <link>http://localhost/ydf/?do=rss091</link>
+        <item>
+            <title>Title 1</title>
+            <link>http://localhost/ydf/?do=rss091#1</link>
+            <description>Description 1</description>
+            <guid>3a31c01d5c9023115e2433cdb1b6515e</guid>
+        </item>
+        <item>
+            <title>Title 2</title>
+            <link>http://localhost/ydf/?do=rss091#2</link>
+            <description>Description 2</description>
+            <guid>be3e15a372932faea5b235d1965c36bf</guid>
+        </item>
+    </channel>
+</rss>]]></programlisting>
+</example>

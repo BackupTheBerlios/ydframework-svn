@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: encrypting and decrypting data</title>
+    <programlisting><![CDATA[<?php
+
+    // Standard include
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDEncryption.php' );
+
+    // Class definition
+    class encryption extends YDRequest {
+
+        // Class constructor
+        function encryption() {
+
+            // Initialize the parent
+            $this->YDRequest();
+
+        }
+
+        // Default action
+        function actionDefault() {
+
+            // The password to use for the encryption
+            $password = 'my_Password';
+
+            // Encrypt a string
+            $encrypted = YDEncryption::encrypt( $password, 'Pieter Claerhout' );
+
+            // Show the encrypted string
+            YDDebugUtil::dump( $encrypted, 'Encrypted string' );
+
+            // Decrypt the encrypted string
+            $decrypted = YDEncryption::decrypt( $password, $encrypted );
+
+            // Display the decrypted string
+            YDDebugUtil::dump( $decrypted, 'Decrypted string' );
+
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?>]]></programlisting>
+</example>

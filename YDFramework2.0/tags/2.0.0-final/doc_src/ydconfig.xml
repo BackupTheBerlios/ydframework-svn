@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydconfig">
+
+    <title>YDConfig: the global configuration</title>
+
+    <para>The <literal>YDConfig</literal> class is a way to configure things in the Yellow Duck Framework. You can compare it with setting a global variable, but it's much more versatile as it's doing some more checking.</para>
+
+    <para>The <literal>YDConfig</literal> class has different methods, which are all implemented as static methods. This means that you don't have to make a instance of the <literal>YDConfig</literal> class to use it. The following methods are available:</para>
+
+    <itemizedlist spacing="compact">
+        <listitem><emphasis role="bold"><literal>YDConfig::get()</literal>:</emphasis> gets the value for the specified configuration variable.</listitem>
+        <listitem><emphasis role="bold"><literal>YDConfig::set()</literal>:</emphasis> sets the value for the specified configuration variable, optionally overriding any value that was set already.</listitem>
+        <listitem><emphasis role="bold"><literal>YDConfig::exists()</literal>:</emphasis> checks if the specified configuration variable is set or not.</listitem>
+        <listitem><emphasis role="bold"><literal>YDConfig::dump()</literal>:</emphasis> this functions uses the <literal>YDDebugUtil::dump</literal> function to dump the contents of the <literal>YDConfig</literal> object.</listitem>
+    </itemizedlist>
+    
+    <para>The following example shows you how you can use the <literal>YDConfig</literal> object:</para>
+    
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydconfig_001.xml" />
+
+    <para>The output from this example should be the following:</para>
+
+    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydconfig_002.xml" />
+
+    <note>A lot of the classes in the Yellow Duck Framework use the <literal>YDConfig</literal> object to be configured. Examples of classes that use the <literal>YDConfig</literal> object to get their configuration from are the <link linkend="ydlog"><literal>YDLog</literal></link>, <link linkend="ydurl_raw_http"><literal>YDHttpClient</literal></link>, <link linkend="ydurl_ydurl_class"><literal>YDUrl</literal></link> and <link linkend="yddatabase_paged"><literal>YDRecordSet</literal></link> classes.</note> 
+
+</chapter>

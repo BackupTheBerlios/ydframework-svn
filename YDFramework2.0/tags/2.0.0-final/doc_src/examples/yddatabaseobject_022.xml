@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: instantiating YDDatabaseObject classes</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Set the path to the classes
+    YDConfig::set( 'YD_DBOBJECT_PATH', '/path/to/classes' );
+
+    // Set a prefix
+    YDConfig::set( 'YD_DBOBJECT_PREFIX', 'YDDBOBJ_' );
+
+    // Create a new user object using getInstance
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+?>]]></programlisting>
+</example>

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: output from the YDMysqlDump module</title>
+    <programlisting><![CDATA[DROP TABLE IF EXISTS `person`;
+
+CREATE TABLE `person` (
+  `id` int(11) NOT NULL auto_increment,
+  `firstname` varchar(128) NOT NULL default '',
+  `lastname` varchar(128) NOT NULL default '',
+  `email` varchar(128) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM;
+
+INSERT INTO `person` VALUES (1,'pieter','claerhout','pieter@yellowduck.be');
+
+INSERT INTO `person` VALUES (2,'fiona','debergh','fiona@yellowduck.be');]]></programlisting>
+</example>
