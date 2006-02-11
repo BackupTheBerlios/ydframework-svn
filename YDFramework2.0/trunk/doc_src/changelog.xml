@@ -5,6 +5,70 @@
 
     <para>This is the overview of the different releases.</para>
 
+    <sect1 id="changelog_ydf_v2_0_final">
+
+        <title>Yellow Duck Framework 2.0 Final</title>
+
+        <para>Released on: 11 february 2006</para>
+        <para>Build number: 1661</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Complete code review with loads of bugfixes.</listitem>
+            <listitem>Cleaned up the user interface of the weblog application and added extra features such as cross linking.</listitem>
+            <listitem>Added the isModified method to YDForm.</listitem>
+            <listitem>Added the YDDatabaseTree class.</listitem>
+            <listitem>Added the YDFormElement_Img class.</listitem>
+            <listitem>Added the isElement method to YDForm.</listitem>
+            <listitem>The YD_FW_REVISION constant is now available in the templates.</listitem>
+            <listitem>Added YDFormElement::isForm that returns the form name of the element.</listitem>
+            <listitem>YDMysqlDump version 1.1. Support for comments and custom export.</listitem>
+            <listitem>Added optional caching to the public pages of the weblog.</listitem>
+            <listitem>Added the YD_WEBLOG_CACHE_PREFIX and YD_WEBLOG_CACHE_SUFFIX constants.</listitem>
+            <listitem>Updated Smarty to version 2.6.12.</listitem>
+            <listitem>Added YDFormElement_Date to handle all combinations of date/time/datetime selects.</listitem>
+            <listitem>Added the escape and escapeSql to YDDatabase drivers and YDDatabaseQuery drivers. The string and sqlString methods are deprecated and they will display a warning to use the new methods instead. Updated the examples and the YDWeblogAPI.</listitem>
+            <listitem>Added YDXml as a wrapper of the phpdomxml package with a few additions, like toArray and loadArray.</listitem>
+            <listitem>The YDFSImage::saveThumbnail function now returns the YDFSImage object for the thumbnail.</listitem>
+            <listitem>Added the toArray function to YDBase.</listitem>
+            <listitem>The ID attribute for form elements is now set by default to the name of the form, followed by an underscore and then followed by the name of the form element (the same as the value of the form elements name attribute in HTML).</listitem>
+            <listitem>Fixed YDRequest::redirect when under IIS.</listitem>
+            <listitem>Added YD_CRLFs to the html form renderer.</listitem>
+            <listitem>Added setTotal and showTotal to YDGraphPie addon.</listitem>
+            <listitem>Added validation rules maxlength_escape, minlength_escape and rangelength_escape.</listitem>
+            <listitem>Added XML form renderer/importer.</listitem>
+            <listitem>Added YDArrayUtil::implode.</listitem>
+            <listitem>Added YDInstaller addon.</listitem>
+            <listitem>Added a patch to HttpClient when 302 redirecting to foreign domains.</listitem>
+            <listitem>Added the YDStringUtil::startsWith and YDStringUtil::endsWith functions.</listitem>
+            <listitem>Added the $failOnError option to the YDDatabaseDriver classes.</listitem>
+            <listitem>The SQL statements that are logged now include filename and line number.</listitem>
+            <listitem>Added a query cache and the _fromNodeArray and _toNodeArray functions to YDDatabaseTree.</listitem>
+            <listitem>Removed the support for PATH_INFO variables from YDRequest::getActionName.</listitem>
+            <listitem>Added YDRecordSet::setTotalRows.</listitem>
+            <listitem>Added YDFormElement_TextAreaCounter.</listitem>
+            <listitem>Added YDConfig var YD_AUTO_EXECUTE to YDF2_process.php to make YDExecutor extensible.</listitem>
+            <listitem>Added option for persistent sorting in recordsets.</listitem>
+            <listitem>Added the checkboxgroup form element.</listitem>
+            <listitem>Added YDForm::getErrors() that returns all active error messages.</listitem>
+            <listitem>Added YDForm::getName() that returns the form name.</listitem>
+            <listitem>Added the form name to the form array.</listitem>
+            <listitem>Added constant YD_DIR_HOME_ADD that holds the path to the addons directory.</listitem>
+            <listitem>Added $success parameter to YDDatabaseObject::_executeCallbacks that indicates if the callback action was successfull (true), not successfull (false) or not executed (null). This parameter will be passed to the callbacks functions as a third parameter.</listitem>
+            <listitem>Added YDDatabaseObject::resetObject that unsets all object variables, fields and non-fields variables leaving the ones that start with underscore. YDDatabaseObject::resetValues only unset fields and select variables. Updated YDDatabaseObject::reset to call resetObject instead of resetValues.</listitem>
+            <listitem>New YDFormElement::setOption method to change an element option.</listitem>
+            <listitem>Added a very basic spam protection to the comments function in the weblog.</listitem>
+            <listitem>YDAjax v2.0.</listitem>
+            <listitem>Added the strip_html filter to YDForm.</listitem>
+            <listitem>Added the YDRequest::getQueryStringParameter and YDRequest::getQueryStringParameterAsInt functions.</listitem>
+            <listitem>Added the YDDatabaseTree::setSortField function.</listitem>
+            <listitem>Added the YDGuidUtil class.</listitem>
+            <listitem>Added YDDatabaseObject::getColumn - request #1731.</listitem>
+            <listitem>Added comparison feature to protected fields in YDDatabaseObject - request #1732.</listitem>
+            <listitem>Added config YD_TEMPLATE_DIR to YDTemplate - request #1727.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
     <sect1 id="changelog_ydf_v2_0rc2">
 
         <title>Yellow Duck Framework 2.0 Release Candidate 2</title>
