@@ -556,6 +556,7 @@
          *  This function prepares a query based on the object values.
          *
          *  @param $only_keys  (optional) Use only the keys for the WHERE clause. Default: true.
+         *  @param $update     (optional) Default: false.
          *
          *  @internal
          */

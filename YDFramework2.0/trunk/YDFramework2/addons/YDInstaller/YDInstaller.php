@@ -174,7 +174,7 @@
         }
         
         /**
-         *  This function adds a <pre> container to the installer body.
+         *  This function adds a &lt;pre&gt; container to the installer body.
          *
          *  @param  $text        The text
          *  @param  $attributes  (optional) Array of attributes

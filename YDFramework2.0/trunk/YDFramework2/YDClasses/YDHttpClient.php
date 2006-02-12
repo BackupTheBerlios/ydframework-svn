@@ -37,11 +37,6 @@
     /**
      *	This is the YDHttpClient class. It extends the HttpClient class and adds support for specifying the content
      *	type.
-     *
-     *	@todo
-     *		Redirects to different sites are not supported, and make retrieving of images from pbase fail. This might
-     *		result in the fact that we need to move to a different HTTP library. Another option is to rewrite the ]
-     *		library completely.
      */
     class YDHttpClient extends HttpClient {
 

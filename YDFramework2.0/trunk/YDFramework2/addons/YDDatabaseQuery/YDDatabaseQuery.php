@@ -999,43 +999,7 @@
             return '';
 
         }
-        
-        /**
-         *  This function will escape a string so that it's safe to include 
-         *  it in an SQL statement.
-         *
-         *  @param $string  The string to escape.
-         *
-         *  @returns    The escaped string.
-         *
-         *  @deprecated  Will be removed in version 2.0 final. Use escape() instead.
-         */
-        function string( $string ) {
-            
-            trigger_error( 'The method YDDatabaseQueryDriver::string is deprecated and will be removed in version 2.0 final. Use YDDatabaseQueryDriver::escape instead.', YD_WARNING );
-            
-            return $this->escape( $string );
-        }
-        
-        /**
-         *  This function will escape a string so that it's safe to include it 
-         *  in an SQL statement and will surround it with the quotes appropriate 
-         *  for the database backend.
-         *
-         *  @param $string  The string to escape.
-         *
-         *  @returns    The escaped string surrounded by quotes.
-         *
-         *  @deprecated  Will be removed in version 2.0 final. Use escapeSql() instead.
-         */
-        function sqlString( $string ) {
-            
-            trigger_error( 'The method YDDatabaseQueryDriver::sqlString is deprecated and will be removed in version 2.0 final. Use YDDatabaseQueryDriver::escapeSql instead.', YD_WARNING );
-            
-            return $this->escapeSql( $string );
-        
-        }
-        
+
         /**
          *  This function will escape a string so that it's safe to include 
          *  it in an SQL statement.

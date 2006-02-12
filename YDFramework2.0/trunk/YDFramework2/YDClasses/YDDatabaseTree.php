@@ -191,7 +191,9 @@
         /**
          *  Fetch the node data for the node identified by $id.
          *
-         *  @param $id  The ID of the node to fetch
+         *  @param $id      The ID of the node to fetch.
+         *  @param $field   The unique field to select on. Defaults to null, which means that the ID field specified
+         *                  when the object was instantiated will be used.
          *
          *  @returns An object containing the node's data, or false if node not found
          */
