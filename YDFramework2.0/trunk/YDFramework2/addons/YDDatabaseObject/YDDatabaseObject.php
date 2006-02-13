@@ -2345,6 +2345,64 @@
         }
         
         /**
+         *  @returns  The foreign table alias name.
+         */
+        function getForeignAlias() {
+            
+            if ( ! isset( $this->foreign_obj ) ) {
+                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
+            }
+            return $this->foreign_obj->getAlias();
+        
+        }
+        
+        /**
+         *  @returns  A reference to the foreign class instance.
+         */
+        function & getForeignInstance() {
+            
+            if ( ! isset( $this->foreign_obj ) ) {
+                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
+            }
+            return $this->foreign_obj;
+        
+        }
+        
+        /**
+         *  This function returns a reference to a foreign field object.
+         *
+         *  @param  $field  The field name.
+         *
+         *  @returns  A reference a the foreign field.
+         */
+        function & getForeignField( $field ) {
+            
+            if ( ! isset( $this->foreign_obj ) ) {
+                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
+            }
+            return $this->foreign_obj->getField( $field );
+        
+        }
+        
+        /**
+         *  This function returns the column name of a defined field.
+         *
+         *  @param $field  The field name.
+         *  @param $alias  (optional) If true, returns the table alias 
+         *                 with the column name. Default: false.
+         *
+         *  @returns  The column name with or without the table alias.
+         */
+        function getForeignColumn( $field, $alias=false ) {
+            
+            if ( ! isset( $this->foreign_obj ) ) {
+                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
+            }
+            return $this->foreign_obj->getColumn( $field, $alias );
+        
+        }
+        
+        /**
          *  This function set the foreign field name.
          *
          *  @param $name  The field name.
@@ -2448,7 +2506,65 @@
             return $this->cross_obj->getTable();
         
         }
+        
+        /**
+         *  @returns  The cross table alias name.
+         */
+        function getCrossAlias() {
+            
+            if ( ! isset( $this->cross_obj ) ) {
+                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
+            }
+            return $this->cross_obj->getAlias();
+        
+        }
+        
+        /**
+         *  @returns  A reference to the cross class instance.
+         */
+        function & getCrossInstance() {
+            
+            if ( ! isset( $this->cross_obj ) ) {
+                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
+            }
+            return $this->cross_obj;
+        
+        }
 
+        /**
+         *  This function returns a reference to a cross field object.
+         *
+         *  @param  $field  The field name.
+         *
+         *  @returns  A reference a the cross field.
+         */
+        function & getCrossField( $field ) {
+            
+            if ( ! isset( $this->cross_obj ) ) {
+                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
+            }
+            return $this->cross_obj->getField( $field );
+        
+        }
+        
+        /**
+         *  This function returns the column name of a defined field.
+         *
+         *  @param $field  The field name.
+         *  @param $alias  (optional) If true, returns the table alias 
+         *                 with the column name. Default: false.
+         *
+         *  @returns  The column name with or without the table alias.
+         */
+        function getCrossColumn( $field, $alias=false ) {
+            
+            if ( ! isset( $this->cross_obj ) ) {
+                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
+            }
+            return $this->cross_obj->getColumn( $field, $alias );
+        
+        }
+        
         /**
          *  This function set the cross local key.
          *
