@@ -244,6 +244,7 @@
             // Initialize the parent
             $this->YDWeblogAdminRequest();
 
+            // The default action
             if ( $this->getActionName() != 'default' ) {
 
                 // Show as plain text

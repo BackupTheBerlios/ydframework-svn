@@ -108,28 +108,36 @@
     <a name="respond"></a>
     <h3 id="respond">{t w="leave_comment"}</h3>
 
-    {$comments_form.tag}
+    {if $comments_form}
 
-        {if $comments_form.errors_unique_messages}
-            <p class="postmetadata alt" style="color: red; text-align: left;">
-                <b>{t w="error_comment"}<br/></b>
-                {foreach from=$comments_form.errors_unique_messages item="error"}
-                    {$error}<br/>
-                {/foreach}
-            </p>
-        {/if}
+        {$comments_form.tag}
 
-        {$comments_form.item_id.html}
+            {if $comments_form.errors_unique_messages}
+                <p class="postmetadata alt" style="color: red; text-align: left;">
+                    <b>{t w="error_comment"}<br/></b>
+                    {foreach from=$comments_form.errors_unique_messages item="error"}
+                        {$error}<br/>
+                    {/foreach}
+                </p>
+            {/if}
 
-        <p>{$comments_form.username.html} <small>{$comments_form.username.label_html}</small></p>
-        <p>{$comments_form.useremail.html} <small>{$comments_form.useremail.label_html}</small></p>
-        <p>{$comments_form.userwebsite.html} <small>{$comments_form.userwebsite.label_html}</small></p>
+            {$comments_form.item_id.html}
 
-        <p>{$comments_form.comment.html}</p>
+            <p>{$comments_form.username.html} <small>{$comments_form.username.label_html}</small></p>
+            <p>{$comments_form.useremail.html} <small>{$comments_form.useremail.label_html}</small></p>
+            <p>{$comments_form.userwebsite.html} <small>{$comments_form.userwebsite.label_html}</small></p>
 
-        <p>{$comments_form.cmdSubmit.html}</p>
+            <p>{$comments_form.comment.html}</p>
 
-    {$comments_form.endtag}
+            <p>{$comments_form.cmdSubmit.html}</p>
+
+        {$comments_form.endtag}
+
+    {else}
+
+        <p>{t w="item_closed"}</p>
+
+    {/if}
 
 </div>
 

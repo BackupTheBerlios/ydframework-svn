@@ -87,6 +87,7 @@ $GLOBALS['t']['err_email'] = 'Email is niet ingegeven of niet correct';
 $GLOBALS['t']['err_website'] = 'De website is geen geldige URL';
 $GLOBALS['t']['err_comment'] = 'Een commentaar is vereist';
 $GLOBALS['t']['with'] = 'bij';
+$GLOBALS['t']['item_closed'] = 'Dit item laat geen commentaren toe.';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'Nieuw commentaar';
@@ -265,6 +266,9 @@ $GLOBALS['t']['cfg_db_prefix'] = 'Database tabel prefix';
 $GLOBALS['t']['cfg_cache'] = 'Caching';
 $GLOBALS['t']['cfg_use_cache_comment'] = 'Cache publieke pagina\'s';
 $GLOBALS['t']['cfg_friendly_urls'] = 'Vriendelijke URLs';
+$GLOBALS['t']['cfg_spam_protection'] = 'Beveiliging tegen spam';
+$GLOBALS['t']['cfg_auto_close_items'] = 'Laat geen commentaren toe na x dagen';
+$GLOBALS['t']['err_auto_close_items'] = 'Laat geen commentaren toe na x dagen moet een getal zijn';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';
@@ -277,6 +281,7 @@ $GLOBALS['t']['change_item_desc'] = 'Wijzig Item';
 $GLOBALS['t']['err_item_title'] = 'Item titel is vereist';
 $GLOBALS['t']['err_item_body'] = 'Item inhoud is vereist';
 $GLOBALS['t']['gallery'] = 'Foto\'s';
+$GLOBALS['t']['allow_comments'] = 'Laat commentaren toe';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'Nog geen foto\'s';

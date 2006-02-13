@@ -87,6 +87,7 @@ $GLOBALS['t']['err_email'] = 'Email is missing or invalid';
 $GLOBALS['t']['err_website'] = 'The website specified is not a valid URL';
 $GLOBALS['t']['err_comment'] = 'Comment is required';
 $GLOBALS['t']['with'] = 'for';
+$GLOBALS['t']['item_closed'] = 'This item does not allow comments.';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'New comment';
@@ -265,6 +266,9 @@ $GLOBALS['t']['cfg_db_prefix'] = 'Database table prefix';
 $GLOBALS['t']['cfg_cache'] = 'Caching';
 $GLOBALS['t']['cfg_use_cache_comment'] = 'Cache public pages';
 $GLOBALS['t']['cfg_friendly_urls'] = 'Friendly URLs';
+$GLOBALS['t']['cfg_spam_protection'] = 'Spam protection';
+$GLOBALS['t']['cfg_auto_close_items'] = 'Do not allow comment after x days';
+$GLOBALS['t']['err_auto_close_items'] = 'Do not allow comment after x days should be numeric';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';
@@ -277,6 +281,7 @@ $GLOBALS['t']['change_item_desc'] = 'Change Item';
 $GLOBALS['t']['err_item_title'] = 'Item title is required';
 $GLOBALS['t']['err_item_body'] = 'Item body is required';
 $GLOBALS['t']['gallery'] = 'Photos';
+$GLOBALS['t']['allow_comments'] = 'Allow comments';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'No images yet';

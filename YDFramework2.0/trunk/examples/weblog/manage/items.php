@@ -42,12 +42,13 @@
 
             // Create the edit form
             $form = new YDWeblogForm( 'itemForm', 'POST', YD_SELF_SCRIPT . '?do=edit' );
-            $form->addElement( 'text',            'title',       t('item_title'),       array( 'class' => 'tfM' ) );
-            $form->addElement( 'wladmintextarea', 'body',        t('item_body'),        array( 'class' => 'tfM' ) );
-            $form->addElement( 'wladmintextarea', 'body_more',   t('item_body_more'),   array( 'class' => 'tfM' ) );
-            $form->addElement( 'select',          'category_id', t('category'),         array( 'class' => 'tfM', 'style' => 'width: 100%' ), $categories );
-            $form->addElement( 'datetimeselect',  'created',     t('created_on'),       array( 'class' => 'tfM' ) );
-            $form->addElement( 'datetimeselect',  'modified',    t('last_modified_on'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'text',            'title',          t('item_title'),       array( 'class' => 'tfM' ) );
+            $form->addElement( 'wladmintextarea', 'body',           t('item_body'),        array( 'class' => 'tfM' ) );
+            $form->addElement( 'wladmintextarea', 'body_more',      t('item_body_more'),   array( 'class' => 'tfM' ) );
+            $form->addElement( 'select',          'category_id',    t('category'),         array( 'class' => 'tfM', 'style' => 'width: 100%' ), $categories );
+            $form->addElement( 'datetimeselect',  'created',        t('created_on'),       array( 'class' => 'tfM' ) );
+            $form->addElement( 'datetimeselect',  'modified',       t('last_modified_on'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'checkbox',        'allow_comments', t( 'allow_comments' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'hidden',          'id' );
             $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),               array( 'class' => 'button' ) );
 

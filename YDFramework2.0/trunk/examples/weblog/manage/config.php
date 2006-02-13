@@ -82,6 +82,8 @@
 
             $form->addElement( 'checkbox', 'friendly_urls', t( 'cfg_friendly_urls' ), array( 'style' => 'border: none;' ) );
 
+            $form->addElement( 'text', 'auto_close_items', t( 'cfg_auto_close_items' ), array( 'class' => 'tfM' ) );
+
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
             // Set the defaults
@@ -96,6 +98,7 @@
             $form->addRule( 'weblog_entries_fp', 'numeric', t( 'err_weblog_entries_fp_num' ) );
             $form->addRule( 'max_syndicated_items', 'required', t( 'err_max_syndicated_items' ) );
             $form->addRule( 'max_syndicated_items', 'numeric', t( 'err_max_syndicated_items_num' ) );
+            $form->addRule( 'auto_close_items', 'numeric', t( 'err_auto_close_items' ) );
 
             // Add the filters
             $form->addFilters( 
@@ -146,6 +149,7 @@
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );
             $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );
+            $config['auto_close_items']     = YDConfig::get( 'auto_close_items',     30 );
 
             // Return the configuration
             return $config;

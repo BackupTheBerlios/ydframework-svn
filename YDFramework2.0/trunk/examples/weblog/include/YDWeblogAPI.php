@@ -88,6 +88,18 @@
                 $this->db->executeSql( 'ALTER TABLE #_users ADD UNIQUE name (name)' );
             }
 
+            // Auto close the old items if needed
+            $auto_close_items = YDConfig::get( 'auto_close_items', '' );
+            if ( $auto_close_items != '' && is_numeric( $auto_close_items ) ) {
+
+                // Calculate the treshold
+                $treshold = time() - ( $auto_close_items * 86400 );
+
+                // Close the items
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE created < ' . $treshold );
+
+            }
+
         }
 
         // Function to log a request to the statistics
@@ -224,6 +236,7 @@
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
             $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
+                 . 'i.allow_comments, '
                  . 'c.title as category, u.email as user_email, u.name as user_name FROM #_items i, #_categories c, '
                  . '#_users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );

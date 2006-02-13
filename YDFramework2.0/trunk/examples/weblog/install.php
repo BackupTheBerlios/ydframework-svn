@@ -147,11 +147,13 @@
                       body longtext NOT NULL,
                       body_more longtext NOT NULL,
                       num_comments int(11) NOT NULL default \'0\',
+                      allow_comments tinyint(1) NOT NULL default \'1\',
                       created int(11) default NULL,
                       modified int(11) default NULL,
                       PRIMARY KEY  (id),
                       KEY category_id (category_id),
-                      KEY user_id (user_id)
+                      KEY user_id (user_id),
+                      KEY allow_comments(allow_comments)
                     ) TYPE=MyISAM;'
                 );
                 $db->executeSql( 'DROP TABLE IF EXISTS ' . $values['db_prefix'] . 'links;' );

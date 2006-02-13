@@ -151,6 +151,10 @@
                 <td class="adminRowL">{$form.modified.label_html}</td> 
                 <td class="adminRowL">{$form.modified.html}</td> 
             </tr>
+            <tr> 
+                <td class="adminRowL">{$form.allow_comments.label_html}</td> 
+                <td class="adminRowL">{$form.allow_comments.html}</td> 
+            </tr>
             <tr>
                 <td class="adminRowL" colspan="2" style="border: 0px;">{$form._cmdSubmit.html}</td>
             </tr>
