@@ -2348,11 +2348,7 @@
          *  @returns  The foreign table alias name.
          */
         function getForeignAlias() {
-            
-            if ( ! isset( $this->foreign_obj ) ) {
-                $this->foreign_obj = YDDatabaseObject::getInstance( $this->getForeignClass() );
-            }
-            return $this->foreign_obj->getAlias();
+            return $this->getForeignVar();
         
         }
         
@@ -2511,11 +2507,7 @@
          *  @returns  The cross table alias name.
          */
         function getCrossAlias() {
-            
-            if ( ! isset( $this->cross_obj ) ) {
-                $this->cross_obj = YDDatabaseObject::getInstance( $this->getCrossClass() );
-            }
-            return $this->cross_obj->getAlias();
+            return $this->getCrossVar();
         
         }
         
