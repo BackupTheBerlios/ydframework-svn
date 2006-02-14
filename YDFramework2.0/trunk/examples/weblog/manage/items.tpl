@@ -69,7 +69,9 @@
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$item.created|date:'%Y/%m/%d %H:%M'}</td>
                 <td class="adminRowL">{$item.user_name}</td>
-                <td class="adminRowL">{$item.title}</td>
+                <td class="adminRowL">
+                    {if $item.allow_comments eq '0'}[x] {/if}{$item.title}
+                </td>
                 <td class="adminRowR">
                     <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
                     |
