@@ -73,12 +73,6 @@
                 YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
             );
 
-            // Get the list of index for the items table
-            $indexes = $this->db->getValuesByName( 'show keys from #_items', 'key_name' );
-            if ( ! in_array( 'allow_comments', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
-            }
-
             // Add any missing body_more field
             $fields = $this->db->getValuesByName( 'show fields from #_items', 'field' );
             if ( ! in_array( 'body_more', $fields ) ) {
@@ -86,6 +80,12 @@
             }
             if ( ! in_array( 'allow_comments', $fields ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
+            }
+
+            // Get the list of index for the items table
+            $indexes = $this->db->getValuesByName( 'show keys from #_items', 'key_name' );
+            if ( ! in_array( 'allow_comments', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
             }
 
             // Get the list of indexes
