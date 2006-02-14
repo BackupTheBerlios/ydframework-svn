@@ -217,14 +217,17 @@
                     $values['db_prefix'] . 'statistics_init', array( 'created' => $db->getDate( '__NOW__' ) )
                 );
 
-                // Include the weblog API
-                YDInclude( dirname( __FILE__ ) . '/include/YDWeblogAPI.php' );
-
                 // Save the config file
                 YDWeblogSaveConfig( $values );
 
                 // Include the config file
                 YDInclude( dirname( __FILE__ ) . '/include/config.php' );
+
+                // Update the database prefix
+                YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix', '' ) );
+
+                // Include the weblog API
+                YDInclude( dirname( __FILE__ ) . '/include/YDWeblogAPI.php' );
 
                 // Create the weblog object
                 $weblog = new YDWeblogAPI();
