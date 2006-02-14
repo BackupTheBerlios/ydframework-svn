@@ -149,7 +149,7 @@
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );
             $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );
-            $config['auto_close_items']     = YDConfig::get( 'auto_close_items',     30 );
+            $config['auto_close_items']     = YDConfig::get( 'auto_close_items',     '' );
 
             // Return the configuration
             return $config;
