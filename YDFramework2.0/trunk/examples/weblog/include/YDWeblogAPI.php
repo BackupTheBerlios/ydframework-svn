@@ -24,6 +24,9 @@
         if ( ! isset( $values['auto_close_items'] ) ) {
             $values['auto_close_items'] = 45;
         }
+        if ( ! isset( $values['include_debug_info'] ) ) {
+            $values['include_debug_info'] = 0;
+        }
 
         // Construct the new config text
         $cfg = '<?php' . "\n\n";

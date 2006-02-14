@@ -28,6 +28,13 @@
     YDInclude( 'YDRequest.php' );
     YDInclude( dirname( __FILE__ ) . '/config.php' );
 
+    // Set the YD_DEBUG flag
+    if ( YDConfig::get( 'include_debug_info', 1 ) == 1 ) {
+        YDConfig::set( 'YD_DEBUG', 1 );
+    } else {
+        YDConfig::set( 'YD_DEBUG', 0 );
+    }
+
     // Update the database prefix
     YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix', '' ) );
 

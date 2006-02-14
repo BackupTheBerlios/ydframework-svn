@@ -24,9 +24,10 @@
             $config = $this->getConfig();
 
             // Fix the boolean values
-            $config['email_new_comment'] = ( $config['email_new_comment'] ) ? t('yes') : t('no');
-            $config['use_cache']         = ( $config['use_cache'] ) ? t('yes') : t('no');
-            $config['friendly_urls']     = ( $config['friendly_urls'] ) ? t('yes') : t('no');
+            $config['email_new_comment']  = ( $config['email_new_comment'] ) ? t('yes') : t('no');
+            $config['use_cache']          = ( $config['use_cache'] ) ? t('yes') : t('no');
+            $config['friendly_urls']      = ( $config['friendly_urls'] ) ? t('yes') : t('no');
+            $config['include_debug_info'] = ( $config['include_debug_info'] ) ? t('yes') : t('no');
 
             // Assign it to the template
             $this->tpl->assign( 'config', $config );
@@ -74,6 +75,7 @@
             $form->addElement( 'text', 'weblog_entries_fp', t( 'cfg_weblog_entries_fp' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'select', 'weblog_skin', t( 'cfg_weblog_skin' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $skins );
             $form->addElement( 'select', 'weblog_language', t( 'cfg_weblog_language' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $languages );
+            $form->addElement( 'checkbox', 'include_debug_info', t( 'cfg_include_debug_info' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'max_syndicated_items', t( 'cfg_rss_max_syndicated_items' ), array( 'class' => 'tfM' ) );
@@ -145,6 +147,7 @@
             $config['weblog_entries_fp']    = YDConfig::get( 'weblog_entries_fp',    1 );
             $config['weblog_skin']          = YDConfig::get( 'weblog_skin',          'default' );
             $config['weblog_language']      = YDConfig::get( 'weblog_language',      'nl' );
+            $config['include_debug_info']   = YDConfig::get( 'include_debug_info',   false );
             $config['email_new_comment']    = YDConfig::get( 'email_new_comment',    true );
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );

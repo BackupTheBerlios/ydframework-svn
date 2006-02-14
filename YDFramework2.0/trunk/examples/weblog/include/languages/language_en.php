@@ -269,6 +269,7 @@ $GLOBALS['t']['cfg_friendly_urls'] = 'Friendly URLs';
 $GLOBALS['t']['cfg_spam_protection'] = 'Spam protection';
 $GLOBALS['t']['cfg_auto_close_items'] = 'Do not allow comment after x days';
 $GLOBALS['t']['err_auto_close_items'] = 'Do not allow comment after x days should be numeric';
+$GLOBALS['t']['cfg_include_debug_info'] = 'Show debugging information';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';
