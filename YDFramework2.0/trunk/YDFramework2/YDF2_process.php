@@ -198,10 +198,14 @@
 
     }
 
+    // Check if we need to auto execute
     if ( YDConfig::get( 'YD_AUTO_EXECUTE', true ) == true ) { 
-    
+
         // Instantiate the executor class
         $clsInst = new YDExecutor( YD_SELF_FILE );
+
+        // Start the session
+        @session_start();
 
         // Execute the execute function
         $clsInst->execute();

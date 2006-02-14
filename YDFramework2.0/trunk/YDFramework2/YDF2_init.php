@@ -39,9 +39,6 @@
     // Disable magic_quotes_runtime
     set_magic_quotes_runtime( 0 );
 
-    // Start the session
-    @session_start();
-
     // Get the path delimiter and newline
     if ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) {
         @define( 'YD_CRLF', "\r\n" );
