@@ -105,6 +105,7 @@
                 $treshold = time() - ( $auto_close_items * 86400 );
 
                 // Close the items
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1' );
                 $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE created < ' . $treshold );
 
             }
