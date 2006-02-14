@@ -694,7 +694,7 @@
          *
          *	@param $formElementName		Form element name or a generic id string.
          *	@param $result				Result string or array.
-         *	@param $atribute			(Optional) Optional atribute to apply result (auto-detection by default when using null).
+         *	@param $attribute			(Optional) Optional atribute to apply result (auto-detection by default when using null).
          *	@param $options				(Optional) Aditional options.
          */	
 		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
@@ -925,7 +925,7 @@
          *
          *	@param $formElement			Form element object.
          *	@param $result				Result value.
-         *	@param $atribute			Custom atribute (auto-detection by default).
+         *	@param $attribute			Custom atribute (auto-detection by default).
          *	@param $options				Other options.
          */		
 		function assignResult( & $formElement, $result, $attribute = null, $options = array()){
@@ -962,8 +962,8 @@
          *
          *	@param $id			Html element id.
          *	@param $result		Result value.
-         *	@param $atribute	Custom atribute (auto-detection by default).
-         *	@param $option		Other options (not used).
+         *	@param $attribute	Custom atribute (auto-detection by default).
+         *	@param $options		Other options (not used).
          */	
 		function assignId( $id, $result, $attribute, $options ){
 		

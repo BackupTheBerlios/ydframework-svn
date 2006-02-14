@@ -108,7 +108,7 @@
          *	optionally convert line breaks as well as convert the remaining HTML tags to their entities.
          *
          *	@param $data			The data you want to convert.
-         *	@param $convertBr		(optional) Boolean to indicate that new lines should be converted to <br/> tags.
+         *	@param $convertBr		(optional) Boolean to indicate that new lines should be converted to &lt;br/&gt; tags.
          *							This is turned on by default.
          *	@param $convertTags		(optional) Boolean to indicate that tags should be converted to HTML. This is turned
          *							on by default.
