@@ -128,7 +128,7 @@
 
             // Standard stuff for the sidebar
             $categories = $this->weblog->getCategories();
-            $pages      = $this->weblog->getPages();
+            $pages      = $this->weblog->getPublicPages();
             $links      = $this->weblog->getLinks();
 
             // Assign them to the template

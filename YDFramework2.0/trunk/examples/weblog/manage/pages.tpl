@@ -66,9 +66,15 @@
         </tr>
         {foreach from=$pages->set item="page"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-                <td class="adminRowL">{$page.created|date:'%Y/%m/%d %H:%M'}</td>
-                <td class="adminRowL">{$page.user_name}</td>
-                <td class="adminRowL">{$page.title}</td>
+                <td class="adminRowL">
+                    {if $page.is_draft eq '1'}<i>{/if}{$page.created|date:'%Y/%m/%d %H:%M'}{if $page.is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $page.is_draft eq '1'}<i>{/if}{$page.user_name}{if $page.is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $page.is_draft eq '1'}<i>{/if}{$page.title}{if $page.is_draft eq '1'}</i>{/if}
+                </td>
                 <td class="adminRowR">
                     <a href="../page.php?id={$page.id}" target="_blank">{t w="view"}</a>
                     |
@@ -118,6 +124,10 @@
                     <br/>
                     {$form.body.html}
                 </td>
+            </tr>
+            <tr> 
+                <td class="adminRowL">{$form.is_draft.label_html}</td> 
+                <td class="adminRowL">{$form.is_draft.html}</td> 
             </tr>
             <tr>
                 <td class="adminRowL">{$form.created.label_html}</td>

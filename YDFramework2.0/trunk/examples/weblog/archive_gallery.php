@@ -18,7 +18,7 @@
         function actionDefault() {
 
             // Get the weblog items
-            $items = $this->weblog->getItems();
+            $items = $this->weblog->getPublicItems();
 
             // Strip out the items without images
             foreach ( $items as $key=>$item ) {

@@ -50,8 +50,9 @@
             $form->addElement( 'datetimeselect',  'modified',       t('last_modified_on'), array( 'class' => 'tfM' ) );
             $form->addElement( 'checkbox',        'allow_comments', t('allow_comments'),   array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox',        'auto_close',     t('auto_close_item'),  array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox',        'is_draft',       t('is_draft'),         array( 'style' => 'border: none;' ) );
             $form->addElement( 'hidden',          'id' );
-            $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),               array( 'class' => 'button' ) );
+            $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),                  array( 'class' => 'button' ) );
 
             // Add the form rules
             $form->addRule( 'title',  'required', t( 'err_item_title' ) );

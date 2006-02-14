@@ -18,7 +18,7 @@
         function actionDefault() {
 
             // Get the weblog items
-            $items = $this->weblog->getItems();
+            $items = $this->weblog->getPublicItems();
 
             // Convert to a nested array
             $items = YDArrayUtil::convertToNested( $items, 'yearmonth' );

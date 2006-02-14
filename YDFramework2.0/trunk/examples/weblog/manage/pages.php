@@ -17,6 +17,7 @@
             $this->form->addElement( 'text', 'title', t('page_title'), array( 'class' => 'tfM' ) );
             $this->form->addElement( 'wladmintextarea', 'body', t('page_body'), array( 'class' => 'taM' ) );
             $this->form->addElement( 'datetimeselect', 'created',     t('created_on'), array( 'class' => 'tfM' ) );
+            $this->form->addElement( 'checkbox',       'is_draft',    t('is_draft'), array( 'style' => 'border: none;' ) );
             $this->form->addElement( 'hidden', 'id' );
             $this->form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 

@@ -79,7 +79,7 @@
                 YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
             );
 
-            // Add any missing body_more field
+            // Add any missing items field
             $fields = $this->db->getValuesByName( 'show fields from #_items', 'field' );
             if ( ! in_array( 'body_more', $fields ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
@@ -90,14 +90,32 @@
             if ( ! in_array( 'auto_close', $fields ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
             }
+            if ( ! in_array( 'is_draft', $fields ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
+            }
 
-            // Get the list of index for the items table
+            // Add any missing pages field
+            $fields = $this->db->getValuesByName( 'show fields from #_pages', 'field' );
+            if ( ! in_array( 'is_draft', $fields ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
+            }
+
+            // Get the list of indexes for the items table
             $indexes = $this->db->getValuesByName( 'show keys from #_items', 'key_name' );
             if ( ! in_array( 'allow_comments', $indexes ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
             }
             if ( ! in_array( 'auto_close', $indexes ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
+            }
+            if ( ! in_array( 'is_draft', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
+            }
+
+            // Get the list of indexes for the items table
+            $indexes = $this->db->getValuesByName( 'show keys from #_pages', 'key_name' );
+            if ( ! in_array( 'is_draft', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_pages ADD INDEX is_draft (is_draft)' );
             }
 
             // Get the list of indexes
@@ -255,14 +273,24 @@
             return ( $result && sizeof( $result ) == 1 ) ? $result[0] : $result;
         }
 
+        // Get the non draft items
+        function getPublicItems( $limit=-1, $offset=-1, $order='created desc, title', $where='AND is_draft = 0' ) {
+            return $this->getItems( $limit, $offset, $order, $where );
+        }
+
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
             $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
-                 . 'i.allow_comments, i.auto_close, '
+                 . 'i.allow_comments, i.auto_close, i.is_draft, '
                  . 'c.title as category, u.email as user_email, u.name as user_name FROM #_items i, #_categories c, '
                  . '#_users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );
             return $this->_fixItems( $this->db->getRecords( $sql, $limit, $offset ) );
+        }
+
+        // Get a publc item by it's ID
+        function getPublicItemByID( $item_id ) {
+            return $this->getItem( 'AND is_draft = 0 AND i.id = ' . $this->str( $item_id ) );
         }
 
         // Get an item by it's ID
@@ -345,7 +373,7 @@
         // Get the categories
         function getCategories( $order='title' ) {
             $result = $this->_selectFromTable( '#_categories', $order );
-            $sql = $this->_prepareQuery( 'SELECT category_id, COUNT(*) AS num_items FROM #_items i GROUP BY category_id' );
+            $sql = $this->_prepareQuery( 'SELECT category_id, COUNT(*) AS num_items FROM #_items i WHERE is_draft=0 GROUP BY category_id' );
             $num_items = $this->db->getAsAssocArray( $sql, 'category_id', 'num_items' );
             foreach ( $result as $key=>$val ) {
                 if ( isset( $num_items[ $val['id'] ] ) ) {
@@ -376,7 +404,7 @@
 
         // Get the items by category
         function getItemsByCategoryId( $category_id, $limit=-1, $offset=-1, $order='created desc, title' ) {
-            return $this->getItems( $limit, $offset, $order, 'AND i.category_id = ' . $this->str( $category_id ) );
+            return $this->getItems( $limit, $offset, $order, 'AND is_draft = 0 AND i.category_id = ' . $this->str( $category_id ) );
         }
 
         // Add a category
@@ -394,19 +422,27 @@
             return $this->_deleteFromTableUsingID( '#_categories', $category_id );
         }
 
+        // Get the public pages
+        function getPublicPages( $order='title', $where=' AND is_draft=0' ) {
+            return $this->getPages( $order, $where );
+        }
+
         // Get the pages
-        function getPages( $order='title' ) {
+        function getPages( $order='title', $where='' ) {
             $sql = $this->_prepareQuery(
-                'SELECT p.id, p.title, p.body, p.created, p.modified, u.email as user_email, u.name as user_name '
+                'SELECT p.id, p.title, p.body, p.is_draft, p.created, p.modified, u.email as user_email, u.name as user_name '
               . 'FROM #_pages p, #_users u WHERE p.user_id = u.id'
             );
+            if ( ! empty( $where ) ) {
+                $sql .= ' ' . $where;
+            }
             return $this->db->getRecords( $sql );
         }
 
         // Get a page by it's ID
         function getPageByID( $page_id ) {
             $sql = $this->_prepareQuery(
-                'SELECT p.id, p.title, p.body, p.created, p.modified, u.email as user_email, u.name as user_name FROM '
+                'SELECT p.id, p.title, p.body, p.is_draft, p.created, p.modified, u.email as user_email, u.name as user_name FROM '
                 . '#_pages p, #_users u WHERE p.user_id = u.id AND p.id = ' . $this->str( $page_id )
             );
             return $this->db->getRecord( $sql );

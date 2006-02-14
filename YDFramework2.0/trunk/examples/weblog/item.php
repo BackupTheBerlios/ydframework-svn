@@ -27,7 +27,7 @@
             $id = $this->getIdFromQS();
 
             // Get the weblog details and go to the default view if none is matched
-            $item  = @ $this->weblog->getItemById( $id );
+            $item  = @ $this->weblog->getPublicItemById( $id );
             $this->redirectIfMissing( $item );
 
             // Convert the list of images to a table of 3 columns

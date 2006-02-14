@@ -30,7 +30,7 @@
             $item_id = substr( $id, 5, strpos( $id, '/' )-5 );
 
             // Get the weblog item
-            $item  = @ $this->weblog->getItemById( $item_id );
+            $item  = @ $this->weblog->getPublicItemById( $item_id );
             if ( ! $item ) {
                 die( 'Invalid image specified' );
             }

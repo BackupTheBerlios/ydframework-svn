@@ -67,10 +67,14 @@
         {$browsebar}
         {foreach from=$items->set item="item"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-                <td class="adminRowL">{$item.created|date:'%Y/%m/%d %H:%M'}</td>
-                <td class="adminRowL">{$item.user_name}</td>
                 <td class="adminRowL">
-                    {if $item.allow_comments eq '0'}[x] {/if}{$item.title}
+                    {if $item.is_draft eq '1'}<i>{/if}{$item.created|date:'%Y/%m/%d %H:%M'}{if $item.is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $item.is_draft eq '1'}<i>{/if}{$item.user_name}{if $item.is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $item.is_draft eq '1'}<i>{/if}{if $item.allow_comments eq '0'}[x] {/if}{$item.title}{if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
                     <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
@@ -160,6 +164,10 @@
             <tr> 
                 <td class="adminRowL">{$form.auto_close.label_html}</td> 
                 <td class="adminRowL">{$form.auto_close.html}</td> 
+            </tr>
+            <tr> 
+                <td class="adminRowL">{$form.is_draft.label_html}</td> 
+                <td class="adminRowL">{$form.is_draft.html}</td> 
             </tr>
             <tr>
                 <td class="adminRowL" colspan="2" style="border: 0px;">{$form._cmdSubmit.html}</td>
