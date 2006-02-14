@@ -220,7 +220,7 @@
             $this->isLastPage = ( $this->pageNext == false ) ? true : false;
 
             // Add the list of pages as an array
-            $this->pages = ( $this->totalPages <= 1 ) ? array() : range( 1, $this->totalPages );
+            $this->pages = ( $this->totalPages <= 1 ) ? array( 1 ) : range( 1, $this->totalPages );
             
             // Get the subset of the records we need
             $this->set = array_slice( $this->records, $this->offset, $this->pagesize );
