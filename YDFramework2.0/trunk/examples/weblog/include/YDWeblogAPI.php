@@ -423,7 +423,7 @@
         }
 
         // Get the public pages
-        function getPublicPages( $order='title', $where=' AND is_draft=0' ) {
+        function getPublicPages( $order='title', $where=' AND p.is_draft=0' ) {
             return $this->getPages( $order, $where );
         }
 
@@ -439,12 +439,20 @@
             return $this->db->getRecords( $sql );
         }
 
+        // Get a public page by it's ID
+        function getPublicPageByID( $page_id, $where=' AND p.is_draft=0' ) {
+            return $this->getPageByID( $page_id, $where );
+        }
+
         // Get a page by it's ID
-        function getPageByID( $page_id ) {
+        function getPageByID( $page_id, $where='' ) {
             $sql = $this->_prepareQuery(
                 'SELECT p.id, p.title, p.body, p.is_draft, p.created, p.modified, u.email as user_email, u.name as user_name FROM '
                 . '#_pages p, #_users u WHERE p.user_id = u.id AND p.id = ' . $this->str( $page_id )
             );
+            if ( ! empty( $where ) ) {
+                $sql .= ' ' . $where;
+            }
             return $this->db->getRecord( $sql );
         }
 

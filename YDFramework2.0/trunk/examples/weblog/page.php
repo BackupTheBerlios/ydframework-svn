@@ -18,7 +18,7 @@
             $id = $this->getIdFromQS();
 
             // Get the page details
-            $page  = $this->weblog->getPageById( $id );
+            $page  = $this->weblog->getPublicPageById( $id );
             $this->redirectIfMissing( $page );
 
             // Add them to the template
