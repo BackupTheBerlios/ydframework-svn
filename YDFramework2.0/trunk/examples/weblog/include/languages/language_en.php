@@ -283,6 +283,10 @@ $GLOBALS['t']['err_item_title'] = 'Item title is required';
 $GLOBALS['t']['err_item_body'] = 'Item body is required';
 $GLOBALS['t']['gallery'] = 'Photos';
 $GLOBALS['t']['allow_comments'] = 'Allow comments';
+$GLOBALS['t']['auto_close_item'] = 'Automatically close item ';
+if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
+    $GLOBALS['t']['auto_close_item'] .= 'after ' . YDConfig::get( 'auto_close_items', '' ) . ' days';
+}
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'No images yet';

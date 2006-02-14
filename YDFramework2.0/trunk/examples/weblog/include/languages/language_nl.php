@@ -283,6 +283,10 @@ $GLOBALS['t']['err_item_title'] = 'Item titel is vereist';
 $GLOBALS['t']['err_item_body'] = 'Item inhoud is vereist';
 $GLOBALS['t']['gallery'] = 'Foto\'s';
 $GLOBALS['t']['allow_comments'] = 'Laat commentaren toe';
+$GLOBALS['t']['auto_close_item'] = 'Sluit item automatisch '
+if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
+    $GLOBALS['t']['auto_close_item'] .= 'na ' . YDConfig::get( 'auto_close_items', '' ) . ' dagen';
+}
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'Nog geen foto\'s';

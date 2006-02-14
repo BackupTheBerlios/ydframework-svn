@@ -87,11 +87,17 @@
             if ( ! in_array( 'allow_comments', $fields ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
             }
+            if ( ! in_array( 'auto_close', $fields ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
+            }
 
             // Get the list of index for the items table
             $indexes = $this->db->getValuesByName( 'show keys from #_items', 'key_name' );
             if ( ! in_array( 'allow_comments', $indexes ) ) {
                 $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
+            }
+            if ( ! in_array( 'auto_close', $indexes ) ) {
+                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
             }
 
             // Get the list of indexes
@@ -111,8 +117,8 @@
                 $treshold = time() - ( $auto_close_items * 86400 );
 
                 // Close the items
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1' );
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE created < ' . $treshold );
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1 WHERE auto_close = 1' );
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE auto_close = 1 AND created < ' . $treshold );
 
             }
 
@@ -252,7 +258,7 @@
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
             $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
-                 . 'i.allow_comments, '
+                 . 'i.allow_comments, i.auto_close, '
                  . 'c.title as category, u.email as user_email, u.name as user_name FROM #_items i, #_categories c, '
                  . '#_users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );
