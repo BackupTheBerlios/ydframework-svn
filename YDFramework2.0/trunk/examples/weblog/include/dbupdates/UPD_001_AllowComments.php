@@ -1,10 +1,10 @@
 <?php
 
     // Class definition
-    class UPD_001_AllowComments.php {
+    class UPD_001_AllowComments {
 
         // Class constructor
-        function UPD_001_AllowComments.php( $db ) {
+        function UPD_001_AllowComments( $db ) {
 
             // Publish the database
             $this->db = $db;
