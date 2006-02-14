@@ -21,6 +21,9 @@
         if ( ! isset( $values['max_syndicated_items'] ) ) {
             $values['max_syndicated_items'] = 20;
         }
+        if ( ! isset( $values['auto_close_items'] ) ) {
+            $values['auto_close_items'] = 45;
+        }
 
         // Construct the new config text
         $cfg = '<?php' . "\n\n";
