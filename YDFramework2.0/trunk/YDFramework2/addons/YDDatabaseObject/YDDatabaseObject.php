@@ -98,7 +98,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.25';
+            $this->_version = '4.26';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -300,7 +300,7 @@
          *
          *  @param $name       The field name.
          *  @param $value      The protected value.
-         *  @param $comparison (optional) The comparison keyword. Accepts: = == <= < >= >
+         *  @param $comparison (optional) The comparison keyword. Accepts: = == <= < >= > != <>
          */
         function registerProtected( $name, $value, $comparison='=' ) {
             
@@ -392,28 +392,43 @@
 
             foreach ( $protected as $field ) {
             
-                $compa = $field->getComparison();
-                $value = $field->getProtected();
+                $p_compar = $field->getComparison();
+                $p_value  = $field->getProtected();
+                
                 $field = $field->getName();
                 
-                switch ( $compa ) {
+                switch ( $p_compar ) {
                     
                     case '<':
+                        if ( $this->get( $field ) >= $p_value ) {
+                            unset( $this->$field );
+                        }
+                        break;
                     case '<=':
-                        if ( ! $this->exists( $field ) || $this->get( $field ) >= $value ) {
-                            $this->set( $field, $value );
+                        if ( $this->get( $field ) > $p_value ) {
+                            unset( $this->$field );
                         }
                         break;
                     case '>':
+                        if ( $this->get( $field ) <= $p_value ) {
+                            unset( $this->$field );
+                        }
+                        break;
                     case '>=':
-                        if ( ! $this->exists( $field ) || $this->get( $field ) <= $value ) {
-                            $this->set( $field, $value );
+                        if ( $this->get( $field ) < $p_value ) {
+                            unset( $this->$field );
+                        }
+                        break;
+                    case '<>':
+                    case '!=':
+                        if ( $this->get( $field ) == $p_value ) {
+                            unset( $this->$field );
                         }
                         break;
                     case '=':
                     case '==':
                     default:
-                        $this->set( $field, $value );
+                        $this->set( $field, $p_value );
                         break;
                         
                 }
@@ -421,21 +436,7 @@
             }
 
         }
-
-        /**
-         *  This function resets all default values in the object.
-         */
-        function resetDefaults() {
-
-            $defaults = $this->_getFieldsByMethod( 'hasDefault' );
-
-            foreach ( $defaults as $field ) {
-                $this->set( $field->getName(), $field->getDefault() );
-            }
-
-        }
-
-
+        
         /**
          *  @returns  The table name of the class.
          */
@@ -834,28 +835,43 @@
 
                     foreach ( $protected as $field ) {
             
-                        $compa = $field->getComparison();
-                        $value = $field->getProtected();
+                        $p_compar = $field->getComparison();
+                        $p_value  = $field->getProtected();
+                        
                         $field = $field->getName();
                         
-                        switch ( $compa ) {
+                        switch ( $p_compar ) {
                             
                             case '<':
+                                if ( $this->get( $field ) >= $p_value ) {
+                                    unset( $this->$field );
+                                }
+                                break;
                             case '<=':
-                                if ( ! array_key_exists( $field, $res ) || $res[ $field ] >= $value ) {
-                                    $res[ $field ] = $value;
+                                if ( $this->get( $field ) > $p_value ) {
+                                    unset( $this->$field );
                                 }
                                 break;
                             case '>':
+                                if ( $this->get( $field ) <= $p_value ) {
+                                    unset( $this->$field );
+                                }
+                                break;
                             case '>=':
-                                if ( ! array_key_exists( $field, $res ) || $res[ $field ] <= $value ) {
-                                    $res[ $field ] = $value;
+                                if ( $this->get( $field ) < $p_value ) {
+                                    unset( $this->$field );
+                                }
+                                break;
+                            case '<>':
+                            case '!=':
+                                if ( $this->get( $field ) == $p_value ) {
+                                    unset( $this->$field );
                                 }
                                 break;
                             case '=':
                             case '==':
                             default:
-                                $res[ $field ] = $value;
+                                $this->set( $field, $p_value );
                                 break;
                                 
                         }
@@ -1962,7 +1978,7 @@
         var $auto;
         var $key;
         var $protected;
-        var $default;
+        var $value;
         var $callback;
         var $comparison;
 
@@ -2024,8 +2040,8 @@
          *  @param $value     The protected value.
          */
         function setProtected( $value ) {
-            $this->setDefault( $value );
             $this->set( 'protected', true );
+            $this->set( 'value', $value );
         }
 
         /**
@@ -2036,8 +2052,8 @@
             $this->set( 'protected', false );
 
             if ( $is ) {
-                $this->unsetDefault();
-                $this->unsetComparison();
+                unset( $this->value );
+                unset( $this->comparison );
             }
         }
 
@@ -2052,7 +2068,7 @@
          *  @returns  The protected value.
          */
         function getProtected() {
-            return $this->getDefault();
+            return $this->get( 'value' );
         }
 
         /**
@@ -2061,13 +2077,7 @@
          *  @param $keyword  (optional) The comparison keyword. Default: =
          */
         function setComparison( $keyword='=' ) {
-            
-            $this->set( 'comparison', '=' );
-        
-            if ( in_array( $keyword, array( '=', '==', '<', '<=', '>', '>=' ) ) ) {
-                $this->set( 'comparison', $keyword );
-            }
-            
+            $this->set( 'comparison', $keyword );
         }
         
         /**
@@ -2082,40 +2092,6 @@
          */
         function unsetComparison() {
             $this->set( 'comparison', '=' );
-        }
-        
-        /**
-         *  @returns  If a field has a default value defined.
-         */
-        function hasDefault() {
-            return $this->exists( 'default', true );
-        }
-
-        /**
-         *  This function sets the default value to the field.
-         *
-         *  @param $value     The default value.
-         */
-        function setDefault( $value ) {
-            if ( ! $this->isProtected() ) {
-                $this->set( 'default', $value );
-            }
-        }
-
-        /**
-         *  This function unsets the default value of a field.
-         */
-        function unsetDefault() {
-            if ( ! $this->isProtected() ) {
-                unset( $this->default );
-            }
-        }
-
-        /**
-         *  @returns  The field default value.
-         */
-        function getDefault() {
-            return $this->get( 'default' );
         }
 
         /**

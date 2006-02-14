@@ -13,7 +13,6 @@
             $this->registerKey( 'id', true );
 
             $name = & $this->registerField( 'name' );
-            $name->setDefault( 'John Doe' );
             
             $this->registerField( 'email' );
             $this->registerField( 'country' );
