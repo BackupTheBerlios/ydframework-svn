@@ -843,35 +843,35 @@
                         switch ( $p_compar ) {
                             
                             case '<':
-                                if ( $this->get( $field ) >= $p_value ) {
-                                    unset( $this->$field );
+                                if ( array_key_exists( $field, $res ) && $res[ $field ] >= $p_value ) {
+                                    unset( $res[ $field ] );
                                 }
                                 break;
                             case '<=':
-                                if ( $this->get( $field ) > $p_value ) {
-                                    unset( $this->$field );
+                                if ( array_key_exists( $field, $res ) && $res[ $field ] > $p_value ) {
+                                    unset( $res[ $field ] );
                                 }
                                 break;
                             case '>':
-                                if ( $this->get( $field ) <= $p_value ) {
-                                    unset( $this->$field );
+                                if ( array_key_exists( $field, $res ) && $res[ $field ] <= $p_value ) {
+                                    unset( $res[ $field ] );
                                 }
                                 break;
                             case '>=':
-                                if ( $this->get( $field ) < $p_value ) {
-                                    unset( $this->$field );
+                                if ( array_key_exists( $field, $res ) && $res[ $field ] < $p_value ) {
+                                    unset( $res[ $field ] );
                                 }
                                 break;
                             case '<>':
                             case '!=':
-                                if ( $this->get( $field ) == $p_value ) {
-                                    unset( $this->$field );
+                                if ( array_key_exists( $field, $res ) && $res[ $field ] == $p_value ) {
+                                    unset( $res[ $field ] );
                                 }
                                 break;
                             case '=':
                             case '==':
                             default:
-                                $this->set( $field, $p_value );
+                                $res[ $field ] = $p_value;
                                 break;
                                 
                         }
