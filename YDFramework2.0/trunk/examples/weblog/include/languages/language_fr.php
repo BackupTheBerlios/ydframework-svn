@@ -286,7 +286,7 @@ $GLOBALS['t']['auto_close_item'] = 'Fermer l\'entr&eacute;e automatiquement ';
 if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
     $GLOBALS['t']['auto_close_item'] .= 'apr&egrave;s ' . YDConfig::get( 'auto_close_items', '' ) . ' jours';
 }
-$GLOBALS['t']['is_draft'] = 'Concept (non publi&eacute;)';
+$GLOBALS['t']['is_draft'] = 'Brouillon (ne pas publier)';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'Aucune image actuellement';
