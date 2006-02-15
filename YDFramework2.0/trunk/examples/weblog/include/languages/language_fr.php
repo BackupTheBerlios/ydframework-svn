@@ -45,7 +45,7 @@ $GLOBALS['t']['weblog'] = 'Weblog';
 $GLOBALS['t']['pages'] = 'Pages';
 $GLOBALS['t']['page'] = 'Page';
 $GLOBALS['t']['archives'] = 'Archives';
-$GLOBALS['t']['archives_gallery'] = 'Galleries photo';
+$GLOBALS['t']['archives_gallery'] = 'Galeries photo';
 $GLOBALS['t']['categories'] = 'Cat&eacute;gories';
 $GLOBALS['t']['view_posts_filed_under'] = 'Voir tous les sujets class&eacute;s sous';
 $GLOBALS['t']['links'] = 'Liens';
@@ -161,7 +161,7 @@ $GLOBALS['t']['full_php_info'] = 'Voir toutes les informations PHP';
 // manage/stats.tpl
 $GLOBALS['t']['general_stats'] = 'Statistiques g&eacute;n&eacute;rales';
 $GLOBALS['t']['installed_since'] = 'Install&eacute; depuis le';
-$GLOBALS['t']['num_days_online'] = 'Nombre de jour en ligne';
+$GLOBALS['t']['num_days_online'] = 'Nombre de jours en ligne';
 $GLOBALS['t']['days'] = 'jour(s)';
 $GLOBALS['t']['hits'] = 'hit(s)';
 $GLOBALS['t']['total_hits'] = 'Nombre total de hits';
@@ -282,11 +282,11 @@ $GLOBALS['t']['err_item_title'] = 'Le titre de l\'entr&eacute;e est requis';
 $GLOBALS['t']['err_item_body'] = 'Le corps de l\'entr&eacute;e est requis';
 $GLOBALS['t']['gallery'] = 'Photos';
 $GLOBALS['t']['allow_comments'] = 'Autoriser les commentaires';
-$GLOBALS['t']['auto_close_item'] = 'Fermez l\'entr&eacute;e automatiquement ';
+$GLOBALS['t']['auto_close_item'] = 'Fermer l\'entr&eacute;e automatiquement ';
 if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
     $GLOBALS['t']['auto_close_item'] .= 'apr&egrave;s ' . YDConfig::get( 'auto_close_items', '' ) . ' jours';
 }
-$GLOBALS['t']['is_draft'] = 'Concept (pas publi&eacute;r)';
+$GLOBALS['t']['is_draft'] = 'Concept (non publi&eacute;)';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'Aucune image actuellement';
