@@ -61,6 +61,9 @@
         fwrite( $f, $cfg );
         fclose( $f );
 
+        // Set the right permissions
+        @chmod( dirname( __FILE__ ) . '/config.php', 0700 );
+
     }
 
     // Class defining our weblog API
