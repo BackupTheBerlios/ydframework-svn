@@ -831,6 +831,11 @@
                 foreach ( $relations_arr as $name => $relation ) {
                     
                     $res = $relation->_results[ $k ];
+                    
+                    if ( ! sizeof( $res ) ) {
+                        continue;
+                    }
+                    
                     $protected = $relation->_getFieldsByMethod( 'isProtected' );
 
                     foreach ( $protected as $field ) {
@@ -878,6 +883,10 @@
             
                     }
                     
+                    if ( ! sizeof( $res ) ) {
+                        continue;
+                    }
+                    
                     $pfx = '';
                     if ( $prefix ) {
                         $pfx = $name . '_';
@@ -909,7 +918,7 @@
                         }
                         
                     }
-                    
+
                     $result = array_merge( $result, $res );
                     
                 }
