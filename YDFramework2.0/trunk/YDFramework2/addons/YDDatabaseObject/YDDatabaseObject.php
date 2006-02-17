@@ -67,6 +67,12 @@
      */
     YDConfig::set( 'YD_DBOBJECT_UPDATE', false, false );
 
+    /**
+     *  This config defines if an action should be executed or not.
+     *  Default: true.
+     */
+    YDConfig::set( 'YD_DBOBJECT_EXECUTE', true, false );
+    
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
     include_once( YD_DIR_HOME_ADD . '/YDDatabaseQuery/YDDatabaseQuery.php' );
@@ -1004,6 +1010,10 @@
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
+            if ( ! YDConfig::get( 'YD_DBOBJECT_EXECUTE' ) ) {
+                return $sql;
+            }
+            
             $result = $this->_db->executeSql( $sql );
             $success = ( $result == -1 || $result === false ) ? false : true;
             
@@ -1063,6 +1073,10 @@
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
             
+            if ( ! YDConfig::get( 'YD_DBOBJECT_EXECUTE' ) ) {
+                return $sql;
+            }
+            
             $result = $this->_db->executeSql( $sql );
             $success = ( $result == -1 || $result === false ) ? false : true;
             
@@ -1100,6 +1114,10 @@
             $sql = $this->_query->getQuery();
             
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
+            
+            if ( ! YDConfig::get( 'YD_DBOBJECT_EXECUTE' ) ) {
+                return $sql;
+            }
             
             $result = $this->_db->executeSql( $sql );
             $success = ( $result == -1 || $result === false ) ? false : true;
@@ -1319,6 +1337,10 @@
             if ( $all == false ) {
                 trigger_error(  $this->getClassName() . ' -
                                 The SELECT statement is empty', YD_ERROR );
+            }
+            
+            if ( ! YDConfig::get( 'YD_DBOBJECT_EXECUTE' ) ) {
+                return $this->_query->getQuery();
             }
             
             $result = $this->findSql( $this->_query->getQuery(), $slices );
