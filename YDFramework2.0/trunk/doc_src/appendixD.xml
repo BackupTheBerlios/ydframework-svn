@@ -42,9 +42,40 @@ Committed revision xxx.
 
         <title>Making a new release archive</title>
 
-        <para>When we put a new released version online, we make a .tar.gz copy of that build.</para>
+        <para>When we put a new released version online, we make a .tar.gz copy of that build which goes along with the compiled documentation and API documentation.</para>
 
-        <para>For more info on how to create that, please contact Pieter Claerhout.</para>
+        <para>In the SVN repository, there is a batch script that automates this, but it has some external requirements.</para>
+
+        <sect2 id="appendixD_release_archive_prereqs">
+
+            <title>Prerequisites</title>
+
+            <para>You need the following software before you can run "make_release.bat".</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>Doxygen</listitem>
+                <listitem>xsltproc</listitem>
+                <listitem>fop</listitem>
+                <listitem>cscript</listitem>
+                <listitem>tar</listitem>
+                <listitem>gzip</listitem>
+                <listitem>sed</listitem>
+            </itemizedlist>
+
+        </sect2>
+
+        <sect2 id="appendixD_release_archive_running">
+
+            <title>Running</title>
+
+            <para>You can run the application as follows:</para>
+
+            <programlisting><![CDATA[C:\>make_release.bat --release 2.0.0-final
+C:\>make_release.bat --snapshot 1202]]></programlisting>
+
+            <para>The release option will export from the "tags" branch, while the snapshot option will export the specified revision from the trunk branch.</para>
+
+        </sect2>
 
     </sect1>
 
