@@ -137,13 +137,24 @@
                 // Get the template name
                 $tplName = $this->_getTemplateName( $file );
 
+                // Get the real path to the template file
+                $tplPath = $tplName;
+                if ( ! is_file( $tplPath ) ) {
+                    $tplPath = realpath( $this->template_dir . '/' . $tplName );
+                } else {
+                    $tplPath = realpath( $tplName );
+                }
+
                 // Add pseudo compile id
                 if ( is_null( $compile_id ) ) {
-                    $compile_id = sprintf( '%u', crc32( realpath( $this->template_dir ) . '/' . $tplName ) );
+
+                    // Generate the compile ID
+                    $compile_id = sprintf( '%u', crc32( $tplPath ) );
+
                 }
 
                 // Output the template
-                $result = parent::fetch( $tplName, $cache_id, $compile_id );
+                $result = parent::fetch( $tplPath, $cache_id, $compile_id );
 
                 // Display the template or return the result
                 if ( $display == true ) {
