@@ -31,8 +31,8 @@
                 <small>
                     {t w="posted_under"} {$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name}</a>
                     {t w="filed_under"} <a href="{$item.category_id|link_category}">{$item.category}</a>.
-                    <br/>
                     {if $user.name}
+                        <br/>
                         <a href="manage/items.php?do=edit&id={$item.id}" target="_blank">{t w="edit"}</a>
                         | <a href="manage/items.php?do=delete&id={$item.id}"
                              onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
