@@ -1194,8 +1194,8 @@
                     $l_key = $l_key->name;
                 }
                 
-                if ( ! $l_column = $this->getColumn( $l_key ) ) {
-                    trigger_error( 'Invalid local key "' . $l_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                if ( ! $l_column = $this->getColumn( $l_key, true ) ) {
+                    $l_column = $l_key;
                 }
 
                 // Foreign table
@@ -1218,8 +1218,8 @@
                     $f_key = $f_key->name;
                 }
                 
-                if ( ! $f_column = $this->$f_var->getColumn( $f_key ) ) {
-                    trigger_error( 'Invalid foreign key "' . $f_key . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                if ( ! $f_column = $this->$f_var->getColumn( $f_key, true ) ) {
+                    $f_column = $f_key;
                 }
                 
                 // Prepare the query in the foreign object
@@ -1237,8 +1237,9 @@
 
                     // Join foreign table
                     $this->_query->join( $rel->getForeignJoin(), $f_table, $f_alias );
-                    $this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column . $r . ' = ' .
-                                       $r . $f_alias . $r . '.' . $r . $f_column . $r );
+                    //$this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column . $r . ' = ' .
+                    //                   $r . $f_alias . $r . '.' . $r . $f_column . $r );
+                    $this->_query->on( $l_column . ' = ' . $f_column );
 
                 } else {
 
@@ -1271,13 +1272,13 @@
                     }
                     
                     // Cross foreign field column name
-                    if ( ! $c_fcolumn = $this->$c_var->getColumn( $c_fkey ) ) {
-                        trigger_error( 'Invalid cross foreign key "' . $c_fkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                    if ( ! $c_fcolumn = $this->$c_var->getColumn( $c_fkey, true ) ) {
+                        $c_fcolumn = $c_fkey;
                     }
                     
                     // Cross local field column name
-                    if ( ! $c_lcolumn = $this->$c_var->getColumn( $c_lkey ) ) {
-                        trigger_error( 'Invalid cross local key "' . $c_lkey . '" - relation "' . $relation . '" - class "' . get_class( $this ) . '"', YD_ERROR );
+                    if ( ! $c_lcolumn = $this->$c_var->getColumn( $c_lkey, true ) ) {
+                        $c_lcolumn = $c_lkey;
                     }
 
                     // Prepare the query in the cross object
@@ -1292,9 +1293,10 @@
 
                     // Join cross table
                     $this->_query->join( $rel->getCrossJoin(), $c_table, $c_alias );
-                    $this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column  . $r . ' = ' .
-                                       $r . $c_alias . $r . '.' . $r . $c_lcolumn . $r );
-
+                    //$this->_query->on( $r . $l_alias . $r . '.' . $r . $l_column  . $r . ' = ' .
+                    //                   $r . $c_alias . $r . '.' . $r . $c_lcolumn . $r );
+                    $this->_query->on( $l_column . ' = ' . $c_lcolumn );
+                    
                     // Cross table additional conditions
                     if ( $where = $rel->getCrossConditions() ) {
                         $this->_query->on( $where );
@@ -1305,9 +1307,10 @@
 
                     // Join foreign table
                     $this->_query->join( $rel->getForeignJoin(), $f_table, $f_alias );
-                    $this->_query->on( $r . $c_alias . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
-                                       $r . $f_alias . $r . '.' . $r . $f_column  . $r );
-
+                    //$this->_query->on( $r . $c_alias . $r . '.' . $r . $c_fcolumn . $r . ' = ' .
+                    //                   $r . $f_alias . $r . '.' . $r . $f_column  . $r );
+                    $this->_query->on( $c_fcolumn . ' = ' . $f_column );
+                    
                 }
 
                 // Foreign table additional conditions
