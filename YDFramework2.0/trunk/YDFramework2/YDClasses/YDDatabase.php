@@ -182,11 +182,11 @@
          *                    Default: false.
          */
         function setTotalRows( $value, $offset=false ) {
-            
-            // Return if total is 0
-            if ( strval( $value ) == '0' ) {
-                return;
-            }
+
+            //// Return if total is 0
+            //if ( strval( $value ) == '0' ) {
+            //    return;
+            //}
 
             // Set the number of records an integer
             $value = intval( $value );
