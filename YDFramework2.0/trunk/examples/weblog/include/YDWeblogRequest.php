@@ -368,9 +368,16 @@
                 // Get the form values
                 $values = $form->getValues();
 
+                // Get the path for the cookies
+                if ( YDStringUtil::endsWith( dirname( YD_SELF_SCRIPT ), '/manage' ) ) {
+                    $cookiePath = dirname( dirname( YD_SELF_SCRIPT ) ) . '/';
+                } else {
+                    $cookiePath = dirname( YD_SELF_SCRIPT ) . '/';
+                }
+
                 // Set the cookies
-                setcookie( 'YD_USER_NAME', $values['loginName'], time() + 31536000, '/' );
-                setcookie( 'YD_USER_PASS', md5( $values['loginPass'] ), time() + 31536000, '/' );
+                setcookie( 'YD_USER_NAME', $values['loginName'], time() + 31536000, $cookiePath );
+                setcookie( 'YD_USER_PASS', md5( $values['loginPass'] ), time() + 31536000, $cookiePath );
 
                 // Set the username
                 $this->username = $values['loginName'];
