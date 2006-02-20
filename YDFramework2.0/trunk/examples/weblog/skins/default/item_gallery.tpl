@@ -1,5 +1,7 @@
 {include file="__std_header.tpl"}
 
+{assign var="max_img_size" value="450"}
+
 {capture assign="browsebar"}
     {if $image->previous or $image->next}
         <div class="navigation">
@@ -27,7 +29,13 @@
 
         <div class="entrytext">
 
-            <p align="center"><img src="{$uploads_dir}/{$image->relative_path}"></p>
+            <p align="center">
+            {if $image->getWidth() > $max_img_size}
+                <iframe src="{$uploads_dir}/{$image->relative_path}" width="{$max_img_size}" height="{$image->getHeight()+20}" marginwidth="0" marginheight="0"></iframe>
+            {else}
+                <img src="{$uploads_dir}/{$image->relative_path}">
+            {/if}
+            </p>
 
             {$browsebar}
 
