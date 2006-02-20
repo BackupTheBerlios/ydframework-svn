@@ -26,6 +26,11 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    // Define the path to XML HTML SAX 3 (needed for safehtml)
+    if ( ! defined( 'XML_HTMLSAX3' ) ) {
+        define( 'XML_HTMLSAX3', YD_DIR_HOME . '/3rdparty/safehtml/classes/' );
+    }
+
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php');
 
@@ -161,6 +166,7 @@
             $this->registerFilter( 'upper', 'strtoupper' );
             $this->registerFilter( 'utf8_decode', 'utf8_decode' );
             $this->registerFilter( 'strip_html', 'strip_tags' );
+            $this->registerFilter( 'safe_html', 'YDFormFilter_safe_html' );
 
             // Add the renderers
             $this->registerRenderer( 'array', 'YDFormRenderer_array', 'YDFormRenderer_array.php' );
@@ -1532,6 +1538,37 @@
         function import( $content, $options=array() ) {
             trigger_error( '"' . $this->getClassName() . '" does not have an import method defined.', YD_ERROR );
         }
+
+    }
+
+    /**
+     *  This filter checks data for any possible XSS HTML code.
+     *
+     *  It basically does the following:
+     *  * opening tag without its closing tag
+     *  * closing tag without its opening tag
+     *  * any of these tags: "base", "basefont", "head", "html", "body", "applet", "object", 
+     *    "iframe", "frame", "frameset", "script", "layer", "ilayer", "embed", "bgsound", 
+     *    "link", "meta", "style", "title", "blink", "xml" etc.
+     *  * any of these attributes: on*, data*, dynsrc
+     *  * javascript:/vbscript:/about: etc. protocols
+     *  * expression/behavior etc. in styles
+     *  * any other active content
+     *
+     *  @param  $data   The data to filter.
+     *
+     *  @returns The filtered data as a string.
+     */
+    function YDFormFilter_safe_html( $data ) {
+
+        // Include the safe_html library
+        require_once( YD_DIR_HOME . '/3rdparty/safehtml/classes/safehtml.php' );
+
+        // Instantiate the handler
+        $safehtml = & new safehtml();
+
+        // Return the filtered data
+        return $safehtml->parse( $data );
 
     }
 

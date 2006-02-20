@@ -51,12 +51,16 @@
 
             // Apply a filter
             $form->addFilter( 'name', 'trim' );
+            $form->addFilter( 'desc1', 'safe_html' );
 
             // Add a rule
             $form->addRule( 'name', 'required', 'Please enter your name' );
 
             // Process the form
             if ( $form->validate() ) {
+
+                // Show the form values
+                YDDebugUtil::dump( $form->getValues() );
 
                 // Mark the form as valid
                 $this->template->assign( 'formValid', true );
