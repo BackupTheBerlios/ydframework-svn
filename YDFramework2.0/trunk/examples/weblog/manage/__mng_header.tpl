@@ -45,8 +45,8 @@
             <p class="langRow">
                 {if $user.name}
                     <a href="index.php?do=logout" class="langRow">{t w="logoff"}</a> |
-                    <a href="../index.php" class="langRow" target="_blank">{t w="view_site"}</a>
                 {/if}
+                <a href="../index.php" class="langRow" target="_blank">{t w="view_site"}</a>
             </p>
         </td>
         <td class="langRowR">

@@ -333,6 +333,15 @@
 
         }
 
+        // Function to get the cookie path
+        function _getCookiePath() {
+            if ( YDStringUtil::endsWith( dirname( YD_SELF_SCRIPT ), '/manage' ) ) {
+                return dirname( dirname( YD_SELF_SCRIPT ) ) . '/';
+            } else {
+                return dirname( YD_SELF_SCRIPT ) . '/';
+            }
+        }
+
         // The login action
         function actionLogin() {
 
@@ -369,11 +378,7 @@
                 $values = $form->getValues();
 
                 // Get the path for the cookies
-                if ( YDStringUtil::endsWith( dirname( YD_SELF_SCRIPT ), '/manage' ) ) {
-                    $cookiePath = dirname( dirname( YD_SELF_SCRIPT ) ) . '/';
-                } else {
-                    $cookiePath = dirname( YD_SELF_SCRIPT ) . '/';
-                }
+                $cookiePath = $this->_getCookiePath();
 
                 // Set the cookies
                 setcookie( 'YD_USER_NAME', $values['loginName'], time() + 31536000, $cookiePath );
@@ -395,11 +400,18 @@
 
         }
 
-
         // Logout action
         function actionLogout() {
-            setcookie( 'YD_USER_PASS', null, time() - 31536000, '/' );
+
+            // Get the path for the cookies
+            $cookiePath = $this->_getCookiePath();
+
+            // Set the cookie
+            setcookie( 'YD_USER_PASS', null, time() - 31536000, $cookiePath );
+
+            // Redirect to the login
             $this->redirectToAction( 'login' );
+
         }
 
         // Check for authentication
