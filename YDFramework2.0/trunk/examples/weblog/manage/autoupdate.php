@@ -61,7 +61,7 @@
                 YDUpdateLog::error( 'Failed to connect to the update server.' );
             }
             if ( @ unserialize( base64_decode( $this->changes ) ) === false ) {
-                YDUpdateLog::error( $this->changes );
+                YDUpdateLog::error( 'Invalid contents retrieved from the update server' );
             }
             $this->changes = unserialize( base64_decode( $this->changes ) );
         }
