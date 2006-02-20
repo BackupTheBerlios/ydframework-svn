@@ -423,10 +423,11 @@
          *
          *	@param $cache	(optional) Indicate if the web content should be cached or not. By default, caching is
          *					turned on.
+         *  @param $fail    (optional) Whether to fail or not if the contents cannot be downloaded. Defaults to true.
          *
          *	@returns	Returns the contents of the URL.
          */
-        function getContents( $cache=true ) {
+        function getContents( $cache=true, $fail=true ) {
 
             // Check if caching is enabled
             $cacheFName = null;
@@ -485,10 +486,14 @@
 
             // Check if there was a result
             if ( $result == false ) {
-                trigger_error(
-                    'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
-                    YD_ERROR
-                );
+                if ( $fail ) {
+                    trigger_error(
+                        'Failed to retrieve the data from the url "' . $this->getUrl() . '". ' . $client->getError(),
+                        YD_ERROR
+                    );
+                } else {
+                    return false;
+                }
             } else {
                 $data = @ $client->getContent();
             }

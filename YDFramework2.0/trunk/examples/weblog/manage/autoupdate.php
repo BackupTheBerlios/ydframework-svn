@@ -56,7 +56,10 @@
         // Class constructor
         function YDUpdateDB() {
             $url = new YDUrl( YDConfig::get( 'updateDbUrl' ) . '?revision=' . YD_FW_REVISION );
-            $this->changes = $url->getContents( false );
+            $this->changes = @ $url->getContents( false, false );
+            if ( ! $this->changes ) {
+                YDUpdateLog::error( 'Failed to connect to the update server.' );
+            }
             if ( @ unserialize( base64_decode( $this->changes ) ) === false ) {
                 YDUpdateLog::error( $this->changes );
             }
