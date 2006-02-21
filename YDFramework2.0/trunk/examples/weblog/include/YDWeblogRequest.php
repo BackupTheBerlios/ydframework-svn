@@ -335,11 +335,20 @@
 
         // Function to get the cookie path
         function _getCookiePath() {
+
+            // Get the path
             if ( YDStringUtil::endsWith( dirname( YD_SELF_SCRIPT ), '/manage' ) ) {
-                return dirname( dirname( YD_SELF_SCRIPT ) ) . '/';
+                $cookiePath = dirname( dirname( YD_SELF_SCRIPT ) );
             } else {
-                return dirname( YD_SELF_SCRIPT ) . '/';
+                $cookiePath =  dirname( YD_SELF_SCRIPT );
             }
+
+            // Trim the unneeded characters
+            $cookiePath = str_replace( '\\', '/', rtrim( $cookiePath, '/' ) );
+
+            // Return the cookie path
+            return $cookiePath . '/';
+
         }
 
         // The login action
