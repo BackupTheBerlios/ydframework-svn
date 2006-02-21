@@ -49,15 +49,12 @@
         <li>
             <h2>{if $user.name}{$user.name}{else}{t w="admin"}{/if}</h2>
             <ul>
-                <li>
-                    {if $user.name}
-                        <a href="manage/index.php">{t w="a_admin_home"}</a>
-                        </br>
-                        <a href="manage/index.php?do=logout">{t w="a_logoff"}</a>
-                    {else}
-                        <a href="manage/index.php">{t w="login"}</a>
-                    {/if}
-                </li>
+                {if $user.name}
+                    <li><a href="manage/index.php">{t w="a_admin_home"}</a></li>
+                    <li><a href="manage/index.php?do=logout">{t w="a_logoff"}</a></li>
+                {else}
+                    <li><a href="manage/index.php">{t w="login"}</a></li>
+                {/if}
             </ul>
         </li>
 
