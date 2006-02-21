@@ -77,6 +77,11 @@
                 // Set the defaults
                 $form->setDefaults( $defaults );
 
+            } else {
+
+                // Set the form defaults
+                $form->setDefaults( array( 'allow_comments' => 1, 'auto_close' => 1, 'is_draft' => 0 ) );
+
             }
 
             // Process the form
