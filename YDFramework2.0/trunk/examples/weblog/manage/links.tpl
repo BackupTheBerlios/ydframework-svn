@@ -20,7 +20,7 @@
 {if $YD_ACTION == 'default'}
 
     {capture assign="browsebar"}
-        {if $links->pages}
+        {if $links->totalPages > 1}
             <tr>
                 <td class="adminRowR" colspan="4">
                     <p class="subline">

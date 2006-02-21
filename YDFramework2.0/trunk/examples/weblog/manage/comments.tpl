@@ -22,7 +22,7 @@
 {if $YD_ACTION == 'default'}
 
     {capture assign="browsebar"}
-        {if $comments->pages}
+        {if $comments->totalPages > 1}
             <tr>
                 <td class="adminRowR" colspan="4">
                     <p class="subline">

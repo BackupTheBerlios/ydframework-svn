@@ -20,9 +20,9 @@
 {if $YD_ACTION == 'default'}
 
     {capture assign="browsebar"}
-        {if $images->pages}
+        {if $images->totalPages > 1}
             <tr>
-                <td class="adminRowR" colspan="5">
+                <td class="adminRowR" colspan="7">
                     <p class="subline">
                     {if ! $images->isFirstPage}
                         <a href="{$images->getPreviousUrl()}" class="subline">&laquo;</a>
