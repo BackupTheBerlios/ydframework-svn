@@ -183,18 +183,17 @@
          */
         function setTotalRows( $value, $offset=false ) {
 
-            //// Return if total is 0
-            //if ( strval( $value ) == '0' ) {
-            //    return;
-            //}
-
             // Set the number of records an integer
             $value = intval( $value );
-            
+
             // Get the number of pages
-            $this->totalPages = ceil( $value / ( float ) $this->pagesize );
+            if ( $this->pagesize == 0 ) {
+                $this->totalPages = 1;
+            } else {
+                $this->totalPages = ceil( $value / ( float ) $this->pagesize );
+            }
             $this->totalRows  = $value;
-            
+
             // Get the original page number
             $this->page = $this->pageorig;
             
