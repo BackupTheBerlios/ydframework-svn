@@ -576,6 +576,8 @@
          *	@static
          */
         function encodeString( $string, $htmlent=false ) {
+            $trans = array_flip( get_html_translation_table( HTML_ENTITIES ) );
+            $string = strtr( $string, $trans );
             $trans = get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES );
             foreach ( $trans as $key => $value ) {
                 if ( ord( $key ) == 60 || ord( $key ) == 62 ) {

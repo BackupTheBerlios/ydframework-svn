@@ -80,7 +80,7 @@
          *	@param $title	The title of the feed.
          */
         function setTitle( $title ) {
-            $this->_title = $title;
+            $this->_title = YDStringUtil::encodeString( $title );
         }
 
         /**
@@ -90,7 +90,7 @@
          */
         function setDescription( $desc ) {
             $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
-            $this->_description = $desc;
+            $this->_description = YDStringUtil::encodeString( $desc );
         }
 
         /**
@@ -134,8 +134,9 @@
             }
 
             $item = array(
-                'title' => $title, 'link' => $link,
-                'description' => $desc, 'guid' => $guid, 'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
+                'title' => YDStringUtil::encodeString( $title ), 'link' => $link,
+                'description' => $desc, 'guid' => $guid,
+                'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
                 'enclosure_type' => $enclosure_type
             );
 
