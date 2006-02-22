@@ -76,12 +76,42 @@
                     if ( ! is_dir( $this->dir_rel ) ) {
                         @mkdir( $this->dir_rel );
                     }
-                    $file->moveUpload( $this->dir_rel, $filename );
+                    @ $file->moveUpload( $this->dir_rel, $filename );
+
+                    // Convert it to an object
+                    $fileObj = new YDFSFile( $this->dir_rel . $file->getBaseName() );
+
+                    // Check if it's a ZIP file
+                    if ( strtolower( $fileObj->getExtension() == 'zip' ) ) {
+
+                        // Include the unzip library
+                        include( YD_DIR_HOME . '/3rdparty/zip/unzip.lib.php' );
+
+                        // Convert it to a ZIP object
+                        $zip = new SimpleUnzip( $fileObj->getAbsolutePath() );
+
+                        // Get the directory as a path
+                        $dir = new YDFSDirectory( $this->dir_rel );
+
+                        // Extract the images
+                        foreach( $zip->Entries as $entry ) {
+
+                            // Save it as a filee
+                            $entryFile = $dir->createFile( $entry->Name, $entry->Data );
+
+
+                            // Delete it if it's not an image
+                            if ( ! $entryFile->isImage() ) {
+                                @ unlink( $entryFile->getAbsolutePath() );
+                            }
+
+                        }
+
+                    }
 
                     // Check if it's an image
-                    $fileObj = new YDFSFile( $this->dir_rel . $file->getBaseName() );
                     if ( ! $fileObj->isImage() ) {
-                        @unlink( $this->dir_rel . $file->getBaseName() );
+                        @unlink( $fileObj->getAbsolutePath() );
                     }
 
                     // Delete the thumbnails
