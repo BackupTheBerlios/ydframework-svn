@@ -73,7 +73,22 @@
 
             // Add the items
             foreach ( $items as $item ) {
-                $this->feed->addItem( $item['title'], YDTplModLinkItem( $item ), YDTplModBBCode( $item['body'] ) );
+
+                // Make the body
+                $body = $item['body'];
+
+                // Add the images if any
+                if ( sizeof( $item['images'] ) > 0 ) {
+                    $body .= '<p>';
+                    foreach ( $item['images'] as $image ) {
+                        $body .= '<img src="' . YDTplModLinkThumb( $image ) . '"/> ';
+                    }
+                    $body .= '</p>';
+                }
+
+                // Add it to the feed
+                $this->feed->addItem( $item['title'], YDTplModLinkItem( $item ), YDTplModBBCode( $body ) );
+
             }
 
         }
