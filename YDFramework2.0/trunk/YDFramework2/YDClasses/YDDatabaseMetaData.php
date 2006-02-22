@@ -224,7 +224,7 @@
          *  @internal
          */
         function _prefixTable( $table ) {
-            return YDConfig::get( 'YD_DB_TABLEPREFIX', '' ) . $table;
+            return str_replace( '#_', YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $table );
         }
 
     }
