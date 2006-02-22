@@ -987,6 +987,53 @@
             );
          }
 
+    }
+
+    /**
+     *  This class allows you to perform LDAP releated tasks.
+     */
+    class YDLdapUtil extends YDBase {
+
+        /**
+         *  Authenticate against a domain.
+         *
+         *  @param  $server     The name of the domain controller.
+         *  @param  $domain     The name of the domain.
+         *  @param  $user       The username.
+         *  @param  $password   The password.
+         *
+         *  @returns    A boolean indicating if the user was authenticated or not.
+         */
+        function authenticate( $server, $domain, $user, $password ) {
+
+            // Connect to the LDAP server
+            $conn = ldap_connect( $server );
+
+            // Setup the options
+            ldap_set_option( $conn, LDAP_OPT_PROTOCOL_VERSION, 3 );
+            ldap_set_option( $conn, LDAP_OPT_REFERRALS, 0 );
+
+            // Require a username
+            if ( empty( $user ) || empty( $pass ) ) {
+                return false;
+            }
+
+            // Fix the username
+            $user = strtolower( trim( $user ) );
+            if ( strpos( $user, '\\' ) ) {
+                $user = substr( $user, strpos( $user, '\\' ) + 1 );
+            }
+
+            // Authenticate
+            $result = @ldap_bind( $conn, $user . '@' . $server, $password );
+
+            // Close the connection
+            ldap_close( $conn );
+
+            // Return the result
+            return ( $result ) ? true : false;
+
+        }
 
     }
 
