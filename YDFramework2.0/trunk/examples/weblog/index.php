@@ -20,6 +20,12 @@
                 $this->redirect( 'item.php?id=' . $id );
             }
 
+            // Add support for itemid query strings
+            $id = @is_numeric( $_GET['itemid'] ) ? intval( $_GET['itemid'] ) : -1;
+            if ( $id != -1 ) {
+                $this->redirect( 'item.php?id=' . $id );
+            }
+
             // Get the weblog items and 5 older items
             $items     = $this->weblog->getPublicItems( YDConfig::get( 'weblog_entries_fp', 5 ) );
             $old_items = $this->weblog->getPublicItems( 5, sizeof( $items ) );
