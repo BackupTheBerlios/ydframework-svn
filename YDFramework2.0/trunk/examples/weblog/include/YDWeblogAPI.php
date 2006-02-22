@@ -82,53 +82,34 @@
                 YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
             );
 
+            // Get a link to the database metadata
+            $dbmeta = new YDDatabaseMetaData( $this->db );
+
             // Add any missing items field
-            $fields = $this->db->getValuesByName( 'show fields from #_items', 'field' );
-            if ( ! in_array( 'body_more', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
-            }
-            if ( ! in_array( 'allow_comments', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
-            }
-            if ( ! in_array( 'auto_close', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
-            }
-            if ( ! in_array( 'is_draft', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
-            }
+            $fields = $dbmeta->getFields( '#_items' );
+            $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
+            $this->executeIfMissing( 'allow_comments', $fields, 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
+            $this->executeIfMissing( 'auto_close', $fields, 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
+            $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
 
             // Add any missing pages field
-            $fields = $this->db->getValuesByName( 'show fields from #_pages', 'field' );
-            if ( ! in_array( 'is_draft', $fields ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
-            }
+            $fields = $dbmeta->getFields( '#_pages' );
+            $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
 
             // Get the list of indexes for the items table
-            $indexes = $this->db->getValuesByName( 'show keys from #_items', 'key_name' );
-            if ( ! in_array( 'allow_comments', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
-            }
-            if ( ! in_array( 'auto_close', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
-            }
-            if ( ! in_array( 'is_draft', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
-            }
+            $indexes = $dbmeta->getIndexes( '#_items' );
+            $this->executeIfMissing( 'allow_comments', $indexes, 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
+            $this->executeIfMissing( 'auto_close', $indexes, 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
+            $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
 
-            // Get the list of indexes for the items table
-            $indexes = $this->db->getValuesByName( 'show keys from #_pages', 'key_name' );
-            if ( ! in_array( 'is_draft', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_pages ADD INDEX is_draft (is_draft)' );
-            }
+            // Get the list of indexes for the pages table
+            $indexes = $dbmeta->getIndexes( '#_pages' );
+            $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_pages ADD INDEX is_draft (is_draft)' );
 
-            // Get the list of indexes
-            $indexes = $this->db->getValuesByName( 'show keys from #_users', 'key_name' );
-            if ( in_array( 'email', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_users DROP INDEX email' );
-            }
-            if ( ! in_array( 'name', $indexes ) ) {
-                $this->db->executeSql( 'ALTER TABLE #_users ADD UNIQUE name (name)' );
-            }
+            // Get the list of indexes for the users table
+            $indexes = $dbmeta->getIndexes( '#_users' );
+            $this->executeIfPresent( 'email', $indexes, 'ALTER TABLE #_users DROP INDEX email' );
+            $this->executeIfMissing( 'name',  $indexes, 'ALTER TABLE #_users ADD UNIQUE name (name)' );
 
             // Auto close the old items if needed
             $auto_close_items = YDConfig::get( 'auto_close_items', '' );
@@ -143,6 +124,20 @@
 
             }
 
+        }
+
+        // Function to execute SQL if the item is missing
+        function executeIfMissing( $needle, $haystack, $sql ) {
+            if ( ! in_array( $needle, $haystack ) ) {
+                $this->db->executeSql( $sql );
+            }
+        }
+
+        // Function to execute SQL if the item is not missing
+        function executeIfPresent( $needle, $haystack, $sql ) {
+            if ( in_array( $needle, $haystack ) ) {
+                $this->db->executeSql( $sql );
+            }
         }
 
         // Function to log a request to the statistics

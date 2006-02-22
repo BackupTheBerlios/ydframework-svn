@@ -74,6 +74,7 @@
     YDInclude( 'YDBBCode.php' );
     YDInclude( 'YDTemplate.php' );
     YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDDatabaseMetaData.php' );
     YDInclude( 'YDFileSystem.php' );
     YDInclude( 'YDFormElements/YDFormElement_BBTextArea.php' );
 
