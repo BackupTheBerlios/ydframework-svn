@@ -64,6 +64,29 @@
         // Set the right permissions
         @chmod( dirname( __FILE__ ) . '/config.php', 0700 );
 
+        // Create a .htaccess file if needed
+        $htaccessPath = dirname( dirname( __FILE__ ) ) . '/.htaccess';
+        if ( ! is_file( $htaccessPath ) ) {
+
+            // The htaccess data
+            $data = 'RewriteEngine on' . YD_CRLF;
+            $data .= 'Options +FollowSymlinks' . YD_CRLF;
+            $data .= 'RewriteRule ^item_([0-9]+).php?$ item.php?id=$1 [L]' . YD_CRLF;
+            $data .= 'RewriteRule ^page_([0-9]+).php?$ page.php?id=$1 [L]' . YD_CRLF;
+            $data .= 'RewriteRule ^category_([0-9]+).php?$ category.php?id=$1 [L]' . YD_CRLF;
+            $data .= 'RewriteRule ^link_([0-9]+).php?$ link.php?id=$1 [L]' . YD_CRLF;
+            $data .= 'RewriteRule ^image/(.*) item_gallery.php?id=$1 [L]' . YD_CRLF;
+
+            // Open the config file
+            $f = fopen( $htaccessPath, 'w' );
+            fwrite( $f, $data );
+            fclose( $f );
+
+            // Set the right permissions
+            @chmod( $htaccessPath, 0700 );
+
+        }
+
     }
 
     // Class defining our weblog API
