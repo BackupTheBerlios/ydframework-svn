@@ -80,6 +80,8 @@
                 $this->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
                 $this->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
 
+                // custom javascript code
+                $this->customJavascript = null;
             }
 
             /**
@@ -134,6 +136,9 @@
                 $this->assign( 'YD_FW_REVISION', YD_FW_REVISION );
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
+                // Add custom javascript
+                $this->register_outputfilter( array( &$this, "__assignJavascript") );
+
                 // Get the template name
                 $tplName = $this->_getTemplateName( $file );
 
@@ -184,6 +189,36 @@
             function assignFetchedTemplate( $name, $file, $cache_id=null, $compile_id=null ) {
                 $fetched = $this->fetch( $file, $cache_id, $compile_id, false );
                 $this->assign( $name, $fetched );
+            }
+
+            /**
+             *	This function will parse the template and will assign custom javascript.
+             *
+             *	@param $tpl_source		Template source
+             *	@param $smarty		    Smarty pointer
+             *
+             *	@returns	Template code parsed
+             */
+            function __assignJavascript( $tpl_source, &$smarty ){
+
+                // test if customJavascript is set
+                if ( is_null( $this->customJavascript ) ) return $tpl_source;
+
+                // add javascript tags
+                $this->customJavascript = "\n<script type=\"text/javascript\">\n" . $this->customJavascript . "</script>\n";
+
+                // replace head end tag
+                return eregi_replace( "</head>", $this->customJavascript . "</head>", $tpl_source );
+            }
+
+            /**
+             *	This function will add custom javascript to the template head
+             *
+             *	@param $jsCode	Javascript code to add
+             */
+            function addJavascript( $jsCode ) {
+
+                $this->customJavascript .= $jsCode . "\n";
             }
 
             /**
