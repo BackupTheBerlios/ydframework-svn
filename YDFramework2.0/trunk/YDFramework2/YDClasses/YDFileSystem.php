@@ -1017,8 +1017,10 @@
                     header( 'Content-type: ' . $img->getMimeType() );
 
                     // Output the image
-                    readfile( $cacheFName );
-                    die();
+                    $f = fopen( $cacheFName, 'rb' );
+                    $data = fread( $f, filesize( $cacheFName ) );
+                    fclose( $f );
+                    die( $data );
 
                 }
 
