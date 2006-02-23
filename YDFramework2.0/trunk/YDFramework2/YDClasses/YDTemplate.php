@@ -214,11 +214,13 @@
             /**
              *	This function will add custom javascript to the template head
              *
-             *	@param $jsCode	Javascript code to add
+             *	@param $jsCode	   Javascript code to add
+             *	@param $prepend    (Optional) Boolean that defines if code should be prepended
              */
-            function addJavascript( $jsCode ) {
+            function addJavascript( $jsCode, $prepend = false ) {
 
-                $this->customJavascript .= $jsCode . "\n";
+                if (!$prepend) $this->customJavascript  = $this->customJavascript . $jsCode . "\n";
+                else           $this->customJavascript  = $jsCode . $this->customJavascript . "\n";
             }
 
             /**
