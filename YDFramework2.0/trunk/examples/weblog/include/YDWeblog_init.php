@@ -256,7 +256,7 @@
             $this->YDForm( $name, $method, $action, $target, $attributes );
 
             // Set the required
-            $this->setHtmlRequired( '', ' <font color="red">(' . t( 'required' ) . ')</font>' );
+            $this->setHtmlRequired( '', ' <span class="required">(' . t( 'required' ) . ')</span>' );
 
             // Register the form element
             $this->registerElement( 'wlbbtextarea', 'YDWeblogFormElement_BBTextArea' );
