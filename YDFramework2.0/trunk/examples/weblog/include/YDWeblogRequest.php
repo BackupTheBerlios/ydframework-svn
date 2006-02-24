@@ -344,7 +344,7 @@
             }
 
             // Trim the unneeded characters
-            $cookiePath = str_replace( '\\', '/', rtrim( $cookiePath, '/' ) );
+            $cookiePath = rtrim( str_replace( '\\', '/', $cookiePath ), '/' );
 
             // Return the cookie path
             return $cookiePath . '/';
