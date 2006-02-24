@@ -42,20 +42,6 @@
 
 
     /**
-     *  This config defines the html tag to use
-     *  Default: </head>
-     */
-    YDConfig::set( 'YD_AJAX_TAG', "</head>", false );
-
-
-    /**
-     *  This config defines if ajax code must be placed after tag (true) or before tag (false).
-     *  Default: false.
-     */
-    YDConfig::set( 'YD_AJAX_AFTERTAG', false, false );
-
-
-    /**
      *  This config defines custom debug value
      *  Default: false
      */
@@ -116,14 +102,11 @@
 		}
 		
 
-		// internal method. replace "</head>" with "all ajax javascript (containing our custom javascript too) and string </head>"
-		function _assignJavascript($tpl_source, &$smarty){
+		// internal method to add js to the template
+		function _assignJavascript(){
 			
 			// load autocompleter css
 			$html  = $this->autocompleterCss;
-			
-			// start javascript code
-			$html .= "\n<script type=\"text/javascript\">\n";
 			
 			// use default url
 			$html .= "var xajaxRequestUri     = \"". YDRequest::getNormalizedUri() ."\";\n";
@@ -186,20 +169,13 @@
 			if (!empty($this->customjsBottom))
 				$html .= implode( "\n", $this->customjsBottom ) ."\n";
 
-			// end javascript code
-			$html .= "</script>\n";
-
-			// get html tag to use
-			$tag = YDConfig::get( 'YD_AJAX_TAG' );
-
-			// add js code to template
-			if ( YDConfig::get( 'YD_AJAX_AFTERTAG' )) return eregi_replace( $tag, $tag  ."\n". $html, $tpl_source );
-			else                                      return eregi_replace( $tag, $html ."\n". $tag,  $tpl_source );
+			// add all code to template html
+			$this->template->addJavascript( $html, true );
 		}
 
 
         /**
-         *	This function adds custom javascript to the template.
+         *	This function adds custom javascript to YDAjax specific js.
          *
          *	@param $js      Javascript code.
          *	@param $order   Zone to place code (top, bottom, topBefore, topAfter, bottomBefore, bottomAfer)
@@ -682,8 +658,8 @@
 			}
 
 			// change template object internals			
-			$this->template->register_outputfilter( array( &$this, "_assignJavascript") );
-
+//			$this->template->register_outputfilter( array( &$this, "_assignJavascript") );
+$this->_assignJavascript();
 			// process all requests and exit
 			return $this->processRequests();
 		}
