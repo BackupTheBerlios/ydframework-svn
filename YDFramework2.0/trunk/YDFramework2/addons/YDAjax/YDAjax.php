@@ -103,13 +103,10 @@
 		
 
 		// internal method to add js to the template
-		function _assignJavascript(){
-			
-			// load autocompleter css
-			$html  = $this->autocompleterCss;
+		function __assignTemplateCode(){
 			
 			// use default url
-			$html .= "var xajaxRequestUri     = \"". YDRequest::getNormalizedUri() ."\";\n";
+			$html  = "var xajaxRequestUri     = \"". YDRequest::getNormalizedUri() ."\";\n";
 
 			// check debug option
 			$html .= "var xajaxDebug          = ". (YDConfig::get( 'YD_AJAX_DEBUG') ? "true" : "false") .";\n";
@@ -629,9 +626,12 @@
 				if ($formElement->getType() != 'autocompleter') continue;
 				
 				if (empty($this->autocompleterCodeFunctions)){
-					// load js code and css
+
+					// load js code
 					$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
-					$this->autocompleterCss  = "\n<style>\n". file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') ."\n</style>";
+
+					// add css to template
+					$this->template->addCss( file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') );
 				}
 		
 				// compute variable name for this autocompleter
@@ -657,9 +657,9 @@
 				$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
 			}
 
-			// change template object internals			
-//			$this->template->register_outputfilter( array( &$this, "_assignJavascript") );
-$this->_assignJavascript();
+			// add js code
+			$this->__assignTemplateCode();
+
 			// process all requests and exit
 			return $this->processRequests();
 		}
