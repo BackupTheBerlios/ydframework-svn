@@ -82,6 +82,9 @@
 
                 // custom javascript code
                 $this->customJavascript = null;
+
+                // custom Css code
+                $this->customCss = null;
             }
 
             /**
@@ -137,7 +140,7 @@
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
                 // Add custom javascript
-                $this->register_outputfilter( array( &$this, "__assignJavascript") );
+                $this->register_outputfilter( array( &$this, "__assignHeadCode") );
 
                 // Get the template name
                 $tplName = $this->_getTemplateName( $file );
@@ -192,23 +195,30 @@
             }
 
             /**
-             *	This function will parse the template and will assign custom javascript.
+             *	This function will parse the template and will assign custom code to head.
              *
              *	@param $tpl_source		Template source
              *	@param $smarty		    Smarty pointer
              *
              *	@returns	Template code parsed
              */
-            function __assignJavascript( $tpl_source, &$smarty ){
+            function __assignHeadCode( $tpl_source, &$smarty ){
+
+                // code to add
+                $code = '';
+
+                // test if customCss is set
+                if ( !is_null( $this->customCss ) )
+                    $code  = "\n<style type=\"text/css\">\n" . $this->customCss . "</style>";
 
                 // test if customJavascript is set
-                if ( is_null( $this->customJavascript ) ) return $tpl_source;
+                if ( !is_null( $this->customJavascript ) ) 
+                    $code .= "\n<script type=\"text/javascript\">\n" . $this->customJavascript . "</script>\n";
 
-                // add javascript tags
-                $this->customJavascript = "\n<script type=\"text/javascript\">\n" . $this->customJavascript . "</script>\n";
+                if ( $code == '' ) return $tpl_source;
 
                 // replace head end tag
-                return eregi_replace( "</head>", $this->customJavascript . "</head>", $tpl_source );
+                return eregi_replace( "</head>", $code . "</head>", $tpl_source );
             }
 
             /**
@@ -221,6 +231,18 @@
 
                 if (!$prepend) $this->customJavascript  = $this->customJavascript . $jsCode . "\n";
                 else           $this->customJavascript  = $jsCode . $this->customJavascript . "\n";
+            }
+
+            /**
+             *	This function will add custom css to the template head
+             *
+             *	@param $cssCode	   Css code to add
+             *	@param $prepend    (Optional) Boolean that defines if code should be prepended
+             */
+            function addCss( $cssCode, $prepend = false ) {
+
+                if (!$prepend) $this->customCss = $this->customCss . $cssCode . "\n";
+                else           $this->customCss = $cssCode . $this->customCss . "\n";
             }
 
             /**
