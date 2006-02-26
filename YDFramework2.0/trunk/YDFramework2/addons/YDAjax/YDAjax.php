@@ -263,6 +263,9 @@
 
 			// create js function to show div
 			$this->waitingMessageCodeFunction ="\nfunction ". $this->wtFunction ."{". $effectShow->getJSHead($this->wtID ."id") . $effectShow->getJSBody($this->wtID ."id") ."}";
+
+			// add script to hide waiting message on response
+			$this->response->addScript( $this->effectHide->getJSHead($this->wtID ."id") . $this->effectHide->getJSBody($this->wtID ."id") );
 		}
 
 
@@ -691,10 +694,6 @@
          *	This method will process all results added in a response
          */	
 		function processResults(){
-
-			// add script to hide waiting message if it's used
-			if (isset($this->wtID))
-				$this->response->addScript( $this->effectHide->getJSHead($this->wtID ."id") . $this->effectHide->getJSBody($this->wtID ."id") );
 
 			// return XML to client browser
 			return $this->response->getXML();
