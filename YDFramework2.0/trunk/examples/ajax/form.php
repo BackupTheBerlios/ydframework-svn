@@ -53,15 +53,13 @@
 		function processform( $formvalues ){
 
 			// if form is not valid, send errors to client side using an alert
-			if (!$this->form->validate( $formvalues )){
-				$this->ajax->addAlert( implode( "\n", $this->form->getErrors() ) );
-			
-			}else{
-				// assign span 'myspanresult' with form values and change 'mybutton' caption
-				$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
-				$this->ajax->addResult( 'mybutton',     'Send form with YDAjax again :)' );
-			}
-			
+			if (!$this->form->validate( $formvalues ))
+				return YDAjax::message( implode( "\n", $this->form->getErrors() ) );
+
+			// assign span 'myspanresult' with form values and change 'mybutton' caption
+			$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
+			$this->ajax->addResult( 'mybutton',     'Send form with YDAjax again :)' );
+
 			// return response to client browser
 			return $this->ajax->processResults();
 		}
