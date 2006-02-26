@@ -386,7 +386,7 @@
 			}
 
 			// if formElementName is a js function we are not assigning an event to a form element but creating a js function
-			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			if (ereg ("^(.*)\(.*\)$", $formElementName, $function)){
 				$this->customjs[ $function[0] ] = $functionName;
 				return;
 			}
@@ -472,14 +472,17 @@
 																							
 						default : die ('Element type "'. $elem->getType() .'" is not supported as dynamic argument');
 					}
-							
-				continue;
+					
+					$args[] = "'". htmlentities( $arg ) ."'";
+					continue;
 				}
-						
-				// if it's not a form element just parse the argument string (we don't want " and ' on code)
-				$args[] = "'". htmlentities( $arg ) ."'";
+
+				// if it's not a form element just parse the argument string
+				// if argument is in format 'var ?' where ? is a string, it's a js variable. otherwise is a simple string
+				if (ereg ("^var (.*)$", $arg, $res)) $args[] = $res[1];
+				else                                 $args[] = "'". htmlentities( $arg ) ."'";
 			}
-						
+
 			// convert arguments (we don't want " and ' on code)
 			return implode( ",", $args );
 		}
@@ -501,7 +504,7 @@
 			}
 
 			// check element
-			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			if (ereg ("^(.*)\(.*\)$", $formElementName, $function)){
 			
 				if (!isset( $this->customjs[ $function[0] ] )) die( "Function ". $function[0] ." is not defined." );
 				
@@ -594,7 +597,7 @@
 		function addAlias( $formElementName, $functionName, $event = null ){
 
 			// check element
-			if (ereg ("^(.*)\(\)$", $formElementName, $function)){
+			if (ereg ("^(.*)\(.*\)$", $formElementName, $function)){
 			
 				if (!isset( $this->customjs[ $formElementName ] )) die( "Function ". $formElementName ." is not defined." );
 				
