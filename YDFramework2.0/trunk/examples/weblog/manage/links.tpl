@@ -67,7 +67,7 @@
         {foreach from=$links->set item="link"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$link.title}</td>
-                <td class="adminRowL"><a href="{$link.url}" target="_blank">{$link.url}</a></td>
+                <td class="adminRowL"><a href="../link.php?id={$link.id}" target="_blank">{$link.url}</a></td>
                 <td class="adminRowR">{$link.num_visits}</td>
                 <td class="adminRowR">
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$link.id}">{t w="edit"}</a> |
