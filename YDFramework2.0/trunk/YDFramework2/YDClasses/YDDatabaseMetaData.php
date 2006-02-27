@@ -40,8 +40,12 @@
          *
          *  @param $db             The YDDatabase object pointing to the database
          */
-        function YDDatabaseMetaData( $db ) {
-            $this->db    = $db;
+        function YDDatabaseMetaData( $db=null ) {
+            if ( is_null( $db ) ) {
+                $this->db = YDDatabase::getNamedInstance();
+            } else {
+                $this->db = $db;
+            }
         }
 
         /**

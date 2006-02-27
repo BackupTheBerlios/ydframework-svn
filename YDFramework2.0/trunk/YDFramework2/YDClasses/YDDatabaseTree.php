@@ -44,8 +44,12 @@
          *  @param $parentField    (optional) Name of the parent ID field. Default is parent_id.
          *  @param $sortField      (optional) Name of the field to sort data. Default is title.
          */
-        function YDDatabaseTree( $db, $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
-            $this->db    = $db;
+        function YDDatabaseTree( $db=null, $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
+            if ( is_null( $db ) ) {
+                $this->db = YDDatabase::getNamedInstance();
+            } else {
+                $this->db = $db;
+            }
             $this->table = $table;
             $this->fields = array(
                 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
