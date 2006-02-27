@@ -15,6 +15,11 @@
             // Register the graph template function
             $this->tpl->register_function( 'graph', array( & $this, 'templateGraph' ) );
 
+            // Update the possible wrong statistics
+            $this->weblog->db->executeSql(
+                "update #_statistics set uri = concat( 'item', uri ) where uri like '.php?id=%'"
+            );
+
         }
 
         // Special template function to draw a graph

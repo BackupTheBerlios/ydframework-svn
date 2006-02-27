@@ -222,12 +222,15 @@
             if ( substr( $values['uri'], 0, 1 ) == '/' ) {
                 $values['uri'] = substr( $values['uri'], 1 );
             }
+            if ( substr( $values['uri'], 0, 4 ) == '.php' ) {
+                $values['uri'] = basename( YD_SELF_SCRIPT ) . substr( $values['uri'], 4 );
+            }
             $values['date'] = strftime( '%Y-%m-%d' );
             $values['browser'] = $this->browser->browser;
             $values['platform'] = $this->browser->platform;
 
             // Fix the short URLs so that they all look the same
-            if ( YDConfig::get( 'friendly_urls', true ) ) {
+            if ( YDConfig::get( 'friendly_urls', true ) && strpos( $values['uri'], '_' ) ) {
                 if ( YDStringUtil::startswith( $values['uri'], 'image/', false ) ) {
                     $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
                 } elseif ( YDStringUtil::startswith( $values['uri'], 'archive' ) ) {
