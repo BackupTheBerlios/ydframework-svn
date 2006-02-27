@@ -340,6 +340,8 @@
          *  @param $label       (optional) The label for the form element.
          *  @param $attributes  (optional) The attributes for the form element.
          *  @param $options     (optional) The options for the elment.
+         *
+         *  @returns    A reference to the element that was added.
          */
         function & addElement( $type, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -398,6 +400,21 @@
             // Return the reference to the instance
             return $this->_elements[ $name ];
 
+        }
+
+        /**
+         *  This function will add multiple form elements at once.
+         *
+         *  @param $type        The type of element to add.
+         *  @param $names       Array with the names of the elements that should be added.
+         *  @param $label       (optional) The label for the form element.
+         *  @param $attributes  (optional) The attributes for the form element.
+         *  @param $options     (optional) The options for the elment.
+         */
+        function addElements( $type, $names, $label='', $attributes=array(), $options=array() ) {
+            foreach ( $names as $name ) {
+                $this->addElement( $type, $name, $label, $attributes, $options );
+            }
         }
 
         /**
