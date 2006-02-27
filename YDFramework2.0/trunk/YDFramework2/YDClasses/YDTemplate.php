@@ -79,6 +79,10 @@
                 $this->register_modifier( 'fmtfilesize', 'YDTemplate_modifier_fmtfileize' );
                 $this->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
                 $this->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
+                $this->register_modifier( 'bbcode', 'YDTemplate_modifier_bbcode' );
+
+                // Register the custom functions
+                $this->register_function( 't', 'YDTemplate_function_t' );
 
                 // custom javascript code
                 $this->customJavascript = null;
@@ -301,67 +305,6 @@
 
         }
 
-        /**
-         *	@internal
-         */
-        function YDTemplate_modifier_fmtfileize( $size ) {
-            return YDStringUtil::formatFileSize( $size );
-        }
-
-        /**
-         *	@internal
-         */
-        function YDTemplate_modifier_implode( $array, $separator=', ' ) {
-            return implode( $separator, $array );
-        }
-
-        /**
-         *	@internal
-         */
-        function YDTemplate_make_timestamp( $string ) {
-            if ( empty( $string ) ) {
-                $string = "now";
-            }
-            $time = strtotime( $string );
-            if ( is_numeric( $time ) && $time != -1 ) {
-                return $time;
-            }
-            if ( preg_match( '/^\d{14}$/', $string ) ) {
-                $time = mktime(
-                    substr( $string, 8, 2 ), substr( $string, 10, 2 ), substr( $string, 12, 2 ),
-                    substr( $string, 4, 2 ), substr( $string, 6, 2 ), substr( $string,0 ,4 )
-                );
-                return $time;
-            }
-            $time = ( int ) $string;
-            if ( $time > 0 ) {
-                return $time;
-            } else {
-                return time();
-            }
-        }
-
-        /**
-         *	@internal
-         */
-        function YDTemplate_modifier_date_format( $string, $format='%b %d, %Y', $default_date=null ) {
-            if( $string != '' ) {
-                return strftime( $format, YDTemplate_make_timestamp( $string ) );
-            } elseif ( isset( $default_date ) && $default_date != '' ) {
-                return strftime( $format, YDTemplate_make_timestamp( $default_date ) );
-            } else {
-                return;
-            }
-        }
-
-        /**
-         *	@internal
-         */
-        function YDTemplate_modifier_dump( $obj ) {
-            var_dump( $obj );
-            return;
-        }
-
     // Use PHP templates
     } else {
 
@@ -535,6 +478,117 @@
 
         }
 
+    }
+
+    /**
+     *	This template function loads a translation from a global variables $_GLOBALS['t'] with specified name.
+     *
+     *  @param  $params   The parameters for the modifier. The parameter "w" gives the name of the translation. The
+     *                    parameter lower indicates if the translation needs to be returned as lowercase or not.
+     *
+     *  @returns    The named translation.
+     */
+    function YDTemplate_function_t( $params ) {
+        if ( @ $params['lower'] == 'yes' ) {
+            return isset( $params['w'] ) ? strtolower( t( $params['w'] ) ) : '';
+        } else {
+            return isset( $params['w'] ) ? t( $params['w'] ) : '';
+        }
+    }
+
+    /**
+     *	This template modifier converts a piece of text to BBCode.
+     *
+     *  @param  $text   The text to convert
+     *
+     *  @returns    The text formatted as HTML.
+     */
+    function YDTemplate_modifier_bbcode( $text ) {
+        YDInclude( 'YDBBCode.php' );
+        $cls = new YDBBCode();
+        return $cls->toHtml( $text, true, false, false, YDRequest::getCurrentUrl() );
+    }
+
+    /**
+     *	This template modifier formats a numeric value to a human readable file size.
+     *
+     *  @param  $size   The numeric value to format.
+     *
+     *  @returns    The filesize in a human readable format.
+     */
+    function YDTemplate_modifier_fmtfileize( $size ) {
+        return YDStringUtil::formatFileSize( $size );
+    }
+
+    /**
+     *	This template modifier converst an array to a string using the specified separator.
+     *
+     *  @param  $array      The array to convert.
+     *  @param  $separator  (optional) The separator to use. Default is ", ".
+     *
+     *  @returns    The array as a string.
+     */
+    function YDTemplate_modifier_implode( $array, $separator=', ' ) {
+        return implode( $separator, $array );
+    }
+
+    /**
+     *	This template modifier generates a timestamp.
+     *
+     *  @param  $string     The string to convert to a timestamp.
+     *
+     *  @returns    The timestamp as a numeric value.
+     */
+    function YDTemplate_make_timestamp( $string ) {
+        if ( empty( $string ) ) {
+            $string = "now";
+        }
+        $time = strtotime( $string );
+        if ( is_numeric( $time ) && $time != -1 ) {
+            return $time;
+        }
+        if ( preg_match( '/^\d{14}$/', $string ) ) {
+            $time = mktime(
+                substr( $string, 8, 2 ), substr( $string, 10, 2 ), substr( $string, 12, 2 ),
+                substr( $string, 4, 2 ), substr( $string, 6, 2 ), substr( $string,0 ,4 )
+            );
+            return $time;
+        }
+        $time = ( int ) $string;
+        if ( $time > 0 ) {
+            return $time;
+        } else {
+            return time();
+        }
+    }
+
+    /**
+     *	This template modifier formats a timestamp as a string using the strftime function.
+     *
+     *  @param  $string     The timestamp to format.
+     *  @param  $format     (optional) The format to use. Default is '%b %d, %Y'.
+     *  @param  $default_date   (optional) If null and no string is given, the current time will be used.
+     *
+     *  @returns    The formatted date.
+     */
+    function YDTemplate_modifier_date_format( $string, $format='%b %d, %Y', $default_date=null ) {
+        if( $string != '' ) {
+            return strftime( $format, YDTemplate_make_timestamp( $string ) );
+        } elseif ( isset( $default_date ) && $default_date != '' ) {
+            return strftime( $format, YDTemplate_make_timestamp( $default_date ) );
+        } else {
+            return;
+        }
+    }
+
+    /*
+     *	This template modifier will dump the contents of the variable using var_dump.
+     *
+     *  @param  $obj    The object to dump.
+     */
+    function YDTemplate_modifier_dump( $obj ) {
+        var_dump( $obj );
+        return;
     }
 
 ?>

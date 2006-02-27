@@ -41,8 +41,6 @@
             $this->tpl->template_dir = dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/';
 
             // Register the modifiers
-            $this->tpl->register_function( 't', 'YDTplModT' );
-            $this->tpl->register_modifier( 'bbcode', 'YDTplModBBCode' );
             $this->tpl->register_modifier( 'date', 'YDTplModDate' );
             $this->tpl->register_modifier( 'link_item', 'YDTplModLinkItem' );
             $this->tpl->register_modifier( 'link_item_gallery', 'YDTplModLinkItemGallery' );
