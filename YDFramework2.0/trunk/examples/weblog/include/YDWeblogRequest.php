@@ -299,6 +299,14 @@
             // Change the template directory
             $this->tpl->template_dir = YD_SELF_DIR;
 
+            // Get a link to the database metadata
+            $dbmeta = new YDDatabaseMetaData( $this->weblog->db );
+
+            // Optimize the tables
+            foreach ( $dbmeta->getTables() as $table ) {
+                $this->weblog->db->executeSql( 'optimize table ' . $table );
+            }
+
         }
 
         // Init the template
