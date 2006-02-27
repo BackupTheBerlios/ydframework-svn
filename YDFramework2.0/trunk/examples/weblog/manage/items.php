@@ -142,7 +142,7 @@
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber['email'], $subscriber['name'] );
                         }
-                        $eml->setSubject( 'New item: ' . strip_tags( $values['title'] ) );
+                        $eml->setSubject( t('new_item') . ': ' . strip_tags( $values['title'] ) );
                         $eml->setHtmlBody( $this->fetch( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/item_email.tpl' ) );
                         $eml->send();
 
