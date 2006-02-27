@@ -94,6 +94,9 @@ $GLOBALS['t']['new_comment'] = 'Nieuw commentaar';
 $GLOBALS['t']['item_title'] = 'Item titel';
 $GLOBALS['t']['wrote'] = 'schreef';
 
+// item_email.tpl
+$GLOBALS['t']['new_item'] = 'Nieuw item';
+
 // page.tpl
 $GLOBALS['t']['created_on'] = 'Aangemaakt op';
 $GLOBALS['t']['last_modified_on'] = 'Laatst aangepast op';
@@ -251,6 +254,7 @@ $GLOBALS['t']['cfg_weblog_language'] = 'Weblog Taal';
 $GLOBALS['t']['cfg_weblog_date_format'] = 'Datum formaat';
 $GLOBALS['t']['cfg_notification'] = 'Notificatie Instellingen';
 $GLOBALS['t']['cfg_notification_email_comment'] = 'Email nieuwe commentaren';
+$GLOBALS['t']['cfg_notification_email_item'] = 'Email niewe items naar de site auteurs';
 $GLOBALS['t']['cfg_rss'] = 'Syndicatie Instellingen';
 $GLOBALS['t']['cfg_rss_max_syndicated_items'] = 'Aantal gesyndiceerde items';
 $GLOBALS['t']['err_db_host'] = 'Database Hostnaam is vereist';

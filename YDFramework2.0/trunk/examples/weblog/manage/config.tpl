@@ -114,6 +114,10 @@
             <td class="adminRowL" width="300">{t w="cfg_notification_email_comment"}</td>
             <td class="adminRowL" width="400">{$config.email_new_comment}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="cfg_notification_email_item"}</td>
+            <td class="adminRowL" width="400">{$config.email_new_item}</td>
+        </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>

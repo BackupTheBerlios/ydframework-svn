@@ -94,6 +94,9 @@ $GLOBALS['t']['new_comment'] = 'Nouveau commentaire';
 $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';
 $GLOBALS['t']['wrote'] = '&eacute;crit';
 
+// item_email.tpl
+$GLOBALS['t']['new_item'] = 'Nouveau entr&eacute;e';
+
 // page.tpl
 $GLOBALS['t']['created_on'] = 'Cr&eacute;&eacute; le';
 $GLOBALS['t']['last_modified_on'] = 'Derni&egrave;re modification le';
@@ -250,6 +253,7 @@ $GLOBALS['t']['cfg_weblog_language'] = 'Langage du Weblog';
 $GLOBALS['t']['cfg_weblog_date_format'] = 'Format des dates';
 $GLOBALS['t']['cfg_notification'] = 'Options de notification';
 $GLOBALS['t']['cfg_notification_email_comment'] = 'Pr&eacute;venir par email des nouveaux commentaires';
+$GLOBALS['t']['cfg_notification_email_item'] = 'Pr&eacute;venir par email des nouveaux articles';
 $GLOBALS['t']['cfg_rss'] = 'Options de syndication';
 $GLOBALS['t']['cfg_rss_max_syndicated_items'] = 'Nombre d\'entr&eacute;es syndiqu&eacute;es';
 $GLOBALS['t']['err_db_host'] = 'Le serveur (hostname) de la base de donn&eacute;es est requis';

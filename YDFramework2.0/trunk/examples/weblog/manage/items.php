@@ -119,6 +119,35 @@
                     // Add it to the database
                     $this->weblog->addItem( $values );
 
+                    // Send an email if configured
+                    if ( YDConfig::get( 'email_new_item', true ) ) {
+
+                        // Include the YDEmail library
+                        YDInclude( 'YDEmail.php' );
+
+                        // Get the list of subscriptions
+                        $subscribers = $this->weblog->getUsers();
+
+                        // Add the comment to the email template
+                        $this->tpl->assign( 'item', $values );
+
+                        // Create the email and send it
+                        $eml = new YDEmail();
+                        if ( ! empty( $item['user_email'] ) ) {
+                            $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                        } else {
+                            $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                        }
+                        $eml->setReplyTo( 'no@reply.net' );
+                        foreach ( $subscribers as $subscriber ) {
+                            $eml->addBcc( $subscriber['email'], $subscriber['name'] );
+                        }
+                        $eml->setSubject( 'New item: ' . strip_tags( $values['title'] ) );
+                        $eml->setHtmlBody( $this->fetch( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/item_email.tpl' ) );
+                        $eml->send();
+
+                    }
+
                 }
 
                 // Redirect to the default acton

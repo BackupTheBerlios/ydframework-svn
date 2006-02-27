@@ -25,6 +25,7 @@
 
             // Fix the boolean values
             $config['email_new_comment']   = ( $config['email_new_comment'] ) ? t('yes') : t('no');
+            $config['email_new_item']      = ( $config['email_new_item'] ) ? t('yes') : t('no');
             $config['use_cache']           = ( $config['use_cache'] ) ? t('yes') : t('no');
             $config['friendly_urls']       = ( $config['friendly_urls'] ) ? t('yes') : t('no');
             $config['include_debug_info']  = ( $config['include_debug_info'] ) ? t('yes') : t('no');
@@ -81,6 +82,7 @@
             $form->addElement( 'checkbox', 'include_debug_info', t( 'cfg_include_debug_info' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ),  array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox', 'email_new_item', t( 'cfg_notification_email_item' ),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'max_syndicated_items', t( 'cfg_rss_max_syndicated_items' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'checkbox', 'use_cache', t( 'cfg_use_cache_comment' ), array( 'style' => 'border: none;' ) );
@@ -154,6 +156,7 @@
             $config['weblog_language']      = YDConfig::get( 'weblog_language',      'nl' );
             $config['include_debug_info']   = YDConfig::get( 'include_debug_info',   false );
             $config['email_new_comment']    = YDConfig::get( 'email_new_comment',    true );
+            $config['email_new_item']       = YDConfig::get( 'email_new_item',       true );
             $config['max_syndicated_items'] = YDConfig::get( 'max_syndicated_items', 20 );
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );
             $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );

@@ -28,16 +28,17 @@
 
         <div id="content" class="narrowcolumn">
 
-            <h3>{t w="new_comment"}: {$item.title}</h3>
+            <h3>{t w="new_item"}: {$item.title}</h3>
 
             <p>
                 <b>{t w="weblog"}</b>: <a href="{$weblog_link}">{$weblog_title}</a><br/>
                 <b>{t w="item_title"}</b>: <a href="{$item|@link_item}">{$item.title}</a><br/>
             </p>
 
-            <p>{$eml_comment.username} {t w="wrote"}:</p>
-
-            <blockquote><i>{$eml_comment.comment|bbcode}</i></blockquote>
+            <blockquote>
+                <p>{$item.body|bbcode}</p>
+                <p>{$item.body_more|bbcode}</p>
+            </blockquote>
 
             &nbsp;
 

@@ -327,7 +327,7 @@
 
         // Add an item
         function addItem( $values ) {
-            return $this->_executeInsert( '#_items', $values );
+            $result = $this->_executeInsert( '#_items', $values );
         }
 
         // Update an item

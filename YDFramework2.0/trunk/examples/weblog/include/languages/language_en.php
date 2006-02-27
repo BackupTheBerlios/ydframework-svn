@@ -94,6 +94,9 @@ $GLOBALS['t']['new_comment'] = 'New comment';
 $GLOBALS['t']['item_title'] = 'Item title';
 $GLOBALS['t']['wrote'] = 'wrote';
 
+// item_email.tpl
+$GLOBALS['t']['new_item'] = 'New item';
+
 // page.tpl
 $GLOBALS['t']['created_on'] = 'Created on';
 $GLOBALS['t']['last_modified_on'] = 'Last modified on';
@@ -251,6 +254,7 @@ $GLOBALS['t']['cfg_weblog_language'] = 'Weblog Language';
 $GLOBALS['t']['cfg_weblog_date_format'] = 'Date format';
 $GLOBALS['t']['cfg_notification'] = 'Notification Settings';
 $GLOBALS['t']['cfg_notification_email_comment'] = 'Email new comments';
+$GLOBALS['t']['cfg_notification_email_item'] = 'Email new items to site authors';
 $GLOBALS['t']['cfg_rss'] = 'Syndication Settings';
 $GLOBALS['t']['cfg_rss_max_syndicated_items'] = 'Number of syndicated items';
 $GLOBALS['t']['err_db_host'] = 'Database Hostname is required';
