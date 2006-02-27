@@ -1,6 +1,7 @@
 /* Begin Typography & Colors */
 body {
 	font-size: 62.5%; /* Resets 1em to 10px */
+	font-size: 10px; /* Resets 1em to 10px */
 	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
 	background-color: #d5d6d7;
 	color: #333;
@@ -108,9 +109,13 @@ h2, h2 a, h2 a:hover, h2 a:visited, h3, h3 a, h3 a:hover, h3 a:visited, #sidebar
 	}
 
 .commentlist li, #commentform input, #commentform textarea {
-	font: 0.9em 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	font: 1em 'Lucida Grande', Verdana, Arial, Sans-Serif;
 	}
-	
+
+#commentform textarea {
+	font-size: 1.3em;
+	}
+
 .commentlist li {
 	font-weight: bold;
 	}
