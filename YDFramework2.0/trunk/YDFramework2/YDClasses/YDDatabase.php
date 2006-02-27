@@ -445,6 +445,69 @@
     class YDDatabase extends YDBase {
 
         /**
+         *  This function registers a named database instance.
+         *
+         *  @param $name    The name of the database instance.
+         *  @param $driver  Name of the database driver or array containing drivername, file name and class name.
+         *  @param $db      Database name to use for the connection.
+         *  @param $user    (optional) User name to use for the connection.
+         *  @param $pass    (optional) Password to use for the connection.
+         *  @param $host    (optional) Host name to use for the connection.
+         *
+         *  @static
+         */
+        function registerInstance( $name, $driver, $db, $user='', $pass='', $host='' ) {
+
+            // Check if the global array exists
+            YDDatabase::_initNamedInstances();
+
+            // Register the instance
+            $GLOBALS['YD_DB_INSTANCES'][ strtolower( $name ) ] = array( $driver, $db, $user, $pass, $host );
+
+        }
+
+        /**
+         *  This function will return a YDDatabaseDriver instance for the named database instance. If no instance is
+         *  given, the one with the name "default" will be used.
+         *
+         *  @param $name    (optional) The name of the database instance. Defaults to "default".
+         *
+         *  @returns    An instance of YDDatabaseDriver
+         *
+         *  @static
+         */
+        function getNamedInstance( $name='default' ) {
+
+            // Check if the global array exists
+            YDDatabase::_initNamedInstances();
+
+            // Trigger an error if the named instance doesn't exist.
+            if ( ! array_key_exists( strtolower( $name ), $GLOBALS['YD_DB_INSTANCES'] ) ) {
+                trigger_error( 'The named database instance "' . $name . '" is not defined.', YD_ERROR );
+            }
+
+            // Get the parameters
+            $params = $GLOBALS['YD_DB_INSTANCES'][ strtolower( $name ) ];
+
+            // Return the right named instance
+            return YDDatabase::getInstance( $params[0], $params[1], $params[2], $params[3], $params[4] );
+
+        }
+
+        /**
+         *  Function to setup the array for the named instances.
+         *
+         *  @internal
+         *
+         *  @static
+         */
+        function _initNamedInstances() {
+            if ( ! isset( $GLOBALS['YD_DB_INSTANCES'] ) ) {
+                $GLOBALS['YD_DB_INSTANCES'] = array();
+            }
+        }
+
+        /**
          *  Using this static function, you can get an instance of a YDDatabaseDriver class.
          *
          *  @param $driver  Name of the database driver or array containing drivername, file name and class name.
@@ -452,6 +515,10 @@
          *  @param $user    (optional) User name to use for the connection.
          *  @param $pass    (optional) Password to use for the connection.
          *  @param $host    (optional) Host name to use for the connection.
+         *
+         *  @returns    An instance of YDDatabaseDriver
+         *
+         *  @static
          */
         function getInstance( $driver, $db, $user='', $pass='', $host='' ) {
 
