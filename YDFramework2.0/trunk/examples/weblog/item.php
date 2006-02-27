@@ -124,7 +124,7 @@
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber );
                         }
-                        $eml->setSubject( 'New comment: ' . strip_tags( $item['title'] ) );
+                        $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
                         $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
                         $eml->send();
 
