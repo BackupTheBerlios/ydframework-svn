@@ -4,7 +4,7 @@
 $GLOBALS['t']['not_found'] = 'Non trouv&eacute;';
 $GLOBALS['t']['sorry_not_there'] = 'D&eacute;sol&eacute;, mais vous cherchez quelque chose qui n\'est pas l&agrave;.';
 $GLOBALS['t']['sorry_not_found'] = 'D&eacute;sol&eacute;, mais vous cherchez quelque chose qui n\'a pas &eacute;t&eacute; trouv&eacute;.';
-$GLOBALS['t']['no_items_found'] = 'D&eacute;sol&eacute;, aucun &eacute;l&eacute;ment correspondant.';
+$GLOBALS['t']['no_items_found'] = 'D&eacute;sol&eacute;, aucune entr&eacute;e correspondante.';
 $GLOBALS['t']['by'] = 'par';
 $GLOBALS['t']['required'] = 'requis';
 $GLOBALS['t']['login'] = 'Login';
@@ -95,7 +95,7 @@ $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';
 $GLOBALS['t']['wrote'] = '&eacute;crit';
 
 // item_email.tpl
-$GLOBALS['t']['new_item'] = 'Nouveau entr&eacute;e';
+$GLOBALS['t']['new_item'] = 'Nouvelle entr&eacute;e';
 
 // page.tpl
 $GLOBALS['t']['created_on'] = 'Cr&eacute;&eacute; le';
@@ -273,7 +273,7 @@ $GLOBALS['t']['cfg_spam_protection'] = 'Protection anti-spam';
 $GLOBALS['t']['cfg_auto_close_items'] = 'Interdire les commentaires apr&egrave;s x jours';
 $GLOBALS['t']['err_auto_close_items'] = 'Interdire les commentaires apr&egrave;s x jours devrait &ecirc;tre num&eacute;rique';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Affiche des informations de d&eacute;bogage';
-$GLOBALS['t']['cfg_default_item_settings'] = 'Valeurs par d&eacute;faut pour des nouveaux articles';
+$GLOBALS['t']['cfg_default_item_settings'] = 'Valeurs par d&eacute;faut pour les nouvelles entr&eacute;es';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';
