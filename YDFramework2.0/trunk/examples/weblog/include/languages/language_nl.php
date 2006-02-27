@@ -270,6 +270,7 @@ $GLOBALS['t']['cfg_spam_protection'] = 'Beveiliging tegen spam';
 $GLOBALS['t']['cfg_auto_close_items'] = 'Laat geen commentaren toe na x dagen';
 $GLOBALS['t']['err_auto_close_items'] = 'Laat geen commentaren toe na x dagen moet een getal zijn';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Toon debugging informatie';
+$GLOBALS['t']['cfg_default_item_settings'] = 'Standaard waardes voor nieuwe posts';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

@@ -270,6 +270,7 @@ $GLOBALS['t']['cfg_spam_protection'] = 'Spam protection';
 $GLOBALS['t']['cfg_auto_close_items'] = 'Do not allow comment after x days';
 $GLOBALS['t']['err_auto_close_items'] = 'Do not allow comment after x days should be numeric';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Show debugging information';
+$GLOBALS['t']['cfg_default_item_settings'] = 'Default values for new items';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

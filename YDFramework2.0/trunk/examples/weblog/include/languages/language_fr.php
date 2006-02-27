@@ -269,6 +269,7 @@ $GLOBALS['t']['cfg_spam_protection'] = 'Protection anti-spam';
 $GLOBALS['t']['cfg_auto_close_items'] = 'Interdire les commentaires apr&egrave;s x jours';
 $GLOBALS['t']['err_auto_close_items'] = 'Interdire les commentaires apr&egrave;s x jours devrait &ecirc;tre num&eacute;rique';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Affiche des informations de d&eacute;bogage';
+$GLOBALS['t']['cfg_default_item_settings'] = 'Valeurs par d&eacute;faut pour des nouveaux articles';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';

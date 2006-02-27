@@ -79,8 +79,19 @@
 
             } else {
 
+                // Get the defaults
+                $defaults = array();
+                $defaults['allow_comments'] = YDConfig::get( 'dflt_allow_comments', true );
+                $auto_close_items = YDConfig::get( 'auto_close_items', true );
+                if ( empty( $auto_close_items ) ) {
+                    $defaults['auto_close'] = false;
+                } else {
+                    $defaults['auto_close'] = true;
+                }
+                $defaults['is_draft'] = YDConfig::get( 'dflt_is_draft', false );
+
                 // Set the form defaults
-                $form->setDefaults( array( 'allow_comments' => 1, 'auto_close' => 1, 'is_draft' => 0 ) );
+                $form->setDefaults( $defaults );
 
             }
 

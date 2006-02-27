@@ -80,6 +80,24 @@
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_default_item_settings"}</th>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="allow_comments"}</td>
+            <td class="adminRowL" width="400">{$config.dflt_allow_comments}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="cfg_auto_close_items"}</td>
+            <td class="adminRowL" width="400">{$config.auto_close_items}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="is_draft"}</td>
+            <td class="adminRowL">{$config.dflt_is_draft}</td>
+        </tr>
+    </table>
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
             <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_cache"}</th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
@@ -107,16 +125,14 @@
             <td class="adminRowL" width="400">{$config.max_syndicated_items}</td>
         </tr>
     </table>
+    {*
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>
             <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_spam_protection"}</th>
         </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="300">{t w="cfg_auto_close_items"}</td>
-            <td class="adminRowL" width="400">{$config.auto_close_items}</td>
-        </tr>
     </table>
+    *}
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
 
@@ -186,6 +202,24 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr><td colspan="3">&nbsp;</td></tr>
             <tr>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_default_item_settings"}</th>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.dflt_allow_comments.label_html}</td>
+                <td class="adminRowL" width="400">{$form.dflt_allow_comments.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.auto_close_items.label_html}</td>
+                <td class="adminRowL" width="400">{$form.auto_close_items.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.dflt_is_draft.label_html}</td>
+                <td class="adminRowL" width="400">{$form.dflt_is_draft.html}</td>
+            </tr>
+        </table>
+        <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
                 <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_cache"}</th>
             </tr>
             <tr>
@@ -211,16 +245,6 @@
             <tr>
                 <td class="adminRowL" width="300">{$form.max_syndicated_items.label_html}</td>
                 <td class="adminRowL" width="400">{$form.max_syndicated_items.html}</td>
-            </tr>
-        </table>
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr>
-                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_spam_protection"}</th>
-            </tr>
-            <tr>
-                <td class="adminRowL" width="300">{$form.auto_close_items.label_html}</td>
-                <td class="adminRowL" width="400">{$form.auto_close_items.html}</td>
             </tr>
         </table>
         <p>{$form._cmdSubmit.html}</p>

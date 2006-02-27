@@ -24,10 +24,13 @@
             $config = $this->getConfig();
 
             // Fix the boolean values
-            $config['email_new_comment']  = ( $config['email_new_comment'] ) ? t('yes') : t('no');
-            $config['use_cache']          = ( $config['use_cache'] ) ? t('yes') : t('no');
-            $config['friendly_urls']      = ( $config['friendly_urls'] ) ? t('yes') : t('no');
-            $config['include_debug_info'] = ( $config['include_debug_info'] ) ? t('yes') : t('no');
+            $config['email_new_comment']   = ( $config['email_new_comment'] ) ? t('yes') : t('no');
+            $config['use_cache']           = ( $config['use_cache'] ) ? t('yes') : t('no');
+            $config['friendly_urls']       = ( $config['friendly_urls'] ) ? t('yes') : t('no');
+            $config['include_debug_info']  = ( $config['include_debug_info'] ) ? t('yes') : t('no');
+            $config['dflt_allow_comments'] = ( $config['dflt_allow_comments'] ) ? t('yes') : t('no');
+            $config['dflt_is_draft']       = ( $config['dflt_is_draft'] ) ? t('yes') : t('no');
+            $config['auto_close_items']    = ( empty( $config['auto_close_items'] ) ) ? '-' : $config['auto_close_items'];
 
             // Assign it to the template
             $this->tpl->assign( 'config', $config );
@@ -84,7 +87,9 @@
 
             $form->addElement( 'checkbox', 'friendly_urls', t( 'cfg_friendly_urls' ), array( 'style' => 'border: none;' ) );
 
+            $form->addElement( 'checkbox', 'dflt_allow_comments', t( 'allow_comments' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'auto_close_items', t( 'cfg_auto_close_items' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'checkbox', 'dflt_is_draft', t( 'is_draft' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
@@ -153,6 +158,8 @@
             $config['use_cache']            = YDConfig::get( 'use_cache',            false );
             $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );
             $config['auto_close_items']     = YDConfig::get( 'auto_close_items',     '' );
+            $config['dflt_allow_comments']  = YDConfig::get( 'dflt_allow_comments',  true );
+            $config['dflt_is_draft']        = YDConfig::get( 'dflt_is_draft',        false );
 
             // Return the configuration
             return $config;

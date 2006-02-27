@@ -27,6 +27,12 @@
         if ( ! isset( $values['include_debug_info'] ) ) {
             $values['include_debug_info'] = 0;
         }
+        if ( ! isset( $values['dflt_allow_comments'] ) ) {
+            $values['dflt_allow_comments'] = true;
+        }
+        if ( ! isset( $values['dflt_is_draft'] ) ) {
+            $values['dflt_is_draft'] = false;
+        }
 
         // Construct the new config text
         $cfg = '<?php' . "\n\n";
