@@ -88,7 +88,8 @@ del /Q "doc\docs_api.dxy" > NUL
 del /Q "doc\docs_api_footer.html" > NUL
 del /Q "doc\RequestProcessing.vsd" > NUL
 del /Q "YDFramework2\images\*.psd" > NUL
-del /Q "make_release.bat" > NUL
+del /Q "scripts\*.bat" > NUL
+rmdir /Q /S "scripts"
 
 :create_build_number_file
 echo [task] Creating build revision file...
