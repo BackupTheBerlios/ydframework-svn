@@ -147,35 +147,6 @@
     }
 
     /**
-     *	This function loads a translation from a global variables $_GLOBALS['t'] with specified name.
-     *
-     *  @param  $params   The parameters for the modifier. The parameter "w" gives the name of the translation. The
-     *                    parameter lower indicates if the translation needs to be returned as lowercase or not.
-     *
-     *  @returns    The named translation.
-     */
-    function t( $t ) {
-
-        // Return empty string when param is missing
-        if ( empty( $t ) ) {
-            return '';
-        }
-
-        // Load the language file
-        @include_once( dirname( __FILE__ ) . '/languages/language_' . strtolower( YDLocale::get() ) . '.php' );
-
-        // Initialize the language array
-        if ( ! isset( $GLOBALS['t'] ) ) {
-            $GLOBALS['t'] = array();
-        }
-
-        // Return the right translation
-        $t = strtolower( $t );
-        return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
-
-    }
-
-    /**
      *  This is the base class for all other YD classes.
      */
     class YDBase {
