@@ -71,6 +71,9 @@
                             @unlink( YD_DIR_TEMP . '/' . $file );
                         }
                     }
+                    if ( substr( $file, -strlen( '.tpl.php' ) ) == '.tpl.php' ) {
+                        @unlink( YD_DIR_TEMP . '/' . $file );
+                    }
                 }
                 closedir( $handle );
             }
