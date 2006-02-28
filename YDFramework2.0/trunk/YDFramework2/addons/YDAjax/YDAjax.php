@@ -65,7 +65,7 @@
          *	@param $template		Template object.
          *	@param $form			Form object.
          */
-        function YDAjax( & $template, & $form){
+        function YDAjax( & $template, & $form = null){
 
 			// prefix string used in js function names
 			$this->prefix = YDConfig::get( 'YD_AJAX_PREFIX' );
@@ -118,33 +118,34 @@
 			$html .= "var xajaxDefinedPost    = 1;\n";
 
 			// get standard xajax code
-			$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js');
+			$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js') . "\n";
 
 			// include generic effects lib .. yes, it must be ALWAYS included
-			$html .= "\n". file_get_contents( dirname( __FILE__ ) . '/js/prototype.lite.js_moo.fx.js_moo.fx.pack.js');
+			$html .= file_get_contents( dirname( __FILE__ ) . '/js/prototype.lite.js_moo.fx.js_moo.fx.pack.js') . "\n";
 
 			// send autocompleter code
-			$html .= "\n" . $this->autocompleterCode;
+			$html .= $this->autocompleterCode;
 
 			// compute ONLOAD code
 			$onload = '';
 
 				// export effects js
 				foreach( $this->effects as $eff_name => $eff_code )
-					$onload  .= $eff_code . "\n\t";
+					$onload  .= "\t" . $eff_code . "\n";
 
 				// send js waiting message creation code
 				if ($this->waitingMessageCode != '')
-					$onload  .= $this->waitingMessageCode . "\n\t";
+					$onload  .= "\t" . $this->waitingMessageCode . "\n";
 
 				// send autocompleter functions code
-				$onload  .= implode( "\n\t", $this->autocompleterCodeFunctions );
+				if (!empty( $this->autocompleterCodeFunctions ))
+					$onload  .= "\t" . implode( "\n\t", $this->autocompleterCodeFunctions ) . "\n";
 
 			// if there are on load js just export it
-			if ($onload != '') $html .= "\nwindow.onload = function() {\n\t". $onload . "\n}";
+			if ($onload != '') $html .= "window.onload = function() {". $onload . "}\n";
 
 			// send js function to hide waiting message
-			$html .= $this->waitingMessageCodeFunction . "\n";
+			$html .= $this->waitingMessageCodeFunction;
 
 			// loop xajax functions created on-the-fly
 			foreach($this->aFunctions as $sFunction => $bExists)
@@ -152,22 +153,22 @@
 
 			// add custom js TOP code
 			if (!empty($this->customjsTop))
-				$html .= implode( "\n", $this->customjsTop ) ."\n";
+				$html .= implode( "\n", $this->customjsTop ) . "\n";
 
 			// add YDAjax js variables
 			foreach( $this->customjsVariables as $variable => $declaration )
-				$html .= "var ". $variable ." = ". $declaration .";\n";
+				$html .= "var ". $variable ." = ". $declaration . ";\n";
 
 			// add YDAjax js functions
 			foreach( $this->customjs as $function => $declaration )
-				$html .= "function ". $function ."{". $declaration ."}\n";
+				$html .= "function ". $function ."{". $declaration . "}\n";
 
 			// add js custom BOTTOM code
 			if (!empty($this->customjsBottom))
-				$html .= implode( "\n", $this->customjsBottom ) ."\n";
+				$html .= implode( "\n", $this->customjsBottom ) . "\n";
 
 			// add all code to template html
-			$this->template->addJavascript( $html, true );
+			$this->template->addJavascript( trim( $html ), true );
 		}
 
 
@@ -263,8 +264,8 @@
 				$effectHide = new YDAjaxEffect( '', 'hide', '', 0 );
 
 			// create js functions to show/hide div
-			$this->waitingMessageCodeFunction  = "\nfunction ". $this->wtFunctionShow ."{". $effectShow->getJSHead($this->wtID ."id") . $effectShow->getJSBody($this->wtID ."id") ."}";
-			$this->waitingMessageCodeFunction .= "\nfunction ". $this->wtFunctionHide ."{". $effectHide->getJSHead($this->wtID ."id") . $effectHide->getJSBody($this->wtID ."id") ."}";
+			$this->waitingMessageCodeFunction  = "function ". $this->wtFunctionShow ."{". $effectShow->getJSHead($this->wtID ."id") . $effectShow->getJSBody($this->wtID ."id") ."}\n";
+			$this->waitingMessageCodeFunction .= "function ". $this->wtFunctionHide ."{". $effectHide->getJSHead($this->wtID ."id") . $effectHide->getJSBody($this->wtID ."id") ."}\n";
 
 			// add script to hide waiting message on response
 			$this->response->addScript( $this->wtFunctionHide . ";" );
@@ -320,7 +321,8 @@
 			// serverFunction must be an array with a class and the method (get function name)
 			$functionName = $this->computeFunction( $formElementName, $serverFunction, $arguments, $options, $effects );
 
-			if (!$this->form->isElement( $formElementName )) return;
+			// if form is not defined or element is not a form element we must return
+			if ( is_null( $this->form ) || !$this->form->isElement( $formElementName ) ) return;
 
 			// get element object
 			$formElement = & $this->form->getElement( $formElementName );
@@ -435,7 +437,7 @@
 			if (is_null($arguments)) return "";
 
 			// if is one argument and it's the form name, we want the form values
-			if (is_string( $arguments ) && $this->form->_name == $arguments) return "xajax.getFormValues('". $arguments . "')";
+			if (is_string( $arguments ) && !is_null( $this->form ) && $this->form->getName() == $arguments) return "xajax.getFormValues('". $arguments . "')";
 
 			// if there's only one argument or option, create arrays
 			if (!is_array( $arguments )) $arguments = array( $arguments );
@@ -628,41 +630,42 @@
 		function processEvents(){
 
 			// find autocompleters
-			foreach( $this->form->_elements as $formElement){
+			if ( !is_null( $this->form ))
+				foreach( $this->form->_elements as $formElement){
 			
-				if ($formElement->getType() != 'autocompleter') continue;
+					if ($formElement->getType() != 'autocompleter') continue;
 				
-				if (empty($this->autocompleterCodeFunctions)){
+					if (empty($this->autocompleterCodeFunctions)){
 
-					// load js code
-					$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
+						// load js code
+						$this->autocompleterCode = "\n" . file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js');
 
-					// add css to template
-					$this->template->addCss( file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') );
-				}
+						// add css to template
+						$this->template->addCss( file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css') );
+					}
 		
-				// compute variable name for this autocompleter
-				$variable = $this->prefix ."at".  $formElement->getName();
+					// compute variable name for this autocompleter
+					$variable = $this->prefix ."at".  $formElement->getName();
 
-				// compute html text id
-				$textID = $formElement->getAttribute( 'id' );
+					// compute html text id
+					$textID = $formElement->getAttribute( 'id' );
 			
-				// compute div id
-				$divID = $textID .'_div';
+					// compute div id
+					$divID = $textID .'_div';
 
-				// get function call
-				$serverFunctionName = $formElement->getAjaxCall();
+					// get function call
+					$serverFunctionName = $formElement->getAjaxCall();
 
-				// get ajax arguments
-				$arguments = $formElement->getAjaxArguments();
+					// get ajax arguments
+					$arguments = $formElement->getAjaxArguments();
 
-				// get ajax effects
-				$effects = $formElement->getAjaxEffects();
+					// get ajax effects
+					$effects = $formElement->getAjaxEffects();
 
-				// add js code for autocompleter
-				$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
-				$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
-			}
+					// add js code for autocompleter
+					$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
+					$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;".  $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
+				}
 
 			// add js code
 			$this->__assignTemplateCode();
@@ -727,12 +730,12 @@
 			// if we want all values and not only the select one
 			if (in_array( 'all', $options )){
 
-				$this->customjs[$jsfunction]  = 'var __ydtmparr = new Array();' . "\n";
-				$this->customjs[$jsfunction] .= 'var __ydtmpsel = document.getElementById("'. $element->getAttribute('id') .'");' . "\n";
-				$this->customjs[$jsfunction] .= 'for (i = 0; i < __ydtmpsel.length; i++){' . "\n";
-				$this->customjs[$jsfunction] .= '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;' . "\n";
-				$this->customjs[$jsfunction] .= '}' . "\n";
-				$this->customjs[$jsfunction] .= 'return __ydtmparr;';
+				$this->customjs[$jsfunction]  = "\n\t" . 'var __ydtmparr = new Array();';
+				$this->customjs[$jsfunction] .= "\n\t" . 'var __ydtmpsel = document.getElementById("'. $element->getAttribute('id') .'");';
+				$this->customjs[$jsfunction] .= "\n\t" . 'for (i = 0; i < __ydtmpsel.length; i++){';
+				$this->customjs[$jsfunction] .= "\n\t" . '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;';
+				$this->customjs[$jsfunction] .= "\n\t" . '}';
+				$this->customjs[$jsfunction] .= "\n\t" . 'return __ydtmparr;' . "\n";
 		
 				return $jsfunction;
 			}
@@ -794,11 +797,11 @@
 			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var day   = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var month = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;' . "\n";
-			$this->customjs[$jsfunction] .= 'var year  = document.getElementById("'. $element->getAttribute('id') .'[year]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day ); ' . "\n";
-			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
+			$this->customjs[$jsfunction]  = "\n\t" . 'var day   = document.getElementById("'. $element->getAttribute('id') .'[day]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var month = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var year  = document.getElementById("'. $element->getAttribute('id') .'[year]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var mydate = new Date( year, month, day ); ';
+			$this->customjs[$jsfunction] .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
 
 			// return function invocation
 			return $jsfunction;
@@ -812,10 +815,10 @@
 			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var mydate = new Date( 1970, 1, 1, hours, minutes ); ' . "\n";
-			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
+			$this->customjs[$jsfunction]  = "\n\t" . 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var mydate = new Date( 1970, 1, 1, hours, minutes ); ';
+			$this->customjs[$jsfunction] .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
 
 			// return function invocation
 			return $jsfunction;
@@ -829,13 +832,13 @@
 			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  = 'var day      = document.getElementById("'. $element->getAttribute('id') .'[day]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var month    = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;' . "\n";
-			$this->customjs[$jsfunction] .= 'var year     = document.getElementById("'. $element->getAttribute('id') .'[year]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;' . "\n";
-			$this->customjs[$jsfunction] .= 'var mydate = new Date( year, month, day, hours, minutes ); ' . "\n";
-			$this->customjs[$jsfunction] .= 'return mydate.getTime() / 1000;';
+			$this->customjs[$jsfunction]  = "\n\t" . 'var day      = document.getElementById("'. $element->getAttribute('id') .'[day]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var month    = document.getElementById("'. $element->getAttribute('id') .'[month]").value - 1;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var year     = document.getElementById("'. $element->getAttribute('id') .'[year]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var hours    = document.getElementById("'. $element->getAttribute('id') .'[hours]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var minutes  = document.getElementById("'. $element->getAttribute('id') .'[minutes]").value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'var mydate = new Date( year, month, day, hours, minutes ); ';
+			$this->customjs[$jsfunction] .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
 
 			// return function invocation
 			return $jsfunction;
@@ -849,9 +852,9 @@
 			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 		
 			// add our custom js function
-			$this->customjs[$jsfunction]  =	'if (document.getElementById("'. $element->getAttribute('id') .'").checked)' . "\n";
-			$this->customjs[$jsfunction] .=	'	return 1;' . "\n";
-			$this->customjs[$jsfunction] .=	'return 0;';
+			$this->customjs[$jsfunction]  =	"\n\t" . 'if (document.getElementById("'. $element->getAttribute('id') .'").checked)';
+			$this->customjs[$jsfunction] .=	"\n\t" . '	return 1;';
+			$this->customjs[$jsfunction] .=	"\n\t" . 'return 0;' . "\n";
 
 			// return function invocation
 			return $jsfunction;
@@ -865,10 +868,10 @@
 			$jsfunction = $this->prefix .'get'. $element->getName() .'()';
 			
 			// add custom js function
-			$this->customjs[$jsfunction]  = 'var __ydftmp = document.getElementById("'. $element->getAttribute('id') .'");' . "\n";
-			$this->customjs[$jsfunction] .= 'for (counter = 0; counter < __ydftmp.length; counter++)' . "\n";
-			$this->customjs[$jsfunction] .= '	if (__ydftmp[counter].checked) return __ydftmp[counter].value;' . "\n";
-			$this->customjs[$jsfunction] .= 'return false;';
+			$this->customjs[$jsfunction]  = "\n\t" . 'var __ydftmp = document.getElementById("'. $element->getAttribute('id') .'");';
+			$this->customjs[$jsfunction] .= "\n\t" . 'for (counter = 0; counter < __ydftmp.length; counter++)';
+			$this->customjs[$jsfunction] .= "\n\t" . '	if (__ydftmp[counter].checked) return __ydftmp[counter].value;';
+			$this->customjs[$jsfunction] .= "\n\t" . 'return false;' . "\n";
 
 			// return function invocation
 			return $jsfunction;
@@ -892,11 +895,11 @@
          *	@param $message			Message to display.
          */		
 		function message( $message ){
-			
+
 			$response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
 			$response->addScript( 'try{ waitingmessagehide() }catch(e){}' );
 			$response->addAlert( $message );
-			
+
 			return $response;
 		}
 
