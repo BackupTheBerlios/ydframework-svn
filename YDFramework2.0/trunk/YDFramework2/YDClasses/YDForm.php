@@ -122,6 +122,7 @@
             $this->registerElement( 'link', 'YDFormElement_Link', 'YDFormElement_Link.php' );
             $this->registerElement( 'div', 'YDFormElement_Div', 'YDFormElement_Div.php' );
             $this->registerElement( 'autocompleter', 'YDFormElement_Autocompleter', 'YDFormElement_Autocompleter.php' );
+            $this->registerElement( 'switchmenu', 'YDFormElement_SwitchMenu', 'YDFormElement_SwitchMenu.php' );
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
