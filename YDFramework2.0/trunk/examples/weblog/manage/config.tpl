@@ -240,6 +240,10 @@
                 <td class="adminRowL" width="300">{$form.email_new_comment.label_html}</td>
                 <td class="adminRowL" width="400">{$form.email_new_comment.html}</td>
             </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.email_new_item.label_html}</td>
+                <td class="adminRowL" width="400">{$form.email_new_item.html}</td>
+            </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr><td colspan="3">&nbsp;</td></tr>
