@@ -65,7 +65,7 @@
          *	@param $template		Template object.
          *	@param $form			Form object.
          */
-        function YDAjax( & $template, & $form = null){
+        function YDAjax( & $template, & $form ){
 
 			// prefix string used in js function names
 			$this->prefix = YDConfig::get( 'YD_AJAX_PREFIX' );
