@@ -109,6 +109,9 @@
                         // Get the list of subscriptions
                         $subscribers = $this->weblog->getCommentSubscribers( $id );
 
+                        // Get the list of subscriptions
+                        $users = $this->weblog->getUsers();
+
                         // Add the comment to the email template
                         $this->tpl->assign( 'eml_comment', $values );
 
@@ -123,6 +126,9 @@
                         $eml->addBcc( $item['user_email'] );
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber );
+                        }
+                        foreach ( $users as $user ) {
+                            $eml->addBcc( $user['email'], $user['name'] );
                         }
                         $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
                         $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
