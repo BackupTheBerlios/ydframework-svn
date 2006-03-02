@@ -87,7 +87,7 @@
                 }
 
                 // Add it to the feed
-                $this->feed->addItem( $item['title'], YDTplModLinkItem( $item ), YDTplModBBCode( $body ) );
+                $this->feed->addItem( $item['title'], YDTplModLinkItem( $item ), YDTemplate_modifier_bbcode( $body ) );
 
             }
 
@@ -109,7 +109,7 @@
             foreach ( $comments as $comment ) {
                 $body = $comment['comment'] . "\n\n" . t('by') . ' ' . $comment['username'];
                 $this->feed->addItem(
-                    $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ), YDTplModBBCode( $body )
+                    $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ), YDTemplate_modifier_bbcode( $body )
                 );
             }
 
@@ -134,7 +134,7 @@
                     foreach ( $item['images'] as $image ) {
                         $body .= '<img src="' . YDTplModLinkThumb( $image ) . '"/> ';
                     }
-                    $this->feed->addItem( $item['title'], YDTplModLinkItemGallery( $item ), YDTplModBBCode( $body ) );
+                    $this->feed->addItem( $item['title'], YDTplModLinkItemGallery( $item ), YDTemplate_modifier_bbcode( $body ) );
                 }
             }
 
