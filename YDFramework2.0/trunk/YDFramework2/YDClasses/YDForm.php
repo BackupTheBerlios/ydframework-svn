@@ -1501,12 +1501,13 @@
             }
             return array(
                 'name'        => $this->_name,
+                'id'          => $this->_attributes['id'],
                 'value'       => $this->_value,
                 'default'     => $this->_default,
                 'type'        => $this->_type,
-                'labelname'   => $this->_label,
+                'label'       => $this->_label,
                 'attributes'  => $this->_attributes,
-                'label'       => '<label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label>',
+                'label_html'  => '<label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label>',
                 'options'     => $this->_options,
                 'placeLabel'  => $this->_placeLabel,
                 'html'        => $this->toHtml(),

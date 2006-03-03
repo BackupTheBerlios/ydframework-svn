@@ -71,9 +71,9 @@
             $form['tag'] = '<form' . $form['attribs'] . '>';
             $form['requirednote'] = $this->_form->_requiredNote;
             $form['endtag'] = '</form>';
-
-            // Add the errors
             $form['name']   = $this->_form->_name;
+            
+            // Add the errors
             $form['errors'] = $this->_form->_errors;
             $form['errors_unique_messages' ] = array_unique( array_values( $this->_form->_errors ) );
 
@@ -105,26 +105,15 @@
                 }
                 $form[ $name ]['required'] = $required;
 
-                // Add the HTML labels
-                if ( $form[ $name ]['isButton'] === false ) {
-                    $form[ $name ]['label_html'] = '';
-                    if ( $form[ $name ]['placeLabel'] != 'none' ) {
-                        if ( ! empty( $form[ $name ]['label'] ) ) {
-                            $form[ $name ]['label_html'] .= $form[ $name ]['label'];
-                        }
-                        $obj = $this->_form->getElement( $name );
-                        if ( $form[ $name ]['required'] ) {
-                            $form[ $name ]['label_html'] = $this->_form->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_form->_htmlRequiredEnd;
-                        }
-                        if ( ! empty( $form[ $name ]['error'] ) ) {
-                            $form[ $name ]['error_html'] = $this->_form->_htmlErrorStart . $form[ $name ]['error'] . $this->_form->_htmlErrorEnd;
-                        }
+                // Add required and error HTML
+                if ( $form[ $name ]['isButton'] === false && $form[ $name ]['placeLabel'] != 'none' ) {
+                    if ( $form[ $name ]['required'] ) {
+                        $form[ $name ]['label_html'] = $this->_form->_htmlRequiredStart . $form[ $name ]['label_html'] . $this->_form->_htmlRequiredEnd;
+                    }
+                    if ( ! empty( $form[ $name ]['error'] ) ) {
+                        $form[ $name ]['error_html'] = $this->_form->_htmlErrorStart . $form[ $name ]['error'] . $this->_form->_htmlErrorEnd;
                     }
                 }
-
-                // Fix the labels
-                $form[ $name ]['label'] = $form[ $name ]['labelname'];
-                unset( $form[ $name ]['labelname'] );
 
             }
 
@@ -132,12 +121,14 @@
             if ( $this->_form->_method == 'get' ) {
                 $form['do'] = array();
                 $form['do']['name'] = 'do';
+                $form['do']['id'] = 'do';
                 $form['do']['value'] = YDRequest::getActionName();
                 $form['do']['type'] = 'hidden';
                 $form['do']['label'] = '';
+                $form['do']['label_html'] = '';
                 $form['do']['options'] = array();
                 $form['do']['placeLabel'] = 'none';
-                $form['do']['html'] = '<input type="hidden" name="do" value="' . YDRequest::getActionName() . '" />';
+                $form['do']['html'] = '<input type="hidden" name="do" id="do" value="' . YDRequest::getActionName() . '" />';
                 $form['do']['isButton'] = false;
                 $form['do']['error'] = '';
                 $form['do']['required'] = false;
