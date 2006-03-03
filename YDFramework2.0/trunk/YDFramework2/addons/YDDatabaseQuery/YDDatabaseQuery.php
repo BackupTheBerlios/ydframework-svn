@@ -41,7 +41,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '2.6';
+            $this->_version = '2.7';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseQuery object.';
             
@@ -50,12 +50,18 @@
         /**
          *  This function creates a new YDDatabaseQuery class for the specified database engine.
          *
-         *  @param  $db The YDDatabaseDriver object to use.
+         *  @param  $db The YDDatabase object pointing to the database or the named instance.
          *
          *  @returns    Returns a new YDDatabaseQuery class.
          */
-        function getInstance( & $db ) {
+        function getInstance( $db=null ) {
 
+            if ( is_null( $db ) ) {
+                $db = YDDatabase::getNamedInstance();
+            } else if ( is_string( $db ) ) {
+                $db = YDDatabase::getNamedInstance( $db );
+            }
+            
             // Get the driver name
             $driver = $db->getDriver();
             
@@ -121,13 +127,21 @@
         var $filter   = true;
         
         /**
-         *  The class constructor can be used to set the action and optional options.
+         *  The class constructor.
+         *
+         *  @param $db  The YDDatabase object pointing to the database or the named instance.
          */
-         function YDDatabaseQueryDriver( & $db ) {
+         function YDDatabaseQueryDriver( $db=null ) {
             
             $this->YDBase();
             
-            $this->db = & $db;
+            if ( is_null( $db ) ) {
+                $this->db = YDDatabase::getNamedInstance();
+            } else if ( is_string( $db ) ) {
+                $this->db = YDDatabase::getNamedInstance( $db );
+            } else {
+                $this->db = $db;
+            }
             
             $this->reset();
             $this->action();
@@ -1051,7 +1065,7 @@
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-        function YDDatabaseQueryDriver_mysql( & $db ) {
+        function YDDatabaseQueryDriver_mysql( $db=null ) {
             
             $this->YDDatabaseQueryDriver( $db );
             

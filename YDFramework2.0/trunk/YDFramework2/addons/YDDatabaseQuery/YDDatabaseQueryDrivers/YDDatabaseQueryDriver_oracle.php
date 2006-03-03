@@ -37,7 +37,7 @@
         /**
          *  The class constructor can be used to set the action and optional options.
          */
-        function YDDatabaseQueryDriver_oracle( & $db ) {
+        function YDDatabaseQueryDriver_oracle( $db=null ) {
             
             $this->YDDatabaseQueryDriver( $db );
             $this->reserved = '"';

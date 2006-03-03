@@ -104,7 +104,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.26';
+            $this->_version = '4.27';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -171,14 +171,23 @@
         /**
          *  This function register the database connection.
          *
-         *  @param $db  Reference to the database abstraction layer.
+         *  @param $db  The YDDatabase object pointing to the database or the named instance.
          *
-         *  @returns    A reference to the database abstraction layer.
+         *  @returns    A reference to the YDDatabase object.
          */
-        function & registerDatabase( & $db ) {
-            $this->_db = & $db;
+        function & registerDatabase( $db=null ) {
+        
+            if ( is_null( $db ) ) {
+                $this->_db = YDDatabase::getNamedInstance();
+            } else if ( is_string( $db ) ) {
+                $this->_db = YDDatabase::getNamedInstance( $db );
+            } else {
+                $this->_db = $db;
+            }
+            
             $this->_query = YDDatabaseQuery::getInstance( $this->_db );
             return $this->_db;
+            
         }
 
         /**
