@@ -232,7 +232,6 @@
             
             // Show the map
             echo( '<h2>Sitemap Tree Example</h2>' );
-            $path = array();
             foreach ( $tree->getDescendants( 1, true, false, $max_level ) as $child ) {
                 
                 /*
