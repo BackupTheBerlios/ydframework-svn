@@ -110,7 +110,7 @@
                     include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
                     
                     $url = new YDUrl( $mixed );
-                    $contents = $url->getContents(); // false cache?
+                    $contents = $url->getContents( false );
                     break;
             
                 case YD_XML_FILE:
