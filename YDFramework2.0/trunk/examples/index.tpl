@@ -614,7 +614,7 @@
           <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-          <td valign="top" rowspan="16">&nbsp;</td>
+          <td valign="top" rowspan="17">&nbsp;</td>
           <td valign="top"><a href="ajax/version.php">Simple ajax example</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/version.php">ajax/version.php</a> </td>
@@ -684,6 +684,10 @@
         <tr>
           <td valign="top"><a href="ajax/autocompleter.php">Autocompleter</a><br/></td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/autocompleter.php">ajax/autocompleter.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="ajax/functions.php">Without a YDForm </a></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/functions.php">ajax/functions.php</a> </td>
         </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>

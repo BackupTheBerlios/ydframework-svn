@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.4';
+            $this->_version = '2.41';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -243,7 +243,7 @@
 			$options['style.zindex']   = 9999;
 
 			// create js for html element creation
-			$this->waitingMessageCode  = "\n\tvar " . $this->wtID . " = document.createElement('div');";
+			$this->waitingMessageCode  = "var " . $this->wtID . " = document.createElement('div');";
 			
 			// add custom options
 			foreach( $options as $name => $value )

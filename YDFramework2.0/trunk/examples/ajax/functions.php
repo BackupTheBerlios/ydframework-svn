@@ -6,7 +6,6 @@
 	// Includes
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDTemplate.php' );
-	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDAjax.php' );
 
 	// Class definition
@@ -15,43 +14,36 @@
 		function functions() {
 
 			$this->YDRequest();
-			$this->tpl = new YDTemplate();
 		}
 
 
 		// Default action
 		function actionDefault() {
 
-			// create a form with a span and a button
-			$form = new YDForm('myform');
-			$form->addElement('span',   'myspanresult', '&nbsp;', array('style' => 'BACKGROUND-COLOR:#ccccff') );
+			// create template object
+			$tpl = new YDTemplate();
 
-			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl );
-			$this->ajax->addForm( $form );
+			// create ajax object with waiting message
+			$this->ajax = new YDAjax( $tpl );
+			$this->ajax->useWaitingMessage();
 
-			// register custom function
-			$this->ajax->addEvent( 'customFunction()', array( & $this, 'getversion' ) );
+			// add custom event
+			$this->ajax->addEvent( 'customFunction(x)', array( & $this, 'getResult' ), 'var x' );
 
 			// process ajax events
 			$this->ajax->processEvents();
 
-
-			// assign form and display template
-			$this->tpl->assign( 'title', 'This is a simple ajax example');
-			$this->tpl->assign( 'form',  $form->tohtml() );
-			$this->tpl->display();
+			// assign title and display template
+			$tpl->assign( 'title', 'This example demonstrates YDAjax without YDForm');
+			$tpl->display();
 		}
 
 
-		// getversion invoked by ajax client
-		function getversion(){
+		// getResult invoked by ajax client
+		function getResult( $var ){
  
-			// assign result to 'myspanresult'
-			$this->ajax->addResult('myspanresult', YD_FW_NAMEVERS);
-
-			// return response to client browser
-			return $this->ajax->processResults();
+			// message to client browser
+			return YDAjax::message( 'Argument submitted : ' . $var );
 		}
 
 	}
