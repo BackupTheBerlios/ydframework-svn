@@ -52,7 +52,7 @@ if (!defined ('XAJAX_POST'))
 // javascript wrappers for the PHP functions that you want to call from your page.
 // It also handles processing and executing the command messages in the xml responses
 // sent back to your page from your PHP functions.
-class xajax
+class xajax extends YDAddOnModule
 {
 	var $aFunctions;				// Array of PHP functions that will be callable through javascript wrappers
 	var $aObjects;				// Array of object callbacks that will allow Javascript to call PHP methods (key=function name)
@@ -81,6 +81,10 @@ class xajax
 	// usage: $xajax = new xajax();
 	function xajax($sRequestURI="",$sWrapperPrefix="xajax_",$sEncoding=XAJAX_DEFAULT_CHAR_ENCODING,$bDebug=false)
 	{
+	        // Initialize the parent class
+            $this->YDAddOnModule();
+
+
 		$this->aFunctions = array();
 		$this->aObjects = array();
 		$this->aFunctionIncludeFiles = array();

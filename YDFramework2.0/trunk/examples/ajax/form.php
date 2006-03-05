@@ -36,7 +36,8 @@
 			$this->form->addRule( 'myemail', 'email',    'Email is not valid' );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $this->form);
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $this->form );
 
 			// assign element 'mybutton' with method 'processform' with 'myform' values as argument
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'processform' ), 'myform' );

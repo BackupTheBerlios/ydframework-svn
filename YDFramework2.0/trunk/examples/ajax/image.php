@@ -34,7 +34,8 @@
 			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250) );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $this->form );
 
 			// create events for each span using call 'generatechart' but with different static arguments
 			$this->ajax->addEvent( 'myspan1', array( & $this, 'generatechart' ), 1 );

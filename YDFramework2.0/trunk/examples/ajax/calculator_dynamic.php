@@ -32,7 +32,8 @@
 			$form->addElement('button', 'mybutton',     'Calc');
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form );
 
 			// assign 'mybutton' with 'compute' call with dynamic values from form elements 'arg1', 'arg2' and 'operation'
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'compute' ), array('arg1', 'arg2', 'operation') );

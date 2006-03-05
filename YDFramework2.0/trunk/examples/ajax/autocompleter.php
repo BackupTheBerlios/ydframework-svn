@@ -23,21 +23,26 @@
 		// Default action
 		function actionDefault() {
 
-			// create a form with a 2 autocompleters and a simple text element
-			$form = new YDForm('myform');
-			$form->addElement('autocompleter', 'arg1', 'Country with standard style:', '', array( &$this, 'getCountry' ) );
-			$form->addElement('text',          'arg2', 'Just a simple text box without autocompleter');
-			$form->addElement('autocompleter', 'arg3', 'Country with custom style:', array('style' => 'width:300px; background-color:#CCFFFF;'), array( &$this, 'getCountry' ) );
+			// create 2 forms with a 1 autocompleters each and a simple text element
+			$form1 = new YDForm('myform1');
+			$form1->addElement('autocompleter', 'arg1', 'Country with standard style:', '', array( &$this, 'getCountry' ) );
+			$form1->addElement('text',          'arg2', 'Just a simple text box without autocompleter');
+
+			$form2 = new YDForm('myform2');
+			$form2->addElement('autocompleter', 'arg3', 'Country with custom style:', array('style' => 'width:300px; background-color:#CCFFFF;'), array( &$this, 'getCountry' ) );
+			$form2->addElement('text',          'arg4', 'Just another text box' );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form1 );
+			$this->ajax->addForm( $form2 );
 
 			// process events added
 			$this->ajax->processEvents();
 
 			// assign form and display template
 			$this->tpl->assign( 'title', 'Just start typing a coutry name in the box to see the effect' );
-			$this->tpl->assign( 'form',  $form->tohtml() );
+			$this->tpl->assign( 'form',  $form1->tohtml() . $form2->tohtml() );
 			$this->tpl->display();
 		}
 

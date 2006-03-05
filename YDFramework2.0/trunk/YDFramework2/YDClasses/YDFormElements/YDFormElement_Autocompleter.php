@@ -50,7 +50,9 @@
 
             // Set the type
             $this->_type = 'autocompleter';
-
+			
+			// add this autocompleter to the list of autocompleters
+			$GLOBALS['YD_AJAX_AUTOCOMPLETERS'][] = $name; 
         }
 
         /**

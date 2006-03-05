@@ -30,7 +30,8 @@
 			$form->addElement('button',	'mybutton2',    'Get time');
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form );
 
 			// register element mybutton with event result and fixed argument '1' and mybutton2 with event 'result' with argument 2
 			$this->ajax->addEvent( 'mybutton',  array( & $this, 'result' ), 1 );

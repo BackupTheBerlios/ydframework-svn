@@ -28,7 +28,8 @@
 			$this->form->addElement( 'select', 'items',  '', array(), array( 'Click on the link above' ) );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $this->form );
 
 			// assign element 'mybutton' with method 'getcontries'. 
 			// option 'all' means that the argument 'items' must send all values (to 'addentry') and not only the current selected value

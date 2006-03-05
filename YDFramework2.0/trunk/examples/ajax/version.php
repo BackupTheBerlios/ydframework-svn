@@ -28,7 +28,8 @@
 			$form->addElement('button', 'mybutton',     'Get YDFramework version');
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form );
 
 			// register element mybutton (mybutton will be assigned with 'getversion' call in the client side)
 			$this->ajax->addEvent( 'mybutton', array( & $this, 'getversion' ) );

@@ -63,9 +63,14 @@
          *	This is the class constructor for the YDAjax class.
          *
          *	@param $template		Template object.
-         *	@param $form			Form object.
          */
-        function YDAjax( & $template, & $form ){
+        function YDAjax( & $template ){
+
+            // Setup the module
+            $this->_author = 'Francisco Azevedo';
+            $this->_version = '2.4';
+            $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
+            $this->_description = 'This class makes ajax easy for YDF developers';
 
 			// prefix string used in js function names
 			$this->prefix = YDConfig::get( 'YD_AJAX_PREFIX' );
@@ -73,8 +78,12 @@
 			// initialize xajax object
 			$this->xajax( "", $this->prefix, YDConfig::get( 'YD_AJAX_ENCODING' ) );
 			
-			// initilize form
-			$this->form = & $form;
+			// initilize all possible forms (10)
+			$this->form_0 = null; $this->form_1 = null;
+			$this->form_2 = null; $this->form_3 = null;
+			$this->form_4 = null; $this->form_5 = null;
+			$this->form_6 = null; $this->form_7 = null;
+			$this->form_8 = null; $this->form_9 = null;
 
 			// initilize template
 			$this->template = & $template;
@@ -142,7 +151,7 @@
 					$onload  .= "\t" . implode( "\n\t", $this->autocompleterCodeFunctions ) . "\n";
 
 			// if there are on load js just export it
-			if ( $onload != '' ) $html .= "window.onload = function() {" . $onload . "}\n";
+			if ( $onload != '' ) $html .= "window.onload = function() {\n" . $onload . "}\n";
 
 			// send js function to hide waiting message
 			$html .= $this->waitingMessageCodeFunction;
@@ -279,6 +288,60 @@
 		}
 
 
+		// internal method to get a form of an element
+		function __getForm( $name ){
+
+			if ( !is_null( $this->form_0 ) && $this->form_0->isElement( $name ) ) return $this->form_0;
+			if ( !is_null( $this->form_1 ) && $this->form_1->isElement( $name ) ) return $this->form_1;
+			if ( !is_null( $this->form_2 ) && $this->form_2->isElement( $name ) ) return $this->form_2;
+			if ( !is_null( $this->form_3 ) && $this->form_3->isElement( $name ) ) return $this->form_3;
+			if ( !is_null( $this->form_4 ) && $this->form_4->isElement( $name ) ) return $this->form_4;
+			if ( !is_null( $this->form_5 ) && $this->form_5->isElement( $name ) ) return $this->form_5;
+			if ( !is_null( $this->form_6 ) && $this->form_6->isElement( $name ) ) return $this->form_6;
+			if ( !is_null( $this->form_7 ) && $this->form_7->isElement( $name ) ) return $this->form_7;
+			if ( !is_null( $this->form_8 ) && $this->form_8->isElement( $name ) ) return $this->form_8;
+			if ( !is_null( $this->form_9 ) && $this->form_9->isElement( $name ) ) return $this->form_9;
+
+			return null;
+		}
+
+		// internal method to check if a form exist
+		function __isForm( $formName ){
+		
+			if ( !is_null( $this->form_0 ) && $this->form_0->getName() == $formName ) return true;
+			if ( !is_null( $this->form_1 ) && $this->form_1->getName() == $formName ) return true;
+			if ( !is_null( $this->form_2 ) && $this->form_2->getName() == $formName ) return true;
+			if ( !is_null( $this->form_3 ) && $this->form_3->getName() == $formName ) return true;
+			if ( !is_null( $this->form_4 ) && $this->form_4->getName() == $formName ) return true;
+			if ( !is_null( $this->form_5 ) && $this->form_5->getName() == $formName ) return true;
+			if ( !is_null( $this->form_6 ) && $this->form_6->getName() == $formName ) return true;
+			if ( !is_null( $this->form_7 ) && $this->form_7->getName() == $formName ) return true;
+			if ( !is_null( $this->form_8 ) && $this->form_8->getName() == $formName ) return true;
+			if ( !is_null( $this->form_9 ) && $this->form_9->getName() == $formName ) return true;
+			
+			return false;
+		}
+		
+        /**
+         *	This method adds a form
+         *
+         *	@param $form		YDForm object
+         */		
+		function addForm( & $form ){
+		
+			if ( is_null( $this->form_0 ) ){ $this->form_0 = & $form; return; }
+			if ( is_null( $this->form_1 ) ){ $this->form_1 = & $form; return; }
+			if ( is_null( $this->form_2 ) ){ $this->form_2 = & $form; return; }
+			if ( is_null( $this->form_3 ) ){ $this->form_3 = & $form; return; }
+			if ( is_null( $this->form_4 ) ){ $this->form_4 = & $form; return; }
+			if ( is_null( $this->form_5 ) ){ $this->form_5 = & $form; return; }
+			if ( is_null( $this->form_6 ) ){ $this->form_6 = & $form; return; }
+			if ( is_null( $this->form_7 ) ){ $this->form_7 = & $form; return; }
+			if ( is_null( $this->form_8 ) ){ $this->form_8 = & $form; return; }
+			if ( is_null( $this->form_9 ) ){ $this->form_9 = & $form; return; }	
+		}
+
+
         /**
          *	This method assigns the current autocompleter with a result array
          *
@@ -320,12 +383,14 @@
 			// serverFunction must be an array with a class and the method (get function name)
 			$functionName = $this->computeFunction( $formElementName, $serverFunction, $arguments, $options, $effects );
 
-			// if form is not defined or element is not a form element we must return
-			if( is_null( $this->form ) || !$this->form->isElement( $formElementName ) ) return;
+			// if element don't have a form we must return
+			$form = $this->__getForm( $formElementName );
 
-			// get element object
-			$formElement = & $this->form->getElement( $formElementName );
-			
+			if( is_null( $form ) ) return;
+
+			// get form element
+			$formElement = & $form->getElement( $formElementName );
+
 			// if event is null we must check the form element type to compute the default event
 			if( is_null( $event ) ) $event = $this->_getDefaultEvent( $formElement->getType() );
 
@@ -367,17 +432,28 @@
 				// if is one effect, we should create an array of effects
 				if ( !is_array( $effects ) ) $effects = array( $effects );
 
-				// cycle effects (from last to first) and create js				
+				// cycle effects and create js
 				foreach( $effects as $effect ){
-
-					// element id
-					$id = $this->form->getName() . '_' . $effect->getId();
 				
 					if ( !in_array( $effect->getVariable(), $this->effects ) ){
-					
+
+						// get form of the element
+						$form = $this->__getForm( $effect->getId() );
+
 						// check if element is a form element
-						if ( $this->form->isElement( $effect->getId() ) )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
-						else												$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
+						if ( !is_null ( $form ) ){
+
+							// compute element id
+							$element = & $form->getElement( $effect->getId() );
+					
+							// get id
+							$id = $element->getAttribute( 'id' );
+						
+							$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
+						
+						}
+						else
+							$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
 				
 					}
 
@@ -406,11 +482,14 @@
 			// initialize js to send
 			$js = '';
 
+			// get form of the element where effect is applyied
+			$form = $this->__getForm( $effect->getId() );
+
 			// test if effect id is a form element
-			if ( $this->form->isElement( $effect->getId() ) ){
+			if ( !is_null( $form ) ){
 				
 				// get element
-				$elem = & $this->form->getElement( $effect->getId() );		
+				$elem = & $form->getElement( $effect->getId() );		
 
 				// element id
 				$id = $elem->getAttribute( 'id' );
@@ -435,8 +514,8 @@
 			// if there are not arguments return empty string
 			if ( is_null( $arguments ) ) return "";
 
-			// if is one argument and it's the form name, we want the form values
-			if ( is_string( $arguments ) && !is_null( $this->form ) && $this->form->getName() == $arguments) return "xajax.getFormValues('" . $arguments . "')";
+			// if is one argument and it's a form name, we want the form values
+			if ( is_string( $arguments ) && $this->__isForm( $arguments ) ) return "xajax.getFormValues('" . $arguments . "')";
 
 			// if there's only one argument or option, create arrays
 			if ( !is_array( $arguments ) ) $arguments = array( $arguments );
@@ -451,11 +530,14 @@
 				// if argument is numeric just add it and continue
 				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
 					
-				// if there's a form defined, test if this argument belongs to it
-				if ( !is_null( $this->form ) && $this->form->isElement( $arg ) ){
+				// get the form of this argument
+				$form = $this->__getForm( $arg );
+
+				// if there's a form defined it's because the argument is a form element
+				if ( !is_null( $form ) ){
 						
 					// get element object
-					$elem = & $this->form->getElement( $arg );
+					$elem = & $form->getElement( $arg );
 
 					// get element type to invoke the custom js to get the value
 					switch( $elem->getType() ){
@@ -515,8 +597,14 @@
 				return;				
 			}
 
+			// get form of this element
+			$form = $this->__getForm( $formElementName );
+
+			// if form is null, it's because formElementName doesn't exist
+			if ( is_null( $form ) ) die( '"' . $formElementName . '" is not a element of any defined form.' ); 
+
 			// get element
-			$elem = & $this->form->getElement( $formElementName );
+			$elem = & $form->getElement( $formElementName );
 
 			// check default event
 			if ( is_null( $event ) ) $event = $this->_getDefaultEvent( $elem->getType() );
@@ -606,8 +694,11 @@
 				return;				
 			}
 
+			// get form of this element
+			$form = $this->__getForm( $formElementName );
+			
 			// get element object
-			$elem = & $this->form->getElement( $formElementName );
+			$elem = & $form->getElement( $formElementName );
 			
 			// if we don't define a event we must check default one
 			if ( is_null( $event ) ) $event = $this->_getDefaultEvent( $elem->getType() );
@@ -627,49 +718,60 @@
          */	
 		function processEvents(){
 
-			// find autocompleters
-			if ( !is_null( $this->form ) )
-				foreach( $this->form->_elements as $formElement ){
+			// check autocompleters
+			$this->__computeAutocompletersCode();
 			
-					if ( $formElement->getType() != 'autocompleter' ) continue;
-				
-					if ( empty( $this->autocompleterCodeFunctions ) ){
-
-						// load js code
-						$this->autocompleterCode = "\n" . file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js' );
-
-						// add css to template
-						$this->template->addCss( file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css' ) );
-					}
-		
-					// compute variable name for this autocompleter
-					$variable = $this->prefix . "at" . $formElement->getName();
-
-					// compute html text id
-					$textID = $formElement->getAttribute( 'id' );
-			
-					// compute div id
-					$divID = $textID . '_div';
-
-					// get function call
-					$serverFunctionName = $formElement->getAjaxCall();
-
-					// get ajax arguments
-					$arguments = $formElement->getAjaxArguments();
-
-					// get ajax effects
-					$effects = $formElement->getAjaxEffects();
-
-					// add js code for autocompleter
-					$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
-					$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;" . $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
-				}
-
 			// add js code
 			$this->__assignTemplateCode();
 
 			// process all requests and exit
 			return $this->processRequests();
+		}
+
+
+		// internal method to add all autocompleter code
+		function __computeAutocompletersCode(){
+
+			// check global flag that defines if there are autocompleters in all forms
+			if ( !isset( $GLOBALS['YD_AJAX_AUTOCOMPLETERS'] ) ) return;
+
+			// load js code
+			$this->autocompleterCode = file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.js' ) . "\n";
+
+			// add css to template
+			$this->template->addCss( file_get_contents( dirname( __FILE__ ) . '/js/autocompleter.css' ) );
+
+			// find autocompleters
+			foreach( $GLOBALS['YD_AJAX_AUTOCOMPLETERS'] as $formElementName ){
+			
+				// get form of this element
+				$form = $this->__getForm( $formElementName );
+
+				// get element
+				$formElement = & $form->getElement( $formElementName );
+
+				// compute variable name for this autocompleter
+				$variable = $this->prefix . "at" . $formElement->getName();
+
+				// compute html text id
+				$textID = $formElement->getAttribute( 'id' );
+			
+				// compute div id
+				$divID = $textID . '_div';
+
+				// get function call
+				$serverFunctionName = $formElement->getAjaxCall();
+
+				// get ajax arguments
+				$arguments = $formElement->getAjaxArguments();
+
+				// get ajax effects
+				$effects = $formElement->getAjaxEffects();
+
+				// add js code for autocompleter
+				$this->autocompleterCodeFunctions[] = $variable . " = new AutoSuggest('" . $textID . "','" . $divID . "', null);";
+				$this->autocompleterCodeFunctions[] = $variable . ".ajax = function(){currentAjaxAutocompleter=this;" . $this->computeFunction( $textID, $serverFunctionName, $arguments, $effects ) . "}";
+			}
 		}
 
 
@@ -684,11 +786,13 @@
 		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
 		
 			// if is not a form element, assign result to a html id
-			if ( !$this->form->isElement( $formElementName ) )
+			$form = $this->__getForm( $formElementName );
+
+			if ( is_null( $form ) )
 				return $this->response->assignId( $formElementName, $result, $attribute, $options );
 
 			// if is a form element, get element
-			$elem = & $this->form->getElement( $formElementName );
+			$elem = & $form->getElement( $formElementName );
 
 			// assign result to element
 			return $this->response->assignResult( $elem, $result, $attribute, $options);

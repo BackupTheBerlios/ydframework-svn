@@ -28,7 +28,8 @@
 			$form->addElement( 'select', 'model', '', array() );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form );
 			
 			// register event to element 'car' and send to 'getmodel' method its dynamic value
 			$this->ajax->addEvent( 'car', array( & $this, 'getmodel' ), array( 'car' ) );

@@ -33,7 +33,8 @@
  			$this->form->setDefault( 'variable', 'example' );
 			
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $this->form );
 
 			// add write and read events
 			$this->ajax->addEvent( 'write', array( & $this, 'write' ), 'variable' );

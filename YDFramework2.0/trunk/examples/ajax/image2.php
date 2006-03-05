@@ -37,7 +37,8 @@
 			$this->form->addElement( 'img',     'myimage2', '', array( 'width' => 550, 'height' => 250 ) );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $this->form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $this->form );
 
 			// create effect
 			$ef1 = new YDAjaxEffect( 'myimage2', 'resize',   "modify(50, 100)" );

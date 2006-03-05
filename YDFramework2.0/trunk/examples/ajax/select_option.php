@@ -23,23 +23,30 @@
 		// Default action
 		function actionDefault() {
 
-			// create form
-			$form = new YDForm('myform');
-			$form->addElement( 'text',   'mytext', 'Write something, eg: "David" (case sensitive)' );
-			$form->addElement( 'select', 'items',  '', array(), array( 'Francisco' => 'Francisco', 'Pieter' => 'Pieter', 'David' => 'David' ) );
+			// create first form form
+			$form1 = new YDForm( 'myform' );
+			$form1->addElement( 'text',   'text1', 'Write something, eg: "David" (case sensitive)' );
+			$form1->addElement( 'select', 'items',  '', array(), array( 'Francisco' => 'Francisco', 'Pieter' => 'Pieter', 'David' => 'David' ) );
+
+			// second form
+			$form2 = new YDForm( 'second' );
+			$form2->addElement( 'text',   'text2', 'Write something, eg: "Pieter" (case sensitive)' );
 
 			// create ajax object
-			$this->ajax = new YDAjax( $this->tpl, $form );
+			$this->ajax = new YDAjax( $this->tpl );
+			$this->ajax->addForm( $form1 );
+			$this->ajax->addForm( $form2 );
 
 			// assign event to mytext
-			$this->ajax->addEvent( 'mytext', array( & $this, 'setSelect' ), 'mytext', 'onkeyup' );
+			$this->ajax->addEvent( 'text1', array( & $this, 'setSelect' ), 'text1', 'onkeyup' );
+			$this->ajax->addEvent( 'text2', array( & $this, 'setSelect' ), 'text2', 'onkeyup' );
 
 			// process all events
 			$this->ajax->processEvents();
 
 			// assign title, form and display template
 			$this->tpl->assign( 'title', 'Change selected value on-the-fly example' );
-			$this->tpl->assign( 'form',  $form->render('html') );
+			$this->tpl->assign( 'form',  $form1->toHtml() . $form2->toHtml() );
 			$this->tpl->display( 'general' );
 		}
 
