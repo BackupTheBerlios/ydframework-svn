@@ -990,12 +990,12 @@
         /**
          *  This function executes an INSERT query based on the values of the object.
          *
-         *  @param $auto  (optional) Defines if the auto increment field (if any)
-         *                should be kept in the query. Default: true.
+         *  @param $values_noquote  (optional) Associative array that defines values that
+         *                          will not be quoted as strings, e.g. NOW().
          *
          *  @returns  The last autoincrement value if any.
          */
-        function insert( $auto=true ) {
+        function insert( $values_noquote=array() ) {
 
             // before insert callbacks
             $res = $this->_executeCallbacks( 'insert', true );
@@ -1006,19 +1006,14 @@
 
             $values = $this->getValues( true, true, true );
 
-            $auto_field = current( $this->_getFieldsByMethod( 'isAutoIncrement' ) );
-            
-            if ( ! $auto && $auto_field ) {
-                unset( $values[ $auto_field->getColumn() ] );
-            }
-
-            if ( ! sizeof( $values ) ) {
+            if ( ! sizeof( $values ) && ! sizeof( $values_noquote ) ) {
                 return;
             }
 
             $this->_query->insert();
             $this->_query->into( $this->getTable() );
             $this->_query->values( $values );
+            $this->_query->values( $values_noquote, true, false );
             $sql = $this->_query->getQuery();
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );
@@ -1029,6 +1024,8 @@
             
             $result = $this->_db->executeSql( $sql );
             $success = ( $result == -1 || $result === false ) ? false : true;
+            
+            $auto_field = current( $this->_getFieldsByMethod( 'isAutoIncrement' ) );
             
             if ( is_numeric( $result ) && $auto_field ) {
                 $result = $this->_db->getLastInsertID();
@@ -1052,9 +1049,12 @@
          *  This function executes an UPDATE query based on the values of the object
          *  and any value set by where.
          *
+         *  @param $values_noquote  (optional) Associative array that defines values that
+         *                          will not be quoted as strings, e.g. NOW().
+         *
          *  @returns  The number of rows affected.
          */
-        function update() {
+        function update( $values_noquote=array() ) {
 
             // before update callbacks
             $res = $this->_executeCallbacks( 'update', true );
@@ -1077,7 +1077,7 @@
             }
             
             // return if no values to set
-            if ( ! sizeof( $values ) ) {
+            if ( ! sizeof( $values ) && ! sizeof( $values_noquote ) ) {
                 return;
             }
 
@@ -1090,6 +1090,7 @@
             $this->_query->update();
             $this->_query->table( $this->getTable() );
             $this->_query->set( $values );
+            $this->_query->set( $values_noquote, true, false );
             $sql = $this->_query->getQuery();
 
             YDDebugUtil::debug( YDStringUtil::removeWhiteSpace( $sql ) );

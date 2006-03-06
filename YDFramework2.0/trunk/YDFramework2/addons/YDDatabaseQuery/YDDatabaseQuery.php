@@ -125,6 +125,8 @@
         var $reserved = '`';
         var $quote    = "'";
         var $filter   = true;
+        var $values_noquote = array();
+        var $filter_noquote = true;
         
         /**
          *  The class constructor.
@@ -464,10 +466,16 @@
          *                   as keys and it's values.
          *  @param $filter   (optional) Don't include columns that start with underscore.
          *                   Default: true.
+         *  @param $quote    (optional) If false, don't quote the value as a string. Default: true.
          */
-        function set( $values, $filter=true ) {
-            $this->values = $values;
-            $this->filter = $filter;
+        function set( $values, $filter=true, $quote=true ) {
+            if ( ! $quote ) {
+                $this->values_noquote = $values;
+                $this->filter_noquote = $filter;
+            } else {
+                $this->values = $values;
+                $this->filter = $filter;
+            }
         }
 
         /**
@@ -477,9 +485,10 @@
          *                   as keys and it's values.
          *  @param $filter   (optional) Don't include columns that start with underscore.
          *                   Default: true.
+         *  @param $quote    (optional) If false, don't quote the value as a string. Default: true.
          */
-        function values( $values, $filter=true ) {
-            $this->set( $values, $filter );
+        function values( $values, $filter=true, $quote=true ) {
+            $this->set( $values, $filter, $quote );
         }
         
         /**
@@ -716,20 +725,24 @@
          */
         function getInsert() {
 
-            if ( ! sizeof( $this->values ) ) {
+            if ( ! sizeof( $this->values ) && ! sizeof( $this->values_noquote ) ) {
                 trigger_error( 'No values were added for the INSERT query.', YD_ERROR );
             }
 
-            $columns = array();
             $values = array();
             foreach ( $this->values as $key => $value ) {
                 if ( $this->filter && substr( $key, 0, 1 ) == '_' ) {
                     continue;
                 }
-                $columns[] = $this->reserved( $key );
-                $values[]  = $this->escapeSql( $value );
+                $values[ $this->reserved( $key ) ] = $this->escapeSql( $value );
             }
-            return ' ( ' . implode( ', ', $columns ) . ' ) VALUES ( ' . implode( ', ', $values ) . ' )';
+            foreach ( $this->values_noquote as $key => $value ) {
+                if ( $this->filter_noquote && substr( $key, 0, 1 ) == '_' ) {
+                    continue;
+                }
+                $values[ $this->reserved( $key ) ] = $this->escape( $value );
+            }
+            return ' ( ' . implode( ', ', array_keys( $values ) ) . ' ) VALUES ( ' . implode( ', ', array_values( $values ) ) . ' )';
         }
 
         /**
@@ -739,7 +752,7 @@
          */
         function getUpdate() {
 
-            if ( ! sizeof( $this->values ) ) {
+            if ( ! sizeof( $this->values ) && ! sizeof( $this->values_noquote ) ) {
                 trigger_error( 'No values were added for the UPDATE query.', YD_ERROR );
             }
 
@@ -748,9 +761,15 @@
                 if ( $this->filter && substr( $key, 0, 1 ) == '_' ) {
                     continue;
                 }
-                $update[] = $this->reserved( $key ) . " = " . $this->escapeSql( $value );
+                $update[ $this->reserved( $key ) ] = $this->reserved( $key ) . " = " . $this->escapeSql( $value );
             }
-            return ' SET ' . implode( ', ', $update );
+            foreach ( $this->values_noquote as $key => $value ) {
+                if ( $this->filter_noquote && substr( $key, 0, 1 ) == '_' ) {
+                    continue;
+                }
+                $update[ $this->reserved( $key ) ] = $this->reserved( $key ) . " = " . $this->escape( $value );
+            }
+            return ' SET ' . implode( ', ', array_values( $update ) );
         }
 
         /**
