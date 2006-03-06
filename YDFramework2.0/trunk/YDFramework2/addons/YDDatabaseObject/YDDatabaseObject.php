@@ -998,7 +998,11 @@
         function insert( $auto=true ) {
 
             // before insert callbacks
-            $this->_executeCallbacks( 'insert', true );
+            $res = $this->_executeCallbacks( 'insert', true );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
 
             $values = $this->getValues( true, true, true );
 
@@ -1032,7 +1036,11 @@
             }
             
             // after insert callbacks
-            $this->_executeCallbacks( 'insert', false, $success );
+            $res = $this->_executeCallbacks( 'insert', false, $success );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
             
             $this->resetQuery();
 
@@ -1049,7 +1057,11 @@
         function update() {
 
             // before update callbacks
-            $this->_executeCallbacks( 'update', true );
+            $res = $this->_executeCallbacks( 'update', true );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
             
             $this->_prepareQuery( true, true );
 
@@ -1090,7 +1102,11 @@
             $success = ( $result == -1 || $result === false ) ? false : true;
             
             // after update callbacks
-            $this->_executeCallbacks( 'update', false, $success );
+            $res = $this->_executeCallbacks( 'update', false, $success );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
             
             $this->resetQuery();
 
@@ -1106,7 +1122,11 @@
         function delete() {
 
             // before delete callbacks
-            $this->_executeCallbacks( 'delete', true );
+            $res = $this->_executeCallbacks( 'delete', true );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
 
             $this->_prepareQuery();
             
@@ -1132,7 +1152,11 @@
             $success = ( $result == -1 || $result === false ) ? false : true;
 
             // after delete callbacks
-            $this->_executeCallbacks( 'delete', false, $success );
+            $res = $this->_executeCallbacks( 'delete', false, $success );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
 
             $this->resetQuery();
 
@@ -1167,7 +1191,11 @@
             $this->_last = $relations;
             
             // before find callbacks
-            $this->_executeCallbacks( 'find', true );
+            $res = $this->_executeCallbacks( 'find', true );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
 
             $r = $this->_query->getReserved();
             $this->_query->select();
@@ -1359,7 +1387,11 @@
             $success = ( $result == -1 || $result === false ) ? false : true;
             
             // after find callbacks
-            $this->_executeCallbacks( 'find', false, $success );
+            $res = $this->_executeCallbacks( 'find', false, $success );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
             
             return $result;
 
@@ -1661,7 +1693,11 @@
         function reset() {
             
             // before reset callbacks
-            $this->_executeCallbacks( 'reset', true );
+            $res = $this->_executeCallbacks( 'reset', true );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
             
             $this->resetObject();
             $this->resetQuery();
@@ -1669,7 +1705,11 @@
             $this->resetCount();
             
             // after reset callbacks
-            $this->_executeCallbacks( 'reset', false );
+            $res = $this->_executeCallbacks( 'reset', false );
+            
+            if ( $res !== true && $res !== null ) {
+                return $res;
+            }
         }
 
         /**
@@ -1993,9 +2033,22 @@
                     trigger_error(  $this->getClassName() . ' -
                                     The ' . $action . ' callback method "' . $callback . '" is not defined.', YD_ERROR );
                 }
-                call_user_func( array( & $this, $callback ), $action, $before, $success );
+                $res = call_user_func( array( & $this, $callback ), $action, $before, $success );
+                
+                if ( $res !== true && $res !== null ) {
+                    return array( 
+                        'class'    => $this->getClassName(),
+                        'callback' => $callback,
+                        'action'   => $action,
+                        'before'   => $before,
+                        'success'  => $success,
+                        'return'   => $res
+                    );
+                }
                 
             }
+            
+            return true;
             
         }
         
