@@ -8,6 +8,7 @@
     YDInclude( 'YDTemplate.php' );
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDDatabaseMetaData.php' );
     YDInclude( 'YDFileSystem.php' );
     YDInclude( dirname( __FILE__ ) . '/include/YDWeblogAPI.php' );
 
