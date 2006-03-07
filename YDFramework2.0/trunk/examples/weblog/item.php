@@ -101,7 +101,7 @@
                     $comment_id = $this->weblog->addComment( $values );
 
                     // Send an email if configured
-                    if ( YDConfig::get( 'email_new_comment', true ) ) {
+                    if ( $comment_id && YDConfig::get( 'email_new_comment', true ) ) {
 
                         // Include the YDEmail library
                         YDInclude( 'YDEmail.php' );
