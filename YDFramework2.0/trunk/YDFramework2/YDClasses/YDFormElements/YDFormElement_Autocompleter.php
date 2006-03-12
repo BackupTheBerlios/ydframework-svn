@@ -64,7 +64,10 @@
 
             // Create the list of attributes
             $attribs = array(
-                'type' => 'text', 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value
+                'type' => 'text',
+				'name' => $this->_form . '_' . $this->_name,
+				'value' => $this->_value,
+				'autocomplete' => 'off'
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
