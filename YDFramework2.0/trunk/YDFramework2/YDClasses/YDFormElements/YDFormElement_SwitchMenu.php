@@ -43,7 +43,7 @@
          *	@param $attributes	(optional) The attributes for the form element.
          *	@param $options		(optional) The menu elements.
          */
-        function YDFormElement_SwitchMenu( $form, $name, $label='', $attributes=array(), $options=array() ) {
+        function YDFormElement_SwitchMenu( $form = 'YDForm', $name = 'SMenu', $label='', $attributes=array(), $options=array() ) {
 
             // Initialize the parent
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
@@ -118,6 +118,19 @@
 			$out .= '</div>';
 
 			return $out;
+		}
+
+
+        /**
+         *	This function adds custom css to the template
+         *
+         *	@param $template		The template object 
+         */
+		function addCss( & $template ){
+
+			$template->addCss( '.menutitle{ cursor:pointer;margin-bottom: 5px;background-color:#ECECFF;color:#000000;width:140px;padding:2px;text-align:center;font-weight:bold;border:1px solid #000000; }' );
+			$template->addCss( '.submenu{ margin-bottom: 0.5em; }' );
+			
 		}
 
 
