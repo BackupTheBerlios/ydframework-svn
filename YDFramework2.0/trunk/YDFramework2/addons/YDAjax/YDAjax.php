@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.41';
+            $this->_version = '2.42';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -235,6 +235,7 @@
 			if ( !isset( $options['style.backgroundColor'] ) ) $options['style.backgroundColor'] = '#cccccc';
 			if ( !isset( $options['style.top'] ) )             $options['style.top']             = '40%';
 			if ( !isset( $options['style.left'] ) )            $options['style.left']            = '44%';
+			if ( !isset( $options['style.border'] ) )          $options['style.border']          = '1px solid #110000';
 
 			// static values
 			$options['id']             = $this->wtID ."id";
