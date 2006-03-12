@@ -37,11 +37,14 @@
 			$this->ajax->addForm( $form1 );
 			$this->ajax->addForm( $form2 );
 
+			// add focus effect to 'arg2' form element. Simple, hein? ;)
+			$this->ajax->addEffect( new YDAjaxEffect( 'arg2', 'focus' ) );
+
 			// process events added
 			$this->ajax->processEvents();
 
 			// assign form and display template
-			$this->tpl->assign( 'title', 'Just start typing a coutry name in the box to see the effect' );
+			$this->tpl->assign( 'title', 'This example demonstrates 2 autocompleters and a text element with focus' );
 			$this->tpl->assign( 'form',  $form1->tohtml() . $form2->tohtml() );
 			$this->tpl->display();
 		}
