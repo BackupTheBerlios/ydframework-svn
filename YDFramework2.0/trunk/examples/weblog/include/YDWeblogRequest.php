@@ -318,8 +318,8 @@
             $this->tpl->assign( 'weblog_description', YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
 
             // Get the link to the different directories
-            $uploads_dir = YDUrl::makeLinkAbsolute( $this->dir_uploads );
-            $skin_dir    = YDUrl::makeLinkAbsolute( $this->dir_skins . $this->skin );
+            $uploads_dir = YDUrl::makeLinkAbsolute( '../' . $this->dir_uploads );
+            $skin_dir    = YDUrl::makeLinkAbsolute( '../' . $this->dir_skins . $this->skin );
             $image_dir   = YDUrl::makeLinkAbsolute( $skin_dir . '/images' );
 
             // Add the different directories to the template
