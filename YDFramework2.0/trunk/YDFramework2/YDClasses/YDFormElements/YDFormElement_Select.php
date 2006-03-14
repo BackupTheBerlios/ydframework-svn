@@ -82,6 +82,73 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onchange';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // if we want all values and not only the select one
+            if (in_array( 'all', $options )){
+
+                $js  = "\n\t" . 'var __ydtmparr = new Array();';
+                $js .= "\n\t" . 'var __ydtmpsel = document.getElementById("' . $this->getAttribute('id') . '");';
+                $js .= "\n\t" . 'for (i = 0; i < __ydtmpsel.length; i++){';
+                $js .= "\n\t" . '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;';
+                $js .= "\n\t" . '}';
+                $js .= "\n\t" . 'return __ydtmparr;' . "\n";
+
+                return $js;
+            }
+
+            // return just the value 
+            return 'return document.getElementById("' . $this->getAttribute('id') . '").value;';
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute event is not defined we must create a default one
+            if ( is_null( $attribute ) ) $attribute = 'value';
+
+            // create select variable
+            $js = 'var __ydfselect = document.getElementById("' . $this->getAttribute('id') . '");';
+
+            // if we want to define the selected option
+            if ( !is_array( $result ) )
+                return $js . 'for (counter = 0; counter < __ydfselect.length; counter++){
+                                 if (__ydfselect[counter].value == "' . addslashes( $result ) . '"){
+                                     __ydfselect.selectedIndex = counter;
+                                 }
+                              }';
+
+            // if we want to replace all select options
+            $js .= '__ydfselect.options.length = 0;';
+            foreach( $result as $key => $value )
+                $js .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("' . addslashes( $value ) . '","' . addslashes( $key ) . '"); ';
+
+            return $js;
+        }
+
+
     }
 
 ?>
