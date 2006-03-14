@@ -482,6 +482,89 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onchange';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // get elements
+            $elements = $this->_getElements();
+
+            // initialize js code
+            $js = '';
+
+            // add our custom js function
+            if ( !in_array( 'year', $elements ) )    $js .= "\n\t" . 'var year = 1970;';
+            else                                     $js .= "\n\t" . 'var year = document.getElementById("' . $this->getAttribute('id') . '[year]").value;';
+
+            if ( !in_array( 'month', $elements ) )   $js .= "\n\t" . 'var month = 0;';
+            else                                     $js .= "\n\t" . 'var month = document.getElementById("' . $this->getAttribute('id') . '[month]").value - 1;';
+
+            if ( !in_array( 'day', $elements ) )     $js .= "\n\t" . 'var day = 1;';
+            else                                     $js .= "\n\t" . 'var day = document.getElementById("' . $this->getAttribute('id') . '[day]").value;';
+
+            if ( !in_array( 'hours', $elements ) )   $js .= "\n\t" . 'var hours = 1;';
+            else                                     $js .= "\n\t" . 'var hours = document.getElementById("' . $this->getAttribute('id') . '[hours]").value;';
+
+            if ( !in_array( 'minutes', $elements ) ) $js .= "\n\t" . 'var minutes = 1;';
+            else                                     $js .= "\n\t" . 'var minutes = document.getElementById("' . $this->getAttribute('id') . '[minutes]").value;';
+
+            if ( !in_array( 'seconds', $elements ) ) $js .= "\n\t" . 'var seconds = 1;';
+            else                                     $js .= "\n\t" . 'var seconds = document.getElementById("' . $this->getAttribute('id') . '[seconds]").value;';
+
+            $js .= "\n\t" . 'var mydate = new Date( year, month, day, hours, minutes, seconds ); ';
+            $js .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
+
+            // return function code
+            return $js;
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute is not defined we must create the default one
+            if ( is_null( $attribute ) ) $attribute = 'value';
+
+            // get timestamp individual values
+            $parsed  = getdate( $result );
+
+            // get elements
+            $elements = $this->_getElements();
+
+            $js = '';
+
+            // add our custom js function
+            if ( in_array( 'year', $elements ) )    $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[year]").'.     $attribute . ' = "' . $parsed['year']    . '";';
+            if ( in_array( 'month', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[day]").'.      $attribute . ' = "' . $parsed['mon']     . '";';
+            if ( in_array( 'day', $elements ) )     $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[day]").'.      $attribute . ' = "' . $parsed['mday']    . '";';
+            if ( in_array( 'hours', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[hours]").'.    $attribute . ' = "' . $parsed['hours']   . '";';
+            if ( in_array( 'minutes', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[minutes]").'.  $attribute . ' = "' . $parsed['minutes'] . '";';
+            if ( in_array( 'seconds', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[seconds]").'.  $attribute . ' = "' . $parsed['seconds'] . '";';
+
+            // return function code
+            return $js;
+        }
+
+
     }
 
 ?>
