@@ -85,10 +85,11 @@
                 $this->register_function( 't', 'YDTemplate_function_t' );
 
                 // custom javascript code
-                $this->customJavascript = null;
+                $this->customJavascript       = '';
+                $this->customJavascriptOnload = '';
 
                 // custom Css code
-                $this->customCss = null;
+                $this->customCss = '';
             }
 
             /**
@@ -212,11 +213,15 @@
                 $code = '';
 
                 // test if customCss is set
-                if ( !is_null( $this->customCss ) )
-                    $code  = "\n<style type=\"text/css\">\n" . $this->customCss . "</style>";
+                if ( $this->customCss != '' )
+                    $code = "\n<style type=\"text/css\">\n" . $this->customCss . "</style>";
+
+                // add onload code to custom javascript code
+                if ( $this->customJavascriptOnload != '' )
+                    $this->customJavascript .= "window.onload = function() {" . $this->customJavascriptOnload . "}\n";
 
                 // test if customJavascript is set
-                if ( !is_null( $this->customJavascript ) ) 
+                if ( $this->customJavascript != '' ) 
                     $code .= "\n<script type=\"text/javascript\">\n" . $this->customJavascript . "</script>\n";
 
                 if ( $code == '' ) return $tpl_source;
@@ -230,11 +235,18 @@
              *
              *	@param $jsCode	   Javascript code to add
              *	@param $prepend    (Optional) Boolean that defines if code should be prepended
+             *	@param $onload     (Optional) Boolean that defines if code should be added after page load
              */
-            function addJavascript( $jsCode, $prepend = false ) {
+            function addJavascript( $jsCode, $prepend = false, $onload = false ) {
 
-                if (!$prepend) $this->customJavascript  = $this->customJavascript . $jsCode . "\n";
-                else           $this->customJavascript  = $jsCode . $this->customJavascript . "\n";
+                if ( $onload ){
+                    if ( !$prepend ) $this->customJavascriptOnload = $this->customJavascriptOnload . $jsCode . "\n";
+                    else             $this->customJavascriptOnload = $jsCode . $this->customJavascriptOnload . "\n";
+                    return;
+                }
+
+                if (!$prepend) $this->customJavascript = $this->customJavascript . $jsCode . "\n";
+                else           $this->customJavascript = $jsCode . $this->customJavascript . "\n";
             }
 
             /**
