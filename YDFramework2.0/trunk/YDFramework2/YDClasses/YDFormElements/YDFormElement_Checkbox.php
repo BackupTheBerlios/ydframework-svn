@@ -131,6 +131,64 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onchange';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // add our custom js function
+            $js  = "\n\t" . 'if (document.getElementById("' . $this->getAttribute('id') . '").checked)';
+            $js .= "\n\t" . '	return 1;';
+            $js .= "\n\t" . 'return 0;' . "\n";
+
+            // return function code
+            return $js;
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute event is not defined we must create a default one
+            if ( is_null( $attribute ) ) $attribute = 'checked';
+
+            if ( $attribute != 'checked' )
+                return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+
+            // if atribute is 'checked' and result is true, check this checkbox
+            if ( is_bool( $result ) && $result == true )
+                return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").checked = true;';
+
+            // if atribute is 'checked' and result is false, clean checkbox selection
+            if ( is_bool( $result ) && $result == false )
+                return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").checked = false;';
+
+            // if atribute is 'checked' and result is 'toggle', checkbox will have the opposite value
+            if ( $result == "toggle" )
+                return 'var __ydftmp = document.getElementById("' . $this->getAttribute( 'id' ) . '");
+                        if (__ydftmp.checked == false) {__ydftmp.checked = true;} else {__ydftmp.checked = false;}';
+
+            return '';
+        }
+
     }
 
 ?>
