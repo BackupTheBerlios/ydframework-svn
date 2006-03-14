@@ -92,6 +92,16 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            die( 'Submit buttons cannot be used in ajax because they force submition.' );
+        }
+
+
     }
 
 ?>
