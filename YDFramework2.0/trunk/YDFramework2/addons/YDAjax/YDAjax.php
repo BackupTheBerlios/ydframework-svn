@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.5';
+            $this->_version = '2.6';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -78,12 +78,9 @@
 			// initialize xajax object
 			$this->xajax( "", $this->prefix, YDConfig::get( 'YD_AJAX_ENCODING' ) );
 			
-			// initilize all possible forms (10)
+			// initilize all possible forms (4)
 			$this->form_0 = null; $this->form_1 = null;
 			$this->form_2 = null; $this->form_3 = null;
-			$this->form_4 = null; $this->form_5 = null;
-			$this->form_6 = null; $this->form_7 = null;
-			$this->form_8 = null; $this->form_9 = null;
 
 			// initilize template
 			$this->template = & $template;
@@ -138,24 +135,6 @@
 			// send autocompleter code
 			$html .= $this->autocompleterCode;
 
-			// compute ONLOAD code
-			$onload = '';
-
-				// export effects js
-				foreach( $this->effects as $eff_name => $eff_code )
-					$onload  .= "\t" . $eff_code . "\n";
-
-				// send js waiting message creation code
-				if( $this->waitingMessageCode != '' )
-					$onload  .= "\t" . $this->waitingMessageCode . "\n";
-
-				// send autocompleter functions code
-				if( !empty( $this->autocompleterCodeFunctions ) )
-					$onload  .= "\t" . implode( "\n\t", $this->autocompleterCodeFunctions ) . "\n";
-
-			// if there are on load js just export it
-			if ( $onload != '' ) $html .= "window.onload = function() {\n" . $onload . "}\n";
-
 			// send js function to hide waiting message
 			$html .= $this->waitingMessageCodeFunction;
 
@@ -181,6 +160,24 @@
 
 			// add all code to template html
 			$this->template->addJavascript( trim( $html ), true );
+
+			// compute ONLOAD code
+			$onload = '';
+
+				// export effects js
+				foreach( $this->effects as $eff_name => $eff_code )
+					$onload  .= "\n\t" . $eff_code;
+
+				// send js waiting message creation code
+				if( $this->waitingMessageCode != '' )
+					$onload  .= "\n\t" . $this->waitingMessageCode;
+
+				// send autocompleter functions code
+				if( !empty( $this->autocompleterCodeFunctions ) )
+					$onload  .= "\n\t" . implode( "\n\t", $this->autocompleterCodeFunctions );
+
+			// add all code to template html
+			$this->template->addJavascript( $onload, false, true );
 		}
 
 
@@ -279,12 +276,6 @@
 			if ( !is_null( $this->form_1 ) && $this->form_1->isElement( $name ) ) return $this->form_1;
 			if ( !is_null( $this->form_2 ) && $this->form_2->isElement( $name ) ) return $this->form_2;
 			if ( !is_null( $this->form_3 ) && $this->form_3->isElement( $name ) ) return $this->form_3;
-			if ( !is_null( $this->form_4 ) && $this->form_4->isElement( $name ) ) return $this->form_4;
-			if ( !is_null( $this->form_5 ) && $this->form_5->isElement( $name ) ) return $this->form_5;
-			if ( !is_null( $this->form_6 ) && $this->form_6->isElement( $name ) ) return $this->form_6;
-			if ( !is_null( $this->form_7 ) && $this->form_7->isElement( $name ) ) return $this->form_7;
-			if ( !is_null( $this->form_8 ) && $this->form_8->isElement( $name ) ) return $this->form_8;
-			if ( !is_null( $this->form_9 ) && $this->form_9->isElement( $name ) ) return $this->form_9;
 
 			return null;
 		}
@@ -296,12 +287,6 @@
 			if ( !is_null( $this->form_1 ) && $this->form_1->getName() == $formName ) return true;
 			if ( !is_null( $this->form_2 ) && $this->form_2->getName() == $formName ) return true;
 			if ( !is_null( $this->form_3 ) && $this->form_3->getName() == $formName ) return true;
-			if ( !is_null( $this->form_4 ) && $this->form_4->getName() == $formName ) return true;
-			if ( !is_null( $this->form_5 ) && $this->form_5->getName() == $formName ) return true;
-			if ( !is_null( $this->form_6 ) && $this->form_6->getName() == $formName ) return true;
-			if ( !is_null( $this->form_7 ) && $this->form_7->getName() == $formName ) return true;
-			if ( !is_null( $this->form_8 ) && $this->form_8->getName() == $formName ) return true;
-			if ( !is_null( $this->form_9 ) && $this->form_9->getName() == $formName ) return true;
 			
 			return false;
 		}
@@ -313,16 +298,12 @@
          */		
 		function addForm( & $form ){
 		
-			if ( is_null( $this->form_0 ) ){ $this->form_0 = & $form; return; }
-			if ( is_null( $this->form_1 ) ){ $this->form_1 = & $form; return; }
-			if ( is_null( $this->form_2 ) ){ $this->form_2 = & $form; return; }
-			if ( is_null( $this->form_3 ) ){ $this->form_3 = & $form; return; }
-			if ( is_null( $this->form_4 ) ){ $this->form_4 = & $form; return; }
-			if ( is_null( $this->form_5 ) ){ $this->form_5 = & $form; return; }
-			if ( is_null( $this->form_6 ) ){ $this->form_6 = & $form; return; }
-			if ( is_null( $this->form_7 ) ){ $this->form_7 = & $form; return; }
-			if ( is_null( $this->form_8 ) ){ $this->form_8 = & $form; return; }
-			if ( is_null( $this->form_9 ) ){ $this->form_9 = & $form; return; }	
+			if ( is_null( $this->form_0 ) ){ $this->form_0 = & $form; return true; }
+			if ( is_null( $this->form_1 ) ){ $this->form_1 = & $form; return true; }
+			if ( is_null( $this->form_2 ) ){ $this->form_2 = & $form; return true; }
+			if ( is_null( $this->form_3 ) ){ $this->form_3 = & $form; return true; }
+
+			return false;
 		}
 
 
@@ -376,7 +357,7 @@
 			$formElement = & $form->getElement( $formElementName );
 
 			// if event is null we must check the form element type to compute the default event
-			if( is_null( $event ) ) $event = $this->_getDefaultEvent( $formElement->getType() );
+			if( is_null( $event ) ) $event = $formElement->getJSEvent();
 
 			// parse event
 			$event = strtolower( $event );
@@ -526,23 +507,9 @@
 					// get element object
 					$elem = & $form->getElement( $arg );
 					
-					// get element type to invoke the custom js to get the value
-					switch( $elem->getType() ){
-						case 'autocompleter' :
-						case 'text' :			$js = $this->_getValueText(           $elem, $options ); break;
-						case 'password' :		$js = $this->_getValuePassword(       $elem, $options ); break;
-						case 'textarea' :		$js = $this->_getValueTextarea(       $elem, $options ); break;
-						case 'radio' :			$js = $this->_getValueRadio(          $elem, $options ); break;
-						case 'checkbox' :		$js = $this->_getValueCheckbox(       $elem, $options ); break;
-						case 'dateselect' :		$js = $this->_getValueDateSelect(     $elem, $options ); break;
-						case 'datetimeselect' :	$js = $this->_getValueDateTimeSelect( $elem, $options ); break;
-						case 'timeselect' :		$js = $this->_getValueTimeSelect(     $elem, $options ); break;
-						case 'span' :			$js = $this->_getValueSpan(           $elem, $options ); break;
-						case 'select' :			$js = $this->_getValueSelect(         $elem, $options ); break;
-																							
-						default : die ( 'Element type "' . $elem->getType() . '" is not supported as dynamic argument' );
-					}
-					
+					// invoke the custom js to get the value
+					$js = $elem->getJS( $options );					
+
 					// compute javascript function name
 					$jsfunction = $this->prefix . 'get' . $elem->getName() . '()';
 
@@ -603,7 +570,7 @@
 			$elem = & $form->getElement( $formElementName );
 
 			// check default event
-			if ( is_null( $event ) ) $event = $this->_getDefaultEvent( $elem->getType() );
+			if ( is_null( $event ) ) $event = $elem->getJSEvent();
 
 			// check if atribute exist
 			$attribute = $elem->getAttribute( $event );
@@ -646,31 +613,6 @@
 		}
 
 
-		// internal method. Returns the default event for a html element type
-		function _getDefaultEvent( $type ){
-
-			switch( $type ){
-				case 'submit' : trigger_error( 'Submit buttons cannot be used in ajax because they force submition.' ); break;
-				case 'image' :  trigger_error( 'Images cannot be used in ajax because they force submition. Use "img" element instead.' ); break;
-				case 'img' :		return 'onclick';
-				case 'button' :		return 'onclick';
-				case 'span' :		return 'onclick';
-				case 'link' :		return 'onclick';
-				case 'dateselect' :	return 'onchange';
-				case 'radio' :		return 'onchange';
-				case 'checkbox' :	return 'onchange';
-				case 'text' :		return 'onchange';
-				case 'textarea' :	return 'onchange';
-				case 'bbtextarea' :	return 'onchange';
-				case 'password' :	return 'onchange';
-				case 'select' :		return 'onchange';
-					
-				// if element doesn't exist return a php error
-				default : trigger_error( 'Element type (' . $type . ') is not supported in YDAjax' ); break;
-			}
-		}
-
-
         /**
          *	This method creates an alias (a js function) to a event
          *
@@ -697,7 +639,7 @@
 			$elem = & $form->getElement( $formElementName );
 			
 			// if we don't define a event we must check default one
-			if ( is_null( $event ) ) $event = $this->_getDefaultEvent( $elem->getType() );
+			if ( is_null( $event ) ) $event = $elem->getJSEvent();
 			
 			// get atribute from element
 			$attribute = $elem->getAttribute( $event );
@@ -787,14 +729,28 @@
 			// if is not a form element, assign result to a html id
 			$form = $this->__getForm( $formElementName );
 
-			if ( is_null( $form ) )
-				return $this->response->assignId( $formElementName, $result, $attribute, $options );
+			// if $formElementName is really an form element
+			if ( !is_null( $form ) ){
 
-			// if is a form element, get element
-			$elem = & $form->getElement( $formElementName );
+				// if is a form element, get element
+				$elem = & $form->getElement( $formElementName );
 
-			// assign result to element
-			return $this->response->assignResult( $elem, $result, $attribute, $options);
+				// assign result to element
+				return $this->response->addScript( $elem->setJS( $result, $attribute, $options ) );
+			}
+
+			// if $formElementName is a simple html ID
+			// if atribute is not defined we must create a default one
+			if (is_null( $attribute )) $attribute = 'innerHTML';
+
+			// if result is an array we should export to a valid js string
+			if (is_array( $result )) $result = str_replace( "\n", "<br>", var_export( $result, true ) );
+		
+			// escape string
+			$result = addslashes( $result );
+			
+			// assign result to form element using the id
+			return $this->response->addScript( 'document.getElementById("' . $formElementName . '").' . $attribute . ' = "' . $result . '";' );
 		}
 
 
@@ -806,132 +762,6 @@
 			// return XML to client browser
 			return $this->response->getXML();
 		}
-		
-		
-		// internal method to create the needed js function to retrieve a text value
-		function _getValueText( & $element, $options ){
-		
-			// return js code
-			return 'return document.getElementById("' . $element->getAttribute('id') . '").value;';
-		}
-
-
-		// internal method to create the needed js function to retrieve a select value
-		function _getValueSelect( & $element, $options ){
-		
-			// if we want all values and not only the select one
-			if (in_array( 'all', $options )){
-
-				$js  = "\n\t" . 'var __ydtmparr = new Array();';
-				$js .= "\n\t" . 'var __ydtmpsel = document.getElementById("' . $element->getAttribute('id') . '");';
-				$js .= "\n\t" . 'for (i = 0; i < __ydtmpsel.length; i++){';
-				$js .= "\n\t" . '    __ydtmparr[ __ydtmpsel.options[i].value ] = __ydtmpsel.options[i].text;';
-				$js .= "\n\t" . '}';
-				$js .= "\n\t" . 'return __ydtmparr;' . "\n";
-		
-				return $js;
-			}
-		
-			// return just the value 
-			return 'return document.getElementById("' . $element->getAttribute('id') . '").value;';
-		}
-
-
-		// internal method to create the needed js function to retrieve a password value
-		function _getValuePassword( & $element, $options ){
-		
-			// return value
-			return 'return document.getElementById("' . $element->getAttribute('id') . '").value;';
-		}
-		
-
-		// internal method to create the needed js function to retrieve a textarea value
-		function _getValueTextarea( & $element, $options ){
-		
-			// return value
-			return 'return document.getElementById("' . $element->getAttribute('id') . '").value;';
-		}
-		
-		
-		// internal method to create the needed js function to retrieve a span value
-		function _getValueSpan( & $element, $options ){
-		
-			// return innerhmtl
-			return 'return document.getElementById("' . $element->getAttribute('id') . '").innerHTML;';
-		}		
-		
-
-		// internal method to create the needed js function to retrieve a dateselect value
-		function _getValueDateSelect( & $element, $options ){
-		
-			// add our custom js function
-			$js  = "\n\t" . 'var day   = document.getElementById("' . $element->getAttribute('id') . '[day]").value;';
-			$js .= "\n\t" . 'var month = document.getElementById("' . $element->getAttribute('id') . '[month]").value - 1;';
-			$js .= "\n\t" . 'var year  = document.getElementById("' . $element->getAttribute('id') . '[year]").value;';
-			$js .= "\n\t" . 'var mydate = new Date( year, month, day ); ';
-			$js .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
-
-			// return function code
-			return $js;
-		}
-
-
-		// internal method to create the needed js function to retrieve a timeselect value
-		function _getValueTimeSelect( & $element, $options ){
-		
-			// add our custom js function
-			$js  = "\n\t" . 'var hours    = document.getElementById("' . $element->getAttribute('id') . '[hours]").value;';
-			$js .= "\n\t" . 'var minutes  = document.getElementById("' . $element->getAttribute('id') . '[minutes]").value;';
-			$js .= "\n\t" . 'var mydate = new Date( 1970, 1, 1, hours, minutes ); ';
-			$js .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
-
-			// return function code
-			return $js;
-		}		
-
-
-		// internal method to create the needed js function to retrieve a datetimeselect value
-		function _getValueDateTimeSelect( & $element, $options ){
-		
-			// add our custom js function
-			$js  = "\n\t" . 'var day      = document.getElementById("' . $element->getAttribute('id') . '[day]").value;';
-			$js .= "\n\t" . 'var month    = document.getElementById("' . $element->getAttribute('id') . '[month]").value - 1;';
-			$js .= "\n\t" . 'var year     = document.getElementById("' . $element->getAttribute('id') . '[year]").value;';
-			$js .= "\n\t" . 'var hours    = document.getElementById("' . $element->getAttribute('id') . '[hours]").value;';
-			$js .= "\n\t" . 'var minutes  = document.getElementById("' . $element->getAttribute('id') . '[minutes]").value;';
-			$js .= "\n\t" . 'var mydate = new Date( year, month, day, hours, minutes ); ';
-			$js .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
-
-			// return function code
-			return $js;
-		}				
-		
-
-		// internal method to create the needed js function to retrieve a checkbox value
-		function _getValueCheckbox( & $element, $options ){
-		
-			// add our custom js function
-			$js  = "\n\t" . 'if (document.getElementById("' . $element->getAttribute('id') . '").checked)';
-			$js .= "\n\t" . '	return 1;';
-			$js .= "\n\t" . 'return 0;' . "\n";
-
-			// return function code
-			return $js;
-		}
-		
-
-		// internal method to create the needed js function to retrieve a radio value
-		function _getValueRadio( & $element, $options ){
-		
-			// add custom js function
-			$js  = "\n\t" . 'var __ydftmp = document.getElementById("' . $element->getAttribute('id') . '");';
-			$js .= "\n\t" . 'for (counter = 0; counter < __ydftmp.length; counter++)';
-			$js .= "\n\t" . '   if (__ydftmp[counter].checked) return __ydftmp[counter].value;';
-			$js .= "\n\t" . 'return false;' . "\n";
-
-			// return function code
-			return $jscode;
-		}		
 
 
         /**
@@ -973,329 +803,8 @@
 			$this->xajaxResponse( $encoding );
 		}
 		
-		
-        /**
-         *	This method assigns a server result to a form element in the client side.
-         *
-         *	@param $formElement			Form element object.
-         *	@param $result				Result value.
-         *	@param $attribute			Custom atribute (auto-detection by default).
-         *	@param $options				Other options.
-         */		
-		function assignResult( & $formElement, $result, $attribute = null, $options = array()){
-	
-			// depending on the type we must invoke the custom function for the element
-			switch( strtolower( $formElement->getType() ) ){
+	}
 
-				case 'submit' :
-				
-				case 'button' :			$this->assignButton(         $formElement, $result, $attribute, $options ); break;
-				case 'checkbox' :		$this->assignCheckbox(       $formElement, $result, $attribute, $options ); break;
-				case 'dateselect' :		$this->assignDateSelect(     $formElement, $result, $attribute, $options ); break;
-				case 'datetimeselect' :	$this->assignDateTimeSelect( $formElement, $result, $attribute, $options ); break;
-				case 'timeselect' :		$this->assignTimeSelect(     $formElement, $result, $attribute, $options ); break;
-				case 'bbtextarea' :		$this->assignBBtextarea(     $formElement, $result, $attribute, $options ); break;
-				case 'img' :			$this->assignImg(            $formElement, $result, $attribute, $options ); break;
-				case 'hidden' :			$this->assignHidden(         $formElement, $result, $attribute, $options ); break;
-				case 'text' :			$this->assignText(           $formElement, $result, $attribute, $options ); break;
-				case 'textarea' :		$this->assignTextarea(       $formElement, $result, $attribute, $options ); break;
-				case 'radio' :			$this->assignRadio(          $formElement, $result, $attribute, $options ); break;
-				case 'password' :		$this->assignPassword(       $formElement, $result, $attribute, $options ); break;
-				case 'span' :			$this->assignSpan(           $formElement, $result, $attribute, $options ); break;
-				case 'select' :			$this->assignSelect(         $formElement, $result, $attribute, $options ); break;
-				case 'image' :			$this->addAlert('Input type image cannot be used. Please use a img instead.'); break;
-
-				// if element doesn't exist return an js alert
-				default : $this->addAlert( 'Element type "' . $formElement->getType() . '" is not supported in YDAjax' ); break;
-			}
-		}
-
-
-        /**
-         *	This method assigns a server result to a element using just the id
-         *
-         *	@param $id			Html element id.
-         *	@param $result		Result value.
-         *	@param $attribute	Custom atribute (auto-detection by default).
-         *	@param $options		Other options (not used).
-         */	
-		function assignId( $id, $result, $attribute, $options ){
-		
-			// if atribute is not defined we must create a default one
-			if (is_null( $attribute )) $attribute = 'innerHTML';
-
-			// if result is an array we should export to a valid js string
-			if (is_array( $result )) $result = str_replace( "\n", "<br>", var_export( $result, true ) );
-		
-			// escape string
-			$result = addslashes( $result );
-			
-			// assign result to form element using the id
-			$this->addScript( 'document.getElementById("' . $id . '").' . $attribute . ' = "' . $result . '";' );
-		}
-
-
-		// internal method to assign a value to a select element
-		function assignSelect( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-
-			// if we want to replace all select options
-			if ( is_array( $result ) ){
-			
-				// compute options
-				$options = '__ydfselect.options.length = 0;';
-				foreach( $result as $key => $value ){
-					$key   = addslashes( $key );
-					$value = addslashes( $value );
-					$options .= '    __ydfselect.options[ __ydfselect.options.length  ] = new Option("' . $value . '","' . $key . '"); ';
-				}
-
-			// if we want to define the selected option
-			}else{
-			
-				$options = 'for (counter = 0; counter < __ydfselect.length; counter++){
-							 	if (__ydfselect[counter].value == "' . addslashes( $result ) . '"){
-								   __ydfselect.selectedIndex = counter;
-								}
-							}';
-			}
-
-			// assign result to form element
-			$this->addScript( 'var __ydfselect = document.getElementById("' . $formElement->getAttribute('id') . '");' . $options );
-		}
-
-
-		// internal method to assign a value to a BBtextarea element
-		function assignBBtextarea( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if (is_null( $attribute )) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') . '").' . $attribute . ' = "' . $result . '";');
-		}
-		
-		
-		// internal method to assign a value to a img element
-		function assignImg( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ){
-				
-				// the default atribute of an image is its source address
-				$attribute = 'src';
-			
-				// if we want to display a new image, we must create a new src value otherwise the browser won't replace
-				$result .= '?' . microtime();
-			}
-
-			// assign result image
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";');
-		}		
-
-		
-		// internal method to assign a value to a text element
-		function assignText( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";');
-		}
-
-
-		// internal method to assign a value to a span element
-		function assignSpan( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if (is_null( $attribute )) $attribute = 'innerHTML';
-
-			// if result is an array we should export to a valid js string
-			if (is_array( $result )) $result =  str_replace( "\n", "<br>", var_export( $result, true ) ) ;
-
-			// escape string
-			$result = addslashes( $result );
-		
-			// assign result to form element using the id
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";' );
-		}
-		
-				
-		// internal method to assign a value to a textarea element
-		function assignTextarea( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";' );
-		}
-		
-
-		// internal method to assign a value to a radio element
-		function assignRadio( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// we must cycle all radio instances of this radio element
-			$this->addScript( '__ydftmp = document.getElementById("' . $formElement->getAttribute( 'id' ) . '");
-							  for (counter = 0; counter < __ydftmp.length; counter++)
-							 	 if (__ydftmp[counter].value == "' . $result . '") __ydftmp[counter].checked = true;
-								 else __ydftmp[counter].checked = false;' );
-		}		
-		
-
-		// internal method to assign a value to a password element
-		function assignPassword( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";');
-		}		
-		
-
-		// internal method to assign a value to a hidden element
-		function assignHidden( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// check and convert $result
-			$result = htmlspecialchars( $result );
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";' );
-		}
-
-
-		// internal method to assign a value to a dateselect element
-		function assignDateSelect( & $formElement, $result, $attribute, $options ){
-
-			// result must be a timestamp
-			if ( !is_integer( $result ) )
-				return $this->addAlert( "DateSelect elements in YDAjax only support timestamps in assignResult" );
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// get timestamp individual values
-			$parsed = getdate( $result );
-			$day    = $parsed['mday'];
-			$month  = $parsed['mon'];
-			$year   = $parsed['year'];
-			
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') . '[day]").' .   $attribute . ' = "' . $day . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') . '[month]").' . $attribute . ' = "' . $month . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') . '[year]").' .  $attribute . ' = "' . $year . '";' );
-		}		
-		
-
-		// internal method to assign a value to a datetimeselect element
-		function assignDateTimeSelect( & $formElement, $result, $attribute, $options ){
-
-			// result must be a timestamp
-			if ( !is_integer( $result ) )
-				return $this->addAlert( "DateSelect elements in YDAjax only support timestamps in assignResult" );
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-			
-			// get timestamp individual values
-			$parsed  = getdate( $result );
-			$day     = $parsed['mday'];
-			$month   = $parsed['mon'];
-			$year    = $parsed['year'];
-			$hours   = $parsed['hours'];
-			$minutes = $parsed['minutes'];
-
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) .'[day]").'.      $attribute . ' = "' . $day     . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) .'[month]").'.    $attribute . ' = "' . $month   . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) .'[year]").'.     $attribute . ' = "' . $year    . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) .'[hours]").'.    $attribute . ' = "' . $hours   . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) .'[minutes]").'.  $attribute . ' = "' . $minutes . '";' );
-		}		
-
-		
-		// internal method to assign a value to a timeselect element
-		function assignTimeSelect( & $formElement, $result, $attribute, $options ){
-
-			//  result must be a timestamp
-			if ( !is_integer( $result ) )
-				return $this->addAlert( "TimeSelect elements in YDAjax only support timestamps in assignResult" );
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-		
-			// get timestamp individual values
-			$parsed  = getdate( $result );
-			$hours   = $parsed['hours'];
-			$minutes = $parsed['minutes'];
-			
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') .'[hours]").'.   $attribute . ' = "' . $hours   . '";' );
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') .'[minutes]").'. $attribute . ' = "' . $minutes . '";' );
-		}	
-		
-
-		// internal method to assign a value to a button element
-		function assignButton( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'value';
-			
-			// assign result to form element
-			$this->addScript( 'document.getElementById("' . $formElement->getAttribute('id') . '").' . $attribute . ' = "' . $result . '";' );
-		}
-		
-		
-		// internal method to assign a value to a checkbox element
-		function assignCheckbox( & $formElement, $result, $attribute, $options ){
-
-			// if atribute event is not defined we must create a default one
-			if ( is_null( $attribute ) ) $attribute = 'checked';
-
-			if ( $attribute != 'checked' )
-				return $this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";' );
-
-			// if atribute is 'checked' and result is true, check this checkbox
-			if ( is_bool( $result ) && $result == true )
-				return $this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").checked = true;' );
-
-			// if atribute is 'checked' and result is false, clean checkbox selection
-			if ( is_bool( $result ) && $result == false )
-				return $this->addScript( 'document.getElementById("' . $formElement->getAttribute( 'id' ) . '").checked = false;' );
-
-			// if atribute is 'checked' and result is 'toggle', checkbox will have the opposite value
-			if ( $result == "toggle" )
-				return $this->addScript( 'var __ydftmp = document.getElementById("' . $formElement->getAttribute( 'id' ) . '");
-										  if (__ydftmp.checked == false) {__ydftmp.checked = true;} else {__ydftmp.checked = false;}' );
-
-		}
-		
-}
 
 
     /**
