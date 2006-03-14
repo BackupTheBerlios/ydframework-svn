@@ -92,6 +92,51 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onclick';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // return js code
+            return 'return document.getElementById("' . $this->getAttribute('id') . '").value;';
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute event is not defined we must create a default one
+            if ( is_null( $attribute ) ){
+
+                // the default atribute of an image is its source address
+                $attribute = 'src';
+
+                // if we want to display a new image, we must create a new src value otherwise the browser won't replace
+                $result .= '?' . microtime();
+            }
+
+            // assign result image
+            return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+        }
+
     }
 
 ?>
