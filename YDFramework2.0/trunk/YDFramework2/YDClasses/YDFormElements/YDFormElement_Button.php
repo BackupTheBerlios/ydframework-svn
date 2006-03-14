@@ -92,6 +92,32 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onclick';
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute event is not defined we must create a default one
+            if ( is_null( $attribute ) ) $attribute = 'value';
+
+            // assign result to form element
+            return 'document.getElementById("' . $this->getAttribute('id') . '").' . $attribute . ' = "' . $result . '";';
+        }
+
     }
 
 ?>
