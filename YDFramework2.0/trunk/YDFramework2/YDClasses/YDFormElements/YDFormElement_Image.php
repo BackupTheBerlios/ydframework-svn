@@ -92,6 +92,16 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            die( 'Images cannot be used in ajax because they force submition. Use "img" element instead.' );
+        }
+
+
     }
 
 ?>
