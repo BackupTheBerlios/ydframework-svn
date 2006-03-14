@@ -1523,6 +1523,41 @@
         function toHtml() {
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            die( 'Element type (' . $this->getType() . ') is not supported in YDAjax' );
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            die( 'Element type (' . $this->getType() . ') is not supported in YDAjax events' );
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            die( 'Element type (' . $this->getType() . ') is not supported in YDAjax responses' );
+        }
+
+
+
     }
 
     /**
