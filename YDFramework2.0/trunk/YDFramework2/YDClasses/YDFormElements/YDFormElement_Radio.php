@@ -91,6 +91,56 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onchange';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // add custom js function
+            $js  = "\n\t" . 'var __ydftmp = document.getElementById("' . $this->getAttribute('id') . '");';
+            $js .= "\n\t" . 'for (counter = 0; counter < __ydftmp.length; counter++)';
+            $js .= "\n\t" . '   if (__ydftmp[counter].checked) return __ydftmp[counter].value;';
+            $js .= "\n\t" . 'return false;' . "\n";
+
+            // return function code
+            return $jscode;
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+            // if atribute is not defined we must create the default one
+            if ( is_null( $attribute ) ) $attribute = 'value';
+
+            // check and convert $result
+            $result = htmlspecialchars( $result );
+
+            // we must cycle all radio instances of this radio element
+            return '__ydftmp = document.getElementById("' . $this->getAttribute( 'id' ) . '");
+                    for (counter = 0; counter < __ydftmp.length; counter++)
+                        if (__ydftmp[counter].value == "' . $result . '") __ydftmp[counter].checked = true;
+                        else __ydftmp[counter].checked = false;';
+        }
+
     }
 
 ?>
