@@ -71,6 +71,47 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onchange';
+        }
+
+
+        /**
+         *	This function gets an element value using javascript
+         *
+         *	@param $options		(optional) The options for the elment.
+         */
+        function getJS( $options = null ){ 
+
+            // return js code
+            return 'return document.getElementById("' . $this->getAttribute('id') . '").value;';
+        }
+
+
+        /**
+         *	This function sets an element value using javascript
+         *
+         *	@param $result		The result value
+         *	@param $attribute	(optional) Element attribute
+         *	@param $options		(optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){ 
+
+             // if atribute is not defined we must create the default one
+             if ( is_null( $attribute ) ) $attribute = 'value';
+
+             // convert $result
+             $result = htmlspecialchars( $result );
+
+             // assign result
+             return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+        }
+
     }
 
 ?>
