@@ -95,6 +95,16 @@
 
         }
 
+
+        /**
+         *	This function returns the default javascript event of this element
+         */
+        function getJSEvent(){ 
+
+            return 'onclick';
+        }
+
+
     }
 
 ?>
