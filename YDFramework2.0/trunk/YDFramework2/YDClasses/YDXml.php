@@ -27,7 +27,7 @@
     }
 
     // Includes
-    include_once( YD_DIR_HOME . '/3rdparty/phpdomxml/lib.xml.inc.php' );
+    @include_once( YD_DIR_HOME . '/3rdparty/phpdomxml/lib.xml.inc.php' );
     
     // YDXml constants
     define( 'YD_XML_FILE',   1 );
