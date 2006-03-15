@@ -102,7 +102,7 @@
                     // Labels (support only default values)
                     $e_lab = & $elem[$i]['#']['labels'][0]['#']['label'];
                     $e_lab[0]['@']['id']    = 'default';
-                    $e_lab[0]['@']['value'] = $arr['labelname'];
+                    $e_lab[0]['@']['value'] = $arr['label'];
                     
                     // Values (support only default values)
                     $e_val = & $elem[$i]['#']['values'][0]['#']['value'];
