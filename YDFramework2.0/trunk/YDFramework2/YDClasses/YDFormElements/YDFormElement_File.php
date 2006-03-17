@@ -109,8 +109,8 @@
                 $path
             );
 
-            @chmod( realpath( $dir ), 0700 );
-            @chmod( $path, 0700 );
+            //@chmod( realpath( $dir ), 0700 );
+            //@chmod( $path, 0700 );
 
             // Provide an interface to some more useful information on the file
             $this->fileo = new YDFSFile( $path );

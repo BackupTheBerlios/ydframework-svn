@@ -68,7 +68,7 @@
         fclose( $f );
 
         // Set the right permissions
-        @chmod( dirname( __FILE__ ) . '/config.php', 0700 );
+        //@chmod( dirname( __FILE__ ) . '/config.php', 0700 );
 
         // Create a .htaccess file if needed
         $htaccessPath = dirname( dirname( __FILE__ ) ) . '/.htaccess';
@@ -89,7 +89,7 @@
             fclose( $f );
 
             // Set the right permissions
-            @chmod( $htaccessPath, 0700 );
+            //@chmod( $htaccessPath, 0700 );
 
         }
 
