@@ -555,10 +555,10 @@
         if ( empty( $string ) ) {
             $string = "now";
         }
-        $time = strtotime( $string );
         if ( is_numeric( $time ) && $time != -1 ) {
-            return $time;
+            return intval( $time );
         }
+        $time = strtotime( $string );
         if ( preg_match( '/^\d{14}$/', $string ) ) {
             $time = mktime(
                 substr( $string, 8, 2 ), substr( $string, 10, 2 ), substr( $string, 12, 2 ),
