@@ -147,6 +147,31 @@
     }
 
     /**
+     *  This function is used to load translations from a $GLOBALS['t'] array.
+     *
+     *  @param  $t  The name of the translated string.
+     *
+     *  @returns    The translated string.
+     */
+    function t( $t ) {
+
+        // Return empty string when param is missing
+        if ( empty( $t ) ) {
+            return '';
+        }
+
+        // Initialize the language array
+        if ( ! isset( $GLOBALS['t'] ) ) {
+            $GLOBALS['t'] = array();
+        }
+
+        // Return the right translation
+        $t = strtolower( $t );
+        return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
+
+    }
+
+    /**
      *  This is the base class for all other YD classes.
      */
     class YDBase {
