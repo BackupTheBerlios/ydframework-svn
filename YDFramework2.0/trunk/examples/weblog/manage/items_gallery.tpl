@@ -95,7 +95,7 @@
                 <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL" valign="top">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</td>
                     <td class="adminRowL" valign="top">
-                        <img src="../{$uploads_dir}/{$image->relative_path_s}" alt="{$image->getBaseName()}">
+                        <img src="{$uploads_dir}/{$image->relative_path_s}" alt="{$image->getBaseName()}">
                     </td>
                     <td class="adminRowL" valign="top">
                         <a href="{$YD_SELF_SCRIPT}?do=showimage&id={$item.id}&img={$image->relative_path}" target="_blank">{$image->getBaseName()}</a>
