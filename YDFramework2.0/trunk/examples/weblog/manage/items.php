@@ -122,6 +122,9 @@
                     // Send an email if configured
                     if ( YDConfig::get( 'email_new_item', true ) ) {
 
+                        // Add the item ID
+                        $values['id'] = $this->weblog->db->getLastInsertID();
+
                         // Include the YDEmail library
                         YDInclude( 'YDEmail.php' );
 
@@ -130,6 +133,7 @@
 
                         // Add the comment to the email template
                         $this->tpl->assign( 'item', $values );
+                        $this->tpl->assign( 'weblog_link', YDUrl::makeLinkAbsolute( '../index.php' ) );
 
                         // Create the email and send it
                         $eml = new YDEmail();
