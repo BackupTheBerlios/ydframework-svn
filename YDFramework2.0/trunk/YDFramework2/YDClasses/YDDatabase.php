@@ -701,6 +701,8 @@
 
         /**
          *  Function that makes the actual connection.
+         *
+         *  @returns    Boolean indicating if the connection was succesfull or not.
          */
         function connect() {
         }
@@ -1272,22 +1274,38 @@
          *  @returns    The version of the database server software.
          */
         function getServerVersion() {
-            $this->connect();
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && is_null( $this->_conn ) && $this->_failOnError === true ) {
+                trigger_error( mysql_error(), YD_ERROR );
+            }
+            if ( ! $result && ! is_null( $this->_conn ) && $this->_failOnError === true ) {
+                trigger_error( mysql_error( $this->_conn ), YD_ERROR );
+            }
+
+            // Return the version
             return 'MySQL ' . mysql_get_server_info();
+
         }
 
         /**
          *  Function that makes the actual connection.
+         *
+         *  @returns    Boolean indicating if the connection was succesfull or not.
          */
         function connect() {
-            $conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
-            if ( ! $conn ) {
-                trigger_error( mysql_error(), YD_ERROR );
+            if ( $this->_conn == null ) {
+                $conn = @mysql_connect( $this->_host, $this->_user, $this->_pass );
+                if ( ! $conn ) {
+                    return false;
+                }
+                if ( ! @mysql_select_db( $this->_db, $conn ) ) {
+                    return false;
+                }
+                $this->_conn = $conn;
             }
-            if ( ! @mysql_select_db( $this->_db, $conn ) ) {
-                trigger_error( mysql_error( $conn ), YD_ERROR );
-            }
-            $this->_conn = $conn;
+            return true;
         }
 
         /**
@@ -1402,14 +1420,35 @@
          *  @internal
          */
         function & _connectAndExec( $sql ) {
+
+            // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+
+            // Log the statement
             $this->_logSql( $sql );
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && is_null( $this->_conn ) && $this->_failOnError === true ) {
+                trigger_error( mysql_error(), YD_ERROR );
+            }
+            if ( ! $result && ! is_null( $this->_conn ) && $this->_failOnError === true ) {
+                trigger_error( mysql_error( $this->_conn ), YD_ERROR );
+            }
+
+            // Execute the query
             $result = @mysql_query( $sql, $this->_conn );
+
+            // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
             }
+
+            // Return the result
             return $result;
+
         }
 
     }

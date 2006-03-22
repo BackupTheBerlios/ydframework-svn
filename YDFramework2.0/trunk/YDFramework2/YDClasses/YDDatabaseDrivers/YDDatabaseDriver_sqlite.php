@@ -64,8 +64,18 @@
          *	@returns	The version of the database server software.
          */
         function getServerVersion() {
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && $this->_failOnError === true ) {
+                trigger_error( $GLOBALS['YD_SQLITE_error'], YD_ERROR );
+            }
+
+            // Return the version
             return 'SQLite ' . sqlite_libversion();
+
         }
 
         /**
@@ -75,10 +85,11 @@
             if ( $this->_conn == null ) {
                 $conn = @sqlite_open( $this->_db, 0666, $error );
                 if ( ! $conn ) {
-                    trigger_error( $error, YD_ERROR );
+                    return false;
                 }
                 $this->_conn = $conn;
             }
+            return true;
         }
 
         /**
@@ -189,14 +200,32 @@
          *	@internal
          */
         function & _connectAndExec( $sql ) {
+
+            // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+
+            // Log the statement
             $this->_logSql( $sql );
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && $this->_failOnError === true ) {
+                trigger_error( $GLOBALS['YD_SQLITE_error'], YD_ERROR );
+            }
+
+            // Execute the query
             $result = @sqlite_query( $sql, $this->_conn );
+
+            // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( sqlite_error_string( sqlite_last_error( $this->_conn ) ), YD_ERROR );
             }
+
+            // Return the result
             return $result;
+
         }
 
     }

@@ -87,10 +87,11 @@
                 $connstr = implode( ' ', $connstr );
                 $conn = pg_connect( $connstr );
                 if ( ! $conn ) {
-                    trigger_error( pg_last_error( $conn ), YD_ERROR );
+                    return false;
                 }
                 $this->_conn = $conn;
             }
+            return true;
         }
 
         /**
@@ -191,14 +192,32 @@
          *	@internal
          */
         function & _connectAndExec( $sql ) {
+
+            // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+
+            // Log the SQL
             $this->_logSql( $sql );
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && $this->_failOnError === true ) {
+                trigger_error( pg_last_error(), YD_ERROR );
+            }
+
+            // Perform the query
             $result = @pg_query( $this->_conn, $sql );
+
+            // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( pg_last_error( $conn ), YD_ERROR );
             }
+
+            // Return the result
             return $result;
+
         }
 
         /**

@@ -67,19 +67,31 @@
          *	@returns	The version of the database server software.
          */
         function getServerVersion() {
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && $this->_failOnError === true ) {
+                $error = ocierror();
+                trigger_error( $error['message'], YD_ERROR );
+            }
+
+            // Return the version
             return 'Oracle ' . ociserverversion( $this->_conn );
+
         }
 
         /**
          *	Function that makes the actual connection.
+         *
+         *  @returns    Boolean indicating if the connection was succesfull or not.
          */
         function connect() {
             if ( $this->_conn == null ) {
                 $conn = @OCILogon( $this->_user, $this->_pass, $this->_db );
                 if ( ! $conn ) {
-                    $error = ocierror( $conn );
-                    trigger_error( $error['message'], YD_ERROR );
+                    return false;
                 }
                 $this->_conn = $conn;
                 $stmt = OCIParse(
@@ -87,6 +99,7 @@
                 );
                 @OCIExecute( $stmt );
             }
+            return true;
         }
 
         /**
@@ -247,15 +260,35 @@
          *	@internal
          */
         function & _connectAndExec( $sql ) {
+
+            // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+
+            // Log the statement
             $this->_logSql( $sql );
-            $this->connect();
+
+            // Connect
+            $result = $this->connect();
+
+            // Handle errors
+            if ( ! $result && $this->_failOnError === true ) {
+                $error = ocierror();
+                trigger_error( $error['message'], YD_ERROR );
+            }
+
+            // Create statement
             $stmt = OCIParse( $this->_conn, $sql );
-            if ( ! $stmt ) {
+
+            // Handle errors
+            if ( ! $stmt && $this->_failOnError === true ) {
                 $error = ocierror( $stmt );
                 trigger_error( $error['message'], YD_ERROR );
             }
+
+            // Execute
             $result = @OCIExecute( $stmt );
+
+            // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
                 $error = ocierror( $stmt );
                 if ( ! empty( $error['sqltext'] ) ) {
@@ -263,7 +296,10 @@
                 }
                 trigger_error( $error['message'], YD_ERROR );
             }
+
+            // Return the result
             return $stmt;
+
         }
 
         /**
