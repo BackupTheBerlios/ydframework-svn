@@ -263,6 +263,10 @@
                     $image->relative_path_s = dirname( $image->relative_path ) . '/s_' . basename( $image->relative_path );
                     $image->relative_path_m = dirname( $image->relative_path ) . '/m_' . basename( $image->relative_path );
 
+                    // Add the thumbnails as objects
+                    $image->relative_path_s_obj = new YDFSImage( $dir_uploads->getAbsolutePath() . '/' . $image->relative_path_s );
+                    $image->relative_path_m_obj = new YDFSImage( $dir_uploads->getAbsolutePath() . '/' . $image->relative_path_m );
+
                     // Update the original image
                     $images[$key] = $image;
 

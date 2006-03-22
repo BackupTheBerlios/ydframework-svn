@@ -33,7 +33,7 @@
             {if $image->getWidth() > $max_img_size}
                 <iframe src="{$uploads_dir}/{$image->relative_path}" width="{$max_img_size}" height="{$image->getHeight()+20}" marginwidth="0" marginheight="0"></iframe>
             {else}
-                <img src="{$uploads_dir}/{$image->relative_path}">
+                <img src="{$uploads_dir}/{$image->relative_path}" width="{$image->getWidth()}" height="{$image->getHeight()}">
             {/if}
             </p>
 
