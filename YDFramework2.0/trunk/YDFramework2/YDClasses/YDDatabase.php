@@ -1176,9 +1176,27 @@
          *  @internal
          */
         function _logSql( $sql ) {
+
+            // Split the SQL in different lines
+            $sql = str_replace( 'FROM', YD_CRLF . 'FROM', $sql );
+            $sql = str_replace( 'LEFT JOIN', YD_CRLF . 'LEFT JOIN', $sql );
+            $sql = str_replace( 'RIGHT JOIN', YD_CRLF . 'RIGHT JOIN', $sql );
+            $sql = str_replace( 'INNER JOIN', YD_CRLF . 'INNER JOIN', $sql );
+            $sql = str_replace( 'WHERE', YD_CRLF . 'WHERE', $sql );
+            $sql = str_replace( 'ORDER BY', YD_CRLF . 'ORDER BY', $sql );
+
+            // Get the backtrace
             $trace = debug_backtrace();
-            $sql = $sql . ' [' . $trace[2]['file'] . ':' . $trace[2]['line'] . ']';
-            array_push( $GLOBALS['YD_SQL_QUERY'], YDStringUtil::removeWhiteSpace( $sql ) );
+
+            // Format the SQL
+            $sql_final = '';
+            foreach ( explode( YD_CRLF, $sql ) as $line ) {
+                $sql_final .= '[' . $trace[2]['file'] . ':' . $trace[2]['line'] . '] ' . $line . YD_CRLF;
+            }
+
+            // Add it to the query log
+            array_push( $GLOBALS['YD_SQL_QUERY'], $sql_final );
+
         }
 
         /**

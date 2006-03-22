@@ -178,7 +178,10 @@
                 if ( sizeof( $GLOBALS['YD_SQL_QUERY'] ) > 0 ) {
                     $debug .= 'EXECUTED SQL QUERIES (' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . ' queries)' . YD_CRLF . YD_CRLF;
                     foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
-                        $debug .= "\t" . ($key+1) . ': ' . trim( $query ) . YD_CRLF . YD_CRLF;
+                        foreach ( explode( YD_CRLF, trim( $query ) ) as $line ) {
+                            $debug .= "\t" . ( $key+1 ) . ':' . "\t" . trim( $line ) . YD_CRLF;
+                        }
+                        $debug .= YD_CRLF;
                     }
                 }
 
