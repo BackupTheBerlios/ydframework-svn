@@ -191,7 +191,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="10" valign="top">&nbsp;</td>
+            <td rowspan="11" valign="top">&nbsp;</td>
             <td valign="top"><a href="form.php">Form handling and validation</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.php">form.php</a>
@@ -255,6 +255,14 @@
             <td valign="top"><a href="form_xml2.php">Rendering and importing using XML</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_xml2.php">form_xml2.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="form_checkboxgroup.php">Using the checkboxgroup elementL</a></td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=form_checkboxgroup.php">form_checkboxgroup.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=form_checkboxgroup.tpl">form_checkboxgroup.tpl</a>
             </td>
         </tr>
         <tr>
