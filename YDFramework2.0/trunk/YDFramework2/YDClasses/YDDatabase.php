@@ -1180,12 +1180,12 @@
         function _logSql( $sql ) {
 
             // Split the SQL in different lines
-            $sql = str_replace( 'FROM', YD_CRLF . 'FROM', $sql );
-            $sql = str_replace( 'LEFT JOIN', YD_CRLF . 'LEFT JOIN', $sql );
-            $sql = str_replace( 'RIGHT JOIN', YD_CRLF . 'RIGHT JOIN', $sql );
-            $sql = str_replace( 'INNER JOIN', YD_CRLF . 'INNER JOIN', $sql );
-            $sql = str_replace( 'WHERE', YD_CRLF . 'WHERE', $sql );
-            $sql = str_replace( 'ORDER BY', YD_CRLF . 'ORDER BY', $sql );
+            $sql = str_ireplace( 'FROM', YD_CRLF . 'FROM', $sql );
+            $sql = str_ireplace( 'LEFT JOIN', YD_CRLF . 'LEFT JOIN', $sql );
+            $sql = str_ireplace( 'RIGHT JOIN', YD_CRLF . 'RIGHT JOIN', $sql );
+            $sql = str_ireplace( 'INNER JOIN', YD_CRLF . 'INNER JOIN', $sql );
+            $sql = str_ireplace( 'WHERE', YD_CRLF . 'WHERE', $sql );
+            $sql = str_ireplace( 'ORDER BY', YD_CRLF . 'ORDER BY', $sql );
 
             // Get the backtrace
             $trace = debug_backtrace();
