@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.6';
+            $this->_version = '2.62';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -343,6 +343,10 @@
          */		
 		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){ 
 		 
+			// if formElementName is "*" we want to define a default event
+			if ( $formElementName === "*" )
+				return $this->registerCatchAllFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
+
 		 	if( !is_array( $options ) ) $options = array( $options );
 		 
 			// serverFunction must be an array with a class and the method (get function name)
@@ -729,6 +733,15 @@
 			// if is not a form element, assign result to a html id
 			$form = $this->__getForm( $formElementName );
 
+			// if result is a string we must parse it. Javascript strings cannot contain new lines
+			if ( is_string( $result ) ){
+
+				// escape string
+				$result = addslashes( $result );
+				$result = str_replace( "\n", " ", $result );
+				$result = str_replace( "\r", " ", $result );
+			}
+
 			// if $formElementName is really an form element
 			if ( !is_null( $form ) ){
 
@@ -745,9 +758,6 @@
 
 			// if result is an array we should export to a valid js string
 			if (is_array( $result )) $result = str_replace( "\n", "<br>", var_export( $result, true ) );
-		
-			// escape string
-			$result = addslashes( $result );
 			
 			// assign result to form element using the id
 			return $this->response->addScript( 'document.getElementById("' . $formElementName . '").' . $attribute . ' = "' . $result . '";' );
