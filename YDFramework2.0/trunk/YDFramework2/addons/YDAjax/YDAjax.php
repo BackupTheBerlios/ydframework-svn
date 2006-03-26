@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.62';
+            $this->_version = '2.63';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -537,6 +537,34 @@
 		}
 
 
+        /**
+         *	This method adds an event to a response to loaded for future use.
+         *
+         *	@param $formElementName		Form element name (string) or js function.
+         *	@param $serverFunction		Array with class and method.
+         *	@param $arguments			(Optional) Arguments for this function call
+         *	@param $event				(Optional) Html event name (auto-detection by default when using null).
+         *	@param $options				(Optional) Custom options.
+         *	@param $effects				(Optional) Effect or array of effects to execute on event (before ajax call).
+         */		
+		function addRuntimeEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){
+		
+			// get function name
+			$functionName = $this->_getWMFunctionShow() . $this->sWrapperPrefix . $serverFunction . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
+
+			// create js variable to handle ajax request
+			$js  = $this->sWrapperPrefix . $serverFunction .'=function(){return xajax.call("' . $serverFunction .'", arguments, 1);};';
+
+			// parse harcoded js function
+			ereg ( "^(.*)(\(.*\))$", $formElementName, $res );
+
+			// create custom js function
+			$js .= $res[1] . '=function'. $res[2] .'{' . $functionName . '};';
+
+			// add all js code to response
+			$this->response->addScript( $js );
+		}
+		
         /**
          *	This method adds confirmation to a element event
          *
