@@ -83,7 +83,7 @@
 
             // Create the list of attributes
             $attribs = array(
-                'id' => $this->_form . '_' . $this->_name, 'src' => $this->_value
+                'id' => $this->_form . '_' . $this->_name, 'src' => $this->_value, 'alt' => $this->_name
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
