@@ -160,11 +160,6 @@
             return '';
         }
 
-        // Initialize the language array
-        if ( ! isset( $GLOBALS['t'] ) ) {
-            $GLOBALS['t'] = array();
-        }
-
         // Return the right translation
         $t = strtolower( $t );
         return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
@@ -384,7 +379,15 @@
             // Set the locale
             YDConfig::set( YD_LOCALE_KEY, $locale );
 
+            // initialize t array
+            $GLOBALS['t'] = array();
+
+            // if directories array exist we must include all files
+            if ( isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) )
+                foreach ( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] as $dir )
+                    @include_once( $dir . '/' . YDLocale::get() . '.php' );
         }
+
 
         /**
          *	@returns	The current locale.
@@ -394,7 +397,31 @@
             return strtolower( YDConfig::get( YD_LOCALE_KEY ) );
         }
 
+
+        /**
+         *	This function adds a new directory
+         *
+         *	@param	$dir       Directory to add
+         */
+        function addDirectory( $dir ){
+
+            // check if directories array exists
+            if ( !isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) )
+                $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] = array();
+
+            // add directory to array. Needed when changing locale
+            $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ][] = $dir;
+
+            // check if translations array exists
+            if ( !isset( $GLOBALS['t'] ) )
+                $GLOBALS['t'] = array();
+
+            // include directory
+            include_once( $dir . '/' . YDLocale::get() . '.php' );
+        }
+
     }
+
 
     /**
      *	This is the base class for all other YD classes.
