@@ -28,6 +28,7 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
+    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
 
     /**
      *	This is the class that define a file upload form element.
