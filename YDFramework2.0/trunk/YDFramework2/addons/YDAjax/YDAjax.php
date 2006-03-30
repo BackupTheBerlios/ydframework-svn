@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.63';
+            $this->_version = '2.7b';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -329,7 +329,7 @@
 			// send array and method to display autocompleter
 			return $this->addScript( $js . 'autocompleterOpen(' . $jsvar . ');' );
 		}
-		
+
 
         /**
          *	This method assigns a server function and arguments to a form element event.
@@ -343,28 +343,27 @@
          */		
 		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){ 
 		 
-			// if formElementName is "*" we want to define a default event
+			// if formElementName is "*" we want to define a default event (only before responses)
 			if ( $formElementName === "*" )
 				return $this->registerCatchAllFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
 
 		 	if( !is_array( $options ) ) $options = array( $options );
+
+			// register function in xajax if not on reponse
+			if ( !$this->onResponse )
+				$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
 		 
 			// serverFunction must be an array with a class and the method (get function name)
 			$functionName = $this->computeFunction( $formElementName, $serverFunction, $arguments, $options, $effects );
 
 			// if element don't have a form we must return
-			$form = $this->__getForm( $formElementName );
-
-			if( is_null( $form ) ) return;
+			if( is_null( $form = $this->__getForm( $formElementName ) ) ) return;
 
 			// get form element
 			$formElement = & $form->getElement( $formElementName );
 
 			// if event is null we must check the form element type to compute the default event
 			if( is_null( $event ) ) $event = $formElement->getJSEvent();
-
-			// parse event
-			$event = strtolower( $event );
 
 			// get previous atribute
 			$previous = is_null( $formElement->getAttribute( $event ) ) ? '' : trim( $formElement->getAttribute( $event ) );
@@ -385,15 +384,13 @@
 
 		function computeFunction( $formElementName, $serverFunction, $arguments = null, $options = null, $effects = null ){ 
 
-			// register function in xajax
-			$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
-
-			$serverFunctionName = $serverFunction[1];
+			if( !$this->onResponse ) $serverFunctionName = $serverFunction[1];
+			else                     $serverFunctionName = $serverFunction;
 
 			if ( !is_array( $options ) ) $options = array( $options );
 			
 			// get function name
-			$functionName = $this->_getWMFunctionShow() . $this->sWrapperPrefix . $serverFunctionName . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
+			$functionName = $this->_getWMFunctionShow() . $this->prefix . $serverFunctionName . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
 
 			// process effects
 			if ( !is_null( $effects ) ){
@@ -418,12 +415,15 @@
 							// get id
 							$id = $element->getAttribute( 'id' );
 						
-							$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
+							// if before response, add effect js to template. otherwise add it to response
+							if ( !$this->onResponse)	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
+							else						$this->response->addScript( $effect->getJSHead( $id ) );
 						
 						}
-						else
-							$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
-				
+						else{
+							if ( !$this->onResponse )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
+							else						$this->response->addScript( $effect->getJSHead() );
+							}
 					}
 
 					// function is now the effect js created
@@ -432,10 +432,36 @@
 			}
 
 			// if formElementName is a js function we are not assigning an event to a form element but creating a js function
-			if ( ereg ( "^(.*)\(.*\)$", $formElementName, $function ) ){
-				$this->customjs[ $function[0] ] = $functionName;
-				return;
+			if ( ereg ( "^(.*)(\(.*\))$", $formElementName, $res ) ){
+
+				// if we are before reponse we must add function to template
+				if ( !$this->onResponse ) return $this->customjs[ $res[0] ] = $functionName;
+				
+				// create js variable to handle ajax request
+				$js  = $this->prefix . $serverFunction .'=function(){return xajax.call("' . $serverFunction .'", arguments, 1);};';
+
+				// create custom js function
+				$js .= $res[1] . '=function'. $res[2] .'{' . $functionName . '};';
+
+				// add all js code to response
+				return $this->response->addScript( $js );
 			}
+
+			
+			if( $this->onResponse ){
+			
+				// create js variable to handle ajax request
+				$js  = $this->prefix . $serverFunction . '=function(){return xajax.call("' . $serverFunction . '", arguments, 1);};';
+
+				// create custom js function
+				$js .= $this->prefix . $serverFunction . 'get=function(){' .  $functionName . '};';
+
+				// add all js code to response
+				$this->response->addScript( $js );
+				
+				return $this->prefix . $serverFunction . 'get()';
+			}
+
 
 			return $functionName;
 		}
@@ -515,13 +541,14 @@
 					$js = $elem->getJS( $options );					
 
 					// compute javascript function name
-					$jsfunction = $this->prefix . 'get' . $elem->getName() . '()';
+					$jsfunction = $this->prefix . 'get' . $elem->getName();
 
 					// add javascript function code to custom js (to be included in template head)
-					$this->customjs[$jsfunction] = $js;
+					if ( !$this->onResponse ) $this->customjs[$jsfunction] = $js;
+					else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
 					
 					// add function name to arguments list
-					$args[] = $jsfunction;
+					$args[] = $jsfunction . '()';
 					
 					continue;
 				}
@@ -536,34 +563,6 @@
 			return implode( ",", $args );
 		}
 
-
-        /**
-         *	This method adds an event to a response to loaded for future use.
-         *
-         *	@param $formElementName		Form element name (string) or js function.
-         *	@param $serverFunction		Array with class and method.
-         *	@param $arguments			(Optional) Arguments for this function call
-         *	@param $event				(Optional) Html event name (auto-detection by default when using null).
-         *	@param $options				(Optional) Custom options.
-         *	@param $effects				(Optional) Effect or array of effects to execute on event (before ajax call).
-         */		
-		function addRuntimeEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){
-		
-			// get function name
-			$functionName = $this->_getWMFunctionShow() . $this->sWrapperPrefix . $serverFunction . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
-
-			// create js variable to handle ajax request
-			$js  = $this->sWrapperPrefix . $serverFunction .'=function(){return xajax.call("' . $serverFunction .'", arguments, 1);};';
-
-			// parse harcoded js function
-			ereg ( "^(.*)(\(.*\))$", $formElementName, $res );
-
-			// create custom js function
-			$js .= $res[1] . '=function'. $res[2] .'{' . $functionName . '};';
-
-			// add all js code to response
-			$this->response->addScript( $js );
-		}
 		
         /**
          *	This method adds confirmation to a element event
@@ -688,14 +687,14 @@
          */	
 		function processEvents(){
 
-			// we will start a response
-			$this->onResponse = true;
-
 			// check autocompleters
 			$this->__computeAutocompletersCode();
 			
 			// add js code
 			$this->__assignTemplateCode();
+
+			// we will start a response
+			$this->onResponse = true;
 
 			// process all requests and exit
 			return $this->processRequests();
