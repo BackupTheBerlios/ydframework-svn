@@ -468,15 +468,18 @@
 
         /**
          *  This function will return a YDDatabaseDriver instance for the named database instance. If no instance is
-         *  given, the one with the name "default" will be used.
+         *  given, the one with the name "default" will be used. You can use database instance objects too.
          *
-         *  @param $name    (optional) The name of the database instance. Defaults to "default".
+         *  @param $name    (optional) The name or object of the database instance. Defaults to "default".
          *
          *  @returns    An instance of YDDatabaseDriver
          *
          *  @static
          */
         function getNamedInstance( $name='default' ) {
+
+            // Check if name is a YDDatabaseDriver object
+            if ( is_object( $name ) ) return $name;
 
             // Check if the global array exists
             YDDatabase::_initNamedInstances();

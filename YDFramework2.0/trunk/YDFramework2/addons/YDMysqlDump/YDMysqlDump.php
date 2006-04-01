@@ -34,9 +34,9 @@
         /**
          *  Class constructor for the YDMysqlDump class.
          *
-         *  @param $dbinstance      Database instance
+         *  @param $dbinstance      Database instance name or object.
          */
-        function YDMysqlDump( $dbinstance = null ) {
+        function YDMysqlDump( $dbinstance = 'default' ) {
 
             // Initializes YDBase
             $this->YDAddOnModule();
@@ -48,9 +48,7 @@
             $this->_description = 'This class defines a mysql backup/restore system.';
 
             // database instance
-            if ( is_null( $dbinstance ) )        $this->dbinstance = YDDatabase::getNamedInstance();
-            else if ( is_string( $dbinstance ) ) $this->dbinstance = YDDatabase::getNamedInstance( $dbinstance );
-            else                                 $this->dbinstance = $dbinstance;
+			$this->dbinstance = YDDatabase::getNamedInstance( $dbinstance );
 
             // predefined filepath for store content (used if we don't want a string)
             $this->filepath = YD_DIR_TEMP . '/backup.sql';
