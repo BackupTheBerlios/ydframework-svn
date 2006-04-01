@@ -43,7 +43,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '1.2';
+            $this->_version = '1.3';
             $this->_copyright = '(c) 2005 Francisco Azevedo, francisco@fusemail.com';
             $this->_description = 'This class defines a mysql backup/restore system.';
 
@@ -54,10 +54,10 @@
             $this->filepath = YD_DIR_TEMP . '/backup.sql';
 
             // defaults
-            $this->useComments = false;
-            $this->useDrops = true;
-            $this->useStructure = true;
-            $this->useData = true;
+            $this->useComments  = false;
+            $this->useDrops     = false;
+            $this->useStructure = false;
+            $this->useData      = false;
 
             // custom tables
             $this->tables_to_use = null;
