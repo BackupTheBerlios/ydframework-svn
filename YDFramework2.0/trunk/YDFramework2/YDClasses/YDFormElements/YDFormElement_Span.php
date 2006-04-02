@@ -53,7 +53,6 @@
 
             // Set the value correctly
             $this->setValue( $label );
-            $this->_label = '';
             $this->_placeLabel = 'none';
 
             // Indicate if filters need to be applied
