@@ -537,19 +537,8 @@
 
             } else {
 
-                // Register the standard drivers
-                $regDrivers[ strtolower( 'mysql' ) ] = array(
-                    'class' => 'YDDatabaseDriver_mysql', 'file' => ''
-                );
-                $regDrivers[ strtolower( 'oracle' ) ] = array(
-                    'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
-                );
-                $regDrivers[ strtolower( 'postgres' ) ] = array(
-                    'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
-                );
-                $regDrivers[ strtolower( 'sqlite' ) ] = array(
-                    'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
-                );
+                // Get the standard driver list
+                $regDrivers = YDDatabase::getSupportedDrivers();
 
                 // Check if the driver exists
                 if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {
@@ -563,7 +552,7 @@
                 if ( is_file( $regDrivers[ strtolower( $driver ) ]['file'] ) ) {
                     include_once( $regDrivers[ strtolower( $driver ) ]['file'] );
                 } else {
-                    include_once( YD_DIR_HOME_CLS . '/YDDatabaseDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
+                    include_once( dirname( __FILE__ ) . '/YDDatabaseDrivers/' . $regDrivers[ strtolower( $driver ) ]['file'] );
                 }
             }
 
@@ -575,6 +564,35 @@
             // Make a new connection object and return it
             $className = $regDrivers[ strtolower( $driver ) ]['class'];
             return new $className( $db, $user, $pass, $host );
+
+        }
+
+        /**
+         *  This function returns the list of supported drivers.
+         *
+         *  @returns    An array with the list of supported drivers.
+         */
+        function getSupportedDrivers() {
+
+            // The list of known drivers
+            $regDrivers = array();
+
+            // Register the standard drivers
+            $regDrivers[ strtolower( 'mysql' ) ] = array(
+                'class' => 'YDDatabaseDriver_mysql', 'file' => ''
+            );
+            $regDrivers[ strtolower( 'oracle' ) ] = array(
+                'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
+            );
+            $regDrivers[ strtolower( 'postgres' ) ] = array(
+                'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
+            );
+            $regDrivers[ strtolower( 'sqlite' ) ] = array(
+                'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
+            );
+
+            // Return the list
+            return $regDrivers;
 
         }
 
