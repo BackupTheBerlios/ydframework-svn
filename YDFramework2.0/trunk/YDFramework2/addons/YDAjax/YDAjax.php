@@ -333,11 +333,7 @@
 				return $this->registerCatchAllFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
 
 		 	if( !is_array( $options ) ) $options = array( $options );
-
-			// register function in xajax if not on reponse
-			if ( !$this->onResponse )
-				$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
-		 
+	 
 			// serverFunction must be an array with a class and the method (get function name)
 			$functionName = $this->computeFunction( $formElementName, $serverFunction, $arguments, $options, $effects );
 
@@ -368,6 +364,10 @@
 
 
 		function computeFunction( $formElementName, $serverFunction, $arguments = null, $options = null, $effects = null ){ 
+
+			// register function in xajax if not on reponse
+			if ( !$this->onResponse )
+				$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
 
 			if( !$this->onResponse ) $serverFunctionName = $serverFunction[1];
 			else                     $serverFunctionName = $serverFunction;
@@ -529,7 +529,7 @@
 					$jsfunction = $this->prefix . 'get' . $elem->getName();
 
 					// add javascript function code to custom js (to be included in template head)
-					if ( !$this->onResponse ) $this->customjs[$jsfunction] = $js;
+					if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
 					else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
 					
 					// add function name to arguments list
