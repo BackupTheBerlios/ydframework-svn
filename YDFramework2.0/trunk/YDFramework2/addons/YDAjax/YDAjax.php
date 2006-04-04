@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.7b';
+            $this->_version = '2.8b';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -212,7 +212,7 @@
 			// check custom options
 			if ( !isset( $options['style.backgroundColor'] ) ) $options['style.backgroundColor'] = '#cccccc';
 			if ( !isset( $options['style.top'] ) )             $options['style.top']             = '40%';
-			if ( !isset( $options['style.left'] ) )            $options['style.left']            = '44%';
+			if ( !isset( $options['style.left'] ) )            $options['style.left']            = '42%';
 			if ( !isset( $options['style.border'] ) )          $options['style.border']          = '1px solid #110000';
 
 			// static values
@@ -240,10 +240,6 @@
 			foreach( $options as $name => $value )
 				$this->waitingMessageCode .= $this->wtID . "." . $name . " = '" . $value . "';";
 
-			// create js function headers to show/hide waiting message div
-			$this->wtFunctionShow = $this->wtID . "show()";
-			$this->wtFunctionHide = $this->wtID . "hide()";
-
 			// create show effect
 			if ( is_null( $effectShow ) )
 				$effectShow = new YDAjaxEffect( '', 'show', '', 0 );
@@ -253,19 +249,8 @@
 				$effectHide = new YDAjaxEffect( '', 'hide', '', 0 );
 
 			// create js functions to show/hide div
-			$this->waitingMessageCodeFunction  = "function " . $this->wtFunctionShow . "{" . $effectShow->getJSHead( $this->wtID . "id" ) . $effectShow->getJSBody( $this->wtID ."id" ) . "}\n";
-			$this->waitingMessageCodeFunction .= "function " . $this->wtFunctionHide . "{" . $effectHide->getJSHead( $this->wtID . "id" ) . $effectHide->getJSBody( $this->wtID ."id" ) . "}\n";
-
-			// add script to hide waiting message on response
-			$this->response->addScript( $this->wtFunctionHide . ";" );
-		}
-
-
-		// internal method to get the js show waiting message function declaration
-		function _getWMFunctionShow(){
-
-			if ( isset( $this->wtID ) ) return $this->wtFunctionShow . ";";
-			else                        return '';
+			$this->waitingMessageCodeFunction  = "xajax.loadingFunction     = function(){" . $effectShow->getJSHead( $this->wtID . "id" ) . $effectShow->getJSBody( $this->wtID ."id" ) . "}\n";
+			$this->waitingMessageCodeFunction .= "xajax.doneLoadingFunction = function(){" . $effectHide->getJSHead( $this->wtID . "id" ) . $effectHide->getJSBody( $this->wtID ."id" ) . "}\n";
 		}
 
 
@@ -390,7 +375,7 @@
 			if ( !is_array( $options ) ) $options = array( $options );
 			
 			// get function name
-			$functionName = $this->_getWMFunctionShow() . $this->prefix . $serverFunctionName . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
+			$functionName = $this->prefix . $serverFunctionName . '(' . $this->_computeFunctionArguments( $arguments, $options ) . ');';
 
 			// process effects
 			if ( !is_null( $effects ) ){
@@ -820,7 +805,6 @@
 		function message( $message ){
 
 			$response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
-			$response->addScript( 'try{ waitingmessagehide() }catch(e){}' );
 			$response->addAlert( $message );
 
 			return $response;
