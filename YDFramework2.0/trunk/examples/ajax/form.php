@@ -55,7 +55,7 @@
 
 			// if form is not valid, send errors to client side using an alert
 			if (!$this->form->validate( $formvalues ))
-				return YDAjax::message( implode( "\n", $this->form->getErrors() ) );
+				return YDAjax::message( $this->form->getErrors( true, "\n* ", "* " ) );
 
 			// assign span 'myspanresult' with form values and change 'mybutton' caption
 			$this->ajax->addResult( 'myspanresult',  $this->form->getValues() ) ;
