@@ -538,6 +538,9 @@
             if ( strtolower( $format ) == 'datetime' ) {
                 $format = '%d %B %Y %H:%M';
             }
+            if ( strtolower( $format ) == 'datetimesql' ) {
+                $format = '%Y-%m-%d %H:%M:%S';
+            }
             if ( strtolower( $format ) == 'time' ) {
                 $format = '%H:%M';
             }
