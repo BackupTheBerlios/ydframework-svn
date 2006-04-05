@@ -800,13 +800,20 @@
         /**
          *	This method sends a ajax response message
          *
-         *	@param $message			Message to display.
+         *	@param $message			Message to display or array.
          */		
-		function message( $message ){
+		function message( $message = "YDAjax error"){
 
+			// create ajax response
 			$response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
+
+			// if message is an array we should export it
+			if ( is_array( $message ) ) $message = var_export( $message, true );
+
+			// add message to alert
 			$response->addAlert( $message );
 
+			// return response
 			return $response;
 		}
 
