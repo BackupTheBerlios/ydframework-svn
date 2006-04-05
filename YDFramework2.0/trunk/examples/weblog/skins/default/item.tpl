@@ -82,7 +82,7 @@
         <ol class="commentlist">
             {foreach from=$comments item="comment"}
                 <li class="{cycle values="alt,"}" id="comment-{$comment.id}">
-                    <a name="comment-{$comment.id}" />
+                    <a name="comment-{$comment.id}"></a>
                     <cite>
                         {if $comment.userwebsite}
                             <a href="{$comment.userwebsite}" rel="external nofollow" target="_blank">{$comment.username}</a>
