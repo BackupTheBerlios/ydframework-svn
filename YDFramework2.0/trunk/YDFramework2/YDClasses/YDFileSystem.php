@@ -570,6 +570,8 @@
         }
 
         /**
+         *  Returns the total free space on the partition where this directory lives
+         *
          *	@param $format	 (Optional) Boolean that defines if free space should be returned as bytes or formated
          *	@param $decimals (Optional) Decimals to use when free space is formated
          *
@@ -1341,6 +1343,8 @@
         }
 
         /**
+         *  Returns the total free space on the partition where this directory lives
+         *
          *	@param $format	 (Optional) Boolean that defines if free space should be returned as bytes or formated
          *	@param $decimals (Optional) Decimals to use when free space is formated
          *
