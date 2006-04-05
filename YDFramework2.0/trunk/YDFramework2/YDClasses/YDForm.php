@@ -688,10 +688,24 @@
         /**
          *  This function returns all active error messages
          *
-         *  @returns    An array containing all active error messages
+         *  @param $asString  (Optional) Boolean value that defines if we want a string or an array
+         *
+         *  @param $separator  (Optional) String that separates all messages (used when we want errors as string)
+         *
+         *  @param $initial  (Optional) String to prepend to all messages (used when we want errors as string)
+         *
+         *  @returns    An array/string containing all active error messages
          */
-        function getErrors() {
-            return array_values( $this->_errors );
+        function getErrors( $asString = false, $separator = "\n", $initial = '' ) {
+
+            // get form errors
+            $errors = array_values( $this->_errors );
+
+            // if we want a string, we must implode with custom separator and use initial string
+            if ( $asString ) $errors = $initial . implode( $separator, $errors );
+
+            // return errors
+            return $errors;
         }
 
         /**
