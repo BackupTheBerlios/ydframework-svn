@@ -197,6 +197,35 @@
         /**
          *	@param $path	Path of the file or directory.
          *
+         *	@param $format	(Optional) Boolean that defines if free space should be returned as bytes or formated
+         *
+         *	@param $decimals (Optional) Decimals to use when free space is formated
+         *
+         *	@returns	The number of bytes available on the specified path
+         *
+         *	@static
+         */
+        function getFreeSpace( $path, $format = false, $decimals = 1 ) {
+
+            // get free disk space on the path
+            $space = disk_free_space( $path );
+
+            // return number of bytes if we don't want to format
+            if ( $format == false ) return $space;
+
+            // include util lib
+            YDInclude( 'YDUtil.php' );
+
+            // return formated string
+            return YDStringUtil::formatFilesize( $space, $decimals );
+        }
+
+
+
+
+        /**
+         *	@param $path	Path of the file or directory.
+         *
          *	@returns	The extension of the specified path string
          *
          *	@static
