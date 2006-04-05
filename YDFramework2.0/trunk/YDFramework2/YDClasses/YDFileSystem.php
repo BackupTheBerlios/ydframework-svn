@@ -570,6 +570,18 @@
         }
 
         /**
+         *	@param $format	 (Optional) Boolean that defines if free space should be returned as bytes or formated
+         *	@param $decimals (Optional) Decimals to use when free space is formated
+         *
+         *	@returns	The number of bytes available
+         *
+         *	@static
+         */
+        function getFreeSpace( $format = false, $decimals = 1 ) {
+            return YDPath::getFreeSpace( $this->_path, $format, $decimals );
+        }
+
+        /**
          *	Function to get the contents of the file. Depending on the file contents, this will be returned as binary or
          *	textual data.
          *
@@ -1326,6 +1338,18 @@
                 return $total;
             }
             return YDStringUtil::formatFilesize( $total, $decimals );
+        }
+
+        /**
+         *	@param $format	 (Optional) Boolean that defines if free space should be returned as bytes or formated
+         *	@param $decimals (Optional) Decimals to use when free space is formated
+         *
+         *	@returns	The number of bytes available
+         *
+         *	@static
+         */
+        function getFreeSpace( $format = false, $decimals = 1 ) {
+            return YDPath::getFreeSpace( $this->_path, $format, $decimals );
         }
 
         /**
