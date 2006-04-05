@@ -35,6 +35,7 @@
             YDDebugUtil::dump( $dir->getSize( true, true ), '$dir->getSize( true, true )' );
             YDDebugUtil::dump( $dir->getFileCount(), '$dir->getFileCount()' );
             YDDebugUtil::dump( $dir->getDirectoryCount(), '$dir->getDirectoryCount()' );
+            YDDebugUtil::dump( $dir->getFreeSpace(), '$dir->getFreeSpace()' );
 
             // All files in the directory
             YDDebugUtil::dump( $dir->getContents(), '$dir->getContents()' );
