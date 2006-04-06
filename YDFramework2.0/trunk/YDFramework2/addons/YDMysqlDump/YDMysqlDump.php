@@ -26,6 +26,10 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	// include filesystem functions
+	include_once( 'YDFileSystem.php' );
+
+
     /**
      *  This class defines a mySql backup/restore system object.
      */
@@ -277,6 +281,23 @@
         function getFilePath() {
             return $this->filepath;
         }
+
+        /**
+         *  This function checks if the backup file can be written on filesystem
+         *
+         *  @returns            1 if file saving can be ok. -1 if not writable, -2 if not free space
+         */
+        function saveValid() {
+
+			// ckeck if directory is writable on OSs different that windows
+			if ( strtoupper( substr( PHP_OS, 0, 3 ) ) != 'WIN' && !is_writable( $this->filepath ) ) return -1;
+
+			// check if has at least 2MB :)
+			if ( floatval( disk_free_space( dirname( $this->filepath ) ) ) - (2.0 * 1048576) < 0 ) return -2;
+
+			// filepath can have the db backup file
+			return 1;
+        }
       
         /**
          *  This function returns the string or the file with the database dump
@@ -325,9 +346,6 @@
                 return $content;
             }
             
-            // include filesystem functions
-            include_once( dirname( __FILE__ ) . '/../../YDClasses/YDFileSystem.php' );
-
             // create file object
             $file = new YDFSFile( $this->filepath, true );
             
