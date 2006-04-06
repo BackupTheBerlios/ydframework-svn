@@ -128,9 +128,6 @@
             // if result is an array we should export to a valid js string
             if (is_array( $result )) $result = str_replace( "\n", "<br>", var_export( $result, true ) ) ;
 
-            // escape string
-            $result = addslashes( $result );
-
             // assign result to form element using the id
             return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
         }
