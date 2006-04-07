@@ -211,7 +211,7 @@
             $this->offset = $offset ? ( $this->pagesize * ( $this->page - 1 ) ) : 0;
             
             // Get the previous and next page
-            $this->pagePrevious = ( $this->page <= 1 ) ? false : $this->page - 1;
+            $this->pagePrevious = ( $this->page < 1 ) ? false : $this->page - 1;
             $this->pageNext = ( $this->page >= $this->totalPages ) ? false : $this->page + 1;
 
             // Indicate if we are on the last or first page
