@@ -39,6 +39,8 @@
     YDConfig::set( 'YD_DB_TABLEPREFIX', '', false );
     YDConfig::set( 'YD_DB_ALLOW_PERSISTENT_SORT', false, false );
 
+    YDConfig::set( 'YD_DB_RS_CYCLENAVIGATION', false, false );
+
     /**
      *  This class implements a (paged) recordset. It contains a lot of extra information about the recordset which is
      *  not available if you return the database results as an array. This object is really handy if you want to work
@@ -211,8 +213,8 @@
             $this->offset = $offset ? ( $this->pagesize * ( $this->page - 1 ) ) : 0;
             
             // Get the previous and next page
-            $this->pagePrevious = ( $this->page < 1 ) ? false : $this->page - 1;
-            $this->pageNext = ( $this->page >= $this->totalPages ) ? false : $this->page + 1;
+            $this->pagePrevious = ( $this->page <= 1 ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? $this->totalPages : 1 ) : $this->page - 1;
+            $this->pageNext = ( $this->page >= $this->totalPages ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? 1 : $this->totalPages ) : $this->page + 1;
 
             // Indicate if we are on the last or first page
             $this->isFirstPage = ( $this->pagePrevious == false ) ? true : false;
