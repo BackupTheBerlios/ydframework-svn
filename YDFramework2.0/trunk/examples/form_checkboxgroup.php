@@ -21,8 +21,16 @@
             // Create the form
             $form = new YDForm( 'form1' );
 
-            // Add the radiobutton
-            $form->addElement( 'checkboxgroup', 'choose_multiple', 'Choose multiple', array(), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            // Add the checkboxgroup
+            $form->addElement( 'checkboxgroup', 'choose_multiple',  'Choose multiple default',                       array(), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple2', 'Choose multiple HORIZONTAL',       array('sep' => 'h' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple3', 'Choose multiple VERTICAL',         array('sep' => 'v' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple4', 'Choose multiple LEFT',             array('sep' => 'l' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple5', 'Choose multiple RIGHT',            array('sep' => 'r' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple6', 'Choose multiple VERTICAL LEFT',    array('sep' => 'vl'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple7', 'Choose multiple VERTICAL RIGHT',   array('sep' => 'vr'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple8', 'Choose multiple HORIZONTAL LEFT',  array('sep' => 'hl'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple9', 'Choose multiple HORIZONTAL RIGHT', array('sep' => 'hr'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
 
             // Add the submit button
             $form->addElement( 'submit', 'btnSubmit', 'submit' );
@@ -39,7 +47,7 @@
             $tpl = new YDTemplate();
 
             // Add the form to the template
-            $tpl->assignForm ( 'form',$form );
+            $tpl->assign ( 'form', $form->toHTML() );
 
             // Display the template
             $tpl->display();

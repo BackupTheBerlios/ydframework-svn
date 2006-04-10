@@ -57,6 +57,9 @@
             foreach ( $options as $key=>$val ) {
                 $item = new YDFormElement_Checkbox( $form, $name . '[' . $key . ']', $val, $attributes, $options );
                 $this->_items[ $key ] = $item;
+
+                // delete attribute. otherwise we would get a 'sep' attribute in html
+                $item->delAttribute( 'sep' );
             }
 
             // Indicate if filters need to be applied
@@ -65,8 +68,21 @@
             // Indicate that the label should be appended
             $this->_placeLabel = 'before';
 
+            // set default separator and default position
+            $this->_separator = '<br />';
+            $this->_position  = 'right';
+
+            // parse separator and position from array
+            if ( isset ( $attributes['sep'] ) ) {
+
+                // find horizontal and left tags
+                if ( is_int( strpos( $attributes['sep'], 'h' ) ) ) $this->_separator = '&nbsp;&nbsp;&nbsp;';
+                if ( is_int( strpos( $attributes['sep'], 'l' ) ) ) $this->_position  = 'left';
+            }
+
         }
-        
+
+
         /**
          *      This function returns a boolean indicating if the element value was
          *      modified from it's default value.
@@ -126,12 +142,11 @@
 
             // Output the HTML
             $output = '';
-            foreach ( $this->_items as $item ) {
-                $output .= '<nowrap>' . $item->toHtml();
-                $output .= '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>';
-                $output .= '</nowrap>##ITEMSEP##';
-            }
-            $output = rtrim( $output, '##ITEMSEP##' );
+
+            foreach ( $this->_items as $item )
+                if ( $this->_position == 'right' ) $output .= $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>' . $this->_separator;
+                else                               $output .= '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml() . $this->_separator;
+
             return $output;
 
         }
