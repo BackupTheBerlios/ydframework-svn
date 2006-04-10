@@ -80,6 +80,10 @@
                 if ( is_int( strpos( $attributes['sep'], 'l' ) ) ) $this->_position  = 'left';
             }
 
+			// we can even have a custom separator
+            if ( isset ( $attributes['separator'] ) )
+				$this->_separator = $attributes['separator'];
+
         }
 
 

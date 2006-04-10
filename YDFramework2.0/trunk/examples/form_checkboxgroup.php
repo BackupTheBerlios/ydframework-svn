@@ -32,6 +32,10 @@
             $form->addElement( 'checkboxgroup', 'choose_multiple8', 'Choose multiple HORIZONTAL LEFT',  array('sep' => 'hl'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple9', 'Choose multiple HORIZONTAL RIGHT', array('sep' => 'hr'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
 
+            $form->addElement( 'checkboxgroup', 'choose_multiple10', 'Custom Separator "|"',                                                  array('separator' => '&nbsp;|&nbsp;'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple11', 'Custom Separator "XXX" and LEFT',           array('sep' => 'l', 'separator' => '&nbsp;&nbsp;XXX&nbsp;&nbsp;'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+            $form->addElement( 'checkboxgroup', 'choose_multiple12', 'Custom Separator "...", LEFT and VERTICAL',                   array('sep' => 'l', 'separator' => '...<br />'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+
             // Add the submit button
             $form->addElement( 'submit', 'btnSubmit', 'submit' );
 
