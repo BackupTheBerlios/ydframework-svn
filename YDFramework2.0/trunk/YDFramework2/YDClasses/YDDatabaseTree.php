@@ -38,18 +38,16 @@
         /**
          *  Constructor. Set the database table name and necessary field names
          *
-         *  @param $db             The YDDatabase object pointing to the database
+         *  @param $db             The YDDatabase instance name or object pointing to the database
          *  @param $table          Name of the tree database table
          *  @param $idField        (optional) Name of the primary key ID field. Default is id.
          *  @param $parentField    (optional) Name of the parent ID field. Default is parent_id.
          *  @param $sortField      (optional) Name of the field to sort data. Default is title.
          */
-        function YDDatabaseTree( $db=null, $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
-            if ( is_null( $db ) ) {
-                $this->db = YDDatabase::getNamedInstance();
-            } else {
-                $this->db = $db;
-            }
+        function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
+
+            $this->db = YDDatabase::getNamedInstance( $db );
+
             $this->table = $table;
             $this->fields = array(
                 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
