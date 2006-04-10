@@ -1340,6 +1340,16 @@
         function setAttribute( $key, $val ) {
             $this->_attributes[$key] = $val;
         }
+
+        /**
+         *  Function to delete an attribute of a form element
+         *
+         *  @param  $key    The name of the attribute
+         */
+        function delAttribute( $key ) {
+            if ( isset( $this->_attributes[$key] ) ) unset( $this->_attributes[$key] );
+        }
+
 		
         /**
          *  Function to set the option of a form element
