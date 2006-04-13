@@ -685,6 +685,9 @@
          */
         function addNode( $values, $parent_id=null ) {
 
+            // Convert the values from an ojbect to an array
+            $values = $this->_toNodeArray( $values );
+
             // Clear the cache
             $this->_clearCache();
 
