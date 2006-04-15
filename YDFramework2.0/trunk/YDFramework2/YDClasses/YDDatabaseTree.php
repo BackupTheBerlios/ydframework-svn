@@ -748,7 +748,7 @@
             // Get the list of IDs to delete
             $nodes_to_delete = array();
             foreach ( $children as $child ) {
-                array_push( $nodes_to_delete, $child['id'] );
+                array_push( $nodes_to_delete, $child[ $this->fields['id'] ] );
             }
 
             // Add the current node
@@ -758,7 +758,7 @@
             if ( sizeof( $nodes_to_delete ) > 0 ) {
 
                 // The query to execute
-                $query = 'delete from ' . $this->table . ' where id in ( ' . join( ', ', $nodes_to_delete ) . ' )';
+                $query = 'delete from ' . $this->table . ' where ' . $this->fields['id'] . ' in ( ' . join( ', ', $nodes_to_delete ) . ' )';
 
                 // Delete the nodes
                 $this->db->executeSql( $query );
