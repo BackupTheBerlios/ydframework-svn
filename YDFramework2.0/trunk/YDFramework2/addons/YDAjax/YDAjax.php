@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.8b';
+            $this->_version = '2.81b';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -497,9 +497,6 @@
 			// if there are not arguments return empty string
 			if ( is_null( $arguments ) ) return "";
 
-			// if is one argument and it's a form name, we want the form values
-			if ( is_string( $arguments ) && $this->__isForm( $arguments ) ) return "xajax.getFormValues('" . $arguments . "')";
-
 			// if there's only one argument or option, create arrays
 			if ( !is_array( $arguments ) ) $arguments = array( $arguments );
 			if ( !is_array( $options ) )   $options   = array( $options );
@@ -509,6 +506,9 @@
 
 			// cycle arguments to create js function to get values
 			foreach ( $arguments as $arg ){
+
+				// if is a string and it's a form name, we want the form values
+				if ( is_string( $arg ) && $this->__isForm( $arg ) ) { $args[] = "xajax.getFormValues('" . $arg . "')"; continue; }
 
 				// if argument is numeric just add it and continue
 				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
