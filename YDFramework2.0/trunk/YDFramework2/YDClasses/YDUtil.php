@@ -862,6 +862,17 @@
         }
 
         /**
+         *  Get the hostname of the client computer.
+         *
+         *  @returns The hostname of the client computer in lowercase.
+         *
+         *  @static
+         */
+        function getComputerName() {
+            return strtolower( gethostbyaddr( $_SERVER['REMOTE_ADDR'] ) );
+        }
+
+        /**
          *	This function returns an array with the languages that are supported by the browser. This is done by using
          *	the HTTP_ACCEPT_LANGUAGE server variable that gets send with the HTTP headers.
          *
