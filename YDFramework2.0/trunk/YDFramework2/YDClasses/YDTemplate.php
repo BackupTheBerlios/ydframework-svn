@@ -483,7 +483,7 @@
                     $tplName = rtrim( $this->template_dir, '/\\' ) . '/' . $file;
                 }
                 if ( ! is_file( $tplName ) ) {
-                    trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
+                    trigger_error( 'Template not found: ' . $file, YD_ERROR );
                 }
                 return $tplName;
             }
