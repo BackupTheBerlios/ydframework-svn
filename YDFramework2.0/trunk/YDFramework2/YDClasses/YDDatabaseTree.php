@@ -232,10 +232,11 @@
          *  @param $childrenOnly    (optional) True if only returning children data. False if returning all descendant
          *                          data.
          *  @param $max_level       (optional) Maximum level to retrieve. Default is all.
+         *  @param $order           (optional) The order of the records to return.
          *
          *  @returns The descendants of the passed now
          */
-        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null ) {
+        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null, $order=null ) {
 
             // Get the ID field
             $idField = $this->fields['id'];
@@ -254,19 +255,26 @@
                 $parent_id = $node[$idField];
             }
 
+            // Get the order
+            if ( empty( $order ) ) {
+                $order = 'order by nleft';
+            } else {
+                $order = 'order by ' . $order . ', nleft';
+            }
+
             // Children only
             if ( $childrenOnly ) {
 
                 // Include ourselves?
                 if ( $includeSelf ) {
                     $query = sprintf(
-                        'select %s from %s where %s = %d or %s = %d order by nleft',
-                        $this->_getFieldsAsString(), $this->table, $this->fields['id'], $parent_id, $this->fields['parent'], $parent_id
+                        'select %s from %s where %s = %d or %s = %d %s',
+                        $this->_getFieldsAsString(), $this->table, $this->fields['id'], $parent_id, $this->fields['parent'], $parent_id, $order
                     );
                 } else {
                     $query = sprintf(
-                        'select %s from %s where %s = %d order by nleft',
-                        $this->_getFieldsAsString(), $this->table, $this->fields['parent'], $parent_id
+                        'select %s from %s where %s = %d %s',
+                        $this->_getFieldsAsString(), $this->table, $this->fields['parent'], $parent_id, $order
                     );
                 }
 
@@ -275,16 +283,16 @@
                 // Include all
                 if ( $nleft > 0 && $includeSelf ) {
                     $query = sprintf(
-                        'select %s from %s where nleft >= %d and nright <= %d order by nleft',
-                         $this->_getFieldsAsString(), $this->table, $nleft, $nright
+                        'select %s from %s where nleft >= %d and nright <= %d %s',
+                         $this->_getFieldsAsString(), $this->table, $nleft, $nright, $order
                     );
                 } else if ( $nleft > 0 ) {
                     $query = sprintf(
-                        'select %s from %s where nleft > %d and nright < %d order by nleft',
-                        $this->_getFieldsAsString(), $this->table, $nleft, $nright
+                        'select %s from %s where nleft > %d and nright < %d %s',
+                        $this->_getFieldsAsString(), $this->table, $nleft, $nright, $order
                     );
                 } else {
-                    $query = sprintf( 'select %s from %s where id > 0 order by nleft', $this->_getFieldsAsString(), $this->table );
+                    $query = sprintf( 'select %s from %s where id > 0 %s', $this->_getFieldsAsString(), $this->table, $order );
                 }
                 
             }
@@ -315,11 +323,12 @@
          *
          *  @param $id             (optional) The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
+         *  @param $order          (optional) The order of the records to return.
          *
          *  @returns The children of the passed node
          */
-        function getChildren( $id=0, $includeSelf=false ) {
-            return $this->getDescendants( $id, $includeSelf, true );
+        function getChildren( $id=0, $includeSelf=false, $order=null ) {
+            return $this->getDescendants( $id, $includeSelf, true, null, $order );
         }
 
         /**
