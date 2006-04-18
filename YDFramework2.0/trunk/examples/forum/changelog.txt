@@ -1,0 +1,10 @@
+Friendly Freddy Forum
+
+
+Version 1.1 - 17/10/2005
+Add multilanguage support based on the YDWeblog solution
+Add English language file
+
+
+Version 1.0 - 01/03/2005
+Initial release made by Erwan PERGOD & Sylvain GOUGOUZIAN in order to evaluate the YellowDuck Framework (http://ydframework.berlios.de) as a php pratical work in university.

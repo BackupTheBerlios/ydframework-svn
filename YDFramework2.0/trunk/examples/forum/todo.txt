@@ -1,0 +1,17 @@
+Tasks todo, in priority order :
+
+:Critical:  	Review the group management, the database groups should be replaced by hardcode roles.
+:High:		Comment the whole code using a phpdoc like standard. Remove french comments.
+:High: 		Redirect after login on requested page
+:High:		Add Association between forums and moderators.
+:Normal:	Add 404 HTTP status on actions which don't exist
+:Normal: 	Forum grouping
+:Normal: 	Valid XHTML
+:Low: 		Mark new posts / posts user replies with flags.
+:Low: 		Add last message link in forums with date.
+:Low: 		Add nice icons
+:Low: 		Improve graphic layout and create a logo
+:Low: 		Extend profiles (add avatar and other fields)
+
+
+...to be continued
