@@ -205,8 +205,8 @@
             $this->addMeta( 'nright', null, 'int', false, null, false );
             $this->addMeta( 'nlevel', null, 'int', false, null, false );
             $this->addMeta( 'title', null, 'string', true, null );
-            $this->addMeta( 'property', 'property_0', 'string', true, null );
-            $this->addMeta( 'property_other', 'property_1', 'string', false, null );
+//            $this->addMeta( 'property', 'property_0', 'string', true, null );
+//            $this->addMeta( 'property_other', 'property_1', 'string', false, null );
             $this->addMeta( 'created', null, 'datetime', false, time() );
             $this->addMeta( 'created_by', null, 'string', false, YDBrowserInfo::getComputerName() );
             $this->addMeta( 'modified', null, 'datetime', false, time() );

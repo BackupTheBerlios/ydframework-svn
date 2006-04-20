@@ -2,6 +2,12 @@
 
     // Include the YDDatabaseMetaData class
     include_once( YD_DIR_HOME_CLS . '/YDDatabaseMetaData.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
+
+    include( YDCMS_DIR_MOD . '/ydcmfhome/ydcmfhome.php' );
+    include( YDCMS_DIR_MOD . '/ydcmfgallery/ydcmfgallery.php' );
+    include( YDCMS_DIR_MOD . '/ydcmfgalleryalbum/ydcmfgalleryalbum.php' );
+    include( YDCMS_DIR_MOD . '/ydcmfgalleryitem/ydcmfgalleryitem.php' );
 
     // Get the metadata object
     $meta = new YDDatabaseMetaData( $this->db );
@@ -83,16 +89,13 @@
     $node->setValue( 'title',           'Titel Nederlands', 'nl' );
     $node->setValue( 'title',           'Title English', 'en' );
     $node->setValue( 'title',           'Titre Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property',        'Property Nederlands', 'nl' );
-    $node->setValue( 'property',        'Property English', 'en' );
-    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property_other',  'Property1' );
-
-    // Add it to the store
+//    $node->setValue( 'property',        'Property Nederlands', 'nl' );
+//    $node->setValue( 'property',        'Property English', 'en' );
+//    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
+//    $node->setValue( 'property_other',  'Property1' );
     $this->addNode( $node );
 
     // Create a new node
-    include( YDCMS_DIR_MOD . '/ydcmfhome/ydcmfhome.php' );
     $node = new YDCmfHome();
     $node->setValue( 'id',              2 );
     $node->setValue( 'parent_id',       1 );
@@ -100,12 +103,10 @@
     $node->setValue( 'title',           'Titel2 Nederlands', 'nl' );
     $node->setValue( 'title',           'Title2 English', 'en' );
     $node->setValue( 'title',           'Titre2 Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property',        'Property2 Nederlands', 'nl' );
-    $node->setValue( 'property',        'Property2 English', 'en' );
-    $node->setValue( 'property',        'Property2 Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property_other',  'Property21' );
-
-    // Add it to the store
+//    $node->setValue( 'property',        'Property2 Nederlands', 'nl' );
+//    $node->setValue( 'property',        'Property2 English', 'en' );
+//    $node->setValue( 'property',        'Property2 Fran&ccedil;ais', 'fr' );
+//    $node->setValue( 'property_other',  'Property21' );
     $this->addNode( $node );
 
     // Create a new node
@@ -116,12 +117,10 @@
     $node->setValue( 'title',           'News Nederlands', 'nl' );
     $node->setValue( 'title',           'News English', 'en' );
     $node->setValue( 'title',           'News Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property',        'Property Nederlands', 'nl' );
-    $node->setValue( 'property',        'Property English', 'en' );
-    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property_other',  'Property1' );
-
-    // Add it to the store
+//    $node->setValue( 'property',        'Property Nederlands', 'nl' );
+//    $node->setValue( 'property',        'Property English', 'en' );
+//    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
+//    $node->setValue( 'property_other',  'Property1' );
     $this->addNode( $node );
 
     // Create a new node
@@ -132,12 +131,10 @@
     $node->setValue( 'title',           'News Krabrally 2006 Nederlands', 'nl' );
     $node->setValue( 'title',           'News Krabrally 2006 English', 'en' );
     $node->setValue( 'title',           'News Krabrally 2006 Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property',        'Property Nederlands', 'nl' );
-    $node->setValue( 'property',        'Property English', 'en' );
-    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property_other',  'Property1' );
-
-    // Add it to the store
+//    $node->setValue( 'property',        'Property Nederlands', 'nl' );
+//    $node->setValue( 'property',        'Property English', 'en' );
+//    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
+//    $node->setValue( 'property_other',  'Property1' );
     $this->addNode( $node );
 
     // Create a new node
@@ -148,12 +145,56 @@
     $node->setValue( 'title',           'News Krabrally 2007 Nederlands', 'nl' );
     $node->setValue( 'title',           'News Krabrally 2007 English', 'en' );
     $node->setValue( 'title',           'News Krabrally 2007 Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property',        'Property Nederlands', 'nl' );
-    $node->setValue( 'property',        'Property English', 'en' );
-    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
-    $node->setValue( 'property_other',  'Property1' );
-
-    // Add it to the store
+//    $node->setValue( 'property',        'Property Nederlands', 'nl' );
+//    $node->setValue( 'property',        'Property English', 'en' );
+//    $node->setValue( 'property',        'Property Fran&ccedil;ais', 'fr' );
+//    $node->setValue( 'property_other',  'Property1' );
     $this->addNode( $node );
+
+    // Add a new photo gallery list
+    $node = new YDCmfGallery();
+    $node->setValue( 'id',        6 );
+    $node->setValue( 'parent_id', 1 );
+    $node->setValue( 'name',      'photo' );
+    $node->setValue( 'title',     'Photo Galleries' );
+    $this->addNode( $node );
+
+    // Add a new photo gallery list
+    $node = new YDCmfGalleryAlbum();
+    $node->setValue( 'id',        7 );
+    $node->setValue( 'parent_id', 6 );
+    $node->setValue( 'name',      'photo/krabrally2006' );
+    $node->setValue( 'title',     'Krabrally 2006' );
+    $this->addNode( $node );
+
+    // Add a new photo gallery list
+    $node = new YDCmfGalleryAlbum();
+    $node->setValue( 'id',        8 );
+    $node->setValue( 'parent_id', 6 );
+    $node->setValue( 'name',      'photo/krabrally2007' );
+    $node->setValue( 'title',     'Krabrally 2007' );
+    $this->addNode( $node );
+
+    // Add some images
+    $dir = new YDFSDirectory( dirname( __FILE__ ) . '/../uploads/krabrally2006' );
+    foreach ( $dir->getContents() as $idx => $file ) {
+        $node = new YDCmfGalleryItem();
+        $node->setValue( 'parent_id', 7 );
+        $node->setValue( 'name', 'photo/krabrally2006/' . $file->getBasenameNoExt() );
+        $node->setValue( 'title', $file->getBasename() );
+        $node->setValue( 'relative_path', 'uploads/krabrally2006/' . $file->getBasename() );
+        $this->addNode( $node );
+    }
+
+    // Add some images
+    $dir = new YDFSDirectory( dirname( __FILE__ ) . '/../uploads/krabrally2007' );
+    foreach ( $dir->getContents() as $idx => $file ) {
+        $node = new YDCmfGalleryItem();
+        $node->setValue( 'parent_id', 8 );
+        $node->setValue( 'name', 'photo/krabrally2007/' . $file->getBasenameNoExt() );
+        $node->setValue( 'title', $file->getBasename() );
+        $node->setValue( 'relative_path', 'uploads/krabrally2007/' . $file->getBasename() );
+        $this->addNode( $node );
+    }
 
 ?>

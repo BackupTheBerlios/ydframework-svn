@@ -5,11 +5,11 @@
 <?php if ( sizeof( $languages ) > 1 ) { ?>
 <p>
     <b>Languages:</b>
-    <?php foreach ( $languages as $fl => $l ) { ?>
+    <?php foreach ( $languages as $l => $fl ) { ?>
         <?php if ( $l == $language ) { ?>
-            [<?php echo( $fl ); ?>]
+            [<?php echo( $l ); ?>]
         <? } else { ?>
-            <?php echo( $node->getTitleLink( null, $l, $fl ) ); ?>
+            <?php echo( $node->getTitleLink( null, $fl, $l ) ); ?>
         <? } ?>
     <?php } ?>
 </p>
