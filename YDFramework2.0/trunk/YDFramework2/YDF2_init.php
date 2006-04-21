@@ -483,7 +483,7 @@
             // if directories array exist we must include all files
             if ( isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) )
                 foreach ( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] as $dir )
-                    @include_once( $dir . '/' . YDLocale::get() . '.php' );
+                    @include( $dir . '/' . YDLocale::get() . '.php' );
         }
 
         /**
