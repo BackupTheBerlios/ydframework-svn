@@ -11,4 +11,9 @@ $GLOBALS['t']['password_new'] = 'Nova password';
 $GLOBALS['t']['password_new_confirm'] = 'Confirme a nova password';
 $GLOBALS['t']['passwords dont match'] = 'As passwords n&atilde;o s&atilde;o iguais';
 
+$GLOBALS['t']['passwords'] = 'Passwords';
+$GLOBALS['t']['change password'] = 'Modificar a password';
+$GLOBALS['t']['personal info'] = 'Configura&ccedil;&otilde;es pessoais';
+$GLOBALS['t']['access'] = 'Acesso';
+
 ?>
