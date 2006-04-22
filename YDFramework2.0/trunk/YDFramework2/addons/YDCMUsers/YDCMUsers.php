@@ -32,6 +32,12 @@
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
+	// set user form name
+	YDConfig::set( 'YDCMUSERS_FORMUSER', 'YDCMUsersForm' );
+
+	// set password form name
+	YDConfig::set( 'YDCMUSERS_FORMPASSWORD', 'YDCMUsersFormPassword' );
+
 
     class YDCMUsers extends YDCMComponent {
     
@@ -195,10 +201,10 @@
          *
          *  @returns    form object
          */
-		function getFormUser( $name = 'YDCMUsersForm' ){
+		function getFormUser(){
 
 			// create form object
-            $form = new YDForm( $name );
+            $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMUSER' ) );
 
 	        $form->addElement( 'span',		'username',		t('user_username') );
             $form->addElement( 'text',		'name',			t('user_name') );
@@ -206,6 +212,15 @@
             $form->addElement( 'textarea',	'other',		t('user_other') );
             $form->addElement( 'select',	'language_id',	t('user_language') );
             $form->addElement( 'select',	'template',		t('user_template') );
+
+            $form->addElement( 'span',		'login_start',	t('login_start') );
+            $form->addElement( 'span',		'login_end',	t('login_end') );
+            $form->addElement( 'span',		'login_counter',t('login_counter') );
+            $form->addElement( 'span',		'login_last',	t('login_last') );
+            $form->addElement( 'span',		'login_current',t('login_current') );
+
+            $form->addElement( 'span',		'created_user',	t('created_user') );
+            $form->addElement( 'span',		'created_date',	t('created_date') );
 
 			return $form;
 		}
@@ -259,15 +274,18 @@
          *
          *  @returns    form object
          */
-		function getFormPassword( $name = 'YDCMUsersFormPassword'){
+		function getFormPassword(){
 
 			// create form object
-            $form = new YDForm( $name );
+            $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMPASSWORD' ) );
 
 			// add form elements
             $form->addElement( 'password', 'old',         t('password_old'),         array('size' => 40) );
             $form->addElement( 'password', 'new',         t('password_new'),         array('size' => 50) );
             $form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 50) );
+
+			// add rules
+			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength', t('passwords too big'), 31 );
 
 			// add compare rules
 			$form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
