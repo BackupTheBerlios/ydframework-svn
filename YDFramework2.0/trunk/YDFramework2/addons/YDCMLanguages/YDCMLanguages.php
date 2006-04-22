@@ -55,5 +55,26 @@
 			// we don't have relations from here (just TO here, and we don't need to define that)
 		}
 
+
+        /**
+         *  This function returns all active languages
+         *
+         *  @returns    Array of languages, eg: array( 'en' => 'English', 'pt' => ... )
+         */
+		function active(){
+		
+			// reset values
+			$this->resetValues();
+
+			// we want only results where active is 1
+			$this->active = 1;
+
+			// find all languages
+			$this->find();
+
+			// return results as array
+			return $this->getResultsAsAssocArray( 'language_id', 'name' );
+		}
+
     }
 ?>
