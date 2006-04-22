@@ -28,6 +28,10 @@
 
 	YDInclude( 'YDCMComponent.php' );
 
+	// add local translation directory
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+
+
     class YDCMLanguages extends YDCMComponent {
 
         function YDCMLanguages() {
