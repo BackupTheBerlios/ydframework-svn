@@ -798,7 +798,7 @@
 
 
         /**
-         *	This method sends a ajax response message
+         *	This static method sends a ajax response message
          *
          *	@param $message			Message to display or array.
          */		
@@ -816,6 +816,25 @@
 			// return response
 			return $response;
 		}
+
+
+        /**
+         *	This static method sends a ajax response script
+         *
+         *	@param $code			Javascript code
+         */		
+		function script( $code ){
+
+			// create ajax response
+			$response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
+
+			// add message to alert
+			$response->addScript( $code );
+
+			// return response
+			return $response;
+		}
+
 
 
 	}
