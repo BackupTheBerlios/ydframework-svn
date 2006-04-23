@@ -90,21 +90,20 @@
 
 
         /**
-         *  This function return the id of the current user
+         *  This function returns the id of the current user
          *
-         *  @returns    user id
+         *  @returns    User id if user exists, false otherwise
          */
 		function currentID(){
 		
 			// reset user values
-			$this->reset();
+			$this->resetValues();
 		
-			// set username and password. TODO: parse PHP_AUTH_USER
-			$this->username =      $_SERVER['PHP_AUTH_USER'];
-			$this->password = md5( $_SERVER['PHP_AUTH_PW'] );
-			
-			// get user
-			$this->findAll();
+			// check if user is valid and get user id ( YDCMUsers::valid does it )
+			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+
+			// if user is not valid we should return false
+			if ( $valid === false ) return false;
 
 			// return user id found
 			return $this->user_id;
@@ -138,9 +137,10 @@
 			// set password
 			$this->password = $password;
 			
-			// check user state
-			// TODO: format 'time()' to a 'datetimesql'
-			$this->where( '(state = 1 OR (state = 2 AND login_start < ' . time() . ' AND login_end > ' . time() . '))' );
+			// check user state based on state and/or user login schedule
+			$now = YDStringUtil::formatDate( time(), 'datetimesql' );
+
+			$this->where( '(state = 1 OR (state = 2 AND login_start < "' . $now . '" AND login_end > "' . $now . '"))' );
 
 			// test if we get just one user
 			if ( $this->find() == 1 ) return true;
@@ -154,24 +154,34 @@
          *
          *  @param $values  User attributes as array
          *
-         *  @returns    true if updated, false otherwise
+         *  @returns    true if updated, false if current user is not valid
          */
 		function changeCurrentUser( $values ){
 		
 			$this->resetValues();
 
+			// check if user is valid
+			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+
+			if ( $valid === false ) return false;
+
+			// reset values added from valid method
+			$this->resetValues();
+
+			// set new values
 			$this->name        = $values['name'];
 			$this->email       = $values['email'];
 			$this->other       = $values['other'];
 			$this->language_id = $values['language_id'];
 			$this->template    = $values['template'];
 
-			// TODO: parse PHP_AUTH_USER string
 			$this->where( 'username = "' .      $_SERVER['PHP_AUTH_USER'] . '"' );
 			$this->where( 'password = "' . md5( $_SERVER['PHP_AUTH_PW'] ) . '"' );
 
-			// return updated rows
-			return $this->update();
+			// return update result
+			if ( $this->update() == 1 ) return true;
+			
+			return false;
 		}
 
 
@@ -244,20 +254,32 @@
          *  @param $oldpassword  Old user password
          *  @param $newpassword  New password
          *
-         *  @returns    true if updated, false when old password is incorrect
+         *  @returns    true if updated, false when old password is incorrect or user is invalid
          */
 		function changeCurrentUserPassword( $oldpassword = '', $newpassword = '' ){
 		
 			$this->resetValues();
 
+			// check if user is valid
+			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+
+			if ( $valid === false ) return false;
+
+			// reset values added from valid method
+			$this->resetValues();
+
+			// set new password
 			$this->password = md5( $newpassword );
 
-			// TODO: parse PHP_AUTH_USER string
+			// change only current user
 			$this->where( 'username = "' .      $_SERVER['PHP_AUTH_USER'] . '"' );
 			$this->where( 'password = "' . md5( $_SERVER['PHP_AUTH_PW'] ) . '"' );
 			$this->where( 'password = "' . md5( $oldpassword )            . '"' );
 
-			return $this->update();
+			// update user and get result
+			if ( $this->update() == 1 ) return true;
+
+			return false;
 		}
 
 

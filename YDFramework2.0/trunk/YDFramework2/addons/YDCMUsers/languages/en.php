@@ -38,5 +38,11 @@ $GLOBALS['t']['passwords'] = 'Passwords';
 $GLOBALS['t']['change password'] = 'Change password';
 $GLOBALS['t']['personal info'] = 'Personal informations';
 $GLOBALS['t']['access'] = 'Access';
+$GLOBALS['t']['old password is incorrect'] = 'Current password is incorrect';
+$GLOBALS['t']['user password updated'] = 'Password is updated';
+$GLOBALS['t']['user is incorrect'] = 'Current user is not valid';
+$GLOBALS['t']['user details updated'] = 'User details updated';
+$GLOBALS['t']['password not updated'] = 'Password was not updated';
+$GLOBALS['t']['user not updated'] = 'User was not updated';
 
 ?>
