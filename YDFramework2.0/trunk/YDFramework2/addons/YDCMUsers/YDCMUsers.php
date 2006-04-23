@@ -33,10 +33,10 @@
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
 	// set user form name
-	YDConfig::set( 'YDCMUSERS_FORMUSER', 'YDCMUsersForm' );
+	YDConfig::set( 'YDCMUSERS_FORMUSER', 'YDCMUsersForm', false );
 
 	// set password form name
-	YDConfig::set( 'YDCMUSERS_FORMPASSWORD', 'YDCMUsersFormPassword' );
+	YDConfig::set( 'YDCMUSERS_FORMPASSWORD', 'YDCMUsersFormPassword', false );
 
 
     class YDCMUsers extends YDCMComponent {
@@ -188,9 +188,8 @@
 			$form = $this->getFormUser();
 
 			// check form validation
- 			// TODO: check if language exist in YDCMLanguages before update
 			if ( !$form->validate( $formvalues ) )
-				return $form->getErrors( true );
+				return $form->getErrors();
 
 			return $this->changeCurrentUser( $form->getValues() );
 		}
@@ -203,24 +202,37 @@
          */
 		function getFormUser(){
 
+			// include languages and templates lib
+			YDInclude( 'YDCMLanguages.php' );
+			YDInclude( 'YDCMTemplates.php' );
+
+			// create languages and templates object
+			$languages = new YDCMLanguages();
+			$templates = new YDCMTemplates();
+
 			// create form object
             $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMUSER' ) );
 
-	        $form->addElement( 'span',		'username',		t('user_username') );
-            $form->addElement( 'text',		'name',			t('user_name') );
-            $form->addElement( 'text',		'email',		t('user_email') );
-            $form->addElement( 'textarea',	'other',		t('user_other') );
-            $form->addElement( 'select',	'language_id',	t('user_language') );
-            $form->addElement( 'select',	'template',		t('user_template') );
+	        $form->addElement( 'span',      'username',     t('user_username') );
+            $form->addElement( 'text',      'name',         t('user_name'),     array('size' => 50, 'maxlength' => 255) );
+            $form->addElement( 'text',      'email',        t('user_email') );
+            $form->addElement( 'textarea',  'other',        t('user_other'),    array('rows' => 4, 'cols' => 30) );
+            $form->addElement( 'select',    'language_id',  t('user_language'), array(), $languages->active() );
+            $form->addElement( 'select',    'template',     t('user_template'), array(), $templates->forAdministrators() );
+            $form->addElement( 'span',      'login_start',  t('login_start') );
+            $form->addElement( 'span',      'login_end',    t('login_end') );
+            $form->addElement( 'span',      'login_counter',t('login_counter') );
+            $form->addElement( 'span',      'login_last',   t('login_last') );
+            $form->addElement( 'span',      'login_current',t('login_current') );
+            $form->addElement( 'span',      'created_user', t('created_user') );
+            $form->addElement( 'span',      'created_date', t('created_date') );
 
-            $form->addElement( 'span',		'login_start',	t('login_start') );
-            $form->addElement( 'span',		'login_end',	t('login_end') );
-            $form->addElement( 'span',		'login_counter',t('login_counter') );
-            $form->addElement( 'span',		'login_last',	t('login_last') );
-            $form->addElement( 'span',		'login_current',t('login_current') );
-
-            $form->addElement( 'span',		'created_user',	t('created_user') );
-            $form->addElement( 'span',		'created_date',	t('created_date') );
+			// add rules
+			$form->addRule( 'name',        'maxlength', t('name too big'),       255 );
+			$form->addRule( 'email',       'email',     t('email not valid') );
+			$form->addRule( 'other',       'maxlength', t('other too big'),      5000 );
+			$form->addRule( 'language_id', 'in_array',  t('language not valid'), array_keys( $languages->active() ) );
+			$form->addRule( 'template',    'in_array',  t('template not valid'), array_keys( $templates->forAdministrators() ) );
 
 			return $form;
 		}
@@ -263,7 +275,7 @@
 
 			// check form validation
 			if ( !$form->validate( $formvalues ) )
-				return $form->getErrors( true );
+				return $form->getErrors();
 
 			return $this->changeCurrentUserPassword( $form->getValue( 'old' ), $form->getValue( 'new' ) );
 		}
@@ -280,14 +292,15 @@
             $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMPASSWORD' ) );
 
 			// add form elements
-            $form->addElement( 'password', 'old',         t('password_old'),         array('size' => 40) );
-            $form->addElement( 'password', 'new',         t('password_new'),         array('size' => 50) );
-            $form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 50) );
+            $form->addElement( 'password', 'old',         t('password_old'),         array('size' => 20, 'maxlength' => 31) );
+            $form->addElement( 'password', 'new',         t('password_new'),         array('size' => 30, 'maxlength' => 31) );
+            $form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
 
 			// add rules
-			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength', t('passwords too big'), 31 );
+			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength',    t('passwords too big'), 31 );
+			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'alphanumeric', t('passwords not alphanumeric') );
 
-			// add compare rules
+			// add compare rule
 			$form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
 
 			return $form;

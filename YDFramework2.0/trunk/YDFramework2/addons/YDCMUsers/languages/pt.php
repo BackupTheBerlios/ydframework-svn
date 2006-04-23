@@ -16,7 +16,11 @@ $GLOBALS['t']['created_user'] = 'Criado por';
 $GLOBALS['t']['created_date'] = 'Criado em';
 
 // USER FORM RULES
-$GLOBALS['t']['passwords dont match'] = 'As passwords n&atilde;o s&atilde;o iguais';
+$GLOBALS['t']['name too big'] = 'O nome &eacute; demasiado grande';
+$GLOBALS['t']['email not valid'] = 'O email n&atilde;o &eacute; v&aacute;lido';
+$GLOBALS['t']['other too big'] = 'As informa&ccedil;&otilde;es adicionais s&atilde;o demasiado grandes';
+$GLOBALS['t']['language not valid'] = 'O idioma n&atilde;o &eacute; v&aacute;lido';
+$GLOBALS['t']['template not valid'] = 'O template n&atilde;o &eacute; v&aacute;lido';
 
 // PASSWORD FORM
 $GLOBALS['t']['password_old'] = 'Password actual';
@@ -24,7 +28,9 @@ $GLOBALS['t']['password_new'] = 'Nova password';
 $GLOBALS['t']['password_new_confirm'] = 'Confirme a nova password';
 
 // PASSWORD FORM RULES
+$GLOBALS['t']['passwords dont match'] = 'As passwords n&atilde;o s&atilde;o iguais';
 $GLOBALS['t']['passwords too big'] = 'Existe pelo menos uma password demasiado grande';
+$GLOBALS['t']['passwords not alphanumeric'] = 'As password t&ecirc;em de ser alfanum&eacute;ricas';
 
 // OTHER
 $GLOBALS['t']['passwords'] = 'Passwords';
