@@ -48,7 +48,7 @@
         /**
          *  This function returns templates in administration side
          *
-         *  @returns    Array of templates, eg: array( 'default', 'orange', ... )
+         *  @returns    Array of templates, eg: array( 'default' => 'Default', 'orange' => ... )
          */
 		function forAdministrators(){
 		
@@ -59,7 +59,7 @@
         /**
          *  This function returns templates in visitors side
          *
-         *  @returns    Array of templates, eg: array( 'default', 'orange', ... )
+         *  @returns    Array of templates, eg: array( 'default' => 'Default', 'orange' => ... )
          */
 		function forVisitors(){
 		
@@ -70,14 +70,21 @@
         /**
          *  This private function returns all filenames of a directory
          *
-         *  @returns    Array of filenames, eg: array( 'default', 'orange', ... )
+         *  @returns    Array of filenames, eg: array( 'default' => 'Default', 'orange' => ... )
          */
 		function __getFiles( $dir ){
 		
+			// init directories
+			$directories = array();
+
+			// init template directory
 			$dir = new YDFSDirectory( $dir );
 			
-			// return all visible directories only
-			return $dir->getContents( '!.*', '', 'YDFSDirectory' );
+			// compute directories array
+			foreach( $dir->getContents( '!.*', '', 'YDFSDirectory' ) as $d )
+				$directories[ $d ] = $d;
+
+			return $directories;
 		}
 
     }
