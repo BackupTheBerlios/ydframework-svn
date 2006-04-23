@@ -27,7 +27,7 @@
     }
 
     YDInclude( 'YDDatabaseObject.php' );
-
+    YDInclude( 'YDCMTree.php' );
 
     class YDCMComponent extends YDDatabaseObject {
 
@@ -47,6 +47,9 @@
 			// register table for this component
             $this->registerTable( $name );
 
+			// set standard component
+			$this->standardComponent = $standardComponent;
+
 			// if this is a standard component has primary key 'component_id' and 2 standard relations
 			if ( $standardComponent ){
 
@@ -64,6 +67,9 @@
          		$relLanguage = & $this->registerRelation( 'YDCMLanguages', false, 'YDCMLanguages' );
 				$relLanguage->setLocalKey( 'language_id' );
 				$relLanguage->setForeignKey( 'language_id' );
+
+				// a standard component has tree operations
+				$this->tree = new YDCMTree();
 			}
 
 		}
@@ -119,6 +125,20 @@
 			return parent::registerRelation( $a, $b, $c );
 		}
 		
+
+        /**
+         *  This function changes component state
+         *
+         *  @param $id  The node id
+         *
+         *  @returns    true if state changed, false otherwise
+         *
+         */
+		function toogleState( $id ){
+		
+			return $this->tree->toogleState( $id );
+		}
+
 
         /**
          *  This function adds a standard node in the tree. Experimental
