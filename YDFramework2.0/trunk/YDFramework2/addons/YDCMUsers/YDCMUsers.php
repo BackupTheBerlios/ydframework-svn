@@ -297,6 +297,7 @@
             $form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
 
 			// add rules
+			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'required',     t('passwords are required') );
 			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength',    t('passwords too big'), 31 );
 			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'alphanumeric', t('passwords not alphanumeric') );
 
@@ -324,6 +325,37 @@
 
 			// return values
 			return $this->getValues();
+		}
+
+
+        /**
+         *  This function updates user login details
+         *
+         *  @returns    updated result
+         */
+		function updateLogin(){
+
+			YDInclude( 'YDUtil.php' );
+
+			$this->resetValues();
+			
+			// get current user id
+			$this->user_id = $this->currentID();
+			
+			// get all attributes
+			$this->find();
+
+			// increase login value
+			$this->login_counter ++;
+
+			// set last login date
+			$this->login_last = $this->login_current;
+
+			// set current login
+			$this->login_current = YDStringUtil::formatDate( time(), 'datetimesql' );
+
+			// return values
+			return $this->update();
 		}
 
 		

@@ -736,11 +736,11 @@
 <OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1251" ColName="login_start" PrevColName="" Pos="14" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="when state is schedule this is the start date">
+<COLUMN ID="1251" ColName="login_start" PrevColName="" Pos="14" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="when state is schedule this is the start date">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1252" ColName="login_end" PrevColName="" Pos="15" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="when state is schedule this is the end date">
+<COLUMN ID="1252" ColName="login_end" PrevColName="" Pos="15" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="when state is schedule this is the end date">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
@@ -750,11 +750,11 @@
 <OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1256" ColName="login_last" PrevColName="" Pos="19" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="last login date">
+<COLUMN ID="1256" ColName="login_last" PrevColName="" Pos="19" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="last login date">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1257" ColName="login_current" PrevColName="" Pos="20" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="date of current session">
+<COLUMN ID="1257" ColName="login_current" PrevColName="" Pos="20" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="date of current session">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
@@ -764,7 +764,7 @@
 <OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1253" ColName="created_date" PrevColName="created" Pos="16" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="creation date">
+<COLUMN ID="1253" ColName="created_date" PrevColName="created" Pos="16" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="creation date">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>

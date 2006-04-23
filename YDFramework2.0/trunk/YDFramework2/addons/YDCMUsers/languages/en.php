@@ -28,6 +28,7 @@ $GLOBALS['t']['password_new'] = 'New password';
 $GLOBALS['t']['password_new_confirm'] = 'Confirm new password';
 
 // PASSWORD FORM RULES
+$GLOBALS['t']['passwords are required'] = 'All passwords are required';
 $GLOBALS['t']['passwords dont match'] = 'Passwords do not match';
 $GLOBALS['t']['passwords too big'] = 'There is at least one password too big';
 $GLOBALS['t']['passwords not alphanumeric'] = 'All passwords must be alphanumeric';
