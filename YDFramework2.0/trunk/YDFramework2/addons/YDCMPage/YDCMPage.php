@@ -39,8 +39,6 @@
             $this->_description = 'This is a page component';
 
             // define custom fields
-			$this->registerField( 'content_id' );
-			$this->registerField( 'language_id' );
 			$this->registerField( 'current_version' );
 			$this->registerField( 'title' );
 			$this->registerField( 'html' );
@@ -56,6 +54,6 @@
 			// we don't have custom relations
 		}
 		
-		
+
     }
 ?>

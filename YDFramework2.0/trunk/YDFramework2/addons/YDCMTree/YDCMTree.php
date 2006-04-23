@@ -27,17 +27,25 @@
     }
 
 	YDInclude( 'YDDatabaseTree.php' );
+    YDInclude( 'YDDatabaseObject.php' );
 
 	// dbobject will delete records even if there are NO conditions ('where' sql conditions)
 	YDConfig::set( 'YD_DBOBJECT_DELETE', true );
 
-    class YDCMTree extends YDCMComponent {
+    class YDCMTree extends YDDatabaseObject {
     
         function YDCMTree() {
         
 			// init component as non default
-            $this->YDCMComponent( 'YDCMTree', false );
+            $this->YDDatabaseObject();
+			
+			// register database as default
+            $this->registerDatabase();
 
+			// register table for this component
+            $this->registerTable( 'YDCMTree' );
+
+			// set component details
             $this->_author = 'Francisco Azevedo';
             $this->_version = '0.1';
             $this->_copyright = '(c) Copyright 2006 Francisco Azevedo';
@@ -87,18 +95,29 @@
 		
 		
         /**
+         *  This function return tree element (except the root)
+         *
+         *  @returns    Array of elements
+         */
+		function getElements(){
+		
+			return $this->tree->getDescendants( 1 );
+		}
+		
+
+        /**
          *  This function inverts a state
          *
-         *  @param $elementID  The node id
+         *  @param $id  The node id
          *
-         *  @returns    1 if state changed, 0 otherwise
+         *  @returns    true if state changed, false otherwise
          */
-		function toogleState( $elementID ){
+		function toogleState( $id ){
 		
 			$this->resetValues();
 
 			// sets element id
-			$this->content_id = intval( $elementID );
+			$this->content_id = intval( $id );
 
 			// search element id and assign values
 			$this->find();
@@ -107,8 +126,10 @@
 			if ( $this->state == 0 ) $this->state = 1;
 			else                     $this->state = 0;
 
-			// update id with new values
-			return $this->update();			
+			// update id with new values an return
+			if ( $this->update() == 1 ) return true;
+			
+			return false;
 		}
 
 
