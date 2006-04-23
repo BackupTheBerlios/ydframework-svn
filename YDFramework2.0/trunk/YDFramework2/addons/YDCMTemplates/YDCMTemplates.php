@@ -26,11 +26,17 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-	// set admin template directory
+	// set admin template directory (without template name directory)
 	YDConfig::set( 'YDCMTEMPLATES_ADMIN_PATH', YD_SELF_DIR, false );
 
-	// set visitors template directory
+	// set admin template name
+	YDConfig::set( 'YDCMTEMPLATES_ADMIN_TEMPLATE', '', false );
+
+	// set visitors template directory (without template name directory)
 	YDConfig::set( 'YDCMTEMPLATES_VISITORS_PATH', YD_SELF_DIR, false );
+
+	// set visitors template name
+	YDConfig::set( 'YDCMTEMPLATES_VISITORS_TEMPLATE', '', false );
 
 
 	// this is a very special component because don't have any DB table (that's way do not extends YDCMComponent)
@@ -42,28 +48,82 @@
             $this->_version = '0.1';
             $this->_copyright = '(c) Copyright 2006 Francisco Azevedo';
             $this->_description = 'This is a CM component for template management';
+			
+			$this->admin_path        = YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' );
+			$this->admin_template    = YDConfig::get( 'YDCMTEMPLATES_ADMIN_TEMPLATE' );
+			$this->visitors_path     = YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' );
+			$this->visitors_template = YDConfig::get( 'YDCMTEMPLATES_VISITORS_TEMPLATE' );
+
 		}
 
 
         /**
-         *  This function returns templates in administration side
+         *  This function returns all possible templates for administration side
          *
-         *  @returns    Array of templates, eg: array( 'default' => 'Default', 'orange' => ... )
+         *  @returns    Associative array of templates, eg: array( 'Default' => 'Default', 'orange' => ... )
          */
-		function forAdministrators(){
+		function admin_templates(){
 		
-			return $this->__getFiles( YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' ) );
+			return $this->__getFiles( $this->admin_path );
 		}
 
 
         /**
-         *  This function returns templates in visitors side
+         *  This function return the template name of administration side
          *
-         *  @returns    Array of templates, eg: array( 'default' => 'Default', 'orange' => ... )
+         *  @returns    Template name
          */
-		function forVisitors(){
+		function admin_template(){
 		
-			return $this->__getFiles( YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' ) );
+			return $this->admin_template;
+		}
+
+
+        /**
+         *  This function return the full template path of administration side
+         *
+         *  @param $subdir  (Optional) template subdirectory
+         *
+         *  @returns    full path
+         */
+		function admin_complete( $subdir = '' ){
+		
+			return $this->admin_path . '/' . $this->admin_template . '/' . $subdir;
+		}
+
+
+        /**
+         *  This function returns all possible templates for visitors side
+         *
+         *  @returns    Associative array of templates, eg: array( 'Default' => 'Default', 'orange' => ... )
+         */
+		function visitors_templates(){
+		
+			return $this->__getFiles( $this->visitors_path );
+		}
+
+
+        /**
+         *  This function return the template name of administration side
+         *
+         *  @returns    Template name
+         */
+		function visitors_template(){
+		
+			return $this->visitors_template;
+		}
+
+
+        /**
+         *  This function return the full template path of visitors side
+         *
+         *  @param $subdir  (Optional) template subdirectory
+         *
+         *  @returns    full path
+         */
+		function visitors_complete( $subdir = '' ){
+		
+			return $this->visitors_path . '/' . $this->visitors_template . '/' . $subdir;
 		}
 
 

@@ -228,7 +228,7 @@
             $form->addElement( 'text',      'email',        t('user_email') );
             $form->addElement( 'textarea',  'other',        t('user_other'),    array('rows' => 4, 'cols' => 30) );
             $form->addElement( 'select',    'language_id',  t('user_language'), array(), $languages->active() );
-            $form->addElement( 'select',    'template',     t('user_template'), array(), $templates->forAdministrators() );
+            $form->addElement( 'select',    'template',     t('user_template'), array(), $templates->admin_templates() );
             $form->addElement( 'span',      'login_start',  t('login_start') );
             $form->addElement( 'span',      'login_end',    t('login_end') );
             $form->addElement( 'span',      'login_counter',t('login_counter') );
@@ -242,7 +242,7 @@
 			$form->addRule( 'email',       'email',     t('email not valid') );
 			$form->addRule( 'other',       'maxlength', t('other too big'),      5000 );
 			$form->addRule( 'language_id', 'in_array',  t('language not valid'), array_keys( $languages->active() ) );
-			$form->addRule( 'template',    'in_array',  t('template not valid'), array_keys( $templates->forAdministrators() ) );
+			$form->addRule( 'template',    'in_array',  t('template not valid'), array_keys( $templates->admin_templates() ) );
 
 			return $form;
 		}
@@ -353,7 +353,7 @@
         /**
          *  This function updates user login details
          *
-         *  @returns    updated result
+         *  @returns    true if user login details updated, false user is not valid or details not updated
          */
 		function updateLogin(){
 
@@ -362,7 +362,9 @@
 			$this->resetValues();
 			
 			// get current user id
-			$this->user_id = $this->currentID();
+			$res = $this->currentID();
+			
+			if ( $res == false ) return false;
 			
 			// get all attributes
 			$this->find();
@@ -376,8 +378,10 @@
 			// set current login
 			$this->login_current = YDStringUtil::formatDate( time(), 'datetimesql' );
 
-			// return values
-			return $this->update();
+			// return update result
+			if ( $this->update() == 1 ) return true;
+			
+			return false;
 		}
 
 		
