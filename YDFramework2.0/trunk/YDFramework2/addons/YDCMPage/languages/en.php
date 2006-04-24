@@ -17,5 +17,11 @@ $GLOBALS['t']['page_search'] = 'Searcheable';
 // PAGE FORM RULES
 
 // OTHER
+$GLOBALS['t']['page'] = 'Page';
+$GLOBALS['t']['page content'] = 'Content';
+$GLOBALS['t']['page template'] = 'Template';
+$GLOBALS['t']['page access'] = 'Access';
+$GLOBALS['t']['new page'] = 'New page';
+$GLOBALS['t']['edit page'] = 'Edit page';
 
 ?>

@@ -17,5 +17,11 @@ $GLOBALS['t']['page_search'] = 'Pesquis&aacute;vel';
 // PAGE FORM RULES
 
 // OTHER
+$GLOBALS['t']['page'] = 'P&aacute;gina';
+$GLOBALS['t']['page content'] = 'Conte&uacute;do';
+$GLOBALS['t']['page template'] = 'Template';
+$GLOBALS['t']['page access'] = 'Acesso';
+$GLOBALS['t']['new page'] = 'Nova p&aacute;gina';
+$GLOBALS['t']['edit page'] = 'Editar p&aacute;gina';
 
 ?>
