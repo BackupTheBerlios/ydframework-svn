@@ -140,6 +140,19 @@
 		}
 
 
+
+        /**
+         *  This function deletes the tree part of a component only
+         *
+         *  @param $id  The node id
+         *
+         */
+		function deleteNode( $id ){
+		
+			return $this->tree->deleteNode( $id );
+		}
+
+
         /**
          *  This function adds a standard node in the tree. Experimental
          *
