@@ -26,6 +26,13 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	// add local translation directory
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+
+	// set page form name
+	YDConfig::set( 'YDCMPAGE_FORMPAGE', 'YDCMPageForm', false );
+
+
     class YDCMPage extends YDCMComponent {
     
         function YDCMPage() {
@@ -54,6 +61,52 @@
 			// we don't have custom relations
 		}
 		
+
+        /**
+         *  This function returns the page form
+         *
+         *  @returns    YDForm object
+         */
+		function getFormPage(){
+		
+			YDInclude( 'YDForm.php' );
+			YDInclude( 'YDCMTemplates.php' );
+		
+			// create access options
+			$access = array( 0 => t('public'), 1 => t('private') );
+
+			// get all possible visitors templates
+			$templates = new YDCMTemplates();
+
+			// create 'template pack' options
+			$template_pack = array(	'pack'	=> t('use templatepack') .' ('. $templates->template_pack() .')',
+									0		=> t('use custom template') );
+	
+			// create form object
+			$form = new YDForm( YDConfig::get( 'YDCMPAGE_FORMPAGE' ) );
+
+	        $form->addElement( 'text',           'reference',     t('page_reference'),      array('size' => 25, 'maxlength' => 35) );
+	        $form->addElement( 'text',           'title',         t('page_title'),          array('size' => 70, 'maxlength' => 70) );
+	        $form->addElement( 'hidden',         'content',       t('page_content') );
+	        $form->addElement( 'select',         'access',        t('page_access'),         array(), $access);
+	        $form->addElement( 'select',         'published',     t('page_published'),      array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+	        $form->addElement( 'datetimeselect', 'date_start',    t('page_startdate') );
+	        $form->addElement( 'datetimeselect', 'date_end',      t('page_enddate'));
+	        $form->addElement( 'select',         'template_pack', '',                       array(), $template_pack );
+	        $form->addElement( 'select',         'template',      t('page_template'),       array(), $templates->visitors_templates());
+	        $form->addElement( 'select',         'metatags',      t('page_metatags'),       array(), array(0 => t('no'), 1 => t('yes')));
+	        $form->addElement( 'textarea',       'description',   t('page_description'),    array('cols' => 50, 'rows' => 5) );
+	        $form->addElement( 'textarea',       'keywords',      t('page_keywords'),       array('cols' => 50, 'rows' => 5) );
+	        $form->addElement( 'select',         'search',        t('page_search'),         array(), array(0 => t('no'), 1 => t('yes')) );
+	        $form->addElement( 'hidden',         'content_id' );
+	        $form->addElement( 'hidden',         'parent_id' );
+
+			// parent of new page is 0 by default
+			$form->setDefault( 'content_id', 0 );
+			$form->setDefault( 'parent_id', 0 );
+
+			return $form;
+		}
 
     }
 ?>
