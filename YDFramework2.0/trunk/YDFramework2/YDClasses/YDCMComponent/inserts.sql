@@ -39,6 +39,11 @@ INSERT INTO `ydcmpage` VALUES (4,  9, 'en', 1, 'Our databases', '', '', 0, '', 0
 INSERT INTO `ydcmpage` VALUES (5, 10, 'en', 1, 'Generators', '', '', 0, '', 0, '', '');
 INSERT INTO `ydcmpage` VALUES (6, 11, 'all', 1, 'Portals for all', '', '', 0, '', 0, '', '');
 
+INSERT INTO `ydcmrootmenu` VALUES (1, 2, 'all', 'my menu paste');
+INSERT INTO `ydcmrootmenu` VALUES (2, 3, 'en',  'documentation in EN');
+INSERT INTO `ydcmrootmenu` VALUES (3, 4, 'pt',  'PT books menu');
+INSERT INTO `ydcmrootmenu` VALUES (4, 8, 'all', 'links menu');
+
 
 INSERT INTO `ydcmusers` VALUES (2,0,0,0,0,'admin','21232f297a57a5a743894a0e4a801fc3','name','email@test.com','a','en',1,NULL,NULL,7,'2006-04-23 17:02:27','2006-04-23 17:02:34',0,'0000-00-00 00:00:00');
 
