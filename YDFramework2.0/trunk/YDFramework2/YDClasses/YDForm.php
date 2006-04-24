@@ -1341,6 +1341,18 @@
             $this->_attributes[$key] = $val;
         }
 
+
+        /**
+         *  Function to set attributes of a form element
+         *
+         *  @param  $attributes    Associative array of attributes
+         */
+        function setAttributes( $attributes ) {
+            foreach ( $attributes as $k => $v )
+                $this->setAttribute( $k, $v );
+        }
+
+
         /**
          *  Function to delete an attribute of a form element
          *
