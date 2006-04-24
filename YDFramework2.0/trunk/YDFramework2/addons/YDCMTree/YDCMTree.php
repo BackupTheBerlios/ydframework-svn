@@ -84,13 +84,12 @@
         /**
          *  This function deletes a tree node
          *
-         *  @param $elementID  The node id
+         *  @param $id  The node id
          */
-		function deleteNode( $elementID ){
+		function deleteNode( $id ){
 
 			// delete node and all children of this node
-			// TODO: maybe we could return the nodes deleted
-			return $this->tree->deleteNode( intval( $elementID ) );
+			return $this->tree->deleteNode( intval( $id ) );
 		}
 		
 		
