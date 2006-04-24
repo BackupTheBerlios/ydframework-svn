@@ -77,8 +77,8 @@
 			$templates = new YDCMTemplates();
 
 			// create 'template pack' options
-			$template_pack = array(	'pack'	=> t('use templatepack') .' ('. $templates->template_pack() .')',
-									0		=> t('use custom template') );
+			$template_pack = array(	1	=> t('use templatepack') .' ('. $templates->template_pack() .')',
+									0	=> t('use custom template') );
 	
 			// create form object
 			$form = new YDForm( YDConfig::get( 'YDCMPAGE_FORMPAGE' ) );

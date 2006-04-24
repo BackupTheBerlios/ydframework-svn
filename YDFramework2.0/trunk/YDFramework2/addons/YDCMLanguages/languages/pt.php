@@ -9,5 +9,9 @@ $GLOBALS['t']['not applicable'] = 'N&atilde;o aplic&aacute;vel';
 $GLOBALS['t']['yes'] = 'Sim';
 $GLOBALS['t']['no'] = 'N&atilde;o';
 $GLOBALS['t']['schedule'] = 'Calend&aacute;rio';
+$GLOBALS['t']['delete'] = 'Eliminar';
+$GLOBALS['t']['toggle state'] = 'Inverter estado';
+$GLOBALS['t']['public'] = 'P&uacute;blico';
+$GLOBALS['t']['private'] = 'Privado';
 
 ?>
