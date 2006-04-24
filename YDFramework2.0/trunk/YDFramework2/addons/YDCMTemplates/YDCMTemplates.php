@@ -38,6 +38,9 @@
 	// set visitors template name
 	YDConfig::set( 'YDCMTEMPLATES_VISITORS_TEMPLATE', '', false );
 
+	// set template pack ( a pH technology )
+	YDConfig::set( 'YDCMTEMPLATES_PACK', false, false );
+
 
 	// this is a very special component because don't have any DB table (that's way do not extends YDCMComponent)
     class YDCMTemplates {
@@ -53,7 +56,7 @@
 			$this->admin_template    = YDConfig::get( 'YDCMTEMPLATES_ADMIN_TEMPLATE' );
 			$this->visitors_path     = YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' );
 			$this->visitors_template = YDConfig::get( 'YDCMTEMPLATES_VISITORS_TEMPLATE' );
-
+			$this->template_pack     = YDConfig::get( 'YDCMTEMPLATES_PACK' );
 		}
 
 
@@ -89,6 +92,17 @@
 		function admin_complete( $subdir = '' ){
 		
 			return $this->admin_path . '/' . $this->admin_template . '/' . $subdir;
+		}
+
+
+        /**
+         *  This function return the template pack
+         *
+         *  @returns    full path
+         */
+		function template_pack(){
+		
+			return $this->template_pack;
 		}
 
 
