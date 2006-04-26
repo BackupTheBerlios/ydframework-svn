@@ -92,6 +92,7 @@
             
         }
         
+
         /**
          *  This function catch the last stored error.
          *
@@ -102,7 +103,7 @@
          *
          *  @static
          */
-        function catch( $error=null, $level=YD_ERROR_FATAL ) {
+        function catchError( $error=null, $level=YD_ERROR_FATAL ) {
             
             $catch = YDConfig::get( 'YD_ERROR_CATCH' );
             $catch_temp = YDConfig::get( 'YD_ERROR_CATCH_TEMP' );
