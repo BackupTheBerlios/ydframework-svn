@@ -51,6 +51,7 @@
 			$this->registerField( 'name' );
 			$this->registerField( 'active' );
 			$this->registerField( 'visitors_default' );
+			$this->registerField( 'admin_default' );
 
 			// we don't have relations from here (just TO here, and we don't need to define that)
 		}
@@ -75,6 +76,28 @@
 			// return results as array
 			return $this->getResultsAsAssocArray( 'language_id', 'name' );
 		}
+
+
+        /**
+         *  This function returns the default language for content creation
+         *
+         *  @returns    Language code, eg: 'en'. or false
+         */
+		function adminDefault(){
+		
+			// reset values
+			$this->resetValues();
+
+			// we want the result where admin default is 1
+			$this->admin_default = 1;
+			$this->limit( 1 );
+			
+			// find language
+			if ( $this->find() == 1 ) return $this->language_id;
+			
+			return false;
+		}
+
 
     }
 ?>
