@@ -42,16 +42,16 @@
          *  @param $table          Name of the tree database table
          *  @param $idField        (optional) Name of the primary key ID field. Default is id.
          *  @param $parentField    (optional) Name of the parent ID field. Default is parent_id.
-         *  @param $sortField      (optional) Name of the field to sort data. Default is title.
+         *  @param $sortField      (optional) Name of the field to sort data. Default is position, title.
          */
-        function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='title' ) {
+        function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='position, title' ) {
 
             $this->db = YDDatabase::getNamedInstance( $db );
 
             $this->table = $table;
             $this->fields = array(
                 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
-                'nleft' => 'nleft', 'nright' => 'nright', 'nlevel' => 'nlevel'
+                'nleft' => 'nleft', 'nright' => 'nright', 'nlevel' => 'nlevel', 'position' => 'position'
             );
             $this->_use_query_cache = true;
             $this->_query_cache = array();
