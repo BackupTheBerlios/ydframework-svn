@@ -36,7 +36,7 @@
             $res = $my->test(); 
 
             // Check for errors
-            while ( $err = YDError::catch( $res ) ) {
+            while ( $err = YDError::catchError( $res ) ) {
                 YDDebugUtil::dump( $err, '$err' );
                 $err->level; // 3 
                 $err->name; // fatal 
@@ -56,7 +56,7 @@
             YDDebugUtil::dump( $errors, '$errors' );
 
             // Or we could dump the error 
-            if ( $err = YDError::catch( $res ) ) { 
+            if ( $err = YDError::catchError( $res ) ) { 
                 $err->dump();
             } 
 
