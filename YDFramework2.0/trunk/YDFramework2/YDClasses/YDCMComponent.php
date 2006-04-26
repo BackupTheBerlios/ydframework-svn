@@ -27,7 +27,7 @@
     }
 
     YDInclude( 'YDDatabaseObject.php' );
-    YDInclude( 'YDCMTree.php' );
+
 
     class YDCMComponent extends YDDatabaseObject {
 
@@ -67,11 +67,33 @@
          		$relLanguage = & $this->registerRelation( 'YDCMLanguages', false, 'YDCMLanguages' );
 				$relLanguage->setLocalKey( 'language_id' );
 				$relLanguage->setForeignKey( 'language_id' );
-
-				// a standard component has tree operations
-				$this->tree = new YDCMTree();
 			}
+				
+			// a standard component has tree operations
+			// TODO: position is required and we must change order from 'parent_id' to 'parent_id ASC, position ASC'
+			$this->tree = new YDDatabaseTree( 'default', 'YDCMTree', 'content_id', 'parent_id', 'parent_id' );
 
+			// TODO: set sort by parent & position
+			// $this->tree->setSortField( 'parent_id ASC, position ASC' );
+
+			// add tree fields
+			$this->tree->addField( 'type' );
+			$this->tree->addField( 'state' );
+			$this->tree->addField( 'reference' );
+			$this->tree->addField( 'access' );
+			$this->tree->addField( 'searcheable' );
+			$this->tree->addField( 'published_date_start' );
+			$this->tree->addField( 'published_date_end' );
+		}
+
+
+        /**
+         *  This function returns all elements (except root)
+         *
+         *  @returns    all tree elements 
+         */
+		function getTreeElements(){
+			return $this->tree->getDescendants( 1 );
 		}
 
 
@@ -115,17 +137,6 @@
 		}
 
 
-		// this function will fix the current YDDatabaseObject::registerRelation
-		// TODO: delete it when YDDatabaseObject::registerRelation support seach inside YDF addons directory
-		function registerRelation( $a, $b, $c ){
-		
-			YDInclude( $a . '.php' );
-			YDInclude( $c . '.php' );			
-			
-			return parent::registerRelation( $a, $b, $c );
-		}
-		
-
         /**
          *  This function changes component state
          *
@@ -135,10 +146,28 @@
          *
          */
 		function toogleState( $id ){
-		
-			return $this->tree->toogleState( $id );
+
+			// get node values
+			$old_node = $this->tree->getNode( $id );
+
+			// change state attribute
+			if ( $old_node[ 'state' ] == 0 ) return $this->setState( $id, 1 );
+			else                             return $this->setState( $id, 0 );
 		}
 
+
+        /**
+         *  This function sets a node state
+         *
+         *  @param $id         The node id
+         *  @param $state      The state code
+         *
+         *  @returns    1 if state changed, 0 otherwise
+         */
+		function setState( $id, $state ){
+		
+			return $this->tree->updateNode( array( 'state' => $state ), $id );
+		}
 
 
         /**
@@ -149,7 +178,7 @@
          */
 		function deleteNode( $id ){
 		
-			return $this->tree->deleteNode( $id );
+			return $this->tree->deleteNode( intval( $id ) );
 		}
 
 
@@ -158,20 +187,56 @@
          *
          *  @param $values  Node values
          */
-		function add( $values ){
+		function addNode( $values, $parent_id = null ){
 
-			// reset values
-			$this->reset();
-			
-			// set values
-			$this->setValues( $values );
-
-			// TODO: check if language_id (another admin could delete or deactivate it)
-			// TODO: check if content_id exist (not required because it should be locked anyway)
-
-			// insert values
-			return $this->insert();
+			// user YDDatabasetree method
+			return $this->tree->addNode( $values, $parent_id );
 		}
 
+
+        /**
+         *  This function updates a node
+         *
+         *  @param $values  Node values
+         */
+		function updateNode( $values, $node_id = null ){
+
+			// user YDDatabasetree method
+			return $this->tree->updateNode( $values, $node_id );
+		}
+
+
     }
+
+
+
+
+    class YDCMTree extends YDDatabaseObject {
+    
+        function YDCMTree() {
+        
+			// init component as non default
+            $this->YDDatabaseObject();
+			
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMTree' );
+
+            // register custom key
+            $this->registerKey( 'content_id', true );
+
+			// register fields	
+			$this->registerField( 'parent_id' );
+			$this->registerField( 'type' );
+			$this->registerField( 'state' );
+			$this->registerField( 'reference' );
+			$this->registerField( 'access' );			
+			$this->registerField( 'searcheable' );			
+			$this->registerField( 'published_date_start' );
+			$this->registerField( 'published_date_end' );			
+		}
+	}
+
 ?>
