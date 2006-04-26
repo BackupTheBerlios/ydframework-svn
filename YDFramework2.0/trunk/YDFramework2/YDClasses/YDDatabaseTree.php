@@ -691,6 +691,8 @@
          *
          *  @param $values      The field values of the node.
          *  @param $parent_id   (optional) The parent ID of the node. The default takes it from the $values.
+         *
+         *  @returns    The ID of the newly inserted node.
          */
         function addNode( $values, $parent_id=null ) {
 
@@ -730,6 +732,38 @@
 
             // Return the ID
             return $id;
+
+        }
+
+        /**
+         *  This function updates a node in the database.
+         *
+         *  @param $values      The field values of the node.
+         *
+         *  @returns    The values of the node that is updated.
+         */
+        function updateNode( $values ) {
+
+            // The ID and parent field
+            $idField = $this->fields['id'];
+
+            // Convert the values from an ojbect to an array
+            $values = $this->_toNodeArray( $values );
+
+            // Clear the cache
+            $this->_clearCache();
+
+            // Perform the insert
+            $this->db->executeUpdate(
+                $this->table, $values,
+                sprintf( '%s = %', $idField, $this->db->escapeSql( $values['id'] ) )
+            );
+
+            // Rebuild the tree
+            $this->rebuild();
+
+            // Return the node
+            return $values;
 
         }
 
