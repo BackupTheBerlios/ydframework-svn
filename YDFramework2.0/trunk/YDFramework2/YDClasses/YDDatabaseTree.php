@@ -739,10 +739,11 @@
          *  This function updates a node in the database.
          *
          *  @param $values      The field values of the node.
+         *  @param $id          (optional) The ID of the node to update.
          *
          *  @returns    The values of the node that is updated.
          */
-        function updateNode( $values ) {
+        function updateNode( $values, $id=null ) {
 
             // The ID and parent field
             $idField = $this->fields['id'];
@@ -753,10 +754,12 @@
             // Clear the cache
             $this->_clearCache();
 
+            // Get the ID of the node to update
+            $id = empty( $id ) ? $values['id'] : $id;
+
             // Perform the insert
             $this->db->executeUpdate(
-                $this->table, $values,
-                sprintf( '%s = %', $idField, $this->db->escapeSql( $values['id'] ) )
+                $this->table, $values, sprintf( '%s = %', $idField, $this->db->escapeSql( $id ) )
             );
 
             // Rebuild the tree
