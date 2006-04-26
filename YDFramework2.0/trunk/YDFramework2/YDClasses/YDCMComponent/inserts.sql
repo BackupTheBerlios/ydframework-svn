@@ -12,9 +12,9 @@ INSERT INTO `ydcmconfiguration_files` VALUES ('video','mpg, mpeg, avi, wmv');
 
 
 
-INSERT INTO `ydcmlanguages` VALUES ('all','All',1,0);
-INSERT INTO `ydcmlanguages` VALUES ('en','English',1,1);
-INSERT INTO `ydcmlanguages` VALUES ('pt','Português',1,0);
+INSERT INTO `ydcmlanguages` VALUES ('all','All',1,0,0);
+INSERT INTO `ydcmlanguages` VALUES ('en','English',1,1,1);
+INSERT INTO `ydcmlanguages` VALUES ('pt','Português',1,0,0);
 
 
 
