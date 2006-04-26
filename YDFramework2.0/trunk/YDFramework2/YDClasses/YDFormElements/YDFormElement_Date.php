@@ -304,6 +304,17 @@
                 'seconds' => 'seconds'
             );
             
+            // if we have a string (eg: "2007-01-01 00:00:01") we will get the array
+            if ( !is_numeric( $val ) && !is_array( $val ) ){
+
+                 // include YDDate lib
+                 YDInclude( 'YDDate.php' );
+
+                 // create date object and export array
+                 $_d = new YDDate( $val );
+                 $val = $_d->toArray();
+            }
+
             if ( is_numeric( $val ) ) {
                 
                 $now = getdate( $val );
