@@ -744,7 +744,7 @@
 
             // Perform the insert
             $this->db->executeUpdate(
-                $this->table, $values, sprintf( '%s = %', $idField, $this->db->escapeSql( $id ) )
+                $this->table, $values, sprintf( '%s = %s', $idField, $this->db->escapeSql( $id ) )
             );
 
             // Rebuild the tree
