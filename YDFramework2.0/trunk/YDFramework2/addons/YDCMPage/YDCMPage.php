@@ -90,7 +90,7 @@
 	        $form->addElement( 'textarea',       'html',                 t('page_html') );
 	        $form->addElement( 'textarea',       'xhtml',                t('page_xhtml') );
 	        $form->addElement( 'select',         'access',               t('page_access'),         array(), $access);
-	        $form->addElement( 'select',         'state',                t('page_state'),      array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+	        $form->addElement( 'select',         'state',                t('page_state'),          array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
 	        $form->addElement( 'datetimeselect', 'published_date_start', t('page_startdate') );
 	        $form->addElement( 'datetimeselect', 'published_date_end',   t('page_enddate'));
 	        $form->addElement( 'select',         'template_pack',        '',                       array(), $template_pack );
@@ -159,8 +159,8 @@
 			$page[ 'content_id' ]    = $id;
 			$page[ 'language_id' ]   = $form->getValue( 'language_id' );
 			$page[ 'title' ]         = $form->getValue( 'title' );
-			$page[ 'hmtl' ]          = $form->getValue( 'html' );
-			$page[ 'xhmtl' ]         = $form->getValue( 'xhtml' );
+			$page[ 'html' ]          = $form->getValue( 'html' );
+			$page[ 'xhtml' ]         = $form->getValue( 'xhtml' );
 			$page[ 'template_pack' ] = $form->getValue( 'template_pack' );
 			$page[ 'template' ]      = $form->getValue( 'template' );
 			$page[ 'metatags' ]      = $form->getValue( 'metatags' );
@@ -202,9 +202,32 @@
 			
 			// find node
 			$this->findAll();
+			
+			// parse html
+			if ( isset( $this->html ) )  $this->html  = htmlentities( $this->html );
+			if ( isset( $this->xhtml ) ) $this->xhtml = htmlentities( $this->xhtml );
 
 			// return node attributes without relation prefixs
 			return $this->getValues( false, false, false, false );
+		}
+
+
+        /**
+         *  This function will delete a page node (and not its children)
+         *
+         *  @param $id  Node id
+         */
+		function deleteElement( $id ){
+
+			// delete all element from this node
+			$this->resetValues();
+
+			$this->content_id = intval( $id );
+		
+			$this->delete();
+			
+			// delete node from tree
+			$this->deleteNode( $id );
 		}
 
     }
