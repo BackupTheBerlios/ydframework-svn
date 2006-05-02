@@ -531,6 +531,11 @@
                 $timestamp = strtotime( $timestamp );
             }
 
+            // If array, is a date YDForm element value
+            if ( is_array( $timestamp ) ) {
+                $timestamp = $timestamp[ 'timestamp' ];
+            }
+
             // Check the standard formats
             if ( strtolower( $format ) == 'date' ) {
                 $format = '%d %B %Y';
