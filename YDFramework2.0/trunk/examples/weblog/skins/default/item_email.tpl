@@ -32,7 +32,7 @@
 
             <p>
                 <b>{t w="weblog"}</b>: <a href="{$weblog_link}">{$weblog_title}</a><br/>
-                <b>{t w="item_title"}</b>: <a href="{$item|@link_item}">{$item.title}</a><br/>
+                <b>{t w="item_title"}</b>: <a href="{$item_link}">{$item.title}</a><br/>
             </p>
 
             <blockquote>

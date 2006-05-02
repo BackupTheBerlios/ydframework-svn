@@ -134,6 +134,7 @@
                         // Add the comment to the email template
                         $this->tpl->assign( 'item', $values );
                         $this->tpl->assign( 'weblog_link', YDUrl::makeLinkAbsolute( '../index.php' ) );
+                        $this->tpl->assign( 'item_link', YDTplModLinkWithID( '../item.php', $values['id'] ) );
 
                         // Create the email and send it
                         $eml = new YDEmail();
