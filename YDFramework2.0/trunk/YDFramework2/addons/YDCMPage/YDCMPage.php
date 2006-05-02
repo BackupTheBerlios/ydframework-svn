@@ -123,7 +123,7 @@
          *
          *  @param $formvalues  Array with page attributes from the standard form
          *
-         *  @returns    true if updated, array with form errors otherwise
+         *  @returns    content_id updated or new content_id
          */
 		function savePageForm( $formvalues = array() ){
 
@@ -175,7 +175,9 @@
 			
 			$this->setValues( $page );
 
-			return $this->insert();
+			$this->insert();
+			
+			return $id;
 		}
 
 
