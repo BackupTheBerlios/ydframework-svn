@@ -474,16 +474,12 @@
 <OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1206" ColName="published_date_start" PrevColName="date_start" Pos="16" idDatatype="5" DatatypeParams="(20)" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="schedule start date (used when state is schedule)">
+<COLUMN ID="1206" ColName="published_date_start" PrevColName="date_start" Pos="16" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="schedule start date (used when state is schedule)">
 <OPTIONSELECTED>
-<OPTIONSELECT Value="0" />
-<OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="1207" ColName="published_date_end" PrevColName="date_end" Pos="17" idDatatype="5" DatatypeParams="(20)" Width="0" Prec="0" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="schedule end date (used when state is schedule)">
+<COLUMN ID="1207" ColName="published_date_end" PrevColName="date_end" Pos="17" idDatatype="15" DatatypeParams="" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="schedule end date (used when state is schedule)">
 <OPTIONSELECTED>
-<OPTIONSELECT Value="0" />
-<OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
 </COLUMNS>
