@@ -14,4 +14,6 @@ $GLOBALS['t']['toggle state'] = 'Inverter estado';
 $GLOBALS['t']['public'] = 'P&uacute;blico';
 $GLOBALS['t']['private'] = 'Privado';
 
+$GLOBALS['t']['add page'] = 'Adicionar p&aacute;gina';
+
 ?>

@@ -24,7 +24,6 @@ $GLOBALS['t']['page template'] = 'Template';
 $GLOBALS['t']['page access'] = 'Access';
 $GLOBALS['t']['new page'] = 'New page';
 $GLOBALS['t']['edit page'] = 'Edit page';
-$GLOBALS['t']['add page'] = 'Add page';
 $GLOBALS['t']['use custom template'] = 'Use custom template';
 $GLOBALS['t']['use templatepack'] = 'Use template pack';
 

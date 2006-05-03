@@ -14,4 +14,6 @@ $GLOBALS['t']['toggle state'] = 'Toggle state';
 $GLOBALS['t']['public'] = 'Public';
 $GLOBALS['t']['private'] = 'Private';
 
+$GLOBALS['t']['add page'] = 'Add page';
+
 ?>
