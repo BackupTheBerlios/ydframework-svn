@@ -241,6 +241,11 @@
                 }
             }
 
+            // Add index.php
+            if ( empty( $values['uri'] ) && basename( YD_SELF_SCRIPT ) == 'index.php' ) {
+                $values['uri'] = 'index.php';
+            }
+
             // Add them to the database
             $this->weblog->logRequestToStats( $values );
 

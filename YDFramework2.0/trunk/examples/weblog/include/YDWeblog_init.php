@@ -42,6 +42,15 @@
     $cache_file = YD_DIR_TEMP . '/' . YD_WEBLOG_CACHE_PREFIX . md5( YDRequest::getNormalizedCurrentUrl() ) . '.' . YD_WEBLOG_CACHE_SUFFIX;
     @define( 'YD_WEBLOG_CACHE_FNAME', $cache_file );
 
+    // Include the standard modules
+    YDInclude( 'YDDatabase.php' );
+    YDInclude( 'YDDatabaseMetaData.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Include other libraries
+    YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
+    YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
+
     // Check if the user wanted to use caching
     if ( YDConfig::get( 'use_cache', false ) ) {
 
@@ -59,6 +68,12 @@
 
                 // Add the elapsed time
                 $elapsed = $GLOBALS['timer']->getElapsed();
+
+                // Log the request to the statistics
+                $req = new YDWeblogRequest();
+                $req->_logRequest();
+
+                // Add the statistics
                 die( $data . YD_CRLF . '<!-- #cached: ' . $elapsed . ' ms -->' );
 
             }
@@ -71,15 +86,8 @@
     YDInclude( 'YDUrl.php' );
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
-    YDInclude( 'YDTemplate.php' );
-    YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDDatabaseMetaData.php' );
     YDInclude( 'YDFileSystem.php' );
     YDInclude( 'YDFormElements/YDFormElement_BBTextArea.php' );
-
-    // Include other libraries
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
-    YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
 
     // Check if the weblog application is locked or not
     $db = YDDatabase::getInstance(
