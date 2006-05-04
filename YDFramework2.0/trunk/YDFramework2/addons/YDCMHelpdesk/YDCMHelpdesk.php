@@ -57,7 +57,7 @@
          *  @param $reference  (Optional) Node reference
          *  @param $parent_id  (Optional) Id of the parent help desk
          */
-		function create( $title, $language_id = 'all', $reference = '', $parent_id = 0 ){
+		function addHelpdesk( $title, $language_id = 'all', $reference = '', $parent_id = 0 ){
 		
 			// add node to content tree
 			$node = array();
@@ -91,7 +91,19 @@
 			return $this->insert();
 		}
 
+/*
+		function deleteHelpdesk( $id ){
 		
+			$this->resetValues();
+			
+			$this->content_id = intval( $id );
+			
+			// delete all post that have this parent
+			$posts = new YDCMHelpdesk_posts();
+			$posts->deleteParent( $id );
+		
+		}
+		*/
     }
 
 
@@ -144,6 +156,64 @@
             $relState->setForeignKey( 'state_id' );
 		}
 
+
+		function addPost( $helpdesk_id, $user_id, $values ){
+		
+			$this->resetValues();
+		
+			// add required fields
+			// TODO: check if user, urgency and state exist
+			$this->component_id = $helpdesk_id;
+			$this->user_id      = $user_id;
+			$this->urgency_id   = $values['urgency_id'];
+			$this->state_id     = $values['state_id'];
+
+
+			// add optional fields
+			if ( isset( $values['subject'] ) )           $this->subject           = $values['subject'];
+			if ( isset( $values['localization'] ) )      $this->localization      = $values['localization'];
+			if ( isset( $values['text'] ) )              $this->text              = $values['text'];
+			if ( isset( $values['created_in'] ) )        $this->created_in        = $values['created_in'];
+			if ( isset( $values['reported_in'] ) )       $this->reported_in       = $values['reported_in'];
+			if ( isset( $values['reported_by'] ) )       $this->reported_by       = $values['reported_by'];
+			if ( isset( $values['reported_to_in'] ) )    $this->reported_to_in    = $values['reported_to_in'];
+			if ( isset( $values['reported_to'] ) )       $this->reported_to       = $values['reported_to'];
+			if ( isset( $values['reported_to_local'] ) ) $this->reported_to_local = $values['reported_to_local'];
+			
+			return $this->insert();
+		}
+		
+		
+		function deletePost( $post_id ){
+		
+			$this->resetValues();
+			
+			$this->post_id = intval( $post_id );
+			
+			return $this->delete();
+		}
+
+
+		function deleteAll( $helpdesk_id ){
+		
+			$this->resetValues();
+			
+			$this->component_id = intval( $helpdesk_id );
+			
+			return $this->delete();
+		}
+
+
+		function deleteParent( $parent_id ){
+		
+			$this->resetValues();
+			
+			$this->parent_id = intval( $parent_id );
+			
+			return $this->delete();
+		}
+
+		
 	}
 
 
@@ -174,6 +244,24 @@
             $relUsers->setForeignKey( 'user_id' );
 		}
 
+
+		function addResponse( $post_id, $user_id, $message ){
+		
+			YDInclude( 'YDUtil.php' );
+
+			$this->resetValues();
+		
+			// create response
+			// TODO: check if post_id and user_id are valid
+			$this->post_id     = intval( $post_id );
+			$this->user_id     = intval( $user_id );
+			$this->date        = YDStringUtil::formatDate( time(), 'datetimesql' );
+			$this->description = $message;
+
+			return $this->insert();
+		}
+		
+		
 	}	
 
 
@@ -199,6 +287,20 @@
 			$rel->setForeignJoin( 'LEFT' );
 		}
 
+
+		function addUrgency( $description, $color = '#FF0000' ){
+		
+			$this->resetValues();
+
+			// create urgency
+			$this->description  = $description;
+			$this->color        = $color;
+
+			return $this->insert();
+		}
+
+
+
 	}	
 
 
@@ -223,6 +325,18 @@
             $rel->setForeignKey( 'state_id' );
 			$rel->setForeignJoin( 'LEFT' );
 		}
+
+
+		function addState( $description ){
+		
+			$this->resetValues();
+
+			// create state
+			$this->description  = $description;
+
+			return $this->insert();
+		}
+
 
 	}	
 
