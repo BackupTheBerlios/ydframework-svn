@@ -84,6 +84,8 @@
 			$this->tree->addField( 'searcheable' );
 			$this->tree->addField( 'published_date_start' );
 			$this->tree->addField( 'published_date_end' );
+			$this->tree->addField( 'candrag' );
+			$this->tree->addField( 'candrop' );
 		}
 
 
@@ -94,6 +96,22 @@
          */
 		function getTreeElements(){
 			return $this->tree->getDescendants( 1 );
+		}
+
+
+        /**
+         *  This function checks if elements are valid drag&dropable
+         *
+         *  @param $x  Id of dragable node
+         *
+         *  @param $y  Id of dropable node
+
+         *  @returns    false if elements are invalid, an associative array with node types (eg: array( $x => 'PHCMPage', $y => 'PHCMRootmenu ))'
+         */
+		function getDragDropElements( $x, $y ){
+		
+			$treeObj = new YDCMTree();
+			return $treeObj->getDragDropElements( $x, $y );
 		}
 
 
@@ -206,6 +224,18 @@
 		}
 
 
+        /**
+         *  This function moves a node
+         *
+         *  @param $values  Node values
+         */
+		function moveNode( $x, $y ){
+
+			// use YDDatabasetree method
+			return $this->tree->moveNode( $x, $y );
+		}
+
+
     }
 
 
@@ -236,7 +266,39 @@
 			$this->registerField( 'searcheable' );			
 			$this->registerField( 'published_date_start' );
 			$this->registerField( 'published_date_end' );			
+			$this->registerField( 'candrag' );
+			$this->registerField( 'candrop' );
 		}
+
+
+        /**
+         *  This function checks if elements are valid drag&dropable
+         *
+         *  @param $x  Id of dragable node
+         *
+         *  @param $y  Id of dropable node
+
+         *  @returns    false if elements are invalid, an associative array with node information
+         */
+		function getDragDropElements( $x, $y ){
+		
+			// check if elements are numeric
+			if ( !is_numeric( $x ) || !is_numeric( $y ) ) return false;
+		
+			// reset old values and get current table	
+			$this->resetValues();
+
+			// set custom where to get those 2 elements
+			$this->where( '((content_id = ' . intval( $x ) . ' AND candrag = 1) OR (content_id = ' . intval( $y ) . ' AND candrop = 1))' );
+
+			// we must get always 2 elements otherwise they were not valid
+			if ( $this->find() != 2 ) return false;
+
+			// return associative array
+			return $this->getResultsAsAssocArray( 'content_id' );
+		}
+
+
 	}
 
 ?>
