@@ -13,6 +13,7 @@ $GLOBALS['t']['delete'] = 'Eliminar';
 $GLOBALS['t']['toggle state'] = 'Inverter estado';
 $GLOBALS['t']['public'] = 'P&uacute;blico';
 $GLOBALS['t']['private'] = 'Privado';
+$GLOBALS['t']['not allowed'] = 'N&atilde;o permitido';
 
 $GLOBALS['t']['add page'] = 'Adicionar p&aacute;gina';
 

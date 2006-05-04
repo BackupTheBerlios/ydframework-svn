@@ -19,17 +19,17 @@ INSERT INTO `ydcmlanguages` VALUES ('pt','Português',1,0,0);
 
 
 
-INSERT INTO `ydcmtree` VALUES (1,0,1,22,1,1,'YDCMRoot','',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (2,1,2,3,2,1,'YDCMRootmenu','menu Code Paste',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (3,1,4,5,2,1,'YDCMRootmenu','menu Documentation',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (4,1,6,13,2,1,'YDCMRootmenu','menu Books',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (5,4,7,8,3,1,'YDCMPage','Apache',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (6,4,9,10,3,1,'YDCMPage','PostegreSQL',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (7,4,11,12,3,1,'YDCMPage','mysql',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (8,1,14,21,2,1,'YDCMRootmenu','links',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (9,8,15,16,3,1,'YDCMPage','databases',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (10,8,17,18,3,1,'YDCMPage','generators',1,1,1,0,0);
-INSERT INTO `ydcmtree` VALUES (11,8,19,20,3,1,'YDCMPage','portals',1,1,1,0,0);
+INSERT INTO `ydcmtree` VALUES (1,0,1,22,1,1,'YDCMRoot','',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (2,1,2,3,2,1,'YDCMRootmenu','menu Code Paste',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (3,1,4,5,2,1,'YDCMRootmenu','menu Documentation',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (4,1,6,13,2,1,'YDCMRootmenu','menu Books',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (5,4,7,8,3,1,'YDCMPage','Apache',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (6,4,9,10,3,1,'YDCMPage','PostegreSQL',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (7,4,11,12,3,1,'YDCMPage','mysql',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (8,1,14,21,2,1,'YDCMRootmenu','links',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (9,8,15,16,3,1,'YDCMPage','databases',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (10,8,17,18,3,1,'YDCMPage','generators',1,1,1,0,0,0,0);
+INSERT INTO `ydcmtree` VALUES (11,8,19,20,3,1,'YDCMPage','portals',1,1,1,0,0,0,0);
 
 
 INSERT INTO `ydcmpage` VALUES (1,  5, 'en', 1, 'Apache in english', '', '', 0, '', 0, '', '');

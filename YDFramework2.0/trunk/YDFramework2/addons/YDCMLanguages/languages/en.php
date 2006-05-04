@@ -13,6 +13,7 @@ $GLOBALS['t']['delete'] = 'Delete';
 $GLOBALS['t']['toggle state'] = 'Toggle state';
 $GLOBALS['t']['public'] = 'Public';
 $GLOBALS['t']['private'] = 'Private';
+$GLOBALS['t']['not allowed'] = 'Not allowed';
 
 $GLOBALS['t']['add page'] = 'Add page';
 
