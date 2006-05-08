@@ -37,7 +37,7 @@
 			$onHide  = new YDAjaxEffect('', 'opacity', "toggle()" );
 
 			// use waiting message with custom effects
-			$this->ajax->useWaitingMessage( 'test<p class="aaa">test with class</p>', array(), $onStart, $onShow, $onHide );
+			$this->ajax->useWaitingMessage( '<h2>Please wait . . .</h2>', array(), $onStart, $onShow, $onHide );
 
 			// to use default waiting message just try:
 			// $this->ajax->useWaitingMessage();
