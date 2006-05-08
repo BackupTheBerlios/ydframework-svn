@@ -33,6 +33,7 @@
 	// include core YDCM libs
 	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMUsers/YDCMUsers.php' );
 	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMTree/YDCMTree.php' );
+	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMLocks/YDCMLocks.php' );
 	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMTemplates/YDCMTemplates.php' );
 	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMLanguages/YDCMLanguages.php' );
 

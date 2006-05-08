@@ -26,17 +26,18 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-    class YDCMLocks extends YDCMComponent {
+    class YDCMLocks extends YDDatabaseObject {
     
         function YDCMLocks() {
         
-			// init component as non default component
-            $this->YDCMComponent( 'YDCMLocks', false );
+			// init component as non default
+            $this->YDDatabaseObject();
+			
+			// register database as default
+            $this->registerDatabase();
 
-            $this->_author = 'Francisco Azevedo';
-            $this->_version = '0.1';
-            $this->_copyright = '(c) Copyright 2006 Francisco Azevedo';
-            $this->_description = 'This is a content lock management component';
+			// register table for this component
+            $this->registerTable( 'YDCMLocks' );
 
             // register custom fields
 			$this->registerField( 'content_id' );
