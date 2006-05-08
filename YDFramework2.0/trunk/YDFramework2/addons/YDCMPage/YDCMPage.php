@@ -26,6 +26,8 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	YDInclude( 'YDCMComponent.php' );
+
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
@@ -68,8 +70,6 @@
 		function getFormPage(){
 		
 			YDInclude( 'YDForm.php' );
-			YDInclude( 'YDCMTemplates.php' );
-			YDInclude( 'YDCMLanguages.php' );
 
 			// init template and language object
 			$templates = new YDCMTemplates();

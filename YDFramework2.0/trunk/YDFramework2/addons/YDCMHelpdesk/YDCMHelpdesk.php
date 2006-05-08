@@ -26,6 +26,16 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+
+	YDInclude( 'YDForm.php' );
+
+	// add local translation directory
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+
+	// set posts form name
+	YDConfig::set( 'YDCMHELPDESK_FORMPOST', 'YDCMHelpdeskFormPost', false );
+
+
     class YDCMHelpdesk extends YDCMComponent {
     
         function YDCMHelpdesk() {
@@ -154,6 +164,46 @@
             $relState = & $this->registerRelation( 'YDCMHelpdesk_state', false, 'YDCMHelpdesk_state' );
 			$relState->setLocalKey( 'state_id' );
             $relState->setForeignKey( 'state_id' );
+		}
+
+
+		function getFormPost(){
+		
+			// create a form for new posts
+            $form = new YDForm( YDConfig::get( 'YDCMHELPDESK_FORMPOST' ) );
+
+			// get urgencies
+			$urgencies = new YDCMHelpdesk_urgency();
+			$urgencies = $urgencies->getUrgencies();
+			
+			// get states
+			$states    = new YDCMHelpdesk_state();
+			$states    = $states->getStates();
+
+			// get types
+			$types     = new YDCMHelpdesk_type();
+			$types     = $types->getTypes();
+
+			// add new form elements
+            $form->addElement( 'text',			'subject',			 t('ticket_subject'),           array('size' => 50) );
+            $form->addElement( 'select', 		'urgency_id',		 t('ticket_urgency_id'),        array(), $urgencies );
+            $form->addElement( 'select',		'state_id',			 t('ticket_state_id'),          array(), $states );
+            $form->addElement( 'textarea',		'text',              t('ticket_text'),              array('cols' => 60, 'rows' => 12) );
+
+            $form->addElement( 'span',			'creation_user',	 t('ticket_creation_user') );
+            $form->addElement( 'datetimeselect','creation_date',     t('ticket_creation_date') );
+
+            $form->addElement( 'span',			'reported_by_user',	 t('ticket_reported_by_user'),  array('size' => 50) );
+            $form->addElement( 'select', 		'reported_by_type',	 t('ticket_reported_by_type'),  array(), $types );
+            $form->addElement( 'text',			'reported_by_local', t('ticket_reported_by_local') );
+            $form->addElement( 'datetimeselect','reported_by_date',	 t('ticket_reported_by_date') );
+  
+            $form->addElement( 'span',          'assignedto_user',	 t('ticket_assignedto_user') );
+            $form->addElement( 'text',			'assignedto_type',	 t('ticket_assignedto_type'),   array('size' => 50) );
+            $form->addElement( 'select', 		'assignedto_local',	 t('ticket_assignedto_local'),  array(), $types );
+            $form->addElement( 'text',			'assignedto_date',   t('ticket_assignedto_date') );
+		
+			return $form;
 		}
 
 
@@ -300,6 +350,23 @@
 		}
 
 
+		function getUrgencies(){
+		
+			$this->resetValues();
+			
+			// find all urgencies
+			$this->find();
+
+			// get associative array
+			$res = $this->getResultsAsAssocArray( 'urgency_id' );
+
+			// translate urgency description
+			foreach( $res as $id => $arr )
+				$res[ $id ][ 'description'] = t( $res[ $id ][ 'description'] );
+
+			// return urgencies
+			return $res;
+		}
 
 	}	
 
@@ -335,6 +402,25 @@
 			$this->description  = $description;
 
 			return $this->insert();
+		}
+
+
+		function getStates(){
+		
+			$this->resetValues();
+			
+			// find all states
+			$this->find();
+
+			// get associative array
+			$res = $this->getResultsAsAssocArray( 'state_id' );
+
+			// translate state description
+			foreach( $res as $id => $arr )
+				$res[ $id ][ 'description'] = t( $res[ $id ][ 'description'] );
+
+			// return urgencies
+			return $res;
 		}
 
 

@@ -26,6 +26,9 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	YDInclude( 'YDCMComponent.php' );
+
+
     class YDCMRootmenu extends YDCMComponent {
     
         function YDCMRootmenu() {

@@ -26,6 +26,9 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	YDInclude( 'YDCMComponent.php' );
+
+
     class YDCMLink extends YDCMComponent {
     
         function YDCMLink() {
