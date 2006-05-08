@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.81b';
+            $this->_version = '2.82b';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -211,14 +211,16 @@
 
 			// check custom options
 			if ( !isset( $options['style.backgroundColor'] ) ) $options['style.backgroundColor'] = '#cccccc';
-			if ( !isset( $options['style.top'] ) )             $options['style.top']             = '40%';
-			if ( !isset( $options['style.left'] ) )            $options['style.left']            = '42%';
 			if ( !isset( $options['style.border'] ) )          $options['style.border']          = '1px solid #110000';
+			if ( !isset( $options['style.width'] ) )           $options['style.width']           = '200px';
 
 			// static values
-			$options['innerHTML']      = $html;
-			$options['style.position'] = "absolute";
-			$options['style.zindex']   = 9999;
+			$options['style.position']   = "absolute";
+			$options['style.top']        = '40%';
+			$options['style.left']       = '50%';
+			$options['style.marginLeft'] = '-' . round( intval( $options['style.width'] ) / 2) . 'px';
+			$options['style.zindex']     = 9999;
+			$options['innerHTML']        = '<center>' . $html . '</center>';
 
 			// create js for html element creation
 			$this->waitingMessageCode  = "var " . $this->wtID . " = document.createElement('div');";
