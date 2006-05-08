@@ -215,6 +215,7 @@
 			if ( !isset( $options['style.width'] ) )           $options['style.width']           = '200px';
 
 			// static values
+			$options['style.cursor']     = "default";
 			$options['style.position']   = "absolute";
 			$options['style.top']        = '40%';
 			$options['style.left']       = '50%';
