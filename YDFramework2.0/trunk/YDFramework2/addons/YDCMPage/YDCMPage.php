@@ -72,8 +72,8 @@
 			YDInclude( 'YDForm.php' );
 
 			// init template and language object
-			$templates = new YDCMTemplates();
-			$languages = new YDCMLanguages();
+			$templates = YDCMComponent::module( 'YDCMTemplates' );
+			$languages = YDCMComponent::module( 'YDCMLanguages' );
 
 			// create access options
 			$access = array( 0 => t('public'), 1 => t('private') );
