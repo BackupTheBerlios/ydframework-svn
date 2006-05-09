@@ -30,13 +30,11 @@
     YDInclude( 'YDDatabaseObject.php' );
 	YDInclude( 'YDDatabaseTree.php' );
 
-	// include core YDCM libs
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMUsers/YDCMUsers.php' );
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMTree/YDCMTree.php' );
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMLocks/YDCMLocks.php' );
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMAudit/YDCMAudit.php' );
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMTemplates/YDCMTemplates.php' );
-	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMLanguages/YDCMLanguages.php' );
+	// set core libs directory
+    YDConfig::set( 'YD_DBOBJECT_PATH', dirname( __FILE__ ) . '/YDCMComponent/');
+
+	// add generic translation directory
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/YDCMComponent/languages/' );
 
 
     class YDCMComponent extends YDDatabaseObject {
@@ -97,6 +95,23 @@
 			$this->tree->addField( 'candrag' );
 			$this->tree->addField( 'candrop' );
 		}
+
+
+        /**
+         *  This static function returns an YDCMComponent module
+         *
+         *  @returns    an module object
+         */
+		function module( $name ){
+
+			// include lib
+			// TODO: check is name is a valid lib name
+			require_once( YDConfig::get( 'YD_DBOBJECT_PATH' ) . '/' . $name . '.php' );
+
+			// return class
+			return new $name();
+		}
+
 
 
         /**

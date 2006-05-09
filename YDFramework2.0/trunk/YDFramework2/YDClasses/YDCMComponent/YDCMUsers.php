@@ -27,7 +27,7 @@
     }
 
 	// add local translation directory
-	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
 
 	// set user form name
 	YDConfig::set( 'YDCMUSERS_FORMUSER', 'YDCMUsersForm', false );

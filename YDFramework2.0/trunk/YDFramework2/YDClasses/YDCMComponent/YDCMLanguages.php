@@ -26,9 +26,6 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-	// add local translation directory
-	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
-
 
     class YDCMLanguages extends YDDatabaseObject {
 
