@@ -66,7 +66,7 @@
 
          *  @returns    false if elements are invalid, an associative array with node information
          */
-		function getDragDropElements( $x, $y ){
+		function getDragDropElements( $x = null, $y = null){
 		
 			// check if elements are numeric
 			if ( !is_numeric( $x ) || !is_numeric( $y ) ) return false;

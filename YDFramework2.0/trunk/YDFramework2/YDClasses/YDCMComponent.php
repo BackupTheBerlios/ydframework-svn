@@ -105,7 +105,7 @@
 		function module( $name ){
 
 			// include lib
-			// TODO: check is name is a valid lib name
+			// TODO: check if name is a valid lib name
 			require_once( YDConfig::get( 'YD_DBOBJECT_PATH' ) . '/' . $name . '.php' );
 
 			// return class
@@ -133,9 +133,12 @@
 
          *  @returns    false if elements are invalid, an associative array with node types (eg: array( $x => 'PHCMPage', $y => 'PHCMRootmenu ))'
          */
-		function getDragDropElements( $x, $y ){
+		function getDragDropElements( $x = null, $y = null ){
 		
-			$treeObj = new YDCMTree();
+			// get object tree
+			$treeObj = YDCMComponent::module( 'YDCMTree' );
+
+			// check drop validation
 			return $treeObj->getDragDropElements( $x, $y );
 		}
 

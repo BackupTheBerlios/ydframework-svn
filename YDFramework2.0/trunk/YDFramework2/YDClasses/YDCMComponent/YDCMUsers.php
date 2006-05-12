@@ -210,13 +210,9 @@
          */
 		function getFormUser(){
 
-			// include languages and templates lib
-			YDInclude( 'YDCMLanguages.php' );
-			YDInclude( 'YDCMTemplates.php' );
-
 			// create languages and templates object
-			$languages = new YDCMLanguages();
-			$templates = new YDCMTemplates();
+			$languages = YDCMComponent::module( 'YDCMLanguages' );
+			$templates = YDCMComponent::module( 'YDCMTemplates' );
 
 			// create form object
             $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMUSER' ) );
