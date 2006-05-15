@@ -554,7 +554,11 @@
 
         // Get the total num of hits
         function getTotalHits() {
-            return $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics' );
+            $result = $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics' );
+            if ( empty( $result ) ) {
+                $result = 0;
+            }
+            return $result;
         }
 
         // Get the number of items
