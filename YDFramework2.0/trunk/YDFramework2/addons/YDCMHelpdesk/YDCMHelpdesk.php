@@ -28,6 +28,10 @@
 
 
 	YDInclude( 'YDForm.php' );
+	YDInclude( 'YDCMComponent.php' );
+
+	// load master component modules
+	YDCMComponent::module( 'YDCMUsers' );
 
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
@@ -101,29 +105,22 @@
 			return $this->insert();
 		}
 
-/*
-		function deleteHelpdesk( $id ){
-		
-			$this->resetValues();
-			
-			$this->content_id = intval( $id );
-			
-			// delete all post that have this parent
-			$posts = new YDCMHelpdesk_posts();
-			$posts->deleteParent( $id );
-		
-		}
-		*/
     }
 
 
 
-    class YDCMHelpdesk_posts extends YDCMComponent {
+    class YDCMHelpdesk_posts extends YDDatabaseObject {
     
         function YDCMHelpdesk_posts() {
         
 			// init component
-            $this->YDCMComponent( 'YDCMHelpdesk_posts', false );
+            $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMHelpdesk_posts' );
 
 			// register Key
 			$this->registerKey( 'post_id', true );
@@ -132,23 +129,26 @@
 			$this->registerField( 'component_id' );
 			$this->registerField( 'user_id' );
 			$this->registerField( 'subject' );
-			$this->registerField( 'localization' );
 			$this->registerField( 'urgency_id' );
 			$this->registerField( 'state_id' );
 			$this->registerField( 'text' );
-			$this->registerField( 'created_in' );
-			$this->registerField( 'reported_in' );
-			$this->registerField( 'reported_by' );
-			$this->registerField( 'reported_to_in' );
-			$this->registerField( 'reported_to' );
-			$this->registerField( 'reported_to_local' );
+			$this->registerField( 'creation_user' );
+			$this->registerField( 'creation_date' );
+			$this->registerField( 'reported_by_user' );
+			$this->registerField( 'reported_by_type' );
+			$this->registerField( 'reported_by_local' );
+			$this->registerField( 'reported_by_date' );
+			$this->registerField( 'assignedto_user' );
+			$this->registerField( 'assignedto_type' );
+			$this->registerField( 'assignedto_local' );
+			$this->registerField( 'assignedto_date' );
 
 			// custom relation
             $rel = & $this->registerRelation( 'YDCMHelpdesk', false, 'YDCMHelpdesk' );
 			$rel->setLocalKey( 'component_id' );
             $rel->setForeignKey( 'component_id' );
 
-            $relUsers = & $this->registerRelation( 'YDCMUsers', false, 'YDCMUsers' );
+            $relUsers = & $this->registerRelation( 'users', false, 'YDCMUsers' );
 			$relUsers->setLocalKey( 'user_id' );
             $relUsers->setForeignKey( 'user_id' );
 
@@ -164,9 +164,16 @@
             $relState = & $this->registerRelation( 'YDCMHelpdesk_state', false, 'YDCMHelpdesk_state' );
 			$relState->setLocalKey( 'state_id' );
             $relState->setForeignKey( 'state_id' );
+
+            $relAss = & $this->registerRelation( 'YDCMHelpdesk_type', false, 'YDCMHelpdesk_type' );
+			$relAss->setLocalKey( 'reported_by_type' );
+            $relAss->setForeignKey( 'type_id' );
 		}
 
 
+        /**
+         *  This function returns a form for posts
+         */
 		function getFormPost(){
 		
 			// create a form for new posts
@@ -207,6 +214,13 @@
 		}
 
 
+        /**
+         *  This function adds a new post
+         *
+         *  @param $helpdesk_id  helpdesk id of this post
+         *  @param $user_id  User id
+         *  @param $values  Array of values
+         */
 		function addPost( $helpdesk_id, $user_id, $values ){
 		
 			$this->resetValues();
@@ -233,7 +247,12 @@
 			return $this->insert();
 		}
 		
-		
+
+        /**
+         *  This function just deletes a post given its id
+         *
+         *  @param $post_id  Post id to delete
+         */
 		function deletePost( $post_id ){
 		
 			$this->resetValues();
@@ -244,6 +263,11 @@
 		}
 
 
+        /**
+         *  This function deletes all posts of a helpdesk
+         *
+         *  @param $helpdesk_id  Helpdesk id
+         */
 		function deleteAll( $helpdesk_id ){
 		
 			$this->resetValues();
@@ -254,6 +278,11 @@
 		}
 
 
+        /**
+         *  This function deletes all posts using a parent id
+         *
+         *  @param $parent_id  parent id
+         */
 		function deleteParent( $parent_id ){
 		
 			$this->resetValues();
@@ -263,17 +292,55 @@
 			return $this->delete();
 		}
 
-		
+
+        /**
+         *  This function returns a special recordset with posts
+         *
+         *  @param $field_order  Field to sort
+         *  @param $field_order_direction  Sort direction
+         *  @param $field_page  Page to retrieve
+         */
+		function getRS( $field_order = 'creation_date', $field_order_direction = 'DESC', $field_page = 1 ){
+
+			// delete previous values
+			$this->resetValues();
+
+			// set current order
+			$this->order( $this->getTable() . '.' . $field_order . ' ' . $field_order_direction . ', creation_date DESC' );
+
+			// get only posts with state 1
+			$this->state_id = 1;
+
+			// get information of users too
+			$this->find( 'users' );
+
+			// define columns we want
+			$fields = array( 'post_id', 'subject', 'name', 'creation_date' );
+
+			// create a recordset
+			$recordset = new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', $fields, false, false, false, false ), $field_page, 9 );
+			$recordset->setFields( $fields );
+			$recordset->setCurrentField( $field_order );
+
+			return $recordset;
+		}
+
 	}
 
 
 
-    class YDCMHelpdesk_response extends YDCMComponent {
+    class YDCMHelpdesk_response extends YDDatabaseObject {
     
         function YDCMHelpdesk_response() {
         
 			// init component
-            $this->YDCMComponent( 'YDCMHelpdesk_response', false );
+            $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMHelpdesk_response' );
 
 			// register Key
 			$this->registerKey( 'response_id', true );
@@ -293,6 +360,7 @@
 			$relUsers->setLocalKey( 'user_id' );
             $relUsers->setForeignKey( 'user_id' );
 		}
+
 
 
 		function addResponse( $post_id, $user_id, $message ){
@@ -316,12 +384,18 @@
 
 
 
-    class YDCMHelpdesk_urgency extends YDCMComponent {
+    class YDCMHelpdesk_urgency extends YDDatabaseObject {
     
         function YDCMHelpdesk_urgency() {
         
 			// init component
-            $this->YDCMComponent( 'YDCMHelpdesk_urgency', false );
+            $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMHelpdesk_urgency' );
 
 			// register Key
 			$this->registerKey( 'urgency_id', true );
@@ -373,12 +447,18 @@
 
 
 
-    class YDCMHelpdesk_state extends YDCMComponent {
+    class YDCMHelpdesk_state extends YDDatabaseObject {
     
         function YDCMHelpdesk_state() {
         
 			// init component
-            $this->YDCMComponent( 'YDCMHelpdesk_state', false );
+            $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMHelpdesk_state' );
 
 			// register Key
 			$this->registerKey( 'state_id', true );
@@ -429,6 +509,30 @@
 
 
 
+
+    class YDCMHelpdesk_type extends YDDatabaseObject {
+    
+        function YDCMHelpdesk_type() {
+        
+			// init component
+            $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMHelpdesk_type' );
+
+			// register Key
+			$this->registerKey( 'type_id', true );
+
+			// register custom fields
+			$this->registerField( 'description' );
+						
+			// custom relations
+		}
+
+	}	
 
 
 ?>
