@@ -71,7 +71,7 @@
 		
 			YDInclude( 'YDForm.php' );
 
-			// init template and language object
+			// get template and language object
 			$templates = YDCMComponent::module( 'YDCMTemplates' );
 			$languages = YDCMComponent::module( 'YDCMLanguages' );
 
@@ -95,10 +95,10 @@
 	        $form->addElement( 'datetimeselect', 'published_date_end',   t('page_enddate'));
 	        $form->addElement( 'select',         'template_pack',        '',                       array(), $template_pack );
 	        $form->addElement( 'select',         'template',             t('page_template'),       array(), $templates->visitors_templates());
-	        $form->addElement( 'select',         'metatags',             t('page_metatags'),       array(), array(0 => t('no'), 1 => t('yes')));
-	        $form->addElement( 'textarea',       'description',          t('page_description'),    array('cols' => 50, 'rows' => 5) );
-	        $form->addElement( 'textarea',       'keywords',             t('page_keywords'),       array('cols' => 50, 'rows' => 5) );
-	        $form->addElement( 'select',         'searcheable',          t('page_search'),         array(), array(0 => t('no'), 1 => t('yes')) );
+	        $form->addElement( 'select',         'metatags',             t('page_metatags'),       array(), array( 0 => t('no'), 1 => t('yes') ) );
+	        $form->addElement( 'textarea',       'description',          t('page_description'),    array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'textarea',       'keywords',             t('page_keywords'),       array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'select',         'searcheable',          t('page_search'),         array(), array( 0 => t('no'), 1 => t('yes') ) );
 	        $form->addElement( 'hidden',         'content_id' );
 	        $form->addElement( 'hidden',         'parent_id' );
 	        $form->addElement( 'hidden',         'language_id' );
@@ -108,10 +108,24 @@
 			$form->setDefault( 'parent_id',   0 );
 			$form->setDefault( 'language_id', $languages->adminDefault() );
 
-			// TODO: add form rules
-			
-			// content_id .. integer
-			// language_id .. valid in possible languages
+			// add form rules
+			$form->addRule( 'reference',      'required',       t('reference_required') );
+			$form->addRule( 'reference',      'alphanumeric',   t('reference_alphanumeric') );
+			$form->addRule( 'reference',      'maxwords',       t('reference_maxwords'),  1 );
+			$form->addRule( 'reference',      'maxlength',      t('reference_maxlength'), 100 );
+			$form->addRule( 'title',          'required',       t('title_required') );
+			$form->addRule( 'title',          'maxlength',      t('title_maxlength'), 255 );
+			$form->addRule( 'content_id',     'required',       t('content_id_required') );
+			$form->addRule( 'content_id',     'numeric',        t('content_id_numeric') );
+			$form->addRule( 'parent_id',      'required',       t('parent_id_required') );
+			$form->addRule( 'parent_id',      'numeric',        t('parent_id_numeric') );
+			$form->addRule( 'html',           'maxlength',      t('html_maxlength'),  50000 );
+			$form->addRule( 'xhtml',          'maxlength',      t('xhtml_maxlength'), 50000 );
+			$form->addRule( 'template_pack',  'in_array',       t('template_pack_invalid'), array( 0, 1 ) );
+			$form->addRule( 'template',       'in_array',       t('template_invalid'),      array_keys( $templates->visitors_templates() ) );
+			$form->addRule( 'metatags',       'in_array',       t('metatags_invalid'),      array( 0, 1 ) );
+			$form->addRule( 'description',    'maxlength',      t('description_maxlength'), 2000 );
+			$form->addRule( 'keywords',       'maxlength',      t('keywords_maxlength'),    2000 );
 
 			return $form;
 		}
