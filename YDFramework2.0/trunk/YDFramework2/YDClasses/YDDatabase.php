@@ -458,9 +458,13 @@
 
         /**
          *  Set current field name
+         *
+         *  @param $field          Field name of sort
+         *  @param $sortdirection  Sort direction
          */
-        function setCurrentField( $field ) {
-            return $this->gr_currentField = $field;
+        function setCurrentField( $field, $sortdirection ) {
+            $this->gr_currentField = $field;
+			$this->sortdirection   = $sortdirection;
         }
 
 
@@ -473,11 +477,14 @@
 
 
         /**
-         *  Set sort direction
+         *  Get sort direction
+         *
+         *  @param $reverse    (optional) Boolean if we want a reverse direction
+         *
          */
         function getSortdirection( $reverse = false ) {
 
-			if ( $reverse ) return ( $this->sortdirection == 'ASC' ? 'DESC' : 'ASC' ) ;
+			if ( $reverse ) return ( strtoupper( $this->sortdirection ) == 'ASC' ? 'DESC' : 'ASC' );
 
 			return $this->sortdirection;
         }

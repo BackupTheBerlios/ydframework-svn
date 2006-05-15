@@ -320,7 +320,7 @@
 			// create a recordset
 			$recordset = new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', $fields, false, false, false, false ), $field_page, 9 );
 			$recordset->setFields( $fields );
-			$recordset->setCurrentField( $field_order );
+			$recordset->setCurrentField( $field_order, $field_order_direction );
 
 			return $recordset;
 		}

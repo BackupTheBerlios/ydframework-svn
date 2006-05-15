@@ -1,4 +1,4 @@
-<table width="100%"  border="0">
+<table width="100%" border="0">
   <tr>
     <td align="right">
 	<span class="field_previous" onClick="ticketReload('{$recordset->getCurrentField()}', '{$recordset->getSortdirection()}', '{$recordset->pagePrevious}');">{t w="previous"}</span>
