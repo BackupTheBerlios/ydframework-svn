@@ -439,7 +439,52 @@
             return $this->set;
         }
 
+
+        /**
+         *  Sets fields names
+         */
+        function setFields( $fields ) {
+            return $this->gr_fields = $fields;
+        }
+
+
+        /**
+         *  Gets fields names
+         */
+        function getFields() {
+            return ( isset( $this->gr_fields ) ? $this->gr_fields : array() );
+        }
+
+
+        /**
+         *  Set current field name
+         */
+        function setCurrentField( $field ) {
+            return $this->gr_currentField = $field;
+        }
+
+
+        /**
+         *  Get current field name
+         */
+        function getCurrentField() {
+            return ( isset( $this->gr_currentField ) ? $this->gr_currentField : array() );
+        }
+
+
+        /**
+         *  Set sort direction
+         */
+        function getSortdirection( $reverse = false ) {
+
+			if ( $reverse ) return ( $this->sortdirection == 'ASC' ? 'DESC' : 'ASC' ) ;
+
+			return $this->sortdirection;
+        }
+
+
     }
+
 
     /**
      *  This class defines a database object.

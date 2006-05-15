@@ -123,6 +123,8 @@
             $this->registerElement( 'div', 'YDFormElement_Div', 'YDFormElement_Div.php' );
             $this->registerElement( 'autocompleter', 'YDFormElement_Autocompleter', 'YDFormElement_Autocompleter.php' );
             $this->registerElement( 'switchmenu', 'YDFormElement_SwitchMenu', 'YDFormElement_SwitchMenu.php' );
+            $this->registerElement( 'grid', 'YDFormElement_Grid', 'YDFormElement_Grid.php' );
+
 
             // Add the rules
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
