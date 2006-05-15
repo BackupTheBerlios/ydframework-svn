@@ -605,7 +605,8 @@
         function getStatsBrowser() {
             $browsers = array(
                 'ie' => 'Internet Explorer', 'mozilla' => 'Netscape/Mozilla', 'safari' => 'Apple Safari',
-                'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'), 'unknown' => t('other')
+                'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'), 'unknown' => t('other'),
+                'rss reader' => 'RSS Reader'
             );
             $browserStats = $this->db->getRecords(
                 'SELECT browser, SUM(hits) AS hits FROM #_statistics GROUP BY browser ORDER BY hits DESC'

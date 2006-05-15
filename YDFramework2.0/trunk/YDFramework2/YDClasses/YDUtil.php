@@ -822,7 +822,10 @@
                 $this->agent = $_SERVER['HTTP_USER_AGENT'];
 
                 // Determine the browser name
-                if ( preg_match( '/MSIE ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
+                if ( substr( strtolower( $this->agent ), 0, 10 ) == 'rss reader' ) {
+                    $this->version = '';
+                    $this->browser = 'rss reader';
+                } elseif ( preg_match( '/MSIE ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
                     $this->version = $ver[1];
                     $this->browser = 'ie';
                 } elseif ( preg_match( '/Safari\/([0-9]+)/', $this->agent, $ver ) ) {
