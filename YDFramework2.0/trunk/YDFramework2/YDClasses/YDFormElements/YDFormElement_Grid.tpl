@@ -17,11 +17,13 @@
         <table width="100%" border="0">
 
             <tr class="rowHeader">
-                {foreach from=$recordset->getFields() item="field"}
-					{if ($field != $recordset->getCurrentField())}
-	                    <td height="24" align="right" class="fieldHeader" onClick="ticketReload('{$field}', '{$recordset->getSortdirection(true)}', '{$recordset->page}');">{t w=$field}&nbsp;</td>
+                {foreach from=$recordset->getFields() item="field" key="key"}
+					{if ($field.sortable == false)}
+	                    <td height="24" align="right" class="fieldHeader_off">{t w=$key}&nbsp;</td>
+					{elseif ($key != $recordset->getCurrentField())}
+	                    <td height="24" align="right" class="fieldHeader" onClick="ticketReload('{$key}', '{$recordset->getSortdirection(true)}', '{$recordset->page}');">{t w=$key}&nbsp;</td>
 					{else}
-	                    <td height="24" align="right" class="fieldHeader_order" onClick="ticketReload('{$field}', '{$recordset->getSortdirection(true)}', '{$recordset->page}');">{t w=$field}&nbsp;</td>
+	                    <td height="24" align="right" class="fieldHeader_order" onClick="ticketReload('{$key}', '{$recordset->getSortdirection(true)}', '{$recordset->page}');">{t w=$key}&nbsp;</td>
 					{/if}
                 {/foreach}
             </tr>
@@ -36,3 +38,11 @@
         {/foreach}
 
 </table>
+        <table width="100%"  border="0">
+          <tr>
+            <td align="right" class="field_total">&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="right" class="field_total">{t w="total"}: {$recordset->totalRows}&nbsp;&nbsp;</td>
+          </tr>
+        </table>

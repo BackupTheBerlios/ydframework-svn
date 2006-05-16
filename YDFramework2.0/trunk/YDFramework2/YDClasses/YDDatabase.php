@@ -442,6 +442,8 @@
 
         /**
          *  Sets fields names
+         *
+         *  @param $field          Field name of sort
          */
         function setFields( $fields ) {
             return $this->gr_fields = $fields;
