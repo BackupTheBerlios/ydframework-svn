@@ -15,9 +15,12 @@
             // Initialize the parent
             $this->YDWeblogRequest();
 
-            // Log the request
-            $this->_logRequest();
+        }
 
+        // Function to output the feed
+        function outputXml( $type ) {
+            $this->feed->outputXml( $type );
+            $this->_logRequest();
         }
 
         // Default action
@@ -28,37 +31,37 @@
         // RSS action
         function actionRss() {
             $this->initMainFeed();
-            $this->feed->outputXml( 'RSS2.0' );
+            $this->outputXml( 'RSS2.0' );
         }
 
         // ATOM action
         function actionAtom() {
             $this->initMainFeed();
-            $this->feed->outputXml( 'ATOM' );
+            $this->outputXml( 'ATOM' );
         }
 
         // RSS / Comments action
         function actionRssComments() {
             $this->initCommentsFeed();
-            $this->feed->outputXml( 'RSS2.0' );
+            $this->outputXml( 'RSS2.0' );
         }
 
         // ATOM / Comments action
         function actionAtomComments() {
             $this->initCommentsFeed();
-            $this->feed->outputXml( 'ATOM' );
+            $this->outputXml( 'ATOM' );
         }
 
         // RSS / Gallery action
         function actionRssGallery() {
             $this->initGalleryFeed();
-            $this->feed->outputXml( 'RSS2.0' );
+            $this->outputXml( 'RSS2.0' );
         }
 
         // ATOM / Gallery action
         function actionAtomGallery() {
             $this->initGalleryFeed();
-            $this->feed->outputXml( 'ATOM' );
+            $this->outputXml( 'ATOM' );
         }
 
         // Function to init the main feed
