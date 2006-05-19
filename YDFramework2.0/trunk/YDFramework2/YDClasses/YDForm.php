@@ -178,7 +178,7 @@
 
             // Clean the action URL
             $url = new YDUrl( $this->_action );
-            $this->_action = $url->getUrl();
+            $this->_action = $url->getUri();
 
         }
 
