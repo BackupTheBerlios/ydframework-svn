@@ -18,6 +18,14 @@
         #header     {literal}{{/literal} margin: 0 !important; margin: 0 0 0 1px; padding: 1px; height: 198px; width: 758px;    {literal}}{/literal}
         #headerimg  {literal}{{/literal} margin: 7px 9px 0; height: 192px; width: 740px;                                        {literal}}{/literal}
         .bbtextarea {literal}{{/literal} width: 650px; height: 160px;                                                           {literal}}{/literal}
+        .printonly  {literal}{{/literal} display: none; {literal}}{/literal}
+        .screenonly {literal}{{/literal} display: inline; {literal}}{/literal}
+    </style>
+
+    <style type="text/css" media="print">
+        #sidebar    {literal}{{/literal} display: none;  {literal}}{/literal}
+        .printonly  {literal}{{/literal} display: inline; {literal}}{/literal}
+        .screenonly {literal}{{/literal} display: none; {literal}}{/literal}
     </style>
 
     <link rel="alternate" type="application/rss+xml"  title="RSS 2.0"  href="{$weblog_link_rss}"  />
@@ -47,6 +55,9 @@
                 <h1><a href="{$weblog_link}" title="{$weblog_title}">{$weblog_title}</a></h1>
                 <div class="description">
                     {if $weblog_description}{$weblog_description}{else}{t w="another_powered_by"}{/if}
+                </div>
+                <div class="printonly">
+                    <p><a href="{$weblog_current_url}">{$weblog_current_url}</a></p>
                 </div>
             </div>
         </div>

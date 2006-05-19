@@ -3,13 +3,15 @@
 <div id="content" class="narrowcolumn">
 
     {if $item.older_id or $item.newer_id}
-        <div class="navigation">
-            {if $item.older_id}
-                <div class="alignleft">&laquo; <a href="{$item.older_id|link_item}">{t w="older_post"}</a></div>
-            {/if}
-            {if $item.newer_id}
-                <div class="alignright"><a href="{$item.newer_id|link_item}">{t w="newer_post"}</a> &raquo;</div>
-            {/if}
+        <div class="screenonly">
+            <div class="navigation">
+                {if $item.older_id}
+                    <div class="alignleft">&laquo; <a href="{$item.older_id|link_item}">{t w="older_post"}</a></div>
+                {/if}
+                {if $item.newer_id}
+                    <div class="alignright"><a href="{$item.newer_id|link_item}">{t w="newer_post"}</a> &raquo;</div>
+                {/if}
+            </div>
         </div>
     {/if}
 
