@@ -806,59 +806,63 @@
             // Initialize YDBase
             $this->YDBase();
 
+            // The matching list for browsers
+            $browsers = array(
+                'bot'       => array( 'bot', 'Yahoo! Slurp', 'crawler' ),
+                'opera'     => array( 'opera' ),
+                'ie'        => array( 'msie' ),
+                'safari'    => array( 'safari' ),
+                'konqueror' => array( 'Konqueror' ),
+                'feed'      => array( 'feed', 'rss', 'synd', 'bloglines', 'newsgator' ),
+                'mozilla'   => array( 'mozilla', 'firefox' ),
+            );
+
+            // The matching list for platforms
+            $platforms = array(
+                'win'       => array( 'win' ),
+                'mac'       => array( 'mac', 'apple' ),
+                'linux'     => array( 'linux', 'bsd' ),
+                'unix'      => array( 'unix', 'sun', 'risc', 'aix' ),
+                'bot'       => array( 'bot', 'Yahoo! Slurp', 'crawler' ),
+                'feed'      => array( 'feed', 'rss', 'synd', 'bloglines', 'newsgator' ),
+            );
+
+            // Mark everything as unknown
+            $this->agent = 'unknown';
+            $this->browser = 'unknown';
+            $this->platform = 'unknown';
+            $this->dotnet = 'unknown';
+
             // Check if the user agent was specified
-            if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
-
-                // Mark everything as unknown
-                $this->agent = 'unknown';
-                $this->browser = 'unknown';
-                $this->version = 'unknown';
-                $this->platform = 'unknown';
-                $this->dotnet = 'unknown';
-
-            } else {
+            if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 
                 // Get the user agent
                 $this->agent = $_SERVER['HTTP_USER_AGENT'];
 
-                // Determine the browser name
-                if ( substr( strtolower( $this->agent ), 0, 10 ) == 'rss reader' ) {
-                    $this->version = '';
-                    $this->browser = 'rss reader';
-                } elseif ( preg_match( '/MSIE ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
-                    $this->version = $ver[1];
-                    $this->browser = 'ie';
-                } elseif ( preg_match( '/Safari\/([0-9]+)/', $this->agent, $ver ) ) {
-                    $this->version = '1.0b' . $ver[1];
-                    $this->browser = 'safari';
-                } elseif ( preg_match( '/Opera ([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
-                    $this->version = $ver[1];
-                    $this->browser = 'opera';
-                } elseif ( preg_match( '/Opera\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
-                    $this->version = $ver[1];
-                    $this->browser = 'opera';
-                } elseif ( preg_match( '/Firefox\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
-                    $this->version = $ver[1];
-                    $this->browser = 'firefox';
-                } elseif ( preg_match( '/Mozilla\/([0-9].[0-9]{1,2})/', $this->agent, $ver ) ) {
-                    $this->version = $ver[1];
-                    $this->browser = 'mozilla';
-                } else {
-                    $this->version = 0;
-                    $this->browser = 'other';
+                // Get the browser name
+                foreach ( $browsers as $browser => $browserpatterns ) {
+                    foreach ( $browserpatterns as $browserpattern ) {
+                        if ( stristr( $this->agent, $browserpattern ) ) {
+                            $this->browser = $browser;
+                            continue;
+                        }
+                    }
+                    if ( $this->browser != 'unknown' ) {
+                        break;
+                    }
                 }
 
-                // Determine the platform
-                if ( stristr( $this->agent,'Win' ) ) {
-                    $this->platform = 'win';
-                } elseif ( stristr( $this->agent,'Mac' ) ) {
-                    $this->platform = 'mac';
-                } elseif ( stristr( $this->agent,'Linux' ) ) {
-                    $this->platform = 'linux';
-                } elseif ( stristr( $this->agent,'Unix' ) ) {
-                    $this->platform = 'unix';
-                } else {
-                    $this->platform = 'other';
+                // Get the browser name
+                foreach ( $platforms as $platform => $platformpatterns ) {
+                    foreach ( $platformpatterns as $platformpattern ) {
+                        if ( stristr( $this->agent, $platformpattern ) ) {
+                            $this->platform = $platform;
+                            continue;
+                        }
+                    }
+                    if ( $this->platform != 'unknown' ) {
+                        break;
+                    }
                 }
 
                 // Get the .NET runtime version

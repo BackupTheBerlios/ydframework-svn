@@ -27,6 +27,7 @@ $GLOBALS['t']['err_general'] = 'Er is een probleem';
 $GLOBALS['t']['back'] = 'Ga terug';
 $GLOBALS['t']['yes'] = 'ja';
 $GLOBALS['t']['no'] = 'nee';
+$GLOBALS['t']['confirm_action'] = 'Bent u zeker dat u de volgende actie wil uitvoeren?';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';
@@ -168,9 +169,13 @@ $GLOBALS['t']['installed_since'] = 'Ge&iuml;nstalleerd sinds';
 $GLOBALS['t']['num_days_online'] = 'Aantal dagen online';
 $GLOBALS['t']['days'] = 'dag(en)';
 $GLOBALS['t']['hits'] = 'hit(s)';
+$GLOBALS['t']['no_bots'] = ' (zonder automatic bots)';
 $GLOBALS['t']['total_hits'] = 'Totaal aantal hits';
+$GLOBALS['t']['total_hits_no_bots'] = $GLOBALS['t']['total_hits'] . $GLOBALS['t']['no_bots'];
 $GLOBALS['t']['avg_hits_per_day'] = 'Gemiddeld aantal hits per dag';
+$GLOBALS['t']['avg_hits_per_day_no_bots'] = $GLOBALS['t']['avg_hits_per_day'] . $GLOBALS['t']['no_bots'];
 $GLOBALS['t']['hits_last_6_months'] = 'Hits van de laatste 6 maanden';
+$GLOBALS['t']['total_average_stats'] = 'Totalen en gemiddelden';
 $GLOBALS['t']['all_months'] = 'Alle maanden';
 $GLOBALS['t']['hits_last_7_days'] = 'Hits laatste 7 dagen';
 $GLOBALS['t']['all_days'] = 'Alle dagen';
@@ -185,6 +190,7 @@ $GLOBALS['t']['totalcomments'] = 'Totaal aantal commentaren';
 $GLOBALS['t']['items'] = 'item(s)';
 $GLOBALS['t']['top_10_commenters'] = 'De 10 meest actieve commentators';
 $GLOBALS['t']['all_commenters'] = 'Alle commentators';
+$GLOBALS['t']['reset_stats'] = 'Reset alle statistieken';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Email adres';

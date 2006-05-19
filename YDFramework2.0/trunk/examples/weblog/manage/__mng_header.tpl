@@ -9,8 +9,12 @@
     <script language="JavaScript">
     <!--
 
-        {literal}function YDConfirmDelete( img ) {{/literal}
-            return confirm( '{t w="confirm_delete"}\n\n"' + img + '"?');
+        {literal}function YDConfirmDelete( name ) {{/literal}
+            return confirm( '{t w="confirm_delete"}\n\n"' + name + '"?');
+        {literal}}{/literal}
+
+        {literal}function YDConfirmAction( name ) {{/literal}
+            return confirm( '{t w="confirm_action"}\n\n"' + name + '"' );
         {literal}}{/literal}
 
         {literal}function YDRowMouseOver( obj ) {{/literal}

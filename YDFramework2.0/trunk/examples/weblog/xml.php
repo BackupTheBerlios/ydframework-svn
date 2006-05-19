@@ -12,9 +12,6 @@
         // Class constructor
         function xml() {
 
-            // Fix up the user agent (to make sure RSS Readers show up in the user agents)
-            $_SERVER['HTTP_USER_AGENT'] = 'RSS Reader ' . $_SERVER['HTTP_USER_AGENT'];
-
             // Initialize the parent
             $this->YDWeblogRequest();
 

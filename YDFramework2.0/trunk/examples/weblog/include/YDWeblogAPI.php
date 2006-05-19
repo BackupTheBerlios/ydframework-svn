@@ -555,10 +555,20 @@
         // Get the total num of hits
         function getTotalHits() {
             $result = $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics' );
-            if ( empty( $result ) ) {
-                $result = 0;
-            }
-            return $result;
+            return empty( $result ) ? 0 : $result;
+        }
+
+        // Get the total num of hits without the bots
+        function getTotalHitsNoBots() {
+            $result = $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics WHERE browser != \'bot\'' );
+            return empty( $result ) ? 0 : $result;
+        }
+
+        // Reset the statistics
+        function resetStats() {
+            $this->db->executeSql( 'truncate #_statistics' );
+            $this->db->executeSql( 'truncate #_statistics_init' );
+            $this->db->executeInsert( '#_statistics_init', array( 'created' => $this->db->getDate( '__NOW__' ) ) );
         }
 
         // Get the number of items
@@ -608,9 +618,14 @@
         // Get the browser statistics
         function getStatsBrowser() {
             $browsers = array(
-                'ie' => 'Internet Explorer', 'mozilla' => 'Netscape/Mozilla', 'safari' => 'Apple Safari',
-                'opera' => 'Opera', 'firefox' => 'FireFox', 'other' => t('other'), 'unknown' => t('other'),
-                'rss reader' => 'RSS Reader'
+                'bot'       => 'Automatic Bots',
+                'opera'     => 'Opera',
+                'ie'        => 'Internet Explorer',
+                'safari'    => 'Apple Safari',
+                'konqueror' => 'Konqueror',
+                'feed'      => 'RSS Reader',
+                'mozilla'   => 'Netscape/Mozilla/FireFox',
+                'unknown'   => t('other'),
             );
             $browserStats = $this->db->getRecords(
                 'SELECT browser, SUM(hits) AS hits FROM #_statistics GROUP BY browser ORDER BY hits DESC'
@@ -626,7 +641,13 @@
         // Get the OS statistics
         function getStatsOs() {
             $platforms = array(
-                'win' => 'Windows', 'mac' => 'Macintosh', 'linux' => 'Linux', 'unix' => 'Unix', 'other' => 'Other', 'unknown' => t('other')
+                'win'       => 'Microsoft Windows',
+                'mac'       => 'Apple Macintosh',
+                'linux'     => 'Linux',
+                'unix'      => 'Unix',
+                'bot'       => 'Automatic Bots',
+                'feed'      => 'RSS Reader',
+                'unknown'   => t('other'),
             );
             $osStats = $this->db->getRecords(
                 'SELECT platform, SUM(hits) AS hits FROM #_statistics GROUP BY platform ORDER BY hits DESC'

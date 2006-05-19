@@ -6,7 +6,11 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="general_stats"}</th>
+            <th class="adminRowLG">&raquo; {t w="general_stats"}</th>
+            <th colspan="2" class="adminRowLGR">
+                <a href="{$YD_SELF_SCRIPT}?do=reset"
+                 onClick="return YDConfirmAction( '{t w="reset_stats"}' );"><b>{t w="reset_stats"}</b></a>
+            </th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL" width="350">{t w="installed_since"}</td>
@@ -24,17 +28,29 @@
             <td class="adminRowL">{t w="totalComments"}</td>
             <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
         </tr>
+    </table>
+
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="total_average_stats"}</th>
+        </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="total_hits"}</td>
             <td class="adminRowL" colspan="2">{$totalHits} {t w="hits"}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="total_hits_no_bots"}</td>
+            <td class="adminRowL" colspan="2">{$totalHitsNoBots} {t w="hits"}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="avg_hits_per_day"}</td>
             <td class="adminRowL" colspan="2">{$avg_hitsaday} {t w="hits"}</td>
         </tr>
-    </table>
-
-    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="avg_hits_per_day_no_bots"}</td>
+            <td class="adminRowL" colspan="2">{$avg_hitsadayNoBots} {t w="hits"}</td>
+        </tr>
 
         <tr><td colspan="3">&nbsp;</td></tr>
         <tr>

@@ -20,6 +20,13 @@
                 "update #_statistics set uri = concat( 'item', uri ) where uri like '.php?id=%'"
             );
 
+            // Merge the other and unknown values
+            $this->weblog->db->executeSql( "update #_statistics set browser = 'unknown' where browser = 'other'" );
+            $this->weblog->db->executeSql( "update #_statistics set browser = 'bot' where browser = 'search'" );
+            $this->weblog->db->executeSql( "update #_statistics set browser = 'feed' where browser = 'rss reader'" );
+            $this->weblog->db->executeSql( "update #_statistics set browser = 'mozilla' where browser = 'firefox'" );
+            $this->weblog->db->executeSql( "update #_statistics set platform = 'unknown' where platform = 'other'" );
+
         }
 
         // Special template function to draw a graph
@@ -45,20 +52,24 @@
         function actionDefault() {
 
             // Get the install date
-            $installDate   = $this->weblog->getInstallDate();
-            $daysOnline    = round( ( time() - $installDate ) / 86400 );
-            $totalHits     = $this->weblog->getTotalHits();
-            $avg_hitsaday  = @ intval( $totalHits / $daysOnline );
-            $totalItems    = $this->weblog->getStatsItemCount();
-            $totalComments = $this->weblog->getStatsCommentCount();
+            $installDate        = $this->weblog->getInstallDate();
+            $daysOnline         = round( ( time() - $installDate ) / 86400 );
+            $totalHits          = $this->weblog->getTotalHits();
+            $totalHitsNoBots    = $this->weblog->getTotalHitsNoBots();
+            $avg_hitsaday       = @ intval( $totalHits / $daysOnline );
+            $avg_hitsadayNoBots = @ intval( $totalHitsNoBots / $daysOnline );
+            $totalItems         = $this->weblog->getStatsItemCount();
+            $totalComments      = $this->weblog->getStatsCommentCount();
 
             // Assign these to the template
-            $this->tpl->assign( 'installDate',   $installDate );
-            $this->tpl->assign( 'daysOnline',    $daysOnline );
-            $this->tpl->assign( 'totalHits',     $totalHits );
-            $this->tpl->assign( 'avg_hitsaday',  $avg_hitsaday );
-            $this->tpl->assign( 'totalItems',    $totalItems );
-            $this->tpl->assign( 'totalComments', $totalComments );
+            $this->tpl->assign( 'installDate',        $installDate );
+            $this->tpl->assign( 'daysOnline',         $daysOnline );
+            $this->tpl->assign( 'totalHits',          $totalHits );
+            $this->tpl->assign( 'totalHitsNoBots',    $totalHitsNoBots );
+            $this->tpl->assign( 'avg_hitsaday',       $avg_hitsaday );
+            $this->tpl->assign( 'avg_hitsadayNoBots', $avg_hitsadayNoBots );
+            $this->tpl->assign( 'totalItems',         $totalItems );
+            $this->tpl->assign( 'totalComments',      $totalComments );
 
             // Get the list of the last 6 months
             $last6Months  = $this->weblog->getStatsMonths();
@@ -127,6 +138,12 @@
             // Display the template
             $this->display();
 
+        }
+
+        // Reset the statistics
+        function actionReset() {
+            $this->weblog->resetStats();
+            $this->redirectToAction();
         }
 
         // Function to calculate the width of the graph elements

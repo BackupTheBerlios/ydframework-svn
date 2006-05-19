@@ -27,6 +27,7 @@ $GLOBALS['t']['err_general'] = 'An error occured';
 $GLOBALS['t']['back'] = 'Go back';
 $GLOBALS['t']['yes'] = 'yes';
 $GLOBALS['t']['no'] = 'no';
+$GLOBALS['t']['confirm_action'] = 'Are you sure you want to perform the following action?';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';
@@ -168,8 +169,12 @@ $GLOBALS['t']['installed_since'] = 'Installed since';
 $GLOBALS['t']['num_days_online'] = 'Number of days online';
 $GLOBALS['t']['days'] = 'day(s)';
 $GLOBALS['t']['hits'] = 'hit(s)';
+$GLOBALS['t']['no_bots'] = ' (without automatic bots)';
 $GLOBALS['t']['total_hits'] = 'Total number of hits';
+$GLOBALS['t']['total_hits_no_bots'] = $GLOBALS['t']['total_hits'] . $GLOBALS['t']['no_bots'];
 $GLOBALS['t']['avg_hits_per_day'] = 'Average number of hits per day';
+$GLOBALS['t']['avg_hits_per_day_no_bots'] = $GLOBALS['t']['avg_hits_per_day'] . $GLOBALS['t']['no_bots'];
+$GLOBALS['t']['total_average_stats'] = 'Totals and averages';
 $GLOBALS['t']['hits_last_6_months'] = 'Hits last 6 months';
 $GLOBALS['t']['all_months'] = 'All months';
 $GLOBALS['t']['hits_last_7_days'] = 'Hits last 7 days';
@@ -185,6 +190,7 @@ $GLOBALS['t']['totalcomments'] = 'Total number of comments';
 $GLOBALS['t']['items'] = 'item(s)';
 $GLOBALS['t']['top_10_commenters'] = 'The 10 most active commenters';
 $GLOBALS['t']['all_commenters'] = 'All commenters';
+$GLOBALS['t']['reset_stats'] = 'Reset all statistics';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Email address';

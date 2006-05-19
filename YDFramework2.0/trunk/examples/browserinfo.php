@@ -21,7 +21,6 @@
             $browser = new YDBrowserInfo();
             YDDebugUtil::dump( $browser->agent, 'Agent' );
             YDDebugUtil::dump( $browser->browser, 'Browser name' );
-            YDDebugUtil::dump( $browser->version, 'Version' );
             YDDebugUtil::dump( $browser->platform, 'Platform' );
             YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
             YDDebugUtil::dump( $browser->getBrowserLanguages(), 'Languages supported by the browser' );
