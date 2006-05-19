@@ -33,6 +33,7 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php');
+    include_once( YD_DIR_HOME_CLS . '/YDUrl.php');
 
     /**
      *  This class defines an object oriented HTML form.
