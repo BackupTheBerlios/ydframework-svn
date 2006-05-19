@@ -176,6 +176,10 @@
             $this->registerRenderer( 'html', 'YDFormRenderer_html', 'YDFormRenderer_html.php' );
             $this->registerRenderer( 'xml', 'YDFormRenderer_xml', 'YDFormRenderer_xml.php' );
 
+            // Clean the action URL
+            $url = new YDUrl( $this->_action );
+            $this->_action = $url->getUrl();
+
         }
 
         /**
