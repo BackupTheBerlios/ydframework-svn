@@ -23,7 +23,7 @@
             // Get the general PHP info
             ob_start();
             phpinfo( INFO_GENERAL );
-            $phpInfo .= ob_get_contents();
+            $phpInfo = ob_get_contents();
             ob_end_clean();
 
             // Get the right part
