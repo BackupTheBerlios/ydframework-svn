@@ -28,6 +28,8 @@ $GLOBALS['t']['back'] = 'Go back';
 $GLOBALS['t']['yes'] = 'yes';
 $GLOBALS['t']['no'] = 'no';
 $GLOBALS['t']['confirm_action'] = 'Are you sure you want to perform the following action?';
+$GLOBALS['t']['rows'] = 'row(s)';
+$GLOBALS['t']['tables'] = 'Tables';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Just another weblog powered by the ' . YD_FW_NAME . '!';
