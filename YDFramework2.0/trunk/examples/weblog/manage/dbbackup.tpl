@@ -17,6 +17,24 @@
     </table></p>
 {/if}
 
+<table width="700" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <th class="adminRowLG" colspan="3">&raquo; {t w="tables"}</th>
+    </tr>
+    {foreach from=$tables item="table"}
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{$table.name}</td>
+            <td class="adminRowR" width="200">{$table.size|fmtfilesize}</td>
+            <td class="adminRowR" width="200">{$table.rows} {t w="rows"}</td>
+        </tr>
+    {/foreach}
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+        <td class="adminRowLNB"></td>
+        <td class="adminRowRNB" align="right" width="200">{$tables_size|fmtfilesize}</td>
+        <td class="adminRowLNB"></td>
+    </tr>
+</table>
+
 {$form.tag}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr>

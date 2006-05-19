@@ -20,6 +20,19 @@
         // Default action
         function actionDefault() {
 
+            // Get the table statistics
+            $tables_size = 0;
+            $tables = $this->weblog->db->getRecords( 'SHOW TABLE STATUS' );
+            foreach ( $tables as $key=>$table ) {
+                $tables[$key] = array();
+                $tables[$key]['name'] = $table['name'];
+                $tables[$key]['rows'] = intval( $table['rows'] );
+                $tables[$key]['size'] = intval( $table['data_length'] ) + intval( $table['index_length'] );
+                $tables_size = $tables_size + $tables[$key]['size'];
+            }
+            $this->tpl->assign( 'tables', $tables );
+            $this->tpl->assign( 'tables_size', $tables_size );
+
             // The backup types we have
             $bck_types = array(
                 0 => t( 'bck_full' ) . '<br/>',
