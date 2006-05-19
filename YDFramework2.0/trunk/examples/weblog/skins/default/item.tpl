@@ -78,6 +78,22 @@
 
     </div>
 
+    <a name="related"></a>
+    {if $related_items}
+        <h3>{t w="related_items"} &#8220;{$item.title}&#8221;</h3>
+        <ul>
+            {foreach from=$related_items item="rel_item"}
+                <li>
+                    {$rel_item.created|date:'%d %B %Y'|lower}:
+                    <a href="{$rel_item|@link_item}">{$rel_item.title}</a>
+                    {if $rel_item.num_comments != '0' or $rel_item.num_images != '0'}
+                        <span class="postmetadata">({$rel_item|@text_num_images:false}{if $rel_item.num_comments != '0' and $rel_item.num_images != '0'}, {/if}{$rel_item|@text_num_comments:false})</span>
+                    {/if}
+                </li>
+            {/foreach}
+        </ul>
+    {/if}
+
     <a name="comment"></a>
     {if $comments}
         <h3>{$item|@text_num_comments:true} {t w="to"} &#8220;{$item.title}&#8221;</h3>

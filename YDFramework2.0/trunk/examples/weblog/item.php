@@ -30,6 +30,9 @@
             $item  = @ $this->weblog->getPublicItemById( $id );
             $this->redirectIfMissing( $item );
 
+            // Get the related items
+            $related_items = $this->weblog->getRelatedItemsByItem( YDConfig::get( 'weblog_entries_fp', 5 ), $item );
+
             // Convert the list of images to a table of 3 columns
             $item['images_as_table'] = YDArrayUtil::convertToTable( $item['images'], 3, true );
 
@@ -38,6 +41,7 @@
 
             // Add them to the template
             $this->tpl->assign( 'item', $item );
+            $this->tpl->assign( 'related_items', $related_items );
             $this->tpl->assign( 'comments', $comments );
 
             // Only if comments are allowed

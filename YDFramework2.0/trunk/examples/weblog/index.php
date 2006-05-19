@@ -28,7 +28,7 @@
 
             // Get the weblog items and 5 older items
             $items     = $this->weblog->getPublicItems( YDConfig::get( 'weblog_entries_fp', 5 ) );
-            $old_items = $this->weblog->getPublicItems( 5, sizeof( $items ) );
+            $old_items = $this->weblog->getPublicItems( YDConfig::get( 'weblog_entries_fp', 5 ), sizeof( $items ) );
 
             // Assign them to the template
             $this->tpl->assign( 'items',     $items );

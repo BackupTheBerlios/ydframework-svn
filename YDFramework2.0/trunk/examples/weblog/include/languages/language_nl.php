@@ -30,6 +30,7 @@ $GLOBALS['t']['no'] = 'nee';
 $GLOBALS['t']['confirm_action'] = 'Bent u zeker dat u de volgende actie wil uitvoeren?';
 $GLOBALS['t']['rows'] = 'rij(en)';
 $GLOBALS['t']['tables'] = 'Tabellen';
+$GLOBALS['t']['related_items'] = 'Gerelateerde items aan';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Weer een weblog aangedreven door het ' . YD_FW_NAME . '!';

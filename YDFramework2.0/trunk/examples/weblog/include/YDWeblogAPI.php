@@ -319,6 +319,39 @@
             return $this->_fixItems( $this->db->getRecords( $sql, $limit, $offset ) );
         }
 
+        // Get related items
+        function getRelatedItemsByItem( $limit, $item ) {
+
+            // Get the items from the same category
+            $items = $this->getItems(
+                -1, -1, 'created desc, title', 'AND is_draft = 0 AND i.category_id = '
+              . $this->str( $item['category_id'] ) . ' and i.id <> ' . $this->str( $item['id'] )
+            );
+
+            // Shuffle the items
+            shuffle( $items );
+
+            // Get the right rows
+            $items = array_slice( $items, 0, $limit );
+
+            // Sort them by date
+            $sorted = array();
+            foreach ( $items as $key=>$item ) {
+                $sorted[ $key ] = intval( $item['created'] );
+            }
+            sort( $sorted );
+
+            // Rearrange the array
+            $sorted_items = array();
+            foreach ( $sorted as $key=>$date ) {
+                array_push( $sorted_items, $items[ $key ] );
+            }
+
+            // Return the items
+            return array_values( $sorted_items );
+
+        }
+
         // Get a publc item by it's ID
         function getPublicItemByID( $item_id ) {
             return $this->getItem( 'AND is_draft = 0 AND i.id = ' . $this->str( $item_id ) );
