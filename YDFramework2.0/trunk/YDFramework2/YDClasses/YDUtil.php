@@ -808,7 +808,7 @@
 
             // The matching list for browsers
             $browsers = array(
-                'bot'       => array( 'bot', 'Yahoo! Slurp', 'crawler' ),
+                'bot'       => array( 'bot', 'Yahoo! Slurp', 'crawler', 'scooter', 'mercator', 'altavista', 'Gulliver', 'spider', 'Ask Jeeves' ),
                 'opera'     => array( 'opera' ),
                 'ie'        => array( 'msie' ),
                 'safari'    => array( 'safari' ),
