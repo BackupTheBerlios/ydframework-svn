@@ -30,7 +30,7 @@
 	YDInclude( 'YDForm.php' );
 	YDInclude( 'YDCMComponent.php' );
 
-	// load master component modules
+	// load users module of YDCMComponent
 	YDCMComponent::module( 'YDCMUsers' );
 
 	// add local translation directory
@@ -38,6 +38,18 @@
 
 	// set posts form name
 	YDConfig::set( 'YDCMHELPDESK_FORMPOST', 'YDCMHelpdeskFormPost', false );
+
+	// set default states
+	YDConfig::set( 'YDCMHELPDESK_STATES', array( 'allstates', 'closed', 'open', 'pendent' ), false );
+
+	// set default types
+	YDConfig::set( 'YDCMHELPDESK_TYPES', array( 'email', 'telephone', 'personal' ), false );
+
+    // set default urgencies (TODO: maybe 'priorities')
+    YDConfig::set( 'YDCMHELPDESK_URGENCIES', array( 'allurgencies' => array(),
+	                                                'low'          => array( 'color' => '#00FF00' ), 
+                                                    'medium'       => array( 'color' => '#FF9900' ), 
+													'high'         => array( 'color' => '#FF9900' ) ), false );
 
 
     class YDCMHelpdesk extends YDCMComponent {
@@ -105,6 +117,47 @@
 			return $this->insert();
 		}
 
+
+        /**
+         *  This static function returns an array of possible states
+         *
+         *  @param $translated  (Optional) boolean that defines if result uses translation strings
+         */
+		function getStates( $translated = false ){
+		
+			return YDCMHelpdesk::getInfo( $translated, YDConfig::get( 'YDCMHELPDESK_STATES' ) );
+		}
+
+
+        /**
+         *  This static function returns an array of possible urgencies
+         *
+         *  @param $translated  (Optional) boolean that defines if result uses translation strings
+         */
+		function getUrgencies( $translated = false ){
+		
+			return YDCMHelpdesk::getInfo( $translated, array_keys( YDConfig::get( 'YDCMHELPDESK_URGENCIES' ) ) );
+		}
+		
+		
+        /**
+         *  This private static function returns an array/associative array based on states/urgencies
+         *
+         *  @param $translated  (Optional) boolean that defines if result uses translation strings
+         */
+		function getInfo( $translated, $arr ){
+			
+			// if we don't want translation, just return
+			if ( $translated != false ) return $arr;
+			
+			// compute associative array
+			$tmp = array();
+			foreach( $states as $s )
+				$tmp[ $s ] = t( $s );
+
+			return $tmp;
+		}
+
     }
 
 
@@ -157,17 +210,22 @@
             $relResponse->setForeignKey( 'post_id' );
 			$relResponse->setForeignJoin( 'LEFT' );
 
-            $relUrgency = & $this->registerRelation( 'YDCMHelpdesk_urgency', false, 'YDCMHelpdesk_urgency' );
-			$relUrgency->setLocalKey( 'urgency_id' );
-            $relUrgency->setForeignKey( 'urgency_id' );
+			// set default columns information
+			$this->columns = array(	'post_id'       => array('sortable' => true), 
+									'subject'       => array('sortable' => true),
+									'name'          => array('sortable' => true), 
+									'creation_date' => array('sortable' => true) );
+		}
 
-            $relState = & $this->registerRelation( 'YDCMHelpdesk_state', false, 'YDCMHelpdesk_state' );
-			$relState->setLocalKey( 'state_id' );
-            $relState->setForeignKey( 'state_id' );
 
-            $relAss = & $this->registerRelation( 'YDCMHelpdesk_type', false, 'YDCMHelpdesk_type' );
-			$relAss->setLocalKey( 'reported_by_type' );
-            $relAss->setForeignKey( 'type_id' );
+        /**
+         *  This function defines columns to use in recordsets/ajaxgrids
+         *
+         *  @param $columns  Helpdesk post columns for recorsets/ajaxgrids
+         */
+		function setColumns( $columns ){
+		
+			$this->columns = $columns;
 		}
 
 
@@ -294,36 +352,69 @@
 
 
         /**
-         *  This function returns a special recordset with posts
+         *  This function returns a recordset with posts
          *
-         *  @param $field_order  Field to sort
-         *  @param $field_order_direction  Sort direction
-         *  @param $field_page  Page to retrieve
+         *  @param $fields  Array of fields
          */
-		function getRS( $field_order = 'creation_date', $field_order_direction = 'DESC', $field_page = 1 ){
+		function getRecordSet( $fields ){
 
 			// delete previous values
 			$this->resetValues();
 
-			// set current order
-			$this->order( $this->getTable() . '.' . $field_order . ' ' . $field_order_direction . ', creation_date DESC' );
+			// check column name. TODO: check if column is a valid helpdesk or user column
+			if ( isset( $fields[ 'grid_column' ] ) ) $column = $fields[ 'grid_column' ];
+			else                                     $column = 'creation_date';
 
-			// get only posts with state 1
-			$this->state_id = 1;
+			// check direction
+			if ( isset( $fields[ 'grid_direction' ] ) && $fields[ 'grid_direction' ] == 'asc' ) $desc = false;
+			else                                                                                $desc = true;
+
+			// apply column order
+            $this->order( $column, $desc );
+
+			// apply state
+			if ( isset( $fields[ 'grid_state' ] ) && in_array( $fields[ 'grid_state' ], YDConfig::get( 'YDCMHELPDESK_STATES' ) ) )
+				$this->state_id = $fields[ 'grid_state' ];
+
+			// apply urgency
+			if ( isset( $fields[ 'grid_urgency' ] ) && in_array( $fields[ 'grid_urgency' ], YDConfig::get( 'YDCMHELPDESK_URGENCIES' ) ) )
+				$this->urgency_id = $fields[ 'grid_urgency' ];
 
 			// get information of users too
 			$this->find( 'users' );
 
-			// define columns we want
-			$fields = array( 'post_id', 'subject', 'name', 'creation_date' );
+			// check page to show
+			if ( isset( $fields[ 'grid_page' ] ) && is_numeric( $fields[ 'grid_page' ] ) ) $page = intval( $fields[ 'grid_page' ] );
+			else                                                                           $page = 1;
 
 			// create a recordset
-			$recordset = new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', $fields, false, false, false, false ), $field_page, 9 );
-			$recordset->setFields( $fields );
-			$recordset->setCurrentField( $field_order, $field_order_direction );
-
-			return $recordset;
+			return new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', array_keys( $this->columns ), false, false, false, false ), $page, 9 );
 		}
+
+
+        /**
+         *  This function returns a ajax grid
+         *
+         *  @param $fields  Array of fields
+         */
+		function getAjaxGrid( $fields = array() ){
+		
+			// include grid lib
+			YDInclude( 'YDFormElement_Grid.php' );
+
+			// init grid
+			$grid = new YDFormElement_Grid();
+
+			// add recordset to grid
+			$grid->setValue( $this->getRecordSet( $fields ) );
+			
+			// add columns information to grid
+			$grid->setColumns( $this->columns );
+
+			return $grid;
+		}
+		
+		
 
 	}
 
@@ -380,158 +471,6 @@
 		}
 		
 		
-	}	
-
-
-
-    class YDCMHelpdesk_urgency extends YDDatabaseObject {
-    
-        function YDCMHelpdesk_urgency() {
-        
-			// init component
-            $this->YDDatabaseObject();
-
-			// register database as default
-            $this->registerDatabase();
-
-			// register table for this component
-            $this->registerTable( 'YDCMHelpdesk_urgency' );
-
-			// register Key
-			$this->registerKey( 'urgency_id', true );
-
-			// register custom fields
-			$this->registerField( 'description' );
-			$this->registerField( 'color' );
-						
-			// custom relations
-            $rel = & $this->registerRelation( 'YDCMHelpdesk_posts', false, 'YDCMHelpdesk_posts' );
-			$rel->setLocalKey( 'urgency_id' );
-            $rel->setForeignKey( 'urgency_id' );
-			$rel->setForeignJoin( 'LEFT' );
-		}
-
-
-		function addUrgency( $description, $color = '#FF0000' ){
-		
-			$this->resetValues();
-
-			// create urgency
-			$this->description  = $description;
-			$this->color        = $color;
-
-			return $this->insert();
-		}
-
-
-		function getUrgencies(){
-		
-			$this->resetValues();
-			
-			// find all urgencies
-			$this->find();
-
-			// get associative array
-			$res = $this->getResultsAsAssocArray( 'urgency_id' );
-
-			// translate urgency description
-			foreach( $res as $id => $arr )
-				$res[ $id ][ 'description'] = t( $res[ $id ][ 'description'] );
-
-			// return urgencies
-			return $res;
-		}
-
-	}	
-
-
-
-
-    class YDCMHelpdesk_state extends YDDatabaseObject {
-    
-        function YDCMHelpdesk_state() {
-        
-			// init component
-            $this->YDDatabaseObject();
-
-			// register database as default
-            $this->registerDatabase();
-
-			// register table for this component
-            $this->registerTable( 'YDCMHelpdesk_state' );
-
-			// register Key
-			$this->registerKey( 'state_id', true );
-
-			// register custom fields
-			$this->registerField( 'description' );
-						
-			// custom relations
-            $rel = & $this->registerRelation( 'YDCMHelpdesk_posts', false, 'YDCMHelpdesk_posts' );
-			$rel->setLocalKey( 'state_id' );
-            $rel->setForeignKey( 'state_id' );
-			$rel->setForeignJoin( 'LEFT' );
-		}
-
-
-		function addState( $description ){
-		
-			$this->resetValues();
-
-			// create state
-			$this->description  = $description;
-
-			return $this->insert();
-		}
-
-
-		function getStates(){
-		
-			$this->resetValues();
-			
-			// find all states
-			$this->find();
-
-			// get associative array
-			$res = $this->getResultsAsAssocArray( 'state_id' );
-
-			// translate state description
-			foreach( $res as $id => $arr )
-				$res[ $id ][ 'description'] = t( $res[ $id ][ 'description'] );
-
-			// return urgencies
-			return $res;
-		}
-
-
-	}	
-
-
-
-
-
-    class YDCMHelpdesk_type extends YDDatabaseObject {
-    
-        function YDCMHelpdesk_type() {
-        
-			// init component
-            $this->YDDatabaseObject();
-
-			// register database as default
-            $this->registerDatabase();
-
-			// register table for this component
-            $this->registerTable( 'YDCMHelpdesk_type' );
-
-			// register Key
-			$this->registerKey( 'type_id', true );
-
-			// register custom fields
-			$this->registerField( 'description' );
-						
-			// custom relations
-		}
-
 	}	
 
 

@@ -14,7 +14,10 @@ $GLOBALS['t']['toggle state'] = 'Toggle state';
 $GLOBALS['t']['public'] = 'Public';
 $GLOBALS['t']['private'] = 'Private';
 $GLOBALS['t']['not allowed'] = 'Not allowed';
+$GLOBALS['t']['total'] = 'Total';
+$GLOBALS['t']['previous'] = 'Previous';
+$GLOBALS['t']['next'] = 'Next';
 
 $GLOBALS['t']['add page'] = 'Add page';
-
+$GLOBALS['t']['please wait'] = 'Please wait';
 ?>
