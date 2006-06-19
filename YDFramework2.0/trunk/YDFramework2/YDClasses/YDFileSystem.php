@@ -220,9 +220,6 @@
             return YDStringUtil::formatFilesize( $space, $decimals );
         }
 
-
-
-
         /**
          *	@param $path	Path of the file or directory.
          *
@@ -379,7 +376,7 @@
                 if ( ! strlen( $arg ) ) {
                     continue;
                 }
-                
+
                 // Normalize the path elements
                 $arg = str_replace( '/', YDPath::getDirectorySeparator(), $arg );
                 $arg = str_replace( '\\', YDPath::getDirectorySeparator(), $arg );
@@ -1382,43 +1379,28 @@
             // Start with an empty list
             $fileList = array();
 
-            // Get a handle to the directory
-            $dirHandle = opendir( $this->getPath() );
-
-            // Get the list of files
-            while ( false !== ( $file = readdir( $dirHandle ) ) ) {
-                if ( $file != '.' && $file != '..' ) {
-                    $fileList[ strtolower( $file ) ] = $file;
-                }
-            }
-
             // Get the list of patterns
             if ( ! is_array( $pattern ) ) {
                 $pattern = array( $pattern );
             }
 
-            // Apply the pattern to match
-            $fileListMatch = array();
-            foreach ( $fileList as $file ) {
-                foreach ( $pattern as $patternitem ) {
-                    if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
-                        if ( YDFSDirectory::_match( $patternitem, $file ) ) {
-                            $fileListMatch[ $file ] = $file;
-                        }
-                    } else {
+            // Get the files that match
+            foreach ( $pattern as $patternitem ) {
+                if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
+                    foreach ( glob( $this->getAbsolutePath() . '/' . $patternitem ) as $file ) {
+                        $file = basename( $file );
                         $fileListMatch[ $file ] = $file;
                     }
                 }
             }
             $fileList = & $fileListMatch;
 
-            // Apply the patterns to not match
-            foreach ( $fileList as $file ) {
-                foreach ( $pattern as $patternitem ) {
-                    if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) == '!' ) {
-                        if ( YDFSDirectory::_match( substr( $patternitem, 1 ), $file ) ) {
-                            unset( $fileList[ $file ] );
-                        }
+            // Remove the files that don't match
+            foreach ( $pattern as $patternitem ) {
+                if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) == '!' ) {
+                    foreach ( glob( $this->getAbsolutePath() . '/' . substr( $patternitem, 1 ) ) as $file ) {
+                        $file = basename( $file );
+                        unset( $fileList[ $file ] );
                     }
                 }
             }
@@ -1681,6 +1663,29 @@
             }
         }
 
+
+        /**
+         *  This function will recursively create the directories
+         *	@param $directory	Directory to create.
+         *	@param $mode		(optional) The mode for the directory. By default, this is 0700.
+         *
+         *	@returns	False on failure, otherwise, it will return a YDFSDirectory object for the new directory.
+         *
+         *  @static
+         */
+        function createDirectories( $directory, $mode=0700 ) {
+            if ( is_null( $directory ) || $directory === '' ) {
+                return false;
+            }
+            if ( is_dir( $directory ) || $directory === '/' ) {
+                return true;
+            }
+            if ( YDFSDirectory::createDirectories( dirname( $directory ), $mode ) ) {
+                return mkdir( $directory, $mode );
+            }
+            return false;
+        }
+
         /**
          *	This function will recursively delete a directory. It will delete the directory and the complete
          *	contents of that directory! Be careful I would say!
@@ -1749,78 +1754,6 @@
 
             // Return the result
             return ( sizeof( $contents ) == 0 ) ? false : true;
-
-        }
-
-        /**
-         *	Function to emulate the fnmatch function from UNIX which is not available on all servers.
-         *
-         *	@remark
-         *		This function is a reformatted version of the function found on:
-         *		http://www.php.net/manual/en/function.fnmatch.php#31353
-         *
-         *	@param $pattern	Pattern to match the file against.
-         *	@param $file	File name that needs to be checked.
-         *
-         *	@return	Boolean indicating if the file matched the pattern or not.
-         *
-         *	@internal
-         */
-        function _match( $pattern, $file ) {
-
-            // Use the native fnmatch function if it is there
-            if ( function_exists( 'fnmatch' ) ) {
-
-                // Match the pattern
-                return fnmatch( $pattern, $file );
-
-            }
-
-            // Loop over the characters of the pattern
-            for ( $i=0; $i < strlen( $pattern ); $i++ ) {
-
-                // Character is a *
-                if ( $pattern[$i] == '*' ) {
-                    for ( $c = $i; $c < max( strlen( $pattern ), strlen( $file ) ); $c++ ) {
-                        if ( YDFSDirectory::_match( substr( $pattern, $i+1 ), substr( $file, $c ) ) ) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                // Pattern is a [
-                if ( $pattern[$i] == '[' ) {
-                    $letter_set = array();
-                    for( $c=$i+1; $c < strlen( $pattern ); $c++ ) {
-                        if ( $pattern[$c] != ']' ) {
-                            array_push( $letter_set, $pattern[$c] );
-                        } else {
-                            break;
-                        }
-                    }
-                    foreach ( $letter_set as $letter ) {
-                        if ( YDFSDirectory::_match( $letter . substr( $pattern, $c+1 ), substr( $file, $i ) ) ) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                // Pattern is a ?
-                if ( $pattern[$i] == '?' ) {
-                    continue;
-                }
-
-                // Pattern not the same as the file character
-                if ( $pattern[$i] != $file[$i] ) {
-                    return false;
-                }
-
-            }
-
-            // All the rest returns positive
-            return true;
 
         }
 

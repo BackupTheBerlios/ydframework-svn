@@ -252,6 +252,22 @@
             return substr( $return, 1 ); 
         }
 
+        /**
+         *  This function will initialize the indicated array if it doesn't exist yet.
+         *
+         *  @param  $where  Where to instantiate the array in.
+         *  @param  $name   The name of the array to create.
+         *
+         *  @static
+         */
+        function createIfNeeded( & $where, $name ) {
+            if ( ! isset( $where[$name] ) ) {
+                $where[$name] = array();
+            }
+
+
+        }
+
     }
 
     /**

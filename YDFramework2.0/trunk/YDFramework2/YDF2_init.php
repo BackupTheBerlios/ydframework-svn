@@ -121,9 +121,6 @@
     $GLOBALS['YD_INCLUDE_PATH'] = explode( YD_PATHDELIM, $includePath );
     @ini_set( 'include_path', $includePath );
 
-//    // Include the standard functions
-//    include_once( YD_DIR_HOME . '/YDF2_core.php' );
-
     // Constants
     define( 'YD_CONFIG_VAR', 'YDF2_GLOBAL_CONFIG' );
     define( 'YD_LOCALE_KEY', 'YD_LOCALE' );
@@ -194,19 +191,33 @@
      *	@param $file	File to be included.
      */
     function YDInclude( $file ) {
+
+        // Check if the file is an absolute path
         if ( is_file( $file ) ) {
             include_once( $file );
             return;
         }
+
+        // Check for known classes in known paths
+
+        // For YDTemplate, check which one needs to be included (optimize the file includes)
+        // If Smarty: include YDTemplate_smarty.php
+        // If PHP: include YDTemplate_php.php
+        // If not defined: include YDTemplate.php
+
+        // Search the include path
         foreach ( $GLOBALS['YD_INCLUDE_PATH'] as $include ) {
             if ( $include != false && is_file( $include . '/' . $file ) ) {
                 include_once( $include . '/' . $file );
                 return;
             }
         }
+
+        // Raise an error
         trigger_error(
             'Failed to include the file: ' . $file . ' The file was not found in the include path.', YD_ERROR
         );
+
     }
 
     /**
@@ -252,16 +263,11 @@
      *  @returns    The translated string.
      */
     function t( $t ) {
-
-        // Return empty string when param is missing
         if ( empty( $t ) ) {
             return '';
         }
-
-        // Return the right translation
         $t = strtolower( $t );
         return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
-
     }
 
     /**
@@ -500,19 +506,13 @@
          *	@param	$dir       Directory to add
          */
         function addDirectory( $dir ){
-
-            // check if directories array exists
-            if ( !isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) )
+            if ( !isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) ) {
                 $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] = array();
-
-            // add directory to array. Needed when changing locale
+            }
             $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ][] = $dir;
-
-            // check if translations array exists
-            if ( !isset( $GLOBALS['t'] ) )
+            if ( !isset( $GLOBALS['t'] ) ) {
                 $GLOBALS['t'] = array();
-
-            // include directory
+            }
             include_once( $dir . '/' . YDLocale::get() . '.php' );
         }
 

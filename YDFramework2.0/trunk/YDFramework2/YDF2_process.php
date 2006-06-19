@@ -191,11 +191,7 @@
             }
 
             // Add the elapsed time
-            $elapsed = $GLOBALS['timer']->getElapsed();
-            echo( YD_CRLF . '<!-- ' . $elapsed . ' ms -->' );
-
-            // Stop the execution of the request
-            die();
+            die( YD_CRLF . '<!-- ' . $GLOBALS['timer']->getElapsed() . ' ms -->' );
 
         }
 
@@ -203,16 +199,9 @@
 
     // Check if we need to auto execute
     if ( YDConfig::get( 'YD_AUTO_EXECUTE', true ) == true ) { 
-
-        // Instantiate the executor class
         $clsInst = new YDExecutor( YD_SELF_FILE );
-
-        // Start the session
         @session_start();
-
-        // Execute the execute function
         $clsInst->execute();
-
     }
-    
+
 ?>
