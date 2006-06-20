@@ -92,7 +92,7 @@
             $out = '';
         
             if ( ! defined( 'YD_CTTA_MAINSCRIPT' ) ) {
-                $out .= '<script language="JavaScript">';
+                $out .= '<script type="text/javascript">';
                 $out .= 'function textCounter( field, maxlimit ) {';
                 $out .= "  var f = document.getElementById( field );";
                 $out .= "  var c = document.getElementById( field + '_counter' );";
