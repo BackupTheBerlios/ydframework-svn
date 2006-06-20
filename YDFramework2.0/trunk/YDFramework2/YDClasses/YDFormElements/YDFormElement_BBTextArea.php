@@ -149,7 +149,7 @@
             $out = '';
             if ( sizeof( $this->_buttons ) > 0 ) {
                 if ( ! defined( 'YD_BBTA_MAINSCRIPT' ) ) {
-                    $out .= '<script language="JavaScript">';
+                    $out .= '<script type="text/javascript">';
                     $out .= '	function AddText( element, startTag, defaultText, endTag ) {';
                     $out .= '		objElement = document.getElementById( element );';
                     $out .= '		if ( objElement.createTextRange ) {';
@@ -172,7 +172,7 @@
                     $out .= '</script>';
                     define( 'YD_BBTA_MAINSCRIPT', 1 );
                 }
-                $out .= '<script language="JavaScript">';
+                $out .= '<script type="text/javascript">';
                 $out .= '	function doButton( element, name ) {';
                 foreach ( $this->_buttons as $button ) {
                     if ( $button['type'] == 'modifier' )  {
