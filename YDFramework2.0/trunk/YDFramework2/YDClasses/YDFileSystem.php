@@ -1378,6 +1378,7 @@
 
             // Start with an empty list
             $fileList = array();
+            $fileListMatch = array();
 
             // Get the list of patterns
             if ( ! is_array( $pattern ) ) {
