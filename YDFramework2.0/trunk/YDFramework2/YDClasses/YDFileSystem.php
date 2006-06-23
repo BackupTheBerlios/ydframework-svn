@@ -28,15 +28,15 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDUtil.php');
-    
+
     // YDFSImage cropping specific constants
     define( 'YD_FS_CROP_UNCHANGED', 1 );
     define( 'YD_FS_CROP_ENLARGED',  2 );
     define( 'YD_FS_CROP_BORDERED',  3 );
-    
+
     // Config when cropping smaller images
     YDConfig::set( 'YD_FS_CROP', YD_FS_CROP_ENLARGED, false );
-    
+
     // The mime types mapping
     $GLOBALS['YD_FS_MIME_MAPPING'] = array(
         'ez' => 'application/andrew-inset',
@@ -380,7 +380,7 @@
                 // Normalize the path elements
                 $arg = str_replace( '/', YDPath::getDirectorySeparator(), $arg );
                 $arg = str_replace( '\\', YDPath::getDirectorySeparator(), $arg );
-                
+
                 // Check for an absolute path
                 if ( YDPath::isAbsolute( $arg ) ) {
                     $path = $arg;
@@ -458,7 +458,7 @@
     class YDFSFile extends YDBase {
 
         /**
-         *  The class constructor of the YDFSFile class takes the path to the file as it's first argument. 
+         *  The class constructor of the YDFSFile class takes the path to the file as it's first argument.
          *  It will then provide you with a number of functions to get the properties of the file.
          *
          *  @param $path    Path of the file.
@@ -471,13 +471,13 @@
 
             // Check if the path if the file exists
             if ( ! is_file( $path ) ) {
-                
+
                 // Check if the file should be created
                 if ( $create ) {
 
                     // Create a new YDFSDirectory object
                     $dir = new YDFSDirectory( dirname( $path ) );
-                    
+
                     // Create the file
                     $dir->createFile( basename( $path ), ' ' );
 
@@ -548,7 +548,7 @@
             if ( $format == 'timestamp' ) {
                 return filemtime( $this->getAbsolutePath() );
             }
-            return YDStringUtil::formatDate( filemtime( $this->getAbsolutePath() ), $format, $locale ); 
+            return YDStringUtil::formatDate( filemtime( $this->getAbsolutePath() ), $format, $locale );
         }
 
         /**
@@ -878,7 +878,7 @@
          *  @internal
          */
         function _initImageSize() {
-        
+
             // Check for the getimagesize function
             if ( ! function_exists( 'getimagesize' ) ) {
                 trigger_error(
@@ -886,7 +886,7 @@
                     . 'using the YDFSImage::getImageSize function.', YD_ERROR
                 );
             }
-        
+
             if ( is_null( $this->image_size ) ) {
                 $this->image_size = getimagesize( $this->getAbsolutePath() );
             }
@@ -950,10 +950,10 @@
          *				the second element is the height in pixels.
          */
         function getImageSize() {
-        
+
             // Init image_size
             $this->_initImageSize();
-            
+
             // Get the first two elements
             $imgSize = array_slice( $this->image_size, 0, 2 );
 
@@ -1084,21 +1084,21 @@
             // Get the current image size
             $ori_width  = imageSX( $src_img );
             $ori_height = imageSY( $src_img );
-            
+
             // Calculate the new image size
             if ( $crop ) {
-            
+
                 if ( $ori_width > $ori_height ) {
                     $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
                     $thumb_h = $height;
-                } 
+                }
                 if ( $ori_width < $ori_height ) {
                     $thumb_w = $width;
                     $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
                 }
-            
+
             } else {
-            
+
                 if ( $ori_width > $ori_height ) {
                     $thumb_w = $width;
                     $thumb_h = ceil( $ori_height * ( $width / $ori_width ) );
@@ -1107,16 +1107,16 @@
                     $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
                     $thumb_h = $height;
                 }
-            
+
             }
-            
+
             if ( $ori_width == $ori_height ) {
                 $thumb_w = $width;
                 $thumb_h = $height;
             }
-            
+
             if ( ( $width >= $ori_width || $height >= $ori_height ) && ( ! $crop || ( $crop && YDConfig::get( 'YD_FS_CROP' ) != YD_FS_CROP_ENLARGED ) ) ) {
-                
+
                 if ( $width >= $ori_width && $height < $ori_height ) {
                     $thumb_w = ceil( $ori_width * ( $height / $ori_height ) );
                     $thumb_h = $height;
@@ -1127,30 +1127,30 @@
                     $thumb_w = $ori_width;
                     $thumb_h = $ori_height;
                 }
-                
+
             }
 
             // Resample the image
-            $dst_img = imagecreatetruecolor( $thumb_w, $thumb_h ); 
+            $dst_img = imagecreatetruecolor( $thumb_w, $thumb_h );
             if ( $img_type == 'png' ) {
                 imagecopyresized( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_height );
             } else {
                 imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $ori_width, $ori_height );
             }
-            
+
             if ( $crop && ( $width != $thumb_w || $height != $thumb_h ) ) {
-            
+
                 $x = ceil( abs( $thumb_w-$width  ) / 2 );
                 $y = ceil( abs( $thumb_h-$height ) / 2 );
-                
+
                 $default = true;
-                
+
                 if ( $ori_width < $width || $ori_height < $height ) {
-                
+
                     switch ( YDConfig::get( 'YD_FS_CROP', YD_FS_CROP_ENLARGED ) ) {
-                    
+
                         case YD_FS_CROP_UNCHANGED:
-                        
+
                             if ( $ori_width < $width && $ori_height < $height ) {
                                 $crp_img = $dst_img;
                                 $default = false;
@@ -1162,31 +1162,31 @@
                                 $height = $ori_height;
                             }
                             break;
-                        
+
                         case YD_FS_CROP_ENLARGED:
                         case YD_FS_CROP_BORDERED:
                             break;
-                            
+
                     }
-                    
+
                 }
-                
+
                 if ( $default ) {
-                
-                    $crp_img = imagecreatetruecolor( $width, $height ); 
-                    
+
+                    $crp_img = imagecreatetruecolor( $width, $height );
+
                     if ( $img_type == 'png' ) {
                         imagecopyresized( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
                     } else {
                         imagecopyresampled( $crp_img, $dst_img, 0, 0, $x, $y, $width, $height, $width, $height );
                     }
-                    
+
                 }
-                
+
                 $dst_img = $crp_img;
-                
+
             }
-            
+
             // Get the resulting image
             ob_start();
             if ( $img_type == 'gif' ) {
@@ -1204,8 +1204,8 @@
             ob_end_clean();
 
             // Destroy the images
-            imagedestroy( $dst_img ); 
-            imagedestroy( $src_img ); 
+            imagedestroy( $dst_img );
+            imagedestroy( $src_img );
 
             // Save the cache if needed
             if ( $cache == true ) {
@@ -1280,7 +1280,7 @@
          *
          *  @returns    The number of files in the directory.
          */
-        function getFileCount(){ 
+        function getFileCount(){
             $total = 0;
             $dirHandle = opendir( $this->getPath() );
             while ( false !== ( $file = readdir( $dirHandle ) ) ) {
@@ -1297,7 +1297,7 @@
          *
          *  @returns    The number of directories in the directory.
          */
-        function getDirectoryCount(){ 
+        function getDirectoryCount(){
             $total = 0;
             $dirHandle = opendir( $this->getPath() );
             while ( false !== ( $file = readdir( $dirHandle ) ) ) {
@@ -1318,8 +1318,8 @@
          *
          *  @returns    The total size of the directory.
          */
-        function getSize( $recursive = false, $formatted = false, $decimals = 1 ) { 
-            $total = 0; 
+        function getSize( $recursive = false, $formatted = false, $decimals = 1 ) {
+            $total = 0;
             $dirHandle = opendir( $this->getPath() );
             while ( false !== ( $file = readdir( $dirHandle ) ) ) {
                 if ( $file == '.' || $file == '..') {
@@ -1328,8 +1328,8 @@
                 if ( is_file( $this->getPath() .'/'. $file ) ) {
                     $total += filesize( $this->getPath() .'/'. $file );
                 } else if ( $recursive && is_dir( $this->getPath() .'/'. $file ) ) {
-                    $subdir = new YDFSDirectory( $this->getPath() .'/'. $file ); 
-                    $total += $subdir->getSize(true, false, $decimals); 
+                    $subdir = new YDFSDirectory( $this->getPath() .'/'. $file );
+                    $total += $subdir->getSize(true, false, $decimals);
                 }
             }
             closedir( $dirHandle );
@@ -1389,6 +1389,11 @@
             foreach ( $pattern as $patternitem ) {
                 if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
                     foreach ( glob( $this->getAbsolutePath() . '/' . $patternitem ) as $file ) {
+                        $file = basename( $file );
+                        $fileListMatch[ $file ] = $file;
+                    }
+                } else if ( empty( $patternitem ) ) {
+                    foreach ( glob( $this->getAbsolutePath() . '/*' ) as $file ) {
                         $file = basename( $file );
                         $fileListMatch[ $file ] = $file;
                     }
