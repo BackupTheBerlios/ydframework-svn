@@ -169,18 +169,6 @@
         }
 
         /**
-         *  Delete a field
-         *
-         *  @param  $name   The name of the field that should be deleted
-         */
-        function delField( $name ) {
-            if ( ! in_array( $name, $this->fields ) ) {
-                unset( $this->fields[ $name ] );
-            }
-        }
-
-
-        /**
          *  Add a number of fields to the list of fields to will get returned by this class.
          *
          *  @param  $names   The name of the field that should be added.
@@ -353,7 +341,7 @@
          *
          *  @returns An array of each node to passed node
          */
-        function getPath( $id=0, $includeSelf=false, $customTable = null, $customWhere = null ) {
+        function getPath( $id=0, $includeSelf=false ) {
 
             // Get the ID field
             $idField = $this->fields['id'];
@@ -366,25 +354,16 @@
                 return array();
             }
 
-			// check if we have a custom where clause
-			if ( is_null( $customWhere ) ) $where = '';
-			else                           $where = ' and ' . $customWhere;
-
-			// check if we have a custom table
-			if ( !is_null( $customTable ) ) $table = $customTable;
-			else                            $table = $this->table;
-
-
             // Include ourselves?
             if ( $includeSelf ) {
                 $query = sprintf(
-                    'select %s from %s where nleft <= %d and nright >= %d %s order by nlevel',
-                    $this->_getFieldsAsString(), $table, $node['nleft'], $node['nright'], $where
+                    'select %s from %s where nleft <= %d and nright >= %d order by nlevel',
+                    $this->_getFieldsAsString(), $this->table, $node['nleft'], $node['nright']
                 );
             } else {
                 $query = sprintf(
-                    'select %s from %s where nleft < %d and nright > %d %s order by nlevel',
-                    $this->_getFieldsAsString(), $table, $node['nleft'], $node['nright'], $where
+                    'select %s from %s where nleft < %d and nright > %d order by nlevel',
+                    $this->_getFieldsAsString(), $this->table, $node['nleft'], $node['nright']
                 );
             }
 
