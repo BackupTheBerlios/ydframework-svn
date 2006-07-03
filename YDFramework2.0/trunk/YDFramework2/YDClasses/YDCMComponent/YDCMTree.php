@@ -54,6 +54,9 @@
 			$this->registerField( 'published_date_end' );			
 			$this->registerField( 'candrag' );
 			$this->registerField( 'candrop' );
+			$this->registerField( 'nleft' );
+			$this->registerField( 'nright' );
+
 		}
 
 
@@ -83,6 +86,7 @@
 			// return associative array
 			return $this->getResultsAsAssocArray( 'content_id' );
 		}
+
 
 
 	}

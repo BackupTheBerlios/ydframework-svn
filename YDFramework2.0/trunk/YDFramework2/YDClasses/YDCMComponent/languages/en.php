@@ -20,4 +20,14 @@ $GLOBALS['t']['next'] = 'Next';
 
 $GLOBALS['t']['add page'] = 'Add page';
 $GLOBALS['t']['please wait'] = 'Please wait';
+
+$GLOBALS['t']['content'] = 'Content';
+$GLOBALS['t']['general view'] = 'General view';
+$GLOBALS['t']['statistics'] = 'Statistics';
+$GLOBALS['t']['administration'] = 'Administration';
+$GLOBALS['t']['system information'] = 'System information';
+$GLOBALS['t']['backup'] = 'Backup';
+$GLOBALS['t']['audit'] = 'Audit';
+$GLOBALS['t']['user management'] = 'User management';
+$GLOBALS['t']['general configuration'] = 'General configuration';
 ?>

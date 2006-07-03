@@ -49,7 +49,6 @@
 
             // define custom fields
 			$this->registerField( 'current_version' );
-			$this->registerField( 'title' );
 			$this->registerField( 'html' );
 			$this->registerField( 'xhtml' );
 			$this->registerField( 'template_pack' );
@@ -60,7 +59,21 @@
 
 			// we don't have custom relations
 		}
+
 		
+        /**
+         *  This function will render this element (to be used in a menu)
+         *
+         *  @returns    Html link
+         */
+		function render( $component, $url ){
+
+			$url->setQueryVar( 'component', $component[ 'type' ] );
+			$url->setQueryVar( 'id',        $component[ 'content_id' ] );
+
+			return '<a href="' . $url->getUrl() . '">' . $component[ 'title' ] . '</a>';
+		}
+
 
         /**
          *  This function returns the page form
@@ -196,37 +209,6 @@
 
 
         /**
-         *  This function returns the page sttributes
-         *
-         *  @returns    Node id
-         */
-		function getNode( $id ){
-		
-			// delete previous stored values
-			$this->resetValues();
-
-			// define our id to find		
-			$this->content_id = intval( $id );
-			
-			// because we can more than one page with same id (content versioning)
-			// we will get the highest (latest).
-			// TODO: get the highest if user did not define a custom version
-			$this->orderBy( 'component_id', 'desc' );
-			$this->limit( 1 );
-			
-			// find node
-			$this->findAll();
-			
-			// parse html
-			if ( isset( $this->html ) )  $this->html  = htmlentities( $this->html );
-			if ( isset( $this->xhtml ) ) $this->xhtml = htmlentities( $this->xhtml );
-
-			// return node attributes without relation prefixs
-			return $this->getValues( false, false, false, false );
-		}
-
-
-        /**
          *  This function will delete a page node (and not its children)
          *
          *  @param $id  Node id
@@ -237,7 +219,6 @@
 			$this->resetValues();
 
 			$this->content_id = intval( $id );
-		
 			$this->delete();
 			
 			// delete node from tree

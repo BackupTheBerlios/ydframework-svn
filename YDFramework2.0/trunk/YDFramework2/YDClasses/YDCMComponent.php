@@ -30,8 +30,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 	YDInclude( 'YDDatabaseTree.php' );
 
-	// set core libs directory
-    YDConfig::set( 'YD_DBOBJECT_PATH', dirname( __FILE__ ) . '/YDCMComponent/');
+	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMComp.php' );
 
 	// add generic translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/YDCMComponent/languages/' );
@@ -55,29 +54,12 @@
 			// register table for this component
             $this->registerTable( $name );
 
-			// set standard component
-			$this->standardComponent = $standardComponent;
+			// add standard relation
+			$this->registerField( 'component_id' );
+       		$rel = & $this->registerRelation( 'YDCMComp', false, 'YDCMComp' );
+			$rel->setLocalKey( 'component_id' );
+			$rel->setForeignKey( 'component_id' );
 
-			// if this is a standard component has primary key 'component_id' and 2 standard relations
-			if ( $standardComponent ){
-
-				// register standard Key
-				$this->registerKey( 'component_id', true );
-
-				// register tree field and relation
-				$this->registerField( 'content_id' );
-	            $relTree = & $this->registerRelation( 'YDCMTree', false, 'YDCMTree' );
-				$relTree->setLocalKey( 'content_id' );
-            	$relTree->setForeignKey( 'content_id' );
-
-				// register language field and relation
-				$this->registerField( 'language_id' );
-         		$relLanguage = & $this->registerRelation( 'YDCMLanguages', false, 'YDCMLanguages' );
-				$relLanguage->setLocalKey( 'language_id' );
-				$relLanguage->setForeignKey( 'language_id' );
-			}
-				
-			// a standard component has tree operations
 			// TODO: position is required and we must change order from 'parent_id' to 'parent_id ASC, position ASC'
 			$this->tree = new YDDatabaseTree( 'default', 'YDCMTree', 'content_id', 'parent_id', 'parent_id' );
 
@@ -94,6 +76,54 @@
 			$this->tree->addField( 'published_date_end' );
 			$this->tree->addField( 'candrag' );
 			$this->tree->addField( 'candrop' );
+
+			// add comp object
+			if ( $standardComponent )
+				$this->comp = new YDCMComp( $name );
+		}
+
+
+        /**
+         *  This function renders this element for menu
+         *
+         *  @param $id           Component id
+         *  @param $urlObj       Url object
+         *
+         *  @returns    An html string
+         */
+
+		function render( $id, $url ){
+		
+			return '';
+		}
+
+
+        /**
+         *  This function will render a menu
+         *
+         *  @param $id           Menu id
+         *  @param $language_id  Language id
+         *  @param $urlObj       Url object
+         *
+         *  @returns    An array with all direct children
+         */
+		function renderMenu( $id, $language_id, $urlObj ){
+		
+			return $this->comp->renderMenu( $id, $language_id, $urlObj );
+		}
+
+
+        /**
+         *  This function returns node attributes
+         *
+         *  @param $id           Menu id
+         *  @param $language_id  Language id
+         *
+         *  @returns    An array with node attributes
+         */
+		function getNode( $id, $language = 'all' ){
+		
+			return $this->comp->getNode( $id, $language );
 		}
 
 
@@ -106,12 +136,11 @@
 
 			// include lib
 			// TODO: check if name is a valid lib name
-			require_once( YDConfig::get( 'YD_DBOBJECT_PATH' ) . '/' . $name . '.php' );
+			require_once( dirname( __FILE__ ) . '/YDCMComponent/' . $name . '.php' );
 
 			// return class
 			return new $name();
 		}
-
 
 
         /**
@@ -120,6 +149,7 @@
          *  @returns    all tree elements 
          */
 		function getTreeElements(){
+
 			return $this->tree->getDescendants( 1 );
 		}
 
@@ -128,9 +158,8 @@
          *  This function checks if elements are valid drag&dropable
          *
          *  @param $x  Id of dragable node
-         *
          *  @param $y  Id of dropable node
-
+         *
          *  @returns    false if elements are invalid, an associative array with node types (eg: array( $x => 'PHCMPage', $y => 'PHCMRootmenu ))'
          */
 		function getDragDropElements( $x = null, $y = null ){
@@ -144,11 +173,62 @@
 
 
         /**
+         *  This function returns the path to current node
+         *
+         *  @param $id           (Optional) Node id
+         *  @param $language_id  (Optional) Language id
+         *
+         *  @returns    An array with all parents
+         */
+		function getPath( $id = 0, $language_id = 'all' ){
+
+			return $this->comp->getPath( $id, $language_id );
+		}
+
+
+        /**
+         *  This function returns all direct elements of a menu
+         *
+         *  @param $id           (Optional) Menu id
+         *  @param $language_id  (Optional) Language id
+         *
+         *  @returns    An array with all direct children
+         */
+		function getMenu( $id = 0, $language_id = 'all' ){
+
+			return $this->comp->getMenu( $id, $language_id );
+		}
+
+
+        /**
+         *  This function returns the path string to current node
+         *
+         *  @param $id           (Optional) Node id
+         *  @param $language_id  (Optional) Language id
+         *  @param $separator    (Optional) Html separator string
+         *  @param $url          (Optional) Url object for element links
+         *  @param $classParents (Optional) Html class for html links of parents
+         *  @param $classCurrent (Optional) Url object for element links
+         *
+         *  @returns    An html string
+         */
+		function getBreadcrum( $id = 0, $language_id = 'all', $separator = ' &gt; ', $url = null, $classParents = 'breadParents', $classCurrent = 'breadCurrent' ){
+
+			// if url object is not set we use the current url
+			if( is_null( $url ) ) $url = new YDUrl( YD_SELF_SCRIPT );
+
+			// get breadcrum from component
+			return $this->comp->getBreadcrum( $id, $language_id, $separator, $url, $classParents, $classCurrent );
+		}
+
+
+        /**
          *  This function returns the component author
          *
          *  @returns    component author
          */
 		function getAuthor(){
+
 			return $this->_author;
 		}
 
@@ -159,6 +239,7 @@
          *  @returns    component version
          */
 		function getVersion(){
+
 			return $this->_version;
 		}
 
@@ -169,6 +250,7 @@
          *  @returns    component copyright
          */
 		function getCopyright(){
+
 			return $this->_copyright;
 		}
 
@@ -179,6 +261,7 @@
          *  @returns    component description
          */
 		function getDescription(){
+
 			return $this->_description;
 		}
 

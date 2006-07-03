@@ -42,8 +42,8 @@
             $this->_description = 'This is a link component';
 
 			// register custom fields
-			$this->registerField( 'title' );
 			$this->registerField( 'url' );
+			$this->registerField( 'num_visits' );
 
 			// we don't have custom relations
 		}

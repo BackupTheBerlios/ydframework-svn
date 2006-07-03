@@ -252,12 +252,8 @@
          */
 		function changeCurrentUserPassword( $oldpassword = '', $newpassword = '' ){
 		
-			$this->resetValues();
-
 			// check if user is valid
-			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
-
-			if ( $valid === false ) return false;
+			if ( !$this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) ) return false;
 
 			// reset values added from valid method
 			$this->resetValues();
