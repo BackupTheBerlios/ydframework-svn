@@ -64,6 +64,7 @@
 
                 // Get the page by ID
                 $defaults = $this->weblog->getPageById( $id );
+                $defaults['body'] = YDTemplate_modifier_bbcode( $defaults['body'] );
 
                 // Get the current date/time
                 $defaults['modified'] = gmmktime();

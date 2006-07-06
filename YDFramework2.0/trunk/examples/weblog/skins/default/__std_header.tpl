@@ -44,6 +44,8 @@
         </script>
     {/if}
 
+    {$weblog_google_analytics}
+
 </head>
 
 <body>

@@ -152,6 +152,17 @@
             $this->tpl->assign( 'weblog_link_archive',         YDUrl::makeLinkAbsolute( 'archive.php' ) );
             $this->tpl->assign( 'weblog_link_archive_gallery', YDUrl::makeLinkAbsolute( 'archive_gallery.php' ) );
 
+            // Add the Google Analytics tag
+            if ( YDConfig::get( 'google_analytics', '' ) != '' ) {
+                $out = '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>' . YD_CRLF;
+                $out .= '<script type="text/javascript">' . YD_CRLF;
+                $out .= '_uacct = "' . YDConfig::get( 'google_analytics', '' ) . '"; urchinTracker();' . YD_CRLF;
+                $out .= '</script>' . YD_CRLF;
+                $this->tpl->assign( 'weblog_google_analytics', $out );
+            } else {
+                $this->tpl->assign( 'weblog_google_analytics', '' );
+            }
+
             // Get the link to the different directories
             $uploads_dir = YDUrl::makeLinkAbsolute( $this->dir_uploads );
             $skin_dir    = YDUrl::makeLinkAbsolute( $this->dir_skins . $this->skin );
@@ -322,6 +333,8 @@
             // Assign the weblog details
             $this->tpl->assign( 'weblog_title',       YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
             $this->tpl->assign( 'weblog_description', YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
+            $this->tpl->assign( 'weblog_language',    YDConfig::get( 'weblog_language', 'en' ) );
+            $this->tpl->assign( 'google_analytics',   YDConfig::get( 'google_analytics', '' ) != '' );
 
             // Get the link to the different directories
             $uploads_dir = YDUrl::makeLinkAbsolute( '../' . $this->dir_uploads );

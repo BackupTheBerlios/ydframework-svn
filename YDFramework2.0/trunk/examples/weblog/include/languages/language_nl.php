@@ -284,6 +284,8 @@ $GLOBALS['t']['cfg_auto_close_items'] = 'Laat geen commentaren toe na x dagen';
 $GLOBALS['t']['err_auto_close_items'] = 'Laat geen commentaren toe na x dagen moet een getal zijn';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Toon debugging informatie';
 $GLOBALS['t']['cfg_default_item_settings'] = 'Standaard waardes voor nieuwe posts';
+$GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
+$GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

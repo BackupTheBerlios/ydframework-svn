@@ -6,6 +6,8 @@
 
     <link rel="stylesheet" type="text/css" href="manage.css" />
 
+    <script language="JavaScript" src="../tiny_mce/tiny_mce_gzip.php"></script>
+
     <script language="JavaScript">
     <!--
 
@@ -24,6 +26,19 @@
         {literal}function YDRowMouseOut( obj ) {{/literal}
             obj.bgColor = '#FFFFFF';
         {literal}}{/literal}
+
+        {literal}tinyMCE.init({
+            mode : "textareas",
+            theme : "advanced",
+            language: "{/literal}{$weblog_language}{literal}",
+            plugins : "imgselector,fullscreen",
+            theme_advanced_buttons1 : "bold,italic,separator,justifyleft,justifycenter,justifyright,separator,bullist,numlist,separator,undo,redo,separator,link,unlink,code,fullscreen,separator,imgselector",
+            theme_advanced_buttons2 : "",
+            theme_advanced_buttons3 : "",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
+            theme_advanced_path_location : ""
+        });{/literal}
 
     //-->
     </script>
@@ -110,6 +125,9 @@
                     <td class="adminRowL">
                         <b>{t w="h_statistics"}</b><br/>
                         &raquo; <a href="stats.php">{t w="a_statistics"}</a><br/>
+                        {if $google_analytics}
+                            &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
+                        {/if}
                     </td>
                 </tr>
                 <tr>

@@ -173,7 +173,7 @@
 
             // Get the list of files
             $dir = new YDFSDirectory( $this->dir_rel );
-            $images = @ $dir->getContents( array( '!index.html', '!index.php' ), null, array( 'YDFSImage' ), true, 'desc' );
+            $images = $dir->getContents( null, null, array( 'YDFSImage' ), true, 'desc' );
 
             // Make the relative path for each file
             foreach ( $images as $key=>$image ) {

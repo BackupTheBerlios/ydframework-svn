@@ -56,7 +56,7 @@
                 $form->addElement( 'text', 'username', t( 'name' ) );
                 $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
                 $form->addElement( 'text', 'userwebsite', t( 'website' ) );
-                $form->addElement( 'wlbbtextarea', 'comment', '', array( 'style' => 'width: 450px' ) );
+                $form->addElement( 'textarea', 'comment', '' );
                 $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'id' => 'submit' ) );
                 $form->addElement( 'hidden', 'item_id' );
 

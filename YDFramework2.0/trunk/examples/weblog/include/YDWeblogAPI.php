@@ -282,6 +282,13 @@
 
             }
 
+            // Fix the image paths
+            if( strtolower( basename( dirname( YD_SELF_FILE ) ) ) != 'manage' ) {
+                $uploads = YDConfig::get( 'dir_uploads', 'uploads' );
+                $item['body'] = str_replace( '../' . $uploads, $uploads, $item['body'] );
+                $item['body_more'] = str_replace( '../' . $uploads, $uploads, $item['body_more'] );
+            }
+
             // Get the count of images
             $item['num_images'] = sizeof( $item['images'] );
 

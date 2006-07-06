@@ -87,7 +87,7 @@
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDFormElements/YDFormElement_BBTextArea.php' );
+    YDInclude( 'YDFormElements/YDFormElement_TextArea.php' );
 
     // Check if the weblog application is locked or not
     $db = YDDatabase::getInstance(
@@ -240,22 +240,11 @@
     }
 
     // A BB Text Area form element
-    class YDWeblogFormElement_BBTextArea extends YDFormElement_BBTextArea {
+    class YDWeblogFormElement_BBTextArea extends YDFormElement_TextArea {
 
         // Class constructor
         function YDWeblogFormElement_BBTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
-
-            // Initialize the parent
-            $this->YDFormElement_BBTextArea( $form, $name, $label, $attributes, $options );
-
-            // Create the toolbar
-            $this->clearButtons();
-            $this->addModifier( 'b', 'bold' );
-            $this->addModifier( 'i', 'italic' );
-            $this->addSimplePopup( 'url',   'url',   t( 'ta_enter_url' ) . ':',   'http://' );
-            $this->addSimplePopup( 'email', 'email', t( 'ta_enter_email' ) . ':' );
-            $this->addSimplePopup( 'img',   'img',   t( 'ta_enter_image' ) . ':', 'http://' );
-
+            $this->YDFormElement_TextArea( $form, $name, $label, $attributes, $options );
         }
 
     }
@@ -265,24 +254,7 @@
 
         // Class constructor
         function YDFormElement_AdminTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
-
-            // Initialize the parent
             $this->YDWeblogFormElement_BBTextArea( $form, $name, $label, $attributes, $options );
-
-            // Create the base url
-            $baseurl = 'images.php?do=selectorImages&field=' . rawurlencode( $form . '_' . $name );
-
-            // Parameters for the window
-            $params = 'width=880,height=660,location=0,menubar=0,resizable=1,scrollbars=1,status=1,titlebar=1';
-
-            // Create the toolbar
-            $this->clearButtons();
-            $this->addModifier( 'b', 'bold' );
-            $this->addModifier( 'i', 'italic' );
-            $this->addSimplePopup( 'url',   'url',   t( 'ta_enter_url' ) . ':',   'http://' );
-            $this->addSimplePopup( 'email', 'email', t( 'ta_enter_email' ) . ':' );
-            $this->addPopupWindow( $baseurl, strtolower( t('select_image') ), 'YDImageSelector', $params );
-
         }
 
     }

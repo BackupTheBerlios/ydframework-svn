@@ -69,6 +69,8 @@
 
                 // Get the comment by ID
                 $defaults = $this->weblog->getItemById( $id );
+                $defaults['body'] = YDTemplate_modifier_bbcode( $defaults['body'] );
+                $defaults['body_more'] = YDTemplate_modifier_bbcode( $defaults['body_more'] );
                 $defaults['modified'] = gmmktime();
 
                 // Assign the values to the template

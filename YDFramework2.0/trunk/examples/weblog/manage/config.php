@@ -49,7 +49,7 @@
 
             // Get the list of skins
             $dir = new YDFSDirectory( dirname( __FILE__ ) . '/../' . $this->dir_skins );
-            $items = $dir->getContents( '!.*', '', array( 'YDFSDirectory' ) );
+            $items = $dir->getContents( null, '', array( 'YDFSDirectory' ) );
             $skins = array();
             foreach ( $items as $item ) {
                 $skins[ $item ] = $item;
@@ -80,6 +80,7 @@
             $form->addElement( 'select', 'weblog_skin', t( 'cfg_weblog_skin' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $skins );
             $form->addElement( 'select', 'weblog_language', t( 'cfg_weblog_language' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $languages );
             $form->addElement( 'checkbox', 'include_debug_info', t( 'cfg_include_debug_info' ), array( 'style' => 'border: none;' ) );
+            $form->addElement( 'text', 'google_analytics', t( 'cfg_weblog_google_analytics' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'email_new_item', t( 'cfg_notification_email_item' ),  array( 'style' => 'border: none;' ) );
@@ -154,6 +155,7 @@
             $config['weblog_entries_fp']    = YDConfig::get( 'weblog_entries_fp',    1 );
             $config['weblog_skin']          = YDConfig::get( 'weblog_skin',          'default' );
             $config['weblog_language']      = YDConfig::get( 'weblog_language',      'nl' );
+            $config['google_analytics']     = YDConfig::get( 'google_analytics',     '' );
             $config['include_debug_info']   = YDConfig::get( 'include_debug_info',   false );
             $config['email_new_comment']    = YDConfig::get( 'email_new_comment',    true );
             $config['email_new_item']       = YDConfig::get( 'email_new_item',       true );

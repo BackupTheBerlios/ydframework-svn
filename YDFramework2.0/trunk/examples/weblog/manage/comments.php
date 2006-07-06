@@ -80,6 +80,7 @@
 
                 // Get the comment by ID
                 $defaults = $this->weblog->getCommentById( $id );
+                $defaults['comment'] = YDTemplate_modifier_bbcode( $defaults['comment'] );
 
                 // Set the defaults
                 $form->setDefaults( $defaults );

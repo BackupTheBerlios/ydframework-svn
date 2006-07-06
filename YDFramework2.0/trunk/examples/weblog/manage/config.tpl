@@ -76,6 +76,10 @@
             <td class="adminRowL">{t w="cfg_include_debug_info"}</td>
             <td class="adminRowL">{$config.include_debug_info}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_weblog_google_analytics"}</td>
+            <td class="adminRowL">{$config.google_analytics|default:'&nbsp;'}</td>
+        </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
@@ -129,14 +133,6 @@
             <td class="adminRowL" width="400">{$config.max_syndicated_items}</td>
         </tr>
     </table>
-    {*
-    <table width="700" cellspacing="0" cellpadding="0" border="0">
-        <tr><td colspan="3">&nbsp;</td></tr>
-        <tr>
-            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_spam_protection"}</th>
-        </tr>
-    </table>
-    *}
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
 
@@ -201,6 +197,10 @@
             <tr>
                 <td class="adminRowL">{$form.include_debug_info.label_html}</td>
                 <td class="adminRowL">{$form.include_debug_info.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.google_analytics.label_html}</td>
+                <td class="adminRowL">{$form.google_analytics.html}</td>
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">

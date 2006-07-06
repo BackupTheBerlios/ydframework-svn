@@ -1,7 +1,6 @@
-/* Begin Typography & Colors */
 body {
-	font-size: 62.5%; /* Resets 1em to 10px */
-	font-size: 10px; /* Resets 1em to 10px */
+	font-size: 62.5%;
+	font-size: 10px;
 	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
 	background-color: #d5d6d7;
 	color: #333;
@@ -113,7 +112,7 @@ h2, h2 a, h2 a:hover, h2 a:visited, h3, h3 a, h3 a:hover, h3 a:visited, #sidebar
 	}
 
 #commentform textarea {
-	font-size: 1.3em;
+	font-size: 1.0em;
 	}
 
 .commentlist li {
@@ -185,11 +184,7 @@ a:hover {
 	font-style: normal;
 	text-transform: capitalize;
 	}
-/* End Typography & Colors */
 
-
-
-/* Begin Structure */
 body {
 	margin: 0;
 	padding: 0; 
@@ -259,11 +254,7 @@ body {
 	padding: 20px 0;
 	text-align: center;
 	}
-/* End Structure */
 
-
-
-/*	Begin Headers */
 h1 {
 	padding-top: 70px;
 	margin: 0;
@@ -296,21 +287,12 @@ h3.comments {
 	padding: 0;
 	margin: 40px auto 20px ;
 	}
-/* End Headers */
 
-
-
-/* Begin Images */
 p img {
 	padding: 0;
 	max-width: 100%;
 	}
 
-/*	Using 'class="alignright"' on an image will (who would've
-	thought?!) align the image to the right. And using 'class="centered',
-	will of course center the image. This is much better than using
-	align="center", being much more futureproof (and valid) */
-	
 img.centered {
 	display: block;
 	margin-left: auto;
@@ -336,14 +318,6 @@ img.alignleft {
 .alignleft {
 	float: left
 	}
-/* End Images */
-
-
-
-/* Begin Lists
-
-	Special stylized non-IE bullets
-	Do not work in Internet Explorer, which merely default to normal bullets. */
 
 html>body .entry ul {
 	margin-left: 0px;
@@ -408,11 +382,7 @@ ol li, #sidebar ul ol li {
 	margin: 3px 0 0;
 	padding: 0;
 	}
-/* End Entry Lists */
 
-
-
-/* Begin Form Elements */
 #searchform {
 	margin: 10px auto;
 	padding: 5px 3px; 
@@ -428,7 +398,7 @@ ol li, #sidebar ul ol li {
 	padding: 1px;
 	}
 
-.entry form { /* This is mainly for password protected posts, makes them look better. */
+.entry form {
 	text-align:center;
 	}
 
@@ -444,6 +414,7 @@ select {
 
 #commentform textarea {
 	width: 100%;
+	height: 160px;
 	padding: 2px;
 	}
 
@@ -451,13 +422,8 @@ select {
 	margin: 0;
 	background-color: #06c;
 	color: #fff;
-	/*float: right;*/
 	}
-/* End Form Elements */
 
-
-
-/* Begin Comments*/
 .alt {
 	margin: 0;
 	padding: 10px;
@@ -492,11 +458,7 @@ select {
 	margin: 0;
 	display: block;
 	}
-/* End Comments */
 
-
-
-/* Begin Sidebar */
 #sidebar
 {
 	padding: 20px 0 10px 0;
@@ -507,48 +469,7 @@ select {
 #sidebar form {
 	margin: 0;
 	}
-/* End Sidebar */
 
-
-
-/* Begin Calendar */
-#wp-calendar {
-	empty-cells: show;
-	margin: 10px auto 0;
-	width: 155px;
-	}
-
-#wp-calendar #next a {
-	padding-right: 10px;
-	text-align: right;
-	}
-
-#wp-calendar #prev a {
-	padding-left: 10px;
-	text-align: left;
-	}
-
-#wp-calendar a {
-	display: block;
-	}
-
-#wp-calendar caption {
-	text-align: center;
-	width: 100%;
-	}
-
-#wp-calendar td {
-	padding: 3px 0;
-	text-align: center;
-	}
-
-#wp-calendar td.pad:hover { /* Doesn't work in IE */
-	background-color: #fff; }
-/* End Calendar */
-
-
-
-/* Begin Various Tags & Classes */
 acronym, abbr, span.caps {
 	cursor: help;
 	}
@@ -594,14 +515,6 @@ a img {
 #content td {
 	font-size: 0.8em;
 }
-
-/* End Various Tags & Classes*/
-
-
-
-/* "Daisy, Daisy, give me your answer do. I'm half crazy all for the love of you.
-	It won't be a stylish marriage, I can't afford a carriage.
-	But you'll look sweet upon the seat of a bicycle built for two." */
 
 .required {
 	color: red;

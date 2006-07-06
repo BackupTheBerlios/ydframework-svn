@@ -13,12 +13,11 @@
             return confirm( '{t w="confirm_delete"}\n\n"' + img + '"?');
         {literal}}{/literal}
 
-        {literal}function addItem( item ) {{/literal}
-            window.opener.focus();
-            window.opener.AddText( '{$smarty.get.field}', '[img]{$uploads_dir}/' , item, '[/img]' );
-            window.close()
-            return false;
-        {literal}}{/literal}
+        {literal}function addItem( item ) {
+            var src = '{/literal}{$uploads_dir}{literal}/' + item;
+            window.opener.tinyMCE.themes['advanced']._insertImage(src);
+            window.close();
+        }{/literal}
 
         {literal}function YDRowMouseOver( obj ) {{/literal}
             document.getElementById( obj + '_1' ).bgColor = '#EDF3FE';
