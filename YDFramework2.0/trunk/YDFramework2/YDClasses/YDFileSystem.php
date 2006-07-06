@@ -1385,18 +1385,34 @@
                 $pattern = array( $pattern );
             }
 
-            // Get the files that match
+            // Check if there other patterns than exceptions
+            $hasMoreThanExceptions = false;
             foreach ( $pattern as $patternitem ) {
                 if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
-                    foreach ( glob( $this->getAbsolutePath() . '/' . $patternitem ) as $file ) {
-                        $file = basename( $file );
-                        $fileListMatch[ $file ] = $file;
+                    $hasMoreThanExceptions = true;
+                    break;
+                }
+            }
+
+            // Get the files that match
+            if ( $hasMoreThanExceptions == true ) {
+                foreach ( $pattern as $patternitem ) {
+                    if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
+                        foreach ( glob( $this->getAbsolutePath() . '/' . $patternitem ) as $file ) {
+                            $file = basename( $file );
+                            $fileListMatch[ $file ] = $file;
+                        }
+                    } else if ( empty( $patternitem ) ) {
+                        foreach ( glob( $this->getAbsolutePath() . '/*' ) as $file ) {
+                            $file = basename( $file );
+                            $fileListMatch[ $file ] = $file;
+                        }
                     }
-                } else if ( empty( $patternitem ) ) {
-                    foreach ( glob( $this->getAbsolutePath() . '/*' ) as $file ) {
-                        $file = basename( $file );
-                        $fileListMatch[ $file ] = $file;
-                    }
+                }
+            } else {
+                foreach ( glob( $this->getAbsolutePath() . '/' . '*' ) as $file ) {
+                    $file = basename( $file );
+                    $fileListMatch[ $file ] = $file;
                 }
             }
             $fileList = & $fileListMatch;
