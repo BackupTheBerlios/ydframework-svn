@@ -247,6 +247,11 @@
             // Initialize the parent
             $this->YDWeblogAdminRequest();
 
+            // Check if we log statistics or not
+            if ( ! YDConfig::get( 'use_auto_update', true ) ) {
+                $this->redirect();
+            }
+
             // The default action
             if ( $this->getActionName() != 'default' ) {
 

@@ -287,6 +287,7 @@ $GLOBALS['t']['cfg_default_item_settings'] = 'Standaard waardes voor nieuwe post
 $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Houdt statistieken bij';
+$GLOBALS['t']['cfg_use_auto_update'] = 'Activeer Auto Update';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

@@ -26,6 +26,7 @@
             // Fix the boolean values
             $config['email_new_comment']   = ( $config['email_new_comment'] ) ? t('yes') : t('no');
             $config['email_new_item']      = ( $config['email_new_item'] ) ? t('yes') : t('no');
+            $config['use_auto_update']     = ( $config['use_auto_update'] ) ? t('yes') : t('no');
             $config['keep_stats']          = ( $config['keep_stats'] ) ? t('yes') : t('no');
             $config['use_cache']           = ( $config['use_cache'] ) ? t('yes') : t('no');
             $config['friendly_urls']       = ( $config['friendly_urls'] ) ? t('yes') : t('no');
@@ -81,6 +82,7 @@
             $form->addElement( 'select', 'weblog_skin', t( 'cfg_weblog_skin' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $skins );
             $form->addElement( 'select', 'weblog_language', t( 'cfg_weblog_language' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $languages );
             $form->addElement( 'checkbox', 'include_debug_info', t( 'cfg_include_debug_info' ), array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox', 'use_auto_update', t( 'cfg_use_auto_update' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'keep_stats', t( 'cfg_keep_stats' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'google_analytics', t( 'cfg_weblog_google_analytics' ), array( 'class' => 'tfM' ) );
 
@@ -157,6 +159,7 @@
             $config['weblog_entries_fp']    = YDConfig::get( 'weblog_entries_fp',    1 );
             $config['weblog_skin']          = YDConfig::get( 'weblog_skin',          'default' );
             $config['weblog_language']      = YDConfig::get( 'weblog_language',      'nl' );
+            $config['use_auto_update']      = YDConfig::get( 'use_auto_update',      true );
             $config['keep_stats']           = YDConfig::get( 'keep_stats',           true );
             $config['google_analytics']     = YDConfig::get( 'google_analytics',     '' );
             $config['include_debug_info']   = YDConfig::get( 'include_debug_info',   false );

@@ -287,6 +287,7 @@ $GLOBALS['t']['cfg_default_item_settings'] = 'Default values for new items';
 $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Track statistics';
+$GLOBALS['t']['cfg_use_auto_update'] = 'Enable Auto Update';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

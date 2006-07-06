@@ -77,6 +77,10 @@
             <td class="adminRowL">{$config.include_debug_info}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_use_auto_update"}</td>
+            <td class="adminRowL">{$config.use_auto_update}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_keep_stats"}</td>
             <td class="adminRowL">{$config.keep_stats}</td>
         </tr>
@@ -201,6 +205,10 @@
             <tr>
                 <td class="adminRowL">{$form.include_debug_info.label_html}</td>
                 <td class="adminRowL">{$form.include_debug_info.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.use_auto_update.label_html}</td>
+                <td class="adminRowL">{$form.use_auto_update.html}</td>
             </tr>
             <tr>
                 <td class="adminRowL">{$form.keep_stats.label_html}</td>
