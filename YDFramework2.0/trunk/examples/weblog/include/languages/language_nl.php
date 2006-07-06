@@ -286,6 +286,7 @@ $GLOBALS['t']['cfg_include_debug_info'] = 'Toon debugging informatie';
 $GLOBALS['t']['cfg_default_item_settings'] = 'Standaard waardes voor nieuwe posts';
 $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
+$GLOBALS['t']['cfg_keep_stats'] = 'Houdt statistieken bij';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

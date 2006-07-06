@@ -23,21 +23,30 @@
             // Assign it to the template
             $this->tpl->assign( 'items', $items );
 
-            // Get the install date
+            // Get the global statistics
             $installDate   = $this->weblog->getInstallDate();
-            $totalHits     = $this->weblog->getTotalHits();
             $daysOnline    = round( ( time() - $installDate ) / 86400 );
-            $avg_hitsaday  = @ intval( $totalHits / $daysOnline );
             $totalItems    = $this->weblog->getStatsItemCount();
             $totalComments = $this->weblog->getStatsCommentCount();
 
             // Assign these to the template
             $this->tpl->assign( 'installDate',   $installDate );
             $this->tpl->assign( 'daysOnline',    $daysOnline );
-            $this->tpl->assign( 'totalHits',     $totalHits );
-            $this->tpl->assign( 'avg_hitsaday',  $avg_hitsaday );
             $this->tpl->assign( 'totalItems',    $totalItems );
             $this->tpl->assign( 'totalComments', $totalComments );
+
+            // Check if we need to log statistics or not
+            if ( YDConfig::get( 'keep_stats', true ) ) {
+
+                // Get the averages
+                $totalHits     = $this->weblog->getTotalHits();
+                $avg_hitsaday  = @ intval( $totalHits / $daysOnline );
+
+                // Assign these to the template
+                $this->tpl->assign( 'totalHits',     $totalHits );
+                $this->tpl->assign( 'avg_hitsaday',  $avg_hitsaday );
+
+            }
 
             // Display the template
             $this->display();

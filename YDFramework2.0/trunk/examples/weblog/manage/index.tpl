@@ -64,36 +64,38 @@
     </tr>
 </table>
 
-<table width="700" cellspacing="0" cellpadding="0" border="0">
-    <tr><td colspan="3">&nbsp;</td></tr>
-    <tr>
-        <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></th>
-        <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></th>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL" width="300">{t w="installed_since"}</td>
-        <td class="adminRowL" width="400" colspan="2">{$installDate|date:"%d %B %Y"|lower}</td>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL">{t w="num_days_online"}</td>
-        <td class="adminRowL" colspan="2">{$daysOnline} {t w="days"}</td>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL">{t w="totalItems"}</td>
-        <td class="adminRowL" colspan="2">{$totalItems} {t w="items"}</td>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL">{t w="totalComments"}</td>
-        <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL">{t w="total_hits"}</td>
-        <td class="adminRowL" colspan="2">{$totalHits} {t w="hits"}</td>
-    </tr>
-    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-        <td class="adminRowL">{t w="avg_hits_per_day"}</td>
-        <td class="adminRowL" colspan="2">{$avg_hitsaday} {t w="hits"}</td>
-    </tr>
-</table>
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
+            <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></th>
+            <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></th>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="installed_since"}</td>
+            <td class="adminRowL" width="400" colspan="2">{$installDate|date:"%d %B %Y"|lower}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="num_days_online"}</td>
+            <td class="adminRowL" colspan="2">{$daysOnline} {t w="days"}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="totalItems"}</td>
+            <td class="adminRowL" colspan="2">{$totalItems} {t w="items"}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="totalComments"}</td>
+            <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
+        </tr>
+        {if $keep_stats}
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL">{t w="total_hits"}</td>
+                <td class="adminRowL" colspan="2">{$totalHits} {t w="hits"}</td>
+            </tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL">{t w="avg_hits_per_day"}</td>
+                <td class="adminRowL" colspan="2">{$avg_hitsaday} {t w="hits"}</td>
+            </tr>
+        {/if}
+    </table>
 
 {include file="__mng_footer.tpl"}

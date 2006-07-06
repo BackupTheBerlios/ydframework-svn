@@ -121,15 +121,19 @@
                         &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
                     </td>
                 </tr>
-                <tr>
-                    <td class="adminRowL">
-                        <b>{t w="h_statistics"}</b><br/>
-                        &raquo; <a href="stats.php">{t w="a_statistics"}</a><br/>
-                        {if $google_analytics}
-                            &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
-                        {/if}
-                    </td>
-                </tr>
+                {if $keep_stats or $google_analytics}
+                    <tr>
+                        <td class="adminRowL">
+                            <b>{t w="h_statistics"}</b><br/>
+                            {if $keep_stats}
+                                &raquo; <a href="stats.php">{t w="a_statistics"}</a><br/>
+                            {/if}
+                            {if $google_analytics}
+                                &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
+                            {/if}
+                        </td>
+                    </tr>
+                {/if}
                 <tr>
                     <td class="adminRowL">
                         <b>{t w="h_logoff"}</b><br/>

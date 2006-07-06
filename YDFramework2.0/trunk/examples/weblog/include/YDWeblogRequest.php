@@ -229,37 +229,42 @@
         // Function to disbable request logging
         function _logRequest() {
 
-            // Get the logging data
-            $values = array();
-            $values['uri'] = str_replace( dirname( YD_SELF_SCRIPT ) . '/', '', $this->getNormalizedUri() );
-            if ( substr( $values['uri'], 0, 1 ) == '/' ) {
-                $values['uri'] = substr( $values['uri'], 1 );
-            }
-            if ( substr( $values['uri'], 0, 4 ) == '.php' ) {
-                $values['uri'] = basename( YD_SELF_SCRIPT ) . substr( $values['uri'], 4 );
-            }
-            $values['date'] = strftime( '%Y-%m-%d' );
-            $values['browser'] = $this->browser->browser;
-            $values['platform'] = $this->browser->platform;
+            // Check if we need to log statistics or not
+            if ( YDConfig::get( 'keep_stats', true ) ) {
 
-            // Fix the short URLs so that they all look the same
-            if ( YDConfig::get( 'friendly_urls', true ) && strpos( $values['uri'], '_' ) ) {
-                if ( YDStringUtil::startswith( $values['uri'], 'image/', false ) ) {
-                    $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
-                } elseif ( YDStringUtil::startswith( $values['uri'], 'archive' ) ) {
-                } else {
-                    $values['uri'] = substr( $values['uri'], 0, strpos( $values['uri'], '_' ) )
-                                   . substr( $values['uri'], strpos( $values['uri'], '.php?id=' ) );
+                // Get the logging data
+                $values = array();
+                $values['uri'] = str_replace( dirname( YD_SELF_SCRIPT ) . '/', '', $this->getNormalizedUri() );
+                if ( substr( $values['uri'], 0, 1 ) == '/' ) {
+                    $values['uri'] = substr( $values['uri'], 1 );
                 }
-            }
+                if ( substr( $values['uri'], 0, 4 ) == '.php' ) {
+                    $values['uri'] = basename( YD_SELF_SCRIPT ) . substr( $values['uri'], 4 );
+                }
+                $values['date'] = strftime( '%Y-%m-%d' );
+                $values['browser'] = $this->browser->browser;
+                $values['platform'] = $this->browser->platform;
 
-            // Add index.php
-            if ( empty( $values['uri'] ) && basename( YD_SELF_SCRIPT ) == 'index.php' ) {
-                $values['uri'] = 'index.php';
-            }
+                // Fix the short URLs so that they all look the same
+                if ( YDConfig::get( 'friendly_urls', true ) && strpos( $values['uri'], '_' ) ) {
+                    if ( YDStringUtil::startswith( $values['uri'], 'image/', false ) ) {
+                        $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
+                    } elseif ( YDStringUtil::startswith( $values['uri'], 'archive' ) ) {
+                    } else {
+                        $values['uri'] = substr( $values['uri'], 0, strpos( $values['uri'], '_' ) )
+                                       . substr( $values['uri'], strpos( $values['uri'], '.php?id=' ) );
+                    }
+                }
 
-            // Add them to the database
-            $this->weblog->logRequestToStats( $values );
+                // Add index.php
+                if ( empty( $values['uri'] ) && basename( YD_SELF_SCRIPT ) == 'index.php' ) {
+                    $values['uri'] = 'index.php';
+                }
+
+                // Add them to the database
+                $this->weblog->logRequestToStats( $values );
+
+            }
 
         }
 
@@ -335,6 +340,7 @@
             $this->tpl->assign( 'weblog_description', YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
             $this->tpl->assign( 'weblog_language',    YDConfig::get( 'weblog_language', 'en' ) );
             $this->tpl->assign( 'google_analytics',   YDConfig::get( 'google_analytics', '' ) != '' );
+            $this->tpl->assign( 'keep_stats',         YDConfig::get( 'keep_stats', true ) );
 
             // Get the link to the different directories
             $uploads_dir = YDUrl::makeLinkAbsolute( '../' . $this->dir_uploads );
