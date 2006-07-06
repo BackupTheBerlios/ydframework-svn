@@ -28,6 +28,11 @@
             $this->tpl->assign( 'category', $category );
             $this->tpl->assign( 'items',    $items );
 
+            // Set the title
+            $this->tpl->assign(
+                'title', t('archive_for_the') . '\'' . $category['title'] . '\' ' .  strtolower( t('category') )
+            );
+
             // Display the template
             $this->display();
 

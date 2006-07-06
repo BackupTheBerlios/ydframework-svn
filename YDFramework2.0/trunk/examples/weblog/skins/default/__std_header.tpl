@@ -4,7 +4,7 @@
 
 <head profile="http://gmpg.org/xfn/1">
 
-    <title>{$weblog_title}</title>
+    <title>{$title}</title>
 
     <meta name="generator" content="{$YD_FW_NAMEVERS}" />
 

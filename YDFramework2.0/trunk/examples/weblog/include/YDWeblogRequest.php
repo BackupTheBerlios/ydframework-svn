@@ -138,7 +138,15 @@
             $this->tpl->assign( 'links',      $links );
 
             // Assign the weblog details
-            $this->tpl->assign( 'weblog_title',                YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+            $title = $this->tpl->get_template_vars( 'title' );
+            $wltitle = YDConfig::get( 'weblog_title', 'Untitled Weblog' );
+            if ( $title != null ) {
+                $title = $wltitle . ' &raquo; ' . $title;
+            } else {
+                $title = $wltitle;
+            }
+            $this->tpl->assign( 'title',                       $title );
+            $this->tpl->assign( 'weblog_title',                $wltitle );
             $this->tpl->assign( 'weblog_description',          YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
             $this->tpl->assign( 'weblog_dir',                  YDUrl::makeLinkAbsolute( '.' ) );
             $this->tpl->assign( 'weblog_current_url',          YDUrl::makeLinkAbsolute( YD_SELF_URI ) );

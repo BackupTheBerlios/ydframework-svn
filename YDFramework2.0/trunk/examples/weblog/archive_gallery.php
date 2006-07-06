@@ -32,6 +32,9 @@
             // Add them to the template
             $this->tpl->assign( 'items', $items );
 
+            // Set the title
+            $this->tpl->assign( 'title', t('archives_gallery') );
+
             // Display the template
             $this->display();
 

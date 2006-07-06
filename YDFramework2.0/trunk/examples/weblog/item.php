@@ -30,6 +30,9 @@
             $item  = @ $this->weblog->getPublicItemById( $id );
             $this->redirectIfMissing( $item );
 
+            // Set the title
+            $this->tpl->assign( 'title', $item['title'] );
+
             // Get the related items
             $related_items = $this->weblog->getRelatedItemsByItem( YDConfig::get( 'weblog_entries_fp', 5 ), $item );
 

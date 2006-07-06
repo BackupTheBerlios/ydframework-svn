@@ -61,6 +61,9 @@
             $this->tpl->assign( 'item',  $item );
             $this->tpl->assign( 'image', $image );
 
+            // Set the title
+            $this->tpl->assign( 'title', $item['title'] . ' &raquo; ' . $image->getBasenameNoExt() );
+
             // Display the template
             $this->display();
 
