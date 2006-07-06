@@ -12,6 +12,11 @@
             // Initialize the parent
             $this->YDWeblogAdminRequest();
 
+            // Check if we log statistics or not
+            if ( ! YDConfig::get( 'keep_stats', true ) ) {
+                $this->redirect();
+            }
+
             // Register the graph template function
             $this->tpl->register_function( 'graph', array( & $this, 'templateGraph' ) );
 
