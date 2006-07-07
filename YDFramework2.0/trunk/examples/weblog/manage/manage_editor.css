@@ -1,0 +1,10 @@
+body, td, pre {
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Verdana, Arial, Sans-Serif;
+	font-size: 10pt;
+	line-height: 16pt;
+	margin: 2px;
+}
+
+body {
+	background-color: #FFFFFF;
+}

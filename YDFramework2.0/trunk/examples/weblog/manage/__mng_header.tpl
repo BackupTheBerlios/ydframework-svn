@@ -38,7 +38,8 @@
             theme_advanced_toolbar_location : "top",
             theme_advanced_toolbar_align : "left",
             theme_advanced_path_location : "",
-            force_br_newlines : true
+            force_br_newlines : true,
+            content_css : 'manage_editor.css'
         });{/literal}
 
     //-->
