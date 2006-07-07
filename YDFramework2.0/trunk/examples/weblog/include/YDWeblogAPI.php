@@ -267,6 +267,24 @@
                     $image->relative_path_s_obj = new YDFSImage( $dir_uploads->getAbsolutePath() . '/' . $image->relative_path_s );
                     $image->relative_path_m_obj = new YDFSImage( $dir_uploads->getAbsolutePath() . '/' . $image->relative_path_m );
 
+                    // Get the EXIF info for the image
+                    $result = read_exif_data_raw( $image->getAbsolutePath(), false );
+                    $image->exif = array();
+                    if ( isset( $result['IFD0'] ) ) {
+                        $image->exif = array_merge( $image->exif, $result['IFD0'] );
+                    }
+                    if ( isset( $result['SubIFD'] ) ) {
+                        $image->exif = array_merge( $image->exif, $result['SubIFD'] );
+                    }
+                    if ( $image->exif ) {
+                        @ $image->exif['full'] = $image->exif['Model'] . ' ' . str_replace( ' sec', 's', $image->exif['ExposureTime'] )
+                                             . ' ' . str_replace( ' ', '/', $image->exif['ApertureValue'] ) . ' ' .  t('at')
+                                             . ' ' . str_replace( ' ', '', $image->exif['FocalLength'] ) . ' ISO'
+                                             . $image->exif['ISOSpeedRatings'];
+                    } else {
+                        $image->exif = null;
+                    }
+
                     // Update the original image
                     $images[$key] = $image;
 

@@ -5,7 +5,6 @@
 
     // Includes
     YDInclude( 'YDForm.php' );
-    YDInclude( dirname( __FILE__ ) . '/include/exifer/exif.php' );
 
     // Class definition
     class item_gallery extends YDWeblogRequest {
@@ -45,16 +44,6 @@
                     $image->num = $key + 1;
                     $image->total_images = sizeof( $item['images'] );
                 }
-            }
-
-            // Get the EXIF info for the image
-            $result = read_exif_data_raw( $image->getAbsolutePath(), false );
-            $image->exif = array();
-            if ( isset( $result['IFD0'] ) ) {
-                $image->exif = array_merge( $image->exif, $result['IFD0'] );
-            }
-            if ( isset( $result['SubIFD'] ) ) {
-                $image->exif = array_merge( $image->exif, $result['SubIFD'] );
             }
 
             // Add them to the template

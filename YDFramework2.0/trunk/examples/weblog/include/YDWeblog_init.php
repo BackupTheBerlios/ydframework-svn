@@ -50,6 +50,7 @@
     // Include other libraries
     YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
+    YDInclude( dirname( __FILE__ ) . '/exifer/exif.php' );
 
     // Check if the user wanted to use caching
     if ( YDConfig::get( 'use_cache', false ) ) {

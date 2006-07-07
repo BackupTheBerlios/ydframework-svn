@@ -53,7 +53,8 @@
                 {foreach from=$image_row item="image"}
                     <td width="33%" align="center" style="vertical-align: middle;" height="100">
                         {if $image}
-                            <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]" title="{$image->getBasenameNoExt()}"
+                            <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
+                             title="{$item.title} &raquo; {$image->getBasenameNoExt()}<br/>{$image->exif.full}"
                              ><img src="{$image|link_thumb}" alt="{$image->getBaseName()}"
                              width="{$image->relative_path_m_obj->getWidth()}" height="{$image->relative_path_m_obj->getHeight()}"></a>
                         {else}
@@ -66,7 +67,8 @@
                 {foreach from=$image_row item="image"}
                     <td width="33%" align="center">
                         {if $image}
-                            <p><a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]" title="{$image->getBasenameNoExt()}"
+                            <p><a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
+                             title="{$item.title} &raquo; {$image->getBasenameNoExt()}<br/>{$image->exif.full}"
                              >{$image->getBasenameNoExt()}</a><br/>&nbsp;</p>
                         {else}
                             &nbsp;
