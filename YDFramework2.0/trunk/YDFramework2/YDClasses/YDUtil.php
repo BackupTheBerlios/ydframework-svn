@@ -604,7 +604,7 @@
             $string = strtr( $string, $trans );
             $trans = get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES );
             foreach ( $trans as $key => $value ) {
-                if ( ord( $key ) == 60 || ord( $key ) == 62 ) {
+                if ( ord( $key ) == 60 || ord( $key ) == 62 || ord( $key ) == 38 ) {
                     unset( $trans[$key] );
                 } else {
                     $trans[$key] = '&#' . ord( $key ) . ';';
