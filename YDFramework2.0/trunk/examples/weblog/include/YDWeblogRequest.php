@@ -36,6 +36,13 @@
             $this->dir_uploads = YDConfig::get( 'dir_uploads', 'uploads' );
             $this->dir_skins   = YDConfig::get( 'dir_skins',   'skins' ) . '/';
 
+
+            // Default to default skin
+            if ( ! is_dir( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/' ) ) {
+                YDConfig::set( 'weblog_skin', 'default' );
+                $this->skin = YDConfig::get( 'weblog_skin', 'default' );
+            }
+
             // Initialize the template
             $this->tpl = new YDTemplate();
             $this->tpl->template_dir = dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/';
