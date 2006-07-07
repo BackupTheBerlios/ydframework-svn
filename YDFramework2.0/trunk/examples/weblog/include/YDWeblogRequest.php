@@ -155,6 +155,7 @@
             $this->tpl->assign( 'title',                       $title );
             $this->tpl->assign( 'weblog_title',                $wltitle );
             $this->tpl->assign( 'weblog_description',          YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
+            $this->tpl->assign( 'weblog_language',             YDConfig::get( 'weblog_language', 'en' ) );
             $this->tpl->assign( 'weblog_dir',                  YDUrl::makeLinkAbsolute( '.' ) );
             $this->tpl->assign( 'weblog_current_url',          YDUrl::makeLinkAbsolute( YD_SELF_URI ) );
             $this->tpl->assign( 'weblog_link',                 YDUrl::makeLinkAbsolute( 'index.php' ) );

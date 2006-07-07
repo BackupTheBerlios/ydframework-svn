@@ -46,6 +46,27 @@
 
     {$weblog_google_analytics}
 
+    <script language="JavaScript" src="tiny_mce/tiny_mce_gzip.php"></script>
+
+    <script language="JavaScript">
+    <!--
+
+        {literal}tinyMCE.init({
+            mode : "textareas",
+            theme : "advanced",
+            language: "{/literal}{$weblog_language}{literal}",
+            theme_advanced_buttons1 : "bold,italic,separator,undo,redo,separator,link,unlink,separator,code",
+            theme_advanced_buttons2 : "",
+            theme_advanced_buttons3 : "",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_toolbar_align : "left",
+            theme_advanced_path_location : "",
+            force_br_newlines : true
+        });{/literal}
+
+    //-->
+    </script>
+
 </head>
 
 <body>
