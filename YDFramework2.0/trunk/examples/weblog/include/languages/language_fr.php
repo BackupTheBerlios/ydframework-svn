@@ -27,6 +27,10 @@ $GLOBALS['t']['err_general'] = 'Une erreur est survenue';
 $GLOBALS['t']['back'] = 'Retour';
 $GLOBALS['t']['yes'] = 'oui';
 $GLOBALS['t']['no'] = 'non';
+$GLOBALS['t']['confirm_action'] = '&Ecirc;tes-vous s&ucirc;r de vouloir effectuer l\'action suivante ?';
+$GLOBALS['t']['rows'] = 'ligne(s)';
+$GLOBALS['t']['tables'] = 'Tables';
+$GLOBALS['t']['related_items'] = 'Entr&eacute;es en rapport avec';
 
 // __std_header.tpl
 $GLOBALS['t']['another_powered_by'] = 'Juste un autre weblog propuls&eacute; par le ' . YD_FW_NAME . '!';
@@ -146,6 +150,7 @@ $GLOBALS['t']['err_login_all'] = 'Nom d\'utilisateur et/ou mot de passe incorrec
 // manage/cache.tpl
 $GLOBALS['t']['cleanup'] = 'Nettoyer';
 $GLOBALS['t']['cache_cleaned_up'] = 'Les fichiers du cache ont &eacute;t&eacute; supprim&eacute;s!';
+$GLOBALS['t']['cleanup_cache'] = 'Supprimer les fichiers du cache';
 
 // manage/serverinfo.tpl
 $GLOBALS['t']['system'] = 'Syst&egrave;me';
@@ -188,6 +193,8 @@ $GLOBALS['t']['totalcomments'] = 'Nombre total de commentaires';
 $GLOBALS['t']['items'] = 'entr&eacute;e(s)';
 $GLOBALS['t']['top_10_commenters'] = 'Les 10 commentateurs les plus actifs';
 $GLOBALS['t']['all_commenters'] = 'Tous les commentateurs';
+$GLOBALS['t']['reset_stats'] = 'R&eacute;initialiser toutes les statistiques';
+$GLOBALS['t']['total_average_stats'] = 'Totals et moyens';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Adresse email';
@@ -278,6 +285,10 @@ $GLOBALS['t']['cfg_auto_close_items'] = 'Interdire les commentaires apr&egrave;s
 $GLOBALS['t']['err_auto_close_items'] = 'Interdire les commentaires apr&egrave;s x jours devrait &ecirc;tre num&eacute;rique';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Affiche des informations de d&eacute;bogage';
 $GLOBALS['t']['cfg_default_item_settings'] = 'Valeurs par d&eacute;faut pour les nouvelles entr&eacute;es';
+$GLOBALS['t']['cfg_weblog_google_analytics'] = 'Compte Google Analytics';
+$GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
+$GLOBALS['t']['cfg_keep_stats'] = 'Statistiques de tra&ccedil;age';
+$GLOBALS['t']['cfg_use_auto_update'] = 'Activer Auto Update';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';
