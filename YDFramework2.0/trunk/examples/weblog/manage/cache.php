@@ -92,7 +92,7 @@
         // Get the total size and count as a piece of text
         function _getTotalSizeAndCountAsText( $pattern ) {
             $res = $this->_getTotalSizeAndCount( $pattern );
-            return sprintf( '(%s %s, %s)', $res[0], t('items'), YDStringUtil::formatFileSize( $res[0] ) );
+            return sprintf( '(%s %s, %s)', $res[0], t('items'), YDStringUtil::formatFileSize( $res[1] ) );
         }
 
         // Get a filelist
