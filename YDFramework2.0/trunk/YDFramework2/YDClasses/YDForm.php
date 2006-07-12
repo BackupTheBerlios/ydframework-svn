@@ -86,8 +86,13 @@
 
             // Some static HTML things
             $this->_htmlRequiredStart =  '';
-            $this->_htmlRequiredEnd = ' <font color="red">(required)</font>';
-            $this->_htmlErrorStart = '<font color="red">Error: ';
+
+            // Check default translations
+            if( !isset( $GLOBALS['t']['form_required'] ) ) $GLOBALS['t']['form_required'] = '(required)';
+            if( !isset( $GLOBALS['t']['form_error'] ) )    $GLOBALS['t']['form_error'] = 'Error: ';
+
+            $this->_htmlRequiredEnd = ' <font color="red">' . t( 'form_required' ) . '</font>';
+            $this->_htmlErrorStart = '<font color="red">' . t( 'form_error' );
             $this->_htmlErrorEnd = '</font>';
             $this->_requiredNote = '';
 
