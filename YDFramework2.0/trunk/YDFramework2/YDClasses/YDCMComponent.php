@@ -29,16 +29,16 @@
 	// include YDF libs
     YDInclude( 'YDDatabaseObject.php' );
 	YDInclude( 'YDDatabaseTree.php' );
+	YDInclude( 'YDUrl.php' );
 
 	require_once( dirname( __FILE__ ) . '/YDCMComponent/YDCMComp.php' );
 
 	// add generic translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/YDCMComponent/languages/' );
 
-
     class YDCMComponent extends YDDatabaseObject {
 
-        function YDCMComponent( $name, $standardComponent = true ) {
+        function YDCMComponent( $type, $id ) {
 
 			// init DB object
             $this->YDDatabaseObject();
@@ -52,7 +52,7 @@
             $this->registerDatabase();
 
 			// register table for this component
-            $this->registerTable( $name );
+            $this->registerTable( $type );
 
 			// add standard relation
 			$this->registerField( 'component_id' );
@@ -60,26 +60,53 @@
 			$rel->setLocalKey( 'component_id' );
 			$rel->setForeignKey( 'component_id' );
 
+			// add comp object
+			$this->comp = new YDCMComp( $type, $id );
+			
+			$this->_id = intval( $id );
+		}
+
+
+        /**
+         *  This function sets a new id for this component
+         *
+         *  @param $id           Component id
+         */
+		function setId( $id ){
+
+			// set id for all operations in this class
+			$this->_id       = intval( $id );
+
+			// set id for internal YDComp object
+			$this->comp->_id = intval( $id );
+		}
+
+
+        /**
+         *  This function renders this element for menu
+         *
+         *  @returns    The YDDatabaseTree object for YDComponent static methods
+         */
+		function __getYDDatabaseTree(){
+		
 			// TODO: position is required and we must change order from 'parent_id' to 'parent_id ASC, position ASC'
-			$this->tree = new YDDatabaseTree( 'default', 'YDCMTree', 'content_id', 'parent_id', 'parent_id' );
+			$tree = new YDDatabaseTree( 'default', 'YDCMTree', 'content_id', 'parent_id', 'parent_id' );
 
 			// TODO: set sort by parent & position
-			// $this->tree->setSortField( 'parent_id ASC, position ASC' );
+			// $tree->setSortField( 'parent_id ASC, position ASC' );
 
 			// add tree fields
-			$this->tree->addField( 'type' );
-			$this->tree->addField( 'state' );
-			$this->tree->addField( 'reference' );
-			$this->tree->addField( 'access' );
-			$this->tree->addField( 'searcheable' );
-			$this->tree->addField( 'published_date_start' );
-			$this->tree->addField( 'published_date_end' );
-			$this->tree->addField( 'candrag' );
-			$this->tree->addField( 'candrop' );
-
-			// add comp object
-			if ( $standardComponent )
-				$this->comp = new YDCMComp( $name );
+			$tree->addField( 'type' );
+			$tree->addField( 'state' );
+			$tree->addField( 'reference' );
+			$tree->addField( 'access' );
+			$tree->addField( 'searcheable' );
+			$tree->addField( 'published_date_start' );
+			$tree->addField( 'published_date_end' );
+			$tree->addField( 'candrag' );
+			$tree->addField( 'candrop' );
+			
+			return $tree;		
 		}
 
 
@@ -91,7 +118,6 @@
          *
          *  @returns    An html string
          */
-
 		function render( $id, $url ){
 		
 			return '';
@@ -101,29 +127,49 @@
         /**
          *  This function will render a menu
          *
-         *  @param $id           Menu id
-         *  @param $language_id  Language id
-         *  @param $urlObj       Url object
-         *
          *  @returns    An array with all direct children
          */
-		function renderMenu( $id, $language_id, $urlObj ){
+		function renderMenu(){
 		
-			return $this->comp->renderMenu( $id, $language_id, $urlObj );
+			return $this->comp->renderMenu();
 		}
 
 
         /**
-         *  This function returns node attributes
-         *
-         *  @param $id           Menu id
-         *  @param $language_id  Language id
+         *  This function returns all node attributes
          *
          *  @returns    An array with node attributes
          */
-		function getNode( $id, $language = 'all' ){
+		function getNode(){
+
+			// check if we have already node attributes (some sort of caching)
+			if ( !isset( $this->__nodeProperties ) ) 
+				$this->__nodeProperties = $this->comp->getNode();
 		
-			return $this->comp->getNode( $id, $language );
+			return $this->__nodeProperties;
+		}
+
+
+		function getInfo(){
+		
+			return $this->comp->getInfo();
+		}
+
+        /**
+         *  This function returns a node attribute
+         *
+         *  @param $attribute           Attribute name
+         *
+         *  @returns    The node attribute
+         */
+		function get( $attribute ){
+
+			$node = $this->getNode();
+
+			// return attribute if exists 
+			if ( isset( $node[ $attribute ] ) ) return $node[ $attribute ];
+
+			return false;
 		}
 
 
@@ -147,10 +193,17 @@
          *  This function returns all elements (except root)
          *
          *  @returns    all tree elements 
+         *  @static
          */
-		function getTreeElements(){
+		function getTreeElements( $id = null ){
 
-			return $this->tree->getDescendants( 1 );
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
+			// check if we have a custom id
+			if( is_null( $id ) ) $id = $this->_id;
+
+			return $tree->getDescendants( $id );
 		}
 
 
@@ -161,10 +214,11 @@
          *  @param $y  Id of dropable node
          *
          *  @returns    false if elements are invalid, an associative array with node types (eg: array( $x => 'PHCMPage', $y => 'PHCMRootmenu ))'
+         *  @static
          */
 		function getDragDropElements( $x = null, $y = null ){
 		
-			// get object tree
+			// get tree module
 			$treeObj = YDCMComponent::module( 'YDCMTree' );
 
 			// check drop validation
@@ -175,50 +229,38 @@
         /**
          *  This function returns the path to current node
          *
-         *  @param $id           (Optional) Node id
-         *  @param $language_id  (Optional) Language id
-         *
          *  @returns    An array with all parents
          */
-		function getPath( $id = 0, $language_id = 'all' ){
+		function getPath(){
 
-			return $this->comp->getPath( $id, $language_id );
+			return $this->comp->getPath();
 		}
 
 
         /**
          *  This function returns all direct elements of a menu
          *
-         *  @param $id           (Optional) Menu id
-         *  @param $language_id  (Optional) Language id
-         *
          *  @returns    An array with all direct children
          */
-		function getMenu( $id = 0, $language_id = 'all' ){
+		function getMenu(){
 
-			return $this->comp->getMenu( $id, $language_id );
+			return $this->comp->getMenu();
 		}
 
 
         /**
          *  This function returns the path string to current node
          *
-         *  @param $id           (Optional) Node id
-         *  @param $language_id  (Optional) Language id
          *  @param $separator    (Optional) Html separator string
-         *  @param $url          (Optional) Url object for element links
          *  @param $classParents (Optional) Html class for html links of parents
          *  @param $classCurrent (Optional) Url object for element links
          *
          *  @returns    An html string
          */
-		function getBreadcrum( $id = 0, $language_id = 'all', $separator = ' &gt; ', $url = null, $classParents = 'breadParents', $classCurrent = 'breadCurrent' ){
-
-			// if url object is not set we use the current url
-			if( is_null( $url ) ) $url = new YDUrl( YD_SELF_SCRIPT );
+		function getBreadcrum( $separator = ' &gt; ', $classParents = 'breadParents', $classCurrent = 'breadCurrent' ){
 
 			// get breadcrum from component
-			return $this->comp->getBreadcrum( $id, $language_id, $separator, $url, $classParents, $classCurrent );
+			return $this->comp->getBreadcrum( $separator, $classParents, $classCurrent );
 		}
 
 
@@ -267,47 +309,34 @@
 
 
         /**
-         *  This function changes component state
-         *
-         *  @param $id  The node id
-         *
-         *  @returns    true if state changed, false otherwise
-         *
-         */
-		function toogleState( $id ){
-
-			// get node values
-			$old_node = $this->tree->getNode( $id );
-
-			// change state attribute
-			if ( $old_node[ 'state' ] == 0 ) return $this->setState( $id, 1 );
-			else                             return $this->setState( $id, 0 );
-		}
-
-
-        /**
          *  This function sets a node state
          *
-         *  @param $id         The node id
          *  @param $state      The state code
          *
          *  @returns    1 if state changed, 0 otherwise
          */
-		function setState( $id, $state ){
-		
-			return $this->tree->updateNode( array( 'state' => $state ), $id );
+		function setState( $state, $id = null ){
+
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
+			// check if static
+			if( is_null( $id ) ) $id = $this->_id;
+
+			return $tree->updateNode( array( 'state' => $state ), $id );
 		}
 
 
         /**
          *  This function deletes the tree part of a component only
          *
-         *  @param $id  The node id
-         *
          */
-		function deleteNode( $id ){
-		
-			return $this->tree->deleteNode( intval( $id ) );
+		function deleteNode(){
+
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
+			return $tree->deleteNode( $this->_id );
 		}
 
 
@@ -318,8 +347,11 @@
          */
 		function addNode( $values, $parent_id = null ){
 
-			// user YDDatabasetree method
-			return $this->tree->addNode( $values, $parent_id );
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
+			// use YDDatabasetree method
+			return $tree->addNode( $values, $parent_id );
 		}
 
 
@@ -330,8 +362,11 @@
          */
 		function updateNode( $values, $node_id = null ){
 
-			// user YDDatabasetree method
-			return $this->tree->updateNode( $values, $node_id );
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
+			// use YDDatabasetree method
+			return $tree->updateNode( $values, $node_id );
 		}
 
 
@@ -342,8 +377,11 @@
          */
 		function moveNode( $x, $y ){
 
+			// init db tree object
+			$tree = YDCMComponent::__getYDDatabaseTree();
+
 			// use YDDatabasetree method
-			return $this->tree->moveNode( $x, $y );
+			return $tree->moveNode( $x, $y );
 		}
 
 

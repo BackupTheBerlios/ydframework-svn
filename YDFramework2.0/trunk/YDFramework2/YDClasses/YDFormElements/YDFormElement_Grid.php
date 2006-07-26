@@ -65,7 +65,7 @@
 			$this->columns = array();
 			
 			// default values
-			$this->defaults = array();
+//			$this->defaults = array();
 			
 			$this->form = new YDForm( 'gridform' . $name );
 			$this->form->addElement( 'hidden', 'gr_column',    '', array('id' => 'gr_column') );
@@ -92,7 +92,7 @@
          *      @param $method  Method name where to send events
          *
          */
-		function setAjax( &$ajax, $method ){
+		function setAjax( &$ajax, $method = 'PHCMHelpdesk_reload' ){
 		
 			$ajax->addForm( $this->form );
 			$ajax->addEvent( 'ticketReload()', $method, $this->form->getName() );
@@ -146,14 +146,17 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
+			$template_record = new YDTemplate();
+
 			// set form defaults
-			if ( isset ( $this->defaults ) ) $this->form->setDefaults( $this->defaults );
+			if ( isset ( $this->defaults ) ){
+				$this->form->setDefaults( $this->defaults );
+				$template_record->assign( 'defaults',  $this->defaults );
+			}
 
 			// get record template and assign recordset
-			$template_record = new YDTemplate();
 			$template_record->assign( 'recordset', $this->_value );
 			$template_record->assign( 'columns',   $this->columns );
-			$template_record->assign( 'defaults',  $this->defaults );
 			$template_record->assignForm( 'form',  $this->form );
 
             // Get the HTML

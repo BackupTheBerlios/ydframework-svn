@@ -49,5 +49,22 @@
 		}
 
 
+        /**
+         *  This function will render this element (to be used in a menu)
+         *
+         *  @returns    Html link
+         */
+		function render( $component, $url ){
+
+			$url->setQueryVar( 'component', $component[ 'type' ] );
+			$url->setQueryVar( 'id',        $component[ 'content_id' ] );
+
+			// get url properties from DB
+			$this->getNode( $component[ 'content_id' ] );
+
+			return '<a href="' . $this->url . '">' . $component[ 'title' ] . '</a>';
+		}
+
+
     }
 ?>

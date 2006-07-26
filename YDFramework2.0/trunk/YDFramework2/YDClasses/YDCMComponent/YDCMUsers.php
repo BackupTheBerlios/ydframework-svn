@@ -29,12 +29,6 @@
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
 
-	// set user form name
-	YDConfig::set( 'YDCMUSERS_FORMUSER', 'YDCMUsersForm', false );
-
-	// set password form name
-	YDConfig::set( 'YDCMUSERS_FORMPASSWORD', 'YDCMUsersFormPassword', false );
-
 
     class YDCMUsers extends YDDatabaseObject {
     
@@ -72,25 +66,44 @@
 			$this->registerField( 'created_user' );
 			$this->registerField( 'created_date' );
 
-			// custom relations
-            $relLocks = & $this->registerRelation( 'YDCMLocks', false, 'YDCMLocks' );
-			$relLocks->setLocalKey( 'user_id' );
-            $relLocks->setForeignKey( 'user_id' );
-			$relLocks->setForeignJoin( 'LEFT' );
-			
-            $relLanguages = & $this->registerRelation( 'YDCMLanguages', false, 'YDCMLanguages' );
-			$relLanguages->setLocalKey( 'language_id' );
-            $relLanguages->setForeignKey( 'language_id' );
+			// relation with lock table
+            $rel = & $this->registerRelation( 'YDCMLocks', false, 'YDCMLocks' );
+			$rel->setLocalKey( 'user_id' );
+            $rel->setForeignKey( 'user_id' );
+			$rel->setForeignJoin( 'LEFT' );
 
-			// setup tree (NOT USED YET)
-			$this->tree = new YDDatabaseTree( 'default', 'YDCMUsers', 'content_id', 'parent_id', 'parent_id' );
+			// relation with languages table
+            $rel = & $this->registerRelation( 'YDCMLanguages', false, 'YDCMLanguages' );
+			$rel->setLocalKey( 'language_id' );
+            $rel->setForeignKey( 'language_id' );
+
+			// TODO: tree position is required
+			$this->tree = new YDDatabaseTree( 'default', 'YDCMUsers', 'user_id', 'parent_id', 'parent_id' );
+
+			// add tree fields
+			$this->tree->addField( 'parent_id' );
+			$this->tree->addField( 'type' );
+			$this->tree->addField( 'state' );
+			$this->tree->addField( 'name' );
+
+			// init user form
+			$this->form = new YDForm( 'YDCMUsers' );
+		}
+
+
+        /**
+         *  This function sets the user id of this user object
+         *
+         *  @param $id  User id
+         */
+		function setId( $id ){
+		
+			$this->id = $id;
 		}
 
 
         /**
          *  This function returns the id of the current user
-         *
-         *  @returns    User id if user exists, false otherwise
          */
 		function currentID(){
 		
@@ -106,6 +119,18 @@
 			// return user id found
 			return $this->user_id;
 		}
+
+
+        /**
+         *  This function returns all sub users
+         *
+         *  @returns    all tree elements 
+         */
+		function getTreeElements(){
+
+			return $this->tree->getDescendants( $this->id, true );
+		}
+
 
         /**
          *  This function checks if a username and password are valid
@@ -192,53 +217,99 @@
          */
 		function changeCurrentUserForm( $formvalues = array() ){
 
-			// get user YDForm object
-			$form = $this->getFormUser();
-
 			// check form validation
-			if ( !$form->validate( $formvalues ) )
-				return $form->getErrors();
+			if ( !$this->form->validate( $formvalues ) )
+				return $this->form->getErrors();
 
-			return $this->changeCurrentUser( $form->getValues() );
+			return $this->changeCurrentUser( $this->form->getValues() );
 		}
 		
 
         /**
-         *  This function return the user form
-         *
-         *  @returns    form object
+         *  This function creates an user details form
+		 *
+		 * @param $username   1: Username is a span, 2: Username is a text box
+		 * @param $password   0: Password is not showed, 1: Password is showed
          */
-		function getFormUser(){
+		function addFormDetails( $username = 1, $password = 0 ){
 
-			// create languages and templates object
+			// add username
+			if ( $username == 1 ) $this->form->addElement( 'span',     'username', t('user_username') );
+			else                  $this->form->addElement( 'text',     'username', t('user_username') );
+
+			// add password
+			if ( $password == 1 ) $this->form->addElement( 'password', 'password', t('user_password') );
+
+			// add name
+            $this->form->addElement( 'text',      'name',         t('user_name'),     array('size' => 50, 'maxlength' => 255) );
+			$this->form->addRule(    'name',      'maxlength',    t('name too big'),  255 );
+
+			// add email
+            $this->form->addElement( 'text',      'email',        t('user_email') );
+			$this->form->addRule(    'email',     'email',        t('email not valid') );
+
+			// add other info textare
+            $this->form->addElement( 'textarea',  'other',        t('user_other'),    array('rows' => 4, 'cols' => 30) );
+			$this->form->addRule(    'other',     'maxlength',    t('other too big'), 5000 );
+
+			// add languages select box
 			$languages = YDCMComponent::module( 'YDCMLanguages' );
+			$this->form->addElement( 'select',      'language_id',  t('user_language'),      array(), $languages->active() );
+			$this->form->addRule(    'language_id', 'in_array',     t('language not valid'), array_keys( $languages->active() ) );
+
+			// add template select box
 			$templates = YDCMComponent::module( 'YDCMTemplates' );
+            $this->form->addElement( 'select',    'template',     t('user_template'),      array(), $templates->admin_templates() );
+			$this->form->addRule(    'template',  'in_array',     t('template not valid'), array_keys( $templates->admin_templates() ) );
 
-			// create form object
-            $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMUSER' ) );
+			// add user details
+            $this->form->addElement( 'span', 'login_start',  t('login_start') );
+            $this->form->addElement( 'span', 'login_end',    t('login_end') );
+            $this->form->addElement( 'span', 'login_counter',t('login_counter') );
+            $this->form->addElement( 'span', 'login_last',   t('login_last') );
+            $this->form->addElement( 'span', 'login_current',t('login_current') );
+            $this->form->addElement( 'span', 'created_user', t('created_user') );
+            $this->form->addElement( 'span', 'created_date', t('created_date') );
+		}
 
-	        $form->addElement( 'span',      'username',     t('user_username') );
-            $form->addElement( 'text',      'name',         t('user_name'),     array('size' => 50, 'maxlength' => 255) );
-            $form->addElement( 'text',      'email',        t('user_email') );
-            $form->addElement( 'textarea',  'other',        t('user_other'),    array('rows' => 4, 'cols' => 30) );
-            $form->addElement( 'select',    'language_id',  t('user_language'), array(), $languages->active() );
-            $form->addElement( 'select',    'template',     t('user_template'), array(), $templates->admin_templates() );
-            $form->addElement( 'span',      'login_start',  t('login_start') );
-            $form->addElement( 'span',      'login_end',    t('login_end') );
-            $form->addElement( 'span',      'login_counter',t('login_counter') );
-            $form->addElement( 'span',      'login_last',   t('login_last') );
-            $form->addElement( 'span',      'login_current',t('login_current') );
-            $form->addElement( 'span',      'created_user', t('created_user') );
-            $form->addElement( 'span',      'created_date', t('created_date') );
 
-			// add rules
-			$form->addRule( 'name',        'maxlength', t('name too big'),       255 );
-			$form->addRule( 'email',       'email',     t('email not valid') );
-			$form->addRule( 'other',       'maxlength', t('other too big'),      5000 );
-			$form->addRule( 'language_id', 'in_array',  t('language not valid'), array_keys( $languages->active() ) );
-			$form->addRule( 'template',    'in_array',  t('template not valid'), array_keys( $templates->admin_templates() ) );
+        /**
+         *  This function creates an user form for password changing
+         *
+         * @param $oldpassword  0: don't include old password box; 1: include old password box
+         */
+		function addFormPassword( $oldpassword = 1 ){
 
-			return $form;
+			// add old password box
+			if ( $oldpassword == 1 )
+            	$this->form->addElement( 'password', 'old',         t('password_old'),         array('size' => 20, 'maxlength' => 31) );
+
+			// add new password box and confirmation box
+            $this->form->addElement( 'password', 'new',         t('password_new'),         array('size' => 30, 'maxlength' => 31) );
+            $this->form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
+
+			// add rules to all passwords
+			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'required',     t('passwords are required') );
+			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength',    t('passwords too big'), 31 );
+			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'alphanumeric', t('passwords not alphanumeric') );
+
+			// add compare rule to new password and confirmation password
+			$this->form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
+		}
+
+
+        /**
+         *  This returns the user form
+         *
+         *  @param $defaults  (Optional) default values to apply in form
+         *
+         *  @returns    YDForm object
+         */
+		function getForm( $defaults = false ){
+
+			if ( is_array( $defaults ) ) $this->form->setDefaults( $defaults );
+
+			return $this->form;
 		}
 
 
@@ -256,12 +327,13 @@
 			if ( !$this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) ) return false;
 
 			// reset values added from valid method
-			$this->resetValues();
+			$this->resetAll();
 
 			// set new password
 			$this->password = md5( $newpassword );
 
 			// change only current user
+			// TODO: escape 'username'
 			$this->where( 'username = "' .      $_SERVER['PHP_AUTH_USER'] . '"' );
 			$this->where( 'password = "' . md5( $_SERVER['PHP_AUTH_PW'] ) . '"' );
 			$this->where( 'password = "' . md5( $oldpassword )            . '"' );
@@ -282,41 +354,11 @@
          */
 		function changeCurrentUserPasswordForm( $formvalues = array() ){
 
-			// get password form
-			$form = $this->getFormPassword();
-
 			// check form validation
-			if ( !$form->validate( $formvalues ) )
-				return $form->getErrors();
+			if ( !$this->form->validate( $formvalues ) )
+				return $this->form->getErrors();
 
-			return $this->changeCurrentUserPassword( $form->getValue( 'old' ), $form->getValue( 'new' ) );
-		}
-
-
-        /**
-         *  This function return the form of password changing
-         *
-         *  @returns    form object
-         */
-		function getFormPassword(){
-
-			// create form object
-            $form = new YDForm( YDConfig::get( 'YDCMUSERS_FORMPASSWORD' ) );
-
-			// add form elements
-            $form->addElement( 'password', 'old',         t('password_old'),         array('size' => 20, 'maxlength' => 31) );
-            $form->addElement( 'password', 'new',         t('password_new'),         array('size' => 30, 'maxlength' => 31) );
-            $form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
-
-			// add rules
-			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'required',     t('passwords are required') );
-			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength',    t('passwords too big'), 31 );
-			$form->addRule( array( 'old', 'new', 'new_confirm' ), 'alphanumeric', t('passwords not alphanumeric') );
-
-			// add compare rule
-			$form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
-
-			return $form;
+			return $this->changeCurrentUserPassword( $this->form->getValue( 'old' ), $this->form->getValue( 'new' ) );
 		}
 
 
@@ -325,15 +367,42 @@
          *
          *  @returns    current user id
          */
-		function getCurrentUser(){
+		function getCurrentUser( $translate = false ){
 		
-			$this->resetValues();
-			
 			// get current user id
-			$this->user_id = $this->currentID();
-			
+			return $this->getUser( $this->currentID(), $translate );
+
+		}
+
+
+		function getUser( $id, $translate = false ){
+
+			$this->resetValues();
+
+			// set user id
+			$this->user_id = intval( $id );
+
 			// get all attributes
-			$this->find();
+			if ( $this->find() != 1 ) return false;
+
+			// password should always empty
+			$this->password = '';
+
+			// check if we want human readable elements
+			if ( $translate ){
+
+				// check if state not schedule
+				if ( $this->state != 2 ){
+					$this->login_start = t('not applicable');
+					$this->login_end   = t('not applicable');
+				}
+
+				// check if user is root
+				if ( $this->created_user == 0 ){
+					$this->created_user = t('not applicable');
+					$this->created_date = t('not applicable');
+				}
+			}
 
 			// return values
 			return $this->getValues();

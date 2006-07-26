@@ -1,5 +1,7 @@
 <?php
 
+$GLOBALS['t']['ydcmpage'] = 'Page';
+
 $GLOBALS['t']['save'] = 'Save';
 $GLOBALS['t']['close'] = 'Close';
 $GLOBALS['t']['open'] = 'Open';
@@ -17,9 +19,31 @@ $GLOBALS['t']['not allowed'] = 'Not allowed';
 $GLOBALS['t']['total'] = 'Total';
 $GLOBALS['t']['previous'] = 'Previous';
 $GLOBALS['t']['next'] = 'Next';
-
-$GLOBALS['t']['add page'] = 'Add page';
+$GLOBALS['t']['state'] = 'State';
+$GLOBALS['t']['add'] = 'Add';
+$GLOBALS['t']['add component'] = 'Add component';
+$GLOBALS['t']['move'] = 'Move';
+$GLOBALS['t']['move up'] = 'Move up';
+$GLOBALS['t']['move down'] = 'Move down';
+$GLOBALS['t']['edit'] = 'Edit';
+$GLOBALS['t']['properties'] = 'Properties';
 $GLOBALS['t']['please wait'] = 'Please wait';
+
+$GLOBALS['t']['visitor'] = 'Visitor';
+$GLOBALS['t']['visitors'] = 'Visitors';
+$GLOBALS['t']['administrator'] = 'Administrator';
+$GLOBALS['t']['administrators'] = 'Administrators';
+
+$GLOBALS['t']['published'] = 'Published';
+$GLOBALS['t']['not published'] = 'Not published';
+$GLOBALS['t']['schedule'] = 'Schedule';
+
+$GLOBALS['t']['translate'] = 'Translate';
+$GLOBALS['t']['translate to'] = 'Translate to';
+
+$GLOBALS['t']['total versions'] = 'Total of versions';
+$GLOBALS['t']['general config'] = 'General configuration';
+$GLOBALS['t']['content versions'] = 'Versions';
 
 $GLOBALS['t']['content'] = 'Content';
 $GLOBALS['t']['general view'] = 'General view';

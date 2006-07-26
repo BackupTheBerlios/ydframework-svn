@@ -48,13 +48,67 @@
 			$this->registerField( 'object' );
 			$this->registerField( 'object_action' );
 			$this->registerField( 'object_id' );
+			$this->registerField( 'browser' );
+			$this->registerField( 'platform' );
+			$this->registerField( 'url' );
 
 			// register custom relation
-            $relUsers = & $this->registerRelation( 'YDCMUsers', false, 'YDCMUsers' );
-			$relUsers->setLocalKey( 'user_id' );
-            $relUsers->setForeignKey( 'user_id' );
+            $rel = & $this->registerRelation( 'YDCMUsers', false, 'YDCMUsers' );
+			$rel->setLocalKey( 'user_id' );
+            $rel->setForeignKey( 'user_id' );
+			$rel->setForeignJoin( 'LEFT' );
 		}
 
+
+        /**
+         *  This function counts visits of a object
+         *
+         *  @param $id       Object id (content_id)
+         *  @param $user_id  (Optional) User id (0 means visitors)
+         *  @param $period   (Optional) Period for count. Valid values: 'week', 'month', year'
+         *
+         *  @returns    an array of labels => values
+         */
+		function getObjectVisits( $id, $user_id = 0, $period = 'week' ){
+		
+			YDInclude( 'YDDate.php' );
+		
+			// compute start date
+			$date = new YDDate();
+
+			$labels = array();
+			
+			if ( $period == 'week' )
+				for( $i = 0; $i < 7; $i++ ){
+					$labels[] = $date->getDayName();
+					$date->addDay( -1 );
+				}
+
+			if ( $period == 'month' )
+				for( $i = 0; $i < 4; $i++ ){
+					$labels[] = $date->getMonthName();
+					$date->addMonth( -1 );
+				}
+
+			if ( $period == 'year' )
+				for( $i = 0; $i < 3; $i++ ){
+					$labels[] = $date->getYear();
+					$date->addYear( -1 );
+				}
+
+			
+			$labels = array_reverse( $labels );
+
+		
+			$this->resetAll();
+			
+			$this->user_id = intval( $user_id );
+			
+		
+		}
+		
+		
+		
 
     }
 ?>

@@ -37,10 +37,10 @@
 
     class YDCMPage extends YDCMComponent {
     
-        function YDCMPage() {
+        function YDCMPage( $id = null ) {
 
 			// init component
-            $this->YDCMComponent( 'YDCMPage' );
+            $this->YDCMComponent( 'YDCMPage', $id );
 
             $this->_author = 'Francisco Azevedo';
             $this->_version = '0.1';
@@ -76,12 +76,12 @@
 
 
         /**
-         *  This function returns the page form
+         *  This function returns the page form (form admin edition)
          *
          *  @returns    YDForm object
          */
 		function getFormPage(){
-		
+
 			YDInclude( 'YDForm.php' );
 
 			// get template and language object

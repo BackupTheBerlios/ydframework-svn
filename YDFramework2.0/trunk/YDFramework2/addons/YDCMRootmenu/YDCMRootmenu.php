@@ -31,10 +31,10 @@
 
     class YDCMRootmenu extends YDCMComponent {
     
-        function YDCMRootmenu() {
+        function YDCMRootmenu( $id = null ) {
         
 			// init component
-            $this->YDCMComponent( 'YDCMRootmenu' );
+            $this->YDCMComponent( 'YDCMRootmenu', $id );
 
             $this->_author = 'Francisco Azevedo';
             $this->_version = '0.1';

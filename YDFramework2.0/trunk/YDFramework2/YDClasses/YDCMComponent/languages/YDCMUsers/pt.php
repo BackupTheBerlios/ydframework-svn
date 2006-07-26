@@ -2,6 +2,7 @@
 
 // USER FORM
 $GLOBALS['t']['user_username'] = 'Username';
+$GLOBALS['t']['user_password'] = 'Password';
 $GLOBALS['t']['user_name'] = 'Nome';
 $GLOBALS['t']['user_email'] = 'Email';
 $GLOBALS['t']['user_other'] = 'Outras informa&ccedil;oes';

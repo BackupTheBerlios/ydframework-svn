@@ -185,12 +185,11 @@
 			$this->registerField( 'urgency_id' );
 			$this->registerField( 'state_id' );
 			$this->registerField( 'text' );
-			$this->registerField( 'creation_user' );
 			$this->registerField( 'creation_date' );
-			$this->registerField( 'reported_by_user' );
-			$this->registerField( 'reported_by_type' );
-			$this->registerField( 'reported_by_local' );
-			$this->registerField( 'reported_by_date' );
+			$this->registerField( 'reportedby_user' );
+			$this->registerField( 'reportedby_type' );
+			$this->registerField( 'reportedby_local' );
+			$this->registerField( 'reportedby_date' );
 			$this->registerField( 'assignedto_user' );
 			$this->registerField( 'assignedto_type' );
 			$this->registerField( 'assignedto_local' );
@@ -237,37 +236,37 @@
 			// create a form for new posts
             $form = new YDForm( YDConfig::get( 'YDCMHELPDESK_FORMPOST' ) );
 
-			// get urgencies
-			$urgencies = new YDCMHelpdesk_urgency();
-			$urgencies = $urgencies->getUrgencies();
-			
-			// get states
-			$states    = new YDCMHelpdesk_state();
-			$states    = $states->getStates();
+			// get urgencies, states and types
+			$urgencies = array_keys( YDConfig::get( 'YDCMHELPDESK_URGENCIES' ) );
+			$states    = YDConfig::get( 'YDCMHELPDESK_STATES' );
+			$types     = YDConfig::get( 'YDCMHELPDESK_TYPES' );
 
-			// get types
-			$types     = new YDCMHelpdesk_type();
-			$types     = $types->getTypes();
+			// delete 'allstates' and 'allurgencies' from states and types
+			array_shift( $urgencies );
+			array_shift( $states );
 
 			// add new form elements
             $form->addElement( 'text',			'subject',			 t('ticket_subject'),           array('size' => 50) );
             $form->addElement( 'select', 		'urgency_id',		 t('ticket_urgency_id'),        array(), $urgencies );
             $form->addElement( 'select',		'state_id',			 t('ticket_state_id'),          array(), $states );
-            $form->addElement( 'textarea',		'text',              t('ticket_text'),              array('cols' => 60, 'rows' => 12) );
+            $form->addElement( 'textarea',		'text',              t('ticket_text'),              array('cols' => 80, 'rows' => 15) );
 
             $form->addElement( 'span',			'creation_user',	 t('ticket_creation_user') );
             $form->addElement( 'datetimeselect','creation_date',     t('ticket_creation_date') );
 
-            $form->addElement( 'span',			'reported_by_user',	 t('ticket_reported_by_user'),  array('size' => 50) );
-            $form->addElement( 'select', 		'reported_by_type',	 t('ticket_reported_by_type'),  array(), $types );
-            $form->addElement( 'text',			'reported_by_local', t('ticket_reported_by_local') );
-            $form->addElement( 'datetimeselect','reported_by_date',	 t('ticket_reported_by_date') );
+            $form->addElement( 'text',			'reportedby_user',	 t('ticket_reportedby_user'),  array('size' => 50) );
+            $form->addElement( 'select', 		'reportedby_type',	 t('ticket_reportedby_type'),  array(), $types );
+            $form->addElement( 'text',			'reportedby_local',  t('ticket_reportedby_local') );
+            $form->addElement( 'datetimeselect','reportedby_date',	 t('ticket_reportedby_date') );
   
-            $form->addElement( 'span',          'assignedto_user',	 t('ticket_assignedto_user') );
-            $form->addElement( 'text',			'assignedto_type',	 t('ticket_assignedto_type'),   array('size' => 50) );
-            $form->addElement( 'select', 		'assignedto_local',	 t('ticket_assignedto_local'),  array(), $types );
-            $form->addElement( 'text',			'assignedto_date',   t('ticket_assignedto_date') );
-		
+            $form->addElement( 'text',          'assignedto_user',	 t('ticket_assignedto_user'),  array('size' => 50) );
+            $form->addElement( 'select',		'assignedto_type',	 t('ticket_assignedto_type'),  array(), $types  );
+            $form->addElement( 'text', 		    'assignedto_local',	 t('ticket_assignedto_local') );
+            $form->addElement( 'datetimeselect','assignedto_date',   t('ticket_assignedto_date') );
+
+			$form->setDefault( 'urgency_id', 1 );
+			$form->setDefault( 'state_id',   1 );
+
 			return $form;
 		}
 
@@ -280,28 +279,28 @@
          *  @param $values  Array of values
          */
 		function addPost( $helpdesk_id, $user_id, $values ){
-		
+
+			// get YDForm object
+			$form = $this->getFormPost();
+
+			// check form validation
+			if ( !$form->validate( $values ) )
+				return $form->getErrors();
+
 			$this->resetValues();
 		
 			// add required fields
 			// TODO: check if user, urgency and state exist
+			$this->setValues( $form->getValues() );
+
 			$this->component_id = $helpdesk_id;
 			$this->user_id      = $user_id;
-			$this->urgency_id   = $values['urgency_id'];
-			$this->state_id     = $values['state_id'];
 
+			// parse dates (convert ugly array in a date time sqlformat )
+			$this->creation_date   = YDStringUtil::formatDate( $this->creation_date,   'datetimesql' );
+			$this->reportedby_date = YDStringUtil::formatDate( $this->reportedby_date, 'datetimesql' );
+			$this->assignedto_date = YDStringUtil::formatDate( $this->assignedto_date, 'datetimesql' );
 
-			// add optional fields
-			if ( isset( $values['subject'] ) )           $this->subject           = $values['subject'];
-			if ( isset( $values['localization'] ) )      $this->localization      = $values['localization'];
-			if ( isset( $values['text'] ) )              $this->text              = $values['text'];
-			if ( isset( $values['created_in'] ) )        $this->created_in        = $values['created_in'];
-			if ( isset( $values['reported_in'] ) )       $this->reported_in       = $values['reported_in'];
-			if ( isset( $values['reported_by'] ) )       $this->reported_by       = $values['reported_by'];
-			if ( isset( $values['reported_to_in'] ) )    $this->reported_to_in    = $values['reported_to_in'];
-			if ( isset( $values['reported_to'] ) )       $this->reported_to       = $values['reported_to'];
-			if ( isset( $values['reported_to_local'] ) ) $this->reported_to_local = $values['reported_to_local'];
-			
 			return $this->insert();
 		}
 		
@@ -370,10 +369,10 @@
 			else                                                                                $desc = true;
 
 			// apply column order
-            $this->order( $column, $desc );
+            $this->order( $column . ' ' . $fields['g'] );
 
 			// apply state
-			if ( isset( $fields[ 'grid_state' ] ) && in_array( $fields[ 'grid_state' ], YDConfig::get( 'YDCMHELPDESK_STATES' ) ) )
+			if ( isset( $fields[ 'grid_state' ] ) && in_array( $fields[ 'grid_state' ], array_keys( YDConfig::get( 'YDCMHELPDESK_STATES' ) ) ) )
 				$this->state_id = $fields[ 'grid_state' ];
 
 			// apply urgency
@@ -388,7 +387,7 @@
 			else                                                                           $page = 1;
 
 			// create a recordset
-			return new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', array_keys( $this->columns ), false, false, false, false ), $page, 9 );
+			return new YDRecordSet( $this->getResultsAsAssocArray( 'post_id', array_keys( $this->columns ), false, false, false, false ), $page, 3 );
 		}
 
 

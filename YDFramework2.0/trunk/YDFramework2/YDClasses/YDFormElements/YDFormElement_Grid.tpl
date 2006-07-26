@@ -1,3 +1,4 @@
+<span id="ticket_table">
 
 <table width="100%" border="0">
   <tr>
@@ -50,3 +51,4 @@
             <td align="right" class="field_total">{t w="total"}: {$recordset->totalRows}&nbsp;&nbsp;</td>
           </tr>
         </table>
+</span>

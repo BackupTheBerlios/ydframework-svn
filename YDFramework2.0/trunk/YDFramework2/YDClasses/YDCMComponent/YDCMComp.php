@@ -31,7 +31,7 @@
 
     class YDCMComp extends YDDatabaseObject {
     
-        function YDCMComp( $name ) {
+        function YDCMComp( $type, $id ) {
         
 			// init component as non default
             $this->YDDatabaseObject();
@@ -47,8 +47,10 @@
 
 			// register fields	
 			$this->registerField( 'title' );
-			$this->registerField( 'rendered' );
-			
+			$this->registerField( 'version_default' );
+			$this->registerField( 'version_date' );
+//			$this->registerField( 'user_id' );
+
 			// add static relations to tree and language
 			$this->registerField( 'content_id' );
        		$rel = & $this->registerRelation( 'YDCMTree', false, 'YDCMTree' );
@@ -60,31 +62,37 @@
 			$rel->setLocalKey( 'language_id' );
 			$rel->setForeignKey( 'language_id' );
 
+			$this->registerField( 'version_user_id' );
+       		$rel = & $this->registerRelation( 'YDCMUsers', false, 'YDCMUsers' );
+			$rel->setLocalKey( 'version_user_id' );
+			$rel->setForeignKey( 'user_id' );
+
 			// add dynamic relation
-       		$rel = & $this->registerRelation( $name, false, $name );
+       		$rel = & $this->registerRelation( $type, false, $type );
 			$rel->setLocalKey( 'component_id' );
 			$rel->setForeignKey( 'component_id' );
 			$rel->setForeignJoin( 'LEFT' );
+
+			// store component id
+			$this->_id = intval( $id );
 			
-//			$this->name = $name;
+			// store type for future use
+			$this->_type = $type;
 		}
 
 
         /**
          *  This function return an array of parent nodes giving an node id
          *
-         *  @param $id           Node id
-         *  @param $language_id  Language id
-         *
          *  @returns    An array with all parent nodes
          */
-		function getPath( $id, $language_id ){
+		function getPath(){
 		
 			// 1st step: GET nleft and nright of this node. yes, it's ugly.. 
 			// TODO: change it with a better tree implementation
-			$this->resetValues();
-			$this->content_id = intval( $id );
-			$this->language_id = $language_id;
+			$this->resetAll();
+			$this->content_id  = $this->_id;
+			$this->language_id = YDLocale::get();
 
 			if ( $this->find( 'ydcmtree' ) != 1 ) return array();
 
@@ -93,7 +101,7 @@
 			// 2nd step: GET parents (based on previous nleft and nright)
 			$this->resetAll();
 
-			$this->language_id = $language_id;
+			$this->language_id = YDLocale::get();
 			$this->where( 'YDCMTree.nleft  <= ' . intval( $node[ 'nleft' ] ) );
 			$this->where( 'YDCMTree.nright >= ' . intval( $node[ 'nright' ] ) );
 			$this->orderBy( 'YDCMTree.nlevel' );
@@ -106,30 +114,30 @@
         /**
          *  This function returns the path string to a node
          *
-         *  @param $id           Node id
-         *  @param $language_id  Language id
          *  @param $separator    Html separator string
-         *  @param $url          Url object for element links
          *  @param $classParents Html class for html links of parents
-         *  @param $classCurrent Url object for element links
+         *  @param $classCurrent Html class for span ( current element )
          *
          *  @returns    An html string
          */
-		function getBreadcrum( $id, $language_id, $separator, $url, $classParents, $classCurrent ){
+		function getBreadcrum( $separator, $classParents, $classCurrent ){
 
 			// init array for results
 			$res = array();
 
+			// init url object
+			$url = new YDUrl( YD_SELF_SCRIPT );
+
 			// cycle elements to get titles
-			foreach( $this->getPath( $id, $language_id ) as $elements ){
+			foreach( $this->getPath() as $elements ){
 			
 				// set url var ID to this element
 				$url->setQueryVar( 'id',        $elements[ 'component_id' ] );
 				$url->setQueryVar( 'component', $elements[ 'type' ] );
 
 				// compute class name
-				if ( $id != $elements[ 'content_id' ] ) $res[] = '<a class="' . $classParents . '" href="' . $url->getUrl() . '">' . $elements[ 'title' ] . '</a>';
-				else                                    $res[] = '<span class="' . $classCurrent . '">' . $elements[ 'title' ] . '</span>';
+				if ( $this->_id != $elements[ 'content_id' ] ) $res[] = '<a class="' . $classParents . '" href="' . $url->getUrl() . '">' . $elements[ 'title' ] . '</a>';
+				else                                           $res[] = '<span class="' . $classCurrent . '">' . $elements[ 'title' ] . '</span>';
 			}
 
 			// return html string
@@ -140,17 +148,14 @@
         /**
          *  This function returns an array with all direct children
          *
-         *  @param $id           Node id
-         *  @param $language_id  Language id
-         *
          *  @returns    An array with all direct children
          */
-		function getMenu( $id, $language_id ){
+		function getMenu(){
 		
-			$this->resetValues();
+			$this->resetAll();
 
-			$this->language_id = $language_id;
-			$this->where( 'YDCMTree.parent_id  = ' . intval( $id ) );
+			$this->language_id = YDLocale::get();
+			$this->where( 'YDCMTree.parent_id  = ' . $this->_id );
 			$this->find( 'ydcmtree' );
 			
 			return $this->getResults( false, false, false, false );
@@ -160,21 +165,19 @@
         /**
          *  This function will render all menu elements
          *
-         *  @param $id           Menu id
-         *  @param $language_id  Language id
-         *  @param $urlObj       YDUrl object
-         *
          *  @returns    An array with all direct children
          */
-		function renderMenu( $id, $language_id, $urlObj ){
+		function renderMenu(){
 
 			$menu = array();
 
+			$url = new YDUrl( YD_SELF_SCRIPT );
+
 			// render each element
-			foreach( $this->getMenu( $id, $language_id ) as $element ){
+			foreach( $this->getMenu() as $element ){
 
 				$el = new $element[ 'type' ];
-				$menu[] = $el->render( $element, &$urlObj );
+				$menu[] = $el->render( $element, &$url );
 			}
 
 			return $menu;
@@ -184,19 +187,16 @@
         /**
          *  This function return node attributes
          *
-         *  @param $id           Menu id
-         *  @param $language_id  Language id
-         *
          *  @returns    An array with all attributes
          */
-		function getNode( $id, $language_id ){
+		function getNode(){
 		
 			// delete previous stored values
-			$this->resetValues();
+			$this->resetAll();
 
 			// define our id to find		
-			$this->content_id = intval( $id );
-			$this->language_id = $language_id;
+			$this->content_id  = $this->_id;
+			$this->language_id = YDLocale::get();
 			
 			$this->limit( 1 );
 			
@@ -209,6 +209,67 @@
 
 			// return node attributes without relation prefixs
 			return $this->getValues( false, false, false, false );
+		}
+
+
+        /**
+         *  This function return node infomation
+         *
+         *  @returns    An array with all information: array( 'description' => .., 'versions' => .., 'versions_total' => .. )
+         */
+		function getInfo(){
+		
+			// delete previous stored values
+			$this->resetAll();
+
+			// define our id to find		
+			$this->content_id  = $this->_id;
+
+			// order versions by version date
+			$this->orderBy( 'version_date', 'desc' );
+			
+			// find node
+			$this->find( 'ydcmtree', 'ydcmusers', strtolower( $this->_type ) );
+
+			$versions = $this->getResultsAsAssocArray( array( 'language_id', 'version_date' ) );
+			
+			// init description and total of versions
+			$description    = array();
+			$versions_total = 0;
+
+			// cycle versions, count and get first description (they must be all the same)
+			foreach( $versions as $v => $arr ){
+			
+				$versions_total += count( $arr );
+			
+				if ( empty( $description ) ) $description = array_values( $arr );
+			}
+
+			// parse publish dates
+			if ( $description[0][ 'YDCMTree_state' ] != 2 ){
+				$description[0][ 'YDCMTree_published_date_start_trans' ] = t('not applicable');
+				$description[0][ 'YDCMTree_published_date_end_trans' ]   = t('not applicable');
+			}
+
+			// parse access
+			if ( $description[0][ 'YDCMTree_access' ] == 1 ) $description[0][ 'YDCMTree_access_trans' ] = t('public');
+			else                                             $description[0][ 'YDCMTree_access_trans' ] = t('private');
+
+			// parse state
+			switch ($description[0][ 'YDCMTree_state' ]){
+				case 0 : $description[0][ 'YDCMTree_state_trans' ] = t('not published'); break;
+				case 1 : $description[0][ 'YDCMTree_state_trans' ] = t('published');     break;
+				case 2 : $description[0][ 'YDCMTree_state_trans' ] = t('schedule');      break;
+			}
+
+			// parse searcheable
+			if ( $description[0][ 'YDCMTree_searcheable' ] == 1 ) $description[0][ 'YDCMTree_searcheable_trans' ] = t('yes');
+			else                                                  $description[0][ 'YDCMTree_searcheable_trans' ] = t('no');
+
+			// return the information array
+			return array(	'description'    => $description[0],
+							'versions'       => $versions,
+							'versions_total' => $versions_total );
 		}
 
 }
