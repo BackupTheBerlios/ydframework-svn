@@ -513,7 +513,9 @@
             if ( !isset( $GLOBALS['t'] ) ) {
                 $GLOBALS['t'] = array();
             }
-            include_once( $dir . '/' . YDLocale::get() . '.php' );
+
+            // just try to include language file
+            @ include_once( $dir . '/' . YDLocale::get() . '.php' );
         }
 
     }
