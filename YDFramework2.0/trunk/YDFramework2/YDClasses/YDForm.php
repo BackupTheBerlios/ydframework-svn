@@ -686,12 +686,17 @@
 
         /**
          *  This function returns all the values for the form as an associative array.
+         *  NOTE: spans are ignored
          *
          *  @returns    The values for the form as an associative array.
          */
         function getValues() {
             $vars = array();
             foreach ( $this->_elements as $name => $element ) {
+
+                // check if elements are special
+                if ( $element->getType() == 'span' ) continue;
+
                 $vars[ $name ] = $this->getValue( $name );
             }
             return $vars;
