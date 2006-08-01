@@ -849,12 +849,15 @@
                     // Remove the form name from the element name
                     $key = preg_replace( '/^' . $this->_name . '_/', '', $key );
 
-                    // Set the value
-                    $this->_elements[ $key ]->setValue( $value );
+                    // Check if the element exists
+                    if ( array_key_exists( $key, $this->_elements ) ) {
+
+                        // Set the value
+                        $this->_elements[ $key ]->setValue( $value );
                     
-                    // Set the default value
-                    $this->setDefault( $key, $value );
-                    
+                        // Set the default value
+                        $this->setDefault( $key, $value );
+                    }
                 }
             }
 
