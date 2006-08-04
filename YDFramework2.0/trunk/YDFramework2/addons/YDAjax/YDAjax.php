@@ -193,6 +193,14 @@
 
 
         /**
+         *	This function resets the internal flag that defines if we are processing events or results (responses)
+         */
+		function clearResponse() {
+			$this->onResponse = false;
+		}
+
+
+        /**
          *	This function sets YDAjax to automagically handle a waiting message
          *
          *	@param $html        (Optional) Html to use in the message.
