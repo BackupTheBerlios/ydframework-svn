@@ -26,6 +26,10 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+
+	// add permissions lib
+	require_once( dirname( __FILE__ ) . '/YDCMPermissions.php' );
+
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
 
@@ -88,6 +92,11 @@
 
 			// init user form
 			$this->form = new YDForm( 'YDCMUsers' );
+
+			// init permissions
+			$this->perm = new YDCMPermissions();
+			
+			$this->id = null;
 		}
 
 
@@ -99,6 +108,25 @@
 		function setId( $id ){
 		
 			$this->id = $id;
+		}
+
+
+        /**
+         *  This function returns all user permissions
+         *
+         *  @param  $user_id (Optional) Custom user id to get permissions
+         *
+         *  @retuns  Associative array of permissions
+         */
+		function getPermissions( $user_id = null ){
+		
+//			require_once( dirname( __FILE__ ) . '/YDCMPermissions.php' );
+
+//			$permissions = new YDCMPermissions();
+		
+			if ( is_null( $user_id ) ) $user_id = $this->id;
+		
+			return $this->perm->getPermissions( $user_id );
 		}
 
 
@@ -129,6 +157,20 @@
 		function getTreeElements(){
 
 			return $this->tree->getDescendants( $this->id, true );
+		}
+
+
+        /**
+         *  This function returns all sub users
+         *
+         *  @param      $id          User id to test if id descendant
+         *  @param      $parent_id   Parent id
+         *
+         *  @returns    boolean flag
+         */
+		function isDescendantOf( $id, $parent_id ){
+
+			return $this->tree->isDescendantOf( intval( $id ), intval( $parent_id ) );
 		}
 
 
@@ -170,46 +212,93 @@
 
 			return false;
 		}
-		
-		
-        /**
-         *  This function updates the current user attributes (ignoring passwords and statistics)
-         *
-         *  @param $values  User attributes as array
-         *
-         *  @returns    true if updated, false if current user is not valid
-         */
-		function changeCurrentUser( $values ){
-		
-			$this->resetValues();
-
-			// check if user is valid
-			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
-
-			if ( $valid === false ) return false;
-
-			// reset values added from valid method
-			$this->resetValues();
-
-			// set new values
-			$this->name        = $values['name'];
-			$this->email       = $values['email'];
-			$this->other       = $values['other'];
-			$this->language_id = $values['language_id'];
-			$this->template    = $values['template'];
-
-			$this->where( 'username = "' .      $_SERVER['PHP_AUTH_USER'] . '"' );
-			$this->where( 'password = "' . md5( $_SERVER['PHP_AUTH_PW'] ) . '"' );
-
-			// return update result
-			if ( $this->update() == 1 ) return true;
-			
-			return false;
-		}
 
 
         /**
          *  This function updates the current user attributes (ignoring passwords and statistics) using form values
+         *
+         *  @param $id          Static user id
+         *  @param $formvalues  Array with user attributes
+         *
+         *  @returns    true if updated, array with form errors otherwise
+         */
+		function changeUserForm( $id, $formvalues = array() ){
+
+			// check form validation
+			if ( !$this->form->validate( $formvalues ) )
+				return $this->form->getErrors();
+
+			// get values
+			$values = $this->form->getValues();
+
+			// change user details and permissions based on general values
+			// BEGIN :)
+			$res1 = $this->changeUserPermissions( $id, $values );
+			$res2 = $this->changeUserDetails( $id, $values );
+			return $res1 + $res2;
+			// COMMIT :)
+		}
+
+
+        /**
+         *  This function updates the current user attributes
+         *
+         *  @param $id          Static user id
+         *  @param $formvalues  Array with user attributes
+         *
+         *  @returns    true if updated, false otherwise
+         */
+		function changeUserDetails( $id, $values ){
+
+			$this->resetAll();
+
+			// set new values
+			$this->setValues( $values );
+
+			// overwrite id
+			$this->user_id = intval( $id );
+
+			// parse dates
+			$this->login_start = YDStringUtil::formatDate( $values[ 'login_start' ], 'datetimesql' );
+			$this->login_end   = YDStringUtil::formatDate( $values[ 'login_end' ],   'datetimesql' );
+
+			// return update result
+			return $this->update();
+		}
+
+
+		function changeUserPermissions( $id, $values ){
+
+			// init temp array permissions
+			$permissions_valid  = array();
+			$permissions_to_add = array();
+			$permissions_to_del = array();
+
+			// check $values if contains permissions that belong to its parent
+			foreach( $this->permissions_parent as $obj => $perms )
+				foreach( $perms as $p => $arr )
+					if( isset( $values[ $obj ][ $p ] ) && $values[ $obj ][ $p ] == 'on' )
+						$permissions_valid[ $obj ][] = $p;
+
+			// cycle current permissions to see the ones we need to delete
+			foreach( $this->permissions as $obj => $perms )
+				foreach( $perms as $p => $arr )
+					if ( !isset( $permissions_valid[ $obj ] ) || !in_array( $p, $permissions_valid[ $obj ] ) ) 
+						$permissions_to_del[ $obj ][] = $p;
+
+			// cycle current permissions to see the ones we need to add
+			foreach( $permissions_valid as $obj => $perms )
+				foreach( $perms as $p )
+					if ( !isset( $this->permissions[ $obj ][$p] ) )
+						$permissions_to_add[ $obj ][] = $p;
+
+			// pass permissions to add and to delete
+			return $this->perm->setPermissions( intval( $id ), $permissions_to_add, $permissions_to_del );
+		}
+
+
+        /**
+         *  This function updates the user attributes using form values
          *
          *  @param $formvalues  Array with user attributes
          *
@@ -221,8 +310,26 @@
 			if ( !$this->form->validate( $formvalues ) )
 				return $this->form->getErrors();
 
-			return $this->changeCurrentUser( $this->form->getValues() );
+			// check if user is valid
+			$valid = $this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] );
+
+			if ( $valid === false ) return false;
+
+			// reset values added from valid method
+			$this->resetValues();
+
+			// set new values
+			$this->setValues( $this->form->getValues() );
+
+			$this->where( 'username = "' .      $_SERVER['PHP_AUTH_USER'] . '"' );
+			$this->where( 'password = "' . md5( $_SERVER['PHP_AUTH_PW'] ) . '"' );
+
+			// return update result
+			if ( $this->update() == 1 ) return true;
+			
+			return false;
 		}
+
 		
 
         /**
@@ -230,8 +337,9 @@
 		 *
 		 * @param $username   1: Username is a span, 2: Username is a text box
 		 * @param $password   0: Password is not showed, 1: Password is showed
+		 * @param $login      0: Login is span, 1: Login is editable
          */
-		function addFormDetails( $username = 1, $password = 0 ){
+		function addFormDetails( $username = 1, $password = 0, $login = 0 ){
 
 			// add username
 			if ( $username == 1 ) $this->form->addElement( 'span',     'username', t('user_username') );
@@ -263,13 +371,77 @@
 			$this->form->addRule(    'template',  'in_array',     t('template not valid'), array_keys( $templates->admin_templates() ) );
 
 			// add user details
-            $this->form->addElement( 'span', 'login_start',  t('login_start') );
-            $this->form->addElement( 'span', 'login_end',    t('login_end') );
-            $this->form->addElement( 'span', 'login_counter',t('login_counter') );
+			if ($login == 1){
+				$this->form->addElement( 'select',         'state',       t('login_state'),          array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+				$this->form->addElement( 'datetimeselect', 'login_start', t('login_start') );
+				$this->form->addElement( 'datetimeselect', 'login_end',   t('login_end'));
+			}else{
+				$this->form->addElement( 'span',           'state',       t('login_state') );
+				$this->form->addElement( 'span',           'login_start', t('login_start') );
+				$this->form->addElement( 'span',           'login_end',   t('login_end') );
+			}
+
+			$this->form->addElement( 'span', 'login_counter',t('login_counter') );
             $this->form->addElement( 'span', 'login_last',   t('login_last') );
             $this->form->addElement( 'span', 'login_current',t('login_current') );
             $this->form->addElement( 'span', 'created_user', t('created_user') );
             $this->form->addElement( 'span', 'created_date', t('created_date') );
+		}
+
+
+        /**
+         *  This function adds checkbox groups about permissions and gets all translations.
+         *  It generates 2 private variables 
+         *    - $this->permissions as db permissions 
+         *    - $this->permissions_html as associative array with checkboxgroup html code
+         *
+         *  @returns  Associative array of objects and correspondent chechboxgoup
+         */
+		function addFormPermissions(){
+
+			// get permissions from parent;
+			$node = $this->getUser( $this->id );
+
+			// init user permissions and permissions html 
+			$this->permissions      = $this->getPermissions();
+			$this->permissions_html = array();
+
+			// init parent permissions
+			$this->permissions_parent = $this->getPermissions( $node['parent_id'] );
+
+			// cycle parent permissions to create form checkboxgroup of this user
+			foreach( $this->permissions_parent as $obj => $perm ){
+
+				// get permission translations of this component
+				YDLocale::addDirectory( YD_DIR_HOME_ADD . '/' . $obj . '/languages/' );
+
+				// init checkboxgroup options
+				$options  = array();
+				$selected = array();
+
+				// cycle all permissions of this object to create checkboxgroup options array
+				foreach( $perm as $p ){
+					$options[ $p['object_action' ] ] = t( $obj . '_' . $p['object_action' ] );
+
+					// check if this parent action belongs to the child too ( to select it )
+					if ( isset( $this->permissions[ $obj ] ) && in_array( $p['object_action' ], array_keys( $this->permissions[ $obj ] ) )){
+						$selected[ $p['object_action' ] ] = 1;
+					}
+				}
+
+				// add object checkbox
+				$this->form->addElement( 'checkboxgroup', $obj, $obj, array(), $options );
+				
+				// add default for this checkboxgroup
+				$this->form->setDefault( $obj, $selected );
+
+				// get element html
+				$el = & $this->form->getElement( $obj );
+				
+				// store html permissions
+				$this->permissions_html[ $obj . ' s' ][] = $el->toHtml();
+			}
+
 		}
 
 
@@ -280,28 +452,36 @@
          */
 		function addFormPassword( $oldpassword = 1 ){
 
-			// add old password box
-			if ( $oldpassword == 1 )
-            	$this->form->addElement( 'password', 'old',         t('password_old'),         array('size' => 20, 'maxlength' => 31) );
+			// add new password box
+            $this->form->addElement( 'password',    'new',          t('password_new'),         array('size' => 30, 'maxlength' => 31) );
+			$this->form->addRule(    'new',         'required',     t('passwords are required') );
+			$this->form->addRule(    'new',         'maxlength',    t('passwords too big'), 31 );
+			$this->form->addRule(    'new',         'alphanumeric', t('passwords not alphanumeric') );
 
-			// add new password box and confirmation box
-            $this->form->addElement( 'password', 'new',         t('password_new'),         array('size' => 30, 'maxlength' => 31) );
-            $this->form->addElement( 'password', 'new_confirm', t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
-
-			// add rules to all passwords
-			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'required',     t('passwords are required') );
-			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'maxlength',    t('passwords too big'), 31 );
-			$this->form->addRule( array( 'old', 'new', 'new_confirm' ), 'alphanumeric', t('passwords not alphanumeric') );
+			// add new_confirm password box
+            $this->form->addElement( 'password',    'new_confirm',  t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
+			$this->form->addRule(    'new_confirm', 'required',     t('passwords are required') );
+			$this->form->addRule(    'new_confirm', 'maxlength',    t('passwords too big'), 31 );
+			$this->form->addRule(    'new_confirm', 'alphanumeric', t('passwords not alphanumeric') );
 
 			// add compare rule to new password and confirmation password
 			$this->form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
+
+			// add old password box
+			if ( $oldpassword == 1 ){
+            	$this->form->addElement( 'password', 'old',          t('password_old'),         array('size' => 20, 'maxlength' => 31) );
+				$this->form->addRule(    'old',      'required',     t('passwords are required') );
+				$this->form->addRule(    'old',      'maxlength',    t('passwords too big'), 31 );
+				$this->form->addRule(    'old',      'alphanumeric', t('passwords not alphanumeric') );
+			}
+
 		}
 
 
         /**
          *  This returns the user form
          *
-         *  @param $defaults  (Optional) default values to apply in form
+         *  @param $defaults  (Optional) default values array to apply in form
          *
          *  @returns    YDForm object
          */
@@ -363,21 +543,75 @@
 
 
         /**
+         *  This function updates a user password
+         *
+         *  @param $newpassword  New password
+         *
+         *  @returns    true if updated, false when user is invalid
+         */
+		function changeUserPassword( $user_id, $newpassword ){
+		
+			// check if user is valid
+			if ( !$this->valid( $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'] ) ) return false;
+
+			// reset values added from valid method
+			$this->resetAll();
+
+			// set new password
+			$this->user_id  = intval( $user_id );
+			$this->password = md5( $newpassword );
+
+			// update user and get result
+			if ( $this->update() == 1 ) return true;
+
+			return false;
+		}
+
+
+        /**
+         *  This function updates a user password
+         *
+         *  @param $formvalues  Array 2 passwords (new and new_confirm)
+         *
+         *  @returns    true if updated, array with form errors
+         */
+		function changeUserPasswordForm( $id = null, $formvalues = array() ){
+
+			// check form validation
+			if ( !$this->form->validate( $formvalues ) )
+				return $this->form->getErrors();
+
+			return $this->changeUserPassword( $id, $this->form->getValue( 'new' ) );
+		}
+
+
+        /**
          *  This function return the current user attributes
          *
-         *  @returns    current user id
+         *  @param      $translate   (Optional) Boolean that defines if result must be translated
+         *
+         *  @returns    User details
          */
 		function getCurrentUser( $translate = false ){
 		
 			// get current user id
-			return $this->getUser( $this->currentID(), $translate );
-
+			return $this->getUser( $translate, $this->currentID() );
 		}
 
 
-		function getUser( $id, $translate = false ){
+        /**
+         *  This function returns user attributes
+         *
+         *  @param      $translate   (Optional) Boolean that defines if result must be translated
+         *  @param      $id          (Optional) Custom user id to use (instead of internal)
+         *
+         *  @returns    User details
+         */
+		function getUser( $translate = false, $id = null ){
 
 			$this->resetValues();
+
+			if ( is_null( $id ) ) $id = $this->id;
 
 			// set user id
 			$this->user_id = intval( $id );

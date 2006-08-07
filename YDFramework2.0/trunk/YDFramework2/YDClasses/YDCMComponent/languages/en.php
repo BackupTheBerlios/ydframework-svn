@@ -1,6 +1,10 @@
 <?php
 
+// components
 $GLOBALS['t']['ydcmpage'] = 'Page';
+$GLOBALS['t']['ydcmpage s'] = 'Pages';
+$GLOBALS['t']['ydcmrootmenu'] = 'Menu';
+$GLOBALS['t']['ydcmrootmenu s'] = 'Menus';
 
 $GLOBALS['t']['save'] = 'Save';
 $GLOBALS['t']['close'] = 'Close';

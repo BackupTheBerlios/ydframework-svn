@@ -1,4 +1,8 @@
 <?php
+// PERMISSIONS
+$GLOBALS['t']['ydcmpage_create'] = 'Create';
+$GLOBALS['t']['ydcmpage_delete'] = 'Delete';
+
 
 // PAGE FORM
 $GLOBALS['t']['page_reference'] = 'Reference';

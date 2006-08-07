@@ -8,6 +8,7 @@ $GLOBALS['t']['user_email'] = 'Email';
 $GLOBALS['t']['user_other'] = 'Outras informa&ccedil;oes';
 $GLOBALS['t']['user_language'] = 'Idioma';
 $GLOBALS['t']['user_template'] = 'Template';
+$GLOBALS['t']['login_state'] = 'Login';
 $GLOBALS['t']['login_start'] = 'Data para inicio de login';
 $GLOBALS['t']['login_end'] = 'Data em que o login expira';
 $GLOBALS['t']['login_counter'] = 'Total de logins';
