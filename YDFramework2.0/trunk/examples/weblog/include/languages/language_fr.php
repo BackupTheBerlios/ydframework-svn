@@ -194,7 +194,7 @@ $GLOBALS['t']['items'] = 'entr&eacute;e(s)';
 $GLOBALS['t']['top_10_commenters'] = 'Les 10 commentateurs les plus actifs';
 $GLOBALS['t']['all_commenters'] = 'Tous les commentateurs';
 $GLOBALS['t']['reset_stats'] = 'R&eacute;initialiser toutes les statistiques';
-$GLOBALS['t']['total_average_stats'] = 'Totals et moyens';
+$GLOBALS['t']['total_average_stats'] = 'Totaux et moyennes';
 
 // manage/users.tpl
 $GLOBALS['t']['useremail'] = 'Adresse email';
