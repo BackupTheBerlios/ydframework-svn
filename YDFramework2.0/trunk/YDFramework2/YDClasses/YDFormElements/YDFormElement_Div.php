@@ -86,6 +86,48 @@
 
         }
 
+
+       /**
+         *    This function returns the default javascript event of this element
+         */
+        function getJSEvent(){
+
+            return 'onclick';
+        }
+
+
+        /**
+         *    This function gets an element value using javascript
+         *
+         *    @param $options        (optional) The options for the elment.
+         */
+        function getJS( $options = null ){
+
+            // return js code
+            return 'return document.getElementById("' . $this->getAttribute('id') . '").innerHTML;';
+        }
+
+
+        /**
+         *    This function sets an element value using javascript
+         *
+         *    @param $result       The result value
+         *    @param $attribute    (optional) Element attribute
+         *    @param $options      (optional) The options for the elment.
+         */
+        function setJS( $result, $attribute = null, $options = null ){
+
+            // if atribute event is not defined we must create a default one
+            if ( is_null( $attribute ) ) $attribute = 'innerHTML';
+
+            // if result is an array we should export to a valid js string
+            if ( is_array( $result ) ) $result = str_replace( "\n", "<br>", var_export( $result, true ) ) ;
+
+            // assign result to form element using the id
+            return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+        }
+
+
     }
 
 ?>
