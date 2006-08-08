@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.82b';
+            $this->_version = '2.83';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -458,7 +458,6 @@
 				return $this->prefix . $serverFunction . 'get()';
 			}
 
-
 			return $functionName;
 		}
 		
@@ -518,11 +517,11 @@
 			// cycle arguments to create js function to get values
 			foreach ( $arguments as $arg ){
 
-				// if is a string and it's a form name, we want the form values
-				if ( is_string( $arg ) && $this->__isForm( $arg ) ) { $args[] = "xajax.getFormValues('" . $arg . "')"; continue; }
-				
 				// if is a string and it's a harcoded form name (eg: 'form xpto', where 'xpto' is a form name)
 				if ( is_string( $arg ) && ereg ( "^form (.*)$", $arg, $res ) ) { $args[] = "xajax.getFormValues('" . $res[1] . "')"; continue; }
+
+				// if is a string and it's a form name, we want the form values
+				if ( is_string( $arg ) && $this->__isForm( $arg ) ) { $args[] = "xajax.getFormValues('" . $arg . "')"; continue; }
 
 				// if argument is numeric just add it and continue
 				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
