@@ -527,7 +527,7 @@
          *
          *  @returns  The tables references expression.
          */
-        function getFrom( $title=true ) {
+        function getFrom( $title=true, $single=false ) {
 
             $from = array();
 
@@ -542,13 +542,13 @@
                     
                     $sql  = sizeof( $from ) ? ', ' : '';
                     $sql .= $this->reserved( $table );
-                    if ( strlen( $alias ) ) {
+                    if ( strlen( $alias ) && ! $single ) {
                         $sql .= ' AS ' . $this->reserved( $alias );
                     }
                     
                 }
 
-                if ( array_key_exists( $index, $this->join ) ) {
+                if ( ! $single && array_key_exists( $index, $this->join ) ) {
 
                     $join = $this->join[ $index ];
                     $sql .= ' ' . $join['type'] . ' JOIN ';
@@ -564,6 +564,10 @@
                 }
 
                 $from[] = $sql;
+                
+                if ( $single ) {
+                    break;
+                }
             }
 
             return ( $title ? ' FROM ' : '' ) . trim( implode( '', $from ) );
@@ -854,7 +858,7 @@
         function getInsertQuery() {
             
             return 'INSERT ' . $this->getOptions() .
-                   'INTO '   . $this->getFrom( false ) . $this->getInsert();
+                   'INTO '   . $this->getFrom( false, true ) . $this->getInsert();
             
         }
         
