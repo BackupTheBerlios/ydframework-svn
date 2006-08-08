@@ -1,11 +1,19 @@
 <?php
 
     include_once( dirname( __FILE__ ) . '/includes/config.php' );
-
+    
     class index extends YDDatabaseObjectRequest {
         
         function index() {
             $this->YDDatabaseObjectRequest();
+        }
+        
+        function getLastYDSqlQuery() {
+            $arr = explode( "\r\n", end( $GLOBALS['YD_SQL_QUERY'] ) );
+            foreach ( $arr as $k => $str ) {
+                $arr[$k] = preg_replace( "/^(\[.*\])/", "", trim( $str ) );
+            }
+            return implode( '', $arr );
         }
         
         function actionGroups() {
@@ -19,7 +27,7 @@
             $group->insert();
             
             $this->template->assign( 'group1', $group );
-            $this->template->assign( 'group1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group1_sql', $this->getLastYDSqlQuery() );
             
             $group->reset();
             $group->name = 'Group B';
@@ -27,7 +35,7 @@
             $group->insert();
             
             $this->template->assign( 'group2', $group );
-            $this->template->assign( 'group2_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group2_sql', $this->getLastYDSqlQuery() );
             
             $group->reset();
             $group->name = 'Group C';
@@ -35,7 +43,7 @@
             $group->insert();
             
             $this->template->assign( 'group3', $group );
-            $this->template->assign( 'group3_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group3_sql', $this->getLastYDSqlQuery() );
             
             $group->reset();
             $group->name = 'Group D';
@@ -43,7 +51,7 @@
             $group->insert();
             
             $this->template->assign( 'group4', $group );
-            $this->template->assign( 'group4_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group4_sql', $this->getLastYDSqlQuery() );
             
             $group->reset(); // resets all data
             $group->find();
@@ -54,7 +62,7 @@
             }
             
             $this->template->assign( 'find1_results', implode( '', $results ) );
-            $this->template->assign( 'find1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'find1_sql', $this->getLastYDSqlQuery() );
             
             $group->reset(); // resets all data
             $group->active = 0;
@@ -66,14 +74,14 @@
             }
             
             $this->template->assign( 'find2_results', implode( '', $results ) );
-            $this->template->assign( 'find2_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'find2_sql', $this->getLastYDSqlQuery() );
             
             $group->active = 1;
             $group->update();
-            $this->template->assign( 'group4_update_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group4_update_sql', $this->getLastYDSqlQuery() );
             
             $group->delete();
-            $this->template->assign( 'group4_delete_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'group4_delete_sql', $this->getLastYDSqlQuery() );
             
             $group->reset(); // resets all data
             $group->find();
@@ -106,7 +114,7 @@
             $user->is_admin = 1;
             $user->birthday = 19700516;
             $user->insert(); // {$insert1_sql}
-            $this->template->assign( 'insert1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert1_sql', $this->getLastYDSqlQuery() );
             
             $user->reset();
             $user->name = 'User B';
@@ -115,7 +123,7 @@
             $user->is_admin = 0;
             $user->birthday = 19500516;
             $user->insert(); // {$insert2_sql}
-            $this->template->assign( 'insert2_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert2_sql', $this->getLastYDSqlQuery() );
             
             $user->reset();
             $user->name = 'User C';
@@ -123,7 +131,7 @@
             $user->country = 'Colombia';
             $user->birthday = 19811120;
             $user->insert(); // {$insert3_sql}
-            $this->template->assign( 'insert3_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert3_sql', $this->getLastYDSqlQuery() );
             
             $user->reset();
             $user->name = 'User A';
@@ -141,7 +149,7 @@
             $this->template->assign( 'age_value', 'age = ' . $user->get( 'age' ) );
             
             $user->update();
-            $this->template->assign( 'update1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'update1_sql', $this->getLastYDSqlQuery() );
             
             $this->template->display( 'users' );
             
@@ -176,49 +184,49 @@
             $phone->number = '1111-1111';
             $phone->ord = 1;
             $phone->insert(); // {$insert1_sql}
-            $this->template->assign( 'insert1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert1_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '1222-2222';
             $phone->ord = 2; 
             $phone->insert(); // {$insert2_sql}
-            $this->template->assign( 'insert2_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert2_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '1333-3333';
             $phone->ord = 3;
             $phone->insert(); // {$insert3_sql}
-            $this->template->assign( 'insert3_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert3_sql', $this->getLastYDSqlQuery() );
             
             $phone->user_id = 2;
             $phone->number = '2444-4444';
             $phone->ord = 1;
             $phone->insert(); // {$insert4_sql}
-            $this->template->assign( 'insert4_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert4_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '2555-5555';
             $phone->ord = 2; 
             $phone->insert(); // {$insert5_sql}
-            $this->template->assign( 'insert5_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert5_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '2666-6666';
             $phone->ord = 3;
             $phone->insert(); // {$insert6_sql}
-            $this->template->assign( 'insert6_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert6_sql', $this->getLastYDSqlQuery() );
             
             $phone->user_id = 3;
             $phone->number = '3777-7777';
             $phone->ord = 1;
             $phone->insert(); // {$insert7_sql}
-            $this->template->assign( 'insert7_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert7_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '3888-8888';
             $phone->ord = 2; 
             $phone->insert(); // {$insert8_sql}
-            $this->template->assign( 'insert8_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert8_sql', $this->getLastYDSqlQuery() );
             
             $phone->number = '3999-9999';
             $phone->ord = 3;
             $phone->insert(); // {$insert9_sql}
-            $this->template->assign( 'insert9_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert9_sql', $this->getLastYDSqlQuery() );
             
             $user->id = 1;
             $user->find( 'phone' );
@@ -261,45 +269,45 @@
             $user_group->joined = 20050515;
             $user_group->active = 1;
             $user_group->insert(); // {$insert1_sql}
-            $this->template->assign( 'insert1_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert1_sql', $this->getLastYDSqlQuery() );
             
             $user_group->group_id = 2;
             $user_group->joined = 20050513;
             $user_group->active = 1;
             $user_group->insert(); // {$insert2_sql}
-            $this->template->assign( 'insert2_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert2_sql', $this->getLastYDSqlQuery() );
             
             $user_group->group_id = 3;
             $user_group->joined = 20050514;
             $user_group->active = 0;
             $user_group->insert(); // {$insert3_sql}
-            $this->template->assign( 'insert3_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert3_sql', $this->getLastYDSqlQuery() );
             
             $user_group->user_id = 2;
             $user_group->group_id = 1;
             $user_group->joined = 20050412;
             $user_group->active = 0;
             $user_group->insert(); // {$insert4_sql}
-            $this->template->assign( 'insert4_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert4_sql', $this->getLastYDSqlQuery() );
             
             $user_group->group_id = 3;
             $user_group->joined = 20050830;
             $user_group->active = 1;
             $user_group->insert(); // {$insert5_sql}
-            $this->template->assign( 'insert5_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert5_sql', $this->getLastYDSqlQuery() );
             
             $user_group->user_id = 3;
             $user_group->group_id = 2;
             $user_group->joined = 20040101;
             $user_group->active = 1;
             $user_group->insert(); // {$insert6_sql}
-            $this->template->assign( 'insert6_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert6_sql', $this->getLastYDSqlQuery() );
             
             $user_group->group_id = 3;
             $user_group->joined = 20051225;
             $user_group->active = 1;
             $user_group->insert(); // {$insert7_sql}
-            $this->template->assign( 'insert7_sql', end( $GLOBALS['YD_SQL_QUERY'] ) );
+            $this->template->assign( 'insert7_sql', $this->getLastYDSqlQuery() );
             
             $user->id = 1;
             $user->find( 'group' );
