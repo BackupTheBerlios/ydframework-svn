@@ -120,10 +120,6 @@
          */
 		function getPermissions( $user_id = null ){
 		
-//			require_once( dirname( __FILE__ ) . '/YDCMPermissions.php' );
-
-//			$permissions = new YDCMPermissions();
-		
 			if ( is_null( $user_id ) ) $user_id = $this->id;
 		
 			return $this->perm->getPermissions( $user_id );
@@ -161,7 +157,7 @@
 
 
         /**
-         *  This function returns all sub users
+         *  This function checks if a user is descendant of another user
          *
          *  @param      $id          User id to test if id descendant
          *  @param      $parent_id   Parent id
@@ -391,13 +387,17 @@
 
         /**
          *  This function adds checkbox groups about permissions and gets all translations.
-         *  It generates 2 private variables 
-         *    - $this->permissions as db permissions 
-         *    - $this->permissions_html as associative array with checkboxgroup html code
+         *  It generates 3 private variables 
+         *    - $this->permissions         user permissions 
+         *    - $this->permissions_panret  parent permissions 
+         *    - $this->permissions_html    associative array with checkboxgroup html code
          *
-         *  @returns  Associative array of objects and correspondent chechboxgoup
+         *  @param    $userParentPermissions   (Optional) Boolean to compute avaiable parent permissions or user permissions
+         *                                      This will be used to create permissions for editing or when creating a subuser
+         *  
+         *  @returns  Associative array of objects and correspondent chechboxgoup html
          */
-		function addFormPermissions(){
+		function addFormPermissions( $useParentPermissions = true ){
 
 			// get permissions from parent;
 			$node = $this->getUser( $this->id );
@@ -406,11 +406,16 @@
 			$this->permissions      = $this->getPermissions();
 			$this->permissions_html = array();
 
-			// init parent permissions
-			$this->permissions_parent = $this->getPermissions( $node['parent_id'] );
+			// check if we are editing or creating
+			if ( $useParentPermissions ){
+				$permissions_avaiable = $this->getPermissions( $node['parent_id'] );
+				$this->permissions_parent = $permissions_avaiable;
+			}else{
+				$permissions_avaiable = $this->permissions;
+			}
 
 			// cycle parent permissions to create form checkboxgroup of this user
-			foreach( $this->permissions_parent as $obj => $perm ){
+			foreach( $permissions_avaiable as $obj => $perm ){
 
 				// get permission translations of this component
 				YDLocale::addDirectory( YD_DIR_HOME_ADD . '/' . $obj . '/languages/' );
@@ -424,7 +429,7 @@
 					$options[ $p['object_action' ] ] = t( $obj . '_' . $p['object_action' ] );
 
 					// check if this parent action belongs to the child too ( to select it )
-					if ( isset( $this->permissions[ $obj ] ) && in_array( $p['object_action' ], array_keys( $this->permissions[ $obj ] ) )){
+					if ( $useParentPermissions && isset( $this->permissions[ $obj ] ) && in_array( $p['object_action' ], array_keys( $this->permissions[ $obj ] ) )){
 						$selected[ $p['object_action' ] ] = 1;
 					}
 				}
@@ -433,7 +438,7 @@
 				$this->form->addElement( 'checkboxgroup', $obj, $obj, array(), $options );
 				
 				// add default for this checkboxgroup
-				$this->form->setDefault( $obj, $selected );
+				if ( $useParentPermissions ) $this->form->setDefault( $obj, $selected );
 
 				// get element html
 				$el = & $this->form->getElement( $obj );

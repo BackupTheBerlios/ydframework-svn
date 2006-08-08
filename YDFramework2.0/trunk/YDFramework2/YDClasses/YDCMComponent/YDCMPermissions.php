@@ -70,7 +70,7 @@
 		
 			$this->resetValues();
 			$this->user_id = intval( $user_id );
-
+			$this->orderby( 'object DESC, object_action DESC' );
 			$this->find();
 
 			return $this->getResultsAsAssocArray( array( 'object', 'object_action' ) );
