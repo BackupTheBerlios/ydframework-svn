@@ -520,6 +520,9 @@
 
 				// if is a string and it's a form name, we want the form values
 				if ( is_string( $arg ) && $this->__isForm( $arg ) ) { $args[] = "xajax.getFormValues('" . $arg . "')"; continue; }
+				
+				// if is a string and it's a harcoded form name (eg: 'form xpto', where 'xpto' is a form name)
+				if ( is_string( $arg ) && ereg ( "^form (.*)$", $arg, $res ) ) { $args[] = "xajax.getFormValues('" . $res[1] . "')"; continue; }
 
 				// if argument is numeric just add it and continue
 				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
