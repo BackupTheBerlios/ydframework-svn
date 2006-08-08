@@ -211,6 +211,41 @@
 
 
         /**
+         *  This function adds a new user based on form values
+         *
+         *  @param $id          Static parent id
+         *  @param $formvalues  Array with user attributes
+         *
+         *  @returns    true if updated, array with form errors otherwise
+         */
+		function addUserForm( $id, $formvalues = array() ){
+
+			// check form validation
+			if ( !$this->form->validate( $formvalues ) )
+				return $this->form->getErrors();
+
+			// parse values
+			$values = array();
+			$values['name']         = $this->form->getValue( 'name' );
+			$values['email']        = $this->form->getValue( 'email' );
+			$values['username']     = $this->form->getValue( 'username' );
+			$values['other']        = $this->form->getValue( 'other' );
+			$values['state']        = $this->form->getValue( 'state' );
+			$values['type']         = 'YDCMUseradministrator';
+			$values['nlevel']       = 1;
+			$values['created_user'] = $this->currentID();
+			$values['created_date'] = YDStringUtil::formatDate( time(), 'datetimesql' );
+			$values['language_id']  = $this->form->getValue( 'language_id' );
+			$values['login_start']  = YDStringUtil::formatDate( $this->form->getValue( 'login_start' ), 'datetimesql' );
+			$values['login_end']    = YDStringUtil::formatDate( $this->form->getValue( 'login_end' ),   'datetimesql' );
+
+			// add user to YDUsers table
+			return $this->tree->addNode( $values, $id );
+		}
+
+
+
+        /**
          *  This function updates the current user attributes (ignoring passwords and statistics) using form values
          *
          *  @param $id          Static user id
