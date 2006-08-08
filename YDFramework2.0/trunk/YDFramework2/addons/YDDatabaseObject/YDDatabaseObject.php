@@ -104,7 +104,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.27';
+            $this->_version = '4.28';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
@@ -120,7 +120,7 @@
             $this->_callbacks->set( 'reset',  array( 'before' => array(), 'after' => array() ) );
 
         }
-
+        
         /**
          *  This function returns an instance of a YDDatabaseObject class.
          *
@@ -1009,7 +1009,7 @@
             if ( ! sizeof( $values ) && ! sizeof( $values_noquote ) ) {
                 return;
             }
-
+            
             $this->_query->insert();
             $this->_query->into( $this->getTable() );
             $this->_query->values( $values );
@@ -1491,6 +1491,63 @@
             
             return $this->_count;
 
+        }
+        
+        /**
+         *  This function returns an associative array with the
+         *  modified fields and it's old and new values.
+         *
+         *  @param $exclude  (optional) Array with fields to exclude from the comparison.
+         *
+         *  @returns  An array with the modified fields and the old and new values.
+         */
+        function getModified( $exclude=array() ) {
+        
+            $all = get_object_vars( $this->_fields );
+            
+            $fields = array();
+            $keys = array();
+			foreach ( $all as $field ) {
+            
+                $name = $field->getName();
+                
+				if ( $field->isKey() ) {
+                    if ( ! array_key_exists( $name, $this ) || ! strlen( $this->$name ) ) {
+    					return false;
+    				}
+                    $keys[] = $name;
+                    continue;
+                }
+                
+                if ( ! in_array( $name, $exclude ) ) {
+                    $fields[] = $name;
+                }
+                
+			}
+            
+            $obj = $this->getInstance();
+            foreach ( $keys as $key ) {
+    			$obj->$key = $this->$key;
+            }
+    		$obj->find();
+    			
+			if ( $obj->count() != 1 ) {
+				return false;
+			}
+			
+			$old = $obj->getValuesAsAssocArray( $fields );
+			$new = $this->getValuesAsAssocArray( $fields );
+            
+            $modified = array();
+			foreach ( $new as $field => $value ) {
+				if ( array_key_exists( $field, $old ) && $old[ $field ] == $value ) {
+					continue;
+				} 
+				$modified[ $field ] = array( 'old' => $old[ $field ], 'new' => $new[ $field ] );
+			}
+			
+			return $modified;
+        
         }
 
         /**
