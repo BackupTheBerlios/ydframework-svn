@@ -80,30 +80,47 @@
         /**
          *  This function assigns an array of permissions to a user
          *
-         *  @param     $user_id              User id to get permissions
-         *  @param     $permissions_to_add   Array with permissions to add
-         *  @param     $permissions_to_del   Array with permissions to delete
+         *  @param     $user_id     User id to get permissions
+         *  @param     $parend_id   Parent id form permission comparation
+         *  @param     $values      Array with permissions
          */
-		function setPermissions( $user_id, $permissions_to_add, $permissions_to_del ){
+		function setPermissions( $user_id, $parent_id, $values ){
+
+			// init temp array permissions
+			$permissions_valid  = array();
+			$permissions_to_add = array();
+			$permissions_to_del = array();
+
+			// get parent permissions
+			$permissions_parent = $this->getPermissions( $parent_id );
+
+			// check $values if contains permissions that belong to its parent
+			foreach( $permissions_parent as $obj => $perms )
+				foreach( $perms as $p => $arr )
+					if( isset( $values[ $obj ][ $p ] ) && $values[ $obj ][ $p ] == 'on' )
+						$permissions_valid[ $obj ][] = $p;
+
+			// get user permissions
+			$permissions_user = $this->getPermissions( $user_id );
+
+			// cycle current permissions to see the ones we need to delete
+			foreach( $permissions_user as $obj => $perms )
+				foreach( $perms as $p => $arr )
+					if ( !isset( $permissions_valid[ $obj ] ) || !in_array( $p, $permissions_valid[ $obj ] ) ) 
+						$permissions_to_del[ $obj ][] = $p;
+
+			// cycle current permissions to see the ones we need to add
+			foreach( $permissions_valid as $obj => $perms )
+				foreach( $perms as $p )
+					if ( !isset( $permissions[ $obj ][$p] ) )
+						$permissions_to_add[ $obj ][] = $p;
+
 
 			$p_add = 0;
 			$t_add = 0;
 
 			$p_del = 0;
 			$t_del = 0;
-
-			// cycle permissions to add and insert them in db
-			foreach ( $permissions_to_add as $obj => $perms )
-				foreach ( array_values( $perms ) as $p ){
-
-					$this->resetAll();
-					$this->user_id        = $user_id;
-					$this->object         = $obj;
-					$this->object_action  = $p;
-
-					if ($this->insert()) $p_add++;
-					$t_add++;
-				}
 
 			// cycle permissions to delete and delete them from db
 			foreach ( $permissions_to_del as $obj => $perms )
@@ -116,6 +133,19 @@
 
 					if ($this->delete()) $p_del++;
 					$t_del++;
+				}
+
+			// cycle permissions to add and insert them in db
+			foreach ( $permissions_to_add as $obj => $perms )
+				foreach ( array_values( $perms ) as $p ){
+
+					$this->resetAll();
+					$this->user_id        = $user_id;
+					$this->object         = $obj;
+					$this->object_action  = $p;
+
+					if ($this->insert()) $p_add++;
+					$t_add++;
 				}
 
 			if ($p_add == $t_add && $p_del == $t_del ) return true;
