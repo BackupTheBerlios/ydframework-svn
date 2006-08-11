@@ -233,10 +233,11 @@
          *                          data.
          *  @param $max_level       (optional) Maximum level to retrieve. Default is all.
          *  @param $order           (optional) The order of the records to return.
+         *  @param $specificPart    (optional) Return array should be not-associative (using a specific key to filter)
          *
          *  @returns The descendants of the passed now
          */
-        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null, $order=null ) {
+        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null, $order=null, $specificPart=null ) {
 
             // Get the ID field
             $idField = $this->fields['id'];
@@ -311,6 +312,17 @@
             $arr = array();
             foreach ( $records as $record ) {
                 $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
+            }
+
+            // check if we want a specific column
+            if ( !is_null( $specificPart ) ){
+
+                // init temporary array
+                $nodes = array();
+                foreach ( $arr as $node )
+                    array_push( $nodes, $node[ $specificPart ] );
+
+                return $nodes;
             }
 
             // Return the result
@@ -758,9 +770,10 @@
         /**
          *  Delete the node and it's children.
          *
-         *  @param $id  The ID of the node to delete.
+         *  @param $id             The ID of the node to delete.
+         *  @param $includeParent  (Optional) Delete id and all children (true by default. if false, deletes children only)
          */
-        function deleteNode( $id ) {
+        function deleteNode( $id, $includeParent = true ) {
 
             // Clear the cache
             $this->_clearCache();
@@ -773,17 +786,8 @@
                 return;
             }
 
-            // Get the children of the node
-            $children = $this->getDescendants( $id );
-
             // Get the list of IDs to delete
-            $nodes_to_delete = array();
-            foreach ( $children as $child ) {
-                array_push( $nodes_to_delete, $child[ $this->fields['id'] ] );
-            }
-
-            // Add the current node
-            array_push( $nodes_to_delete, $id  );
+			$nodes_to_delete = $this->getDescendants( $id, $includeParent, false, null, null, $this->fields['id'] );
 
             // Check if there is something to delete
             if ( sizeof( $nodes_to_delete ) > 0 ) {
