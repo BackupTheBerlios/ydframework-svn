@@ -122,6 +122,18 @@
             }
             return $default;
         }
+
+        /**
+         *      This function returns the value of the element.
+         *
+         *      @returns        Value of this object.
+         */
+        function getValue() {
+
+            // add timestamp to values array
+            $this->_value['timestamp'] = $this->getTimeStamp();
+            return $this->_value;
+        }
         
         /**
          *      This function returns an array of values from $start to $end and

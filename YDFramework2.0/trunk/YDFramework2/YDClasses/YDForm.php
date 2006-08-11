@@ -176,6 +176,7 @@
             $this->registerFilter( 'utf8_decode', 'utf8_decode' );
             $this->registerFilter( 'strip_html', 'strip_tags' );
             $this->registerFilter( 'safe_html', 'YDFormFilter_safe_html' );
+            $this->registerFilter( 'dateformat', 'YDFormFilter_dateformat' );
 
             // Add the renderers
             $this->registerRenderer( 'array', 'YDFormRenderer_array', 'YDFormRenderer_array.php' );
@@ -489,18 +490,19 @@
         /**
          *  Add a filter to the form for the specified field.
          *
-         *  @param  $element    The element to apply the filter on. If you specify an array, it will add the filter for
-         *                      each element in the array.
-         *  @param  $filter     The name of the filter to apply.
+         *  @param  $element       The element to apply the filter on. If you specify an array, it will add the filter for
+         *                         each element in the array.
+         *  @param  $filter        The name of the filter to apply.
+         *  @param  $options       (Optional) Custom filter options.
          */
-        function addFilter( $element, $filter ) {
+        function addFilter( $element, $filter, $options = null ) {
 
             // Check if the element is an array or not
             if ( is_array( $element ) ) {
 
                 // Add the rule for each element
                 foreach ( $element as $e ) {
-                    $this->addFilter( $e, $filter );
+                    $this->addFilter( $e, $filter, $options );
                 }
 
                 // Return
@@ -522,8 +524,7 @@
             if ( ! @ is_array( $this->_filters[ $element ] ) ) { $this->_filters[ $element ] = array(); }
 
             // Add the filter
-            array_push( $this->_filters[ $element ], $filter );
-
+            array_push( $this->_filters[ $element ], array( $filter, $options ) );
         }
 
         /**
@@ -660,15 +661,6 @@
                 if ( array_key_exists( $this->_name . '_' . $name, $_FILES ) ) {
                     return $_FILES[ $this->_name . '_' . $name ];
                 }
-            }
-
-            // Add the timestamp if needed
-            if ( $element->hasMethod( 'getTimeStamp' ) ) {
-                if ( ! is_array( $value ) ) {
-                    $element->setValue( $value );
-                    $value = $element->getValue();
-                }
-                @ $value['timestamp'] = $element->getTimeStamp();
             }
 
             // Unset the element
@@ -1206,17 +1198,31 @@
             if ( array_key_exists( $name, $this->_filters ) ) {
                 if ( is_array( $this->_filters[ $name ] ) ) {
                     foreach ( $this->_filters[ $name ] as $filter ) {
-                        if ( ! is_callable( $this->_regFilters[ $filter ]['callback'] ) ) {
+                        if ( ! is_callable( $this->_regFilters[ $filter[0] ]['callback'] ) ) {
                             trigger_error(
                                 'The callback specified for the filter "' . $name . '" is not valid', YD_ERROR
                             );
                         }
                         if ( is_array( $value ) ) {
-                            foreach ( $value as $key=>$x ) {
-                                $value[$key] = call_user_func( $this->_regFilters[ $filter ]['callback'], $value[$key] );
+
+                            // check if element is special: 'date', 'dateselect' or 'datetimeselect'
+                            $element = & $this->getElement( $name );
+
+                            // if array is special we should pass all array to the function (instead of map the function to each element)
+                            if ( in_array( $element->getType(), array( 'date', 'dateselect', 'datetimeselect' ) ) ){
+                                if ( is_null( $filter[1] ) ) $value = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value );
+                                else                         $value = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value, $filter[1] );
+
+                            // otherwise we map the function to all array elements
+                            }else{
+                                foreach ( $value as $key=>$x ) {
+                                    if ( is_null( $filter[1] ) ) $value[$key] = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value[$key], $filter[1] );
+                                    else                         $value[$key] = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value[$key] );
+                                }
                             }
                         } else {
-                            $value = call_user_func( $this->_regFilters[ $filter ]['callback'], $value );
+                            if ( is_null( $filter[1] ) ) $value = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value );
+                            else                         $value = call_user_func( $this->_regFilters[ $filter[0] ]['callback'], $value, $filter[1] );
                         }
                     }
                 }
@@ -1706,5 +1712,26 @@
         return $safehtml->parse( $data );
 
     }
+
+
+    /**
+     *  This filter reads a date form element result and returns a custom result
+     *
+     *  @param  $data     The data to filter.
+     *  @param  $option   (Optional) Filter option. By default, is returned the timestamp
+     *
+     *  @returns The filtered data as a string.
+     */
+    function YDFormFilter_dateformat( $data, $option = "timestamp" ) {
+
+        // check if option is a array member
+        if ( isset( $data[ $option ] ) ) return $data[ $option ];
+
+        // if not a member we want a custom date format eg: "datetimesql", "%b"
+        YDInclude( 'YDUtil.php' );
+
+        return YDStringUtil::formatDate( $data, $option );
+    }
+
 
 ?>
