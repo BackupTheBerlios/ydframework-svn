@@ -62,18 +62,37 @@
         /**
          *  This function return an array of permissions
          *
-         *  @param     $user_id   User id to get permissions
+         *  @param     $user_id    User id to get permissions
+         *  @param     $translate  (Optional) Translate permissions
 		 *
          *  @returns    An array with all permission groupby object
          */
-		function getPermissions( $user_id ){
+		function getPermissions( $user_id, $translate = false ){
 		
 			$this->resetValues();
 			$this->user_id = intval( $user_id );
 			$this->orderby( 'object DESC, object_action DESC' );
 			$this->find();
 
-			return $this->getResultsAsAssocArray( array( 'object', 'object_action' ) );
+			$permissions = $this->getResultsAsAssocArray( array( 'object', 'object_action' ) );
+			
+			if ( !$translate ) return $permissions;
+
+			$arr_translated = array();
+
+			// cycle objects and compute translated actions
+			foreach( $permissions as $obj => $perms ){
+
+				// get permission translations of this component
+				YDLocale::addDirectory( YD_DIR_HOME_ADD . '/' . $obj . '/languages/' );
+
+				if (!isset( $arr_translated[ $obj ] ) ) $arr_translated[] = $obj;
+
+				foreach( $perms as $p )
+					$arr_translated[ $obj ][] = t( $p );
+			}
+			
+			return $arr_translated;
 		}
 
 

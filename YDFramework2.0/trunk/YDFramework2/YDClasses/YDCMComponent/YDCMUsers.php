@@ -250,7 +250,7 @@
 
 			// get form values
 			$values = $this->form->getValues();
-
+//return array_reverse( $values );
 			// we need parent fot setting user permissions
 			$details = $this->getUser( $id );
 
@@ -339,10 +339,13 @@
 		 * @param $password     (Optional) Flag that defines if we want to include the password box
 		 *                                 TRUE: include password box; FALSE: don't include
 		 * 
-		 * @param $logindetails (Optional) Flag that defines if we login details are editable (eg: login schedule dates)
+		 * @param $logindetails (Optional) Flag that defines if login details are editable (eg: login schedule dates)
+		 *                                 TRUE: login details are editable; FALSE: login details are just information
+		 * 
+		 * @param $userdetails  (Optional) Flag that defines if user details are editable (eg: name, email, other info, template, language)
 		 *                                 TRUE: user details are editable; FALSE: user details are just information
          */
-		function addFormDetails( $username = false, $password = false, $logindetails = false ){
+		function addFormDetails( $username = false, $password = false, $logindetails = false, $userdetails = true ){
 
 			// add username
 			if ( $username ) $this->form->addElement( 'text', 'username', t('user_username') );
@@ -351,29 +354,7 @@
 			// add password
 			if ( $password ) $this->form->addElement( 'password', 'password', t('user_password') );
 
-			// add name
-            $this->form->addElement( 'text',      'name',         t('user_name'),     array('size' => 50, 'maxlength' => 255) );
-			$this->form->addRule(    'name',      'maxlength',    t('name too big'),  255 );
-
-			// add email
-            $this->form->addElement( 'text',      'email',        t('user_email') );
-			$this->form->addRule(    'email',     'email',        t('email not valid') );
-
-			// add other info textare
-            $this->form->addElement( 'textarea',  'other',        t('user_other'),    array('rows' => 4, 'cols' => 30) );
-			$this->form->addRule(    'other',     'maxlength',    t('other too big'), 5000 );
-
-			// add languages select box
-			$languages = YDCMComponent::module( 'YDCMLanguages' );
-			$this->form->addElement( 'select',      'language_id',  t('user_language'),      array(), $languages->active() );
-			$this->form->addRule(    'language_id', 'in_array',     t('language not valid'), array_keys( $languages->active() ) );
-
-			// add template select box
-			$templates = YDCMComponent::module( 'YDCMTemplates' );
-            $this->form->addElement( 'select',    'template',     t('user_template'),      array(), $templates->admin_templates() );
-			$this->form->addRule(    'template',  'in_array',     t('template not valid'), array_keys( $templates->admin_templates() ) );
-
-			// add user details
+			// add login details
 			if ( $logindetails ){
 				$this->form->addElement( 'select',         'state',       t('login_state'), array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
 				$this->form->addElement( 'datetimeselect', 'login_start', t('login_start') );
@@ -382,6 +363,32 @@
 				$this->form->addElement( 'span',           'state',       t('login_state') );
 				$this->form->addElement( 'span',           'login_start', t('login_start') );
 				$this->form->addElement( 'span',           'login_end',   t('login_end') );
+			}
+
+			// add common user details
+            if ( $userdetails ){
+				$this->form->addElement( 'text',      'name',          t('user_name'),     array('size' => 50, 'maxlength' => 255) );
+				$this->form->addElement( 'text',      'email',         t('user_email') );
+				$this->form->addElement( 'textarea',  'other',         t('user_other'),    array('rows' => 4, 'cols' => 30) );
+
+				$languages = YDCMComponent::module( 'YDCMLanguages' );
+				$this->form->addElement( 'select',      'language_id', t('user_language'),      array(), $languages->active() );
+
+				$templates = YDCMComponent::module( 'YDCMTemplates' );
+    	        $this->form->addElement( 'select',    'template',      t('user_template'),      array(), $templates->admin_templates() );
+
+				$this->form->addRule( 'name',        'maxlength',      t('name too big'),  255 );
+				$this->form->addRule( 'email',       'email',          t('email not valid') );
+				$this->form->addRule( 'other',       'maxlength',      t('other too big'), 5000 );
+				$this->form->addRule( 'language_id', 'in_array',       t('language not valid'), array_keys( $languages->active() ) );
+				$this->form->addRule( 'template',    'in_array',       t('template not valid'), array_keys( $templates->admin_templates() ) );
+
+			}else{
+				$this->form->addElement( 'span',      'name',          t('user_name') );
+				$this->form->addElement( 'span',      'email',         t('user_email') );
+				$this->form->addElement( 'span',      'other',         t('user_other') );
+				$this->form->addElement( 'span',      'language_id',   t('user_language') );
+				$this->form->addElement( 'span',      'template',      t('user_template') );
 			}
 
 			$this->form->addElement( 'span', 'login_counter', t('login_counter') );
@@ -584,17 +591,17 @@
         /**
          *  This function returns user attributes
          *
-         *  @param      $id          User id to use (instead of internal)
+         *  @param      $user_id     User id to use (instead of internal)
          *  @param      $translate   (Optional) Boolean that defines if result must be translated
          *
          *  @returns    User details
          */
-		function getUser( $id, $translate = false ){
+		function getUser( $user_id, $translate = false ){
 
 			$this->resetValues();
 
 			// set user id
-			$this->user_id = intval( $id );
+			$this->user_id = intval( $user_id );
 
 			// get all attributes
 			if ( $this->find() != 1 ) return false;
@@ -611,6 +618,10 @@
 					$this->login_end   = t('not applicable');
 				}
 
+				if ( $this->state == 0 )      $this->state = t('blocked');
+				else if ( $this->state == 1 ) $this->state = t('active');
+				else                          $this->state = t('schedule');
+
 				// check if user is root
 				if ( $this->created_user == 0 ){
 					$this->created_user = t('not applicable');
@@ -618,8 +629,11 @@
 				}
 			}
 
-			// return values
-			return $this->getValues();
+			// add permissions
+			$values = $this->getValues();
+			$values[ 'permissions' ] = $this->getPermissions( intval( $user_id ) );
+			
+			return $values;
 		}
 
 
