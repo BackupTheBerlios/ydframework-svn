@@ -760,7 +760,7 @@
             <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=stringutil.php">stringutil.php</a> </td>
         </tr>
         <tr>
-            <td valign="top"><a href="ajax.php">Using AJAX with the {$YD_FW_NAME}</a></td>
+            <td valign="top"><a href="ajax.php">Using AJAX (without YDAjax) </a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=ajax.php">ajax.php</a>
                 <br/>
