@@ -549,6 +549,9 @@
 
             // If array, is a date YDForm element value
             if ( is_array( $timestamp ) ) {
+			
+				// check if timestamp exists. otherwise create it
+				if ( !isset( $timestamp[ 'timestamp' ] ) ) $timestamp[ 'timestamp' ] = mktime( $timestamp['hours'], $timestamp['minutes'], $timestamp['seconds'], $timestamp['month'], $timestamp['day'], $timestamp['year'] );
                 $timestamp = $timestamp[ 'timestamp' ];
             }
 

@@ -846,6 +846,7 @@
 
                         // Set the value
                         $this->_elements[ $key ]->setValue( $value );
+						$this->setDefault( $key, $value );
                     }
                 }
             }
