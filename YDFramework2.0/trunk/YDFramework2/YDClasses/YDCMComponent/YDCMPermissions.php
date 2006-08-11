@@ -78,6 +78,22 @@
 
 
         /**
+         *  This function return an array of permissions
+         *
+         *  @param     $user_id   User id (or Array of ids ) to delete
+         */
+		function deletePermissions( $user_id ){
+
+			if ( !is_array( $user_id ) ) $user_id = array( $user_id );
+
+			$this->resetValues();
+			$this->where( 'user_id IN ("' . implode( '","', $user_id ) . '")' );
+
+			return $this->delete();
+		}
+
+
+        /**
          *  This function assigns an array of permissions to a user
          *
          *  @param     $user_id     User id to get permissions

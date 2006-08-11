@@ -46,5 +46,7 @@ $GLOBALS['t']['user is incorrect'] = 'Current user is not valid';
 $GLOBALS['t']['user details updated'] = 'User details updated';
 $GLOBALS['t']['password not updated'] = 'Password was not updated';
 $GLOBALS['t']['user not updated'] = 'User was not updated';
+$GLOBALS['t']['administrator and children'] = 'Administrator and children';
+$GLOBALS['t']['children only'] = 'Children only';
 
 ?>

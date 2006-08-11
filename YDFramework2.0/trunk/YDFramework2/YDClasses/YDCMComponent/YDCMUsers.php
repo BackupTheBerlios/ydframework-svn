@@ -308,7 +308,27 @@
 			return false;
 		}
 
+
+        /**
+         *  This function deletes a user (and all children) or just the children
+         *
+         *  @param $user_id        User id
+         *  @param $includeParent  (Optional) Delete user id and children (false means delete children only)
+         *
+         *  @returns    true if updated, array with form errors otherwise
+         */
+		function deleteUser( $user_id, $includeParent = true ){
 		
+			// get ids to delete
+			$ids = $this->tree->getDescendants( intval( $user_id ), $includeParent, false, null, null, 'user_id' );
+
+			// delete all permissions of this users
+			$this->perm->deletePermissions( $ids );
+
+			// delete node from users table
+			$this->tree->deleteNode( $user_id, $includeParent );
+		}
+
 
         /**
          *  This function adds form elements for user detail management
