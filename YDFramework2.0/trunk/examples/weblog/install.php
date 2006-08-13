@@ -94,6 +94,7 @@
             $form->addRule( 'db_user', 'required', 'Database user is required' );
             $form->addRule( 'weblog_title', 'required', 'Weblog title is required' );
             $form->addRule( 'name', 'required', 'User name is required' );
+            $form->addRule( 'email', 'required', 'User email is required' );
             $form->addRule( 'email', 'email', 'User email is required' );
             $form->addRule( 'password', 'required', 'Password is required' );
             $form->addFormRule( array( & $this, 'checkInstallParams' ) );
@@ -105,6 +106,7 @@
             $form->setDefault( 'db_prefix', 'ydw_' );
             $form->setDefault( 'weblog_title', 'My Weblog' );
             $form->setDefault( 'weblog_description', 'Description of my Weblog' );
+            $form->setDefault( 'weblog_language', 'en' );
 
             // Process the form
             if ( $form->validate() === true ) {

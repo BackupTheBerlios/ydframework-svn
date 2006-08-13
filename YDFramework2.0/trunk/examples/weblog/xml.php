@@ -68,7 +68,7 @@
         function initMainFeed() {
 
             // Get the weblog items
-            $items = $this->weblog->getItems( YDConfig::get( 'max_syndicated_items', 15 ) );
+            $items = $this->weblog->getPublicItems( YDConfig::get( 'max_syndicated_items', 15 ) );
             $items = array_reverse( $items );
 
             // Initialize the feed
@@ -93,7 +93,10 @@
                 }
 
                 // Add it to the feed
-                $this->feed->addItem( $item['title'], YDTplModLinkItem( $item ), YDTemplate_modifier_bbcode( $body ) );
+                $this->feed->addItem(
+                    $item['title'], YDTplModLinkItem( $item ),
+                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $item )
+                );
 
             }
 
@@ -103,7 +106,7 @@
         function initCommentsFeed() {
 
             // Get the weblog items
-            $comments = $this->weblog->getComments( null, 'CREATED DESC', YDConfig::get( 'max_syndicated_items', 15 ) );
+            $comments = $this->weblog->getComments( null, 'CREATED DESC', YDConfig::get( 'max_syndicated_items', 15 ), -1, true );
 
             // Initialize the feed
             $this->feed = new YDFeedCreator();
@@ -115,7 +118,8 @@
             foreach ( $comments as $comment ) {
                 $body = $comment['comment'] . "\n\n" . t('by') . ' ' . $comment['username'];
                 $this->feed->addItem(
-                    $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ), YDTemplate_modifier_bbcode( $body )
+                    $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ),
+                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $comment['item_id'], '#comment' )
                 );
             }
 
@@ -125,7 +129,7 @@
         function initGalleryFeed() {
 
             // Get the weblog items
-            $items = $this->weblog->getItems();
+            $items = $this->weblog->getPublicItems();
 
             // Initialize the feed
             $this->feed = new YDFeedCreator();
@@ -140,7 +144,10 @@
                     foreach ( $item['images'] as $image ) {
                         $body .= '<img src="' . YDTplModLinkThumb( $image ) . '"/> ';
                     }
-                    $this->feed->addItem( $item['title'], YDTplModLinkItemGallery( $item ), YDTemplate_modifier_bbcode( $body ) );
+                    $this->feed->addItem(
+                        $item['title'], YDTplModLinkItemGallery( $item ),
+                        YDTemplate_modifier_bbcode( $body ), YDTplModLinkItemGallery( $item )
+                    );
                 }
             }
 

@@ -306,6 +306,8 @@ if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
     $GLOBALS['t']['auto_close_item'] .= 'na ' . YDConfig::get( 'auto_close_items', '' ) . ' dagen';
 }
 $GLOBALS['t']['is_draft'] = 'Concept (niet publiceren)';
+$GLOBALS['t']['draft'] = 'concept';
+$GLOBALS['t']['closed'] = 'gesloten';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'Nog geen foto\'s';

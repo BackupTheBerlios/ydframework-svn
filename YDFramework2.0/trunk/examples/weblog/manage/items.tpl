@@ -66,15 +66,26 @@
         </tr>
         {$browsebar}
         {foreach from=$items->set item="item"}
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $item.is_draft eq '1'}style="color: gray"{/if}>
                 <td class="adminRowL">
-                    {if $item.is_draft eq '1'}<i>{/if}{$item.created|date:'%Y/%m/%d %H:%M'}{if $item.is_draft eq '1'}</i>{/if}
+                    {if $item.is_draft eq '1'}<i>{/if}
+                    {$item.created|date:'%Y/%m/%d %H:%M'}
+                    {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowL">
-                    {if $item.is_draft eq '1'}<i>{/if}{$item.user_name}{if $item.is_draft eq '1'}</i>{/if}
+                    {if $item.is_draft eq '1'}<i>{/if}
+                    {$item.user_name}
+                    {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowL">
-                    {if $item.is_draft eq '1'}<i>{/if}{if $item.allow_comments eq '0'}[x] {/if}{$item.title}{if $item.is_draft eq '1'}</i>{/if}
+                    {if $item.is_draft eq '1'}<i>{/if}
+                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{$item.title}</a>
+                    <br/>
+                    {if $item.allow_comments eq '0'}
+                        {t w="closed"}{if $item.is_draft eq '1'}, {/if}
+                    {/if}
+                    {if $item.is_draft eq '1'}{t w="draft"}{/if}
+                    {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
                     <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>

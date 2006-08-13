@@ -406,13 +406,16 @@
         }
 
         // Get the comments for an item
-        function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1 ) {
+        function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1, $public_only=false ) {
             if ( $item_id ) {
-                $sql = $this->_prepareQuery( 'SELECT * FROM #_comments WHERE item_id = ' . $this->str( $item_id ), $order );
+                $query = 'SELECT * FROM #_comments WHERE item_id = ' . $this->str( $item_id );
             } else {
-                $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id', $order );
+                $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
+                if ( $public_only == true ) {
+                    $query .= ' and i.is_draft = 0';
+                }
             }
-            $records = $this->db->getRecords( $sql, $limit, $offset );
+            $records = $this->db->getRecords( $this->_prepareQuery( $query, $order ), $limit, $offset );
             foreach ( $records as $key=>$record ) {
                 $records[$key]['comment'] = trim( strip_tags( $record['comment'] ) );
             }

@@ -71,7 +71,7 @@
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{$form.name.label_html}</td>
-                <td class="adminRowC" width="400">
+                <td class="adminRowL" width="400">
                     {if $user_data}
                         <b>{$user_data.name}</b>
                     {else}

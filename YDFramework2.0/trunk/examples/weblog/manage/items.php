@@ -149,7 +149,11 @@
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber['email'], $subscriber['name'] );
                         }
-                        $eml->setSubject( t('new_item') . ': ' . strip_tags( $values['title'] ) );
+                        if ( $values['is_draft'] ) {
+                            $eml->setSubject( t('new_item') . ' (' . t('draft') . '): ' . strip_tags( $values['title'] ) );
+                        } else {
+                            $eml->setSubject( t('new_item') . ': ' . strip_tags( $values['title'] ) );
+                        }
                         $eml->setHtmlBody( $this->fetch( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/item_email.tpl' ) );
                         $eml->send();
 

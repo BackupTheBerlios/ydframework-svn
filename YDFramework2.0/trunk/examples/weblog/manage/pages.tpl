@@ -65,15 +65,22 @@
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
         {foreach from=$pages->set item="page"}
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $page.is_draft eq '1'}style="color: gray"{/if}>
                 <td class="adminRowL">
-                    {if $page.is_draft eq '1'}<i>{/if}{$page.created|date:'%Y/%m/%d %H:%M'}{if $page.is_draft eq '1'}</i>{/if}
+                    {if $page.is_draft eq '1'}<i>{/if}
+                    {$page.created|date:'%Y/%m/%d %H:%M'}
+                    {if $page.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowL">
-                    {if $page.is_draft eq '1'}<i>{/if}{$page.user_name}{if $page.is_draft eq '1'}</i>{/if}
+                    {if $page.is_draft eq '1'}<i>{/if}
+                    {$page.user_name}
+                    {if $page.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowL">
-                    {if $page.is_draft eq '1'}<i>{/if}{$page.title}{if $page.is_draft eq '1'}</i>{/if}
+                    {if $page.is_draft eq '1'}<i>{/if}
+                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$page.id}">{$page.title}</a>
+                    {if $page.is_draft eq '1'}<br/>{t w="draft"}{/if}
+                    {if $page.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
                     <a href="../page.php?id={$page.id}" target="_blank">{t w="view"}</a>

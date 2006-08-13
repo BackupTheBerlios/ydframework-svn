@@ -73,15 +73,29 @@
         <tr>
             <th class="adminRowL" width="17%">{t w="date"}</th>
             <th class="adminRowL" width="15%">{t w="author"}</th>
-            <th class="adminRowL" width="30%">{t w="parent"}</th>
+            <th class="adminRowL" width="30%">{t w="comment"}</th>
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
         {$browsebar}
         {foreach from=$comments->set item="comment"}
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-                <td class="adminRowL">{$comment.created|date:'%Y/%m/%d %H:%M'}</td>
-                <td class="adminRowL">{$comment.username}</td>
-                <td class="adminRowL">{$comment.comment|bbcode|strip_tags|truncate}</td>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
+                <td class="adminRowL">
+                    {if $comment.item_is_draft eq '1'}<i>{/if}
+                    {$comment.created|date:'%Y/%m/%d %H:%M'}
+                    {if $comment.item_is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $comment.item_is_draft eq '1'}<i>{/if}
+                    {$comment.username}
+                    {if $comment.item_is_draft eq '1'}</i>{/if}
+                </td>
+                <td class="adminRowL">
+                    {if $comment.item_is_draft eq '1'}<i>{/if}
+                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.comment|bbcode|strip_tags|truncate}</a>
+                    <br/>
+                    {t w="item"}: {$comment.item_title}
+                    {if $comment.item_is_draft eq '1'}</i>{/if}
+                </td>
                 <td class="adminRowR">
                     <a href="../item.php?id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
                     |

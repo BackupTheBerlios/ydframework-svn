@@ -53,6 +53,7 @@
             $form->addFilters( array( 'name', 'email' ), 'strip_html' );
 
             // Add the rules
+            $form->addRule( 'email', 'required', t('req_useremail') );
             $form->addRule( 'email', 'email', t('req_useremail') );
             if ( $id == '-1' ) {
                 $form->addRule( 'name', 'required', t('err_username') );
