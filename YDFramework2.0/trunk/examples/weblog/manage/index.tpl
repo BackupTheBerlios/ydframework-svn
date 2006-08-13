@@ -31,7 +31,7 @@
             </td>
             <td class="adminRowL">
                 {if $item.is_draft eq '1'}<i>{/if}
-                <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{$item.title}</a>
+                <a href="items.php?do=edit&id={$item.id}">{$item.title}</a>
                 <br/>
                 {if $item.allow_comments eq '0'}
                     {t w="closed"}{if $item.is_draft eq '1'}, {/if}
@@ -42,9 +42,9 @@
             <td class="adminRowR">
                 <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
                 |
-                <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{t w="edit"}</a>
+                <a href="items.php?do=edit&id={$item.id}">{t w="edit"}</a>
                 |
-                <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}"
+                <a href="items.php?do=delete&id={$item.id}"
                  onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
                 <br/>
                 <a href="comments.php?id={$item.id}">{if $item.num_comments > 0}{$item|@text_num_comments:false}{else}<span class="disabled">0 {t w="comments" lower=true}</span>{/if}</a> |
