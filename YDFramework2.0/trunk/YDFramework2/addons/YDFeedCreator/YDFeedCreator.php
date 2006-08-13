@@ -103,6 +103,15 @@
         }
 
         /**
+         *  Function to set the generator of the feed
+         *
+         *  @param $generator   The name of the application that generates the feed.
+         */
+        function setGenerator( $generator ) {
+            $this->_generator = $generator;
+        }
+
+        /**
          *	This function will add a new item to the feed. You need to at least give in a title, link. A description is
          *	advised but optional. Also a GUID is optional. If no GUID is given, an automatic one will be created which
          *	is the md5 checksum of the different elememts.
@@ -118,7 +127,7 @@
          *  @remark
          *      Enclosures are only supported for ATOM and RSS 2.0 feeds.
          */
-        function addItem( $title, $link, $desc=null, $guid=null, $enclosure=null, $enclosure_size=null, $enclosure_type=null ) {
+        function addItem( $title, $link, $desc=null, $guid=null, $enclosure=null, $enclosure_size=null, $enclosure_type=null, $commentlink=null ) {
 
             $link = YDUrl::makeLinkAbsolute( $link, $this->_link );
             $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
@@ -137,7 +146,7 @@
                 'title' => YDStringUtil::encodeString( $title ), 'link' => $link,
                 'description' => $desc, 'guid' => $guid,
                 'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
-                'enclosure_type' => $enclosure_type
+                'enclosure_type' => $enclosure_type, 'comments' => $commentlink
             );
 
             $this->_items[ $guid ] = $item;
@@ -209,7 +218,11 @@
                     $item['link'][0]['#'] = $arr['link'];
                     $item['guid'][0]['#'] = $arr['guid'];
                     $item['guid'][0]['@']['isPermanlink'] = 'false';
-                    
+
+                    if ( ! is_null( $arr['comments'] ) ) {
+                        $item['comments'] = $arr['comments'];
+                    }
+
                     if ( ! empty( $arr['description'] ) ) {
                         $item['description'] = $arr['description'];
                     }
@@ -222,7 +235,7 @@
                         
                     }
                     $i++;
-                    
+
                 }
                 
             }

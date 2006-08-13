@@ -76,6 +76,7 @@
             $this->feed->setTitle( YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
             $this->feed->setDescription( YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
             $this->feed->setLink( YDUrl::makeLinkAbsolute( 'index.php' ) );
+            $this->feed->setGenerator( YD_FW_NAMEVERS );
 
             // Add the items
             foreach ( $items as $item ) {
@@ -95,7 +96,8 @@
                 // Add it to the feed
                 $this->feed->addItem(
                     $item['title'], YDTplModLinkItem( $item ),
-                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $item )
+                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $item ),
+                    null, null, null, YDTplModLinkItem( $item ) . '#comments'
                 );
 
             }
