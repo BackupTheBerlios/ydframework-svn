@@ -10,7 +10,6 @@
     // Class definition
     class ajax extends YDRequest {
 
-
         // Class constructor
         function ajax() {
 
