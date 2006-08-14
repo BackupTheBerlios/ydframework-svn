@@ -109,6 +109,7 @@ $GLOBALS['t']['last_modified_on'] = 'Laatst aangepast op';
 $GLOBALS['t']['no_comments_yet'] = 'Nog geen commentaren';
 $GLOBALS['t']['comment'] = 'Commentaar';
 $GLOBALS['t']['comments'] = 'Commentaren';
+$GLOBALS['t']['err_name_length'] = 'Naam kan niet langer zijn dan 35 karakters';
 
 // manage/__mng_header.tpl
 $GLOBALS['t']['confirm_delete'] = 'Bent u zeker dat u het volgende wil verwijderen:';

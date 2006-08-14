@@ -109,6 +109,7 @@ $GLOBALS['t']['last_modified_on'] = 'Last modified on';
 $GLOBALS['t']['no_comments_yet'] = 'No comments yet';
 $GLOBALS['t']['comment'] = 'Comment';
 $GLOBALS['t']['comments'] = 'Comments';
+$GLOBALS['t']['err_name_length'] = 'Name cannot be longer than 35 characters';
 
 // manage/__mng_header.tpl
 $GLOBALS['t']['confirm_delete'] = 'Are you sure you want to delete:';

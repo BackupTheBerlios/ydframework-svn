@@ -65,9 +65,13 @@
             $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),      array( 'class' => 'button' ) );
 
             // Add the form rules
-            $form->addRule( 'username',  'required', t( 'err_name' ) );
-            $form->addRule( 'useremail', 'email',    t( 'err_email' ) );
-            $form->addRule( 'comment',   'required', t( 'err_comment' ) );
+            $form->addRule( 'username',    'required',  t( 'err_name' ) );
+            $form->addRule( 'username',    'not_email', t( 'err_name_email' ) );
+            $form->addRule( 'username',    'maxlength', t( 'err_name_length' ), array( 35 ) );
+            $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
+            $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
+            $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
+            $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
