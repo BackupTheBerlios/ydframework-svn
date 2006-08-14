@@ -42,6 +42,12 @@
             content_css : 'manage_editor.css'
         });{/literal}
 
+        {literal}function YDDisableAutoClose( obj ) {
+            if ( obj.checked ) {
+                document.getElementById("itemForm_auto_close").checked = false;
+            }
+        }{/literal}
+
     //-->
     </script>
 

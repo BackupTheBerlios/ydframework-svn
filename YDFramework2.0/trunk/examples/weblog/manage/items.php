@@ -48,7 +48,7 @@
             $form->addElement( 'select',          'category_id',    t('category'),         array( 'class' => 'tfM', 'style' => 'width: 100%' ), $categories );
             $form->addElement( 'datetimeselect',  'created',        t('created_on'),       array( 'class' => 'tfM' ) );
             $form->addElement( 'datetimeselect',  'modified',       t('last_modified_on'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'checkbox',        'allow_comments', t('allow_comments'),   array( 'style' => 'border: none;' ) );
+            $form->addElement( 'checkbox',        'allow_comments', t('allow_comments'),   array( 'style' => 'border: none;', 'onClick' => 'YDDisableAutoClose(this)') );
             $form->addElement( 'checkbox',        'auto_close',     t('auto_close_item'),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox',        'is_draft',       t('is_draft'),         array( 'style' => 'border: none;' ) );
             $form->addElement( 'hidden',          'id' );
