@@ -88,8 +88,10 @@
                     {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
-                    <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
-                    |
+                    {if $item.is_draft neq '1'}
+                        <a href="../item.php?id={$item.id}" target="_blank">{t w="view"}</a>
+                        |
+                    {/if}
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{t w="edit"}</a>
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}"

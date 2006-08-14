@@ -110,16 +110,53 @@
                 // Set the user
                 $values['user_id'] = $this->user['id'];
 
+                // Check if we need to publish or not
+                $needs_publish_email = false;
+
                 // If there is an ID, we do an edit
                 if ( $values['id'] ) {
+
+                    // Get the item by ID
+                    $item = $this->weblog->getItemByID( $values['id'] );
+
+                    // Check if the item changes from draft to published
+                    if ( $item['is_draft'] && ! $values['is_draft'] ) {
+
+                        // Remember this
+                        $needs_publish_email = true;
+
+                        // Update the created timestamp
+                        $values['created'] =  time();
+                        $values['modified'] = time();
+
+                    }
 
                     // Update the database
                     $this->weblog->updateItem( $values );
 
                 } else {
 
+                    // Check if the item is draft or not
+                    if ( ! $values['is_draft'] ) {
+
+                        // Remember this
+                        $needs_publish_email = true;
+
+                        // Update the created timestamp
+                        $values['created'] =  time();
+                        $values['modified'] = time();
+
+                    }
+
                     // Add it to the database
                     $this->weblog->addItem( $values );
+
+                }
+
+                // Check if we need to send an email
+                if ( $needs_publish_email ) {
+
+                    die( 'send email' );
 
                     // Send an email if configured
                     if ( YDConfig::get( 'email_new_item', true ) ) {
@@ -149,11 +186,7 @@
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber['email'], $subscriber['name'] );
                         }
-                        if ( $values['is_draft'] ) {
-                            $eml->setSubject( t('new_item') . ' (' . t('draft') . '): ' . strip_tags( $values['title'] ) );
-                        } else {
-                            $eml->setSubject( t('new_item') . ': ' . strip_tags( $values['title'] ) );
-                        }
+                        $eml->setSubject( t('new_item') . ': ' . strip_tags( $values['title'] ) );
                         $eml->setHtmlBody( $this->fetch( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/item_email.tpl' ) );
                         $eml->send();
 

@@ -28,7 +28,7 @@
 
         <div id="content" class="narrowcolumn">
 
-            <h3>{t w="new_item"}{if $item.is_draft} ({t w="draft"}){/if}: {$item.title}</h3>
+            <h3>{t w="new_item"}: {$item.title}</h3>
 
             <p>
                 <b>{t w="weblog"}</b>: <a href="{$weblog_link}">{$weblog_title}</a><br/>
