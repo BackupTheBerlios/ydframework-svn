@@ -17,8 +17,24 @@
         // Default action
         function actionDefault() {
 
+            // Get the filter
+            $filter = 'active';
+            if ( isset( $_GET['filter'] ) ) {
+                if ( strtolower( $_GET['filter'] ) == 'drafts' ) {
+                    $filter = 'drafts';
+                } elseif( strtolower( $_GET['filter'] ) == 'closed' ) {
+                    $filter = 'closed';
+                }
+            }
+
             // Get the list of items
-            $items = $this->weblog->getItems();
+            if ( $filter == 'active' ) {
+                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 0 AND allow_comments = 1' );
+            } elseif ( $filter == 'drafts' ) {
+                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 1' );
+            } else {
+                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND allow_comments = 0' );
+            }
 
             // Get the pagesize and current page from the URL
             $page = @ $_GET['page'];
@@ -27,7 +43,8 @@
             $items = new YDRecordSet( $items, $page, intval( YDConfig::get( 'YD_DB_DEFAULTPAGESIZE', 20 ) / 2 ) );
 
             // Assign it to the template
-            $this->tpl->assign( 'items', $items );
+            $this->tpl->assign( 'items',  $items );
+            $this->tpl->assign( 'filter', $filter );
 
             // Display the template
             $this->display();
@@ -156,8 +173,6 @@
                 // Check if we need to send an email
                 if ( $needs_publish_email ) {
 
-                    die( 'send email' );
-
                     // Send an email if configured
                     if ( YDConfig::get( 'email_new_item', true ) ) {
 
@@ -194,8 +209,14 @@
 
                 }
 
-                // Redirect to the default acton
-                $this->redirectToAction();
+                // Redirect to the default action
+                if ( $values['is_draft'] ) {
+                    $this->redirect( YD_SELF_SCRIPT . '?filter=drafts' );
+                } elseif ( ! $values['allow_comments'] ) {
+                    $this->redirect( YD_SELF_SCRIPT . '?filter=closed' );
+                } else {
+                    $this->redirectToAction();
+                }
 
             }
 

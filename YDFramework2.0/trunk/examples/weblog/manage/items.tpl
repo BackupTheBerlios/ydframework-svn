@@ -51,7 +51,14 @@
 
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; {t w="a_items"}</th>
+        <th colspan="3" class="adminRowLG">
+            &raquo; <a href="{$YD_SELF_SCRIPT}">
+                {if $filter == 'active'}<b>{/if}{t w="active_items"}{if $filter == 'active'}</b>{/if}</a>
+            | <a href="{$YD_SELF_SCRIPT}?filter=drafts">
+                {if $filter == 'drafts'}<b>{/if}{t w="drafts_items"}{if $filter == 'drafts'}</b>{/if}</a>
+            | <a href="{$YD_SELF_SCRIPT}?filter=closed">
+                {if $filter == 'closed'}<b>{/if}{t w="closed_items"}{if $filter == 'drafts'}</b>{/if}</a>
+        </th>
         <th class="adminRowLGR">
             <a href="{$YD_SELF_SCRIPT}?do=edit"><img src="images/icon_add.gif" border="0" /></a>
             <a href="{$YD_SELF_SCRIPT}?do=edit"><b>{t w="add_item"}</b></a>
@@ -82,9 +89,8 @@
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{$item.title}</a>
                     <br/>
                     {if $item.allow_comments eq '0'}
-                        {t w="closed"}{if $item.is_draft eq '1'}, {/if}
+                        {t w="closed"}
                     {/if}
-                    {if $item.is_draft eq '1'}{t w="draft"}{/if}
                     {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">

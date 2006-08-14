@@ -5,7 +5,11 @@
 {if $items}
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
-        <th colspan="3" class="adminRowLG">&raquo; <a href="items.php"><b>{t w="a_items"}</b></a></th>
+        <th colspan="3" class="adminRowLG">
+            &raquo; <a href="items.php"><b>{t w="active_items"}</b></a>
+            | <a href="items.php?filter=drafts">{t w="drafts_items"}</a>
+            | <a href="items.php?filter=closed">{t w="closed_items"}</a>
+        </th>
         <th class="adminRowLGR">
             <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
             <a href="items.php?do=edit"><b>{t w="add_item"}</b></a>

@@ -309,6 +309,9 @@ if ( YDConfig::get( 'auto_close_items', '' ) != '' ) {
 $GLOBALS['t']['is_draft'] = 'Draft (do not publish)';
 $GLOBALS['t']['draft'] = 'draft';
 $GLOBALS['t']['closed'] = 'closed';
+$GLOBALS['t']['active_items'] = 'active items';
+$GLOBALS['t']['drafts_items'] = 'drafts';
+$GLOBALS['t']['closed_items'] = 'closed items';
 
 // item_gallery.tpl
 $GLOBALS['t']['no_images_yet'] = 'No images yet';
