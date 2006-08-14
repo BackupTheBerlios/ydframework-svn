@@ -721,7 +721,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="15" valign="top">&nbsp;</td>
+            <td rowspan="16" valign="top">&nbsp;</td>
             <td valign="top"><a href="constants.php">YDFramework2 constants</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=constants.php">constants.php</a>
@@ -795,6 +795,14 @@
             <td valign="top"><a href="guidutil.php">Using the YDGuidUtil class</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=guidutil.php">guidutil.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="xul.php">Using XUL</a> (FireFox and Mozilla only)</td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=xul.php">xul.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=xul.tpl">xul.tpl</a>
             </td>
         </tr>
         </table>
