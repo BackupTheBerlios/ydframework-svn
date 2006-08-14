@@ -79,7 +79,6 @@
                 <td class="adminRowL">
                     {if $page.is_draft eq '1'}<i>{/if}
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$page.id}">{$page.title}</a>
-                    {if $page.is_draft eq '1'}<br/>{t w="draft"}{/if}
                     {if $page.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
