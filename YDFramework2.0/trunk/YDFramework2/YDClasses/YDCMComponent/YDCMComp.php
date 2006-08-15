@@ -49,7 +49,6 @@
 			$this->registerField( 'title' );
 			$this->registerField( 'version_default' );
 			$this->registerField( 'version_date' );
-//			$this->registerField( 'user_id' );
 
 			// add static relations to tree and language
 			$this->registerField( 'content_id' );
@@ -62,9 +61,9 @@
 			$rel->setLocalKey( 'language_id' );
 			$rel->setForeignKey( 'language_id' );
 
-			$this->registerField( 'version_user_id' );
+			$this->registerField( 'user_id' );
        		$rel = & $this->registerRelation( 'YDCMUsers', false, 'YDCMUsers' );
-			$rel->setLocalKey( 'version_user_id' );
+			$rel->setLocalKey( 'user_id' );
 			$rel->setForeignKey( 'user_id' );
 
 			// add dynamic relation
