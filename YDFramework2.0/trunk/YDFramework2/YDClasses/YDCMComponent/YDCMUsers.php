@@ -30,6 +30,8 @@
 	// add permissions lib
 	require_once( dirname( __FILE__ ) . '/YDCMPermissions.php' );
 
+	YDInclude( 'YDForm.php' );
+
 	// add local translation directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
 
@@ -242,7 +244,7 @@
          *
          *  @returns    true if updated, array with form errors otherwise
          */
-		function changeUserForm( $id, $formvalues = array() ){
+		function changeUserForm( $id, $formvalues = null ){
 
 			// check form validation
 			if ( !$this->form->validate( $formvalues ) )
@@ -250,7 +252,7 @@
 
 			// get form values
 			$values = $this->form->getValues();
-//return array_reverse( $values );
+
 			// we need parent fot setting user permissions
 			$details = $this->getUser( $id );
 
@@ -267,8 +269,8 @@
 			$this->user_id = intval( $id );
 
 			// parse dates
-			$this->login_start = YDStringUtil::formatDate( $values[ 'login_start' ], 'datetimesql' );
-			$this->login_end   = YDStringUtil::formatDate( $values[ 'login_end' ],   'datetimesql' );
+			if ( isset( $this->login_start ) ) $this->login_start = YDStringUtil::formatDate( $values[ 'login_start' ], 'datetimesql' );
+			if ( isset( $this->login_end ) )   $this->login_end   = YDStringUtil::formatDate( $values[ 'login_end' ],   'datetimesql' );
 
 			// return update result
 			return $this->update();

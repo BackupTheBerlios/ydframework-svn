@@ -26,6 +26,8 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+	YDInclude( 'YDFileSystem.php' );
+
 	// set admin template directory (without template name directory)
 	YDConfig::set( 'YDCMTEMPLATES_ADMIN_PATH', YD_SELF_DIR, false );
 
