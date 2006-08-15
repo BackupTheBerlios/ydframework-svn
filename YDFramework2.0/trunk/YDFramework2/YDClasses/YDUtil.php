@@ -549,10 +549,15 @@
 
             // If array, is a date YDForm element value
             if ( is_array( $timestamp ) ) {
-			
-				// check if timestamp exists. otherwise create it
-				if ( !isset( $timestamp[ 'timestamp' ] ) ) $timestamp[ 'timestamp' ] = mktime( $timestamp['hours'], $timestamp['minutes'], $timestamp['seconds'], $timestamp['month'], $timestamp['day'], $timestamp['year'] );
-                $timestamp = $timestamp[ 'timestamp' ];
+
+                // check if timestamp exists. otherwise create it
+                $hours   = isset( $timestamp[ 'hours' ] ) ?   $timestamp[ 'hours' ] : 0;
+                $minutes = isset( $timestamp[ 'minutes' ] ) ? $timestamp[ 'minutes' ] : 0;
+                $seconds = isset( $timestamp[ 'seconds' ] ) ? $timestamp[ 'seconds' ] : 0;
+                $month   = isset( $timestamp[ 'month' ] ) ?   $timestamp[ 'month' ] : 1;
+                $day     = isset( $timestamp[ 'day' ] ) ?     $timestamp[ 'day' ] : 1;
+                $year    = isset( $timestamp[ 'year' ] ) ?    $timestamp[ 'year' ] : 1970;
+                $timestamp = mktime( $hours, $minutes, $seconds, $month, $day, $year );
             }
 
             // Check the standard formats
