@@ -215,18 +215,23 @@
 
 			// parse values
 			$values = array();
-			$values['name']         = $this->form->getValue( 'name' );
-			$values['email']        = $this->form->getValue( 'email' );
-			$values['username']     = $this->form->getValue( 'username' );
-			$values['other']        = $this->form->getValue( 'other' );
-			$values['state']        = $this->form->getValue( 'state' );
-			$values['type']         = 'YDCMUseradministrator';
-			$values['nlevel']       = 1;
-			$values['created_user'] = $this->currentID();
-			$values['created_date'] = YDStringUtil::formatDate( time(), 'datetimesql' );
-			$values['language_id']  = $this->form->getValue( 'language_id' );
-			$values['login_start']  = YDStringUtil::formatDate( $this->form->getValue( 'login_start' ), 'datetimesql' );
-			$values['login_end']    = YDStringUtil::formatDate( $this->form->getValue( 'login_end' ),   'datetimesql' );
+			$values['name']          = $this->form->getValue( 'name' );
+			$values['email']         = $this->form->getValue( 'email' );
+			$values['username']      = $this->form->getValue( 'username' );
+			$values['other']         = $this->form->getValue( 'other' );
+			$values['state']         = $this->form->getValue( 'state' );
+			$values['type']          = 'YDCMUseradministrator';
+			$values['nlevel']        = 1;
+			$values['created_user']  = $this->currentID();
+			$values['created_date']  = YDStringUtil::formatDate( time(), 'datetimesql' );
+			$values['language_id']   = $this->form->getValue( 'language_id' );
+			$values['login_start']   = YDStringUtil::formatDate( $this->form->getValue( 'login_start' ), 'datetimesql' );
+			$values['login_end']     = YDStringUtil::formatDate( $this->form->getValue( 'login_end' ),   'datetimesql' );
+			$values['login_counter'] = 0;
+
+			// check password
+			if ( $this->form->isElement( 'password' ) )
+				$values['password'] = md5( $this->form->getValue( 'password' ) );
 
 			// add user to YDUsers table
 			$newID = $this->tree->addNode( $values, $parent_id );
@@ -359,7 +364,7 @@
 			// add login details
 			if ( $logindetails ){
 				$this->form->addElement( 'select',         'state',       t('login_state'), array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
-				$this->form->addElement( 'datetimeselect', 'login_start', t('login_start') );
+				$this->form->addElement( 'dateselect', 'login_start', t('login_start') );
 				$this->form->addElement( 'datetimeselect', 'login_end',   t('login_end'));
 			}else{
 				$this->form->addElement( 'span',           'state',       t('login_state') );
