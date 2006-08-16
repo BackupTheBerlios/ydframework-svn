@@ -83,7 +83,7 @@
 			$rel->setLocalKey( 'language_id' );
             $rel->setForeignKey( 'language_id' );
 
-			// TODO: tree position is required
+			// create tree object
 			$this->tree = new YDDatabaseTree( 'default', 'YDCMUsers', 'user_id', 'parent_id', 'parent_id' );
 
 			// add tree fields
@@ -97,19 +97,6 @@
 
 			// init permissions
 			$this->perm = new YDCMPermissions();
-		}
-
-
-        /**
-         *  This function returns all user permissions
-         *
-         *  @param  $user_id   User id to get permissions
-         *
-         *  @retuns  Associative array of permissions
-         */
-		function getPermissions( $user_id ){
-		
-			return $this->perm->getPermissions( $user_id );
 		}
 
 
@@ -207,7 +194,7 @@
          *
          *  @returns    true if updated, array with form errors otherwise
          */
-		function addUserForm( $parent_id, $formvalues = array() ){
+		function addUserForm( $parent_id, $formvalues = null ){
 
 			// check form validation
 			if ( !$this->form->validate( $formvalues ) )
@@ -364,7 +351,7 @@
 			// add login details
 			if ( $logindetails ){
 				$this->form->addElement( 'select',         'state',       t('login_state'), array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
-				$this->form->addElement( 'dateselect', 'login_start', t('login_start') );
+				$this->form->addElement( 'datetimeselect', 'login_start', t('login_start') );
 				$this->form->addElement( 'datetimeselect', 'login_end',   t('login_end'));
 			}else{
 				$this->form->addElement( 'span',           'state',       t('login_state') );
@@ -429,11 +416,11 @@
 			$node = $this->getUser( $user_id );
 
 			// get user permissions
-			$permissions = $this->getPermissions( $user_id );
+			$permissions = $this->perm->getPermissions( $user_id );
 
 			// check if we are editing or creating
-			if ( $useParentPermissions ) $permissions_avaiable = $this->getPermissions( $node['parent_id'] );
-			else                         $permissions_avaiable = $this->getPermissions( $user_id );
+			if ( $useParentPermissions ) $permissions_avaiable = $this->perm->getPermissions( $node['parent_id'] );
+			else                         $permissions_avaiable = $this->perm->getPermissions( $user_id );
 
 			// cycle parent permissions to create form checkboxgroup of this user
 			foreach( $permissions_avaiable as $obj => $perm ){
@@ -638,7 +625,7 @@
 
 			// add permissions
 			$values = $this->getValues();
-			$values[ 'permissions' ] = $this->getPermissions( intval( $user_id ) );
+			$values[ 'permissions' ] = $this->perm->getPermissions( intval( $user_id ) );
 			
 			return $values;
 		}
