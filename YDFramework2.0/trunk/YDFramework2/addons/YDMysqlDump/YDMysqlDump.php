@@ -199,14 +199,38 @@
             // get creation statement of a specific table
             $record = $this->dbinstance->getRecord( "SHOW CREATE TABLE `". $table . "`" );
 
-            $content = $record['create table'] . $separator;
+            // Get the statement
+            $content = $record['create table'];
+
+            // Strip out the default character set (as it fails the import on some systems).
+            $pos = strpos( $content, ' DEFAULT CHARSET=' );
+            if ( $pos !== false ) {
+                $content = substr( $content, 0, $pos );
+            }
+
+            // Add the separator
+            $content = $content . $separator;
             
             // return only the statement
             if (!$this->useComments) return $content;
 
             return "\n\n--\n-- Table struture of '". $table ."'\n--\n\n". $content;
         } 
-      
+
+        /**
+         *  Helper function to strip a piece of text from the end of a table
+         *
+         *  @param  $text   The text to strip from
+         *  @param  $strip  The text to strip
+         */
+        function _stripFromEnd( $text, $strip ) {
+            $pos = strpos( $text, strip );
+            if ( $pos !== false ) {
+                $text = substr( $text, 0, $pos );
+            }
+            return $text;
+        }
+
         /**
          *  This function returns all insert statements as a string for each row of a table
          *
