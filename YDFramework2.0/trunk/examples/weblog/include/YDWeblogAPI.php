@@ -416,9 +416,10 @@
         function addComment( $values ) {
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
             $result = $this->_executeInsert( '#_comments', $values );
+            $comment_id = $this->db->getLastInsertID();
             $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
             $this->db->executeSql( $sql );
-            return $result;
+            return $comment_id;
         }
 
         // Update a comment
