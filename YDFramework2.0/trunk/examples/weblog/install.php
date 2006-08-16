@@ -148,7 +148,7 @@
                       user_id int(11) NOT NULL default \'1\',
                       title varchar(255) NOT NULL default \'\',
                       body longtext NOT NULL,
-                      body_more longtext NOT NULL,
+                      body_more longtext default NULL,
                       num_comments int(11) NOT NULL default \'0\',
                       allow_comments tinyint(1) NOT NULL default \'1\',
                       created int(11) default NULL,
