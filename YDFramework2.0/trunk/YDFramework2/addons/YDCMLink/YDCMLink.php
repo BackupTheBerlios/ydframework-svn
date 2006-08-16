@@ -54,7 +54,7 @@
          *
          *  @returns    Html link
          */
-		function render( $component, $url ){
+		function render( $component, & $url ){
 
 			$url->setQueryVar( 'component', $component[ 'type' ] );
 			$url->setQueryVar( 'id',        $component[ 'content_id' ] );

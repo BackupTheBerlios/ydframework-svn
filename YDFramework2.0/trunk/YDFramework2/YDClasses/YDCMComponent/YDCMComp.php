@@ -176,7 +176,7 @@
 			foreach( $this->getMenu() as $element ){
 
 				$el = new $element[ 'type' ];
-				$menu[] = $el->render( $element, &$url );
+				$menu[] = $el->render( $element, $url );
 			}
 
 			return $menu;

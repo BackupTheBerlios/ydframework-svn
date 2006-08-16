@@ -118,7 +118,7 @@
          *
          *  @returns    An html string
          */
-		function render( $id, $url ){
+		function render( $id, & $url ){
 		
 			return '';
 		}
