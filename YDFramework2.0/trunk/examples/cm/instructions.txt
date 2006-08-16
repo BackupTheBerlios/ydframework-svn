@@ -1,6 +1,6 @@
 1 - Get DBDesigner4 (opensource db scheme editor): http://fabforce.net/dbdesigner4/
 
-	1.1 - open YDFramework2\YDClasses\YDCMComponent\DBDesigner4.xml in DBDesigner4
+	1.1 - open DBDesigner4.xml in DBDesigner4
 
 	1.2 - in DBDesigner4 select FILE -> EXPORT -> SQL CREATE SCRIPT
 
