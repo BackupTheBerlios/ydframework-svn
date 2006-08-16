@@ -46,6 +46,7 @@ $GLOBALS['t']['user is incorrect'] = 'O utilizador actual &eacute; incorrecto';
 $GLOBALS['t']['user details updated'] = 'Informa&ccedil;&otilde;es do utilizador actualizadas';
 $GLOBALS['t']['password not updated'] = 'A password n&atilde;o foi actualizada';
 $GLOBALS['t']['user not updated'] = 'O utilizador n&atilde;o foi actualizado';
+$GLOBALS['t']['user added'] = 'Utilizador adicionado';
 $GLOBALS['t']['administrator and children'] = 'Administrador e sub-administratores';
 $GLOBALS['t']['children only'] = 'Apenas sub-administratores';
 
