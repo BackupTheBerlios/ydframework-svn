@@ -92,8 +92,10 @@
                 <td class="adminRowL">
                     {if $comment.item_is_draft eq '1'}<i>{/if}
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.comment|bbcode|strip_tags|truncate}</a>
-                    <br/>
-                    {t w="item"}: {$comment.item_title}
+                    {if $comment.item_title}
+                        <br/>
+                        {t w="item"}: {$comment.item_title}
+                    {/if}
                     {if $comment.item_is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
