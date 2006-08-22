@@ -626,7 +626,7 @@
           <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-          <td valign="top" rowspan="17">&nbsp;</td>
+          <td valign="top" rowspan="18">&nbsp;</td>
           <td valign="top"><a href="ajax/version.php">Simple ajax example</a><br/>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/version.php">ajax/version.php</a> </td>
@@ -661,6 +661,11 @@
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/form.php">ajax/form.php</a> </td>
         </tr>
+        <tr>
+          <td valign="top"><a href="ajax/two_forms.php">Two forms in same template</a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/two_forms.php">ajax/two_forms.php</a> </td>
+          </tr>
         <tr>
           <td valign="top"><a href="ajax/persistent_store.php">Persistent server store</a><br/></td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/persistent_store.php">ajax/persistent_store.php</a> </td>
