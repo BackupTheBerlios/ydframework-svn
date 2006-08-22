@@ -10,7 +10,7 @@
     YDInclude( 'YDCMComponent.php' );
 
     // set YDDatabase instance connection
-    YDDatabase::registerInstance( 'default', 'mysql', 'tppp', 'root', '', 'localhost' );
+    YDDatabase::registerInstance( 'default', 'mysql', 'ph', 'root', '', 'localhost' );
 
 	// set portal language. Currently you can user 'en' and 'pt'.
 	YDLocale::set( 'en' );

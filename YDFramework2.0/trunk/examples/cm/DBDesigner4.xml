@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes" ?>
 <DBMODEL Version="4.0">
 <SETTINGS>
-<GLOBALSETTINGS ModelName="YDCM scheme" IDModel="0" IDVersion="0" VersionStr="1.0.0.0" Comments="" UseVersionHistroy="1" AutoIncVersion="1" DatabaseType="MySQL" ZoomFac="74.00" XPos="119" YPos="31" DefaultDataType="5" DefaultTablePrefix="0" DefSaveDBConn="" DefSyncDBConn="" DefQueryDBConn="" Printer="" HPageCount="4.0" PageAspectRatio="1.440892512336408" PageOrientation="1" PageFormat="A4 (210x297 mm, 8.26x11.7 inches)" SelectedPages="" UsePositionGrid="1" PositionGridX="20" PositionGridY="20" TableNameInRefs="0" DefaultTableType="0" ActivateRefDefForNewRelations="1" FKPrefix="" FKPostfix="" CreateFKRefDefIndex="0" DBQuoteCharacter="`" CreateSQLforLinkedObjects="0" DefModelFont="Tahoma" CanvasWidth="4096" CanvasHeight="2842" />
+<GLOBALSETTINGS ModelName="YDCM scheme" IDModel="0" IDVersion="0" VersionStr="1.0.0.0" Comments="" UseVersionHistroy="1" AutoIncVersion="1" DatabaseType="MySQL" ZoomFac="74.00" XPos="102" YPos="31" DefaultDataType="5" DefaultTablePrefix="0" DefSaveDBConn="" DefSyncDBConn="" DefQueryDBConn="" Printer="" HPageCount="4.0" PageAspectRatio="1.440892512336408" PageOrientation="1" PageFormat="A4 (210x297 mm, 8.26x11.7 inches)" SelectedPages="" UsePositionGrid="1" PositionGridX="20" PositionGridY="20" TableNameInRefs="0" DefaultTableType="0" ActivateRefDefForNewRelations="1" FKPrefix="" FKPostfix="" CreateFKRefDefIndex="0" DBQuoteCharacter="`" CreateSQLforLinkedObjects="0" DefModelFont="Tahoma" CanvasWidth="4096" CanvasHeight="2842" />
 <DATATYPEGROUPS>
 <DATATYPEGROUP Name="Numeric Types" Icon="1" />
 <DATATYPEGROUP Name="Date and Time Types" Icon="2" />
@@ -1027,7 +1027,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1771" Tablename="YDCMPermissions" PrevTableName="Table_14" XPos="800" YPos="620" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="INSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`object_id`,`schedule`,`date_start`,`date_end`,`user_id`) VALUES (117,\aYDCMRootmenu\a,\adelete\a,NULL,0,\a0000-00-00 00:00:00\a,\a0000-00-00 00:00:00\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`object_id`,`schedule`,`date_start`,`date_end`,`user_id`) VALUES (118,\aYDCMPage\a,\apublish\a,NULL,0,\a0000-00-00 00:00:00\a,\a0000-00-00 00:00:00\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`object_id`,`schedule`,`date_start`,`date_end`,`user_id`) VALUES (119,\aYDCMPage\a,\acreate\a,NULL,0,\a0000-00-00 00:00:00\a,\a0000-00-00 00:00:00\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`object_id`,`schedule`,`date_start`,`date_end`,`user_id`) VALUES (120,\aYDCMPage\a,\apublish\a,NULL,0,\a0000-00-00 00:00:00\a,\a0000-00-00 00:00:00\a,101);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`object_id`,`schedule`,`date_start`,`date_end`,`user_id`) VALUES (121,\aYDCMPage\a,\acreate\a,NULL,0,\a0000-00-00 00:00:00\a,\a0000-00-00 00:00:00\a,101);\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="37" >
+<TABLE ID="1771" Tablename="YDCMPermissions" PrevTableName="Table_14" XPos="800" YPos="620" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="INSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`user_id`) VALUES (117,\aYDCMRootmenu\a,\adelete\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`user_id`) VALUES (118,\aYDCMPage\a,\adelete\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`user_id`) VALUES (119,\aYDCMPage\a,\acreate\a,100);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`user_id`) VALUES (120,\aYDCMPage\a,\adelete\a,101);\nINSERT INTO `ydcmpermissions` (`permission_id`,`object`,`object_action`,`user_id`) VALUES (121,\aYDCMPage\a,\acreate\a,101);\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="37" >
 <COLUMNS>
 <COLUMN ID="1781" ColName="permission_id" PrevColName="" Pos="7" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1049,26 +1049,6 @@
 <COLUMN ID="1776" ColName="object_action" PrevColName="" Pos="2" idDatatype="20" DatatypeParams="(255)" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
 <OPTIONSELECT Value="0" />
-</OPTIONSELECTED>
-</COLUMN>
-<COLUMN ID="1777" ColName="object_id" PrevColName="" Pos="3" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="0" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
-<OPTIONSELECTED>
-<OPTIONSELECT Value="1" />
-<OPTIONSELECT Value="0" />
-</OPTIONSELECTED>
-</COLUMN>
-<COLUMN ID="1778" ColName="schedule" PrevColName="" Pos="4" idDatatype="1" DatatypeParams="(1)" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="0" Comments="This permission has start and date time">
-<OPTIONSELECTED>
-<OPTIONSELECT Value="1" />
-<OPTIONSELECT Value="0" />
-</OPTIONSELECTED>
-</COLUMN>
-<COLUMN ID="1779" ColName="date_start" PrevColName="" Pos="5" idDatatype="15" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
-<OPTIONSELECTED>
-</OPTIONSELECTED>
-</COLUMN>
-<COLUMN ID="1780" ColName="date_end" PrevColName="" Pos="6" idDatatype="15" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
-<OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
 </COLUMNS>
