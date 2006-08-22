@@ -104,7 +104,12 @@
          *  @return The node as a node array.
          */
         function _toNodeArray( $node ) {
-            return $node;
+            $arr = array();
+
+            foreach ( $this->fields as $f )
+                if ( isset( $node[ $f ] ) ) $arr[ $f ] = $node[ $f ];
+
+            return $arr;
         }
 
         /*
