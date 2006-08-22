@@ -44,18 +44,9 @@
             $this->registerKey( 'permission_id', true );
 
 			// register fields	
+			$this->registerField( 'user_id' );
 			$this->registerField( 'object' );
 			$this->registerField( 'object_action' );
-			$this->registerField( 'object_id' );
-			$this->registerField( 'schedule' );
-			$this->registerField( 'date_start' );
-			$this->registerField( 'date_end' );
-
-			// add static relations
-			$this->registerField( 'user_id' );
-       		$rel = & $this->registerRelation( 'YDCMPermissions', false, 'YDCMPermissions' );
-			$rel->setLocalKey( 'user_id' );
-			$rel->setForeignKey( 'user_id' );
 		}
 
 
@@ -117,7 +108,7 @@
          *
          *  @param     $user_id     User id to get permissions
          *  @param     $parend_id   Parent id form permission comparation
-         *  @param     $values      Array with permissions
+         *  @param     $permissions Array with permissions
          */
 		function setPermissions( $user_id, $parent_id, $values ){
 
@@ -129,16 +120,16 @@
 			// get parent permissions
 			$permissions_parent = $this->getPermissions( $parent_id );
 
-			// check $values if contains permissions that belong to its parent
+			// filter $values and get permissions that are in parent
 			foreach( $permissions_parent as $obj => $perms )
 				foreach( $perms as $p => $arr )
-					if( isset( $values[ $obj ][ $p ] ) && $values[ $obj ][ $p ] == 'on' )
+					if( isset( $values[ $obj ][ $p ] ) && $values[ $obj ][ $p ] == 1 )
 						$permissions_valid[ $obj ][] = $p;
 
 			// get user permissions
 			$permissions_user = $this->getPermissions( $user_id );
 
-			// cycle current permissions to see the ones we need to delete
+			// cycle user permissions to see the ones we need to delete
 			foreach( $permissions_user as $obj => $perms )
 				foreach( $perms as $p => $arr )
 					if ( !isset( $permissions_valid[ $obj ] ) || !in_array( $p, $permissions_valid[ $obj ] ) ) 
