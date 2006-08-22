@@ -89,7 +89,8 @@
             $this->run_line     = null;
             $this->md5          = md5( $level . $message . $file . $line . $function . $stacktrace . mt_rand() );
             $this->stacktrace   = $stacktrace;
-            
+            $this->ok           = ( $level === 1000 );
+            $this->value        = $custom;
         }
         
 
