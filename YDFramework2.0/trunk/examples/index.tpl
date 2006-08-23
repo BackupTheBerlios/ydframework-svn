@@ -707,6 +707,27 @@
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/functions.php">ajax/functions.php</a> </td>
         </tr>
         <tr>
+          <td colspan="2"><b>&nbsp;<br/>
+            YDCMComponent: Content Management</b></td>
+          <td><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+          <td valign="top" rowspan="4">&nbsp;</td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/instructions.txt">Instructions (database and configuration) </a></td>
+          <td valign="top">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" valign="top"><strong>Backend examples</strong></td>
+        </tr>
+        <tr>
+          <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php">User management ( details, add )</a><br/>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/userdetails.php">cm/backend/userdetails.php</a> </td>
+          </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
