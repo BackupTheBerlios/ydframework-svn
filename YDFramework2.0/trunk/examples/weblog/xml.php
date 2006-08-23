@@ -121,7 +121,7 @@
                 $body = $comment['comment'] . "\n\n" . t('by') . ' ' . $comment['username'];
                 $this->feed->addItem(
                     $comment['item_title'], YDTplModLinkItem( $comment['item_id'], '#comment' ),
-                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $comment['item_id'], '#comment' )
+                    YDTemplate_modifier_bbcode( $body ), YDTplModLinkItem( $comment['item_id'], '#comment_' . $comment['id'] )
                 );
             }
 
@@ -147,8 +147,8 @@
                         $body .= '<img src="' . YDTplModLinkThumb( $image ) . '"/> ';
                     }
                     $this->feed->addItem(
-                        $item['title'], YDTplModLinkItemGallery( $item ),
-                        YDTemplate_modifier_bbcode( $body ), YDTplModLinkItemGallery( $item )
+                        $item['title'], YDTplModLinkItemImages( $item ),
+                        YDTemplate_modifier_bbcode( $body ), YDTplModLinkItemImages( $item )
                     );
                 }
             }
