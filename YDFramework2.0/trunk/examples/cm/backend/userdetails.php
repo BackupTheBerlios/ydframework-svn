@@ -2,6 +2,8 @@
 
     include_once( dirname( __FILE__ ) . '/../cm.php' );
 
+	YDInclude( 'YDCMUsers.php' );
+
     // Class definition
     class userdetails extends cm {
 
@@ -12,7 +14,7 @@
             $this->cm();
 
 			// create a user object
-			$this->users = YDCMComponent::module( 'YDCMUsers' );
+			$this->users = new YDCMUsers();
         }
 
 
@@ -20,17 +22,18 @@
         function actionDefault() {
 
 			// get user id 101 details and display them
-			YDDebugUtil::dump( $this->users->getUser( 101, true ) );
+			YDDebugUtil::dump( $this->users->getUser( 101, true ), '$this->users->getUser( 101, true )' );
         }
 
 
         // Edit user example
         function actionEdit() {
 
-			// add form of user 101. User cannot edit username, cannot see password, cannot see login details, can edit user details, cannot see access info, cannot see permissions
+			// add editing form of user 101.
+			// user cannot edit username, cannot see password, cannot see login details, can edit user details, cannot see access info, cann edit permissions
 			$this->users->addFormEdit( 101, false, null, null, true, null, true );
 
-			// get user form and add a custom submit button
+			// get form
 			$form = & $this->users->getForm();
 
 			// if form is not submitted just show it
@@ -40,7 +43,7 @@
 			$result = $this->users->saveFormEdit( 101, 100 );
 
 			// check if result is a array (form error messages)
-			if( is_array( $result ) ) return $form->display();
+			if ( is_array( $result ) ) return $form->display();
 
 			// if update was sucessfull, show ok message in current language
 			if ( $result == 1 ) return print( t( 'user details updated' ) );
@@ -53,10 +56,11 @@
 		// this action will add a new sub-user of the root (super-administrator: id 100)
 		function actionNew(){
 
-			// add element as child of user 100. User can edit username, can edit password, can edit login details, can edit user details, cannot see access info, can edit permissions
+			// add form for adding a new user as child of user 100. 
+			// user can edit username, can edit password, can edit login details, can edit user details, cannot see access info, can edit permissions
 			$this->users->addFormNew( 100, true, true, true, true, null, true );
 
-			// get form and add a custom submition button
+			// get form
 			$form = & $this->users->getForm();
 
 			// if form is not submitted just show it
