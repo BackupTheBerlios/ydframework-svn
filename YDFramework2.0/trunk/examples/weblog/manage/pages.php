@@ -69,6 +69,15 @@
                 // Get the current date/time
                 $defaults['modified'] = gmmktime();
 
+                // Add delete button with existing items
+                $this->form->addElement(
+                    'button', '_cmdDelete', t('delete'),
+                    array(
+                        'class' => 'button',
+                        'onClick' => 'return YDConfirmDeleteAndRedirect( \'' . addslashes( $defaults['title'] ) . '\', \'' . YD_SELF_SCRIPT . '?do=delete&id=' . $defaults['id'] . '\' );'
+                    )
+                );
+
                 // Assign the values to the template
                 $this->tpl->assign( 'page', $defaults );
 

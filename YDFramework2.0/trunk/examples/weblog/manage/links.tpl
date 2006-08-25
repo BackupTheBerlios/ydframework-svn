@@ -111,9 +111,14 @@
                 <td class="adminRowL">{$form.url.label_html}</td>
                 <td class="adminRowC">{$form.url.html}</td>
             </tr>
+            <tr>
+                <td class="adminRowL" colspan="2" style="border: 0px;">
+                    {$form._cmdSubmit.html}
+                    {$form._cmdDelete.html}
+                </td>
+            </tr>
         </table>
         {$form.id.html}
-        <p>{$form._cmdSubmit.html}</p>
     {$form.endtag}
 {/if}
 

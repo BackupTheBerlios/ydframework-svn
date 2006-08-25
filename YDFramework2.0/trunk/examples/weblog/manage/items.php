@@ -90,6 +90,15 @@
                 $defaults['body_more'] = YDTemplate_modifier_bbcode( $defaults['body_more'] );
                 $defaults['modified'] = gmmktime();
 
+                // Add delete button with existing items
+                $form->addElement(
+                    'button', '_cmdDelete', t('delete'),
+                    array(
+                        'class' => 'button',
+                        'onClick' => 'return YDConfirmDeleteAndRedirect( \'' . addslashes( $defaults['title'] ) . '\', \'' . YD_SELF_SCRIPT . '?do=delete&id=' . $defaults['id'] . '\' );'
+                    )
+                );
+
                 // Assign the values to the template
                 $this->tpl->assign( 'item', $defaults );
 

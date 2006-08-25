@@ -15,6 +15,15 @@
             return confirm( '{t w="confirm_delete"}\n\n"' + name + '"?');
         {literal}}{/literal}
 
+        {literal}function YDConfirmDeleteAndRedirect( name, url ) {{/literal}
+            if ( confirm( '{t w="confirm_delete"}\n\n"' + name + '"?') ) {literal}{{/literal}
+                window.navigate( url );
+                return true;
+            {literal}}{/literal} else {literal}{{/literal}
+                return false;
+            {literal}}{/literal}
+        {literal}}{/literal}
+
         {literal}function YDConfirmAction( name ) {{/literal}
             return confirm( '{t w="confirm_action"}\n\n"' + name + '"' );
         {literal}}{/literal}

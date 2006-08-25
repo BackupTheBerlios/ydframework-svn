@@ -51,6 +51,7 @@
     YDInclude( dirname( __FILE__ ) . '/YDWeblogAPI.php' );
     YDInclude( dirname( __FILE__ ) . '/YDWeblogRequest.php' );
     YDInclude( dirname( __FILE__ ) . '/exifer/exif.php' );
+    YDInclude( YD_DIR_HOME . '/3rdparty/smarty/libs/plugins/modifier.truncate.php' );
 
     // Check if the user wanted to use caching
     if ( YDConfig::get( 'use_cache', false ) ) {

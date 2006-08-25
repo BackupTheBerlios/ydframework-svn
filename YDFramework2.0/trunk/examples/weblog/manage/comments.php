@@ -86,6 +86,15 @@
                 $defaults = $this->weblog->getCommentById( $id );
                 $defaults['comment'] = YDTemplate_modifier_bbcode( $defaults['comment'] );
 
+                // Add delete button with existing items
+                $form->addElement(
+                    'button', '_cmdDelete', t('delete'),
+                    array(
+                        'class' => 'button',
+                        'onClick' => 'return YDConfirmDeleteAndRedirect( \'' . addslashes( smarty_modifier_truncate( trim( strip_tags( $defaults['comment'] ) ) ) ) . '\', \'' . YD_SELF_SCRIPT . '?do=delete&id=' . $defaults['id'] . '\' );'
+                    )
+                );
+
                 // Set the defaults
                 $form->setDefaults( $defaults );
 

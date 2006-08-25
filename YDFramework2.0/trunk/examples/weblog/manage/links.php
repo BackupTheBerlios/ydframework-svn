@@ -60,6 +60,15 @@
                 // Get the link by ID
                 $defaults = $this->weblog->getLinkById( $id );
 
+                // Add delete button with existing items
+                $this->form->addElement(
+                    'button', '_cmdDelete', t('delete'),
+                    array(
+                        'class' => 'button',
+                        'onClick' => 'return YDConfirmDeleteAndRedirect( \'' . addslashes( $defaults['title'] ) . '\', \'' . YD_SELF_SCRIPT . '?do=delete&id=' . $defaults['id'] . '\' );'
+                    )
+                );
+
                 // Set the defaults
                 $this->form->setDefaults( $defaults );
 

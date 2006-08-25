@@ -189,7 +189,10 @@
                 <td class="adminRowL">{$form.is_draft.html}</td> 
             </tr>
             <tr>
-                <td class="adminRowL" colspan="2" style="border: 0px;">{$form._cmdSubmit.html}</td>
+                <td class="adminRowL" colspan="2" style="border: 0px;">
+                    {$form._cmdSubmit.html}
+                    {$form._cmdDelete.html}
+                </td>
             </tr>
             {if $form.title.value != ''}
                 <tr><td colspan="7">&nbsp;</td></tr>
