@@ -108,7 +108,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="4" valign="top">&nbsp;</td>
+            <td rowspan="5" valign="top">&nbsp;</td>
             <td valign="top"><a href="sample.php">Defining and using action requests</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=sample.php">sample.php</a>
@@ -148,6 +148,14 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app2/index.php">multi_apps/app2/index.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=multi_apps/app2/index.tpl">multi_apps/app2/index.tpl</a>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="callbacks.php">Using callbacks</a> </td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=sample.php">callbacks.php</a>
+                <br/>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=sample.tpl">callbacks.tpl</a>
             </td>
         </tr>
         <tr>

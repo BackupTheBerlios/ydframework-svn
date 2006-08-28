@@ -32,6 +32,8 @@
      *	framework is implemented in this class.
      */
     class YDRequest extends YDBase {
+	
+        var $_callbacks = null;	
 
         /**
          *	This is the class constructor for the YDRequest class. This sets the default action to 'actionDefault' (but
@@ -46,6 +48,11 @@
             $this->__isInitialized = true;
             $this->__requiresAuthentication = false;
 
+            // setup the callbacks object
+            $this->_callbacks = new YDBase();
+
+            // this is for callbacks applicable to all actions
+            $this->_callbacks->set( 'action',   array( 'before' => array(), 'after' => array() ) );
         }
 
         /**
@@ -57,21 +64,11 @@
          *	@returns	The name of the current action.
          */
         function getActionName() {
-
-            // Get the name of the action
             $action = strtolower( empty( $_GET[ 'do' ] ) ? 'actionDefault' : 'action' . $_GET[ 'do' ] );
-
-            // We convert to lowercase
-            //$action = strtolower( $action );
-
-            // Remove the action prefix
             if ( strpos( $action, 'action' ) === 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
-
-            // Return the action name
             return strtolower( $action );
-
         }
 
         /**
@@ -169,6 +166,14 @@
          *	the action names and so on are also update to reflect this.
          *
          *	@param $action	Name of the action to forward to.
+         *
+         *  @returns 	Returns an array containing results returned from action and callback processing.
+         *				Elements of this array are keyed by strings:
+         *					action:before
+         *					<actionname>:before
+         *					<actionname>
+         *					<actionname>:after
+         *					action:after		 
          */
         function forward( $action ) {
             if ( strpos( $action, 'action' ) === 0 ) {
@@ -178,7 +183,8 @@
             if ( ! $this->isActionAllowed() ) {
                 $this->errorActionNotAllowed();
             } else {
-                call_user_func( array( $this, 'action' . $action ) );
+                // process the requested action (second parameter disables callback processing)
+                return $this->_processAction( $action, false );
             }
         }
 
@@ -230,13 +236,54 @@
         }
 
         /**
+         *  This function processes the specified action.
+         *
+         *  @param  $action  			The action name.
+         *  @param  $enable_callbacks	Default is true. Use this to disable callback processing.
+         *
+         *  @returns 	Returns an array containing results returned from action and callback processing.
+         *				Elements of this array are keyed by strings:
+         *					action:before
+         *					<actionname>:before
+         *					<actionname>
+         *					<actionname>:after
+         *					action:after
+         *
+         *  @internal
+         */
+        function _processAction( $action, $enable_callbacks = true ) {
+            if ( ! YDStringUtil::startsWith( $action, 'action' ) ) {
+                $action = 'action' . $action;
+            }
+            $results = array();
+            if ( $enable_callbacks == true ) {
+                $results['action:before'] = $this->_executeCallbacks( 'action' , true );
+                $results[$action . ':before'] = $this->_executeCallbacks( $action, true );
+            }
+            $results[$action] = call_user_func( array( $this, $action ) );
+            if ( $enable_callbacks == true ) {
+                $results[$action . ':after'] = $this->_executeCallbacks( $action, false );
+                $results['action:after'] = $this->_executeCallbacks( 'action', false );
+            }
+            return $results;
+        }
+
+        /**
          *	This function is the intelligent part of the YDRequest class. Based on the action specified in the URL, it
          *	will execute the right function of this class. It performs quite a lot of error checking to see whether the
          *	action function is specified or not.
+         *
+         *  @returns 	Returns an array containing results returned from action and callback processing.
+         *				Elements of this array are keyed by strings:
+         *					action:before
+         *					<actionname>:before
+         *					<actionname>
+         *					<actionname>:after
+         *					action:after
          */
         function process() {
             $action = 'action' . $this->getActionName();
-            call_user_func( array( $this, $action ) );
+            return $this->_processAction( $action, true );
         }
 
         /**
@@ -334,6 +381,120 @@
          */
         function errorActionNotAllowed() {
             trigger_error( 'You are not allow to access the action "' . $this->getActionName() . '"', YD_ERROR );
+        }
+
+        /**
+         *  This function registers an action callback method.
+         *
+         *  'before' and 'after' callbacks can be registered for
+         *  'action' (all actions) or for a specific YDRequest action.
+         *
+         *  By default no YDRequest action callbacks are defined.
+         *
+         *  Callbacks are disabled when an action forwards to another
+         *  action. This is to prevent duplicated processing of callbacks.
+         *  "redirectToAction" is a more compatible with callbacks.
+         *
+         *  Processing of callbacks and actions in the context of a request
+         *  is executed in this order:
+         * 
+         *    1. (optional) before 'action' callbacks - apply to all actions
+         *    2. (optional) before callback for the current action
+         *	  3. Current action
+         *    4. (optional) after callback for the current action
+         *    5. (optional) after 'action' callbacks - apply to all actions
+         *
+         *	example 1: will execute my_before_callback() before each action
+         *		$this->registerCallback( 'my_before_callback', 'action', true );
+         *
+         *	example 2: will execute my_after_callback() after each action
+         *		$this->registerCallback( 'my_after_callback', 'action', false );
+         *
+         *	example 3: will execute my_deafult_after_callback() after actionDefault
+         *		$this->registerCallback( 'my_deafult_after_callback', 'actionDefault', false );		 
+         *
+         *  @param $method  The method name.
+         *  @param $action  The action or array of actions that trigger the call.
+         *  @param $before  (optional) Execute callback before the action. Default: false.
+         */
+        function registerCallback( $method, $action, $before=false ) {
+            if ( strtolower( $action ) != 'action' && ! $this->_callbacks->exists( strtolower( $action ) ) ) {
+                $this->_callbacks->set( strtolower( $action ),   array( 'before' => array(), 'after' => array() ) );				
+            }
+            if ( strtolower( $action ) != 'action' && ! $this->hasMethod( $action ) ) {
+                trigger_error(  $this->getClassName() . ' - ' .
+                                    ' action "' . $action . '" for callback "' . $method . '" does not exist.', YD_ERROR );					
+            }
+            $sub = $before ? 'before' : 'after';
+            if ( ! is_array( $action ) ) {
+                $action = array( $action );
+            }
+            foreach ( $action as $ac ) {
+                if ( ! $this->_callbacks->exists( strtolower( $ac ) ) ) {
+                    trigger_error(  $this->getClassName() . ' - ' . $ac .
+                                    ' Incorrect action for callback "' . $method . '".', YD_ERROR );
+                }
+                $aclower = strtolower( $ac );
+                $act = & $this->_callbacks->$aclower;
+                $act[ $sub ][ $method ] = '';
+            }
+        }
+
+        /**
+         *  This function unregisters a callback method.
+         *
+         *  @param $method  The method name.
+         *  @param $action  (optional) The action that triggers the call. If null, from all actions. Default: null.
+         */
+        function unregisterCallback( $method, $action=null ) {
+            if ( ! is_null( $action ) && ! $this->_callbacks->exists( strtolower( $action ) ) ) {
+                trigger_error(  $this->getClassName() . ' -
+                                Incorrect action for unregistering callback method "' . $method . '".', YD_ERROR );
+            }
+            $actions = array( $action );
+            if ( is_null( $action ) ) {
+                $actions = array_keys( get_object_vars( $this->_callbacks ) );
+            }
+            foreach ( $actions as $action ) {
+                $ac = strtolower ( $action );
+                $act = & $this->_callbacks->$ac;
+                unset( $act[ 'before' ][ $method ] );
+                unset( $act[ 'after' ][ $method ] );
+            }
+        }
+
+        /**
+         *  This function executes all callbacks defined for the action.
+         *
+         *  @param  $action  The action name.
+         *  @param  $before  (optional) Execute the before actions. Default: false.
+         *  @param  $success (optional) Boolean indicating if the action was successful. Default: null - no result.
+         *
+         *  @internal
+         */
+        function _executeCallbacks( $action, $before=false, $success=null ) {
+            $sub = $before ? 'before' : 'after';
+            $actions = & $this->_callbacks->$action;
+            if ( $actions[$sub] != null ) {
+                foreach ( $actions[ $sub ] as $callback => $n ) {
+                    if ( ! $this->hasMethod( $callback ) ) {
+                        trigger_error(  $this->getClassName() . ' - The ' . 
+                                        $action . ' callback method "' . $callback . '" is not defined.', YD_ERROR );
+                    }
+                    $res = call_user_func( array( & $this, $callback ), $action, $before, $success );
+                    if ( $res !== true && $res !== null ) {
+                        return array( 
+                            'class'    => $this->getClassName(),
+                            'callback' => $callback,
+                            'action'   => $action,
+                            'before'   => $before,
+                            'success'  => $success,
+                            'return'   => $res
+                        );
+                    }
+                }
+            }
+            return true;
         }
 
     }
