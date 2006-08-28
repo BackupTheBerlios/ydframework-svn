@@ -147,6 +147,7 @@
             <p>{$comments_form.username.html} <small>{$comments_form.username.label_html}</small></p>
             <p>{$comments_form.useremail.html} <small>{$comments_form.useremail.label_html}</small></p>
             <p>{$comments_form.userwebsite.html} <small>{$comments_form.userwebsite.label_html}</small></p>
+            <p>{$comments_form._userspam.html} <small>{$comments_form._userspam.label_html}</small></p>
 
             <p>{$comments_form.comment.html}</p>
 

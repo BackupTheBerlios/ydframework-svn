@@ -55,10 +55,14 @@
                     'comments', 'POST', YDTplModLinkItemRespond( $item ), '_self', array( 'id' => 'commentform' )
                 );
 
+                // The SPAM options
+                $spam_options = array( 1 => t('spam'), 2 => t('spam'), 3 => t('no_spam'), 4 => t('spam') );
+
                 // Add the fields
                 $form->addElement( 'text', 'username', t( 'name' ) );
                 $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
                 $form->addElement( 'text', 'userwebsite', t( 'website' ) );
+                $form->addElement( 'select', '_userspam', t('choose_no_spam'), array(), $spam_options );
                 $form->addElement( 'textarea', 'comment', '' );
                 $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'id' => 'submit' ) );
                 $form->addElement( 'hidden', 'item_id' );
@@ -78,6 +82,7 @@
                 $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
                 $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
                 $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
+                $form->addRule( '_userspam',   'value',     t( 'err_userspam' ), '3' );
                 $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
 
                 // Add the filters

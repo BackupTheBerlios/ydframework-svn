@@ -50,6 +50,16 @@
         }
 
         /**
+         *	This function returns true if the variable is equal to the specified value, otherwise, it returns false.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The required value.
+         */
+        function value( $val, $opts ) {
+            return $val === $opts;
+        }
+
+        /**
          *	This function returns true if the variable is smaller than the specified length, otherwise, it returns
          *	false.
          *

@@ -133,6 +133,7 @@
 
 
             // Add the rules
+            $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
             $this->registerRule( 'required', array( 'YDValidateRules', 'required' ), 'YDValidateRules.php' );
             $this->registerRule( 'maxlength', array( 'YDValidateRules', 'maxlength' ), 'YDValidateRules.php' );
             $this->registerRule( 'minlength', array( 'YDValidateRules', 'minlength' ), 'YDValidateRules.php' );

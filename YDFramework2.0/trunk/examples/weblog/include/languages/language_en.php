@@ -92,6 +92,10 @@ $GLOBALS['t']['err_website'] = 'The website specified is not a valid URL';
 $GLOBALS['t']['err_comment'] = 'Comment is required';
 $GLOBALS['t']['with'] = 'for';
 $GLOBALS['t']['item_closed'] = 'This item does not allow comments.';
+$GLOBALS['t']['spam'] = 'Spam';
+$GLOBALS['t']['no_spam'] = 'No spam';
+$GLOBALS['t']['choose_no_spam'] = 'Choose "no spam" here';
+$GLOBALS['t']['err_userspam'] = 'You didn\'t select "no spam"';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'New comment';
