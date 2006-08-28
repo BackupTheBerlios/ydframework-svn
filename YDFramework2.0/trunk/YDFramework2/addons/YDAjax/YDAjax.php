@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.83';
+            $this->_version = '2.84';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -109,6 +109,8 @@
 			// we are not on response
 			$this->onResponse = false;
 		}
+
+	
 
 
 		// internal method to add js to the template
@@ -197,6 +199,14 @@
          */
 		function clearResponse() {
 			$this->onResponse = false;
+		}
+
+
+        /**
+         *	This method returns the template object
+         */
+		function & getTemplate(){
+			return $this->template;
 		}
 
 
