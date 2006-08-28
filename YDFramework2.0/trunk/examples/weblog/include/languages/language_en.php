@@ -95,7 +95,7 @@ $GLOBALS['t']['item_closed'] = 'This item does not allow comments.';
 $GLOBALS['t']['spam'] = 'Spam';
 $GLOBALS['t']['no_spam'] = 'No spam';
 $GLOBALS['t']['choose_no_spam'] = 'Choose "no spam" here';
-$GLOBALS['t']['err_userspam'] = 'You didn\'t select "no spam"';
+$GLOBALS['t']['err_userspam'] = 'Detected a spam attack';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'New comment';

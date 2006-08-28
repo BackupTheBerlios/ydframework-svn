@@ -133,6 +133,8 @@
 
         {$comments_form.tag}
 
+            {$comments_form._userspam.html}
+
             {if $comments_form.errors_unique_messages}
                 <p class="postmetadata alt" style="color: red; text-align: left;">
                     <b>{t w="error_comment"}<br/></b>
@@ -147,7 +149,6 @@
             <p>{$comments_form.username.html} <small>{$comments_form.username.label_html}</small></p>
             <p>{$comments_form.useremail.html} <small>{$comments_form.useremail.label_html}</small></p>
             <p>{$comments_form.userwebsite.html} <small>{$comments_form.userwebsite.label_html}</small></p>
-            <p>{$comments_form._userspam.html} <small>{$comments_form._userspam.label_html}</small></p>
 
             <p>{$comments_form.comment.html}</p>
 

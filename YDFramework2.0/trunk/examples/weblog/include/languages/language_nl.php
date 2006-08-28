@@ -95,7 +95,7 @@ $GLOBALS['t']['item_closed'] = 'Dit item laat geen commentaren toe.';
 $GLOBALS['t']['spam'] = 'Spam';
 $GLOBALS['t']['no_spam'] = 'Geen spam';
 $GLOBALS['t']['choose_no_spam'] = 'Kies hier "geen spam"';
-$GLOBALS['t']['err_userspam'] = 'Je selecteerde niet "geen spam"';
+$GLOBALS['t']['err_userspam'] = 'Detecteerde een spam aanval';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'Nieuw commentaar';

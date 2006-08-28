@@ -55,16 +55,19 @@
                     'comments', 'POST', YDTplModLinkItemRespond( $item ), '_self', array( 'id' => 'commentform' )
                 );
 
-                // The SPAM options
-                $spam_options = array( 1 => t('spam'), 2 => t('spam'), 3 => t('no_spam'), 4 => t('spam') );
-
                 // Add the fields
                 $form->addElement( 'text', 'username', t( 'name' ) );
                 $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
                 $form->addElement( 'text', 'userwebsite', t( 'website' ) );
-                $form->addElement( 'select', '_userspam', t('choose_no_spam'), array(), $spam_options );
+                $form->addElement( 'hidden', '_userspam', t('choose_no_spam'), array() );
                 $form->addElement( 'textarea', 'comment', '' );
-                $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'id' => 'submit' ) );
+                $form->addElement(
+                    'submit', 'cmdSubmit', t( 'submit_comment' ),
+                    array(
+                        'id' => 'submit',
+                        'onClick' => 'this.document.getElementById(\'comments__userspam\').value = 3; return true;'
+                    )
+                );
                 $form->addElement( 'hidden', 'item_id' );
 
                 // Set the defaults
@@ -73,6 +76,7 @@
                 $defaults['username']    = empty( $_COOKIE['YD_USER_NAME'] ) ? '' : $_COOKIE['YD_USER_NAME'];
                 $defaults['useremail']   = empty( $_COOKIE['YD_USER_EMAIL'] ) ? '' : $_COOKIE['YD_USER_EMAIL'];
                 $defaults['userwebsite'] = empty( $_COOKIE['YD_USER_WEBSITE'] ) ? '' : $_COOKIE['YD_USER_WEBSITE'];
+                $defaults['_userspam']   = 1;
                 $form->setDefaults( $defaults );
 
                 // Set the rules
