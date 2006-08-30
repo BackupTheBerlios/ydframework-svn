@@ -49,10 +49,15 @@
             // Get the version of phpMailer
             $PHPMailer = new PHPMailer();
 
+            // Get the list of PHP modules
+            $php_modules = get_loaded_extensions();
+            sort( $php_modules );
+            $php_modules = implode( $php_modules, ', ' );
+
             // Get the other variables
             $this->tpl->assign( 'php_version',       phpversion() );
             $this->tpl->assign( 'mysql_version',     mysql_get_server_info() );
-            $this->tpl->assign( 'php_modules',       implode( get_loaded_extensions(), ', ' ) );
+            $this->tpl->assign( 'php_modules',       $php_modules );
             $this->tpl->assign( 'includePath',       $GLOBALS['YD_INCLUDE_PATH'] );
             $this->tpl->assign( 'phpmailer_version', $PHPMailer->Version );
             $this->tpl->assign( 'PHP_OS', PHP_OS );
