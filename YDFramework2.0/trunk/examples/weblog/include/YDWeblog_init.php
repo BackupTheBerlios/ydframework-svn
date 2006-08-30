@@ -54,13 +54,15 @@
     YDInclude( YD_DIR_HOME . '/3rdparty/smarty/libs/plugins/modifier.truncate.php' );
 
     // Check for blocked IP addresses
-    $blocked_ips = YDConfig::get( 'blocked_ips', '' );
-    $blocked_ips = explode( ', ', YDFormatStringWithListValues( $blocked_ips ) );
+    $blocked_ips = YDFormatStringWithListValues( YDConfig::get( 'blocked_ips', '' ) );
 
     // Check if the current IP address is blocked or not
-    foreach ( $blocked_ips as $ip ) {
-        if ( YDStringUtil::match( $_SERVER['REMOTE_ADDR'], $ip ) ) {
-            die( 'IP address ' . $_SERVER['REMOTE_ADDR'] . ' is blocked.' );
+    if ( $blocked_ips != '' ) {
+        $blocked_ips = explode( ', ', $blocked_ips );
+        foreach ( $blocked_ips as $ip ) {
+            if ( YDStringUtil::match( $_SERVER['REMOTE_ADDR'], $ip ) ) {
+                die( 'IP address ' . $_SERVER['REMOTE_ADDR'] . ' is blocked.' );
+            }
         }
     }
 
