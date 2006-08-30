@@ -133,6 +133,8 @@
                       useremail varchar(255) NOT NULL default \'\',
                       userwebsite varchar(255) default NULL,
                       userip varchar(20) default NULL,
+                      useragent varchar(255) default NULL,
+                      userrequrl varchar(255) default NULL,
                       comment longtext NOT NULL,
                       created int(11) default NULL,
                       modified int(11) default NULL,

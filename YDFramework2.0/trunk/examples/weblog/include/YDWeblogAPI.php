@@ -114,7 +114,12 @@
             // Get a link to the database metadata
             $dbmeta = new YDDatabaseMetaData( $this->db );
 
-            // Add any missing items field
+            // Add any missing comments fields
+            $fields = $dbmeta->getFields( '#_comments' );
+            $this->executeIfMissing( 'useragent', $fields, 'ALTER TABLE #_comments ADD useragent varchar(255) AFTER userip' );
+            $this->executeIfMissing( 'userrequrl', $fields, 'ALTER TABLE #_comments ADD userrequrl varchar(255) AFTER useragent' );
+
+            // Add any missing items fields
             $fields = $dbmeta->getFields( '#_items' );
             $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
             $this->executeIfMissing( 'allow_comments', $fields, 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
@@ -389,17 +394,7 @@
 
         // Get the comments for an item
         function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1, $public_only=false ) {
-            /*
-            if ( $item_id ) {
-                $query = 'SELECT * FROM #_comments WHERE item_id = ' . $this->str( $item_id );
-            } else {
-                $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
-                if ( $public_only == true ) {
-                    $query .= ' and i.is_draft = 0';
-                }
-            }
-            */
-            $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
+            $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
             if ( $item_id ) {
                 $query .= ' and item_id = ' . $this->str( $item_id );
             }
@@ -415,7 +410,7 @@
 
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
-            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
+            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
             $record  = $this->db->getRecord( $sql );
             $record['comment'] = trim( strip_tags( $record['comment'] ) );
             return $record;
@@ -424,6 +419,8 @@
         // Add a comment
         function addComment( $values ) {
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
+            $values['useragent'] = $_SERVER['HTTP_USER_AGENT'];
+            $values['userrequrl'] = $_SERVER['REQUEST_URI'];
             $result = $this->_executeInsert( '#_comments', $values );
             $comment_id = $this->db->getLastInsertID();
             $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );

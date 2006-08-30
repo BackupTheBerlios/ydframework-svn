@@ -150,8 +150,16 @@
                 <td class="adminRowL" width="400"><a href="items.php?do=edit&id={$comment.item_id}"><b>{$comment.item_title}</b></a></td>
             </tr>
             <tr>
-                <td class="adminRowL" width="300">{t w="posted_from"}</td>
-                <td class="adminRowL" width="400">{$comment.userip}</td>
+                <td class="adminRowL">{t w="posted_from"}</td>
+                <td class="adminRowL">{$comment.userip}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">User Agent</td>
+                <td class="adminRowL" width="400">{$comment.useragent|default:'-'}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">Request URI</td>
+                <td class="adminRowL">{$comment.userrequrl|default:'-'}</td>
             </tr>
             <tr>
                 <td class="adminRowL">{$form.username.label_html}</td>
