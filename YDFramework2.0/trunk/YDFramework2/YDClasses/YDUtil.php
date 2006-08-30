@@ -813,6 +813,58 @@
             return ( substr( $string, -strlen( $substring ) ) == $substring );
         }
 
+        /**
+         *  This function is an fnmatch replacement.
+         *
+         *  $param $string      The string to test
+         *  $param $pattern     The pattern to match
+         *
+         *  @returns    Boolean indicating if the string matches the pattern or not.
+         */
+        function match( $string, $pattern ) {
+            for ( $op = 0, $npattern = '', $n = 0, $l = strlen( $pattern ); $n < $l; $n++ ) {
+            switch ($c = $pattern[$n]) {
+                case '\\':
+                    $npattern .= '\\' . @$pattern[++$n];
+                    break;
+                case '.':
+                case '+':
+                case '^':
+                case '$':
+                case '(':
+                case ')':
+                case '{':
+                case '}':
+                case '=':
+                case '!':
+                case '<':
+                case '>':
+                case '|':
+                    $npattern .= '\\' . $c;
+                    break;
+                case '?': case '*':
+                    $npattern .= '.' . $c;
+                    break;
+                case '[':
+                case ']':
+                default:
+                    $npattern .= $c;
+                    if ($c == '[') {
+                        $op++;
+                    } else if ($c == ']') {
+                        if ($op == 0) return false;
+                            $op--;
+                        }
+                        break;
+                    }
+            }
+            if ( $op != 0 ) {
+                return false;
+            } else {
+                return preg_match( '/' . $npattern . '/i', $string );
+            }
+        }
+
     }
 
     /**

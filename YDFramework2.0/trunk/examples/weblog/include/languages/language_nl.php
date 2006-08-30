@@ -293,6 +293,7 @@ $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Houdt statistieken bij';
 $GLOBALS['t']['cfg_use_auto_update'] = 'Activeer Auto Update';
+$GLOBALS['t']['cfg_blocked_ips'] = 'Geblokkeerde IP adressen gescheiden door comma\'s. Je kan een sterretje gebruiken als wildcard.';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

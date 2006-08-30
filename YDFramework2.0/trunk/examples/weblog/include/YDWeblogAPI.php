@@ -95,6 +95,16 @@
 
     }
 
+    // Function to format a string with list values
+    function YDFormatStringWithListValues( $string ) {
+        $string = str_replace( ';', ',', $string );
+        $string = explode( ',', $string );
+        foreach ( $string as $k=>$v ) {
+            $string[$k] = trim( $v );
+        }
+        return implode( ', ', $string );
+    }
+
     // Class defining our weblog API
     class YDWeblogAPI extends YDBase {
 

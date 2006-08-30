@@ -38,6 +38,7 @@
 
         {literal}tinyMCE.init({
             mode : "textareas",
+            editor_deselector : "tfMNoMCE",
             theme : "advanced",
             language: "{/literal}{$weblog_language}{literal}",
             plugins : "imgselector,fullscreen",

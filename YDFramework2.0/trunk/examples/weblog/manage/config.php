@@ -98,6 +98,8 @@
             $form->addElement( 'text', 'auto_close_items', t( 'cfg_auto_close_items' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'checkbox', 'dflt_is_draft', t( 'is_draft' ), array( 'style' => 'border: none;' ) );
 
+            $form->addElement( 'textarea', 'blocked_ips', t( 'cfg_blocked_ips' ), array( 'class' => 'tfMNoMCE' ) );
+
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
             // Set the defaults
@@ -125,6 +127,9 @@
 
                 // Get the form values
                 $values = $form->getValues();
+
+                // Format the list of blocked IP numbers
+                $values['blocked_ips'] = YDFormatStringWithListValues( $values['blocked_ips'] );
 
                 // Save the config
                 YDWeblogSaveConfig( $values );
@@ -171,6 +176,7 @@
             $config['auto_close_items']     = YDConfig::get( 'auto_close_items',     '' );
             $config['dflt_allow_comments']  = YDConfig::get( 'dflt_allow_comments',  true );
             $config['dflt_is_draft']        = YDConfig::get( 'dflt_is_draft',        false );
+            $config['blocked_ips']          = YDConfig::get( 'blocked_ips',          YDFormatStringWithListValues( '' ) );
 
             // Return the configuration
             return $config;

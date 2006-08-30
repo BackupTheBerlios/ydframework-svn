@@ -141,6 +141,16 @@
             <td class="adminRowL" width="400">{$config.max_syndicated_items}</td>
         </tr>
     </table>
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+        <tr><td colspan="3">&nbsp;</td></tr>
+        <tr>
+            <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_spam_protection"}</th>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL" width="300">{t w="cfg_blocked_ips"}</td>
+            <td class="adminRowL" width="400">{$config.blocked_ips|default:'-'|replace:', ':'<br/>'}</td>
+        </tr>
+    </table>
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
 
@@ -269,6 +279,16 @@
             <tr>
                 <td class="adminRowL" width="300">{$form.max_syndicated_items.label_html}</td>
                 <td class="adminRowL" width="400">{$form.max_syndicated_items.html}</td>
+            </tr>
+        </table>
+        <table width="700" cellspacing="0" cellpadding="0" border="0">
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
+                <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_spam_protection"}</th>
+            </tr>
+            <tr>
+                <td class="adminRowL" width="300">{$form.blocked_ips.label_html}</td>
+                <td class="adminRowL" width="400">{$form.blocked_ips.html}</td>
             </tr>
         </table>
         <p>{$form._cmdSubmit.html}</p>

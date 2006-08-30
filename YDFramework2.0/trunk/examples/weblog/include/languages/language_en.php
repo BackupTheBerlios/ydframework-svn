@@ -293,6 +293,7 @@ $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Track statistics';
 $GLOBALS['t']['cfg_use_auto_update'] = 'Enable Auto Update';
+$GLOBALS['t']['cfg_blocked_ips'] = 'Blocked IP addresses separated by comma\'s. An asterix can be used as a wildcard.';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';

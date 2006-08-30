@@ -90,6 +90,11 @@ textarea {
     line-height: 14pt;
 }
 
+textarea.tfMNoMce {
+    width: 400px;
+    height: 100px;
+}
+
 td.bbtoolbar {
 	background: url(images/nav-bg-editor.gif);
 }
