@@ -78,6 +78,12 @@
 
             // Get the ID from the query string
             $id = $this->getIdFromQS();
+            if ( $id == -1 ) {
+                $id = $form->getValue( 'id' );
+                if ( $id == '' ) {
+                    $id = -1;
+                }
+            }
 
             // If there is something, set the defaults
             if ( $id != -1 ) {
