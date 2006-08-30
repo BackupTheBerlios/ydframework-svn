@@ -100,7 +100,11 @@
         $string = str_replace( ';', ',', $string );
         $string = explode( ',', $string );
         foreach ( $string as $k=>$v ) {
-            $string[$k] = trim( $v );
+            if ( trim( $v ) == '' ) {
+                unset( $string[$k] );
+            } else {
+                $string[$k] = trim( $v );
+            }
         }
         return implode( ', ', $string );
     }
