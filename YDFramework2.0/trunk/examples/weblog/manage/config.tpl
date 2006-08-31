@@ -36,11 +36,11 @@
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_db_pass"}</td>
-            <td class="adminRowL">{$config.db_pass|default:'&nbsp;'}</td>
+            <td class="adminRowL">{$config.db_pass|default:'-'}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_db_prefix"}</td>
-            <td class="adminRowL">{$config.db_prefix|default:'&nbsp;'}</td>
+            <td class="adminRowL">{$config.db_prefix|default:'-'}</td>
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
@@ -54,7 +54,7 @@
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_weblog_description"}</td>
-            <td class="adminRowL">{$config.weblog_description}</td>
+            <td class="adminRowL">{$config.weblog_description|default:'-'}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_weblog_entries_fp"}</td>
@@ -82,7 +82,7 @@
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_weblog_google_analytics"}</td>
-            <td class="adminRowL">{$config.google_analytics|default:'&nbsp;'}</td>
+            <td class="adminRowL">{$config.google_analytics|default:'-'}</td>
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
