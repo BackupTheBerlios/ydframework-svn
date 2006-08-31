@@ -59,6 +59,9 @@
     @define( 'YD_FW_HOMEPAGE', 'http://ydframework.berlios.de/' );
     @define( 'YD_FW_COPYRIGHT', '(c) 2002-2006 Pieter Claerhout, pieter@yellowduck.be' );
 
+    // Server constants
+    @define( 'YD_SERVER_API', php_sapi_name() );
+
     // Directory paths
     @define( 'YD_DIR_HOME', dirname( __FILE__ ) );
     @define( 'YD_DIR_HOME_CLS', YD_DIR_HOME . '/YDClasses' );
@@ -67,7 +70,7 @@
 
     // File and URL constants
     @define( 'YD_SELF_SCRIPT', $_SERVER['PHP_SELF'] );
-    if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) ) {
+    if ( ! isset( $_SERVER['SCRIPT_FILENAME'] ) || substr( YD_SERVER_API, 0, 3 ) == 'cgi' ) {
         $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
     }
     @define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
