@@ -55,6 +55,7 @@
             $php_modules = implode( $php_modules, ', ' );
 
             // Get the other variables
+            $this->tpl->assign( 'schema_info',       $this->weblog->getFullSchemaVersion() );
             $this->tpl->assign( 'php_version',       phpversion() );
             $this->tpl->assign( 'mysql_version',     mysql_get_server_info() );
             $this->tpl->assign( 'php_modules',       $php_modules );

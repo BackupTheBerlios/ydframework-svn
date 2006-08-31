@@ -144,16 +144,22 @@
 
             // Create the schemaversion table if it doesn't exists
             if ( ! $this->dbmeta->tableExists( '#_schemaversion' ) ) {
-                $sql = 'CREATE TABLE #_schemaversion (installed TIMESTAMP, version INT (11))';
+                $sql = 'CREATE TABLE #_schemaversion (installed INT(11), version INT (11))';
                 $this->db->executeSql( $sql );
             }
 
             // Check the schema version
-            $schema_version = $this->db->getRecord( 'select version from #_schemaversion order by installed desc' );
+            $schema_version = $this->db->getValue( 'select version from #_schemaversion order by installed desc' );
 
             // Return the schema version
             return ( $schema_version === false  ) ? 0 : intval( $schema_version );
 
+        }
+
+        // Get the full schema information
+        function getFullSchemaVersion() {
+            $this->getSchemaVersion();
+            return $this->db->getRecord( 'select installed, version from #_schemaversion order by installed desc' );
         }
 
         // Function to set the schema version
@@ -168,7 +174,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 1;
+            $current_schema = 2;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -206,6 +212,10 @@
                 $indexes = $this->dbmeta->getIndexes( '#_users' );
                 $this->executeIfPresent( 'email', $indexes, 'ALTER TABLE #_users DROP INDEX email' );
                 $this->executeIfMissing( 'name',  $indexes, 'ALTER TABLE #_users ADD UNIQUE name (name)' );
+
+                // Fix the shemaversion table if needed
+                $this->db->executeSql( 'ALTER TABLE #_schemaversion CHANGE installed installed INT(11)' );
+                $this->db->executeSql( 'UPDATE #_schemaversion SET installed = unix_timestamp() WHERE installed = 0' );
 
                 // Update the schema information
                 $this->setSchemaVersion( $current_schema );

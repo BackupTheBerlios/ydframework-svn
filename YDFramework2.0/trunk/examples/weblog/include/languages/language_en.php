@@ -348,5 +348,7 @@ $GLOBALS['t']['development_version'] = 'Development version';
 $GLOBALS['t']['msg_correct_version'] = 'There are no newer versions available';
 $GLOBALS['t']['msg_install_update'] = 'Newer versions are available';
 $GLOBALS['t']['development_changelog'] = 'Development Changelog';
+$GLOBALS['t']['schema_version'] = 'Database schema version';
+$GLOBALS['t']['installed_on'] = 'installed on';
 
 ?>

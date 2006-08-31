@@ -348,5 +348,7 @@ $GLOBALS['t']['development_version'] = 'Ontwikkel versie';
 $GLOBALS['t']['msg_correct_version'] = 'Er zijn geen nieuwere versies beschikbaar';
 $GLOBALS['t']['msg_install_update'] = 'Er zijn nieuwe versies beschikbaar';
 $GLOBALS['t']['development_changelog'] = 'Ontwikkel Logboek';
+$GLOBALS['t']['schema_version'] = 'Database schema versie';
+$GLOBALS['t']['installed_on'] = 'ge&iuml;nstalleerd op';
 
 ?>

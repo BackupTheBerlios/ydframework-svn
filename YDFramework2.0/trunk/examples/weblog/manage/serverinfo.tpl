@@ -45,6 +45,10 @@
         <td class="adminRowL" width="400">{$YD_FW_NAMEVERS}</td>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+        <td class="adminRowL" width="300">{t w="schema_version"}</td>
+        <td class="adminRowL" width="400">{$schema_info.version} ({t w="installed_on"} {$schema_info.installed|date:"%d %B %Y"|lower})</td>
+    </tr>
+    <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL">Smarty</td>
         <td class="adminRowL">Smarty {$smarty.version}</td>
     </tr>
