@@ -357,7 +357,6 @@
             $this->tpl->assign( 'weblog_language',    YDConfig::get( 'weblog_language', 'en' ) );
             $this->tpl->assign( 'google_analytics',   YDConfig::get( 'google_analytics', '' ) != '' );
             $this->tpl->assign( 'keep_stats',         YDConfig::get( 'keep_stats', true ) );
-            $this->tpl->assign( 'use_auto_update',    YDConfig::get( 'use_auto_update',  true ) );
 
             // Get the link to the different directories
             $uploads_dir = YDUrl::makeLinkAbsolute( '../' . $this->dir_uploads );

@@ -288,7 +288,6 @@ $GLOBALS['t']['cfg_default_item_settings'] = 'Valeurs par d&eacute;faut pour les
 $GLOBALS['t']['cfg_weblog_google_analytics'] = 'Compte Google Analytics';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Statistiques de tra&ccedil;age';
-$GLOBALS['t']['cfg_use_auto_update'] = 'Activer Auto Update';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Titre de l\'entr&eacute;e';

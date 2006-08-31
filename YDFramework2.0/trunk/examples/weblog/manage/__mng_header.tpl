@@ -135,9 +135,6 @@
                 <tr>
                     <td class="adminRowL">
                         <b>{t w="h_diagtools"}</b><br/>
-                        {if $use_auto_update}
-                            &raquo; <a href="autoupdate.php">{t w="a_version_info"}</a><br/>
-                        {/if}
                         &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
                     </td>
                 </tr>

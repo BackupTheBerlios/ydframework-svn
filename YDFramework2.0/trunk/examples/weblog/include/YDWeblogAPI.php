@@ -126,49 +126,89 @@
             );
 
             // Get a link to the database metadata
-            $dbmeta = new YDDatabaseMetaData( $this->db );
+            $this->dbmeta = new YDDatabaseMetaData( $this->db );
 
-            // Add any missing comments fields
-            $fields = $dbmeta->getFields( '#_comments' );
-            $this->executeIfMissing( 'useragent', $fields, 'ALTER TABLE #_comments ADD useragent varchar(255) AFTER userip' );
-            $this->executeIfMissing( 'userrequrl', $fields, 'ALTER TABLE #_comments ADD userrequrl varchar(255) AFTER useragent' );
+            // Upgrade the schema if needed
+            $this->upgradeSchemaIfNeeded();
 
-            // Add any missing items fields
-            $fields = $dbmeta->getFields( '#_items' );
-            $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
-            $this->executeIfMissing( 'allow_comments', $fields, 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
-            $this->executeIfMissing( 'auto_close', $fields, 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
-            $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
+            // Auto close the old items
+            $this->autoCloseOldItems();
 
-            // Add any missing pages field
-            $fields = $dbmeta->getFields( '#_pages' );
-            $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
+        }
 
-            // Get the list of indexes for the items table
-            $indexes = $dbmeta->getIndexes( '#_items' );
-            $this->executeIfMissing( 'allow_comments', $indexes, 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
-            $this->executeIfMissing( 'auto_close', $indexes, 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
-            $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
+        // Get the schema version
+        function getSchemaVersion() {
 
-            // Get the list of indexes for the pages table
-            $indexes = $dbmeta->getIndexes( '#_pages' );
-            $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_pages ADD INDEX is_draft (is_draft)' );
+            // Check if the schema version table exists
+            $tables = $this->dbmeta->getTables();
 
-            // Get the list of indexes for the users table
-            $indexes = $dbmeta->getIndexes( '#_users' );
-            $this->executeIfPresent( 'email', $indexes, 'ALTER TABLE #_users DROP INDEX email' );
-            $this->executeIfMissing( 'name',  $indexes, 'ALTER TABLE #_users ADD UNIQUE name (name)' );
+            // Create the schemaversion table if it doesn't exists
+            if ( ! $this->dbmeta->tableExists( '#_schemaversion' ) ) {
+                $sql = 'CREATE TABLE #_schemaversion (installed TIMESTAMP, version INT (11))';
+                $this->db->executeSql( $sql );
+            }
 
-            // Auto close the old items if needed
-            $auto_close_items = YDConfig::get( 'auto_close_items', '' );
-            if ( $auto_close_items != '' && is_numeric( $auto_close_items ) ) {
+            // Check the schema version
+            $schema_version = $this->db->getRecord( 'select version from #_schemaversion order by installed desc' );
 
-                // Calculate the treshold
-                $treshold = time() - ( $auto_close_items * 86400 );
+            // Return the schema version
+            return ( $schema_version === false  ) ? 0 : intval( $schema_version );
 
-                // Close the items
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1 WHERE auto_close = 1' );
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE auto_close = 1 AND created < ' . $treshold );
+        }
+
+        // Function to set the schema version
+        function setSchemaVersion( $version ) {
+            $values = array();
+            $values['installed'] = time();
+            $values['version'] = $version;
+            $this->db->executeInsert( '#_schemaversion', $values );
+        }
+
+        // Upgrade the schema if needed
+        function upgradeSchemaIfNeeded() {
+
+            // The current weblog schema version
+            $current_schema = 1;
+
+            // Get the schema version
+            $installed_schema = $this->getSchemaVersion();
+
+            // Check if we have the required schema version
+            if ( $installed_schema < $current_schema ) {
+
+                // Add any missing comments fields
+                $fields = $this->dbmeta->getFields( '#_comments' );
+                $this->executeIfMissing( 'useragent', $fields, 'ALTER TABLE #_comments ADD useragent varchar(255) AFTER userip' );
+                $this->executeIfMissing( 'userrequrl', $fields, 'ALTER TABLE #_comments ADD userrequrl varchar(255) AFTER useragent' );
+
+                // Add any missing items fields
+                $fields = $this->dbmeta->getFields( '#_items' );
+                $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
+                $this->executeIfMissing( 'allow_comments', $fields, 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
+                $this->executeIfMissing( 'auto_close', $fields, 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
+                $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
+
+                // Add any missing pages field
+                $fields = $this->dbmeta->getFields( '#_pages' );
+                $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
+
+                // Get the list of indexes for the items table
+                $indexes = $this->dbmeta->getIndexes( '#_items' );
+                $this->executeIfMissing( 'allow_comments', $indexes, 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
+                $this->executeIfMissing( 'auto_close', $indexes, 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
+                $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
+
+                // Get the list of indexes for the pages table
+                $indexes = $this->dbmeta->getIndexes( '#_pages' );
+                $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_pages ADD INDEX is_draft (is_draft)' );
+
+                // Get the list of indexes for the users table
+                $indexes = $this->dbmeta->getIndexes( '#_users' );
+                $this->executeIfPresent( 'email', $indexes, 'ALTER TABLE #_users DROP INDEX email' );
+                $this->executeIfMissing( 'name',  $indexes, 'ALTER TABLE #_users ADD UNIQUE name (name)' );
+
+                // Update the schema information
+                $this->setSchemaVersion( $current_schema );
 
             }
 
@@ -186,6 +226,24 @@
             if ( in_array( $needle, $haystack ) ) {
                 $this->db->executeSql( $sql );
             }
+        }
+
+        // Function to auto close old items
+        function autoCloseOldItems() {
+
+            // Auto close the old items if needed
+            $auto_close_items = YDConfig::get( 'auto_close_items', '' );
+            if ( $auto_close_items != '' && is_numeric( $auto_close_items ) ) {
+
+                // Calculate the treshold
+                $treshold = time() - ( $auto_close_items * 86400 );
+
+                // Close the items
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1 WHERE auto_close = 1' );
+                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE auto_close = 1 AND created < ' . $treshold );
+
+            }
+
         }
 
         // Function to log a request to the statistics
