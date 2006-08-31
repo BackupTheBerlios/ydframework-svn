@@ -65,7 +65,6 @@
                 case 'mysql':
                     $sql = 'show tables from ' . $this->db->getDatabase();
                     $tables = $this->db->getValuesByName( $sql, 'tables_in_' . $this->db->getDatabase() );
-                    $tables = array_map( 'strtolower', $tables );
                     break;
 
                 // PostgreSQL
@@ -94,6 +93,9 @@
 
             }
 
+            // Convert the table names to lowercase
+            $tables = array_map( 'strtolower', $tables );
+
             // Return the list of tables
             return $tables;
 
@@ -121,7 +123,6 @@
                 case 'mysql':
                     $sql = 'SHOW FIELDS FROM ' . $table;
                     $fields = $this->db->getValuesByName( $sql, 'field' );
-                    $fields = array_map( 'strtolower', $fields );
                     break;
 
                 // PostgreSQL
@@ -151,6 +152,9 @@
 
             }
 
+            // Convert the fields to lowercase
+            $fields = array_map( 'strtolower', $fields );
+
             // Return the list of tables
             return $fields;
 
@@ -178,7 +182,6 @@
                 case 'mysql':
                     $sql = 'SHOW KEYS FROM ' . $table;
                     $indexes = $this->db->getValuesByName( $sql, 'key_name' );
-                    $indexes = array_map( 'strtolower', $indexes );
                     break;
 
                 // PostgreSQL
@@ -213,9 +216,25 @@
 
             }
 
+            // Convert the list of indexes to lowercase
+            $indexes = array_map( 'strtolower', $indexes );
+
             // Return the list of tables
             return $indexes;
 
+        }
+
+        /**
+         *  Checks if the specified table exists or not.
+         *
+         *  @param  $table  Name of the table
+         *
+         *  @return Boolean indicating if the table exists or not.
+         */
+        function tableExists( $table ) {
+            $table = strtolower( $this->_prefixTable( $table ) );
+            $tables = $this->getTables();
+            return in_array( $table, $tables );
         }
 
         /**
