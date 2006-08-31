@@ -8,7 +8,6 @@
         <th colspan="3" class="adminRowLG">
             &raquo; <a href="items.php"><b>{t w="active_items"}</b></a>
             | <a href="items.php?filter=drafts">{t w="drafts_items"}</a>
-            | <a href="items.php?filter=closed">{t w="closed_items"}</a>
         </th>
         <th class="adminRowLGR">
             <a href="items.php?do=edit"><img src="images/icon_add.gif" border="0" /></a>
@@ -37,9 +36,6 @@
                 {if $item.is_draft eq '1'}<i>{/if}
                 <a href="items.php?do=edit&id={$item.id}">{$item.title}</a>
                 <br/>
-                {if $item.allow_comments eq '0'}
-                    {t w="closed"}{if $item.is_draft eq '1'}, {/if}
-                {/if}
                 {if $item.is_draft eq '1'}{t w="draft"}{/if}
                 {if $item.is_draft eq '1'}</i>{/if}
             </td>

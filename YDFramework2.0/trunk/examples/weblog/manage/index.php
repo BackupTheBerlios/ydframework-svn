@@ -18,7 +18,7 @@
         function actionDefault() {
 
             // Get the 5 newest items
-            $items = $this->weblog->getItems( 5, -1, 'created desc', 'AND is_draft = 0 AND allow_comments = 1' );
+            $items = $this->weblog->getItems( 5, -1, 'created desc', 'AND is_draft = 0' );
 
             // Assign it to the template
             $this->tpl->assign( 'items', $items );
