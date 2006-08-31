@@ -19,21 +19,15 @@
 
             // Get the filter
             $filter = 'active';
-            if ( isset( $_GET['filter'] ) ) {
-                if ( strtolower( $_GET['filter'] ) == 'drafts' ) {
-                    $filter = 'drafts';
-                } elseif( strtolower( $_GET['filter'] ) == 'closed' ) {
-                    $filter = 'closed';
-                }
+            if ( isset( $_GET['filter'] ) && strtolower( $_GET['filter'] ) == 'drafts' ) {
+                $filter = 'drafts';
             }
 
             // Get the list of items
             if ( $filter == 'active' ) {
-                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 0 AND allow_comments = 1' );
-            } elseif ( $filter == 'drafts' ) {
-                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 1' );
+                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 0' );
             } else {
-                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND allow_comments = 0' );
+                $items = $this->weblog->getItems( -1, -1, 'created desc', 'AND is_draft = 1' );
             }
 
             // Get the pagesize and current page from the URL
@@ -65,8 +59,6 @@
             $form->addElement( 'select',          'category_id',    t('category'),         array( 'class' => 'tfM', 'style' => 'width: 100%' ), $categories );
             $form->addElement( 'datetimeselect',  'created',        t('created_on'),       array( 'class' => 'tfM' ) );
             $form->addElement( 'datetimeselect',  'modified',       t('last_modified_on'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'checkbox',        'allow_comments', t('allow_comments'),   array( 'style' => 'border: none;', 'onClick' => 'YDDisableAutoClose(this)') );
-            $form->addElement( 'checkbox',        'auto_close',     t('auto_close_item'),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox',        'is_draft',       t('is_draft'),         array( 'style' => 'border: none;' ) );
             $form->addElement( 'hidden',          'id' );
             $form->addElement( 'submit',          '_cmdSubmit',  t('OK'),                  array( 'class' => 'button' ) );
@@ -109,13 +101,6 @@
 
                 // Get the defaults
                 $defaults = array();
-                $defaults['allow_comments'] = YDConfig::get( 'dflt_allow_comments', true );
-                $auto_close_items = YDConfig::get( 'auto_close_items', true );
-                if ( empty( $auto_close_items ) ) {
-                    $defaults['auto_close'] = false;
-                } else {
-                    $defaults['auto_close'] = true;
-                }
                 $defaults['is_draft'] = YDConfig::get( 'dflt_is_draft', false );
 
                 // Set the form defaults
@@ -221,8 +206,6 @@
                 // Redirect to the default action
                 if ( $values['is_draft'] ) {
                     $this->redirect( YD_SELF_SCRIPT . '?filter=drafts' );
-                } elseif ( ! $values['allow_comments'] ) {
-                    $this->redirect( YD_SELF_SCRIPT . '?filter=closed' );
                 } else {
                     $this->redirectToAction();
                 }

@@ -47,124 +47,119 @@
             $this->tpl->assign( 'related_items', $related_items );
             $this->tpl->assign( 'comments', $comments );
 
-            // Only if comments are allowed
-            if ( $item['allow_comments'] == '1' ) {
+            // Create the comments form
+            $form = new YDWeblogForm(
+                'comments', 'POST', YDTplModLinkItemRespond( $item ), '_self', array( 'id' => 'commentform' )
+            );
 
-                // Create the comments form
-                $form = new YDWeblogForm(
-                    'comments', 'POST', YDTplModLinkItemRespond( $item ), '_self', array( 'id' => 'commentform' )
-                );
+            // Add the fields
+            $form->addElement( 'text', 'username', t( 'name' ) );
+            $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
+            $form->addElement( 'text', 'userwebsite', t( 'website' ) );
+            $form->addElement( 'hidden', '_userspam', t('choose_no_spam'), array() );
+            $form->addElement( 'textarea', 'comment', '' );
+            $form->addElement(
+                'submit', 'cmdSubmit', t( 'submit_comment' ),
+                array(
+                    'id' => 'submit',
+                    'onClick' => 'this.document.getElementById(\'comments__userspam\').value = 3; return true;'
+                )
+            );
+            $form->addElement( 'hidden', 'item_id' );
 
-                // Add the fields
-                $form->addElement( 'text', 'username', t( 'name' ) );
-                $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
-                $form->addElement( 'text', 'userwebsite', t( 'website' ) );
-                $form->addElement( 'hidden', '_userspam', t('choose_no_spam'), array() );
-                $form->addElement( 'textarea', 'comment', '' );
-                $form->addElement(
-                    'submit', 'cmdSubmit', t( 'submit_comment' ),
-                    array(
-                        'id' => 'submit',
-                        'onClick' => 'this.document.getElementById(\'comments__userspam\').value = 3; return true;'
-                    )
-                );
-                $form->addElement( 'hidden', 'item_id' );
+            // Set the defaults
+            $defaults = array();
+            $defaults['item_id']     = $id;
+            $defaults['username']    = empty( $_COOKIE['YD_USER_NAME'] ) ? '' : $_COOKIE['YD_USER_NAME'];
+            $defaults['useremail']   = empty( $_COOKIE['YD_USER_EMAIL'] ) ? '' : $_COOKIE['YD_USER_EMAIL'];
+            $defaults['userwebsite'] = empty( $_COOKIE['YD_USER_WEBSITE'] ) ? '' : $_COOKIE['YD_USER_WEBSITE'];
+            $defaults['_userspam']   = 1;
+            $form->setDefaults( $defaults );
 
-                // Set the defaults
-                $defaults = array();
-                $defaults['item_id']     = $id;
-                $defaults['username']    = empty( $_COOKIE['YD_USER_NAME'] ) ? '' : $_COOKIE['YD_USER_NAME'];
-                $defaults['useremail']   = empty( $_COOKIE['YD_USER_EMAIL'] ) ? '' : $_COOKIE['YD_USER_EMAIL'];
-                $defaults['userwebsite'] = empty( $_COOKIE['YD_USER_WEBSITE'] ) ? '' : $_COOKIE['YD_USER_WEBSITE'];
-                $defaults['_userspam']   = 1;
-                $form->setDefaults( $defaults );
+            // Set the rules
+            $form->addRule( 'username',    'required',  t( 'err_name' ) );
+            $form->addRule( 'username',    'not_email', t( 'err_name_email' ) );
+            $form->addRule( 'username',    'maxlength', t( 'err_name_length' ), 35 );
+            $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
+            $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
+            $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
+            $form->addRule( '_userspam',   'value',     t( 'err_userspam' ), '3' );
+            $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
 
-                // Set the rules
-                $form->addRule( 'username',    'required',  t( 'err_name' ) );
-                $form->addRule( 'username',    'not_email', t( 'err_name_email' ) );
-                $form->addRule( 'username',    'maxlength', t( 'err_name_length' ), 35 );
-                $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
-                $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
-                $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
-                $form->addRule( '_userspam',   'value',     t( 'err_userspam' ), '3' );
-                $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
+            // Add the filters
+            $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
+            $form->addFilter( 'comment', 'safe_html' );
 
-                // Add the filters
-                $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
-                $form->addFilter( 'comment', 'safe_html' );
+            // Process the form
+            if ( $form->validate() === true ) {
 
-                // Process the form
-                if ( $form->validate() === true ) {
+                // Get the form values
+                $values = $form->getValues();
 
-                    // Get the form values
-                    $values = $form->getValues();
-
-                    // Simple spam protection
-                    if ( ! empty( $values['userwebsite'] ) && strpos( $values['userwebsite'], '.' ) === false ) {
-                        $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
-                    }
-
-                    // Fix any faulty web addresses
-                    if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
-                        $values['userwebsite'] = 'http://' . $values['userwebsite'];
-                    }
-
-                    // Save the username, useremail and userwebsite
-                    setcookie( 'YD_USER_NAME',    $values['username'],    time() + 31536000, '/' );
-                    setcookie( 'YD_USER_EMAIL',   $values['useremail'],   time() + 31536000, '/' );
-                    setcookie( 'YD_USER_WEBSITE', $values['userwebsite'], time() + 31536000, '/' );
-
-                    // Add the values to the database
-                    $comment_id = $this->weblog->addComment( $values );
-
-                    // Send an email if configured
-                    if ( $comment_id > 0 && YDConfig::get( 'email_new_comment', true ) ) {
-
-                        // Include the YDEmail library
-                        YDInclude( 'YDEmail.php' );
-
-                        // Get the list of subscriptions
-                        $subscribers = $this->weblog->getCommentSubscribers( $id );
-
-                        // Get the list of subscriptions
-                        $users = $this->weblog->getUsers();
-
-                        // Add the comment to the email template
-                        $this->tpl->assign( 'eml_comment', $values );
-
-                        // Create the email and send it
-                        $eml = new YDEmail();
-                        if ( ! empty( $item['user_email'] ) ) {
-                            $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
-                        } else {
-                            $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
-                        }
-                        $eml->setReplyTo( 'no@reply.net' );
-                        $eml->addBcc( $item['user_email'] );
-                        foreach ( $subscribers as $subscriber ) {
-                            $eml->addBcc( $subscriber );
-                        }
-                        foreach ( $users as $user ) {
-                            $eml->addBcc( $user['email'], $user['name'] );
-                        }
-                        $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
-                        $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
-                        $eml->send();
-
-                    }
-
-                    // Clear the cache
-                    $this->clearCache();
-
-                    // Redirect to the item
+                // Simple spam protection
+                if ( ! empty( $values['userwebsite'] ) && strpos( $values['userwebsite'], '.' ) === false ) {
                     $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
+                }
+
+                // Fix any faulty web addresses
+                if ( ! empty( $values['userwebsite'] ) && substr( strtolower( $values['userwebsite'] ), 0, 7 ) != 'http://' ) {
+                    $values['userwebsite'] = 'http://' . $values['userwebsite'];
+                }
+
+                // Save the username, useremail and userwebsite
+                setcookie( 'YD_USER_NAME',    $values['username'],    time() + 31536000, '/' );
+                setcookie( 'YD_USER_EMAIL',   $values['useremail'],   time() + 31536000, '/' );
+                setcookie( 'YD_USER_WEBSITE', $values['userwebsite'], time() + 31536000, '/' );
+
+                // Add the values to the database
+                $comment_id = $this->weblog->addComment( $values );
+
+                // Send an email if configured
+                if ( $comment_id > 0 && YDConfig::get( 'email_new_comment', true ) ) {
+
+                    // Include the YDEmail library
+                    YDInclude( 'YDEmail.php' );
+
+                    // Get the list of subscriptions
+                    $subscribers = $this->weblog->getCommentSubscribers( $id );
+
+                    // Get the list of subscriptions
+                    $users = $this->weblog->getUsers();
+
+                    // Add the comment to the email template
+                    $this->tpl->assign( 'eml_comment', $values );
+
+                    // Create the email and send it
+                    $eml = new YDEmail();
+                    if ( ! empty( $item['user_email'] ) ) {
+                        $eml->setFrom( $item['user_email'], YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    } else {
+                        $eml->setFrom( 'nobody@nowhere.com', YDConfig::get( 'weblog_title', 'Untitled Weblog' ) );
+                    }
+                    $eml->setReplyTo( 'no@reply.net' );
+                    $eml->addBcc( $item['user_email'] );
+                    foreach ( $subscribers as $subscriber ) {
+                        $eml->addBcc( $subscriber );
+                    }
+                    foreach ( $users as $user ) {
+                        $eml->addBcc( $user['email'], $user['name'] );
+                    }
+                    $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+                    $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
+                    $eml->send();
 
                 }
 
-                // Add the form to the template
-                $this->tpl->assignForm( 'comments_form', $form );
+                // Clear the cache
+                $this->clearCache();
+
+                // Redirect to the item
+                $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
 
             }
+
+            // Add the form to the template
+            $this->tpl->assignForm( 'comments_form', $form );
 
             // Display the template
             $this->display();

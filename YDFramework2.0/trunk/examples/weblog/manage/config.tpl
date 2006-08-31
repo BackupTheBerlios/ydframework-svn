@@ -91,16 +91,8 @@
             <th colspan="3" class="adminRowLG">&raquo; {t w="cfg_default_item_settings"}</th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="300">{t w="allow_comments"}</td>
-            <td class="adminRowL" width="400">{$config.dflt_allow_comments}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="300">{t w="cfg_auto_close_items"}</td>
-            <td class="adminRowL" width="400">{$config.auto_close_items}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="is_draft"}</td>
-            <td class="adminRowL">{$config.dflt_is_draft}</td>
+            <td class="adminRowL" width="300">{t w="is_draft"}</td>
+            <td class="adminRowL" width="400">{$config.dflt_is_draft}</td>
         </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">

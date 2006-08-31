@@ -21,14 +21,8 @@
         if ( ! isset( $values['max_syndicated_items'] ) ) {
             $values['max_syndicated_items'] = 20;
         }
-        if ( ! isset( $values['auto_close_items'] ) ) {
-            $values['auto_close_items'] = 45;
-        }
         if ( ! isset( $values['include_debug_info'] ) ) {
             $values['include_debug_info'] = 0;
-        }
-        if ( ! isset( $values['dflt_allow_comments'] ) ) {
-            $values['dflt_allow_comments'] = true;
         }
         if ( ! isset( $values['dflt_is_draft'] ) ) {
             $values['dflt_is_draft'] = false;
@@ -131,9 +125,6 @@
             // Upgrade the schema if needed
             $this->upgradeSchemaIfNeeded();
 
-            // Auto close the old items
-            $this->autoCloseOldItems();
-
         }
 
         // Get the schema version
@@ -149,7 +140,7 @@
             }
 
             // Check the schema version
-            $schema_version = $this->db->getValue( 'select version from #_schemaversion order by installed desc' );
+            $schema_version = $this->db->getValue( 'select version from #_schemaversion order by installed desc, version desc' );
 
             // Return the schema version
             return ( $schema_version === false  ) ? 0 : intval( $schema_version );
@@ -159,7 +150,7 @@
         // Get the full schema information
         function getFullSchemaVersion() {
             $this->getSchemaVersion();
-            return $this->db->getRecord( 'select installed, version from #_schemaversion order by installed desc' );
+            return $this->db->getRecord( 'select installed, version from #_schemaversion order by installed desc, version desc' );
         }
 
         // Function to set the schema version
@@ -174,7 +165,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 2;
+            $current_schema = 3;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -190,9 +181,9 @@
                 // Add any missing items fields
                 $fields = $this->dbmeta->getFields( '#_items' );
                 $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
-                $this->executeIfMissing( 'allow_comments', $fields, 'ALTER TABLE #_items ADD allow_comments TINYINT(1) DEFAULT "1" NOT NULL AFTER num_comments' );
-                $this->executeIfMissing( 'auto_close', $fields, 'ALTER TABLE #_items ADD auto_close TINYINT(1) DEFAULT "1" NOT NULL AFTER allow_comments' );
                 $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
+                $this->executeIfPresent( 'allow_comments', $fields, 'ALTER TABLE #_items DROP allow_comments' );
+                $this->executeIfPresent( 'auto_close', $fields, 'ALTER TABLE #_items DROP auto_close' );
 
                 // Add any missing pages field
                 $fields = $this->dbmeta->getFields( '#_pages' );
@@ -200,8 +191,6 @@
 
                 // Get the list of indexes for the items table
                 $indexes = $this->dbmeta->getIndexes( '#_items' );
-                $this->executeIfMissing( 'allow_comments', $indexes, 'ALTER TABLE #_items ADD INDEX allow_comments (allow_comments)' );
-                $this->executeIfMissing( 'auto_close', $indexes, 'ALTER TABLE #_items ADD INDEX auto_close (auto_close)' );
                 $this->executeIfMissing( 'is_draft', $indexes, 'ALTER TABLE #_items ADD INDEX is_draft (is_draft)' );
 
                 // Get the list of indexes for the pages table
@@ -216,6 +205,9 @@
                 // Fix the shemaversion table if needed
                 $this->db->executeSql( 'ALTER TABLE #_schemaversion CHANGE installed installed INT(11)' );
                 $this->db->executeSql( 'UPDATE #_schemaversion SET installed = unix_timestamp() WHERE installed = 0' );
+
+                // Remove the auto close fields from the items
+
 
                 // Update the schema information
                 $this->setSchemaVersion( $current_schema );
@@ -236,24 +228,6 @@
             if ( in_array( $needle, $haystack ) ) {
                 $this->db->executeSql( $sql );
             }
-        }
-
-        // Function to auto close old items
-        function autoCloseOldItems() {
-
-            // Auto close the old items if needed
-            $auto_close_items = YDConfig::get( 'auto_close_items', '' );
-            if ( $auto_close_items != '' && is_numeric( $auto_close_items ) ) {
-
-                // Calculate the treshold
-                $treshold = time() - ( $auto_close_items * 86400 );
-
-                // Close the items
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=1 WHERE auto_close = 1' );
-                $this->db->executeSql( 'UPDATE #_items SET allow_comments=0 WHERE auto_close = 1 AND created < ' . $treshold );
-
-            }
-
         }
 
         // Function to log a request to the statistics
@@ -406,7 +380,7 @@
         // Function to get the items of the weblog
         function getItems( $limit=-1, $offset=-1, $order='created desc, title', $where='' ) {
             $sql = 'SELECT i.id, i.category_id, i.title, i.body, i.body_more, i.num_comments, i.created, i.modified, '
-                 . 'i.allow_comments, i.auto_close, i.is_draft, '
+                 . 'i.is_draft, '
                  . 'c.title as category, u.email as user_email, u.name as user_name FROM #_items i, #_categories c, '
                  . '#_users u WHERE i.category_id = c.id AND i.user_id = u.id ';
             $sql = $this->_prepareQuery( $sql . $where, $order );

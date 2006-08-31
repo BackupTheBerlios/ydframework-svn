@@ -56,8 +56,6 @@
                 {if $filter == 'active'}<b>{/if}{t w="active_items"}{if $filter == 'active'}</b>{/if}</a>
             | <a href="{$YD_SELF_SCRIPT}?filter=drafts">
                 {if $filter == 'drafts'}<b>{/if}{t w="drafts_items"}{if $filter == 'drafts'}</b>{/if}</a>
-            | <a href="{$YD_SELF_SCRIPT}?filter=closed">
-                {if $filter == 'closed'}<b>{/if}{t w="closed_items"}{if $filter == 'drafts'}</b>{/if}</a>
         </th>
         <th class="adminRowLGR">
             <a href="{$YD_SELF_SCRIPT}?do=edit"><img src="images/icon_add.gif" border="0" /></a>
@@ -88,9 +86,6 @@
                     {if $item.is_draft eq '1'}<i>{/if}
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$item.id}">{$item.title}</a>
                     <br/>
-                    {if $item.allow_comments eq '0'}
-                        {t w="closed"}
-                    {/if}
                     {if $item.is_draft eq '1'}</i>{/if}
                 </td>
                 <td class="adminRowR">
@@ -175,14 +170,6 @@
             <tr> 
                 <td class="adminRowL">{$form.modified.label_html}</td> 
                 <td class="adminRowL">{$form.modified.html}</td> 
-            </tr>
-            <tr> 
-                <td class="adminRowL">{$form.allow_comments.label_html}</td> 
-                <td class="adminRowL">{$form.allow_comments.html}</td> 
-            </tr>
-            <tr> 
-                <td class="adminRowL">{$form.auto_close.label_html}</td> 
-                <td class="adminRowL">{$form.auto_close.html}</td> 
             </tr>
             <tr> 
                 <td class="adminRowL">{$form.is_draft.label_html}</td> 
