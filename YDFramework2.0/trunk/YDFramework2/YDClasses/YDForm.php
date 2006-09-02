@@ -625,9 +625,10 @@
          *  __ALL__ to add a form wide error.
          *
          *  @param $callback    The callback of the funtion to perform for this form rule.
+         *  @param $options     (Optional) Custom rule options
          */
-        function addFormRule( $callback ) {
-            array_push( $this->_formrules, $callback );
+        function addFormRule( $callback, $options = null ) {
+            array_push( $this->_formrules, array( $callback, $options ) );
         }
 
         /**
@@ -1036,15 +1037,16 @@
             foreach ( $this->_formrules as $rule ) {
 
                 // Check if the callback is valid
-                if ( ! is_callable( $rule ) ) {
-                    trigger_error( 'The callback specified for the form "' . $rule . '" is not valid', YD_ERROR );
+                if ( ! is_callable( $rule[0] ) ) {
+                    trigger_error( 'The callback specified for the form "' . $rule[0] . '" is not valid', YD_ERROR );
                 }
 
                 // Get the form values
                 $values = $this->getValues();
 
                 // Execute the rule
-                $result = call_user_func( $rule, $values );
+                if ( is_null( $rule[1] ) ) $result = call_user_func( $rule[0], $values );
+                else                       $result = call_user_func( $rule[0], $values, $rule[1] );
 
                 // Check the result
                 if ( is_array( $result ) ) {
