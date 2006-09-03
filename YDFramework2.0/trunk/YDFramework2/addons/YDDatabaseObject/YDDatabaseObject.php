@@ -1733,22 +1733,14 @@
          *  This function resets all information in the object and relation objects.
          */
         function resetAll() {
-            
-            $relations = array_keys( get_object_vars( $this->_relations ) );
-
-            foreach ( $relations as $relation ) {
-                $this->resetRelation( $relation );
-            }
-            
-            $this->reset();
-            
+            $this->reset( true );
         }
 
         /**
          *  This function resets the object's values, any additional query value and
          *  any result remaining to be fetch.
          */
-        function reset() {
+        function reset( $all=false ) {
             
             // before reset callbacks
             $res = $this->_executeCallbacks( 'reset', true );
@@ -1757,7 +1749,12 @@
                 return $res;
             }
             
-            $this->resetObject();
+			if ( $all ) {
+				$this->resetObject();
+				$this->resetRelations();
+			} else {
+				$this->resetValues();
+			}
             $this->resetQuery();
             $this->resetResults();
             $this->resetCount();
@@ -1788,23 +1785,31 @@
          *  This function resets the object's field values.
          */
         function resetValues() {
-            $this->setValues( array() );
+            
+			$this->setValues( array() );
+			
+			$selects = array_keys( get_object_vars( $this->_selects ) );
+
+            foreach ( $selects as $select ) {
+                unset( $this->$select );
+            }
+			
         }
         
         /**
-         *  This function resets the all object's values.
+         *  This function resets the object.
          */
         function resetObject() {
             
-            $vars = get_object_vars( $this );
-            
             $relation_vars = array();
-            foreach ( $this->_relations as $rel ) {
-                $relation_vars[] = $rel->getForeignVar();
-                if ( $rel->isManyToMany() ) {
-                    $relation_vars[] = $rel->getCrossVar();
-                }
-            }
+			foreach ( $this->_relations as $rel ) {
+				$relation_vars[] = $rel->getForeignVar();
+				if ( $rel->isManyToMany() ) {
+					$relation_vars[] = $rel->getCrossVar();
+				}
+			}
+			
+			$vars = get_object_vars( $this );
             
             foreach ( $vars as $var => $value ) {
                 
@@ -1815,6 +1820,19 @@
             }
             
         }
+		
+		/**
+         *  This function unloads all relations.
+         */
+		function resetRelations() {
+			
+			$relations = array_keys( get_object_vars( $this->_relations ) );
+
+            foreach ( $relations as $relation ) {
+                $this->resetRelation( $relation );
+            }
+			
+		}
 
         /**
          *  This function resets any query addition.
