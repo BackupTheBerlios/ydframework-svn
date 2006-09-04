@@ -30,7 +30,6 @@ $GLOBALS['t']['state'] = 'Estado';
 $GLOBALS['t']['add'] = 'Adicionar';
 $GLOBALS['t']['add component'] = 'Adicionar component';
 $GLOBALS['t']['add user'] = 'Adicionar utilizador';
-$GLOBALS['t']['add group'] = 'Adicionar grupo';
 $GLOBALS['t']['move'] = 'Mover';
 $GLOBALS['t']['move up'] = 'Mover para cima';
 $GLOBALS['t']['move down'] = 'Mover para baixo';
@@ -42,6 +41,10 @@ $GLOBALS['t']['visitor'] = 'Visitante';
 $GLOBALS['t']['visitors'] = 'Visitantes';
 $GLOBALS['t']['administrator'] = 'Administrador';
 $GLOBALS['t']['administrators'] = 'Administradores';
+
+$GLOBALS['t']['published'] = 'Publicado';
+$GLOBALS['t']['not published'] = 'Não publicado';
+$GLOBALS['t']['schedule'] = 'Calend&aacute;rio';
 
 $GLOBALS['t']['translate'] = 'Traduzir';
 $GLOBALS['t']['translate to'] = 'Traduzir para';
@@ -59,10 +62,6 @@ $GLOBALS['t']['backup'] = 'C&oacute;pias de seguran&ccedil;a';
 $GLOBALS['t']['audit'] = 'Auditoria';
 $GLOBALS['t']['user management'] = 'Gest&atilde;o de utilizadores';
 $GLOBALS['t']['general configuration'] = 'Configura&ccedil;&atilde;o geral';
-
-
-
-
 
 $GLOBALS['t']['form errors'] = 'Erros no formulario';
 ?>

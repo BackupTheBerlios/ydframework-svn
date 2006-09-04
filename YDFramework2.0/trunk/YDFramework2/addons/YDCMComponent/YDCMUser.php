@@ -31,7 +31,7 @@
 
 	// add translations directory
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
-	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUser/' );
 
 	// add YDF libs needed by this class
 	YDInclude( 'YDDatabaseObject.php' );
@@ -173,14 +173,11 @@
          *  This method adds form elements for user editing
 		 *
 		 * @param $user_id      User id to edit
-		 *
-		 * @param $editable     Array with form element names that are editable
-		 * @param $noneditable  (Optional) Array with form element names that are NOT editable
-		 * @param $translate    (Optional) User details should be translated
+		 * @param $noneditable  (Optional) Array with form element names that are NOT editable (are spans).
          */
-		function addFormEdit( $id, $editable, $noneditable = array(), $translate = true ){
+		function addFormEdit( $id, $noneditable = array() ){
 
-		 	return $this->_addFormDetails( $id, true, $editable, $noneditable, $translate );
+		 	return $this->_addFormDetails( $id, true, $noneditable );
 		}
 
 
@@ -188,13 +185,10 @@
          *  This method adds form elements for addind a new user
 		 *
 		 * @param $parent_id    Group id of this new user
-		 * @param $editable     Array with form element names that are editable
-		 * @param $noneditable  (Optional) Array with form element names that are NOT editable
-		 * @param $translate    (Optional) User details should be translated
          */
-		function addFormNew( $id, $editable, $noneditable = array(), $translate = true ){
+		function addFormNew( $id ){
 
-		 	return $this->_addFormDetails( $id, false, $editable, $noneditable, $translate );
+		 	return $this->_addFormDetails( $id, false );
 		}
 		 
 		
@@ -203,14 +197,12 @@
 		 *
 		 * @param $id           If you will EDIT some user this is the user id to edit. On $edit (next argument) you must set TRUE
          *                      If you will ADD a new user this is the parent id of the new user. On $edit (next argument) you must set FALSE
-         *
-		 * @param $editable     Array with form element names that are editable
 		 *
 		 * @param $noneditable  Array with form element names that are NOT editable
 		 *
 		 * @param $translate    User details should be translated
          */
-		function _addFormDetails( $id, $edit, $editable, $noneditable, $translate ){
+		function _addFormDetails( $id, $edit, $noneditable = array() ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -218,82 +210,77 @@
 			$this->_form = new YDForm( 'YDCMUsers' );
 
 			// check arguments
-			if ( !is_array( $editable ) ) $editable = array( $editable );
 			if ( !is_array( $noneditable ) ) $noneditable = array( $noneditable );
 
 			// add username
-			if ( in_array( 'username', $editable ) ){
-				$this->_form->addElement( 'text', 'username', t('user_username') );
+			if ( in_array( 'username', $noneditable ) ){
+				$this->_form->addElement( 'span', 'username', t( 'ydcmuser label username' ) );
+			}else{
+				$this->_form->addElement( 'text', 'username', t( 'ydcmuser label username' ) );
 				$this->_form->addFormRule( array( & $this, '_checkuser' ), array( $edit, $id ) );
-
-			}else if ( in_array( 'username', $noneditable ) ){
-				$this->_form->addElement( 'span', 'username', t('user_username') );
 			}
 
-			// add password
-			if ( in_array( 'password', $editable ) ){
-				$this->_form->addElement( 'password', 'password', t('user_password') );				
-			}
+			// add password box for new users or editing users
+			if ( ! $edit || ( $edit && ! in_array( 'password', $noneditable ) ) )
+				$this->_form->addElement( 'password', 'password', t( 'ydcmuser label password' ) );				
 
 			// add state
-			if ( in_array( 'state', $editable ) ){
-				$this->_form->addElement( 'select',         'state',       t('login_state'), array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
-				$this->_form->addElement( 'datetimeselect', 'login_start', t('login_start') );
-				$this->_form->addElement( 'datetimeselect', 'login_end',   t('login_end'));
-
-			}else if ( in_array( 'state', $noneditable ) ){
-				$this->_form->addElement( 'span',           'state',       t('login_state') );
-				$this->_form->addElement( 'span',           'login_start', t('login_start') );
-				$this->_form->addElement( 'span',           'login_end',   t('login_end') );
+			if ( in_array( 'state', $noneditable ) ){
+				$this->_form->addElement( 'span',           'state',       t( 'ydcmuser label state' ) );
+				$this->_form->addElement( 'span',           'login_start', t( 'ydcmuser label login_start' ) );
+				$this->_form->addElement( 'span',           'login_end',   t( 'ydcmuser label login_end' ) );
+			}else{
+				$this->_form->addElement( 'select',         'state',       t( 'ydcmuser label state' ), array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+				$this->_form->addElement( 'datetimeselect', 'login_start', t( 'ydcmuser label login_start' ) );
+				$this->_form->addElement( 'datetimeselect', 'login_end',   t( 'ydcmuser label login_end' ) );
 			}
 
 			// add common user details
-			if ( in_array( 'details', $editable ) ){
-				$this->_form->addElement( 'text',      'name',          t('user_name'),     array('size' => 50, 'maxlength' => 255) );
-				$this->_form->addElement( 'text',      'email',         t('user_email') );
-				$this->_form->addElement( 'textarea',  'other',         t('user_other'),    array('rows' => 4, 'cols' => 30) );
+			if ( in_array( 'details', $noneditable ) ){
+				$this->_form->addElement( 'span',      'name',          t( 'ydcmuser label name' ) );
+				$this->_form->addElement( 'span',      'email',         t( 'ydcmuser label email' ) );
+				$this->_form->addElement( 'span',      'other',         t( 'ydcmuser label other' ) );
+				$this->_form->addElement( 'span',      'lang_id',       t( 'ydcmuser label language' ) );
+				$this->_form->addElement( 'span',      'template',      t( 'ydcmuser label template' ) );
+			}else{
+				$this->_form->addElement( 'text',      'name',          t( 'ydcmuser label name' ),     array('size' => 50, 'maxlength' => 255) );
+				$this->_form->addElement( 'text',      'email',         t( 'ydcmuser label email' ) );
+				$this->_form->addElement( 'textarea',  'other',         t( 'ydcmuser label other' ),    array('rows' => 4, 'cols' => 30) );
 
 				$languages = new YDCMLanguages();
 				$languages = $languages->active();
-				$this->_form->addElement( 'select',    'lang_id',       t('user_language'), array(), $languages );
+				$this->_form->addElement( 'select',    'lang_id',       t( 'ydcmuser label language' ), array(), $languages );
 
 				$templates = new YDCMTemplates();
-    	        $this->_form->addElement( 'select',    'template',      t('user_template'), array(), $templates->admin_templates() );
+    	        $this->_form->addElement( 'select',    'template',      t( 'ydcmuser label template' ), array(), $templates->admin_templates() );
 
-				$this->_form->addRule( 'name',        'maxlength',      t('name too big'),  255 );
-				$this->_form->addRule( 'email',       'email',          t('email not valid') );
-				$this->_form->addRule( 'other',       'maxlength',      t('other too big'), 5000 );
-				$this->_form->addRule( 'language_id', 'in_array',       t('language not valid'), array_keys( $languages ) );
-				$this->_form->addRule( 'template',    'in_array',       t('template not valid'), array_keys( $templates->admin_templates() ) );
-
-			}else if ( in_array( 'details', $noneditable ) ){
-				$this->_form->addElement( 'span',      'name',          t('user_name') );
-				$this->_form->addElement( 'span',      'email',         t('user_email') );
-				$this->_form->addElement( 'span',      'other',         t('user_other') );
-				$this->_form->addElement( 'span',      'lang_id',       t('user_language') );
-				$this->_form->addElement( 'span',      'template',      t('user_template') );
+				$this->_form->addRule( 'name',        'maxlength',      t( 'ydcmuser mess name too big' ),  255 );
+				$this->_form->addRule( 'email',       'email',          t( 'ydcmuser mess email not valid' ) );
+				$this->_form->addRule( 'other',       'maxlength',      t( 'ydcmuser mess other too big' ), 5000 );
+				$this->_form->addRule( 'language_id', 'in_array',       t( 'ydcmuser mess language not valid' ), array_keys( $languages ) );
+				$this->_form->addRule( 'template',    'in_array',       t( 'ydcmuser mess template not valid' ), array_keys( $templates->admin_templates() ) );
 			}
 
-			// add access information
-			if ( in_array( 'access', $noneditable ) ){
-				$this->_form->addElement( 'span', 'login_counter', t('login_counter') );
-    	        $this->_form->addElement( 'span', 'login_last',    t('login_last') );
-    	        $this->_form->addElement( 'span', 'login_current', t('login_current') );
+			// add access information when editing
+			if ( $edit ) {
+				$this->_form->addElement( 'span', 'login_counter', t( 'ydcmuser label login_counter' ) );
+   	        	$this->_form->addElement( 'span', 'login_last',    t( 'ydcmuser label login_last' ) );
+   	        	$this->_form->addElement( 'span', 'login_current', t( 'ydcmuser label login_current' ) );
 			}
 
 			// if we are editing a user it's a good idea to set form defaults with user node attributes
 			if ( $edit ){
 
 				// add submit button
-				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'save' ) );
+				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmuser label save' ) );
 
 				// set form defaults based on user attributes
-				$this->_form->setDefaults( $this->getUser( $id, $translate ) );
+				$this->_form->setDefaults( $this->getUser( $id ) );
 
 			}else{
 
 				// add submit button
-				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'add' ) );
+				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmuser label new' ) );
 
 				// when adding a user, if login_end date exists we setup 7 days interval
 				if ( $this->_form->isElement( 'login_end' ) )
@@ -317,7 +304,7 @@
 			
 			if ( $this->find() == 0 ) return true;
 			
-			return array( '__ALL__' => t( 'username exists' ) );
+			return array( '__ALL__' => t( 'ydcmuser mess username exists' ) );
 		}
 
 
@@ -406,8 +393,8 @@
 				$res = $this->update();
 				
 				// check update result and return
-				if ( $res > 0 ) return YDResult::ok( t( 'user details updated' ), $res );
-				else            return YDResult::warning( t( 'user not updated' ), $res );
+				if ( $res > 0 ) return YDResult::ok( t( 'ydcmuser mess updated' ), $res );
+				else            return YDResult::warning( t( 'ydcmuser mess impossible to update' ), $res );
 
 			}else{
 
@@ -446,8 +433,8 @@
 				$this->setValues( $user );
 
 				// insert values
-				if ( $this->insert() ) return YDResult::ok( t( 'user added' ), $res );
-				else                   return YDResult::fatal( t( 'user not added' ), $res );
+				if ( $this->insert() ) return YDResult::ok( t( 'ydcmuser mess created' ), $res );
+				else                   return YDResult::fatal( t( 'ydcmuser mess impossible to create' ), $res );
 			}
 
 		}
@@ -467,28 +454,20 @@
 			// init form
 			$this->_form = new YDForm( 'YDCMUsers' );
 
-			// add new password box
-            $this->_form->addElement( 'password',    'new',          t('password_new'),         array('size' => 30, 'maxlength' => 31) );
-			$this->_form->addRule(    'new',         'required',     t('passwords are required') );
-			$this->_form->addRule(    'new',         'maxlength',    t('passwords too big'), 31 );
-			$this->_form->addRule(    'new',         'alphanumeric', t('passwords not alphanumeric') );
+			// add old password box
+			if ( $oldpassword )
+            	$this->_form->addElement( 'password', 'old',          t('ydcmuser label old password'),         array('size' => 20, 'maxlength' => 31) );
 
-			// add new_confirm password box
-            $this->_form->addElement( 'password',    'new_confirm',  t('password_new_confirm'), array('size' => 30, 'maxlength' => 31) );
-			$this->_form->addRule(    'new_confirm', 'required',     t('passwords are required') );
-			$this->_form->addRule(    'new_confirm', 'maxlength',    t('passwords too big'), 31 );
-			$this->_form->addRule(    'new_confirm', 'alphanumeric', t('passwords not alphanumeric') );
+			// add password boxes
+            $this->_form->addElement( 'password',    'new',          t('ydcmuser label new password'),         array('size' => 30, 'maxlength' => 31) );
+            $this->_form->addElement( 'password',    'new_confirm',  t('ydcmuser label confirm password'), array('size' => 30, 'maxlength' => 31) );
+
+			$this->_form->addRule(    '__ALL__',     'required',     t('ydcmuser mess passwords are required') );
+			$this->_form->addRule(    '__ALL__',     'maxlength',    t('ydcmuser mess passwords too big'), 31 );
+			$this->_form->addRule(    '__ALL__',     'alphanumeric', t('ydcmuser mess passwords not alphanumeric') );
 
 			// add compare rule to new password and confirmation password
 			$this->_form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
-
-			// add old password box
-			if ( $oldpassword ){
-            	$this->_form->addElement( 'password', 'old',          t('password_old'),         array('size' => 20, 'maxlength' => 31) );
-				$this->_form->addRule(    'old',      'required',     t('passwords are required') );
-				$this->_form->addRule(    'old',      'maxlength',    t('passwords too big'), 31 );
-				$this->_form->addRule(    'old',      'alphanumeric', t('passwords not alphanumeric') );
-			}
 		}
 
 
@@ -517,8 +496,8 @@
 			$this->where( 'user_id = ' . intval( $user_id ) );
 
 			// update user and get result
-			if ( $this->update() == 1 ) return YDResult::ok( t('user password updated') );
-			else                        return YDResult::fatal( t('password not updated') );
+			if ( $this->update() == 1 ) return YDResult::ok( t('ydcmuser mess password updated') );
+			else                        return YDResult::fatal( t('ydcmuser mess password not updated') );
 		}
 
 

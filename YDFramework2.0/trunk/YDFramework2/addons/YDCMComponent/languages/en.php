@@ -30,7 +30,6 @@ $GLOBALS['t']['state'] = 'State';
 $GLOBALS['t']['add'] = 'Add';
 $GLOBALS['t']['add component'] = 'Add component';
 $GLOBALS['t']['add user'] = 'Add user';
-$GLOBALS['t']['add group'] = 'Add group';
 $GLOBALS['t']['move'] = 'Move';
 $GLOBALS['t']['move up'] = 'Move up';
 $GLOBALS['t']['move down'] = 'Move down';

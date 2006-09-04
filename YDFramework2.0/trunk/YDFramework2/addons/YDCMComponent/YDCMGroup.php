@@ -110,12 +110,10 @@
          *  This method adds form elements for group editing
 		 *
 		 * @param $group_id     Group id to edit
-		 *
-		 * @param $editable     (Optional) Boolean flag that defines if elements are editable
          */
-		function addFormEdit( $group_id, $editable = true ){
+		function addFormEdit( $group_id ){
 
-		 	return $this->_addFormDetails( $group_id, true, $editable );
+		 	return $this->_addFormDetails( $group_id, true );
 		}
 
 
@@ -126,7 +124,7 @@
          */
 		function addFormNew( $parent_group_id = null ){
 
-		 	return $this->_addFormDetails( $parent_group_id, false, true );
+		 	return $this->_addFormDetails( $parent_group_id, false );
 		}
 		 
 		
@@ -137,44 +135,38 @@
          *                      If you will ADD a new group this is the parent id. Use NULL to add it to the root tree
          *
 		 * @param $edit         TRUE: We are editing a group, FALSE: we are creating a group
-		 *
-		 * @param $editable     When editing a group, this boolean flag defines if form elements are editable (default true)
          */
-		function _addFormDetails( $id, $edit, $editable ){
+		function _addFormDetails( $id, $edit ){
 
 			YDInclude( 'YDForm.php' );
 
 			// init form
 			$this->_form = new YDForm( 'YDCMGroup' );
 
-			// add name and drecription
-			if ( $editable ){
-				$this->_form->addElement( 'text',     'name',        t( 'group name' ) );
-				$this->_form->addElement( 'textarea', 'description', t( 'group description' ), array( 'rows' => 4, 'cols' => 40 ) );
-				$this->_form->addElement( 'select',   'state',       t( 'group state' ), array(), array( 0 => t( 'Blocked' ), 1 => t( 'Active' ) ) );
+			// add elements
+			$this->_form->addElement( 'text',     'name',        t( 'ydcmgroup label name' ) );
+			$this->_form->addElement( 'textarea', 'description', t( 'ydcmgroup label description' ), array( 'rows' => 4, 'cols' => 40 ) );
+			$this->_form->addElement( 'select',   'state',       t( 'ydcmgroup label state' ), array(), array( 0 => t( 'Blocked' ), 1 => t( 'Active' ) ) );
 
-				$this->_form->addFormRule( array( & $this, '_checkgroup' ), array( $edit, $id ) );
+			// add rules
+			$this->_form->addFormRule( array( & $this, '_checkgroup' ), array( $edit, $id ) );
 
-			}else{
-				$this->_form->addElement( 'span', 'name',        t( 'group name' ) );
-				$this->_form->addElement( 'span', 'description', t( 'group description' ) );
+
+			// if we are not editing a group, just add a submit button and return
+			if ( ! $edit ){
+				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label new' ) );
+				return;
 			}
 
-			// if we are editing a group, set form defaults
-			if ( $edit ){
+			// if we are editing, set defaults and add a submit button
+			$defaults = $this->getGroup( $id );
+			$this->_form->setDefaults( $defaults );
 
-				// add submit button
-				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'save' ) );
+			// state default is 'ydcmuserobject_state' because it's on userobject table
+			$this->_form->setDefault( 'state', $defaults[ 'ydcmuserobject_state' ] );
 
-				// set form defaults based on user attributes
-				$this->_form->setDefaults( $this->getGroup( $id ) );
-
-			}else{
-
-				// add submit button
-				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'add' ) );
-			}
-
+			// add submit button
+			$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label save' ) );
 		}
 
 
@@ -193,7 +185,7 @@
 			
 			if ( $this->find() == 0 ) return true;
 			
-			return array( '__ALL__' => t( 'group exists' ) );
+			return array( '__ALL__' => t( 'ydcmgroup mess group exists' ) );
 		}
 
 
@@ -254,7 +246,7 @@
 				$userobject = array();
 				$userobject['type']  = 'YDCMGroup';
 				$userobject['reference'] = $values[ 'name' ];
-//				$userobject['state']     = $values[ 'state' ];
+				$userobject['state']     = $values[ 'state' ];
 
 				// update userobject
 				$uobj = new YDCMUserobject();
@@ -270,11 +262,12 @@
 				$this->setValues( $group );
 				$this->where( 'group_id = '. $id ); 
 
-				$res = $this->update();
+				// updated and sum lines afected to userobject lines afected
+				$res += $this->update();
 				
-				// check update result and return
-				if ( $res > 0 ) return YDResult::ok( t( 'group details updated' ), $res );
-				else            return YDResult::warning( t( 'group not updated' ), $res );
+				// check update from node update and from group update
+				if ( $res > 0 ) return YDResult::ok( t( 'ydcmgroup mess details updated' ), $res );
+				else            return YDResult::warning( t( 'ydcmgroup mess details not updated' ), $res );
 
 			}else{
 
@@ -282,12 +275,12 @@
 				$userobject = array();
 				$userobject['type']      = 'YDCMGroup';
 				$userobject['reference'] = $values[ 'name' ];
-				$userobject['state']     = isset( $values[ 'state' ] ) ? $values[ 'state' ] : 0;
+				$userobject['state']     = $values[ 'state' ];
 
 				// check default parent id
 				if ( is_null( $id ) ) $id = 1;
 
-				// TODO: check if group is valid (and, eg,  is not a user node)
+				// TODO: check if group is valid (and, eg, is not a user node)
 
 				// update userobject and get new id
 				$uobj = new YDCMUserobject();
@@ -304,8 +297,8 @@
 				$this->setValues( $group );
 
 				// insert values
-				if ( $this->insert() ) return YDResult::ok( t( 'group added' ), $res );
-				else                   return YDResult::fatal( t( 'group not added' ), $res );
+				if ( $this->insert() ) return YDResult::ok( t( 'ydcmgroup mess created' ), $res );
+				else                   return YDResult::fatal( t( 'ydcmgroup mess impossible to create' ), $res );
 			}
 
 		}
