@@ -1778,6 +1778,18 @@
                 }
                 
             }
+			
+			foreach ( $this->_relations as $rel ) {
+			
+                $f_var = $rel->getForeignVar();
+				unset( $this->$f_var );
+				
+				if ( $rel->isManyToMany() ) {
+					$c_var = $rel->getCrossVar();
+					unset( $this->$c_var );
+				}
+				
+            }
             
         }
 		
