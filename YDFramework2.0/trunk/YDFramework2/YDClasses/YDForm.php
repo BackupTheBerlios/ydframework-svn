@@ -546,12 +546,15 @@
          *  Add a rule to the form for the specified field.
          *
          *  @param  $element    The element to apply the rule on. If you specify an array, it will add the rule for each
-         *                      element in the array.
+         *                      element in the array. If you specify '__ALL__', it will add the rule to all form elements
          *  @param  $rule       The name of the rule to apply.
          *  @param  $error      The error message to show if an error occured.
          *  @param  $options    (optional) The options to pass to the validator function.
          */
         function addRule( $element, $rule, $error, $options=null ) {
+
+			// Check if element is special element '__ALL__'
+			if ( is_string( $element) && $element == '__ALL__' ) $element = array_keys( $this->_elements );
 
             // Check if the element is an array or not
             if ( is_array( $element ) ) {
