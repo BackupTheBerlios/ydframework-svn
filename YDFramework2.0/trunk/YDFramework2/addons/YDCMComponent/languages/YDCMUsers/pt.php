@@ -47,8 +47,11 @@ $GLOBALS['t']['user details updated'] = 'Informa&ccedil;&otilde;es do utilizador
 $GLOBALS['t']['password not updated'] = 'A password n&atilde;o foi actualizada';
 $GLOBALS['t']['user not updated'] = 'O utilizador n&atilde;o foi actualizado';
 $GLOBALS['t']['user added'] = 'Utilizador adicionado';
-$GLOBALS['t']['administrator and children'] = 'Administrador e sub-administratores';
-$GLOBALS['t']['children only'] = 'Apenas sub-administratores';
+$GLOBALS['t']['user not added'] = 'Impossivel adicionar utilizador';
+$GLOBALS['t']['username exists'] = 'O utilizador ja existe';
+$GLOBALS['t']['administrator and move children up'] = 'Administrador e mover sub-admins para cima';
+$GLOBALS['t']['administrator and children'] = 'Administrador e sub-admins';
+$GLOBALS['t']['children only'] = 'Apenas sub-admins';
 
 
 ?>

@@ -30,7 +30,7 @@
     YDInclude( 'YDDatabaseObject.php' );
 	YDInclude( 'YDDatabaseTree.php' );
 	YDInclude( 'YDUrl.php' );
-	YDInclude( 'YDError.php' );
+	YDInclude( 'YDResult.php' );
 
 	// include YDCM libs
 	YDInclude( 'YDCMComp.php' );
@@ -189,6 +189,7 @@
 			// check if we have a custom id
 			if( is_null( $id ) ) $id = $this->_id;
 
+			// TODO: check if return element is a array
 			return $tree->getDescendants( $id );
 		}
 
@@ -373,34 +374,5 @@
 
     }
 
-
-	@define ( YD_ERROR_OK, 1000 );
-	
-    YDConfig::set( 'YD_ERROR_LEVELS', array(
-            YD_ERROR_NOTICE  => 'Notice',
-            YD_ERROR_WARNING => 'Warning',
-            YD_ERROR_FATAL   => 'Fatal',
-            YD_ERROR_OK      => 'Ok'
-        ));
-
-	// experimental class to handle all YDCM method results
-	class YDResult extends YDError{
-	
-        /**
-         *  This method creates a OK type
-         *
-         *  @param  $message  The message.
-         *  @param  $value    (optional) A custom value
-         *
-         *  @returns     An YDCMResult object.
-         *
-         *  @static
-         */
-        function ok( $message, $value = null ) {
-            return YDError::_error( YD_ERROR_OK, $message, $value );
-        }
-
-
-	}
 
 ?>

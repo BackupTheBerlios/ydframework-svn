@@ -47,6 +47,9 @@ $GLOBALS['t']['user details updated'] = 'User details updated';
 $GLOBALS['t']['password not updated'] = 'Password was not updated';
 $GLOBALS['t']['user not updated'] = 'User was not updated';
 $GLOBALS['t']['user added'] = 'New user added';
+$GLOBALS['t']['user not added'] = 'Impossible do add user';
+$GLOBALS['t']['username exists'] = 'User already exists';
+$GLOBALS['t']['administrator and move children up'] = 'Administrator and move children up';
 $GLOBALS['t']['administrator and children'] = 'Administrator and children';
 $GLOBALS['t']['children only'] = 'Children only';
 

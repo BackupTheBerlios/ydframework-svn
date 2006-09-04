@@ -29,6 +29,8 @@ $GLOBALS['t']['next'] = 'Seguinte';
 $GLOBALS['t']['state'] = 'Estado';
 $GLOBALS['t']['add'] = 'Adicionar';
 $GLOBALS['t']['add component'] = 'Adicionar component';
+$GLOBALS['t']['add user'] = 'Adicionar utilizador';
+$GLOBALS['t']['add group'] = 'Adicionar grupo';
 $GLOBALS['t']['move'] = 'Mover';
 $GLOBALS['t']['move up'] = 'Mover para cima';
 $GLOBALS['t']['move down'] = 'Mover para baixo';
@@ -59,4 +61,8 @@ $GLOBALS['t']['user management'] = 'Gest&atilde;o de utilizadores';
 $GLOBALS['t']['general configuration'] = 'Configura&ccedil;&atilde;o geral';
 
 
+
+
+
+$GLOBALS['t']['form errors'] = 'Erros no formulario';
 ?>
