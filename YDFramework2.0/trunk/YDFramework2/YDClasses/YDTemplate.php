@@ -558,7 +558,6 @@
         if ( is_numeric( $time ) && $time != -1 ) {
             return intval( $time );
         }
-        $time = strtotime( $string );
         if ( preg_match( '/^\d{14}$/', $string ) ) {
             $time = mktime(
                 substr( $string, 8, 2 ), substr( $string, 10, 2 ), substr( $string, 12, 2 ),
@@ -566,7 +565,7 @@
             );
             return $time;
         }
-        $time = ( int ) $string;
+        $time = ( int ) strtotime( $string );
         if ( $time > 0 ) {
             return $time;
         } else {
