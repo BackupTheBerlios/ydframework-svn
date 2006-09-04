@@ -104,7 +104,7 @@
 
             // Setup the module
             $this->_author = 'David Bittencourt';
-            $this->_version = '4.28';
+            $this->_version = '4.30';
             $this->_copyright = '(c) 2005 David Bittencourt, muitocomplicado@hotmail.com';
             $this->_description = 'This class defines a YDDatabaseObject object.';
 
