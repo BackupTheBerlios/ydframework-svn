@@ -743,7 +743,7 @@
          *  @param $values      The field values of the node.
          *  @param $id          (optional) The ID of the node to update.
          *
-         *  @returns    The values of the node that is updated.
+         *  @returns    Total of lines affected
          */
         function updateNode( $values, $id=null ) {
 
@@ -760,17 +760,17 @@
             $id = empty( $id ) ? $values['id'] : $id;
 
             // Perform the insert
-            $this->db->executeUpdate(
+            $res = $this->db->executeUpdate(
                 $this->table, $values, sprintf( '%s = %s', $idField, $this->db->escapeSql( $id ) )
             );
 
             // Rebuild the tree
             $this->rebuild();
 
-            // Return the node
-            return $values;
-
+            // Return total of lines affected
+            return $res;
         }
+
 
         /**
          *  Delete the node and it's children.
