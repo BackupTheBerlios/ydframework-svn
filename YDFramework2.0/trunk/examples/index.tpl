@@ -270,7 +270,7 @@
             </td>
         </tr>
         <tr>
-            <td valign="top"><a href="form_checkboxgroup.php">Using the checkboxgroup elementL</a></td>
+            <td valign="top"><a href="form_checkboxgroup.php">Using the checkboxgroup element</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_checkboxgroup.php">form_checkboxgroup.php</a>
                 <br/>
@@ -720,7 +720,7 @@
           <td><b>&nbsp;</b></td>
         </tr>
         <tr>
-          <td valign="top" rowspan="4">&nbsp;</td>
+          <td valign="top" rowspan="6">&nbsp;</td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/instructions.txt">Instructions (database and configuration) </a></td>
           <td valign="top">&nbsp;</td>
         </tr>
@@ -731,9 +731,21 @@
           <td colspan="2" valign="top"><strong>Backend examples</strong></td>
         </tr>
         <tr>
-          <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php">User management ( details, add )</a><br/>
-          </td>
+          <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php">User management ( how to get details )</a><br>
+&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php?do=edit">User management ( edit a user )</a><br>
+&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php?do=new">User management ( add a new user )</a><br/></td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/userdetails.php">cm/backend/userdetails.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/groups.php">Groups ( how to get details )</a><br>
+&nbsp;&nbsp;&nbsp;<a href="cm/backend/groups.php?do=edit">Groups ( edit a group )</a><br>
+&nbsp;&nbsp;&nbsp;<a href="cm/backend/groups.php?do=new">Groups ( add a new group )</a><br/></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/groups.php">cm/backend/groups.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php">Permissions ( register, check, add, delete )</a><br>
+          </td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/permissions.php">cm/backend/permissions.php</a> </td>
           </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>YDXml</b></td>
@@ -751,11 +763,27 @@
             </td>
         </tr>
         <tr>
+          <td colspan="2"><b>&nbsp;<br/>
+            YDError and YDResult </b></td>
+          <td><b>&nbsp;</b></td>
+        </tr>
+        <tr>
+          <td valign="top">&nbsp;</td>
+          <td valign="top"><a href="error.php">Using the YDError class</a></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=error.php">error.php</a> </td>
+        </tr>
+        <tr>
+          <td valign="top">&nbsp;</td>
+          <td valign="top"><a href="result.php">YDResult class (OK result)</a><br>
+          <a href="result.php?do=errors">YDResult class (FATAL result)</a></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=result.php">result.php</a></td>
+        </tr>
+        <tr>
             <td colspan="2"><b>&nbsp;<br/>Other classes and modules</b></td>
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="16" valign="top">&nbsp;</td>
+            <td rowspan="15" valign="top">&nbsp;</td>
             <td valign="top"><a href="constants.php">YDFramework2 constants</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=constants.php">constants.php</a>
@@ -817,12 +845,6 @@
             <td valign="top"><a href="pdfreport.php">Using PDF reports</a></td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=pdfreport.php">pdfreport.php</a>
-            </td>
-        </tr>
-        <tr>
-            <td valign="top"><a href="error.php">Using the YDError class</a></td>
-            <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=error.php">error.php</a>
             </td>
         </tr>
         <tr>

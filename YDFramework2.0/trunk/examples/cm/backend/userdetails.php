@@ -1,37 +1,48 @@
 <?php
 
+	// include global parameters
     include_once( dirname( __FILE__ ) . '/../cm.php' );
 
-	YDInclude( 'YDCMUsers.php' );
+    YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDCMUser.php' );
+
 
     // Class definition
-    class userdetails extends cm {
+    class userdetails extends YDRequest {
 
         // Class constructor
         function userdetails() {
 
 			// init parent class
-            $this->cm();
+            $this->YDRequest();
 
 			// create a user object
-			$this->users = new YDCMUsers();
+			$this->users = new YDCMUser();
         }
 
 
         // Default action (that shows user details form with some editable fields)
         function actionDefault() {
 
-			// get user id 101 details and display them
-			YDDebugUtil::dump( $this->users->getUser( 101, true ), '$this->users->getUser( 101, true )' );
+			// get user 6 
+			YDDebugUtil::dump( $this->users->getUser( 6 ), '$this->users->getUser( 6 );' );
+
+			// get user 4 (with details translated)
+			YDDebugUtil::dump( $this->users->getUser( 4, true ), '$this->users->getUser( 4, true ); // details translated' );
+
+			// get user 3 (don't exist because node is a group)
+			YDDebugUtil::dump( $this->users->getUser( 3 ), '$this->users->getUser( 3 ); // 3 is a group' );
+
+			// get user with username 'francisco'
+			YDDebugUtil::dump( $this->users->getUser( 'francisco' ), '$this->users->getUser( "francisco" );' );
         }
 
 
         // Edit user example
         function actionEdit() {
 
-			// add editing form of user 101.
-			// user cannot edit username, cannot see password, cannot see login details, can edit user details, cannot see access info, cann edit permissions
-			$this->users->addFormEdit( 101, false, null, null, true, null, true );
+			// add editing form (with details edition) with defaults of user 6
+			$this->users->addFormEdit( 6, 'details' );
 
 			// get form
 			$form = & $this->users->getForm();
@@ -39,26 +50,23 @@
 			// if form is not submitted just show it
 			if ( ! $form->isSubmitted() ) return $form->display();
 
-			// update user 101 with submitted information, magic isn't it ;) 100 is our id (created user, for loggin)
-			$result = $this->users->saveFormEdit( 101, 100 );
+			// update user 6 with submitted information, magic isn't it ;)
+			$result = $this->users->saveFormEdit( 6 );
 
-			// check if result is a array (form error messages)
-			if ( is_array( $result ) ) return $form->display();
+			// print result message
+			if ( $result->ok ) print( 'OK: ' . $result->message );
+			else               print( 'Error: ' . $result->message );
 
-			// if update was sucessfull, show ok message in current language
-			if ( $result == 1 ) return print( t( 'user details updated' ) );
-
-			// if form is valid but details are not changed (because are same as the db ones)
-			if ( $result == 0 ) return print( t( 'user not updated' ) );
+			// display form again
+			$form->display();
         }
 
 
 		// this action will add a new sub-user of the root (super-administrator: id 100)
 		function actionNew(){
 
-			// add form for adding a new user as child of user 100. 
-			// user can edit username, can edit password, can edit login details, can edit user details, cannot see access info, can edit permissions
-			$this->users->addFormNew( 100, true, true, true, true, null, true );
+			// add form for adding a new user to group 2
+			$this->users->addFormNew( 2, array( 'username', 'password', 'state', 'details' ) );
 
 			// get form
 			$form = & $this->users->getForm();
@@ -66,14 +74,15 @@
 			// if form is not submitted just show it
 			if ( ! $form->isSubmitted() ) return $form->display();
 
-			// add user ( 1st argument 100: parent of new user is 100; 2nd arg 100: we (user id that is creating this element) have id 100
-			$result = $this->users->saveFormNew( 100, 100 );
+			// add user to group 2
+			$result = $this->users->saveFormNew( 2 );
 			
-			// check if result has form errors
-			if ( is_array( $result ) ) return $form->display();
+			// print result message
+			if ( $result->ok ) print( 'OK: ' . $result->message );
+			else               print( 'Error: ' . $result->message );
 
-			// if creation is sucessfull, show ok message in current language
-			print( t( 'user added' ) );
+			// display form again
+			$form->display();
 		}
 
 
