@@ -41,8 +41,8 @@
         // Edit user example
         function actionEdit() {
 
-			// add editing form (with details edition) with defaults of user 6
-			$this->users->addFormEdit( 6, 'details' );
+			// add editing form defaults of userobject 6
+			$this->users->addFormEdit( 6 );
 
 			// get form
 			$form = & $this->users->getForm();
@@ -66,7 +66,7 @@
 		function actionNew(){
 
 			// add form for adding a new user to group 2
-			$this->users->addFormNew( 2, array( 'username', 'password', 'state', 'details' ) );
+			$this->users->addFormNew( 2 );
 
 			// get form
 			$form = & $this->users->getForm();
