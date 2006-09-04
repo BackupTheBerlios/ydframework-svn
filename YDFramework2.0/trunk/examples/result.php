@@ -1,15 +1,20 @@
 <?php
 
-    include_once( dirname( __FILE__ ) . '/../cm.php' );
+    // ydf include
+    include_once( dirname( __FILE__ ) . '/../YDFramework2/YDF2_init.php' );
+
+	YDInclude( 'YDRequest.php' );
+	YDInclude( 'YDResult.php' );
+
 
     // Class definition
-    class returns extends cm {
+    class result extends YDRequest {
 
         // Class constructor
-        function returns() {
+        function result() {
 
 			// init parent class and test class
-            $this->cm();
+            $this->YDRequest();
 			$this->test = new mytest();
         }
 
@@ -37,22 +42,7 @@
 			
 			// check if div processing was ok
 			if ( $res->ok ) return print $res->message . ' ' . $res->value;
-
-			// get error
-			if ( $res->custom == 0 ){
-
-				// do something about 'x' argument being 0
-				print $res->message;
-			}
-
-			if ( $res->custom == 1 ){
-
-				// do something about internal 'a' variable being 5
-				print $res->message;
-			}
-
-			// in any case of error, show all information
-			$res->dump();
+			else            return $res->dump();
         }
 
 
