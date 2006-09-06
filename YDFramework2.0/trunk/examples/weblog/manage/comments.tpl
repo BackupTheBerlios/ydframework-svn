@@ -66,7 +66,14 @@
     {/if}
     <tr>
         <th class="adminRowLG" colspan="7">
-            &raquo; {t w="a_comments"}
+            {if $item}
+                &raquo; {t w="a_comments"}
+            {else}
+                &raquo; <a href="{$YD_SELF_SCRIPT}">
+                    {if $filter == 'no_spam'}<b>{/if}{t w="a_comments"}{if $filter == 'no_spam'}</b>{/if}</a>
+                | <a href="{$YD_SELF_SCRIPT}?filter=spam">
+                    {if $filter == 'spam'}<b>{/if}{t w="a_comments_spam"}{if $filter == 'spam'}</b>{/if}</a>
+            {/if}
         </th>
     </tr>
     {if $comments->set}
@@ -110,6 +117,12 @@
                     |
                     <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
                      onClick="return YDConfirmDelete( '{$comment.comment|bbcode|strip_tags|strip|truncate|addslashes}' );">{t w="delete"}</a>
+                    <br/>
+                    {if $comment.is_spam}
+                        <a href="{$YD_SELF_SCRIPT}?do=mark_as_not_spam&id={$comment.id}">{t w="mark_as_not_spam"}</a>
+                    {else}
+                        <a href="{$YD_SELF_SCRIPT}?do=mark_as_spam&id={$comment.id}">{t w="mark_as_spam"}</a>
+                    {/if}
                 </td>
             </tr>
         {/foreach}
@@ -183,6 +196,10 @@
             <tr>
                 <td class="adminRowL">{$form.created.label_html}</td>
                 <td class="adminRowL">{$form.created.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.is_spam.label_html}</td>
+                <td class="adminRowL">{$form.is_spam.html}</td>
             </tr>
             <tr>
                 <td class="adminRowL" colspan="2" style="border: 0px;">

@@ -56,15 +56,8 @@
             $form->addElement( 'text', 'username', t( 'name' ) );
             $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
             $form->addElement( 'text', 'userwebsite', t( 'website' ) );
-            $form->addElement( 'hidden', '_userspam', t('choose_no_spam'), array() );
             $form->addElement( 'textarea', 'comment', '' );
-            $form->addElement(
-                'submit', 'cmdSubmit', t( 'submit_comment' ),
-                array(
-                    'id' => 'submit',
-                    'onClick' => 'this.document.getElementById(\'comments__userspam\').value = 3; return true;'
-                )
-            );
+            $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ) );
             $form->addElement( 'hidden', 'item_id' );
 
             // Set the defaults
@@ -73,7 +66,6 @@
             $defaults['username']    = empty( $_COOKIE['YD_USER_NAME'] ) ? '' : $_COOKIE['YD_USER_NAME'];
             $defaults['useremail']   = empty( $_COOKIE['YD_USER_EMAIL'] ) ? '' : $_COOKIE['YD_USER_EMAIL'];
             $defaults['userwebsite'] = empty( $_COOKIE['YD_USER_WEBSITE'] ) ? '' : $_COOKIE['YD_USER_WEBSITE'];
-            $defaults['_userspam']   = 1;
             $form->setDefaults( $defaults );
 
             // Set the rules
@@ -83,7 +75,6 @@
             $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
             $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
             $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
-            $form->addRule( '_userspam',   'value',     t( 'err_userspam' ), '3' );
             $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
 
             // Add the filters

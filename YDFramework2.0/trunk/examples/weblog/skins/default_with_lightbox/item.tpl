@@ -118,6 +118,7 @@
                             | <a href="manage/comments.php?do=edit&id={$comment.id}" target="_blank">{t w="edit"}</a>
                             | <a href="manage/comments.php?do=delete&id={$comment.id}"
                                  onClick="return YDConfirmDelete( '{$item.title|addslashes}' );">{t w="delete"}</a>
+                            | <a href="manage/comments.php?do=mark_as_spam&id={$comment.id}">{t w="mark_as_spam"}</a>
                         {/if}
                     </small>
                     <p>{$comment.comment|bbcode}</p>
@@ -130,8 +131,6 @@
     <h3 id="respond">{t w="leave_comment"}</h3>
 
     {$comments_form.tag}
-
-        {$comments_form._userspam.html}
 
         {if $comments_form.errors_unique_messages}
             <p class="postmetadata alt" style="color: red; text-align: left;">

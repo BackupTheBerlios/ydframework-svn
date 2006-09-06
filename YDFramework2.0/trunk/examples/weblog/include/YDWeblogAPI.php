@@ -165,7 +165,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 3;
+            $current_schema = 4;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -177,6 +177,7 @@
                 $fields = $this->dbmeta->getFields( '#_comments' );
                 $this->executeIfMissing( 'useragent', $fields, 'ALTER TABLE #_comments ADD useragent varchar(255) AFTER userip' );
                 $this->executeIfMissing( 'userrequrl', $fields, 'ALTER TABLE #_comments ADD userrequrl varchar(255) AFTER useragent' );
+                $this->executeIfMissing( 'is_spam', $fields, 'ALTER TABLE #_comments ADD is_spam TINYINT(1) DEFAULT "0" NOT NULL AFTER comment' );
 
                 // Add any missing items fields
                 $fields = $this->dbmeta->getFields( '#_items' );
@@ -449,13 +450,18 @@
         }
 
         // Get the comments for an item
-        function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1, $public_only=false ) {
-            $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
+        function getComments( $item_id=null, $order='created', $limit=-1, $offset=-1, $public_only=false, $spam_only=false ) {
+            $query = 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.is_spam as is_spam, c.created as created, c.modified as modified, i.title as item_title, i.is_draft as item_is_draft FROM #_comments c, #_items i WHERE c.item_id = i.id';
             if ( $item_id ) {
                 $query .= ' and item_id = ' . $this->str( $item_id );
             }
             if ( $public_only == true ) {
                 $query .= ' and i.is_draft = 0';
+            }
+            if ( $spam_only == true ) {
+                $query .= ' and c.is_spam = 1';
+            } else {
+                $query .= ' and c.is_spam = 0';
             }
             $records = $this->db->getRecords( $this->_prepareQuery( $query, $order ), $limit, $offset );
             foreach ( $records as $key=>$record ) {
@@ -466,7 +472,7 @@
 
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
-            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
+            $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.is_spam as is_spam, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
             $record  = $this->db->getRecord( $sql );
             $record['comment'] = trim( strip_tags( $record['comment'] ) );
             return $record;
@@ -474,14 +480,52 @@
 
         // Add a comment
         function addComment( $values ) {
+
+            // Update the values
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
             $values['useragent'] = $_SERVER['HTTP_USER_AGENT'];
             $values['userrequrl'] = $_SERVER['REQUEST_URI'];
+
+            // Check against akismet if a key is there
+            if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
+
+                // Include the YDAkismet addon
+                include_once( YD_DIR_HOME_ADD . '/YDAkismet/YDAkismet.php' );
+
+                // Get the URL of the weblog
+                $weblog_url = dirname( YDRequest::getCurrentUrl( true ) ) . '/';
+
+                // Initialize YDAkismet
+                $akismet = new YDAkismet( $weblog_url, YDConfig::get( 'akismet_key', '' ) );
+
+                // Check if it's spam or not
+                $result = $akismet->checkComment(
+                    $values['comment'], $values['username'], $values['useremail'], $values['userwebsite'],
+                    $values['userip'], $values['useragent']
+                );
+
+                // Update the comment values
+                if ( $result == NULL || $result === false ) {
+                    $values['is_spam'] = 0;
+                } else {
+                    $values['is_spam'] = 1;
+                }
+
+            }
+
+            // Add the comment
             $result = $this->_executeInsert( '#_comments', $values );
-            $comment_id = $this->db->getLastInsertID();
-            $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
-            $this->db->executeSql( $sql );
+
+            // Only update the items table if not spam
+            if ( ! $values['is_spam'] ) {
+                $comment_id = $this->db->getLastInsertID();
+                $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
+                $this->db->executeSql( $sql );
+            }
+
+            // Return the comment id
             return $comment_id;
+
         }
 
         // Update a comment
@@ -489,12 +533,34 @@
             return $this->db->executeUpdate( '#_comments', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 
+        // Update a comment and mark it as spam
+        function updateCommentAsSpam( $comment_id ) {
+            $comment = $this->getCommentById( $comment_id );
+            $comment['is_spam'] = 1;
+            unset( $comment['item_title'] );
+            $this->updateComment( $comment );
+            $sql = 'UPDATE #_items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
+            $this->db->executeSql( $sql );
+        }
+
+        // Update a comment and unmark it as spam
+        function updateCommentAsNotSpam( $comment_id ) {
+            $comment = $this->getCommentById( $comment_id );
+            $comment['is_spam'] = 0;
+            unset( $comment['item_title'] );
+            $this->updateComment( $comment );
+            $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $comment['item_id'] );
+            $this->db->executeSql( $sql );
+        }
+
         // Delete a comment
         function deleteComment( $comment_id ) {
             $comment = $this->getCommentById( $comment_id );
             $result = $this->_deleteFromTableUsingID( '#_comments', $comment_id );
-            $sql = 'UPDATE #_items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
-            $this->db->executeSql( $sql );
+            if ( ! $comment['is_spam'] ) {
+                $sql = 'UPDATE #_items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
+                $this->db->executeSql( $sql );
+            }
             return $result;
         }
 

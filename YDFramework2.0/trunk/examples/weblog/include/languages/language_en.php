@@ -252,6 +252,10 @@ $GLOBALS['t']['change_comment_desc'] = 'Change comment';
 $GLOBALS['t']['mail'] = 'Email';
 $GLOBALS['t']['no_comments_found'] = 'No comments were found';
 $GLOBALS['t']['posted_from'] = 'Posted from IP address';
+$GLOBALS['t']['a_comments_spam'] = 'Spam comments';
+$GLOBALS['t']['mark_as_spam'] = 'mark as spam';
+$GLOBALS['t']['mark_as_not_spam'] = 'mark as not spam';
+$GLOBALS['t']['is_spam'] = 'Spam comment';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Settings';

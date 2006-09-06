@@ -93,6 +93,7 @@
             $form->addElement( 'checkbox', 'dflt_is_draft', t( 'is_draft' ), array( 'style' => 'border: none;' ) );
 
             $form->addElement( 'textarea', 'blocked_ips', t( 'cfg_blocked_ips' ), array( 'class' => 'tfMNoMCE' ) );
+            $form->addElement( 'text', 'akismet_key', t( 'cfg_akismet_key' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
@@ -167,6 +168,7 @@
             $config['friendly_urls']        = YDConfig::get( 'friendly_urls',        false );
             $config['dflt_is_draft']        = YDConfig::get( 'dflt_is_draft',        false );
             $config['blocked_ips']          = YDConfig::get( 'blocked_ips',          YDFormatStringWithListValues( '' ) );
+            $config['akismet_key']          = YDConfig::get( 'akismet_key',          '' );
 
             // Return the configuration
             return $config;

@@ -252,6 +252,10 @@ $GLOBALS['t']['change_comment_desc'] = 'Wijzig commentaar';
 $GLOBALS['t']['mail'] = 'Email';
 $GLOBALS['t']['no_comments_found'] = 'Er werden geen commentaren gevonden';
 $GLOBALS['t']['posted_from'] = 'Gepost van het IP adres';
+$GLOBALS['t']['a_comments_spam'] = 'Spam commentaren';
+$GLOBALS['t']['mark_as_spam'] = 'markeer als spam';
+$GLOBALS['t']['mark_as_not_spam'] = 'markeer als niet spam';
+$GLOBALS['t']['is_spam'] = 'Spam commentaar';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Instellingen';

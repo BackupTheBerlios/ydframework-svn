@@ -138,6 +138,10 @@
             <td class="adminRowL" width="300">{t w="cfg_blocked_ips"}</td>
             <td class="adminRowL" width="400">{$config.blocked_ips|default:'-'|replace:', ':'<br/>'}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_akismet_key"}</td>
+            <td class="adminRowL">{$config.akismet_key|default:'-'}</td>
+        </tr>
     </table>
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
@@ -273,6 +277,10 @@
             <tr>
                 <td class="adminRowL" width="300">{$form.blocked_ips.label_html}</td>
                 <td class="adminRowL" width="400">{$form.blocked_ips.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.akismet_key.label_html}</td>
+                <td class="adminRowL">{$form.akismet_key.html}</td>
             </tr>
         </table>
         <p>{$form._cmdSubmit.html}</p>
