@@ -46,7 +46,7 @@
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL" width="300">{t w="schema_version"}</td>
-        <td class="adminRowL" width="400">{$schema_info.version} ({t w="installed_on"} {$schema_info.installed|date:"%d %B %Y"|lower})</td>
+        <td class="adminRowL" width="400">{$schema_info.version}</td>
     </tr>
     <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
         <td class="adminRowL">Smarty</td>
