@@ -130,9 +130,6 @@
         // Get the schema version
         function getSchemaVersion() {
 
-            // Check if the schema version table exists
-            $tables = $this->dbmeta->getTables();
-
             // Create the schemaversion table if it doesn't exists
             if ( ! $this->dbmeta->tableExists( '#_schemaversion' ) ) {
                 $sql = 'CREATE TABLE #_schemaversion (installed INT(11), version INT (11))';
