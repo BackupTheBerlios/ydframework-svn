@@ -11,7 +11,7 @@
                 </h2>
                 <small>{$item.created|date|lower} {t w="by"} <a href="mailto:{$item.user_email|escape:'hexentity'}">{$item.user_name|lower}</a></small>
                 <p>
-                    <table width="450" border=0 cellspacing=0 cellpadding=0>
+                    <table width="450" border="0" cellspacing="0" cellpadding="0">
                     {foreach from=$item.images_as_table item="image_row"}
                     <tr>
                         {foreach from=$image_row item="image"}

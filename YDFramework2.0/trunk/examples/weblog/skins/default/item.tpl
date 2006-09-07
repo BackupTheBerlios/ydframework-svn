@@ -47,7 +47,7 @@
         {if $item.images}
             <a name="images"></a>
             <h3>{$item|@text_num_images} {t w="with"} &#8220;{$item.title}&#8221;</h3>
-            <p><table width="450" border=0 cellspacing=0 cellpadding=0>
+            <p><table width="450" border="0" cellspacing="0" cellpadding="0">
             {foreach from=$item.images_as_table item="image_row"}
             <tr>
                 {foreach from=$image_row item="image"}
