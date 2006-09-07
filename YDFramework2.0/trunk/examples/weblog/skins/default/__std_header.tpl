@@ -33,7 +33,7 @@
     <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="{$weblog_link_atom}" />
 
     {if $user.name}
-        <script language="JavaScript">
+        <script type="text/javascript">
         <!--
 
             {literal}function YDConfirmDelete( img ) {{/literal}
@@ -46,9 +46,9 @@
 
     {$weblog_google_analytics}
 
-    <script language="JavaScript" src="tiny_mce/tiny_mce_gzip.php"></script>
+    <script type="text/javascript" src="tiny_mce/tiny_mce_gzip.php"></script>
 
-    <script language="JavaScript">
+    <script type="text/javascript">
     <!--
 
         {literal}tinyMCE.init({
