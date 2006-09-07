@@ -207,9 +207,6 @@
                 $this->db->executeSql( 'ALTER TABLE #_schemaversion CHANGE installed installed INT(11)' );
                 $this->db->executeSql( 'UPDATE #_schemaversion SET installed = unix_timestamp() WHERE installed = 0' );
 
-                // Remove the auto close fields from the items
-
-
                 // Update the schema information
                 $this->setSchemaVersion( $current_schema );
 

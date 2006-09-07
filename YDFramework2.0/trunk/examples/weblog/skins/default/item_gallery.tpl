@@ -45,10 +45,6 @@
                     ({t w="image"} {$image->num} {t w="of"} {$image->total_images})
                     <br/>
                     {t w="item"}: <a href="{$item|@link_item}">{$item.title}</a>
-                    {if $image->exif}
-                        <br/>
-                        EXIF: {$image->exif.full}
-                    {/if}
                 </small>
             </p>
 
