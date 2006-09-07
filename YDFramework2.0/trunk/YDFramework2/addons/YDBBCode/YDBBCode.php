@@ -64,8 +64,8 @@
             $this->addRule( "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>' );
             $this->addRule( "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>' );
             $this->addRule( "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' );
-            $this->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2"></a>' );
-            $this->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1">' );
+            $this->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2" alt="\\2" /></a>' );
+            $this->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1" alt="\\1" />' );
             $this->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );
 
             // Attributes to convert links
