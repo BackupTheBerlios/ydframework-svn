@@ -264,8 +264,6 @@
             if ( ! isset( $where[$name] ) ) {
                 $where[$name] = array();
             }
-
-
         }
 
     }
