@@ -166,7 +166,7 @@
 
             // Update the image metadata for the submitted items
             foreach ( $_POST['metadata'] as $item => $data ) {
-                YDDebugUtil::dump( $this->weblog->setItemImageMetaData( $item, $data ) );
+                $this->weblog->setItemImageMetaData( $item, $data );
             }
 
             // Redirect to the list view
