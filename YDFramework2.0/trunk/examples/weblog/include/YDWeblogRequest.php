@@ -86,34 +86,20 @@
 
         // Function to show a thumbnail
         function actionThumbnail() {
-
-            // Get the image name
             if ( ! isset( $_GET['id'] ) ) {
                 die( 'No image selected.' );
             }
-
-            // Create a new image object
             $img = new YDFSImage( dirname( __FILE__ ) . '/../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $_GET['id'] );
-
-            // Output the thumbnail
             $img->outputThumbnail( 100, 100 );
-
         }
 
         // Function to show a thumbnail
         function actionThumbnailSmall() {
-
-            // Get the image name
             if ( ! isset( $_GET['id'] ) ) {
                 die( 'No image selected.' );
             }
-
-            // Create a new image object
             $img = new YDFSImage( YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $_GET['id'] );
-
-            // Output the thumbnail
             $img->outputThumbnail( 48, 48 );
-
         }
 
         // Function to get the ID from the query string
@@ -193,53 +179,28 @@
 
         // Fetch a template
         function fetch( $customTpl=null ) {
-
-            // Initialize the template
             $this->initTemplate();
-
-            // Log a request to the stats
             $this->_logRequest();
-
-            // Parse the template
             $data = $this->tpl->fetch( $customTpl );
-
-            // Check if caching is enabled
             if ( YDConfig::get( 'use_cache', false ) ) {
-
-                // Save the cache if needed
                 if ( $this->caching === true ) {
-
-                    // Save the cache
                     $f = fopen( YD_WEBLOG_CACHE_FNAME, 'wb' );
                     fwrite( $f, $data );
                     fclose( $f );
-
                 }
-
             }
-
-            // Return the parsed templaet
             return $data;
-
         }
 
         // Display the named template
         function display( $customTpl=null ) {
-
-            // Display a fetched template
             echo( $this->fetch( $customTpl ) );
-
         }
 
         // Get the name of the template
         function getTemplateName( $customTpl=null ) {
-
-            // Get the correct template name
             $name = is_null( $customTpl ) ? strtolower( get_class( $this ) ) : $customTpl;
-
-            // Return the file path
             return  $this->tpl->template_dir . $name . YD_TPL_EXT;
-
         }
 
         // Function to disbable request logging
@@ -379,36 +340,22 @@
 
         // Function to show a thumbnail
         function actionThumbnailSmall() {
-
-            // Get the image name
             if ( ! isset( $_GET['id'] ) ) {
                 die( 'No image selected.' );
             }
-
-            // Create a new image object
             $img = new YDFSImage( YDConfig::get( 'dir_uploads', '../uploads' ) . '/' . $_GET['id'] );
-
-            // Output the thumbnail
             $img->outputThumbnail( 48, 48 );
-
         }
 
         // Function to get the cookie path
         function _getCookiePath() {
-
-            // Get the path
             if ( YDStringUtil::endsWith( dirname( YD_SELF_SCRIPT ), '/manage' ) ) {
                 $cookiePath = dirname( dirname( YD_SELF_SCRIPT ) );
             } else {
                 $cookiePath =  dirname( YD_SELF_SCRIPT );
             }
-
-            // Trim the unneeded characters
             $cookiePath = rtrim( str_replace( '\\', '/', $cookiePath ), '/' );
-
-            // Return the cookie path
             return $cookiePath . '/';
-
         }
 
         // The login action
@@ -471,16 +418,9 @@
 
         // Logout action
         function actionLogout() {
-
-            // Get the path for the cookies
             $cookiePath = $this->_getCookiePath();
-
-            // Set the cookie
             setcookie( 'YD_USER_PASS', null, time() - 31536000, $cookiePath );
-
-            // Redirect to the login
             $this->redirectToAction( 'login' );
-
         }
 
         // Check for authentication

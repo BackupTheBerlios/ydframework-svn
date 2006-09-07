@@ -11,10 +11,7 @@
 
         // Class constructor
         function xml() {
-
-            // Initialize the parent
             $this->YDWeblogRequest();
-
         }
 
         // Function to output the feed

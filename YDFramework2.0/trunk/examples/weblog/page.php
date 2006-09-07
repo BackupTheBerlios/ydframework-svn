@@ -21,10 +21,8 @@
             $page  = $this->weblog->getPublicPageById( $id );
             $this->redirectIfMissing( $page );
 
-            // Set the title
+            // Assign the variables to the template
             $this->tpl->assign( 'title', $page['title'] );
-
-            // Add them to the template
             $this->tpl->assign( 'page', $page );
 
             // Display the template

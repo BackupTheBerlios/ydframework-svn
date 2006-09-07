@@ -8,10 +8,7 @@
 
         // Class constructor
         function comments() {
-
-            // Initialize the parent
             $this->YDWeblogAdminRequest();
-
         }
 
         // Default action
@@ -70,7 +67,7 @@
             $form->addElement( 'text',            'username',    t('name'),    array( 'class' => 'tfM' ) );
             $form->addElement( 'text',            'useremail',   t('mail'),    array( 'class' => 'tfM' ) );
             $form->addElement( 'text',            'userwebsite', t('website'), array( 'class' => 'tfM' ) );
-            $form->addElement( 'wladmintextarea', 'comment',     t('comment'), array( 'class' => 'tfM' ) );
+            $form->addElement( 'textarea',        'comment',     t('comment'), array( 'class' => 'tfM' ) );
             $form->addElement( 'datetimeselect',  'created',     t('created_on'), array( 'class' => 'tfM' ) );
             $form->addElement( 'checkbox',        'is_spam',     t('is_spam'), array( 'style' => 'border: none;' ) );
             $form->addElement( 'hidden',          'id' );
@@ -123,10 +120,7 @@
 
             // Check if the comment exists
             if ( $form->getValue( 'id' ) == '' ) {
-
-                // Return to the default action
                 $this->redirectToAction();
-
             }
 
             // Process the form
@@ -156,59 +150,29 @@
 
         // Delete a category
         function actionDelete() {
-
-            // Get the ID from the query string
             $id = $this->getIdFromQS();
-
-            // If there is something, set the defaults
             if ( $id ) {
-
-                // Delete the comment
                 $this->weblog->deleteComment( $id );
-
             }
-
-            // Redirect to the default acton
             $this->redirectToAction();
-
         }
 
         // Action to mark a comment as spam
         function actionMark_as_spam() {
-
-            // Get the ID from the query string
             $id = $this->getIdFromQS();
-
-            // If there is something, set the defaults
             if ( $id ) {
-
-                // Delete the comment
                 $this->weblog->updateCommentAsSpam( $id );
-
             }
-
-            // Redirect to the default acton
             $this->redirect( YD_SELF_SCRIPT . '?filter=spam' );
-
         }
 
         // Action to unmark a comment as spam
         function actionMark_as_not_spam() {
-
-            // Get the ID from the query string
             $id = $this->getIdFromQS();
-
-            // If there is something, set the defaults
             if ( $id ) {
-
-                // Delete the comment
                 $this->weblog->updateCommentAsNotSpam( $id );
-
             }
-
-            // Redirect to the default acton
             $this->redirectToAction();
-
         }
 
     }

@@ -30,9 +30,6 @@
             $item  = @ $this->weblog->getPublicItemById( $id );
             $this->redirectIfMissing( $item );
 
-            // Set the title
-            $this->tpl->assign( 'title', $item['title'] );
-
             // Get the related items
             $related_items = $this->weblog->getRelatedItemsByItem( YDConfig::get( 'weblog_entries_fp', 5 ), $item );
 
@@ -42,7 +39,8 @@
             // Get the comments
             $comments = $this->weblog->getComments( $id );
 
-            // Add them to the template
+            // Assign the variables to the template
+            $this->tpl->assign( 'title', $item['title'] );
             $this->tpl->assign( 'item', $item );
             $this->tpl->assign( 'related_items', $related_items );
             $this->tpl->assign( 'comments', $comments );

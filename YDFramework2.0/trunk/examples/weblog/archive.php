@@ -23,10 +23,8 @@
             // Convert to a nested array
             $items = YDArrayUtil::convertToNested( $items, 'yearmonth' );
 
-            // Add them to the template
+            // Assign the variables to the template
             $this->tpl->assign( 'items', $items );
-
-            // Set the title
             $this->tpl->assign( 'title', t('archives') );
 
             // Display the template

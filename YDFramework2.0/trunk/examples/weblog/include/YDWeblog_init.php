@@ -66,35 +66,18 @@
         }
     }
 
-    // Check if the user wanted to use caching
+    // Cache output if needed
     if ( YDConfig::get( 'use_cache', false ) ) {
-
-        // Check if we allow caching
         if ( sizeof( $_POST ) == 0 ) {
-
-            // Check if there is a cache item for this request
             if ( is_file( YD_WEBLOG_CACHE_FNAME ) ) {
-
-                // Output the cached item
                 $data = file_get_contents( YD_WEBLOG_CACHE_FNAME );
-
-                // Include a cache filter if any
                 @include( dirname( __FILE__ ) . '/cache_filter.php' );
-
-                // Add the elapsed time
                 $elapsed = $GLOBALS['timer']->getElapsed();
-
-                // Log the request to the statistics
                 $req = new YDWeblogRequest();
                 $req->_logRequest();
-
-                // Add the statistics
                 die( $data . YD_CRLF . '<!-- #cached: ' . $elapsed . ' ms -->' );
-
             }
-
         }
-
     }
 
     // Include the standard modules
@@ -102,7 +85,6 @@
     YDInclude( 'YDUtil.php' );
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDFileSystem.php' );
-    YDInclude( 'YDFormElements/YDFormElement_TextArea.php' );
 
     // Check if the weblog application is locked or not
     $db = YDDatabase::getInstance(
@@ -110,13 +92,6 @@
         YDConfig::get( 'db_name', 'YDWeblog' ), YDConfig::get( 'db_user', 'root' ),
         YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
     );
-    $tables = $db->getRecords( 'show tables' );
-    $table_field_name = 'tables_in_' . strtolower( YDConfig::get( 'db_name', 'YDWeblog' ) );
-    foreach ( $tables as $table ) {
-        if ( strtolower( $table[$table_field_name] ) == YDConfig::get( 'db_prefix', '' ) . 'locked' ) {
-            die( 'Weblog application is being updated. Please come again later.' );
-        }
-    }
 
     // Set the right locale
     $language = YDConfig::get( 'weblog_language', 'en' );
@@ -239,37 +214,8 @@
 
         // Class constructor
         function YDWeblogForm( $name, $method='post', $action='', $target='_self', $attributes=array() ) {
-
-            // Initialize the parent
             $this->YDForm( $name, $method, $action, $target, $attributes );
-
-            // Set the required
             $this->setHtmlRequired( '', ' <span class="required">(' . t( 'required' ) . ')</span>' );
-
-            // Register the form element
-            $this->registerElement( 'wlbbtextarea', 'YDWeblogFormElement_BBTextArea' );
-            $this->registerElement( 'wladmintextarea', 'YDFormElement_AdminTextArea' );
-
-        }
-
-    }
-
-    // A BB Text Area form element
-    class YDWeblogFormElement_BBTextArea extends YDFormElement_TextArea {
-
-        // Class constructor
-        function YDWeblogFormElement_BBTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
-            $this->YDFormElement_TextArea( $form, $name, $label, $attributes, $options );
-        }
-
-    }
-
-    // Custom bbtext area
-    class YDFormElement_AdminTextArea extends YDWeblogFormElement_BBTextArea {
-
-        // Class constructor
-        function YDFormElement_AdminTextArea( $form, $name, $label='', $attributes=array(), $options=array() ) {
-            $this->YDWeblogFormElement_BBTextArea( $form, $name, $label, $attributes, $options );
         }
 
     }

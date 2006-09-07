@@ -24,11 +24,9 @@
             // Get the category items
             $items = $this->weblog->getItemsByCategoryId( $id );
 
-            // Add them to the template
+            // Assign the variables to the template
             $this->tpl->assign( 'category', $category );
             $this->tpl->assign( 'items',    $items );
-
-            // Set the title
             $this->tpl->assign(
                 'title', t('archive_for_the') . '\'' . $category['title'] . '\' ' .  strtolower( t('category') )
             );

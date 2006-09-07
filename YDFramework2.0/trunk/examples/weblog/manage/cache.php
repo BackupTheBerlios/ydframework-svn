@@ -8,10 +8,7 @@
 
         // Class constructor
         function cache() {
-
-            // Initialize the parent
             $this->YDWeblogAdminRequest();
-
         }
 
         // Default action
@@ -31,7 +28,6 @@
             $form->addElement( 'checkbox', 'cache_tpl', $cache_tpl_lbl, array( 'style' => 'border: none;' ) );
             $form->addElement( 'submit', '_cmdSubmit', t( 'cleanup' ), array( 'class' => 'button' ) );
             $form->setDefaults( array( 'cache_pub' => 1, 'cache_web' => 1, 'cache_tmb' => 1, 'cache_tpl' => 1 ) );
-
 
             // Validate the form
             if ( $form->validate() == true ) {

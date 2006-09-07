@@ -77,34 +77,18 @@
 
             // Add a form rule for new links
             if ( $this->form->getValue( 'id' ) == '' ) {
-
-                // Add a rule to make sure the category is unique
                 $this->form->addFormRule( array( & $this, 'checkUniqueCategory' ) );
-
             }
 
             // Process the form
             if ( $this->form->validate() === true ) {
-
-                // Get the form values
                 $values = $this->form->getValues();
-
-                // If there is an ID, we do an edit
                 if ( $values['id'] ) {
-
-                    // Update the database
                     $this->weblog->updateCategory( $values );
-
                 } else {
-
-                    // Add it to the database
                     $this->weblog->addCategory( $values );
-
                 }
-
-                // Redirect to the default acton
                 $this->redirectToAction();
-
             }
 
             // Add the form to the template
@@ -117,36 +101,21 @@
 
         // Delete a category
         function actionDelete() {
-
-            // Get the ID from the query string
             $id = $this->getIdFromQS();
-
-            // If there is something, set the defaults
             if ( $id ) {
-
-                // Delete the category
                 $this->weblog->deleteCategory( $id );
-
             }
-
-            // Redirect to the default acton
             $this->redirectToAction();
-
         }
 
         // Check for a unique category
         function checkUniqueCategory( $values ) {
-
-            // Get the category by name
             $category = $this->weblog->getCategoryByName( $values['title'] );
-
-            // Return an error if it exists
             if ( $category ) {
                 return array( '__ALL__' => t( 'err_unique_category' ) );
             } else {
                 return true;
             }
-
         }
 
     }

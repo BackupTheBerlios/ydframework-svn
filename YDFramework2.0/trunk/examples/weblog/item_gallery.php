@@ -64,11 +64,9 @@
                 $image->exif = null;
             }
 
-            // Add them to the template
+            // Assign the variables to the template
             $this->tpl->assign( 'item',  $item );
             $this->tpl->assign( 'image', $image );
-
-            // Set the title
             $this->tpl->assign( 'title', $item['title'] . ' &raquo; ' . $image->getBasenameNoExt() );
 
             // Display the template
