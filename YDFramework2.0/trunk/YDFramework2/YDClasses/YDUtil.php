@@ -328,10 +328,11 @@
             $data = var_export( $obj, true );
             if ( $html == true ) {
                 $data = stripslashes( htmlentities( $data ) );
+                $style = ' style="text-align: left; font-size: 10pt;"';
                 if ( ! empty( $label ) ) {
-                    $data = '<pre><b style="color: navy">' . $label . '</b><br>' . $data . '</pre>';
+                    $data = '<pre' . $style . '><b style="color: navy">' . $label . '</b><br>' . $data . '</pre>';
                 } else {
-                    $data = '<pre>' . $data . '</pre>';
+                    $data = '<pre' . $style . '>' . $data . '</pre>';
                 }
             } else {
                 $data = $label . YD_CRLF . $data;
