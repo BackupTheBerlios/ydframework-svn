@@ -212,7 +212,7 @@
 
             // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
-                trigger_error( pg_last_error( $conn ), YD_ERROR );
+                trigger_error( pg_last_error( $this->conn ), YD_ERROR );
             }
 
             // Return the result
