@@ -73,25 +73,12 @@
             <td class="adminRowL">{t w="server"}</td>
             <td class="adminRowL" colspan="2">{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</td>
         </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="installed_version"}</td>
-            <td class="adminRowL" colspan="2">{$YD_FW_REVISION}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="300">{t w="installed_since"}</td>
-            <td class="adminRowL" width="400" colspan="2">{$installDate|date:"%d %B %Y"|lower}</td>
-        </tr>
     </table>
 </td>
 <td width="350" align="right" valign="top">
     <table width="340" cellspacing="0" cellpadding="0" border="0">
         <tr>
-            <th class="adminRowLG">&raquo; <a href="stats.php"><b>{t w="a_statistics"}</b></a></th>
-            <th class="adminRowLGR"><a href="stats.php"><img src="images/more_details.gif" border="0" /></a></th>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="num_days_online"}</td>
-            <td class="adminRowL" colspan="2">{$daysOnline} {t w="days"}</td>
+            <th class="adminRowLG" colspan="3">&raquo; {t w="a_statistics"}</th>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="totalItems"}</td>
@@ -101,16 +88,6 @@
             <td class="adminRowL">{t w="totalComments"}</td>
             <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
         </tr>
-        {if $keep_stats}
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-                <td class="adminRowL">{t w="total_hits"}</td>
-                <td class="adminRowL" colspan="2">{$totalHits} {t w="hits"}</td>
-            </tr>
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-                <td class="adminRowL">{t w="avg_hits_per_day"}</td>
-                <td class="adminRowL" colspan="2">{$avg_hitsaday} {t w="hits"}</td>
-            </tr>
-        {/if}
     </table>
 </td></tr>
 </table>

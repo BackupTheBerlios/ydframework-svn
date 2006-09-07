@@ -73,7 +73,6 @@
                 @include( dirname( __FILE__ ) . '/cache_filter.php' );
                 $elapsed = $GLOBALS['timer']->getElapsed();
                 $req = new YDWeblogRequest();
-                $req->_logRequest();
                 die( $data . YD_CRLF . '<!-- #cached: ' . $elapsed . ' ms -->' );
             }
         }

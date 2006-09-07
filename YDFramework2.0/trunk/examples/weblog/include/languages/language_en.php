@@ -293,7 +293,7 @@ $GLOBALS['t']['cfg_auto_close_items'] = 'Do not allow comment after x days';
 $GLOBALS['t']['err_auto_close_items'] = 'Do not allow comment after x days should be numeric';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Show debugging information';
 $GLOBALS['t']['cfg_default_item_settings'] = 'Default values for new items';
-$GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
+$GLOBALS['t']['cfg_weblog_google_analytics'] = '<a href="http://www.google.com/analytics/" target="_blank">Google Analytics</a> Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Track statistics';
 $GLOBALS['t']['cfg_blocked_ips'] = 'Blocked IP addresses separated by comma\'s. An asterix can be used as a wildcard.';

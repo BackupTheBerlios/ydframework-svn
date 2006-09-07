@@ -77,10 +77,6 @@
             <td class="adminRowL">{$config.include_debug_info}</td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="cfg_keep_stats"}</td>
-            <td class="adminRowL">{$config.keep_stats}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_weblog_google_analytics"}</td>
             <td class="adminRowL">{$config.google_analytics|default:'-'}</td>
         </tr>
@@ -207,10 +203,6 @@
             <tr>
                 <td class="adminRowL">{$form.include_debug_info.label_html}</td>
                 <td class="adminRowL">{$form.include_debug_info.html}</td>
-            </tr>
-            <tr>
-                <td class="adminRowL">{$form.keep_stats.label_html}</td>
-                <td class="adminRowL">{$form.keep_stats.html}</td>
             </tr>
             <tr>
                 <td class="adminRowL">{$form.google_analytics.label_html}</td>

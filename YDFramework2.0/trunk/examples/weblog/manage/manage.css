@@ -228,18 +228,6 @@ td.leftCol {
     width: 200px;
 }
 
-td.adminGraphD {
-	background: url(images/default-bg.gif);
-	background-position: 0% 100%;
-	background-repeat: repeat-x;
-}
-
-td.adminGraphL {
-	background: url(images/nav-bg.gif);
-	background-position: 0% 100%;
-	background-repeat: repeat-x;
-}
-
 a.leftColSelected {
     color: darkred;
     font-weight: bold;
@@ -260,7 +248,6 @@ a.no {
 a.helpLink {
     cursor: pointer;
 }
-
 
 input[type=checkbox], input[type=radio] { border:none; }
 input[type=submit], input[type=button] { background:white url(images/nav-bg.gif) bottom repeat-x; }

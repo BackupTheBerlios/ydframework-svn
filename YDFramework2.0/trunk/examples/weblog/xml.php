@@ -17,7 +17,6 @@
         // Function to output the feed
         function outputXml( $type ) {
             $this->feed->outputXml( $type );
-            $this->_logRequest();
         }
 
         // Default action

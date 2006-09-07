@@ -293,7 +293,7 @@ $GLOBALS['t']['cfg_auto_close_items'] = 'Laat geen commentaren toe na x dagen';
 $GLOBALS['t']['err_auto_close_items'] = 'Laat geen commentaren toe na x dagen moet een getal zijn';
 $GLOBALS['t']['cfg_include_debug_info'] = 'Toon debugging informatie';
 $GLOBALS['t']['cfg_default_item_settings'] = 'Standaard waardes voor nieuwe posts';
-$GLOBALS['t']['cfg_weblog_google_analytics'] = 'Google Analytics Account';
+$GLOBALS['t']['cfg_weblog_google_analytics'] = '<a href="http://www.google.com/analytics/" target="_blank">Google Analytics</a> Account';
 $GLOBALS['t']['cfg_google_analytics'] = 'Google Analytics';
 $GLOBALS['t']['cfg_keep_stats'] = 'Houdt statistieken bij';
 $GLOBALS['t']['cfg_blocked_ips'] = 'Geblokkeerde IP adressen gescheiden door comma\'s. Je kan een sterretje gebruiken als wildcard.';

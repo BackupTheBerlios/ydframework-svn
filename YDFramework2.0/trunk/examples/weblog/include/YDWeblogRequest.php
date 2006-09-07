@@ -36,7 +36,6 @@
             $this->dir_uploads = YDConfig::get( 'dir_uploads', 'uploads' );
             $this->dir_skins   = YDConfig::get( 'dir_skins',   'skins' ) . '/';
 
-
             // Default to default skin
             if ( ! is_dir( dirname( __FILE__ ) . '/../' . $this->dir_skins . $this->skin . '/' ) ) {
                 YDConfig::set( 'weblog_skin', 'default' );
@@ -61,9 +60,6 @@
             $this->tpl->register_modifier( 'link_thumb_small', 'YDTplModLinkThumbSmall' );
             $this->tpl->register_modifier( 'text_num_comments', 'YDTplModTextNumComments' );
             $this->tpl->register_modifier( 'text_num_images', 'YDTplModTextNumImages' );
-
-            // Get the browser information
-            $this->browser = new YDBrowserInfo();
 
         }
 
@@ -180,7 +176,6 @@
         // Fetch a template
         function fetch( $customTpl=null ) {
             $this->initTemplate();
-            $this->_logRequest();
             $data = $this->tpl->fetch( $customTpl );
             if ( YDConfig::get( 'use_cache', false ) ) {
                 if ( $this->caching === true ) {
@@ -201,48 +196,6 @@
         function getTemplateName( $customTpl=null ) {
             $name = is_null( $customTpl ) ? strtolower( get_class( $this ) ) : $customTpl;
             return  $this->tpl->template_dir . $name . YD_TPL_EXT;
-        }
-
-        // Function to disbable request logging
-        function _logRequest() {
-
-            // Check if we need to log statistics or not
-            if ( YDConfig::get( 'keep_stats', true ) ) {
-
-                // Get the logging data
-                $values = array();
-                $values['uri'] = str_replace( dirname( YD_SELF_SCRIPT ) . '/', '', $this->getNormalizedUri() );
-                if ( substr( $values['uri'], 0, 1 ) == '/' ) {
-                    $values['uri'] = substr( $values['uri'], 1 );
-                }
-                if ( substr( $values['uri'], 0, 4 ) == '.php' ) {
-                    $values['uri'] = basename( YD_SELF_SCRIPT ) . substr( $values['uri'], 4 );
-                }
-                $values['date'] = strftime( '%Y-%m-%d' );
-                $values['browser'] = $this->browser->browser;
-                $values['platform'] = $this->browser->platform;
-
-                // Fix the short URLs so that they all look the same
-                if ( YDConfig::get( 'friendly_urls', true ) && strpos( $values['uri'], '_' ) ) {
-                    if ( YDStringUtil::startswith( $values['uri'], 'image/', false ) ) {
-                        $values['uri'] = 'item_gallery.php?id=' . substr( $values['uri'], 6 );
-                    } elseif ( YDStringUtil::startswith( $values['uri'], 'archive' ) ) {
-                    } else {
-                        $values['uri'] = substr( $values['uri'], 0, strpos( $values['uri'], '_' ) )
-                                       . substr( $values['uri'], strpos( $values['uri'], '.php?id=' ) );
-                    }
-                }
-
-                // Add index.php
-                if ( empty( $values['uri'] ) && basename( YD_SELF_SCRIPT ) == 'index.php' ) {
-                    $values['uri'] = 'index.php';
-                }
-
-                // Add them to the database
-                $this->weblog->logRequestToStats( $values );
-
-            }
-
         }
 
         // Check for authentication
@@ -317,7 +270,6 @@
             $this->tpl->assign( 'weblog_description', YDConfig::get( 'weblog_description', 'Untitled Weblog Description' ) );
             $this->tpl->assign( 'weblog_language',    YDConfig::get( 'weblog_language', 'en' ) );
             $this->tpl->assign( 'google_analytics',   YDConfig::get( 'google_analytics', '' ) != '' );
-            $this->tpl->assign( 'keep_stats',         YDConfig::get( 'keep_stats', true ) );
 
             // Get the link to the different directories
             $uploads_dir = YDUrl::makeLinkAbsolute( '../' . $this->dir_uploads );

@@ -162,7 +162,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 4;
+            $current_schema = 5;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -204,6 +204,10 @@
                 $this->db->executeSql( 'ALTER TABLE #_schemaversion CHANGE installed installed INT(11)' );
                 $this->db->executeSql( 'UPDATE #_schemaversion SET installed = unix_timestamp() WHERE installed = 0' );
 
+                // Drop the statistics tables
+                $this->db->executeSql( 'DROP TABLE #_statistics' );
+                $this->db->executeSql( 'DROP TABLE #_statistics_init' );
+
                 // Update the schema information
                 $this->setSchemaVersion( $current_schema );
 
@@ -223,34 +227,6 @@
             if ( in_array( $needle, $haystack ) ) {
                 $this->db->executeSql( $sql );
             }
-        }
-
-        // Function to log a request to the statistics
-        function logRequestToStats( $values ) {
-
-            // Default to index.php
-            if ( ! empty( $values['uri'] ) ) {
-
-                // Create the where clause
-                $where = array();
-                foreach ( $values as $key=>$val ) {
-                    array_push( $where, $key . '=' . $this->str( $val ) );
-                }
-                $where =implode( ' and ', $where );
-
-                // Generate the SQL statement
-                $sql = $this->db->_createSqlUpdate( '#_statistics', $values, $where );
-                $sql = str_replace( ' WHERE', ',hits=hits+1 WHERE', $sql );
-
-                // Execute the SQL
-                $affected = $this->db->executeSql( $sql );
-                if ( $affected === 0 ) {
-                    $values['hits'] = '1';
-                    $this->db->executeInsert( '#_statistics', $values );
-                }
-
-            }
-
         }
 
         // Function to auto add some records to an item
@@ -713,30 +689,6 @@
             );
         }
 
-        // Get the install date
-        function getInstallDate() {
-            return strtotime( $this->db->getValue( 'SELECT created FROM #_statistics_init LIMIT 1' ) );
-        }
-
-        // Get the total num of hits
-        function getTotalHits() {
-            $result = $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics' );
-            return empty( $result ) ? 0 : $result;
-        }
-
-        // Get the total num of hits without the bots
-        function getTotalHitsNoBots() {
-            $result = $this->db->getValue( 'SELECT SUM(hits) FROM #_statistics WHERE browser != \'bot\'' );
-            return empty( $result ) ? 0 : $result;
-        }
-
-        // Reset the statistics
-        function resetStats() {
-            $this->db->executeSql( 'truncate #_statistics' );
-            $this->db->executeSql( 'truncate #_statistics_init' );
-            $this->db->executeInsert( '#_statistics_init', array( 'created' => $this->db->getDate( '__NOW__' ) ) );
-        }
-
         // Get the number of items
         function getStatsItemCount() {
             return $this->db->getValue( 'SELECT count(*) FROM #_items' );
@@ -745,85 +697,6 @@
         // Get the number of comments
         function getStatsCommentCount() {
             return $this->db->getValue( 'SELECT count(*) FROM #_comments' );
-        }
-
-        // Get the stats from the last 6 months
-        function getStatsMonths( $limit=6 ) {
-            YDInclude( 'YDDate.php' );
-            $records = $this->db->getRecords(
-                'SELECT DATE_FORMAT(date,\'%Y-%m\') AS YearMonth, SUM(hits) AS hits FROM #_statistics '
-              . ' GROUP BY YearMonth ORDER BY date DESC', $limit
-            );
-            foreach ( $records as $key=>$record ) {
-                $date = new YDDate( $record['yearmonth'] . '-01' );
-                $records[$key]['yearmonth'] = $record['yearmonth'] . ' (' . strtolower( $date->getMonthName() ) . ')';
-            }
-            return $records;
-        }
-
-        // Get the stats from the last 7 days
-        function getStatsDays( $limit=7 ) {
-            YDInclude( 'YDDate.php' );
-            $records = $this->db->getRecords(
-                'SELECT date, SUM(hits) AS hits FROM #_statistics GROUP BY date ORDER BY date DESC', $limit
-            );
-            foreach ( $records as $key=>$record ) {
-                $date = new YDDate( $record['date'] );
-                $records[$key]['date'] = $record['date'] . ' (' . strtolower( $date->getDayName() ) . ')';
-            }
-            return $records;
-        }
-
-        // Get the top 10 URLs
-        function getStatsUrls( $limit=10 ) {
-            return $this->db->getRecords(
-                'SELECT uri, SUM(hits) AS hits FROM #_statistics GROUP BY uri ORDER BY hits DESC', $limit
-            );
-        }
-
-        // Get the browser statistics
-        function getStatsBrowser() {
-            $browsers = array(
-                'bot'       => 'Automatic Bots',
-                'opera'     => 'Opera',
-                'ie'        => 'Internet Explorer',
-                'safari'    => 'Apple Safari',
-                'konqueror' => 'Konqueror',
-                'feed'      => 'RSS Reader',
-                'mozilla'   => 'Netscape/Mozilla/FireFox',
-                'unknown'   => t('other'),
-            );
-            $browserStats = $this->db->getRecords(
-                'SELECT browser, SUM(hits) AS hits FROM #_statistics GROUP BY browser ORDER BY hits DESC'
-            );
-            if ( sizeof( $browserStats ) > 0 ) {
-                foreach ( $browserStats as $key=>$val ) {
-                    $browserStats[$key]['browser'] = $browsers[ $val['browser'] ];
-                }
-            }
-            return $browserStats;
-        }
-
-        // Get the OS statistics
-        function getStatsOs() {
-            $platforms = array(
-                'win'       => 'Microsoft Windows',
-                'mac'       => 'Apple Macintosh',
-                'linux'     => 'Linux',
-                'unix'      => 'Unix',
-                'bot'       => 'Automatic Bots',
-                'feed'      => 'RSS Reader',
-                'unknown'   => t('other'),
-            );
-            $osStats = $this->db->getRecords(
-                'SELECT platform, SUM(hits) AS hits FROM #_statistics GROUP BY platform ORDER BY hits DESC'
-            );
-            if ( sizeof( $osStats ) > 0 ) {
-                foreach ( $osStats as $key=>$val ) {
-                    $osStats[$key]['platform'] = $platforms[ $val['platform'] ];
-                }
-            }
-            return $osStats;
         }
 
         // Get the commenter statistics
