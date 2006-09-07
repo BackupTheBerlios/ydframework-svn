@@ -615,7 +615,6 @@
             // Filters should only be applied if the form is submitted and if the element type supports it.
             if ( $this->isSubmitted() ) {
                 if ( $applyFilters == true ) {
-                    $value = $this->_applyFilter( '__ALL__', $value );
                     $value = $this->_applyFilter( $name, $value );
                 }
             } else {
