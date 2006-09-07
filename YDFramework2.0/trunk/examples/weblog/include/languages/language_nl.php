@@ -327,7 +327,7 @@ $GLOBALS['t']['no_images_yet'] = 'Nog geen foto\'s';
 $GLOBALS['t']['image'] = 'foto';
 $GLOBALS['t']['images'] = 'foto\'s';
 $GLOBALS['t']['item'] = 'Item';
-$GLOBALS['t']['edit_meta'] = 'metadata';
+$GLOBALS['t']['edit_meta'] = 'informatie';
 
 // manage/index.tpl
 $GLOBALS['t']['latest_items'] = 'Laatste items';
