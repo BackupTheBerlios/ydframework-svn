@@ -345,7 +345,7 @@ $GLOBALS['t']['bck_structure_only'] = 'Enkel de structuur';
 $GLOBALS['t']['bck_data_only'] = 'Enkel de data';
 
 // manage/version_info.tpl
-$GLOBALS['t']['h_diagtools'] = 'Diagnose tools';
+$GLOBALS['t']['h_diagtools'] = 'Tools';
 $GLOBALS['t']['a_version_info'] = 'Auto Update';
 $GLOBALS['t']['version_check'] = 'Controleer Versie';
 $GLOBALS['t']['installed_version'] = 'Ge&iuml;nstalleerde versie';

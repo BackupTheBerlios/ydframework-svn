@@ -1,6 +1,6 @@
 {include file="__mng_header.tpl"}
 
-<p class="title">{t w="h_maintenance"} &raquo; {t w="a_cleanup_cache"}</p>
+<p class="title">{t w="h_diagtools"} &raquo; {t w="a_cleanup_cache"}</p>
 
 {if $message}
     <p><table width="700" cellspacing="0" cellpadding="0" border="0">

@@ -1,6 +1,6 @@
 {include file="__mng_header.tpl"}
 
-<p class="title">{t w="h_maintenance"} &raquo; {t w="a_db_backup"}</p>
+<p class="title">{t w="h_diagtools"} &raquo; {t w="a_db_backup"}</p>
 
 {if $form.errors}
     <p><table width="700" cellspacing="0" cellpadding="0" border="0">

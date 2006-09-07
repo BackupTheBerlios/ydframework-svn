@@ -1,6 +1,6 @@
 {include file="__mng_header.tpl"}
 
-<p class="title">{t w="h_maintenance"} &raquo; {t w="a_server_info"}</p>
+<p class="title">{t w="h_diagtools"} &raquo; {t w="a_server_info"}</p>
 
 <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
