@@ -315,13 +315,9 @@
          *  @param  $raw      (optional) Indicates if the value is a raw value.
          */
         function setDefault( $name, $value, $raw=false ) {
-
             if ( array_key_exists( $name, $this->_elements ) ) {
-
                 $element = & $this->getElement( $name );
                 $element->setDefault( $value, $raw );
-
-                // Update the value for the existing elements
                 if ( ! $this->isSubmitted() ) {
                     if ( $raw ) {
                         $element->setRawValue( $value );
@@ -329,12 +325,9 @@
                         $element->setValue( $value );
                     }
                 }
-
             } else {
                 $this->_defaults[ $name ] = $value;
             }
-
-
         }
 
         /**
@@ -480,13 +473,7 @@
          *  @returns  A boolean indicating if the element exists.
          */
         function isElement( $name ) {
-            
-            // Check if the element exists
-            if ( array_key_exists( $name, $this->_elements ) ) {
-                return true;
-            }
-            return false;
-            
+            return array_key_exists( $name, $this->_elements ) ? true : false;
         }
 
         /**
@@ -498,34 +485,24 @@
          *  @param  $options       (Optional) Custom filter options.
          */
         function addFilter( $element, $filter, $options = null ) {
-
-            // Check if the element is an array or not
+            if ( is_string( $element) && $element == '__ALL__' ) {
+                $element = array_keys( $this->_elements );
+            }
             if ( is_array( $element ) ) {
-
-                // Add the rule for each element
                 foreach ( $element as $e ) {
                     $this->addFilter( $e, $filter, $options );
                 }
-
-                // Return
                 return;
-
             }
-
-            // Check if it's a known filter
             if ( ! array_key_exists( $filter, $this->_regFilters ) ) {
                 trigger_error( 'Unknown filter "' . $filter . '" for element "' . $element . '"', YD_ERROR );
             }
-
-            // Include the filter file
             if ( ! empty( $this->_regFilters[ $filter ]['file'] ) ) {
                 YDInclude( $this->_regFilters[ $filter ]['file'] );
             }
-
-            // Initialize the element
-            if ( ! @ is_array( $this->_filters[ $element ] ) ) { $this->_filters[ $element ] = array(); }
-
-            // Add the filter
+            if ( ! @ is_array( $this->_filters[ $element ] ) ) {
+                $this->_filters[ $element ] = array();
+            }
             array_push( $this->_filters[ $element ], array( $filter, $options ) );
         }
 
@@ -553,40 +530,25 @@
          *  @param  $options    (optional) The options to pass to the validator function.
          */
         function addRule( $element, $rule, $error, $options=null ) {
-
-			// Check if element is special element '__ALL__'
-			if ( is_string( $element) && $element == '__ALL__' ) $element = array_keys( $this->_elements );
-
-            // Check if the element is an array or not
+            if ( is_string( $element) && $element == '__ALL__' ) {
+                $element = array_keys( $this->_elements );
+            }
             if ( is_array( $element ) ) {
-
-                // Add the rule for each element
                 foreach ( $element as $e ) {
                     $this->addRule( $e, $rule, $error, $options );
                 }
-
-                // Return
                 return;
-
             }
-
-            // Check if it's a known filter
             if ( ! array_key_exists( $rule, $this->_regRules ) ) {
                 trigger_error( 'Unknown rule "' . $rule . '" for element "' . $element . '"', YD_ERROR );
             }
-
-            // Include the rule file
             if ( ! empty( $this->_regRules[ $rule ]['file'] ) ) {
                 YDInclude( $this->_regRules[ $rule ]['file'] );
             }
-
-            // Initialize the element
-            if ( ! @ is_array( $this->_rules[ $element ] ) ) { $this->_rules[ $element ] = array(); }
-
-            // Add the rule
+            if ( ! @ is_array( $this->_rules[ $element ] ) ) {
+                $this->_rules[ $element ] = array();
+            }
             array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
-
-
         }
 
         /**
@@ -691,10 +653,9 @@
         function getValues() {
             $vars = array();
             foreach ( $this->_elements as $name => $element ) {
-
-                // check if elements are special
-                if ( $element->getType() == 'span' ) continue;
-
+                if ( $element->getType() == 'span' ) {
+                    continue;
+                }
                 $vars[ $name ] = $this->getValue( $name );
             }
             return $vars;
@@ -710,21 +671,17 @@
          *  @returns    An array/string containing all active error messages
          */
         function getErrors( $asString = false, $separator = "\n", $initial = '' ) {
-
-            // get form errors
             $errors = array_unique( array_values( $this->_errors ) );
-
-            // if we want a string, we must implode with custom separator and use initial string
-            if ( $asString ) $errors = $initial . implode( $separator, $errors );
-
-            // return errors
+            if ( $asString ) {
+                $errors = $initial . implode( $separator, $errors );
+            }
             return $errors;
         }
 
         /**
-         *      Gets the name of the form.
+         *  Gets the name of the form.
          *
-         *      @returns        The name of the form.
+         *  @returns        The name of the form.
          */
         function getName() {
             return $this->_name;
@@ -736,28 +693,14 @@
          *  @returns    Boolean indicating if the form was submitted or not.
          */
         function isSubmitted() {
-
-            // Get the right variables
-            if ( $this->_method == 'get' ) {
-                $vars = $_GET;
-            } else {
-                $vars = $_POST;
-            }
-
-            // Loop over the post variables
+            $vars = ( $this->_method == 'get' ) ? $_GET : $_POST;
             foreach ( $vars as $key=>$value ) {
-
-                // Remove the form name from the element name
                 $key = preg_replace( '/^' . $this->_name . '_/', '', $key );
-
-                // Check if the key is a form element
-                if ( array_key_exists( $key, $this->_elements ) ) { return true; };
-
+                if ( array_key_exists( $key, $this->_elements ) ) {
+                    return true;
+                };
             }
-
-            // Return false
             return false;
-
         }
 
         /**
@@ -768,23 +711,13 @@
          *  @returns    Boolean indicating if the button was clicked or not.
          */
         function isClicked( $button ) {
-
-            // Get the element.
             $element = $this->getElement( $button );
-
-            // Check if it's a button
             if ( $element->isButton() === true ) {
-
-                // Check the post variables
                 if ( array_key_exists( $this->_name . '_' . $element->_name, $this->_formVars ) ) {
                     return true;
                 }
-
             }
-
-            // Return false in all other cases
             return false;
-
         }
 
         /**
@@ -819,7 +752,6 @@
             return $this->validate( $customvalues );
         }
 
-
         /**
          *  This function will return true if the form is valid. If not, it will return false.
          *
@@ -852,7 +784,8 @@
 
                         // Set the value
                         $this->_elements[ $key ]->setValue( $value );
-						$this->setDefault( $key, $value );
+                        $this->setDefault( $key, $value );
+
                     }
                 }
             }
@@ -930,6 +863,7 @@
                             }
                         }
 
+                        // Check mandatory elements
                         if ( $mandatory ) {
 
                             // Check the rule
@@ -1089,15 +1023,10 @@
          *  @returns    The rendered form.
          */
         function render( $type ) {
-
-            // Get the renderer object
             $instance = $this->getRenderer( $type );
-
-            // Return the rendered form
             return $instance->render();
-
         }
-        
+
         /**
          *  This function will use the import feature of the renderers to define
          *  the object with new settings from the content returned by the render method.
@@ -1107,19 +1036,13 @@
          *  @param  $options   (optional) Additional options.
          */
         function import( $type, $content, $options=array() ) {
-
-            // Get the renderer object
             $instance = $this->getRenderer( $type );
-
-            // Import the form
             $new_this = $instance->import( $content, $options );
-            
             foreach ( get_object_vars( $new_this ) as $key => $val ) {
                 $this->$key = $val;
             }
-
         }
-        
+
         /**
          *  This function will return an instance of a renderer class.
          *
@@ -1128,25 +1051,15 @@
          *  @returns    The renderer object.
          */
         function getRenderer( $type ) {
-            
-            // Check if the renderer is known
             if ( ! array_key_exists( $type, $this->_regRenderers ) ) {
                 trigger_error( 'Unknown for renderer type "' . $type . '".', YD_ERROR );
             }
-
-            // Include the renderer file
             if ( ! empty( $this->_regRenderers[ $type ]['file'] ) ) {
                 YDInclude( $this->_regRenderers[ $type ]['file'] );
             }
-
-            // Check if the class exists
             $class = $this->_regRenderers[ $type ]['class'];
-
-            // Return the instance
             return new $class( $this );
-        
         }
-
 
         /**
          *  This function will return the form as an array.
@@ -1241,11 +1154,9 @@
          *  @param $array   Associative array containing the default values.
          */
         function setRawDefaults( $array ) {
-
             foreach ( $array as $key => $val ) {
                 $this->setDefault( $key, $val, true );
             }
-
         }
 
         /**
@@ -1284,9 +1195,7 @@
          *  @returns      The default value of the element.
          */
         function getDefault( $name ) {
-
             $element = & $this->getElement( $name );
-
             if ( ! is_null( $element->_default ) ) {
                 return $element->getDefault();
             }
@@ -1298,22 +1207,16 @@
          *  @returns  The modified elements and it's values as an associative array.
          */
         function getModifiedValues() {
-
             $modified = array();
-
             if ( $this->isSubmitted() ) {
-
                 foreach ( $this->_elements as $name => $element ) {
                     if ( $element->isModified() ) {
                         $modified[ $name ] = $this->getValue( $name );
                     }
                 }
-
             }
-
             return $modified;
         }
-
     }
 
     /**
@@ -1370,7 +1273,6 @@
             $this->_attributes[$key] = $val;
         }
 
-
         /**
          *  Function to set attributes of a form element
          *
@@ -1381,7 +1283,6 @@
                 $this->setAttribute( $k, $v );
         }
 
-
         /**
          *  Function to delete an attribute of a form element
          *
@@ -1391,7 +1292,6 @@
             if ( isset( $this->_attributes[$key] ) ) unset( $this->_attributes[$key] );
         }
 
-
         /**
          *  Function to delete all attributes of a form element
          */
@@ -1399,7 +1299,6 @@
             $this->_attributes = array() ;
         }
 
-		
         /**
          *  Function to set the option of a form element
          *
@@ -1408,8 +1307,7 @@
          */
         function setOption( $key, $val ) {
             $this->_options[$key] = $val;
-        }		
-
+        }
 
         /**
          *  Function to delete an option of a form element
@@ -1420,14 +1318,12 @@
             if ( isset( $this->_options[$key] ) ) unset( $this->_options[$key] );
         }
 
-
         /**
          *  Function to delete all options of a form element
          */
         function delOptions() {
             $this->_options = array();
         }
-
 
         /**
          *  This function sets the value for the element.
@@ -1522,7 +1418,7 @@
         function getOptions() {
             return $this->_options;
         }
-        
+
         /**
          *      Gets the name of the form.
          *
@@ -1615,15 +1511,12 @@
         function toHtml() {
         }
 
-
         /**
          *	This function returns the default javascript event of this element
          */
         function getJSEvent(){ 
-
             die( 'Element type (' . $this->getType() . ') is not supported in YDAjax' );
         }
-
 
         /**
          *	This function gets an element value using javascript
@@ -1631,10 +1524,8 @@
          *	@param $options		(optional) The options for the elment.
          */
         function getJS( $options = null ){ 
-
             die( 'Element type (' . $this->getType() . ') is not supported in YDAjax events' );
         }
-
 
         /**
          *	This function sets an element value using javascript
@@ -1644,11 +1535,8 @@
          *	@param $options		(optional) The options for the elment.
          */
         function setJS( $result, $attribute = null, $options = null ){ 
-
             die( 'Element type (' . $this->getType() . ') is not supported in YDAjax responses' );
         }
-
-
 
     }
 
@@ -1706,18 +1594,10 @@
      *  @returns The filtered data as a string.
      */
     function YDFormFilter_safe_html( $data ) {
-
-        // Include the safe_html library
         require_once( YD_DIR_HOME . '/3rdparty/safehtml/classes/safehtml.php' );
-
-        // Instantiate the handler
         $safehtml = & new safehtml();
-
-        // Return the filtered data
         return $safehtml->parse( $data );
-
     }
-
 
     /**
      *  This filter reads a date form element result and returns a custom result
@@ -1728,15 +1608,11 @@
      *  @returns The filtered data as a string.
      */
     function YDFormFilter_dateformat( $data, $option = "timestamp" ) {
-
-        // check if option is a array member
-        if ( isset( $data[ $option ] ) ) return $data[ $option ];
-
-        // if not a member we want a custom date format eg: "datetimesql", "%b"
+        if ( isset( $data[ $option ] ) ) {
+            return $data[ $option ];
+        }
         YDInclude( 'YDUtil.php' );
-
         return YDStringUtil::formatDate( $data, $option );
     }
-
 
 ?>
