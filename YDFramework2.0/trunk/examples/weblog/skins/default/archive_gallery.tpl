@@ -23,7 +23,7 @@
                                 {/if}
                             </td>
                         {/foreach}
-                    <tr/>
+                    </tr>
                     {/foreach}
                 </table>
                 </p>

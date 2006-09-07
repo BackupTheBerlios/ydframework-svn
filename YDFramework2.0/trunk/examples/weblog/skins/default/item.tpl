@@ -60,7 +60,7 @@
                         {/if}
                     </td>
                 {/foreach}
-            <tr/>
+            </tr>
             <tr>
                 {foreach from=$image_row item="image"}
                     <td width="33%" align="center">
@@ -71,7 +71,7 @@
                         {/if}
                      </td>
                 {/foreach}
-            <tr/>
+            </tr>
             {/foreach}
             </table></p>
         {/if}
