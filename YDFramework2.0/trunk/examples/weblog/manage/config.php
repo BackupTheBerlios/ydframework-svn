@@ -31,6 +31,9 @@
             $config['include_debug_info']  = ( $config['include_debug_info'] ) ? t('yes') : t('no');
             $config['dflt_is_draft']       = ( $config['dflt_is_draft'] ) ? t('yes') : t('no');
 
+            // Hide the database password if any
+            $config['db_pass'] = str_repeat( '*', strlen( $config['db_pass'] ) );
+
             // Assign it to the template
             $this->tpl->assign( 'config', $config );
 
@@ -69,7 +72,7 @@
             $form->addElement( 'text', 'db_host', t( 'cfg_db_host' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_name', t( 'cfg_db_name' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_user', t( 'cfg_db_user' ), array( 'class' => 'tfM' ) );
-            $form->addElement( 'text', 'db_pass', t( 'cfg_db_pass' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'password', 'db_pass', t( 'cfg_db_pass' ), array( 'class' => 'tfM' ) );
             $form->addElement( 'text', 'db_prefix', t( 'cfg_db_prefix' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'text', 'weblog_title', t( 'cfg_weblog_title' ), array( 'class' => 'tfM' ) );
