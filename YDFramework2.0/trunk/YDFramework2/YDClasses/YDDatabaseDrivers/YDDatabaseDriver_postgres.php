@@ -104,7 +104,7 @@
         function getRecord( $sql ) {
             $result = & $this->_connectAndExec( $sql );
             $type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? PGSQL_NUM : PGSQL_ASSOC;
-            return $this->_lowerKeyNames( pg_fetch_array( $result, $type ) );
+            return $this->_lowerKeyNames( pg_fetch_array( $result, NULL, $type ) );
         }
 
         /**
@@ -123,7 +123,7 @@
             $result = & $this->_connectAndExec( $sql );
             $type = YDConfig::get( 'YD_DB_FETCHTYPE' ) == YD_DB_FETCH_NUM ? PGSQL_NUM : PGSQL_ASSOC;
             $dataset = array();
-            while ( $line = $this->_lowerKeyNames( pg_fetch_array( $result, $type ) ) ) {
+            while ( $line = $this->_lowerKeyNames( pg_fetch_array( $result, NULL, $type ) ) ) {
                 array_push( $dataset, $line );
             }
             pg_free_result( $result );
