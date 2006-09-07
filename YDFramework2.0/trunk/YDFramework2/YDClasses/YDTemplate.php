@@ -555,8 +555,8 @@
         if ( empty( $string ) ) {
             $string = "now";
         }
-        if ( is_numeric( $time ) && $time != -1 ) {
-            return intval( $time );
+        if ( is_numeric( $string ) && $time != -1 ) {
+            return intval( $string );
         }
         if ( preg_match( '/^\d{14}$/', $string ) ) {
             $time = mktime(
