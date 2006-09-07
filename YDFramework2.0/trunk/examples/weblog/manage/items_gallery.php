@@ -19,7 +19,7 @@
             $id = $this->getIdFromQS();
 
             // Get the weblog details and go to the default view if none is matched
-            $this->item  = @ $this->weblog->getItemById( $id );
+            $this->item = @ $this->weblog->getItemById( $id );
             if ( ! $this->item ) {
                 $this->redirect( 'items.php' );
             }
@@ -158,6 +158,19 @@
 
             // Redirect
             $this->redirect( '../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $file );
+
+        }
+
+        // Action to edit the metadata
+        function actionEditMetaData() {
+
+            // Update the image metadata for the submitted items
+            foreach ( $_POST['metadata'] as $item => $data ) {
+                YDDebugUtil::dump( $this->weblog->setItemImageMetaData( $item, $data ) );
+            }
+
+            // Redirect to the list view
+            $this->redirect( YD_SELF_SCRIPT . '?id=' . $this->item['id'] );
 
         }
 

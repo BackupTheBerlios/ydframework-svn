@@ -100,3 +100,10 @@
 	height: 1%;
 	}	
 	
+p.img_description {
+	font-style: italic;
+	font-weight: normal;
+	margin: 8px;
+	padding: 0px;
+	margin-left: 24px;
+}

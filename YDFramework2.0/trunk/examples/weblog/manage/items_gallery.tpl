@@ -49,37 +49,43 @@
         {/if}
     {/capture}
 
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <th class="adminRowLG" colspan="7">
+            &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
+            ({$item.title})
+            &nbsp;
+            <a href="../item.php?id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
+        </th>
+    </tr>
+
+    <tr><td colspan="7">&nbsp;</td></tr>
+    <tr>
+        <th class="adminRowLG" colspan="7">
+            &raquo; <a href="comments.php?id={$item.id}" style="font-weight: bold">{t w="a_comments"}</a>
+            ({$item|@text_num_comments:true})
+        </th>
+    </tr>
+
+    <tr><td colspan="7">&nbsp;</td></tr>
+    <tr>
+        <th class="adminRowLG" colspan="7">
+            &raquo; {t w="gallery"}
+        </th>
+    </tr>
+    </table>
+
+    {*<table width="700" cellspacing="0" cellpadding="0" border="0">
     {$form.tag}
-        {$form.action.html}
-
-        <table width="700" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <th class="adminRowLG" colspan="7">
-                &raquo; <a href="items.php?do=edit&id={$item.id}" style="font-weight: bold">{t w="change_item_desc"}</a>
-                ({$item.title})
-                &nbsp;
-                <a href="../item.php?id={$item.id}" target="_blank"><img src="images/more_details.gif" border="0" /></a>
-            </th>
-        </tr>
-
-        <tr><td colspan="7">&nbsp;</td></tr>
-        <tr>
-            <th class="adminRowLG" colspan="7">
-                &raquo; <a href="comments.php?id={$item.id}" style="font-weight: bold">{t w="a_comments"}</a>
-                ({$item|@text_num_comments:true})
-            </th>
-        </tr>
-
-        <tr><td colspan="7">&nbsp;</td></tr>
-        <tr>
-            <th class="adminRowLG" colspan="7">
-                &raquo; {t w="gallery"}
-            </th>
-        </tr>
         <tr>
             <td class="adminRowL" colspan="5">{$form.image.html}</td>
             <td class="adminRowR" colspan="2">{$form._cmdSubmit.html}</td>
         </tr>
+    {$form.endtag}
+    </table>*}
+
+    <form name="metaDataForm" id="metaDataForm" action="{$YD_SELF_SCRIPT}?do=editMetaData&id={$item.id}" method="POST">
+        <table width="700" cellspacing="0" cellpadding="0" border="0">
         {if $images->set}
             <tr>
                 <th class="adminRowL" width="20%">{t w="date"}</th>
@@ -106,6 +112,18 @@
                     <td class="adminRowR" valign="top">
                         <a href="{$YD_SELF_SCRIPT}?do=delete&id={$item.id}&img={$image->relative_path}"
                          onClick="return YDConfirmDelete( '{$image->getBaseName()|addslashes}' );">{t w="delete"}</a>
+                        <br/>
+                        <a href="#" onClick="YDShowHideElement( 'meta_{$image->getBaseName()|@addslashes}' );return false;">{t w="edit_meta"}</a>
+                    </td>
+                </tr>
+                <tr id="meta_{$image->getBaseName()}" style="display: none;">
+                    <td class="adminRowL" colspan="5">
+                        <input class="tfM" type="text" name="metadata[{$image->relative_path}][title]" value="{$image->title}"/>
+                        <br/>
+                        <textarea class="tfMNoMCE" name="metadata[{$image->relative_path}][description]">{$image->description}</textarea>
+                    </td>
+                    <td class="adminRowR" colspan="2">
+                        <input type="submit" class="button" value="{t w="save"}" />
                     </td>
                 </tr>
             {/foreach}
@@ -121,8 +139,7 @@
             </tr>
         {/if}
         </table>
-
-    {$form.endtag}
+    </form>
 
 {/if}
 

@@ -17,7 +17,7 @@
                         {foreach from=$image_row item="image"}
                             <td width="12%" align="center" valign="middle" height="60">
                                 {if $image}
-                                    <a href="item_gallery.php?id={$image->relative_path}"><img src="{$image|link_thumb_small}" alt="{$image->getBaseName()}" width="{$image->relative_path_s_obj->getWidth()}" height="{$image->relative_path_s_obj->getHeight()}"></a>
+                                    <a href="item_gallery.php?id={$image->relative_path}"><img src="{$image|link_thumb_small}" alt="{$image->title}" width="{$image->relative_path_s_obj->getWidth()}" height="{$image->relative_path_s_obj->getHeight()}"></a>
                                 {else}
                                     &nbsp;
                                 {/if}

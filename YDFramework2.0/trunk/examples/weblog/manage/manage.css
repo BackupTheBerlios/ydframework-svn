@@ -169,6 +169,20 @@ td.adminRowLNB, th.adminRowLNB {
     text-align: left;
 }
 
+td.adminRowCNB, th.adminRowCNB {
+    border-bottom: 0px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: center;
+}
+
+td.adminRowRNB, th.adminRowRNB {
+    border-bottom: 0px solid #DDDDDD;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    text-align: right;
+}
+
 td.adminRowC, th.adminRowC {
     border-bottom: 1px solid #DDDDDD;
     padding-top: 4px;
@@ -251,3 +265,7 @@ a.helpLink {
 
 input[type=checkbox], input[type=radio] { border:none; }
 input[type=submit], input[type=button] { background:white url(images/nav-bg.gif) bottom repeat-x; }
+
+form {
+	margin: 0px;
+}

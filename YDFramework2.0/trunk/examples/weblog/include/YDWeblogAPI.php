@@ -125,6 +125,9 @@
             // Upgrade the schema if needed
             $this->upgradeSchemaIfNeeded();
 
+            // The array that will hold the image metadata
+            $this->imagemetadata = null;
+
         }
 
         // Get the schema version
@@ -162,7 +165,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 5;
+            $current_schema = 6;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -205,8 +208,24 @@
                 $this->db->executeSql( 'UPDATE #_schemaversion SET installed = unix_timestamp() WHERE installed = 0' );
 
                 // Drop the statistics tables
-                $this->db->executeSql( 'DROP TABLE #_statistics' );
-                $this->db->executeSql( 'DROP TABLE #_statistics_init' );
+                $this->db->executeSql( 'DROP TABLE IF EXISTS #_statistics' );
+                $this->db->executeSql( 'DROP TABLE IF EXISTS #_statistics_init' );
+
+                // Create the image_metadata table
+                if ( ! $this->dbmeta->tableExists( '#_imagemetadata' ) ) {
+                    $this->db->executeSql(
+                          'CREATE TABLE #_imagemetadata ('
+                        . '  id int(11) NOT NULL auto_increment,'
+                        . '  img_path varchar(255) NOT NULL default \'\','
+                        . '  title varchar(255) default NULL,'
+                        . '  description longtext,'
+                        . '  created int(11) default NULL,'
+                        . '  modified int(11) default NULL,'
+                        . '  PRIMARY KEY  (id),'
+                        . '  UNIQUE KEY img_path (img_path)'
+                        . ')'
+                    );
+                }
 
                 // Update the schema information
                 $this->setSchemaVersion( $current_schema );
@@ -284,12 +303,10 @@
                     $image->relative_path = str_replace( $dir_uploads->getAbsolutePath(), '', $image->getAbsolutePath() );
 
                     // Update the backslashes
-                    $image->relative_path = str_replace( '\\', '/', $image->relative_path );
+                    $image->relative_path = ltrim( str_replace( '\\', '/', $image->relative_path ), '/' );
 
-                    // Remove the leading slash
-                    if ( substr( $image->relative_path, 0, 1 ) == '/' ) {
-                        $image->relative_path = substr( $image->relative_path, 1 );
-                    }
+                    // Merge the title and description if any
+                    $image = $this->getItemImageMetaData( $image );
 
                     // Make links to the thumbnails
                     $image->relative_path_s = dirname( $image->relative_path ) . '/s_' . basename( $image->relative_path );
@@ -335,6 +352,44 @@
                 $items[$key] = $this->_fixItem( $item, $order );
             }
             return $items;
+        }
+
+        // Get the title and description for an item image
+        function getItemImageMetaData( $image ) {
+
+            // Get the image metadata if not there yet
+            if ( is_null( $this->imagemetadata ) ) {
+                $this->imagemetadata = $this->db->getRecords( 'SELECT * FROM #_imagemetadata' );
+                $this->imagemetadata = YDArrayUtil::convertToNested( $this->imagemetadata, 'img_path' );
+                foreach ( $this->imagemetadata as $key=>$val ) {
+                    $this->imagemetadata[$key] = $val[0];
+                }
+            }
+
+            // Start with the default settings
+            $image->title = $image->getBasenameNoExt();
+            $image->description = '';
+
+            // Add the image data if any
+            if ( isset( $this->imagemetadata[ $image->relative_path ] ) ) {
+                $image->title = $this->imagemetadata[ $image->relative_path ]['title'];
+                $image->description = $this->imagemetadata[ $image->relative_path ]['description'];
+            }
+
+            // Return the image metadata
+            return $image;
+
+        }
+
+        // Update the image data for an item in the database
+        function setItemImageMetaData( $item, $data ) {
+            $values = $data;
+            $values['img_path'] = $item;
+            $result = $this->_executeUpdate( '#_imagemetadata', $values, 'img_path = ' . $this->str( $item ) );
+            if ( $result == '0' ) {
+                $result = $this->_executeInsert( '#_imagemetadata', $values );
+            }
+            return $result;
         }
 
         // Function to get a single item

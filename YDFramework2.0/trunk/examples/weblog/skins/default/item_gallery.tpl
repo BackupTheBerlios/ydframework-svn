@@ -25,7 +25,7 @@
 
     <div class="post">
 
-        <h2 id="post-{$item.id}"><a href="{$item|@link_item}">{$item.title}</a> &raquo; {$image->getBasenameNoExt()}</h2>
+        <h2 id="post-{$item.id}"><a href="{$item|@link_item}">{$item.title}</a> &raquo; {$image->title}</h2>
 
         <div class="entrytext">
 
@@ -33,15 +33,19 @@
             {if $image->getWidth() > $max_img_size}
                 <iframe src="{$uploads_dir}/{$image->relative_path}" width="{$max_img_size}" height="{$image->getHeight()+20}" marginwidth="0" marginheight="0"></iframe>
             {else}
-                <img src="{$uploads_dir}/{$image->relative_path}" width="{$image->getWidth()}" height="{$image->getHeight()}">
+                <img src="{$uploads_dir}/{$image->relative_path}" width="{$image->getWidth()}" height="{$image->getHeight()}" />
             {/if}
             </p>
+
+            {if $image->description}
+                {$image->description|@bbcode}
+            {/if}
 
             {$browsebar}
 
             <p class="postmetadata alt">
                 <small>
-                    {t w="image"}: {$image->getBaseName()}
+                    {t w="image"}: {$image->title}
                     ({t w="image"} {$image->num} {t w="of"} {$image->total_images})
                     <br/>
                     {t w="item"}: <a href="{$item|@link_item}">{$item.title}</a>

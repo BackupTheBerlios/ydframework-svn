@@ -36,6 +36,15 @@
             obj.bgColor = '#FFFFFF';
         {literal}}{/literal}
 
+        {literal}function YDShowHideElement( obj ) {
+            obj = document.getElementById( obj );
+            if ( obj.style.display == 'none' ) {
+                obj.style.display = '';
+            } else {
+                obj.style.display = 'none';
+            }
+        }{/literal}
+
         {literal}tinyMCE.init({
             mode : "textareas",
             editor_deselector : "tfMNoMCE",

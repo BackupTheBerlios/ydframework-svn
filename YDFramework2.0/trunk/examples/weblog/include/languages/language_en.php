@@ -327,6 +327,7 @@ $GLOBALS['t']['no_images_yet'] = 'No images yet';
 $GLOBALS['t']['image'] = 'image';
 $GLOBALS['t']['images'] = 'images';
 $GLOBALS['t']['item'] = 'Item';
+$GLOBALS['t']['edit_meta'] = 'metadata';
 
 // manage/index.tpl
 $GLOBALS['t']['latest_items'] = 'Latest items';
