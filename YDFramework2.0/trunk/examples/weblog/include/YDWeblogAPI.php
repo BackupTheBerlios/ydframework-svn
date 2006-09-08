@@ -308,6 +308,14 @@
                     // Merge the title and description if any
                     $image = $this->getItemImageMetaData( $image );
 
+                    // Create the full title, including item title, image title and description if any
+                    $image->full_description = $item['title'] . ' &raquo; ' . $image->title;
+                    if ( $image->description ) {
+                        $image->full_description .= '<p class="img_description">'
+                                                 . YDTemplate_modifier_bbcode( $image->description ) . '</p>';
+                    }
+                    $image->full_description_html = htmlspecialchars( $image->full_description, ENT_QUOTES );
+
                     // Make links to the thumbnails
                     $image->relative_path_s = dirname( $image->relative_path ) . '/s_' . basename( $image->relative_path );
                     $image->relative_path_m = dirname( $image->relative_path ) . '/m_' . basename( $image->relative_path );

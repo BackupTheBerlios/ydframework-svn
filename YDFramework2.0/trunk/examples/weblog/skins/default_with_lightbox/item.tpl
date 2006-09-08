@@ -54,7 +54,7 @@
                     <td width="33%" align="center" style="vertical-align: middle;" height="100">
                         {if $image}
                             <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
-                             title="{$item.title} &raquo; {$image->title}{if $image->description}<p class='img_description'>{$image->description|@bbcode}</p>{/if}"
+                             title="{$image->full_description_html}"
                              ><img src="{$image|link_thumb}" alt="{$image->title}"
                              width="{$image->relative_path_m_obj->getWidth()}" height="{$image->relative_path_m_obj->getHeight()}"></a>
                         {else}
@@ -68,7 +68,7 @@
                     <td width="33%" align="center">
                         {if $image}
                             <p><a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
-                             title="{$item.title} &raquo; {$image->title}{if $image->description}<p class='img_description'>{$image->description|@bbcode}</p>{/if}"
+                             title="{$image->full_description_html}"
                              >{$image->title}</a><br/>&nbsp;</p>
                         {else}
                             &nbsp;
