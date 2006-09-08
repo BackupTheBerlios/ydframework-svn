@@ -75,14 +75,14 @@
     </tr>
     </table>
 
-    {*<table width="700" cellspacing="0" cellpadding="0" border="0">
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
     {$form.tag}
         <tr>
             <td class="adminRowL" colspan="5">{$form.image.html}</td>
             <td class="adminRowR" colspan="2">{$form._cmdSubmit.html}</td>
         </tr>
     {$form.endtag}
-    </table>*}
+    </table>
 
     <form name="metaDataForm" id="metaDataForm" action="{$YD_SELF_SCRIPT}?do=editMetaData&id={$item.id}" method="POST">
         <table width="700" cellspacing="0" cellpadding="0" border="0">
