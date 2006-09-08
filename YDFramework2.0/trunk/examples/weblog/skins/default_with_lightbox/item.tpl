@@ -51,29 +51,19 @@
             {foreach from=$item.images_as_table item="image_row"}
             <tr>
                 {foreach from=$image_row item="image"}
-                    <td width="33%" align="center" style="vertical-align: middle;" height="100">
+                    <td width="33%" align="center" style="vertical-align: middle;">
                         {if $image}
-                            <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
-                             title="{$image->full_description_html}"
-                             ><img src="{$image|link_thumb}" alt="{$image->title}"
+                            <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]" 
+                             title="{$image->full_description_html}"><img src="{$image|link_thumb}" alt="{$image->title}"
                              width="{$image->relative_path_m_obj->getWidth()}" height="{$image->relative_path_m_obj->getHeight()}"></a>
+                            <br/>
+                            <a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
+                             title="{$image->full_description_html}">{$image->title}</a>
+                             <br/>&nbsp;
                         {else}
                             &nbsp;
                         {/if}
                     </td>
-                {/foreach}
-            </tr>
-            <tr>
-                {foreach from=$image_row item="image"}
-                    <td width="33%" align="center">
-                        {if $image}
-                            <p><a href="{$uploads_dir}/{$image->relative_path}" rel="lightbox[{$item.id}]"
-                             title="{$image->full_description_html}"
-                             >{$image->title}</a><br/>&nbsp;</p>
-                        {else}
-                            &nbsp;
-                        {/if}
-                     </td>
                 {/foreach}
             </tr>
             {/foreach}
