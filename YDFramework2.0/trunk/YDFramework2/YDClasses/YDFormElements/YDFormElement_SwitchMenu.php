@@ -137,7 +137,7 @@
         /**
          *	This function adds a new menu item
          *
-         *	@param $menu		The name of the menu
+         *	@param $name		The name of the menu
          */
 		function addMenu( $name ){
 
