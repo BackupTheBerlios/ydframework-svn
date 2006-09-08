@@ -490,7 +490,7 @@
             }
             $records = $this->db->getRecords( $this->_prepareQuery( $query, $order ), $limit, $offset );
             foreach ( $records as $key=>$record ) {
-                $records[$key]['comment'] = trim( strip_tags( $record['comment'] ) );
+                $records[$key]['comment'] = trim( $record['comment'] );
             }
             return $records;
         }
@@ -499,7 +499,7 @@
         function getCommentById( $comment_id ) {
             $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.is_spam as is_spam, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );
             $record  = $this->db->getRecord( $sql );
-            $record['comment'] = trim( strip_tags( $record['comment'] ) );
+            $record['comment'] = trim( $record['comment'] );
             return $record;
         }
 
@@ -536,6 +536,12 @@
                     $values['is_spam'] = 1;
                 }
 
+            }
+
+            // Check the amount of hyperlinks in the comments. More than 3 is marked as spam.
+            $count = preg_match_all( "/http:\/\//i", $values['comment'], $matches );
+            if ( $count > 3 ) {
+                $values['is_spam'] = 1;
             }
 
             // Add the comment
