@@ -137,6 +137,9 @@
             $image = $this->getImage();
             $this->redirectIfMissing( $image );
 
+            // Remove the image metadata
+            $this->weblog->removeImageMetaData( $image );
+
             // The path to the image
             $path = realpath( '../' . YDConfig::get( 'dir_uploads', 'uploads' ) . '/' . $image );
 

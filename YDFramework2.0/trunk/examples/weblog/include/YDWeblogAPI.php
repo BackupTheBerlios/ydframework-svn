@@ -362,8 +362,8 @@
             return $items;
         }
 
-        // Get the title and description for an item image
-        function getItemImageMetaData( $image ) {
+        // Function to initialize image metadata
+        function initImageMetaData() {
 
             // Get the image metadata if not there yet
             if ( is_null( $this->imagemetadata ) ) {
@@ -373,6 +373,14 @@
                     $this->imagemetadata[$key] = $val[0];
                 }
             }
+
+        }
+
+        // Get the title and description for an item image
+        function getItemImageMetaData( $image ) {
+
+            // Initialize the image data
+            $this->initImageMetaData();
 
             // Start with the default settings
             $image->title = $image->getBasenameNoExt();
@@ -398,6 +406,12 @@
                 $result = $this->_executeInsert( '#_imagemetadata', $values );
             }
             return $result;
+        }
+
+        // Function to delete the image data for an item in the database
+        function removeImageMetaData( $image ) {
+            $sql = 'DELETE FROM #_imagemetadata WHERE img_path = ' . $this->str( $image );
+            return $this->db->executeSql( $sql );
         }
 
         // Function to get a single item
