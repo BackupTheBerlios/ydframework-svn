@@ -99,10 +99,11 @@
                             // Save it as a filee
                             $entryFile = $dir->createFile( $entry->Name, $entry->Data );
 
-
                             // Delete it if it's not an image
                             if ( ! $entryFile->isImage() ) {
                                 @ unlink( $entryFile->getAbsolutePath() );
+                            } else {
+                                $entryFile = $this->weblog->resizeUploadedImage( $entryFile );
                             }
 
                         }
@@ -112,6 +113,8 @@
                     // Check if it's an image
                     if ( ! $fileObj->isImage() ) {
                         @unlink( $fileObj->getAbsolutePath() );
+                    } else {
+                        $fileObj = $this->weblog->resizeUploadedImage( $fileObj );
                     }
 
                     // Delete the thumbnails

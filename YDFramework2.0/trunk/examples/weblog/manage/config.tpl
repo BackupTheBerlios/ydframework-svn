@@ -80,6 +80,12 @@
             <td class="adminRowL">{t w="cfg_weblog_google_analytics"}</td>
             <td class="adminRowL">{$config.google_analytics|default:'-'}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_max_img_size"}</td>
+            <td class="adminRowL">
+                {$config.max_img_size_x|default:'-'} x {$config.max_img_size_y|default:'-'} pixels
+            </td>
+        </tr>
     </table>
     <table width="700" cellspacing="0" cellpadding="0" border="0">
         <tr><td colspan="3">&nbsp;</td></tr>
@@ -207,6 +213,12 @@
             <tr>
                 <td class="adminRowL">{$form.google_analytics.label_html}</td>
                 <td class="adminRowL">{$form.google_analytics.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.max_img_size_x.label_html}</td>
+                <td class="adminRowL">
+                    {$form.max_img_size_x.html} x {$form.max_img_size_y.html} pixels
+                </td>
             </tr>
         </table>
         <table width="700" cellspacing="0" cellpadding="0" border="0">

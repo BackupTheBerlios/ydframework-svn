@@ -88,6 +88,9 @@
                     $thumb->_createThumbnail( 100, 100, true );
                     $thumb->_createThumbnail(  48,  48, true );
 
+                    // Resize the uploaded image in place
+                    $thumb = $this->weblog->resizeUploadedImage( $thumb );
+
                 }
 
                 // Get the name of the action

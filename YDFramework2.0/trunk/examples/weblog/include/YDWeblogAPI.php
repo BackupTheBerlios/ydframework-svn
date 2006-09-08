@@ -841,6 +841,44 @@
             $this->db->executeSql( $sql );
         }
 
+        // Function to resize an uploaded image. Takes a YDFSImage object as it's argument
+        function resizeUploadedImage( $image ) {
+
+            // Convert the YDFSFile objects to images
+            if ( is_object( $image ) && strtolower( get_class( $image ) ) == 'ydfsfile' ) {
+                $image = new YDFSImage( $image->getAbsolutePath() );
+            }
+
+            // Convert strings to images
+            if ( is_string( $image ) ) {
+                $image = new YDFSImage( $image );
+            }
+
+            // Get the maximum X and Y size
+            $max_x = YDConfig::get( 'max_img_size_x', '' );
+            $max_y = YDConfig::get( 'max_img_size_y', '' );
+            $max_x = empty( $max_x ) ? 999999 : $max_x;
+            $max_y = empty( $max_y ) ? 999999 : $max_y;
+
+            // Do nothing if maximum sizes are specified
+            if ( $max_x == 99999 && $max_y == 999999 ) {
+                return $image;
+            }
+
+            // Resize the image
+            $image->saveThumbnail( $max_x, $max_y, $image->getAbsolutePath() );
+
+            // Debugging help
+            $image->getImageSize();
+            YDDebugUtil::dump( $max_x, 'x' );
+            YDDebugUtil::dump( $max_y, 'y' );
+            YDDebugUtil::dump( $image, 'image' );
+
+            // Return the image
+            return $image;
+
+        }
+
         // Prepare a query
         function _prepareQuery( $sql, $order=null ) {
             return is_null( $order ) ? $sql : $sql . ' ORDER BY ' . $order;

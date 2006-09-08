@@ -82,6 +82,9 @@
             $form->addElement( 'select', 'weblog_language', t( 'cfg_weblog_language' ), array( 'class' => 'tfM', 'style' => 'width: 100%' ), $languages );
             $form->addElement( 'checkbox', 'include_debug_info', t( 'cfg_include_debug_info' ), array( 'style' => 'border: none;' ) );
             $form->addElement( 'text', 'google_analytics', t( 'cfg_weblog_google_analytics' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'text', 'weblog_title', t( 'cfg_weblog_title' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'text', 'max_img_size_x', t( 'cfg_max_img_size' ), array( 'class' => 'tfXS' ) );
+            $form->addElement( 'text', 'max_img_size_y', t( 'cfg_max_img_size' ), array( 'class' => 'tfXS' ) );
 
             $form->addElement( 'checkbox', 'email_new_comment', t( 'cfg_notification_email_comment' ),  array( 'style' => 'border: none;' ) );
             $form->addElement( 'checkbox', 'email_new_item', t( 'cfg_notification_email_item' ),  array( 'style' => 'border: none;' ) );
@@ -169,6 +172,8 @@
             $config['dflt_is_draft']        = YDConfig::get( 'dflt_is_draft',        false );
             $config['blocked_ips']          = YDConfig::get( 'blocked_ips',          YDFormatStringWithListValues( '' ) );
             $config['akismet_key']          = YDConfig::get( 'akismet_key',          '' );
+            $config['max_img_size_x']       = YDConfig::get( 'max_img_size_x',       '' );
+            $config['max_img_size_y']       = YDConfig::get( 'max_img_size_y',       '' );
 
             // Return the configuration
             return $config;
