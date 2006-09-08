@@ -524,6 +524,7 @@
          *  This function builds the tables references expression and returns it.
          *
          *  @param $title       (optional) If true, returns the FROM string. Default: true.
+         *  @param $single      (optional) Returns a single table only. Default is false.
          *
          *  @returns  The tables references expression.
          */
