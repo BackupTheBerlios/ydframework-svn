@@ -121,6 +121,7 @@
          */
         function doRequest( $host, $url, $data ) {
             $client = new YDHttpClient( $host, 80 );
+            $client->setDebug( false );
             $client->user_agent = YD_FW_NAME . '/' . YD_FW_VERSION . ' | ' . $this->getClassName() . '/' . $this->_version;
             $result = @ $client->post( $url, $data );
             if ( $result == false ) {
