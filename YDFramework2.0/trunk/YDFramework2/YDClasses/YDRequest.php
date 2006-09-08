@@ -170,10 +170,10 @@
          *  @returns 	Returns an array containing results returned from action and callback processing.
          *				Elements of this array are keyed by strings:
          *					action:before
-         *					<actionname>:before
-         *					<actionname>
-         *					<actionname>:after
-         *					action:after		 
+         *					&lt;actionname&gt;:before
+         *					&lt;actionname&gt;
+         *					&lt;actionname&gt;:after
+         *					action:after
          */
         function forward( $action ) {
             if ( strpos( $action, 'action' ) === 0 ) {
@@ -244,9 +244,9 @@
          *  @returns 	Returns an array containing results returned from action and callback processing.
          *				Elements of this array are keyed by strings:
          *					action:before
-         *					<actionname>:before
-         *					<actionname>
-         *					<actionname>:after
+         *					&lt;actionname&gt;:before
+         *					&lt;actionname&gt;
+         *					&lt;actionname&gt;:after
          *					action:after
          *
          *  @internal

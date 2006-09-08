@@ -123,6 +123,7 @@
          *  @param $enclosure       (optional) The url of the enclosure.
          *  @param $enclosure_size  (optional) The size in bytes of the enclosure.
          *  @param $enclosure_type  (optional) The mime-type of the enclosure.
+         *  @param $commentlink     (optional) The link to the comment page for the item.
          *
          *  @remark
          *      Enclosures are only supported for ATOM and RSS 2.0 feeds.
