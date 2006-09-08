@@ -213,6 +213,8 @@
          *  This function checks if a userobject if can do some action
          *
          *  @param     $userobject_id     Userobject id
+         *  @param     $class             The class name
+         *  @param     $action            The action name
          *
          *  @returns   Boolean TRUE or FALSE
          */

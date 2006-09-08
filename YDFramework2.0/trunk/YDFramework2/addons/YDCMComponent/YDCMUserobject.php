@@ -78,7 +78,8 @@
         /**
          *  This method returns all sub users of a userobject
          *
-         *  @param  $parent_id   Parent id
+         *  @param  $parent_id      Parent id
+         *  @param  $includeNode    (optional) Includes the node or not. Defaults to true.
          *
          *  @returns    Array with user and children nodes
          */

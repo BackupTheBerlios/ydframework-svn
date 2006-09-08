@@ -143,6 +143,9 @@
         /**
          *  This private static function returns an array/associative array based on states/urgencies
          *
+         *  @param  $translated Indicates if we need translations or not.
+         *  @param  $arr        Array with the states.
+         *
          *  @param $translated  (Optional) boolean that defines if result uses translation strings
          */
 		function getInfo( $translated, $arr ){

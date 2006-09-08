@@ -172,7 +172,7 @@
         /**
          *  This method adds form elements for user editing
 		 *
-		 * @param $user_id      User id to edit
+		 * @param $id           User id to edit
 		 * @param $noneditable  (Optional) Array with form element names that are NOT editable (are spans).
          */
 		function addFormEdit( $id, $noneditable = array() ){
@@ -184,7 +184,7 @@
         /**
          *  This method adds form elements for addind a new user
 		 *
-		 * @param $parent_id    Group id of this new user
+		 * @param $id    Group id of this new user
          */
 		function addFormNew( $id ){
 
@@ -197,10 +197,9 @@
 		 *
 		 * @param $id           If you will EDIT some user this is the user id to edit. On $edit (next argument) you must set TRUE
          *                      If you will ADD a new user this is the parent id of the new user. On $edit (next argument) you must set FALSE
-		 *
+		 * @param $edit         The edit parameter
+         *
 		 * @param $noneditable  Array with form element names that are NOT editable
-		 *
-		 * @param $translate    User details should be translated
          */
 		function _addFormDetails( $id, $edit, $noneditable = array() ){
 

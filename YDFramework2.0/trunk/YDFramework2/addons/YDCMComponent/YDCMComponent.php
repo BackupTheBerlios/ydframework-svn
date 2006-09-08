@@ -115,8 +115,8 @@
         /**
          *  This function renders this element for menu
          *
-         *  @param $id           Component id
-         *  @param $urlObj       Url object
+         *  @param $id        Component id
+         *  @param $url       Url object
          *
          *  @returns    An html string
          */
@@ -299,6 +299,7 @@
          *  This function sets a node state
          *
          *  @param $state      The state code
+         *  @param $id         (optional) The ID of the node. Defaults to null.
          *
          *  @returns    1 if state changed, 0 otherwise
          */
@@ -330,7 +331,8 @@
         /**
          *  This function adds a standard node in the tree. Experimental
          *
-         *  @param $values  Node values
+         *  @param $values      Node values
+         *  @param $parent_id   (optional) The parent id for the node. Defaults to null.
          */
 		function addNode( $values, $parent_id = null ){
 
@@ -345,7 +347,8 @@
         /**
          *  This function updates a node
          *
-         *  @param $values  Node values
+         *  @param $values      Node values
+         *  @param $node_id     (optional) The ID of the node. Defaults to null.
          */
 		function updateNode( $values, $node_id = null ){
 
@@ -360,7 +363,8 @@
         /**
          *  This function moves a node
          *
-         *  @param $values  Node values
+         *  @param $x  X value
+         *  @param $y  Y value
          */
 		function moveNode( $x, $y ){
 
