@@ -182,7 +182,7 @@
                 // Add any missing items fields
                 $fields = $this->dbmeta->getFields( '#_items' );
                 $this->executeIfMissing( 'body_more', $fields, 'ALTER TABLE #_items ADD body_more LONGTEXT AFTER body' );
-                $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER auto_close' );
+                $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_items ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER num_comments' );
                 $this->executeIfPresent( 'allow_comments', $fields, 'ALTER TABLE #_items DROP allow_comments' );
                 $this->executeIfPresent( 'auto_close', $fields, 'ALTER TABLE #_items DROP auto_close' );
 
