@@ -101,10 +101,10 @@
                 setcookie( 'YD_USER_WEBSITE', $values['userwebsite'], time() + 31536000, '/' );
 
                 // Add the values to the database
-                $comment_id = $this->weblog->addComment( $values );
+                $comment = $this->weblog->addComment( $values );
 
                 // Send an email if configured
-                if ( $comment_id > 0 && YDConfig::get( 'email_new_comment', true ) ) {
+                if ( $comment['id'] > 0 && YDConfig::get( 'email_new_comment', true ) ) {
 
                     // Include the YDEmail library
                     YDInclude( 'YDEmail.php' );
@@ -127,13 +127,27 @@
                     }
                     $eml->setReplyTo( 'no@reply.net' );
                     $eml->addBcc( $item['user_email'] );
-                    foreach ( $subscribers as $subscriber ) {
-                        $eml->addBcc( $subscriber );
+
+                    // Spam emails do not go to the subscribers
+                    if ( $comment['is_spam'] == '0' ) {
+                        foreach ( $subscribers as $subscriber ) {
+                            $eml->addBcc( $subscriber );
+                        }
                     }
+
+                    // Email the item owners
                     foreach ( $users as $user ) {
                         $eml->addBcc( $user['email'], $user['name'] );
                     }
-                    $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+
+                    // Set the subject
+                    if ( $comment['is_spam'] == 0 ) {
+                        $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+                    } else {
+                        $eml->setSubject( '[spam] ' . t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+                    }
+
+                    // Send the email
                     $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
                     $eml->send();
 
@@ -143,7 +157,7 @@
                 $this->clearCache();
 
                 // Redirect to the item
-                $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment_id ) );
+                $this->redirect( YDTplModLinkItem( $item, '#comment-' . $comment['id'] ) );
 
             }
 

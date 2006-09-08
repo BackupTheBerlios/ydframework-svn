@@ -510,6 +510,7 @@
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
             $values['useragent'] = $_SERVER['HTTP_USER_AGENT'];
             $values['userrequrl'] = $_SERVER['REQUEST_URI'];
+            $values['is_spam'] = 0;
 
             // Check against akismet if a key is there
             if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
@@ -539,23 +540,27 @@
             }
 
             // Check the amount of hyperlinks in the comments. More than 3 is marked as spam.
-            $count = preg_match_all( "/http:\/\//i", $values['comment'], $matches );
-            if ( $count > 3 ) {
+            $count1 = preg_match_all( "/href=/i", $values['comment'], $matches1 );
+            $count2 = preg_match_all( "/\[url=/i", $values['comment'], $matches2 );
+            if ( ( $count1 + $count2 ) > 3 ) {
                 $values['is_spam'] = 1;
             }
 
             // Add the comment
             $result = $this->_executeInsert( '#_comments', $values );
+            $comment_id = $this->db->getLastInsertID();
 
             // Only update the items table if not spam
             if ( ! $values['is_spam'] ) {
-                $comment_id = $this->db->getLastInsertID();
                 $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $values['item_id'] );
                 $this->db->executeSql( $sql );
             }
 
+            // Update the comment
+            $values['id'] = $comment_id;
+
             // Return the comment id
-            return $comment_id;
+            return $values;
 
         }
 
