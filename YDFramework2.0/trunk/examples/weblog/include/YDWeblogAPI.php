@@ -882,12 +882,6 @@
             // Resize the image
             $image->saveThumbnail( $max_x, $max_y, $image->getAbsolutePath() );
 
-            // Debugging help
-            $image->getImageSize();
-            YDDebugUtil::dump( $max_x, 'x' );
-            YDDebugUtil::dump( $max_y, 'y' );
-            YDDebugUtil::dump( $image, 'image' );
-
             // Return the image
             return $image;
 
