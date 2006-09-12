@@ -1130,6 +1130,30 @@
         }
 
         /**
+         *  This method returns the DELETE query based on the values of the object
+         *  or any condition set by where and order.
+         *
+         *  @returns  The SQL query string.
+         */
+         function deleteSQL(){
+
+            // get current execute config value
+            $exe = YDConfig::get( 'YD_DBOBJECT_EXECUTE' );
+
+            // disable query execution
+            YDConfig::set( 'YD_DBOBJECT_EXECUTE', false );
+
+            // get delete sql
+            $res = $this->delete();
+
+            // set current execute config with original value
+            YDConfig::set( 'YD_DBOBJECT_EXECUTE', $exe );
+
+            // return sql query
+            return $res;
+        }
+
+        /**
          *  This function finds the rows that match the object field's values
          *  an any other condition added with where, group, having, etc.
          *
