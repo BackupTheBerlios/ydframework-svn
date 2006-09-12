@@ -75,6 +75,12 @@
 				unset( $attributes['height'] );
 			}
 
+			// check if border exist
+			if ( isset( $attributes['border'] ) ){
+				$this->_image_parameters['border'] = $attributes['border'];
+				unset( $attributes['border'] );
+			}
+
             // Initialize the parent
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
 
@@ -119,8 +125,8 @@
 			// compute image source
 			$source = $this->_img_src;
 
-			// compute selected option. If default value was set, use it. Otherwise use 1st option
-			if ( ! empty( $this->_value ) ){
+			// compute selected option. If default value was set and that value is valid, use it. Otherwise use 1st option
+			if ( ! empty( $this->_value ) && isset( $this->_options[ $this->_value ] ) ){
 				$source .= $this->_value;
 			}else{
 				$values  = array_keys( $this->_options );
