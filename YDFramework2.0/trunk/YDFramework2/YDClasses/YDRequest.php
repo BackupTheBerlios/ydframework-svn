@@ -122,6 +122,26 @@
         }
 
         /**
+         *  Get the value of a query string variable. When the required parameter is not set, it will redirect to the
+         *  indicated action.
+         *
+         *  @param  $name               The name of the query string variable.
+         *  @param  $default            (optional) The default value if the query string variable is not existing.
+         *  @param  $values             (optional) The allowed values as an array.
+         *  @param  $action_if_fails    (optional) The action to redirect of if the parameter is invalid.
+         *
+         *  @returns    The value of the query string variable as a string.
+         */
+        function getRequiredQueryStringParameter( $name, $default, $values=null, $action_if_fails='default' ) {
+            $result = $this->getQueryStringParameter( $name, $default, $values );
+            if ( empty( $result ) ) {
+                $this->redirectToAction( $action_if_fails );
+            } else {
+                return $result;
+            }
+        }
+
+        /**
          *	This function will return the full URL to the current request, including hostname, port and request URI.
          *
          *  @param  $no_qs  (optional) If set to false, the query string will be omitted. Default is false.
@@ -222,6 +242,9 @@
          *					before redirecting. They will automatically get URL encoded.
          */
         function redirectToAction( $action='default', $params=array() ) {
+            if ( is_null( $action ) ) {
+                $action = 'default';
+            }
             if ( strpos( $action, 'action' ) === 0 ) {
                 $action = substr( $action, strlen( 'action' ) );
             }
