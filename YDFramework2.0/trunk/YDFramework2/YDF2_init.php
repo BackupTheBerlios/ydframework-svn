@@ -67,7 +67,11 @@
 
     // File and URL constants
     @define( 'YD_SELF_SCRIPT', $_SERVER['PHP_SELF'] );
-    @define( 'YD_SELF_FILE', $_SERVER['PATH_TRANSLATED'] );
+    if ( isset( $_SERVER['PATH_TRANSLATED'] ) ) {
+        @define( 'YD_SELF_FILE', $_SERVER['PATH_TRANSLATED'] );
+    } else {
+        @define( 'YD_SELF_FILE', $_SERVER['SCRIPT_FILENAME'] );
+    }
     @define( 'YD_SELF_DIR', dirname( YD_SELF_FILE ) );
     @define( 'YD_SELF_URI', $_SERVER['REQUEST_URI'] );
 
