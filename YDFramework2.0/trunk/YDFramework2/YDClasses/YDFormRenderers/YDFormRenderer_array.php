@@ -72,6 +72,7 @@
             $form['requirednote'] = $this->_form->_requiredNote;
             $form['endtag'] = '</form>';
             $form['name']   = $this->_form->_name;
+            $form['legend'] = $this->_form->_legend;
 
             // Add the fieldset and legend tag if any
             if ( ! empty( $this->_form->_legend ) ) {
