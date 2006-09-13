@@ -38,8 +38,11 @@
         /**
          *	This is the class constructor for the YDRequest class. This sets the default action to 'actionDefault' (but
          *	can be overridden later on).
+         *
+         *  @param  $cookiePath     (optional) The default cookie path. Defaults to '/'.
+         *  @param  $cookieLifeTime (optional) The default cookie life time. Defaults to 31536000 seconds (1 year).
          */
-        function YDRequest() {
+        function YDRequest( $cookiePath='/', $cookieLifeTime=null ) {
 
             // Initialize YDBase
             $this->YDBase();
@@ -53,6 +56,14 @@
 
             // this is for callbacks applicable to all actions
             $this->_callbacks->set( 'action',   array( 'before' => array(), 'after' => array() ) );
+
+            // The default cookie path
+            $this->cookiePath = $cookiePath;
+            if ( $cookieLifeTime == null ) {
+                $cookieLifeTime = time() + 31536000;
+            }
+            $this->cookieLifeTime = $cookieLifeTime;
+
         }
 
         /**
@@ -510,6 +521,52 @@
             }
             return true;
         }
+
+        /**
+         *  This function gets the value of a specific cookie.
+         *
+         *  @param  $name       The name of the cookie.
+         *  @param  $default    (optional) The default value if the cookie is null or not set. Defaults to ''.
+         *  @param  $values     (optional) The allowed values as an array.
+         *
+         *  @returns    The value of the cookie or the default if the cookie is not set or not in values.
+         */
+        function getCookie( $name, $default='', $values=null ) {
+            if ( isset( $_COOKIE[$name] ) && ! empty( $_COOKIE[$name] ) ) {
+                if ( ! is_null( $values ) ) {
+                    if ( in_array( $_COOKIE[$name], $values ) ) {
+                        return $_COOKIE[$name];
+                    } else {
+                        return $default;
+                    }
+                } else {
+                    return $_COOKIE[$name];
+                }
+            } else {
+                return $default;
+            }
+        }
+
+        /**
+         *  This function sets the value for a specific cookie
+         *
+         *  @param  $name       The name of the cookie to set.
+         *  @param  $value      The value to set for the cookie.
+         */
+        function setCookie( $name, $value ) {
+            setcookie( $name, $value, $this->cookieLifeTime, $this->cookiePath );
+        }
+
+        /**
+         *  This function deletes a cookie value.
+         *
+         *  @param  $name       The name of the cookie to delete.
+         */
+        function deleteCookie( $name ) {
+            setcookie( $name, null, time() - 31536000, $this->cookiePath );
+            unset( $_COOKIE[$name] );
+        }
+
 
     }
 
