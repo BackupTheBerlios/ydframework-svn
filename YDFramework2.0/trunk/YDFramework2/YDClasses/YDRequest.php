@@ -32,8 +32,8 @@
      *	framework is implemented in this class.
      */
     class YDRequest extends YDBase {
-	
-        var $_callbacks = null;	
+
+        var $_callbacks = null;
 
         /**
          *	This is the class constructor for the YDRequest class. This sets the default action to 'actionDefault' (but
@@ -76,11 +76,24 @@
          *
          *  @param  $name    The name of the query string variable.
          *  @param  $default (optional) The default value if the query string variable is not existing.
+         *  @param  $values  (optional) The allowed values as an array.
          *
          *  @returns    The value of the query string variable as a string.
          */
-        function getQueryStringParameter( $name, $default='' ) {
-            return isset( $_GET[ $name ] ) ? $_GET[ $name ] : $default;
+        function getQueryStringParameter( $name, $default='', $values=null ) {
+            if ( isset( $_GET[$name] ) ) {
+                if ( ! is_null( $values ) ) {
+                    if ( in_array( $_GET[$name], $values ) ) {
+                        return $_GET[$name];
+                    } else {
+                        return $default;
+                    }
+                } else {
+                    return $_GET[$name];
+                }
+            } else {
+                return $default;
+            }
         }
 
         /**
@@ -88,11 +101,12 @@
          *
          *  @param  $name    The name of the query string variable.
          *  @param  $default (optional) The default value if the query string variable is not existing.
+         *  @param  $values  (optional) The allowed values as an array.
          *
          *  @returns    The value of the query string variable as an integer.
          */
-        function getQueryStringParameterAsInt( $name, $default=null ) {
-            $value = $this->getQueryStringParameter( $name, $default );
+        function getQueryStringParameterAsInt( $name, $default=null, $values=null ) {
+            $value = $this->getQueryStringParameter( $name, $default, $values );
             return is_numeric( $value ) ? intval( $value ) : $default;
         }
 
@@ -215,11 +229,11 @@
          */
         function redirect( $url ) {
             if ( strpos( strtoupper( $_SERVER['SERVER_SOFTWARE'] ), 'IIS' ) ) {
-               header( 'Refresh: 0; URL=' . $url ); 
-            } else { 
-               header( 'Location: '. $url ); 
-            } 
-            die(); 
+               header( 'Refresh: 0; URL=' . $url );
+            } else {
+               header( 'Location: '. $url );
+            }
+            die();
         }
 
         /**
@@ -397,7 +411,7 @@
          *
          *  Processing of callbacks and actions in the context of a request
          *  is executed in this order:
-         * 
+         *
          *    1. (optional) before 'action' callbacks - apply to all actions
          *    2. (optional) before callback for the current action
          *	  3. Current action
@@ -411,7 +425,7 @@
          *		$this->registerCallback( 'my_after_callback', 'action', false );
          *
          *	example 3: will execute my_deafult_after_callback() after actionDefault
-         *		$this->registerCallback( 'my_deafult_after_callback', 'actionDefault', false );		 
+         *		$this->registerCallback( 'my_deafult_after_callback', 'actionDefault', false );
          *
          *  @param $method  The method name.
          *  @param $action  The action or array of actions that trigger the call.
@@ -419,11 +433,11 @@
          */
         function registerCallback( $method, $action, $before=false ) {
             if ( strtolower( $action ) != 'action' && ! $this->_callbacks->exists( strtolower( $action ) ) ) {
-                $this->_callbacks->set( strtolower( $action ),   array( 'before' => array(), 'after' => array() ) );				
+                $this->_callbacks->set( strtolower( $action ),   array( 'before' => array(), 'after' => array() ) );
             }
             if ( strtolower( $action ) != 'action' && ! $this->hasMethod( $action ) ) {
                 trigger_error(  $this->getClassName() . ' - ' .
-                                    ' action "' . $action . '" for callback "' . $method . '" does not exist.', YD_ERROR );					
+                                    ' action "' . $action . '" for callback "' . $method . '" does not exist.', YD_ERROR );
             }
             $sub = $before ? 'before' : 'after';
             if ( ! is_array( $action ) ) {
@@ -478,12 +492,12 @@
             if ( $actions[$sub] != null ) {
                 foreach ( $actions[ $sub ] as $callback => $n ) {
                     if ( ! $this->hasMethod( $callback ) ) {
-                        trigger_error(  $this->getClassName() . ' - The ' . 
+                        trigger_error(  $this->getClassName() . ' - The ' .
                                         $action . ' callback method "' . $callback . '" is not defined.', YD_ERROR );
                     }
                     $res = call_user_func( array( & $this, $callback ), $action, $before, $success );
                     if ( $res !== true && $res !== null ) {
-                        return array( 
+                        return array(
                             'class'    => $this->getClassName(),
                             'callback' => $callback,
                             'action'   => $action,
