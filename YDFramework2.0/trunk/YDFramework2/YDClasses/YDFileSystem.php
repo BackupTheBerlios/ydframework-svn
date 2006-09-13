@@ -1398,21 +1398,30 @@
             if ( $hasMoreThanExceptions == true ) {
                 foreach ( $pattern as $patternitem ) {
                     if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) != '!' ) {
-                        foreach ( glob( $this->getAbsolutePath() . '/' . $patternitem ) as $file ) {
-                            $file = basename( $file );
-                            $fileListMatch[ $file ] = $file;
+                        $glob_files = glob( $this->getAbsolutePath() . '/' . $patternitem );
+                        if ( $glob_files !== false ) {
+                            foreach ( $glob_files as $file ) {
+                                $file = basename( $file );
+                                $fileListMatch[ $file ] = $file;
+                            }
                         }
                     } else if ( empty( $patternitem ) ) {
-                        foreach ( glob( $this->getAbsolutePath() . '/*' ) as $file ) {
-                            $file = basename( $file );
-                            $fileListMatch[ $file ] = $file;
+                        $glob_files = glob( $this->getAbsolutePath() . '/*' );
+                        if ( $glob_files !== false ) {
+                            foreach ( glob( $this->getAbsolutePath() . '/*' ) as $file ) {
+                                $file = basename( $file );
+                                $fileListMatch[ $file ] = $file;
+                            }
                         }
                     }
                 }
             } else {
-                foreach ( glob( $this->getAbsolutePath() . '/' . '*' ) as $file ) {
-                    $file = basename( $file );
-                    $fileListMatch[ $file ] = $file;
+                $glob_files = glob( $this->getAbsolutePath() . '/' . '*' );
+                if ( $glob_files !== false ) {
+                    foreach ( $glob_files as $file ) {
+                        $file = basename( $file );
+                        $fileListMatch[ $file ] = $file;
+                    }
                 }
             }
             $fileList = & $fileListMatch;
@@ -1420,9 +1429,12 @@
             // Remove the files that don't match
             foreach ( $pattern as $patternitem ) {
                 if ( ! empty( $patternitem ) && substr( $patternitem, 0, 1 ) == '!' ) {
-                    foreach ( glob( $this->getAbsolutePath() . '/' . substr( $patternitem, 1 ) ) as $file ) {
-                        $file = basename( $file );
-                        unset( $fileList[ $file ] );
+                    $glob_files = glob( $this->getAbsolutePath() . '/' . substr( $patternitem, 1 ) );
+                    if ( $glob_files !== false ) {
+                        foreach ( $glob_files as $file ) {
+                            $file = basename( $file );
+                            unset( $fileList[ $file ] );
+                        }
                     }
                 }
             }
