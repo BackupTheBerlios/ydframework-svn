@@ -1066,6 +1066,58 @@
         }
 
         /**
+         *  Function to prepare an SQL statement with parameters. The parameters start counting from 1.
+         
+         *  This works as follows:
+         *
+         *  \code
+         *  $sql = 'SELECT * FROM comments WHERE id = :1 and author = :2'
+         *  \endcode
+         *
+         *  After a function call as follows:
+         *
+         *  \code
+         *  prepareSql( $sql, 1, 'Pieter Claerhout' );
+         *  \endcode
+         *
+         *  The SQL statement becomes:
+         *
+         *  \code
+         *  SELECT * FROM comments WHERE id = '1' and author = 'Pieter Claerhout'
+         *  \endcode
+         *
+         *  All the arguments are automatically escaped.
+         *
+         *  @returns A prepared SQL statement
+         */
+        function prepareSql() {
+
+            // Check that we have at least one argument (the SQL statement)
+            $numargs = func_num_args();
+            if ( $numargs < 1 ) {
+                trigger_error( "The function prepareSql needs at least 1 parameter.", YD_ERROR );
+            }
+
+            // Get the list of arguments
+            $args = func_get_args();
+
+            // First element is the SQL statement itself
+            $sql = array_shift( $args );
+
+            // Reset the indexes on the arguments
+            $args = array_values( $args );
+
+            // Update the SQL statement
+            foreach ( $args as $key => $arg ) {
+                $sql = str_replace( ':' . ($key+1), $this->escapeSql( $arg ), $sql );
+            }
+
+            // Return the SQL statement
+            return $sql;
+
+        }
+
+        /**
          *  Format the $date in the format the database accepts. The $date parameter can be a Unix integer timestamp or
          *  an ISO format Y-m-d. Uses the fmtDate field, which holds the format to use. If null or false or '' is passed
          *  in, it will be converted to an SQL null.

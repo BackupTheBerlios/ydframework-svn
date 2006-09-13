@@ -33,6 +33,12 @@
 
             // Test string escaping
             YDDebugUtil::dump( $db->escape( "Pieter's Framework" ), '$db->escape' );
+            YDDebugUtil::dump(
+                $db->prepareSql(
+                    'SELECT * FROM comments WHERE id = :1 and author = :2', 1, "Pieter's Author"
+                ),
+                '$db->prepareSql'
+            );
 
             // Test timestamps
             YDDebugUtil::dump( $db->getDate(), 'getDate()' );
