@@ -195,7 +195,7 @@
          *
          *	@param $input	The array to convert.
          *	@param $key		The column to use as the key name.
-         *	@param $map		The array or string which indicates how values of the children arrays should be mapped in 
+         *	@param $map		The array or string which indicates how values of the children arrays should be mapped in
          *                  the parent array.
          *
          *	@returns		The array resulting from the mapping.
@@ -232,7 +232,7 @@
             // Return the new array
             return $output;
         }
-        
+
         /**
          *  This function will implode a 1-level array in a string.
          *
@@ -249,7 +249,7 @@
             foreach ( $input as $k => $v ) {
                 $return .= $separator . $k . $glue . $v;
             }
-            return substr( $return, 1 ); 
+            return substr( $return, 1 );
         }
 
         /**
@@ -624,21 +624,21 @@
             return $string;
         }
 
-        /** 
-         *   This function will encode all characters in a string to it's ASCII value. 
-         * 
-         *   @param $string   The original string to encode. 
-         * 
-         *   @returns   The encoded string. 
-         * 
-         *   @static 
-         */ 
-        function encodeToAscii( $string ) { 
-            $result = ''; 
-            for ( $i=0; $i < strlen( $string ); $i++ ) { 
-                $result .= "&#" . ord( substr( $string, $i, 1) ) . ';'; 
-            } 
-            return $result; 
+        /**
+         *   This function will encode all characters in a string to it's ASCII value.
+         *
+         *   @param $string   The original string to encode.
+         *
+         *   @returns   The encoded string.
+         *
+         *   @static
+         */
+        function encodeToAscii( $string ) {
+            $result = '';
+            for ( $i=0; $i < strlen( $string ); $i++ ) {
+                $result .= "&#" . ord( substr( $string, $i, 1) ) . ';';
+            }
+            return $result;
         }
 
         /**
@@ -710,29 +710,29 @@
 
         }
 
-        /** 
-         *   This function will compare two network ip addresses 
-         * 
-         *   @param $ip1      First ip 
-         * 
-         *   @param $ip2      Second ip 
-         * 
-         *   @returns    Returns < 0 if ip1 is less than ip2; > 0 if str1 is greater than ip2, and 0 if they are equal. 
-         * 
-         *   @static 
-         */ 
-        function ipcmp( $ip1, $ip2 ){ 
+        /**
+         *   This function will compare two network ip addresses
+         *
+         *   @param $ip1      First ip
+         *
+         *   @param $ip2      Second ip
+         *
+         *   @returns    Returns < 0 if ip1 is less than ip2; > 0 if str1 is greater than ip2, and 0 if they are equal.
+         *
+         *   @static
+         */
+        function ipcmp( $ip1, $ip2 ){
 
-            // get 4 elements from the network address 
-            $ip1 = explode(".", $ip1); 
-            $ip2 = explode(".", $ip2); 
+            // get 4 elements from the network address
+            $ip1 = explode(".", $ip1);
+            $ip2 = explode(".", $ip2);
 
-            // get an integer that represents the numeric value of the address 
-            $ip1 = $ip1[0]*256^3 + $ip1[1]*256^2 + $ip1[2]*256 + $ip1[3]; 
-            $ip2 = $ip2[0]*256^3 + $ip2[1]*256^2 + $ip2[2]*256 + $ip2[3]; 
+            // get an integer that represents the numeric value of the address
+            $ip1 = $ip1[0]*256^3 + $ip1[1]*256^2 + $ip1[2]*256 + $ip1[3];
+            $ip2 = $ip2[0]*256^3 + $ip2[1]*256^2 + $ip2[2]*256 + $ip2[3];
 
-            // return diference 
-            return $ip1 - $ip2; 
+            // return diference
+            return $ip1 - $ip2;
 
         }
 
@@ -753,7 +753,7 @@
 
             // Decode the HTML entities
             $trans = array_flip( get_html_translation_table( HTML_ENTITIES, ENT_NOQUOTES ) );
-            $data = strtr( $data, $trans ); 
+            $data = strtr( $data, $trans );
 
             // The characters to replace
             $chars = array(
@@ -983,7 +983,7 @@
             $browserLanguages = array_unique( $browserLanguages );
 
             // Return the browser languages
-            return array_values( $browserLanguages );
+            return array_map( 'strtolower', array_values( $browserLanguages ) );
 
         }
 
