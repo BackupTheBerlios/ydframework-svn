@@ -72,7 +72,18 @@
             $form['requirednote'] = $this->_form->_requiredNote;
             $form['endtag'] = '</form>';
             $form['name']   = $this->_form->_name;
-            
+
+            // Add the fieldset and legend tag if any
+            if ( ! empty( $this->_form->_legend ) ) {
+
+                // Add it to the start tag
+                $form['tag'] .= '<fieldset><legend>' . $this->_form->_legend . '</legend>';
+
+                // Add it to the end tag
+                $form['endtag'] = '</fieldset>' . $form['endtag'];
+
+            }
+
             // Add the errors
             $form['errors'] = $this->_form->_errors;
             $form['errors_unique_messages' ] = array_unique( array_values( $this->_form->_errors ) );

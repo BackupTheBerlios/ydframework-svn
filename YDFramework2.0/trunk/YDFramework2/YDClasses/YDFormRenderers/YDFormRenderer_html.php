@@ -58,11 +58,14 @@
 
             // Start with the form element
             $html = $form['tag'] . YD_CRLF;
-            
+
             // Add form errors if any
             if ( isset( $form['errors']['__ALL__'] ) ) {
                 $html .= '<p>' . $this->_form->_htmlErrorStart . $form['errors']['__ALL__'] . $this->_form->_htmlErrorEnd . '</p>' . YD_CRLF;
             }
+
+            // Store the HTML end
+            $html_end = $form['endtag'];
 
             // Remove some things from the array
             unset( $form['attribs'] );
@@ -71,7 +74,8 @@
             unset( $form['errors'] );
             unset( $form['errors_unique_messages'] );
             unset( $form['requirednote'] );
-            
+
+            // Remove the form name
             if ( ! is_array( $form['name'] ) ) {
                 unset( $form['name'] );
             }
@@ -133,7 +137,7 @@
             }
 
             // Close the form tag
-            $html .= '</form>';
+            $html .= $html_end;
 
             // Return the HTML
             return $html;

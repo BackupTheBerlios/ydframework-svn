@@ -63,6 +63,7 @@
             $this->_action = empty( $action ) ? $_SERVER['REQUEST_URI'] : $action;
             $this->_target = empty( $target ) ? '_self' : $target;
             $this->_attributes = $attributes;
+            $this->_legend = null;
 
             // The list of known elements, rules, filters and validators
             $this->_regElements = array();
@@ -189,6 +190,15 @@
             $url = new YDUrl( $this->_action );
             $this->_action = $url->getUri();
 
+        }
+
+        /**
+         *  This function sets the legend for a form. This will generate a fieldset tag and legend tag in the HTML.
+         *
+         *  @param  $legend     The legend to set for the field.
+         */
+        function setLegend( $legend ) {
+            $this->_legend = $legend;
         }
 
         /**

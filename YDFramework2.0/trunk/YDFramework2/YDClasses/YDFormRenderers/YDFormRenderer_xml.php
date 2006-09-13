@@ -60,7 +60,8 @@
             $xml['form'][0]['@']['method'] = $this->_form->_method;
             $xml['form'][0]['@']['action'] = $this->_form->_action;
             $xml['form'][0]['@']['target'] = $this->_form->_target;
-            
+            $xml['form'][0]['@']['legend'] = $this->_form->_legend;
+
             $form = & $xml['form'][0]['#'];
             $attr = & $form['attributes'][0]['#'];
             $elem = & $form['elements'][0]['#'];
@@ -351,7 +352,8 @@
             $f_method = $arr['form'][0]['@']['method'];
             $f_action = $arr['form'][0]['@']['action'];
             $f_target = $arr['form'][0]['@']['target'];
-            
+            $f_legend = $arr['form'][0]['@']['legend'];
+
             // References
             $form = & $arr['form'][0]['#'];
             $attr = & $form['attributes'][0]['#'];
@@ -377,7 +379,7 @@
             
             // YDForm object
             $f = new $class( $f_name, $f_method, $f_action, $f_target, $f_attr );
-            
+            $f->setLegend( $f_legend );
            
             // Elements
             if ( is_array( $elem ) ) {
