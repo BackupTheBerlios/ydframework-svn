@@ -92,7 +92,7 @@
          *  @param $username  User username
          *  @param $password  User password (if password length is smaller than 32 we must md5 it, password form elements must have max 31)
          *
-         *  @returns    user_id if valid, false otherwise
+         *  @returns    ARRAY with user attributes, FALSE otherwise
          */
 		function valid( $username = '', $password = '' ){
 
@@ -122,9 +122,9 @@
 			$this->where( '(state = 1 OR (state = 2 AND login_start < "' . $now . '" AND login_end > "' . $now . '"))' );
 
 			// test if we get just one user
-			if ( $this->find( 'ydcmuserobject' ) == 1 ) return intval( $this->get( 'user_id' ) );
-
-			return false;
+			if ( $this->find( 'ydcmuserobject' ) != 1 ) return false;
+			
+			return $this->getValues();
 		}
 
 
@@ -174,8 +174,10 @@
 		 *
 		 * @param $id           User id to edit
 		 * @param $noneditable  (Optional) Array with form element names that are NOT editable (are spans).
+         *
+		 * @returns    YDForm object pointer         
          */
-		function addFormEdit( $id, $noneditable = array() ){
+		function & addFormEdit( $id, $noneditable = array() ){
 
 		 	return $this->_addFormDetails( $id, true, $noneditable );
 		}
@@ -185,8 +187,10 @@
          *  This method adds form elements for addind a new user
 		 *
 		 * @param $id    Group id of this new user
+         *
+		 * @returns    YDForm object pointer         
          */
-		function addFormNew( $id ){
+		function & addFormNew( $id ){
 
 		 	return $this->_addFormDetails( $id, false );
 		}
@@ -198,10 +202,11 @@
 		 * @param $id           If you will EDIT some user this is the user id to edit. On $edit (next argument) you must set TRUE
          *                      If you will ADD a new user this is the parent id of the new user. On $edit (next argument) you must set FALSE
 		 * @param $edit         The edit parameter
-         *
 		 * @param $noneditable  Array with form element names that are NOT editable
-         */
-		function _addFormDetails( $id, $edit, $noneditable = array() ){
+         *
+		 * @returns    YDForm object pointer         
+		 */
+		function & _addFormDetails( $id, $edit, $noneditable = array() ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -251,7 +256,11 @@
 				$this->_form->addElement( 'select',    'lang_id',       t( 'ydcmuser label language' ), array(), $languages );
 
 				$templates = new YDCMTemplates();
-    	        $this->_form->addElement( 'select',    'template',      t( 'ydcmuser label template' ), array(), $templates->admin_templates() );
+
+				// get url to templates and set shot.png as filename
+				$attributes = array( 'border' => 1, 'src' => YDConfig::get( 'YDCMTEMPLATES_ADMIN_URL' ), 'ext' => '/shot.png' );
+
+    	        $this->_form->addElement( 'selectimage',    'template', t( 'ydcmuser label template' ), $attributes, $templates->admin_templates() );
 
 				$this->_form->addRule( 'name',        'maxlength',      t( 'ydcmuser mess name too big' ),  255 );
 				$this->_form->addRule( 'email',       'email',          t( 'ydcmuser mess email not valid' ) );
@@ -286,6 +295,8 @@
 					$this->_form->setDefault( 'login_end', time() + 7 * 24 * 3600 );
 			}
 
+
+			return $this->_form;
 		}
 
         /**
@@ -445,8 +456,10 @@
          * @param $oldpassword  (Optional) Flag the defines if we should include a box with old password confirmation.
          *                                 This box is used when the user wants to change its pass and not when we want to change another user pass
          *                                 TRUE: include box; FALSE: don't include
+         *
+         * @returns YDForm object pointer
          */
-		function addFormPassword( $oldpassword = true ){
+		function & addFormPassword( $oldpassword = true ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -467,6 +480,8 @@
 
 			// add compare rule to new password and confirmation password
 			$this->_form->addCompareRule( array( 'new', 'new_confirm' ), 'equal', t('passwords dont match') );
+
+			return $this->_form;
 		}
 
 
