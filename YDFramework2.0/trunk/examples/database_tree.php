@@ -13,6 +13,7 @@
             nleft int(11) NOT NULL default '0',
             nright int(11) NOT NULL default '0',
             nlevel int(11) NOT NULL default '0',
+            position int(11) NOT NULL default '0',
             PRIMARY KEY  (id),
             KEY nested_tree_parent_id (parent_id),
             KEY nested_tree_nleft (nleft),
@@ -22,35 +23,35 @@
         // =============================================================================================================
 
         // ==== Default values for testing =============================================================================
-        INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1);
-        INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2);
-        INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2);
-        INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2);
-        INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3);
-        INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3);
-        INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3);
-        INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2);
-        INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3);
-        INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3);
-        INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3);
+        INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1,0);
+        INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2,0);
+        INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2,0);
+        INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2,0);
+        INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3,0);
+        INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3,0);
+        INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3,0);
+        INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2,0);
+        INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3,0);
+        INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3,0);
+        INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3,0);
         // =============================================================================================================
 
         // ==== Sample data dump =======================================================================================
-        +----+-----------+----------------------+-------+--------+--------+
-        | id | parent_id | title                | nleft | nright | nlevel |
-        +----+-----------+----------------------+-------+--------+--------+
-        |  1 |         0 | General Resources    |     1 |     22 |      1 |
-        |  2 |         1 | Code Paste           |     2 |      3 |      2 |
-        |  3 |         1 | Documentation        |     4 |      5 |      2 |
-        |  4 |         1 | Books & Publications |     6 |     13 |      2 |
-        |  5 |         4 | Apache               |     7 |      8 |      3 |
-        |  6 |         4 | PostgreSQL           |     9 |     10 |      3 |
-        |  7 |         4 | MySQL                |    11 |     12 |      3 |
-        |  8 |         1 | Links                |    14 |     21 |      2 |
-        |  9 |         8 | Databases            |    15 |     16 |      3 |
-        | 10 |         8 | Generators           |    17 |     18 |      3 |
-        | 11 |         8 | Portals              |    19 |     20 |      3 |
-        +----+-----------+----------------------+-------+--------+--------+
+        +----+-----------+----------------------+-------+--------+--------+----------+
+        | id | parent_id | title                | nleft | nright | nlevel | position |
+        +----+-----------+----------------------+-------+--------+--------+----------+
+        |  1 |         0 | General Resources    |     1 |     22 |      1 |        0 |
+        |  2 |         1 | Code Paste           |     2 |      3 |      2 |        0 |
+        |  3 |         1 | Documentation        |     4 |      5 |      2 |        0 |
+        |  4 |         1 | Books & Publications |     6 |     13 |      2 |        0 |
+        |  5 |         4 | Apache               |     7 |      8 |      3 |        0 |
+        |  6 |         4 | PostgreSQL           |     9 |     10 |      3 |        0 |
+        |  7 |         4 | MySQL                |    11 |     12 |      3 |        0 |
+        |  8 |         1 | Links                |    14 |     21 |      2 |        0 |
+        |  9 |         8 | Databases            |    15 |     16 |      3 |        0 |
+        | 10 |         8 | Generators           |    17 |     18 |      3 |        0 |
+        | 11 |         8 | Portals              |    19 |     20 |      3 |        0 |
+        +----+-----------+----------------------+-------+--------+--------+----------+
         // =============================================================================================================
 
     */
