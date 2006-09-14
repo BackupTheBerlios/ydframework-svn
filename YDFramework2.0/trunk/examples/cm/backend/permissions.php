@@ -107,6 +107,19 @@
 		}
 
 
+		function actionAlwaysRegistered(){
+
+            print(" Registered 'always valid' permissions    <br>
+                    'YDCMPage', 'closeit'                    <br><br>");
+
+			// register some always registered
+			$this->perms->registerAlwaysValidAction( 'YDCMPage', 'closeit' );
+
+			// check if userobject 2 can 'YDCMPage'+'closeit'
+			YDDebugUtil::dump( $this->perms->can( 2, 'YDCMPage', 'closeit' ), '$this->perms->can( 2, "YDCMPage", "closeit" );  // check if userobject 2 can "YDCMPage"+"closeit"' );
+
+		}
+
     }
 
     // Process the request
