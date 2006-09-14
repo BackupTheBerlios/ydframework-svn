@@ -62,6 +62,9 @@
 			
 			// init alias
 			$this->_actions_alias = array();
+			
+			// init always-valid actions
+			$this->_always_valid = array();
 		}
 
 
@@ -182,6 +185,45 @@
 
 
         /**
+         *  This function registers an always-valid action
+         *
+         *  @param     $class    Class name
+         *  @param     $action   Action name
+         *
+         *  @returns   TRUE if added, FALSE is already exists
+         */
+		function registerAlwaysValidAction( $class, $action ){
+
+			// check if class and action are registed
+			if ( $this->actionIsRegistered( $class, $action ) ) return false;
+
+			// add action to class
+			$this->_always_valid[ $class ][] = $action;
+
+			return true;
+		}
+
+
+        /**
+         *  This function returns all always valid actions
+         *
+         *  @param     $class    (Optional) Class name. default NULL to get alias from all classes
+         *
+         *  @returns   Associative array:  array( CLASS => array( ACTION => array( ALIAS, ALIAS, .. ) ), or array with actions and correspondent alias when class argument is defined
+         */
+		function getRegisterAlwaysValidActions( $class = null ){
+
+			// check if we want actions from all classes
+			if ( is_null( $class ) ) return $this->_always_valid;
+			
+			// check if class exists
+			if ( isset( $this->_always_valid[ $class ] ) ) return $this->_always_valid[ $class ];
+
+			return array();
+		}
+
+
+        /**
          *  This function registers a alias to a action
          *
          *  @param     $alias    Action alias
@@ -255,9 +297,12 @@
          */
 		function actionIsRegistered( $class, $action ){
 
-			// check original action
+			// check always valid action
+			if ( isset( $this->_always_valid[ $class ] ) && in_array( $action, $this->_always_valid ) ) return true;
+
+			// check original action ( searching original actions and alias )
 			if ( $this->getOriginalAction( $class, $action ) == false ) return false;
-			
+
 			return true;
 		}
 
@@ -313,6 +358,9 @@
          *  @returns   Boolean TRUE or FALSE
          */
 		function can( $userobject_id, $class, $action ){
+
+			// check if class is an 'always registered'
+			if ( isset( $this->_always_valid[ $class ] ) && in_array( $action, $this->_always_valid[ $class ] ) ) return true;
 
 			// check if class and action are registed
 			$action = $this->getOriginalAction( $class, $action );
