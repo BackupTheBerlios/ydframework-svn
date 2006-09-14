@@ -575,9 +575,12 @@
          *
          *  @param  $name       The name of the cookie to set.
          *  @param  $value      The value to set for the cookie.
+         *  @param  $sessionOnly    (optional) If set to true, the cookie is only set for the current session,
+         *                          otherwise, the default cookie lifetime is used.
          */
-        function setCookie( $name, $value ) {
-            setcookie( $name, $value, $this->cookieLifeTime, $this->cookiePath );
+        function setCookie( $name, $value, $sessionOnly=false ) {
+            $lifeTime = ( $sessionOnly ) ? 0 : $this->cookieLifeTime;
+            setcookie( $name, $value, $lifeTime, $this->cookiePath );
         }
 
         /**
