@@ -59,6 +59,9 @@
 
 			// init valid actions
 			$this->_actions = array();
+			
+			// init alias
+			$this->_actions_alias = array();
 		}
 
 
@@ -103,7 +106,7 @@
 
 				// cycle actions to compute translated string
 				foreach( $actions as $action => $info )
-					$arr_translated[ $class ][ t( "permission $class $action" ) ] = $info;
+					$arr_translated[ $class ][ t( "$class perm $action" ) ] = $info;
 			}
 			
 			return $arr_translated;
@@ -125,7 +128,7 @@
 			$this->resetAll();
 
 			// delete all permissions of correspondent userobjects
-			$this->where( 'permission_id IN ("' . implode( '","', $userobject_id ) . '")' );
+			$this->where( 'permission_id IN ("' . implode( '","', array_map( "intval", $userobject_id ) ) . '")' );
 
 			return ( $this->delete() > 0 );
 		}
@@ -168,6 +171,10 @@
          */
 		function registerAction( $class, $action ){
 
+			// check if class and action are registed
+			if ( $this->actionIsRegistered( $class, $action ) ) return false;
+
+			// add action to class
 			$this->_actions[ $class ][] = $action;
 
 			return true;
@@ -175,16 +182,103 @@
 
 
         /**
-         *  This function checks if a class+action is registered
+         *  This function registers a alias to a action
+         *
+         *  @param     $alias    Action alias
+         *  @param     $class    Class name
+         *  @param     $action   Action name (or another alias name)
+         *
+         *  @returns   TRUE if added, FALSE if original class or action not valid
+         */
+		function registerAlias( $alias, $class, $action ){
+
+			// check if class exists
+			if ( ! isset( $this->_actions[ $class ] ) ) return false;
+
+			// check if action really exists and belong to the specified class
+			if ( in_array( $action, $this->_actions[ $class ] ) ){
+
+				// check if class is already created in alias array
+				if ( ! isset( $this->_actions_alias[ $class ] ) ) $this->_actions_alias[ $class ] = array();
+
+				// add alias
+				$this->_actions_alias[ $class ][ $action ][] = $alias;
+			
+				return true;
+
+			}else{
+
+				// check if $action is another alias. if yes, replace $action with original name
+				foreach( $this->_actions_alias[ $class ] as $_originalAction => $_alias )
+					if ( in_array( $action, $_alias ) ){
+				
+						// check if class is already created in alias array
+						if ( ! isset( $this->_actions_alias[ $class ] ) ) $this->_actions_alias[ $class ] = array();
+				
+						// add alias
+						$this->_actions_alias[ $class ][ $_originalAction ][] = $alias;
+					
+						return true;
+					}
+
+				return false;
+				}
+		}
+
+
+        /**
+         *  This function returns all registered alias
+         *
+         *  @param     $class    (Optional) Class name. default NULL to get alias from all classes
+         *
+         *  @returns   Associative array:  array( CLASS => array( ACTION => array( ALIAS, ALIAS, .. ) ), or array with actions and correspondent alias when class argument is defined
+         */
+		function getRegisteredAlias( $class = null ){
+
+			// check if we want actions from all classes
+			if ( is_null( $class ) ) return $this->_actions_alias;
+			
+			// check if class exists
+			if ( isset( $this->_actions_alias[ $class ] ) ) return $this->_actions_alias[ $class ];
+
+			return array();
+		}
+
+
+        /**
+         *  This function checks if a class+action is registered (searching alias too)
          *
          *  @param     $class    Class name
-         *  @param     $action   Action name
+         *  @param     $action   Action name ( or alias name)
          *
          *  @returns   TRUE if registered, FALSE otherwise
          */
 		function actionIsRegistered( $class, $action ){
 
-			if ( isset( $this->_actions[ $class ] ) && in_array( $action, $this->_actions[ $class ] ) ) return true;
+			// check original action
+			if ( $this->getOriginalAction( $class, $action ) == false ) return false;
+			
+			return true;
+		}
+
+
+        /**
+         *  This function checks if a class+action is registered and returns the original action
+         *
+         *  @param     $class    Class name
+         *  @param     $action   Action name ( or alias name)
+         *
+         *  @returns   STRING name of real action, FALSE otherwise
+         */
+		function getOriginalAction( $class, $action ){
+
+			// check if is a registered action
+			if ( isset( $this->_actions[ $class ] ) && in_array( $action, $this->_actions[ $class ] ) ) return $action;
+
+			// check if is a registered alias
+			if ( isset( $this->_actions_alias[ $class ] ) )
+				foreach( $this->_actions_alias[ $class ] as $originalAction => $alias )
+					if ( in_array( $action, $alias ) ) return $originalAction;
 
 			return false;
 		}
@@ -202,7 +296,7 @@
 			// check if we want actions from all classes
 			if ( is_null( $class ) ) return $this->_actions;
 			
-			// check if action exists
+			// check if class exists
 			if ( isset( $this->_actions[ $class ] ) ) return $this->_actions[ $class ];
 
 			return array();
@@ -221,16 +315,18 @@
 		function can( $userobject_id, $class, $action ){
 
 			// check if class and action are registed
-			if ( ! isset( $this->_actions[ $class ] ) || ! in_array( $action, $this->_actions[ $class ] ) ) return false;
+			$action = $this->getOriginalAction( $class, $action );
+
+			if ( $action == false ) return false;
 
 			$this->resetAll();
-			
+
 			// try to get a row joined with userobject
 			$this->set( 'permission_id', $userobject_id );
 			$this->set( 'class', $class );
 			$this->set( 'action', $action );
 
-			return ( $this->find( 'ydcmuserobject' ) == 1 );
+			return ( $this->find( 'ydcmuserobject' ) >= 1 );
 		}
 
 }
