@@ -21,7 +21,7 @@
         }
 
 
-        // Default action (that shows user details form with some editable fields)
+        // Default action (that shows user details)
         function actionDefault() {
 
 			// get user 6 
@@ -41,17 +41,14 @@
         // Edit user example
         function actionEdit() {
 
-			// add editing form defaults of userobject 6
-			$this->users->addFormEdit( 6 );
-
-			// get form
-			$form = & $this->users->getForm();
+			// create editing form of userobject 6
+			$form = & $this->users->addFormEdit( 6 );
 
 			// if form is not submitted just show it
 			if ( ! $form->isSubmitted() ) return $form->display();
 
-			// update user 6 with submitted information, magic isn't it ;)
-			$result = $this->users->saveFormEdit( 6 );
+			// update user with submitted information, magic isn't it ;)
+			$result = $this->users->saveFormEdit();
 
 			// print result message
 			if ( $result->ok ) print( 'OK: ' . $result->message );
@@ -62,20 +59,17 @@
         }
 
 
-		// this action will add a new sub-user of the root (super-administrator: id 100)
+		// this action will add a new user
 		function actionNew(){
 
-			// add form for adding a new user to group 2
-			$this->users->addFormNew( 2 );
-
-			// get form
-			$form = & $this->users->getForm();
+			// create form for adding a new user
+			$form = & $this->users->addFormNew();
 
 			// if form is not submitted just show it
 			if ( ! $form->isSubmitted() ) return $form->display();
 
-			// add user to group 2
-			$result = $this->users->saveFormNew( 2 );
+			// add user
+			$result = $this->users->saveFormNew();
 			
 			// print result message
 			if ( $result->ok ) print( 'OK: ' . $result->message );
