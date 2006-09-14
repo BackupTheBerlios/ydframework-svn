@@ -33,6 +33,8 @@
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUser/' );
 
+	YDConfig::set( 'YDCMTEMPLATES_ADMIN_EXT', '/shot.png', false );
+
 	// add YDF libs needed by this class
 	YDInclude( 'YDDatabaseObject.php' );
 	YDInclude( 'YDValidateRules.php' );
@@ -258,7 +260,7 @@
 				$templates = new YDCMTemplates();
 
 				// get url to templates and set shot.png as filename
-				$attributes = array( 'border' => 1, 'src' => YDConfig::get( 'YDCMTEMPLATES_ADMIN_URL' ), 'ext' => '/shot.png' );
+				$attributes = array( 'border' => 1, 'src' => YDConfig::get( 'YDCMTEMPLATES_ADMIN_URL' ), 'ext' => 	YDConfig::get( 'YDCMTEMPLATES_ADMIN_EXT' ) );
 
     	        $this->_form->addElement( 'selectimage',    'template', t( 'ydcmuser label template' ), $attributes, $templates->admin_templates() );
 
