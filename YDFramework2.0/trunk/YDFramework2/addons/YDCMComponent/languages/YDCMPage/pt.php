@@ -1,7 +1,7 @@
 <?php
 // PERMISSIONS
-$GLOBALS['t']['ydcmpage_create'] = 'Criar';
-$GLOBALS['t']['ydcmpage_delete'] = 'Eliminar';
+$GLOBALS['t']['ydcmpage perm create'] = 'Criar';
+$GLOBALS['t']['ydcmpage perm delete'] = 'Eliminar';
 
 
 // PAGE FORM
