@@ -181,5 +181,27 @@
 		}
 
 
+        /**
+         *  This method returns an associative array 
+         *
+         *  @param $type       Node type
+         *  @param $attribute  (Optional) Attribute name or (array of attributes) to get only
+         *
+         *  @returns    Associative array
+         */
+		function getElements( $type, $attributes = array() ){
+
+			$this->resetAll();
+
+			// set user id
+			$this->set( 'type', $type );
+
+			// get all attributes
+			$this->find();
+
+			return $this->getResultsAsAssocArray( 'userobject_id', $attributes );
+		}
+
+
     }
 ?>

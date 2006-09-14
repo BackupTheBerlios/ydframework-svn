@@ -12,6 +12,7 @@ $GLOBALS['t']['ydcmuser label password'] = 'Password';
 $GLOBALS['t']['ydcmuser label name'] = 'Nome';
 $GLOBALS['t']['ydcmuser label email'] = 'Email';
 $GLOBALS['t']['ydcmuser label other'] = 'Outras informa&ccedil;&otilde;es';
+$GLOBALS['t']['ydcmuser label group'] = 'Grupo';
 $GLOBALS['t']['ydcmuser label language'] = 'Idioma';
 $GLOBALS['t']['ydcmuser label template'] = 'Template';
 $GLOBALS['t']['ydcmuser label state'] = 'Login';

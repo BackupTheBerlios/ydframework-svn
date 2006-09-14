@@ -181,6 +181,8 @@
          */
 		function & addFormEdit( $id, $noneditable = array() ){
 
+			$this->editing_ID = $id;
+
 		 	return $this->_addFormDetails( $id, true, $noneditable );
 		}
 
@@ -188,27 +190,27 @@
         /**
          *  This method adds form elements for addind a new user
 		 *
-		 * @param $id    Group id of this new user
+		 * @param $id    (Optional) Predefined-Group_id of this new user
          *
 		 * @returns    YDForm object pointer         
          */
-		function & addFormNew( $id ){
+		function & addFormNew( $id = null ){
 
-		 	return $this->_addFormDetails( $id, false );
+		 	return $this->_addFormDetails( $id, false, array() );
 		}
 		 
 		
         /**
          *  Helper method for user management
 		 *
-		 * @param $id           If you will EDIT some user this is the user id to edit. On $edit (next argument) you must set TRUE
-         *                      If you will ADD a new user this is the parent id of the new user. On $edit (next argument) you must set FALSE
-		 * @param $edit         The edit parameter
+		 * @param $id           If you will EDIT some user this is the user id to edit.
+         *                      If you will ADD a new user this is the group id (parent_id) of the new user.
+		 * @param $edit         The edit parameter. TRUE if form is form editing, FALSE if form is for a new user creation
 		 * @param $noneditable  Array with form element names that are NOT editable
          *
 		 * @returns    YDForm object pointer         
 		 */
-		function & _addFormDetails( $id, $edit, $noneditable = array() ){
+		function & _addFormDetails( $id, $edit, $noneditable ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -289,6 +291,14 @@
 
 			}else{
 
+				// if id argument is not set its because we want a select box (with groups) so choose
+				if ( is_null( $id ) ){
+				
+					// get groups from userobject
+					$obj = new YDCMUserobject();
+					$this->_form->addElement( 'select', 'group', t( 'ydcmuser label group' ), array(), $obj->getElements( 'YDCMGroup', 'reference' ) );
+				}					
+
 				// add submit button
 				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmuser label new' ) );
 
@@ -323,14 +333,16 @@
         /**
          *  This method updates user attributes
          *
-         *  @param $id           User id to save attributes
+         *  @param $id           (Optional) User id to force saving
          *  @param $formvalues   (Optional) Custom array with user attributes
          *
          *  @returns    YDResult object. OK      - form updated
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to update
          */
-		function saveFormEdit( $id, $formvalues = null ){
+		function saveFormEdit( $id = null, $formvalues = null ){
+
+			if ( is_null( $id ) ) $id = $this->editing_ID;
 
 			return $this->_saveFormDetails( $id, true, $formvalues );
 		}
@@ -339,14 +351,14 @@
         /**
          *  This method adds a new user
          *
-         *  @param $parent_id    Parent id of this new user
+         *  @param $parent_id    (Optional) Group id (parent_id) of this new user
          *  @param $formvalues   (Optional) Custom array with user attributes
          *
          *  @returns    YDResult object. OK      - form added
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to add
          */
-		function saveFormNew( $parent_id, $formvalues = null ){
+		function saveFormNew( $parent_id = null, $formvalues = null ){
 
 			return $this->_saveFormDetails( $parent_id, false, $formvalues );
 		}
@@ -410,15 +422,18 @@
 
 			}else{
 
+				// check if parent it is set in argument or was choosen in the group selectbox
+				if ( is_null( $id ) ) $id = $values[ 'group' ];
+
 				// create userobject node
 				$userobject = array();
 				$userobject['type']      = 'YDCMUser';
 				$userobject['reference'] = $values[ 'name' ];
 				$userobject['state']     = isset( $values[ 'state' ] ) ? $values[ 'state' ] : 0;
-				
-				// update userobject and get new id
+
+				// insert a new node in userobject and get the new id for user row creation
 				$uobj = new YDCMUserobject();
-				$res  = $uobj->addNode( $userobject, $id );
+				$res = $uobj->addNode( $userobject, intval( $id ) );
 
 				// create user row
 				$user = array();
