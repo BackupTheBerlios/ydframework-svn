@@ -4,7 +4,6 @@
 <head>
 
     <title>{$YD_FW_NAMEVERS}</title>
-
     {literal}<style>
         td { border-bottom: 1px solid #FFCC00; }
         P,TD,LI,INPUT,SELECT,TEXTAREA{background-color:#FFE9A6;font:13px/1.3 Verdana}
@@ -715,20 +714,25 @@
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/functions.php">ajax/functions.php</a> </td>
         </tr>
         <tr>
-          <td colspan="2"><b>&nbsp;<br/>
-            YDCMComponent: Content Management</b></td>
-          <td><b>&nbsp;</b></td>
-        </tr>
+          <td colspan="3"><b>&nbsp;<br/>
+            YDCMComponent: Content Management</b><b>&nbsp;components</b></td>
+          </tr>
         <tr>
-          <td valign="top" rowspan="6">&nbsp;</td>
-          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/instructions.txt">Instructions (database and configuration) </a></td>
-          <td valign="top">&nbsp;</td>
-        </tr>
+          <td valign="top" rowspan="5">&nbsp;</td>
+          <td colspan="2" valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td nowrap style="border-bottom: 0px">Instructions: </td>
+                <td style="border-bottom: 0px"><ol>
+                  <li>Create a mySQL database </li>
+                  <li>Create your database structure using <a href="{$YD_SELF_SCRIPT}?do=source&id=cm/cm.sql" target="_blank">this SQL file</a> <span style="font-size: 9px">(examples/cm/cm.sql)</span></li>
+                  <li>Edit database connection in <a href="{$YD_SELF_SCRIPT}?do=source&id=cm/cm.php" target="_blank">this configuration file</a> <span style="font-size: 9px">(examples/cm/cm.php)</span></li>
+                </ol></td>
+              </tr>
+            </table>            </td>
+          </tr>
         <tr>
-          <td colspan="2" valign="top">&nbsp;</td>
-        </tr>
-        <tr>
-          <td colspan="2" valign="top"><strong>Backend examples</strong></td>
+          <td colspan="2" valign="top"><br>
+          <strong>Backend examples</strong></td>
         </tr>
         <tr>
           <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/userdetails.php">User management ( how to get details )</a><br>
@@ -744,6 +748,7 @@
         </tr>
         <tr>
           <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php">Permissions ( register, check, add, delete )</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php?do=alias">Permissions ( using alias )</a><br>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/permissions.php">cm/backend/permissions.php</a> </td>
           </tr>
