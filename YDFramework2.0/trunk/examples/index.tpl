@@ -749,6 +749,7 @@
         <tr>
           <td valign="top">&nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php">Permissions ( register, check, add, delete )</a><br>
             &nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php?do=alias">Permissions ( using alias )</a><br>
+            &nbsp;&nbsp;&nbsp;<a href="cm/backend/permissions.php?do=alwaysRegistered">Permissions ( always registered actions )</a><br>
           </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=cm/backend/permissions.php">cm/backend/permissions.php</a> </td>
           </tr>
