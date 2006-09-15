@@ -485,7 +485,9 @@
             YDConfig::set( YD_LOCALE_KEY, $locale );
 
             // initialize t array
-            $GLOBALS['t'] = array();
+            if ( ! isset( $GLOBALS['t'] ) ) {
+                $GLOBALS['t'] = array();
+            }
 
             // if directories array exist we must include all files
             if ( isset( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] ) )
