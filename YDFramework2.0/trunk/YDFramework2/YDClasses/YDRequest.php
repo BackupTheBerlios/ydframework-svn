@@ -85,15 +85,17 @@
         /**
          *  Get the value of a query string variable.
          *
-         *  @param  $name    The name of the query string variable.
-         *  @param  $default (optional) The default value if the query string variable is not existing.
-         *  @param  $values  (optional) The allowed values as an array.
+         *  @param  $name       The name of the query string variable.
+         *  @param  $default    (optional) The default value if the query string variable is not existing.
+         *  @param  $values     (optional) The allowed values as an array.
+         *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
          *
          *  @returns    The value of the query string variable as a string.
          */
-        function getQueryStringParameter( $name, $default='', $values=null ) {
+        function getQueryStringParameter( $name, $default='', $values=null, $use_keys=false ) {
             if ( isset( $_GET[$name] ) ) {
                 if ( ! is_null( $values ) ) {
+                    $values = $use_keys ? array_keys( $values ) : array_values( $values );;
                     if ( in_array( $_GET[$name], $values ) ) {
                         return $_GET[$name];
                     } else {
@@ -113,11 +115,12 @@
          *  @param  $name    The name of the query string variable.
          *  @param  $default (optional) The default value if the query string variable is not existing.
          *  @param  $values  (optional) The allowed values as an array.
+         *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
          *
          *  @returns    The value of the query string variable as an integer.
          */
-        function getQueryStringParameterAsInt( $name, $default=null, $values=null ) {
-            $value = $this->getQueryStringParameter( $name, $default, $values );
+        function getQueryStringParameterAsInt( $name, $default=null, $values=null, $use_keys=false ) {
+            $value = $this->getQueryStringParameter( $name, $default, $values, $use_keys );
             return is_numeric( $value ) ? intval( $value ) : $default;
         }
 
@@ -129,11 +132,12 @@
          *  @param  $default            (optional) The default value if the query string variable is not existing.
          *  @param  $values             (optional) The allowed values as an array.
          *  @param  $action_if_fails    (optional) The action to redirect of if the parameter is invalid.
+         *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
          *
          *  @returns    The value of the query string variable as a string.
          */
-        function getRequiredQueryStringParameter( $name, $default, $values=null, $action_if_fails='default' ) {
-            $result = $this->getQueryStringParameter( $name, $default, $values );
+        function getRequiredQueryStringParameter( $name, $default, $values=null, $action_if_fails='default', $use_keys=false ) {
+            $result = $this->getQueryStringParameter( $name, $default, $values, $use_keys );
             if ( empty( $result ) ) {
                 $this->redirectToAction( $action_if_fails );
             } else {
