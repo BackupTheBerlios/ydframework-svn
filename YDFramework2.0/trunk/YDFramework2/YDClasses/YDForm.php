@@ -1117,9 +1117,22 @@
             if ( sizeof( $array ) == 0 ) { return ''; }
             $out = '';
             foreach ( $array as $key=>$value ) {
-                $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
+                if ( is_null( $value ) ) $out .= ' disabled ';
+                else                     $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
             }
             return $out;
+        }
+
+        /**
+         *  This function returns the default value of an element.
+         *
+         *  @param $name     The element name
+         *  @param $options  (Optional) Custom options (eg, used on checkboxgroup to specify internal element)
+         */
+        function disable( $name, $options = null ) {
+
+                $element = & $this->getElement( $name );
+                $element->disable( $options );
         }
 
         /**
@@ -1298,6 +1311,17 @@
             foreach ( $attributes as $k => $v )
                 $this->setAttribute( $k, $v );
         }
+
+
+        /**
+         *  Function to disable this element
+         *
+         *  @param  $options    (Optional) Custom options
+         */
+        function disable( $options = null ) {
+            $this->setAttribute( 'disabled', null );
+        }
+
 
         /**
          *  Function to delete an attribute of a form element
