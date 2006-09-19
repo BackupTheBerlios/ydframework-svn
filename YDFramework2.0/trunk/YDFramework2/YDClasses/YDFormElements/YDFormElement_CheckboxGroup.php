@@ -113,6 +113,30 @@
             }
         }
 
+
+        /**
+         *	This function disables checkboxes
+         *
+         *	@param	$options	Value, Array of values to disable
+         */
+        function disable( $options ) {
+
+            // if null disable all elements
+            if ( is_null ( $options ) ){
+                foreach ( $this->_items as $k => $item )
+                    if ( isset( $this->_items[$k] ) ) $this->_items[$k]->disable();
+                return;
+            }
+
+            // check if options is array
+            if ( ! is_array( $options ) ) $options = array( $options );
+
+            // disable specific elements
+            foreach( $options as $k )
+                if ( isset( $this->_items[$k] ) ) $this->_items[$k]->disable();
+        }
+
+
         /**
          *      This function returns the value of the element.
          *
