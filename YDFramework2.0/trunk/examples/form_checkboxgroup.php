@@ -36,6 +36,11 @@
             $form->addElement( 'checkboxgroup', 'choose_multiple11', 'Custom Separator "XXX" and LEFT',           array('sep' => 'l', 'separator' => '&nbsp;&nbsp;XXX&nbsp;&nbsp;'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple12', 'Custom Separator "...", LEFT and VERTICAL',                   array('sep' => 'l', 'separator' => '...<br />'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
 
+			// demonstrate disable on checkboxgroup
+            $form->disable( 'choose_multiple',  1 );
+            $form->disable( 'choose_multiple2', array( 0, 1 ) );
+            $form->disable( 'choose_multiple3' );
+
             // Add the submit button
             $form->addElement( 'submit', 'btnSubmit', 'submit' );
 
