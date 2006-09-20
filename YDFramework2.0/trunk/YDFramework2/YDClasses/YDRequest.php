@@ -136,7 +136,7 @@
          *
          *  @returns    The value of the query string variable as a string.
          */
-        function getRequiredQueryStringParameter( $name, $default, $values=null, $action_if_fails='default', $use_keys=false ) {
+        function getRequiredQueryStringParameter( $name, $default='', $values=null, $action_if_fails='default', $use_keys=false ) {
             $result = $this->getQueryStringParameter( $name, $default, $values, $use_keys );
             if ( empty( $result ) ) {
                 $this->redirectToAction( $action_if_fails );
