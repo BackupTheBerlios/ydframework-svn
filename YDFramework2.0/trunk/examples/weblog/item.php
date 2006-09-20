@@ -55,7 +55,7 @@
             $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
             $form->addElement( 'text', 'userwebsite', t( 'website' ) );
             $form->addElement( 'textarea', 'comment', '' );
-            $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ) );
+            $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'class' => 'button' ) );
             $form->addElement( 'hidden', 'item_id' );
 
             // Set the defaults
