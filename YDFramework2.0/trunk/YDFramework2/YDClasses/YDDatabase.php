@@ -211,14 +211,14 @@
             
             // Get the offset
             $this->offset = $offset ? ( $this->pagesize * ( $this->page - 1 ) ) : 0;
-            
+
             // Get the previous and next page
-            $this->pagePrevious = ( $this->page <= 1 ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? $this->totalPages : 0 ) : $this->page - 1;
-            $this->pageNext = ( $this->page >= $this->totalPages ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? 1 : $this->totalPages ) : $this->page + 1;
+            $this->pagePrevious = ( $this->page <= 1 ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? $this->totalPages : false ) : $this->page - 1;
+            $this->pageNext = ( $this->page >= $this->totalPages ) ? ( YDConfig::get( 'YD_DB_RS_CYCLENAVIGATION' ) ? 1 : false ) : $this->page + 1;
 
             // Indicate if we are on the last or first page
-            $this->isFirstPage = ( $this->pagePrevious ) ? true : false;
-            $this->isLastPage = ( $this->pageNext ) ? true : false;
+            $this->isFirstPage = ( $this->pagePrevious === false ) ? true : false;
+            $this->isLastPage = ( $this->pageNext === false ) ? true : false;
 
             // Add the list of pages as an array
             $this->pages = ( $this->totalPages <= 1 ) ? array( 1 ) : range( 1, $this->totalPages );
