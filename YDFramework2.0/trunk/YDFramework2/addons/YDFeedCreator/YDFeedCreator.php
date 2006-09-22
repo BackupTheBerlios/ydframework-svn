@@ -145,7 +145,7 @@
 
             $item = array(
                 'title' => YDStringUtil::encodeString( $title ), 'link' => $link,
-                'description' => $desc, 'guid' => $guid,
+                'description' => YDStringUtil::encodeString( $desc ), 'guid' => $guid,
                 'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
                 'enclosure_type' => $enclosure_type, 'comments' => $commentlink
             );
