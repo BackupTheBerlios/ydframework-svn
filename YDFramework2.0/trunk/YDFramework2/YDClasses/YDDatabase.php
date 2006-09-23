@@ -548,30 +548,8 @@
          *  @returns    The browsebar as formatted HTML.
          */
         function getBrowseBar(
-            $previousLabel='previous', $nextLabel='next', $style=YD_BROWSEBAR_SHORT, $currentLink=false
+            $previousLabel='previous', $nextLabel='next', $style=YD_BROWSEBAR_SHORT, $currentLink=false, $allLink=null
         ) {
-
-//            {if $users->totalPages > 1}
-//                <tr><td colspan="5">
-//                {if $users->page != 1}
-//                    <a href="{$users->getPreviousUrl()}">{t w="previous"}</a>
-//                {else}
-//                    {t w="previous"}
-//                {/if}
-//                {foreach from=$users->pages item="page"}
-//                    {if $page == $users->page}
-//                        {$page}
-//                    {else}
-//                        <a href="{$users->getPageUrl($page)}">{$page}</a>
-//                    {/if}
-//                {/foreach}
-//                {if $users->page != $users->totalPages}
-//                    <a href="{$users->getNextUrl()}">{t w="next"}</a>
-//                {else}
-//                    {t w="next"}
-//                {/if}
-//                </td></tr>
-//            {/if}
 
             // Capture the HTML output
             $html = '';
@@ -609,6 +587,15 @@
                 } else {
                     $html .= '... ';
                 }
+            }
+
+            // Add an all link if need
+            if ( ! empty( $allLink ) ) {
+                $url = $this->url;
+                $url->deleteQueryVar( $this->pagevar );
+                $url->deleteQueryVar( $this->sizevar );
+                $url->setQueryVar( 'show', 'all' );
+                $html .= sprintf( '<a href="%s">%s</a> ', $url->getUri(), $allLink );
             }
 
             // Get the next link if any
