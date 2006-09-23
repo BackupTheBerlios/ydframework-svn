@@ -32,6 +32,8 @@
     // Constants
     define( 'YD_DB_FETCH_ASSOC', 1 );
     define( 'YD_DB_FETCH_NUM', 2 );
+    define( 'YD_BROWSEBAR_FULL', 3 );
+    define( 'YD_BROWSEBAR_SHORT', 4 );
 
     // Configure the default for this class
     YDConfig::set( 'YD_DB_FETCHTYPE', YD_DB_FETCH_ASSOC, false );
@@ -222,7 +224,53 @@
 
             // Add the list of pages as an array
             $this->pages = ( $this->totalPages <= 1 ) ? array( 1 ) : range( 1, $this->totalPages );
-            
+
+            // Get subset of the pages a la phpBB (ideal for large page lists
+            $this->pagesShort = $this->pages;
+            if ( sizeof( $this->pages ) > 10 ) {
+
+                // Get the first 3 pages
+                $this->pagesShort = range( 1, 3 );
+
+                // Get the current page, the previous one and the next one
+                if ( $this->pagePrevious !== false && ! in_array( $this->pagePrevious, $this->pagesShort ) ) {
+                    array_push( $this->pagesShort, $this->pagePrevious );
+                }
+                if ( ! in_array( $this->page, $this->pagesShort ) ) {
+                    array_push( $this->pagesShort, $this->page );
+                }
+                if ( $this->pageNext !== false && ! in_array( $this->pageNext, $this->pagesShort ) ) {
+                    array_push( $this->pagesShort, $this->pageNext );
+                }
+
+                // Get the last 3 pages
+                $this->pagesShort = array_merge( $this->pagesShort, range( $this->totalPages-2, $this->totalPages ) );
+
+                // Get the unique values
+                $this->pagesShort = array_unique( $this->pagesShort );
+
+                // Sort the list
+                sort( $this->pagesShort );
+
+                // Add the holes
+                $pagesShort = $this->pagesShort;
+                $counter = 1;
+                foreach ( $this->pagesShort as $key=>$page ) {
+                    $next = next( $this->pagesShort );
+                    if ( $next !== false && ( $page + 1 ) != $next ) {
+                        array_splice(
+                            $pagesShort,
+                            $key+$counter,
+                            count( $pagesShort ),
+                            array_merge( array( false ), array_slice( $pagesShort, $key+$counter ) )
+                        );
+                        $counter++;
+                    }
+                }
+                $this->pagesShort = $pagesShort;
+
+            }
+
             // Get the subset of the records we need
             $this->set = array_slice( $this->records, $this->offset, $this->pagesize );
 
@@ -439,7 +487,6 @@
             return $this->set;
         }
 
-
         /**
          *  Sets fields names
          *
@@ -449,14 +496,12 @@
             return $this->gr_fields = $fields;
         }
 
-
         /**
          *  Gets fields names
          */
         function getFields() {
             return ( isset( $this->gr_fields ) ? $this->gr_fields : array() );
         }
-
 
         /**
          *  Set current field name
@@ -466,9 +511,8 @@
          */
         function setCurrentField( $field, $sortdirection ) {
             $this->gr_currentField = $field;
-			$this->sortdirection   = $sortdirection;
+            $this->sortdirection   = $sortdirection;
         }
-
 
         /**
          *  Get current field name
@@ -477,7 +521,6 @@
             return ( isset( $this->gr_currentField ) ? $this->gr_currentField : array() );
         }
 
-
         /**
          *  Get sort direction
          *
@@ -485,12 +528,100 @@
          *
          */
         function getSortdirection( $reverse = false ) {
-
-			if ( $reverse ) return ( strtoupper( $this->sortdirection ) == 'ASC' ? 'DESC' : 'ASC' );
-
-			return $this->sortdirection;
+            if ( $reverse ) {
+                return ( strtoupper( $this->sortdirection ) == 'ASC' ? 'DESC' : 'ASC' );
+            } else {
+                return $this->sortdirection;
+            }
         }
 
+        /**
+         *  This function gives a prerendered browsing bar for the recordset.
+         *
+         *  @param  $previousLabel  (optional) Label for the previous link. Defaults to "previous".
+         *  @param  $nextLabel      (optional) Label for the next link. Defaults to "next".
+         *  @param  $style          (optional) Style of the browse bar. This can be either YD_BROWSEBAR_FULL or
+         *                          YD_BROWSEBAR_FULL. The full one shows all page numbers, the short one doesn't.
+         *  @param  $currentLink    (optional) Boolean indicating if you should be able to click on the link for the
+         *                          current page or not.
+         *
+         *  @returns    The browsebar as formatted HTML.
+         */
+        function getBrowseBar(
+            $previousLabel='previous', $nextLabel='next', $style=YD_BROWSEBAR_SHORT, $currentLink=false
+        ) {
+
+//            {if $users->totalPages > 1}
+//                <tr><td colspan="5">
+//                {if $users->page != 1}
+//                    <a href="{$users->getPreviousUrl()}">{t w="previous"}</a>
+//                {else}
+//                    {t w="previous"}
+//                {/if}
+//                {foreach from=$users->pages item="page"}
+//                    {if $page == $users->page}
+//                        {$page}
+//                    {else}
+//                        <a href="{$users->getPageUrl($page)}">{$page}</a>
+//                    {/if}
+//                {/foreach}
+//                {if $users->page != $users->totalPages}
+//                    <a href="{$users->getNextUrl()}">{t w="next"}</a>
+//                {else}
+//                    {t w="next"}
+//                {/if}
+//                </td></tr>
+//            {/if}
+
+            // Capture the HTML output
+            $html = '';
+
+            // If no pages, return an empty string
+            if ( $this->totalPages <= 1 ) {
+                return $html;
+            }
+
+            // Get the correct currentLink value
+            $currentLink = ( $currentLink === false ) ? false : true;
+
+            // Get the list of pages we need to use
+            $pages = ( $style == YD_BROWSEBAR_SHORT ) ? $this->pagesShort : $this->pages;
+
+            // Get the previous link if any
+            if ( $this->page != 1 ) {
+                $html .= sprintf( '<a href="%s">%s</a> ', $this->getPreviousUrl(), $previousLabel );
+            } else {
+                $html .= sprintf( '%s ', $previousLabel );
+            }
+
+            // Loop over the pages
+            foreach ( $pages as $page ) {
+                if ( $page !== false ) {
+                    if ( $page == $this->page ) {
+                        if ( $currentLink ) {
+                            $html .= sprintf( '<a href="%s"><b>%s</b></a> ', $this->getPageUrl( $page ), $page );
+                        } else {
+                            $html .= sprintf( '<b>%s</b> ', $page );
+                        }
+                    } else {
+                        $html .= sprintf( '<a href="%s">%s</a> ', $this->getPageUrl( $page ), $page );
+                    }
+                } else {
+                    $html .= '... ';
+                }
+            }
+
+            // Get the next link if any
+            if ( $this->page != $this->totalPages ) {
+                $html .= sprintf( '<a href="%s">%s</a> ', $this->getNextUrl(), $nextLabel );
+            } else {
+                $html .= sprintf( '%s ', $nextLabel );
+            }
+
+            // Return the HTML
+            return $html;
+
+        }
 
     }
 
