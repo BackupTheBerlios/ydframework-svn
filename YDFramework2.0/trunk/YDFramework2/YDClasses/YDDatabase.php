@@ -538,8 +538,8 @@
         /**
          *  This function gives a prerendered browsing bar for the recordset.
          *
-         *  @param  $previousLabel  (optional) Label for the previous link. Defaults to "previous".
-         *  @param  $nextLabel      (optional) Label for the next link. Defaults to "next".
+         *  @param  $previousLabel  (optional) Label for the previous link. Defaults to "&laquo;".
+         *  @param  $nextLabel      (optional) Label for the next link. Defaults to "&raquo;".
          *  @param  $style          (optional) Style of the browse bar. This can be either YD_BROWSEBAR_FULL or
          *                          YD_BROWSEBAR_FULL. The full one shows all page numbers, the short one doesn't.
          *  @param  $currentLink    (optional) Boolean indicating if you should be able to click on the link for the
@@ -548,7 +548,7 @@
          *  @returns    The browsebar as formatted HTML.
          */
         function getBrowseBar(
-            $previousLabel='previous', $nextLabel='next', $style=YD_BROWSEBAR_SHORT, $currentLink=false, $allLink=null
+            $previousLabel='&laquo;', $nextLabel='&raquo;', $style=YD_BROWSEBAR_SHORT, $currentLink=false, $allLink=null
         ) {
 
             // Capture the HTML output
