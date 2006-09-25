@@ -1418,7 +1418,7 @@
 
         /**
          *  This function will log the SQL statement to the debug log and keep track of the number of queries that were
-         *  executed.
+         *  executed. This will only happen if YD_DEBUG equals 1 or 2
          *
          *  @param $sql The SQL statement to log.
          *
@@ -1426,33 +1426,38 @@
          */
         function _logSql( $sql ) {
 
-            // Split the SQL in different lines
-            $sql = str_ireplace( 'SELECT', 'SELECT', $sql );
-            $sql = str_ireplace( 'UPDATE', 'UPDATE', $sql );
-            $sql = str_ireplace( 'DELETE', 'DELETE', $sql );
-            $sql = str_ireplace( 'INSERT', 'INSERT', $sql );
-            $sql = str_ireplace( 'FROM', YD_CRLF . 'FROM', $sql );
-            $sql = str_ireplace( 'INTO', YD_CRLF . 'INTO', $sql );
-            $sql = str_ireplace( 'VALUES', YD_CRLF . 'VALUES', $sql );
-            $sql = str_ireplace( 'LEFT JOIN', YD_CRLF . 'LEFT JOIN', $sql );
-            $sql = str_ireplace( 'RIGHT JOIN', YD_CRLF . 'RIGHT JOIN', $sql );
-            $sql = str_ireplace( 'INNER JOIN', YD_CRLF . 'INNER JOIN', $sql );
-            $sql = str_ireplace( 'WHERE', YD_CRLF . 'WHERE', $sql );
-            $sql = str_ireplace( 'ORDER BY', YD_CRLF . 'ORDER BY', $sql );
-            $sql = str_ireplace( 'GROUP BY', YD_CRLF . 'GROUP BY', $sql );
-            $sql = str_ireplace( 'LIMIT', YD_CRLF . 'LIMIT', $sql );
+            // Show debugging info if needed
+            if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 
-            // Get the backtrace
-            $trace = debug_backtrace();
+                // Split the SQL in different lines
+                $sql = str_ireplace( 'SELECT', 'SELECT', $sql );
+                $sql = str_ireplace( 'UPDATE', 'UPDATE', $sql );
+                $sql = str_ireplace( 'DELETE', 'DELETE', $sql );
+                $sql = str_ireplace( 'INSERT', 'INSERT', $sql );
+                $sql = str_ireplace( 'FROM', YD_CRLF . 'FROM', $sql );
+                $sql = str_ireplace( 'INTO', YD_CRLF . 'INTO', $sql );
+                $sql = str_ireplace( 'VALUES', YD_CRLF . 'VALUES', $sql );
+                $sql = str_ireplace( 'LEFT JOIN', YD_CRLF . 'LEFT JOIN', $sql );
+                $sql = str_ireplace( 'RIGHT JOIN', YD_CRLF . 'RIGHT JOIN', $sql );
+                $sql = str_ireplace( 'INNER JOIN', YD_CRLF . 'INNER JOIN', $sql );
+                $sql = str_ireplace( 'WHERE', YD_CRLF . 'WHERE', $sql );
+                $sql = str_ireplace( 'ORDER BY', YD_CRLF . 'ORDER BY', $sql );
+                $sql = str_ireplace( 'GROUP BY', YD_CRLF . 'GROUP BY', $sql );
+                $sql = str_ireplace( 'LIMIT', YD_CRLF . 'LIMIT', $sql );
 
-            // Format the SQL
-            $sql_final = '';
-            foreach ( explode( YD_CRLF, $sql ) as $line ) {
-                $sql_final .= '[' . $trace[2]['file'] . ':' . $trace[2]['line'] . '] ' . $line . YD_CRLF;
+                // Get the backtrace
+                $trace = debug_backtrace();
+
+                // Format the SQL
+                $sql_final = '';
+                foreach ( explode( YD_CRLF, $sql ) as $line ) {
+                    $sql_final .= '[' . $trace[2]['file'] . ':' . $trace[2]['line'] . '] ' . $line . YD_CRLF;
+                }
+
+                // Add it to the query log
+                array_push( $GLOBALS['YD_SQL_QUERY'], $sql_final );
+
             }
-
-            // Add it to the query log
-            array_push( $GLOBALS['YD_SQL_QUERY'], $sql_final );
 
         }
 
