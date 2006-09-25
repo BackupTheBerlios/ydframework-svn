@@ -19,36 +19,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $images->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="7">
-                    <p class="subline">
-                    {if ! $images->isFirstPage}
-                        <a href="{$images->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$images->pages item="page"}
-                        {if $page == $images->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$images->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $images->isLastPage}
-                        <a href="{$images->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     {$form.tag}
         {$form.action.html}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
@@ -70,7 +40,7 @@
                 <th class="adminRowL" width="14%">{t w="dimensions"}</th>
                 <th class="adminRowR" width="10%">{t w="actions"}</th>
             </tr>
-            {$browsebar}
+            <tr><td class="adminRowR" colspan="7">{$images->getBrowseBar()}</td></tr>
             {foreach from=$images->set item="image"}
                 <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL" valign="top">{$image->getLastModified()|date:'%Y/%m/%d %H:%M'}</td>
@@ -89,7 +59,7 @@
                     </td>
                 </tr>
             {/foreach}
-            {$browsebar}
+            <tr><td class="adminRowR" colspan="7">{$images->getBrowseBar()}</td></tr>
             <tr>
                 <td class="adminRowLNB" colspan="7">
                     <p class="subline">{t w="total"}: {$images->totalRows}</p>

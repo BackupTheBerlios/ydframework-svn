@@ -21,36 +21,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $comments->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="4">
-                    <p class="subline">
-                    {if ! $comments->isFirstPage}
-                        <a href="{$comments->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$comments->pages item="page"}
-                        {if $page == $comments->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$comments->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $comments->isLastPage}
-                        <a href="{$comments->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     {if $item}
         <tr>
@@ -83,7 +53,7 @@
             <th class="adminRowL" width="30%">{t w="comment"}</th>
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
-        {$browsebar}
+        <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
         {foreach from=$comments->set item="comment"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
                 <td class="adminRowL">
@@ -126,7 +96,7 @@
                 </td>
             </tr>
         {/foreach}
-        {$browsebar}
+        <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
         <tr>
             <td class="adminRowLNB" colspan="4">
                 <p class="subline">{t w="total"}: {$comments->totalRows}</p>

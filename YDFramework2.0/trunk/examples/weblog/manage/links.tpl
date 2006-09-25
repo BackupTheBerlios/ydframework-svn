@@ -19,36 +19,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $links->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="4">
-                    <p class="subline">
-                    {if ! $links->isFirstPage}
-                        <a href="{$links->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$links->pages item="page"}
-                        {if $page == $links->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$links->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $links->isLastPage}
-                        <a href="{$links->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
         <th colspan="3" class="adminRowLG">&raquo; {t w="a_links"}</th>
@@ -64,6 +34,7 @@
             <th class="adminRowR" width="10%">{t w="num_visits"}</th>
             <th class="adminRowR" width="20%">{t w="actions"}</th>
         </tr>
+        <tr><td class="adminRowR" colspan="4">{$links->getBrowseBar()}</td></tr>
         {foreach from=$links->set item="link"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$link.title}</td>
@@ -76,6 +47,7 @@
                 </td>
             </tr>
         {/foreach}
+        <tr><td class="adminRowR" colspan="4">{$links->getBrowseBar()}</td></tr>
         <tr>
             <td class="adminRowLNB" colspan="4">
                 <p class="subline">{t w="total"}: {$links->totalRows}</p>

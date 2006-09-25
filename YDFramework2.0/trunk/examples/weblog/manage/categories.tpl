@@ -19,36 +19,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $categories->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="3">
-                    <p class="subline">
-                    {if ! $categories->isFirstPage}
-                        <a href="{$categories->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$categories->pages item="page"}
-                        {if $page == $categories->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$categories->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $categories->isLastPage}
-                        <a href="{$categories->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     {$form.tag}
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
@@ -65,7 +35,7 @@
                 <th class="adminRowR" width="20%">{t w="number_of_items"}</th>
                 <th class="adminRowR" width="35%">{t w="actions"}</th>
             </tr>
-            {$browsebar}
+            <tr><td class="adminRowR" colspan="3">{$categories->getBrowseBar()}</td></tr>
             {foreach from=$categories->set item="category"}
                 <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL">{$category.title}</td>
@@ -78,7 +48,7 @@
                     </td>
                 </tr>
             {/foreach}
-            {$browsebar}
+            <tr><td class="adminRowR" colspan="3">{$categories->getBrowseBar()}</td></tr>
             <tr>
                 <td class="adminRowLNB" colspan="3">
                     <p class="subline">{t w="total"}: {$categories->totalRows}</p>

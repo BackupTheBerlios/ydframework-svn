@@ -19,36 +19,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $pages->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="4">
-                    <p class="subline">
-                    {if ! $pages->isFirstPage}
-                        <a href="{$pages->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$pages->pages item="page"}
-                        {if $page == $pages->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$pages->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $pages->isLastPage}
-                        <a href="{$pages->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
         <th colspan="3" class="adminRowLG">&raquo; {t w="a_pages"}</th>
@@ -64,6 +34,7 @@
             <th class="adminRowL" width="30%">{t w="title"}</th>
             <th class="adminRowR" width="18%">{t w="actions"}</th>
         </tr>
+        <tr><td class="adminRowR" colspan="4">{$pages->getBrowseBar()}</td></tr>
         {foreach from=$pages->set item="page"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $page.is_draft eq '1'}style="color: gray"{/if}>
                 <td class="adminRowL">
@@ -91,6 +62,7 @@
                 </td>
             </tr>
         {/foreach}
+        <tr><td class="adminRowR" colspan="4">{$pages->getBrowseBar()}</td></tr>
         <tr>
             <td class="adminRowLNB" colspan="4">
                 <p class="subline">{t w="total"}: {$pages->totalRows}</p>

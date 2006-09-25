@@ -39,36 +39,6 @@
 
     <p class="title">{t w="h_contents"} &raquo; {t w="select_image"}</p>
 
-    {capture assign="browsebar"}
-        {if $images->pages}
-            <tr>
-                <td class="adminRowR" colspan="5" style="border-top: 1px solid #DDDDDD;">
-                    <p class="subline">
-                    {if ! $images->isFirstPage}
-                        <a href="{$images->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$images->pages item="page"}
-                        {if $page == $images->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$images->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $images->isLastPage}
-                        <a href="{$images->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     {$form.tag}
         {$form.action.html}
         <table width="100%" cellspacing="0" cellpadding="0" border="0">
@@ -80,7 +50,7 @@
                 <td class="adminRowR" colspan="1">{$form._cmdSubmit.html}</td>
             </tr>
         {if $images->set}
-            {$browsebar}
+            <tr><td colspan="5">{$images->getBrowseBar()}</td></tr>
             {foreach from=$images->set item="image_row"}
             <tr>
                 {foreach from=$image_row item="image"}
@@ -109,7 +79,7 @@
                 {/foreach}
             </tr>
             {/foreach}
-            {$browsebar}
+            <tr><td colspan="5">{$images->getBrowseBar()}</td></tr>
             <tr>
                 <td class="adminRowLNB" colspan="5">
                     <p class="subline">{t w="total"}: {$images->totalRows}</p>

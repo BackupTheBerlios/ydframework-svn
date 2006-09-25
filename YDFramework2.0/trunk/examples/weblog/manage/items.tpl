@@ -19,36 +19,6 @@
 
 {if $YD_ACTION == 'default'}
 
-    {capture assign="browsebar"}
-        {if $items->totalPages > 1}
-            <tr>
-                <td class="adminRowR" colspan="4">
-                    <p class="subline">
-                    {if ! $items->isFirstPage}
-                        <a href="{$items->getPreviousUrl()}" class="subline">&laquo;</a>
-                    {else}
-                        &laquo;
-                    {/if}
-                    |
-                    {foreach from=$items->pages item="page"}
-                        {if $page == $items->page}
-                            <b>{$page}</b>
-                        {else}
-                            <a href="{$items->getPageUrl($page)}" class="subline">{$page}</a>
-                        {/if}
-                    {/foreach}
-                    |
-                    {if ! $items->isLastPage}
-                        <a href="{$items->getNextUrl()}" class="subline">&raquo;</a>
-                    {else}
-                        &raquo;
-                    {/if}
-                    </p>
-                </td>
-            </tr>
-        {/if}
-    {/capture}
-
     <table width="700" cellspacing="0" cellpadding="0" border="0">
     <tr>
         <th colspan="3" class="adminRowLG">
@@ -69,7 +39,7 @@
             <th class="adminRowL" width="26%">{t w="title"}</th>
             <th class="adminRowR" width="22%">{t w="actions"}</th>
         </tr>
-        {$browsebar}
+        <tr><td class="adminRowR" colspan="4">{$items->getBrowseBar()}</td></tr>
         {foreach from=$items->set item="item"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $item.is_draft eq '1'}style="color: gray"{/if}>
                 <td class="adminRowL">
@@ -103,7 +73,7 @@
                 </td>
             </tr>
         {/foreach}
-        {$browsebar}
+        <tr><td class="adminRowR" colspan="4">{$items->getBrowseBar()}</td></tr>
         <tr>
             <td class="adminRowLNB" colspan="4">
                 <p class="subline">{t w="total"}: {$items->totalRows}</p>
