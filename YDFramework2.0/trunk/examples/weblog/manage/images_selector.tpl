@@ -50,7 +50,7 @@
                 <td class="adminRowR" colspan="1">{$form._cmdSubmit.html}</td>
             </tr>
         {if $images->set}
-            <tr><td colspan="5">{$images->getBrowseBar()}</td></tr>
+            <tr><td class="adminRowR" colspan="5">{$images->getBrowseBar()}</td></tr>
             {foreach from=$images->set item="image_row"}
             <tr>
                 {foreach from=$image_row item="image"}
@@ -79,7 +79,7 @@
                 {/foreach}
             </tr>
             {/foreach}
-            <tr><td colspan="5">{$images->getBrowseBar()}</td></tr>
+            <tr><td class="adminRowR" colspan="5">{$images->getBrowseBar()}</td></tr>
             <tr>
                 <td class="adminRowLNB" colspan="5">
                     <p class="subline">{t w="total"}: {$images->totalRows}</p>
