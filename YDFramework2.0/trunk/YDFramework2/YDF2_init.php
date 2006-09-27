@@ -268,7 +268,7 @@
             return '';
         }
         $t = strtolower( $t );
-        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
+        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "<font color=\"red\">%%$t%%</font>" );
         array_unshift( $params, $out );
         return call_user_func_array( 'sprintf', $params );
     }
