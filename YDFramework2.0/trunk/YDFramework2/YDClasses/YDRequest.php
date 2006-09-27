@@ -146,6 +146,23 @@
         }
 
         /**
+         *  Get the value of a query string variable. When the required parameter is not set, it will redirect to the
+         *  indicated action.
+         *
+         *  @param  $name               The name of the query string variable.
+         *  @param  $default            (optional) The default value if the query string variable is not existing.
+         *  @param  $values             (optional) The allowed values as an array.
+         *  @param  $action_if_fails    (optional) The action to redirect of if the parameter is invalid.
+         *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
+         *
+         *  @returns    The value of the query string variable as a integer.
+         */
+        function getRequiredQueryStringParameterAsInt( $name, $default='', $values=null, $action_if_fails='default', $use_keys=false ) {
+            $value = $this->getRequiredQueryStringParameter( $name, $default, $values, $use_keys );
+            return is_numeric( $value ) ? intval( $value ) : $default;
+        }
+
+        /**
          *	This function will return the full URL to the current request, including hostname, port and request URI.
          *
          *  @param  $no_qs  (optional) If set to false, the query string will be omitted. Default is false.
