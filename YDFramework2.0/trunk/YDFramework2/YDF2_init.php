@@ -263,12 +263,14 @@
      *
      *  @returns    The translated string.
      */
-    function t( $t ) {
+    function t( $t, $params=array() ) {
         if ( empty( $t ) ) {
             return '';
         }
         $t = strtolower( $t );
-        return ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
+        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%$t%" );
+        array_unshift( $params, $out );
+        return call_user_func_array( 'sprintf', $params );
     }
 
     /**

@@ -501,11 +501,32 @@
      *  @returns    The named translation.
      */
     function YDTemplate_function_t( $params ) {
-        if ( @ $params['lower'] == 'yes' ) {
-            return isset( $params['w'] ) ? strtolower( t( $params['w'] ) ) : '';
+
+        // Check if the word is specified
+        if ( isset( $params['w'] ) ) {
+
+            // Get the word and lowercase setting
+            $word = $params['w'];
+            $lower = ( @ $params['lower'] == 'yes' ) ? true : false;
+
+            // Remove unneeded parameters
+            unset( $params['lower'] );
+            unset( $params['w'] );
+
+            // Get the translated word
+            $word = t( $word, $params );
+
+            // Return it
+            return ( $lower === true ) ? strtolower( $word ) : $word;
+
+        // No word specified
         } else {
-            return isset( $params['w'] ) ? t( $params['w'] ) : '';
+
+            // Return an empty string
+            return '';
+
         }
+
     }
 
     /**
