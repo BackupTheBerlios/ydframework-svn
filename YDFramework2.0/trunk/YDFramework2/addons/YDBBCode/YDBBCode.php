@@ -67,6 +67,9 @@
             $this->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2" alt="\\2" /></a>' );
             $this->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1" alt="\\1" />' );
             $this->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );
+            $this->addRule( "/\[quote](.+?)\[\/quote\]/msi", '<blockquote>\\1</blockquote>' );
+            $this->addRule( "/\[quote=\"([^<> \n]+?)\"\](.+?)\[\/quote\]/msi", '<blockquote><b>\\1</b><br/>\\2</blockquote>' );
+            $this->addRule( "/\[quote=([^<> \n]+?)\](.+?)\[\/quote\]/msi", '<blockquote><b>\\1</b><br/>\\2</blockquote>' );
 
             // Attributes to convert links
             $this->_convertLinks = array(
