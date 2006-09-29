@@ -539,7 +539,7 @@
     function YDTemplate_modifier_bbcode( $text ) {
         YDInclude( 'YDBBCode.php' );
         $cls = new YDBBCode();
-        return $cls->toHtml( $text, true, false, false, YDRequest::getCurrentUrl() );
+        return $cls->toHtml( $text, true, false, true, YDRequest::getCurrentUrl() );
     }
 
     /**
