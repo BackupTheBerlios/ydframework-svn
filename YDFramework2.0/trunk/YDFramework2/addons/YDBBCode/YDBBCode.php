@@ -26,6 +26,13 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
+    // Includes
+    YDInclude( dirname( __FILE__ ) . '/stringparser_bbcode.class.php' );
+
+    // Configure the default for this class
+    YDConfig::set( 'YD_BBCODE_SMILIES_DIR', null, false );
+    YDConfig::set( 'YD_BBCODE_SMILIES_URL', null, false );
+
     /**
      *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be
      *	implemented. The following codes are supported by default: img, url, mail, email, color, b, i, u, code, quote, p
@@ -46,30 +53,41 @@
             $this->_copyright = '(c) Copyright 2002-2005 Pieter Claerhout';
             $this->_description = 'This class implements a BBCode parser. By default, it supports a number of standard '
                                . 'codes that can be implemented. The following codes are supported by default: img, '
-                               . 'url, mail, email, color, b, i, u, code, quote, p';
+                               . 'url, mail, email, color, b, i, u, code, quote, p, size';
 
-            // Conversions
-            $this->_conversions = array();
+            // Create a new parser class
+            $this->parser = new StringParser_BBCode();
 
-            // Add the initial conversions
-            $this->addRule( "/\[[bB]\](.+?)\[\/[bB]\]/s", '<b>\\1</b>' );
-            $this->addRule( "/\[[iI]\](.+?)\[\/[iI]\]/s", '<i>\\1</i>' );
-            $this->addRule( "/\[[uU]\](.+?)\[\/[uU]\]/s", '<u>\\1</u>' );
-            $this->addRule( "/\[[pP]\](.+?)\[\/[pP]\]/s", '<p>\\1</p>' );
-            $this->addRule( "/\[code\](.+?)\[\/code\]/s", '<code>\\1</code>' );
-            $this->addRule( "/\[quote\](.+?)\[\/quote\]/s", '<blockquote>\\1</blockquote>' );
-            $this->addRule( "/\[url=([^<> \n]+?)\](.+?)\[\/url\]/i", '<a href="\\1">\\2</a>' );
-            $this->addRule( "/\[url\]([^<> \n]+?)\[\/url\]/i", '<a href="\\1">\\1</a>' );
-            $this->addRule( "/\[mail=([^<> \n]+?)\](.+?)\[\/mail\]/i", '<a href="mailto:\\1">\\2</a>' );
-            $this->addRule( "/\[mail\]([^<> \n]+?)\[\/mail\]/i", '<a href="mailto:\\1">\\1</a>' );
-            $this->addRule( "/\[email=([^<> \n]+?)\](.+?)\[\/email\]/i", '<a href="mailto:\\1">\\2</a>' );
-            $this->addRule( "/\[email\]([^<> \n]+?)\[\/email\]/i", '<a href="mailto:\\1">\\1</a>' );
-            $this->addRule( "/\[img=([^<> \n]+?)\](.+?)\[\/img\]/i", '<a href="\\1"><img border="0" src="\\2" alt="\\2" /></a>' );
-            $this->addRule( "/\[img\]([^<> \n]+?)\[\/img\]/i", '<img border="0" src="\\1" alt="\\1" />' );
-            $this->addRule( "/\[color=([^<> \n]+?)\](.+?)\[\/color\]/i", '<font color="\\1">\\2</font>' );
-            $this->addRule( "/\[quote](.+?)\[\/quote\]/msi", '<blockquote>\\1</blockquote>' );
-            $this->addRule( "/\[quote=\"([^<> \n]+?)\"\](.+?)\[\/quote\]/msi", '<blockquote><b>\\1</b><br/>\\2</blockquote>' );
-            $this->addRule( "/\[quote=([^<> \n]+?)\](.+?)\[\/quote\]/msi", '<blockquote><b>\\1</b><br/>\\2</blockquote>' );
+            // Make tags not case sensitive and allow mixed attributes
+            $this->parser->setGlobalCaseSensitive( false );
+            $this->parser->setMixedAttributeTypes( true );
+
+            // Register the codes
+            $this->addCode( 'b', 'simple_replace', 'inline', null, array('start_tag'=>'<b>', 'end_tag'=>'</b>') );
+            $this->addCode( 'i', 'simple_replace', 'inline', null, array('start_tag'=>'<i>', 'end_tag'=>'</i>') );
+            $this->addCode( 'u', 'simple_replace', 'inline', null, array('start_tag'=>'<u>', 'end_tag'=>'</u>') );
+            $this->addCode( 'p', 'simple_replace', 'inline', null, array('start_tag'=>'<p>', 'end_tag'=>'</p>') );
+            $this->addCode( 'code', 'usecontent', 'block', array( &$this, 'doTagCode' ) );
+            $this->addCode( 'color', 'callback_replace', 'inline', array( &$this, 'doTagColor' ) );
+            $this->addCode( 'size', 'callback_replace', 'inline', array( &$this, 'doTagSize' ) );
+            $this->addCode( 'quote', 'callback_replace', 'block', array( &$this, 'doTagQuote' ) );
+            $this->addCode( 'url', 'usecontent?', 'link', array( &$this, 'doTagUrl' ), array('usecontent_param'=>'default') );
+            $this->addCode( 'link', 'usecontent?', 'link', array( &$this, 'doTagUrl' ), array('usecontent_param'=>'default') );
+            $this->addCode( 'mail', 'usecontent?', 'link', array( &$this, 'doTagEmail' ), array('usecontent_param'=>'default') );
+            $this->addCode( 'email', 'usecontent?', 'link', array( &$this, 'doTagEmail' ), array('usecontent_param'=>'default') );
+            $this->addCode( 'img', 'usecontent?', 'image', array( &$this, 'doTagImg' ), array('usecontent_param'=>'default') );
+            $this->addCode( 'hr', 'simple_replace', 'inline', null, array('start_tag'=>'<hr />','end_tag'=>'') );
+
+            // Add list handling
+            $this->addCode( 'list', 'simple_replace', 'list', null, array('start_tag'=>'<ul>', 'end_tag'=>'</ul>') );
+            $this->addCode( '*', 'simple_replace', 'listitem', null, array('start_tag'=>'<li>', 'end_tag'=>'</li>') );
+
+            // Add some parser flags
+            $this->parser->setCodeFlag( '*', 'closetag', BBCODE_CLOSETAG_OPTIONAL );
+            $this->parser->setCodeFlag( 'hr', 'closetag', BBCODE_CLOSETAG_FORBIDDEN );
+            $this->parser->setCodeFlag( 'list', 'opentag.before.newline', BBCODE_NEWLINE_DROP );
+            $this->parser->setCodeFlag( 'list', 'closetag.before.newline', BBCODE_NEWLINE_DROP );
+            $this->parser->setCodeFlag( 'hr', 'opentag.before.newline', BBCODE_NEWLINE_DROP );
 
             // Attributes to convert links
             $this->_convertLinks = array(
@@ -78,16 +96,229 @@
                 "#([\n ])([a-z0-9\-_.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i" => "\\1[email]\\2@\\3[/email]"
             );
 
+            // The list of smilies that this class supports
+            $this->smilies = array(
+                ':D' => 'icon_biggrin.gif',
+                ':-D' => 'icon_biggrin.gif',
+                ':grin:' => 'icon_biggrin.gif',
+                ':)' => 'icon_smile.gif',
+                ':-)' => 'icon_smile.gif',
+                ':smile:' => 'icon_smile.gif',
+                ':(' => 'icon_sad.gif',
+                ':-(' => 'icon_sad.gif',
+                ':sad:' => 'icon_sad.gif',
+                ':o' => 'icon_surprised.gif',
+                ':-o' => 'icon_surprised.gif',
+                ':eek:' => 'icon_surprised.gif',
+                ':shock:' => 'icon_eek.gif',
+                ':?' => 'icon_confused.gif',
+                ':-?' => 'icon_confused.gif',
+                ':???:' => 'icon_confused.gif',
+                '8)' => 'icon_cool.gif',
+                '8-)' => 'icon_cool.gif',
+                ':cool:' => 'icon_cool.gif',
+                ':lol:' => 'icon_lol.gif',
+                ':x' => 'icon_mad.gif',
+                ':-x' => 'icon_mad.gif',
+                ':mad:' => 'icon_mad.gif',
+                ':P' => 'icon_razz.gif',
+                ':-P' => 'icon_razz.gif',
+                ':razz:' => 'icon_razz.gif',
+                ':oops:' => 'icon_redface.gif',
+                ':cry:' => 'icon_cry.gif',
+                ':evil:' => 'icon_evil.gif',
+                ':twisted:' => 'icon_twisted.gif',
+                ':roll:' => 'icon_rolleyes.gif',
+                ':wink:' => 'icon_wink.gif',
+                ';)' => 'icon_wink.gif',
+                ';-)' => 'icon_wink.gif',
+                ':!:' => 'icon_exclaim.gif',
+                ':?:' => 'icon_question.gif',
+                ':idea:' => 'icon_idea.gif',
+                ':arrow:' => 'icon_arrow.gif',
+                ':|' => 'icon_neutral.gif',
+                ':-|' => 'icon_neutral.gif',
+                ':neutral:' => 'icon_neutral.gif',
+                ':mrgreen:' => 'icon_mrgreen.gif',
+                ':--' => 'icon_mrgreen.gif',
+            );
+
         }
 
         /**
-         *	You can use this function to add a conversion rule to the parser.
+         *  Function to add a new code to the parser.
          *
-         *	@param $regex	Regular expression matching the tags.
-         *	@param $replace	The replacement for the tag regex.
+         *  @param  $code           The code to register
+         *  @param  $type           The type of the code to register
+         *  @param  $content_type   The content type of the code to register
+         *  @param  $callback       The callback function to handle the code
+         *  @param  $params         (optional) The parameters for the callback function.
          */
-        function addRule( $regex, $replace ) {
-            $this->_conversions[ $regex ] = $replace;
+        function addCode( $code, $type, $content_type, $callback=null, $params=array() ) {
+            $this->parser->addCode(
+                $code, $type, $callback, $params, $content_type, array( 'block', 'inline', 'listitem', 'list', 'link' ), array( 'image' )
+            );
+        }
+
+        /**
+         *  Function to handle the code tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagCode( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && strtolower( $attributes['default'] == 'bbcode' ) ) {
+                    $content = str_replace( '[', '<font color="blue">[', $content );
+                    $content = str_replace( ']', ']</font>', $content );
+                }
+                return '<code>' . $content . '</code>';
+            }
+        }
+
+        /**
+         *  Function to handle the color tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagColor( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && ! empty( $attributes['default'] ) ) {
+                    return '<font color="' . $attributes['default'] . '">' . $content . '</font>';
+                } else {
+                    return $content;
+                }
+            }
+        }
+
+        /**
+         *  Function to handle the size tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagSize( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && is_numeric( $attributes['default'] ) ) {
+                    return '<font size="' . $attributes['default'] . '">' . $content . '</font>';
+                } else {
+                    return $content;
+                }
+            }
+        }
+
+        /**
+         *  Function to handle the quote tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagQuote( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && ! empty( $attributes['default'] ) ) {
+                    $content = '<b>' . $attributes['default'] . ' ' . t('wrote') . "</b>\n" . $content;
+                }
+                return '<blockquote>' . $content . '</blockquote>';
+            }
+        }
+
+        /**
+         *  Function to handle the url tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagUrl( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && ! empty( $attributes['default'] ) ) {
+                    return '<a href="' . $attributes['default'] . '">' . $content . "</a>";
+                } else {
+                    return '<a href="' . $content . '">' . $content . "</a>";
+                }
+            }
+        }
+
+        /**
+         *  Function to handle the email tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagEmail( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && ! empty( $attributes['default'] ) ) {
+                    return '<a href="mailto:' . $attributes['default'] . '">' . $content . "</a>";
+                } else {
+                    return '<a href="mailto:' . $content . '">' . $content . "</a>";
+                }
+            }
+        }
+
+        /**
+         *  Function to handle the img tag.
+         *
+         *  @params $action         The action that is executed.
+         *  @params $attributes     The attributes specified in the tag
+         *  @params $content        The content value of the tag.
+         *  @params $params         The parameters for the tag
+         *  @params $node_object    A reference to the node object.
+         *
+         *  @returns    The html version of the tag.
+         */
+        function doTagImg( $action, $attributes, $content, $params, $node_object ) {
+            if ( $action == 'validate' ) {
+                return true;
+            } else {
+                if ( isset( $attributes['default'] ) && ! empty( $attributes['default'] ) ) {
+                    $url = $attributes['default'];
+                } else {
+                    $url = $content;
+                }
+                return '<img src="' . preg_replace( '/\[[A-Za-z]+\]/i', '', $url ) . '" alt="' . $content . '" />';
+            }
         }
 
         /**
@@ -139,8 +370,16 @@
                 $data = str_replace( '>', '&gt;', $data );
             }
 
+            // Fix common problems
+            $data = str_replace( "\r\n", "\n", $data );
+            $data = str_replace( "\r", "\n", $data );
+            $data = str_replace( "[/quote]\n\n", "[/quote]\n", $data );
+
             // Convert the tags
-            $data = preg_replace( array_keys( $this->_conversions ), array_values( $this->_conversions ), $data  );
+            $data = $this->parser->parse( $data );
+
+            // Strip the leftover tags
+            $data = trim( preg_replace( '/\[\/[a-z]+\]/i', '', $data ) );
 
             // Open http links in a new window
             $data = str_replace( ' href="http://', ' target="_blank" href="http://', $data );
@@ -148,6 +387,15 @@
             // Convert tags if needed
             if ( $convertBr === true ) {
                 $data = nl2br( trim( $data ) );
+            }
+
+            // Convert smilies if needed
+            $smilies_path = YDConfig::get( 'YD_BBCODE_SMILIES_DIR', '' );
+            $smilies_url = YDConfig::get( 'YD_BBCODE_SMILIES_URL', '' );
+            if ( is_dir( $smilies_path ) ) {
+                foreach ( $this->smilies as $smilie=>$file ) {
+                    $data = str_replace( $smilie, '<img src="' . $smilies_url . '/' . $file . '" width="15" height="15" />', $data );
+                }
             }
 
             // Make links absolute if needed

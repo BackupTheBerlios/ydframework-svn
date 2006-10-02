@@ -614,6 +614,15 @@
             unset( $_COOKIE[$name] );
         }
 
+        /**
+         *  Action to include the JavaScript for the bbtextarea field.
+         *
+         *  @internal
+         */
+        function actionJsBBTextArea() {
+            header( 'Content-Type: application/x-javascript' );
+            die( readfile( dirname( __FILE__ ) . '/../javascript/bbtextarea.js' ) );
+        }
 
     }
 

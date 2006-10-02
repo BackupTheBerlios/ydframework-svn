@@ -149,27 +149,7 @@
             $out = '';
             if ( sizeof( $this->_buttons ) > 0 ) {
                 if ( ! defined( 'YD_BBTA_MAINSCRIPT' ) ) {
-                    $out .= '<script type="text/javascript">';
-                    $out .= '	function AddText( element, startTag, defaultText, endTag ) {';
-                    $out .= '		objElement = document.getElementById( element );';
-                    $out .= '		if ( objElement.createTextRange ) {';
-                    $out .= '			var text;';
-                    $out .= '			objElement.focus( objElement.caretPos);';
-                    $out .= '			objElement.caretPos = document.selection.createRange().duplicate();';
-                    $out .= '			if ( objElement.caretPos.text.length > 0 ) {' . "\n";
-                    $out .= '				objElement.caretPos.text = startTag + objElement.caretPos.text + endTag;';
-                    $out .= '			} else {';
-                    $out .= '				objElement.caretPos.text = startTag + defaultText + endTag;';
-                    $out .= '			}';
-                    $out .= '		} else {';
-                    $out .= '			objElement.value += startTag + defaultText + endTag;';
-                    $out .= '		}';
-                    $out .= '	}';
-                    $out .= '	function openWin( url, name, opts ) {';
-                    $out .= '		win = window.open( url, name, opts );';
-                    $out .= '		win.focus();';
-                    $out .= '	}';
-                    $out .= '</script>';
+                    $out .= '<script src="' . YD_SELF_SCRIPT . '?do=JsBBTextArea" type="text/javascript"></script>';
                     define( 'YD_BBTA_MAINSCRIPT', 1 );
                 }
                 $out .= '<script type="text/javascript">';
