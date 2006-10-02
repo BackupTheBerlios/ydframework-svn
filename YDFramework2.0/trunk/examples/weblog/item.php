@@ -141,7 +141,7 @@
                     }
 
                     // Set the subject
-                    if ( $comment['is_spam'] == 0 ) {
+                    if ( $comment['is_spam'] == '0' ) {
                         $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
                     } else {
                         $eml->setSubject( '[spam] ' . t('new_comment') . ': ' . strip_tags( $item['title'] ) );
