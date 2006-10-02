@@ -129,7 +129,7 @@
                     $eml->addBcc( $item['user_email'] );
 
                     // Spam emails do not go to the subscribers
-                    if ( $comment['is_spam'] == '0' ) {
+                    if ( intval( $comment['is_spam'] ) == 0 ) {
                         foreach ( $subscribers as $subscriber ) {
                             $eml->addBcc( $subscriber );
                         }
@@ -141,7 +141,7 @@
                     }
 
                     // Set the subject
-                    if ( $comment['is_spam'] == '0' ) {
+                    if ( intval( $comment['is_spam'] ) == 0 ) {
                         $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
                     } else {
                         $eml->setSubject( '[spam] ' . t('new_comment') . ': ' . strip_tags( $item['title'] ) );
