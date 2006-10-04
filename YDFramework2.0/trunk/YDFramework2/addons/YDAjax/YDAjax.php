@@ -314,6 +314,27 @@
 
 
         /**
+         * This method gets the actual DOM id of an element by first seeing if it is a form element.
+         *
+         *  @param $id        Form element name or a generic id string.
+         */
+         function getActualId( $id ) {
+         
+            // try to get a form containing this element
+            $form = $this->__getForm( $id );
+
+            // if $id is not a form element return string
+            if ( is_null( $form ) ) return $id;
+
+            // if is a form element, get element
+            $elem = & $form->getElement( $id );
+
+            // return real element id
+            return $elem->getAttribute( 'id' );
+         }
+
+
+        /**
          *	This method assigns the current autocompleter with a result array
          *
          *	@param $result		Autocompleter results array
