@@ -108,6 +108,17 @@
             $this->setValue( $val );
         } 
 
+
+        /**
+         *	This function extends element disable by making the element label gray too
+         */
+		function disable(){
+		
+			parent::disable( null );
+			$this->_label = '<span style="color:#999999">' . $this->_label . '</span>';
+		}
+
+
         /**
          *	This function will return the element as HTML.
          *
