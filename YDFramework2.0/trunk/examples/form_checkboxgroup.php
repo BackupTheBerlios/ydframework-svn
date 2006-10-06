@@ -26,7 +26,7 @@
             $form->addElement( 'checkboxgroup', 'choose_multiple2', 'Choose multiple HORIZONTAL',       array('sep' => 'h' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple3', 'Choose multiple VERTICAL',         array('sep' => 'v' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple4', 'Choose multiple LEFT',             array('sep' => 'l' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
-            $form->addElement( 'checkboxgroup', 'choose_multiple5', 'Choose multiple RIGHT',            array('sep' => 'r' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
+    $el = & $form->addElement( 'checkboxgroup', 'choose_multiple5', 'Choose multiple RIGHT',            array('sep' => 'r' ), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple6', 'Choose multiple VERTICAL LEFT',    array('sep' => 'vl'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple7', 'Choose multiple VERTICAL RIGHT',   array('sep' => 'vr'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple8', 'Choose multiple HORIZONTAL LEFT',  array('sep' => 'hl'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
@@ -40,6 +40,9 @@
             $form->disable( 'choose_multiple',  1 );
             $form->disable( 'choose_multiple2', array( 0, 1 ) );
             $form->disable( 'choose_multiple3' );
+
+			// Add and example about 'select all' button
+			$el->addSelectAll();
 
             // Add the submit button
             $form->addElement( 'submit', 'btnSubmit', 'submit' );
