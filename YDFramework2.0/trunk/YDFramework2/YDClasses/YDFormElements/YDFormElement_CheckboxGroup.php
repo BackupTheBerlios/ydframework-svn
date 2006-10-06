@@ -84,6 +84,7 @@
             if ( isset ( $attributes['separator'] ) )
 				$this->_separator = $attributes['separator'];
 
+			$this->_addSelectAll = false;
         }
 
 
@@ -111,6 +112,18 @@
             foreach ( $val as $k=>$v ) {
                 $this->_items[$k]->setValue( $v );
             }
+        }
+
+
+        /**
+         *	This function sets checkboxgroup with 'select all' button
+         *
+         *	@param	$onBottom	(Optional) Boolean that defines if button should be added on top (TRUE) or on bottom (FALSE) options
+         */
+        function addSelectAll( $onBottom = true ) {
+
+			$this->_addSelectAll = true;
+			$this->_addSelectAll_onBottom = $onBottom;
         }
 
 
@@ -175,8 +188,25 @@
                 if ( $this->_position == 'right' ) $output .= $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>' . $this->_separator;
                 else                               $output .= '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml() . $this->_separator;
 
-            return $output;
+			// check if a 'select all' button should be added
+			if ( $this->_addSelectAll ){ 
 
+				// check default translation
+				if( !isset( $GLOBALS['t']['select all'] ) ) $GLOBALS['t']['select all'] = 'select all';
+
+				// compute button code
+				$bcode = '<input type="checkbox" onclick="for (var i=0;i<document.forms[\''. $this->_form . '\'].elements.length;i++) if (document.forms[\''. $this->_form . '\'].elements[i].type==\'checkbox\' && !document.forms[\''. $this->_form . '\'].elements[i].disabled && /' . $this->_name . '\[[0-9]+\]/.test( document.forms[\''. $this->_form . '\'].elements[i].name ) ) document.forms[\''. $this->_form . '\'].elements[i].checked = this.checked;" />';
+
+				// compute button label
+				if ( $this->_position == 'right' ) $bcode = '<span class="select_all"><label>' . $bcode . ' ' . t( 'select all' ) . '</label></span>';
+				else                               $bcode = '<span class="select_all"><label>' . t( 'select all' ) . ' ' . $bcode . '</label></span>';
+
+				// add button code to html output
+				if ( $this->_addSelectAll_onBottom ) $output = $output . $bcode;
+				else                                 $output = $bcode . $this->_separator . $output;
+			}
+
+            return $output;
         }
 
     }
