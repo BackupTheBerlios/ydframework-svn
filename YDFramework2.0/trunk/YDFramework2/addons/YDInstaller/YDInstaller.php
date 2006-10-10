@@ -41,6 +41,8 @@
         var $_items = array();
         var $_css = array();
         var $_css_link = array();
+        var $_js = array();
+        var $_js_link = array();
         var $_errors = array();
 
         /**
