@@ -558,18 +558,24 @@
 
                 // Update the comment values
                 if ( $result == NULL || $result === false ) {
-                    $values['is_spam'] = 0;
+                    $values['is_spam'] = '0';
                 } else {
-                    $values['is_spam'] = 1;
+                    $values['is_spam'] = '1';
                 }
 
             }
 
-            // Check the amount of hyperlinks in the comments. More than 3 is marked as spam.
+            // Check the amount of hyperlinks in the comments. More than 1 is marked as spam.
             $count1 = preg_match_all( "/href=/i", $values['comment'], $matches1 );
             $count2 = preg_match_all( "/\[url=/i", $values['comment'], $matches2 );
-            if ( ( $count1 + $count2 ) > 3 ) {
-                $values['is_spam'] = 1;
+            if ( ( $count1 + $count2 ) > 1 ) {
+                $values['is_spam'] = '1';
+            }
+
+            // Only 2 http links are allowed
+            $count = preg_match_all( "/http\:\/\//i", $values['comment'], $matches );
+            if ( ( $count ) > 1 ) {
+                $values['is_spam'] = '1';
             }
 
             // Add the comment
