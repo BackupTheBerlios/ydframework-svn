@@ -1117,8 +1117,7 @@
             if ( sizeof( $array ) == 0 ) { return ''; }
             $out = '';
             foreach ( $array as $key=>$value ) {
-                if ( is_null( $value ) ) $out .= ' disabled ';
-                else                     $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
+                $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
             }
             return $out;
         }
@@ -1312,16 +1311,23 @@
                 $this->setAttribute( $k, $v );
         }
 
-
         /**
          *  Function to disable this element
          *
          *  @param  $options    (Optional) Custom options
          */
         function disable( $options = null ) {
-            $this->setAttribute( 'disabled', null );
+            $this->setAttribute( 'disabled', 'disabled' );
         }
 
+        /**
+         *  Function to enable this element
+         *
+         *  @param  $options    (Optional) Custom options
+         */
+        function enable( $options = null ) {
+            $this->delAttribute( 'disabled' );
+        }
 
         /**
          *  Function to delete an attribute of a form element
