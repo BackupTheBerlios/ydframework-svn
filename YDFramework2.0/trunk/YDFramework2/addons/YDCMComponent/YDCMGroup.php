@@ -136,7 +136,7 @@
          *
 		 * @param $edit         TRUE: We are editing a group, FALSE: we are creating a group
          */
-		function _addFormDetails( $id, $edit ){
+		function & _addFormDetails( $id, $edit ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -155,7 +155,7 @@
 			// if we are not editing a group, just add a submit button and return
 			if ( ! $edit ){
 				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label new' ) );
-				return;
+				return $this->_form;
 			}
 
 			// if we are editing, set defaults and add a submit button
@@ -167,6 +167,8 @@
 
 			// add submit button
 			$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label save' ) );
+			
+			return $this->_form;
 		}
 
 
