@@ -221,8 +221,8 @@
 				if( !isset( $GLOBALS['t']['select all'] ) ) $GLOBALS['t']['select all'] = 'select all';
 
 				// compute button label
-				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label>' . $selall->toHTML() . ' ' . t( 'select all' ) . '</label></span>';
-				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label>' . t( 'select all' ) . ' ' . $selall->toHTML() . '</label></span>';
+				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '>' . $selall->toHTML() . '&nbsp;<label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label></span>';
+				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label>&nbsp;' . $selall->toHTML() . '</span>';
 
 				// add button code to html output
 				if ( $this->_addSelectAll_onBottom ) $output = $output . $selall_html;
