@@ -184,7 +184,7 @@
         /**
          *  This method returns an associative array 
          *
-         *  @param $type       Node type
+         *  @param $type       Node type (or array of types)
          *  @param $attribute  (Optional) Attribute name or (array of attributes) to get only
          *
          *  @returns    Associative array
@@ -194,7 +194,7 @@
 			$this->resetAll();
 
 			// set user id
-			$this->set( 'type', $type );
+			$this->where( 'type IN ("' . implode( '","', $type ) . '")' );
 
 			// get all attributes
 			$this->find();
