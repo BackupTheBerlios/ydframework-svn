@@ -85,6 +85,8 @@
 				$this->_separator = $attributes['separator'];
 
 			$this->_addSelectAll = false;
+			$this->_addSelectAll_chk_attributes = array();
+			$this->_addSelectAll_label_attributes = array();
         }
 
 
@@ -116,14 +118,29 @@
 
 
         /**
+         *	This function sets the attribute for the element.
+         *
+         *	@param	$attribute	Attribute to change
+         *	@param	$value   	Attribute value
+         */
+        function setAttribute( $attribute, $value ) {
+            foreach ( $this->_items as $k=>$v ) {
+                $this->_items[$k]->setAttribute( $attribute, $value );
+            }
+        }
+
+
+        /**
          *	This function sets checkboxgroup with 'select all' button
          *
-         *	@param	$onBottom	(Optional) Boolean that defines if button should be added on top (TRUE) or on bottom (FALSE) options
+         *	@param	$onBottom			(Optional) Boolean that defines if button should be added on bottom (TRUE) or on top (FALSE)
+         *	@param	$chk_attributes		(Optional) Attributes to pass to the select all checkbox
          */
-        function addSelectAll( $onBottom = true ) {
+        function addSelectAll( $onBottom = true, $chk_attributes = array() ) {
 
 			$this->_addSelectAll = true;
 			$this->_addSelectAll_onBottom = $onBottom;
+			$this->_addSelectAll_chk_attributes = $chk_attributes;
         }
 
 
@@ -188,22 +205,28 @@
                 if ( $this->_position == 'right' ) $output .= $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>' . $this->_separator;
                 else                               $output .= '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml() . $this->_separator;
 
-			// check if a 'select all' button should be added
-			if ( $this->_addSelectAll ){ 
+			// check if we have more than one element and a 'select all' button is defined
+			if ( count( $this->_items ) > 1 && $this->_addSelectAll ){ 
+
+				// compute button code
+				$selall = new YDFormElement_Checkbox( $this->_form, $this->getAttribute( 'id' ) . 'sall' );
+				$selall->setAttribute( 'onclick', 'for (var i=0;i<document.forms[\''. $this->_form . '\'].elements.length;i++) if (document.forms[\''. $this->_form . '\'].elements[i].type==\'checkbox\' && !document.forms[\''. $this->_form . '\'].elements[i].disabled && /' . $this->_name . '\[[a-zA-Z0-9]+\]/.test( document.forms[\''. $this->_form . '\'].elements[i].name ) ) document.forms[\''. $this->_form . '\'].elements[i].checked = this.checked;' );
+
+				// if all checkboxes are selected, the 'select all' will be selected too
+				$selall->setValue(1);
+				foreach( $this->getValue() as $elem => $value )
+					if ( $value != 1 ){ $selall->setValue(0); break; }
 
 				// check default translation
 				if( !isset( $GLOBALS['t']['select all'] ) ) $GLOBALS['t']['select all'] = 'select all';
 
-				// compute button code
-				$bcode = '<input type="checkbox" onclick="for (var i=0;i<document.forms[\''. $this->_form . '\'].elements.length;i++) if (document.forms[\''. $this->_form . '\'].elements[i].type==\'checkbox\' && !document.forms[\''. $this->_form . '\'].elements[i].disabled && /' . $this->_name . '\[[0-9]+\]/.test( document.forms[\''. $this->_form . '\'].elements[i].name ) ) document.forms[\''. $this->_form . '\'].elements[i].checked = this.checked;" />';
-
 				// compute button label
-				if ( $this->_position == 'right' ) $bcode = '<span class="select_all"><label>' . $bcode . ' ' . t( 'select all' ) . '</label></span>';
-				else                               $bcode = '<span class="select_all"><label>' . t( 'select all' ) . ' ' . $bcode . '</label></span>';
+				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label>' . $selall->toHTML() . ' ' . t( 'select all' ) . '</label></span>';
+				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label>' . t( 'select all' ) . ' ' . $selall->toHTML() . '</label></span>';
 
 				// add button code to html output
-				if ( $this->_addSelectAll_onBottom ) $output = $output . $bcode;
-				else                                 $output = $bcode . $this->_separator . $output;
+				if ( $this->_addSelectAll_onBottom ) $output = $output . $selall_html;
+				else                                 $output = $selall_html . $this->_separator . $output;
 			}
 
             return $output;
