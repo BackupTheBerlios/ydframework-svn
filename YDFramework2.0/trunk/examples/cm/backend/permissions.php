@@ -26,19 +26,9 @@
 			$this->perms->registerAction( 'YDCMGroup', 'add' );
 			$this->perms->registerAction( 'YDCMGroup', 'edit' );
 
-            print(" We have registered the next permissions :                        <br>
-                    'YDCMPage',  'create'                                            <br>
-                    'YDCMPage',  'delete'                                            <br>
-                    'YDCMGroup', 'add'                                               <br>
-                    'YDCMGroup', 'edit'                                              <br><br>");
+			YDDebugUtil::dump("\n'YDCMPage',  'create' \n'YDCMPage',  'delete'\n'YDCMGroup', 'add'\n'YDCMGroup', 'edit'", 'We have registered the next permissions:' );
 
-
-            print(" In our database we have the next permission system:              <br>
-                    INSERT INTO `ydcmpermission` VALUES (2,'YDCMRootmenu','delete'); <br>
-                    INSERT INTO `ydcmpermission` VALUES (2,'YDCMPage','delete');     <br>
-                    INSERT INTO `ydcmpermission` VALUES (2,'YDCMPage','create');     <br>
-                    INSERT INTO `ydcmpermission` VALUES (5,'YDCMPage','delete');     <br>
-                    INSERT INTO `ydcmpermission` VALUES (5,'YDCMPage','create');     <br><br>");
+			YDDebugUtil::dump( $this->perms->getAllPermissions( true ), 'In our database we have the next permission system:' );
         }
 
 
@@ -52,10 +42,10 @@
 			YDDebugUtil::dump( $this->perms->can( 5, 'YDCMPage', 'add' ), '$this->perms->can( 5, "YDCMPage", "add" );  // check if userobject 5 can "YDCMPage"+"add"' );
 
 			// check if userobject 2 can 'YDCMRootmenu'+'delete'
-			YDDebugUtil::dump( $this->perms->can( 2, 'YDCMRootmenu', 'delete' ), '$this->perms->can( 2, "YDCMRootmenu", "delete" );  // action is in DB but its NOT registered' );
+			YDDebugUtil::dump( $this->perms->can( 2, 'YDCMRootmenu', 'delete' ), '$this->perms->can( 2, "YDCMRootmenu", "delete" );  // action is in DB but it is NOT registered' );
 
 			// get permissions of userobject 2
-			YDDebugUtil::dump( $this->perms->getPermissions( 2 ), '$this->perms->getPermissions( 2 );' );
+			YDDebugUtil::dump( $this->perms->getPermissions( 2 ), '$this->perms->getPermissions( 2 );  // get permissions of group Administrators' );
 
 			// get translated permissions of userobject 5
 			YDDebugUtil::dump( $this->perms->getPermissions( 5, true ), '$this->perms->getPermissions( 5, true );  // translated permissions' );
@@ -119,6 +109,32 @@
 			YDDebugUtil::dump( $this->perms->can( 2, 'YDCMPage', 'closeit' ), '$this->perms->can( 2, "YDCMPage", "closeit" );  // check if userobject 2 can "YDCMPage"+"closeit"' );
 
 		}
+
+
+		function actionEdit(){
+		
+			// get permissions form of group id 2
+			print "Edit group 2 permissions: \n";
+			
+			$form = & $this->perms->addFormEdit( 2 );
+
+			// if form is not submitted just show it
+			if ( ! $form->isSubmitted() ) return $form->display();
+
+			// update user with submitted information, magic isn't it ;)
+			$result = $this->perms->saveFormEdit();
+
+			// print result message
+			if ( $result->ok ) print( 'OK: '    . $result->message );
+			else               print( 'Error: ' . $result->message );
+
+			// display form again
+			$form->display();
+			
+			// display db state after updating
+			YDDebugUtil::dump( $this->perms->getAllPermissions( true ), 'Now, we have the next permission system in our db:' );
+		}		
+		
 
     }
 
