@@ -1277,6 +1277,7 @@
             $this->_default = null;
             $this->_raw_default = false;
             $this->_isButton = false;
+			$this->_label_attributes = array();
 
             // Indicate where the label should be
             $this->_placeLabel = 'before';
@@ -1486,11 +1487,28 @@
         /**
          *      Gets the label of the form element.
          *
+         *      @param  $html   (Optional) Return label as html
          *      @returns        The label of the form element.
          */
-        function getLabel() {
+        function getLabel( $html = false ) {
+
+			if ( $html ) return '<span ' . YDForm::_convertToHtmlAttrib( $this->_label_attributes ) . '><label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label></span>';
+
             return $this->_label;
         }
+
+
+        /**
+         *      Sets label attribute
+         *
+         *      @param  $attribute	Attribute name
+         *      @param  $value 		Attribute value
+         */
+        function setLabelAttribute( $attribute, $value ) {
+
+			$this->_label_attributes[ $attribute ] = $value;
+        }
+
 
         /**
          *      This function returns a boolean indicating if the element value was
@@ -1541,7 +1559,7 @@
                 'type'        => $this->_type,
                 'label'       => $this->_label,
                 'attributes'  => $this->_attributes,
-                'label_html'  => '<label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label>',
+                'label_html'  => $this->getLabel( true ),
                 'options'     => $this->_options,
                 'placeLabel'  => $this->_placeLabel,
                 'html'        => $this->toHtml(),
@@ -1556,6 +1574,18 @@
          */
         function toHtml() {
         }
+
+
+        /**
+         *  This function returns the element as HTML with label
+         *
+         *  @returns    The form element as HTML text.
+         */
+        function toFullHtml( $separator = '', $begin = '', $end = '') {
+		
+			return $begin . $this->getLabel( true ) . $separator . $this->toHTML() . $end;
+        }
+
 
         /**
          *	This function returns the default javascript event of this element
