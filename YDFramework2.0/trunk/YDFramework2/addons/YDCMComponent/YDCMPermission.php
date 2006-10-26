@@ -31,7 +31,10 @@
 
 	// include YDF libs
 	YDInclude( 'YDDatabaseObject.php' );
+	YDInclude( 'YDResult.php' );
 
+	// add translations directory for generic translations
+	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
 
     class YDCMPermission extends YDDatabaseObject {
@@ -65,6 +68,13 @@
 			
 			// init always-valid actions
 			$this->_always_valid = array();
+
+			// init action titles and class titles
+			$this->_titles_actions = array();
+			$this->_titles_classes = array();
+
+			// init form name
+			$this->_form_name = 'permissions';
 		}
 
 
@@ -114,6 +124,28 @@
 			
 			return $arr_translated;
 		}
+
+
+        /**
+         *  This function returns all permissions
+		 *
+         *  @returns    An array with all permissions
+         */
+		function getAllPermissions( $txt = false ){
+
+			$this->resetAll();
+			$this->orderBy( 'permission_id', 'desc' );
+			$this->findAll();
+			
+			if ( $txt == false ) return $this->getResults();
+
+			$export = "\nID \tCLASS \t\tACTION \n";
+			foreach( $this->getResults() as $res )
+				$export .= $res[ 'permission_id'] . "\t" . $res[ 'class'] . "\t" . $res[ 'action'] . "\n";
+				
+			return $export;			
+		}
+
 
 
         /**
@@ -169,10 +201,11 @@
          *
          *  @param     $class    Class name
          *  @param     $action   Action name
+         *  @param     $title	 (Optional) Action title ( custom action description )
          *
          *  @returns   TRUE if added, FALSE is already exists
          */
-		function registerAction( $class, $action ){
+		function registerAction( $class, $action, $title = null ){
 
 			// check if class and action are registed
 			if ( $this->actionIsRegistered( $class, $action ) ) return false;
@@ -180,7 +213,59 @@
 			// add action to class
 			$this->_actions[ $class ][] = $action;
 
+			// add title if defined
+			if ( is_string( $title ) ) $this->_titles_actions[ $class ][ $action ] = $title;
+
 			return true;
+		}
+
+
+        /**
+         *  This function returns a action description
+         *
+         *  @param     $class    Class name
+         *  @param     $action   Action name
+         *
+         *  @returns   description STRING
+         */
+		function getActionTitle( $class, $action ){
+		
+			// if a custom title was defined, just return it
+			if ( isset( $this->_titles_actions[ $class ][ $action ] ) ) return $this->_titles_actions[ $class ][ $action ];
+
+			// return default 
+			return t( $class . ' perm ' . $action );
+		}
+
+
+        /**
+         *  This function returns a class description
+         *
+         *  @param     $class    Class name
+         *
+         *  @returns   description STRING
+         */
+		function setClassTitle( $class, $title ){
+
+			// add description if not null
+			if ( is_string( $title ) ) $this->_titles_classes[ $class ] = $title;
+		}
+
+
+        /**
+         *  This function returns a class description
+         *
+         *  @param     $class    Class name
+         *
+         *  @returns   description STRING
+         */
+		function getClassTitle( $class ){
+		
+			// if a custom title was defined, just return it
+			if ( isset( $this->_titles_classes[ $class ] ) ) return $this->_titles_classes[ $class ];
+
+			// return default 
+			return t( $class . ' perm' );
 		}
 
 
@@ -345,6 +430,179 @@
 			if ( isset( $this->_actions[ $class ] ) ) return $this->_actions[ $class ];
 
 			return array();
+		}
+
+
+
+        /**
+         *  This function returns all registered actions
+         *
+         *  @param     $name    Form name
+         */
+		function setForm( $name ){
+
+			$this->_form_name = $name;
+		}
+
+
+        /**
+         *  This function returns an associative array with checkboxgroups
+         *
+         *  @returns   Associative array:  array( CLASS => checkboxgroup )
+         */
+		function & addFormEdit( $group_id ){
+
+			// store edition id (used later when saving details)
+			$this->_editing_id = $group_id;
+
+			// get current permissions of this group
+			$perms = $this->getPermissions( $group_id );
+
+			// check if we need to create a new form, or use some
+			if ( ! isset( $this->_form ) ){
+	
+				YDInclude( 'YDForm.php' );
+
+				// init form
+				$this->_form = new YDForm( $this->_form_name );
+			}
+
+			// if this group is not a root group we must get the parent group permissions to check the ones we can use
+			$userobject = new YDCMUserobject();
+			$groups     = $userobject->getElements( array( 'ydcmgroup', 'ydcmuser' ) );
+			$parent_id  = $groups[ $group_id ][ 'parent_id' ];
+
+			// if parent of this group is root, parentgroup permissions are ALL (read: null), otherwise we must get permissions of that parent
+			if ( $parent_id == 1 ) $parentgroup_perms = null;
+			else                   $parentgroup_perms = $this->getPermissions( $groups[ $parent_id ][ 'parent_id' ] );
+
+			// init form default array
+			$form_defaults = array();
+
+			// get all possible actions to compute checkboxgroups for each class
+			foreach( $this->getRegisteredActions() as $class => $actions ){
+			
+				// get permission translations for each component
+				YDLocale::addDirectory( YD_DIR_HOME_ADD . '/YDCMComponent/languages/' . $class );
+
+				// init checkboxgroup options, disabled options and default values
+				$chk_options                         = array();
+				$chk_disable                         = array();
+				$form_defaults[ 'pclass_' . $class ] = array();
+
+				// cycle all actions of this class to get translations and default values
+				foreach( $actions as $action ){
+				
+					// get actions labels
+					$chk_options[ $action ] = $this->getActionTitle( $class, $action );
+					
+					// if parentgroup is the root (id 1) or the parent group has the correspondent action, this action must be set based on current group db values
+					if ( is_null( $parentgroup_perms ) || isset( $parentgroup_perms[ $class ][ $action ] ) ){
+						
+						if ( isset( $perms[ $class ][ $action ] ) ) $form_defaults[ 'pclass_' . $class ][ $action ] = 1;
+
+					// otherwise the action must be unset and disabled (because, if the parent group cannot do something, this group cannot do too)
+					}else{
+						$form_defaults[ 'pclass_'. $class ][ $action ] = 0;
+						$chk_disable[] = $action;
+					}
+				}
+
+				// add checkboxgroup to form
+				$checkboxgroup = & $this->_form->addElement( 'checkboxgroup', 'pclass_'. $class, $this->getClassTitle( $class ), array(), $chk_options );
+				$checkboxgroup->addSelectAll( true, array( 'class' => 'ydcmpermission_checkbox_selall' ) );
+				$checkboxgroup->setAttribute( 'class', 'ydcmpermission_checkbox' );
+				$checkboxgroup->setLabelAttribute( 'class', 'ydcmpermission_checkbox_label' );
+
+				// disable some checkboxgroup elements
+				if ( ! empty( $chk_disable ) ) $this->_form->disable( 'pclass_' . $class, $chk_disable );
+			}
+
+			// add submit button
+			$this->_form->addElement( 'submit', '_cmdSubmit', t( 'save' ) );
+
+			// set form defaults
+			$this->_form->setDefaults( $form_defaults );
+
+			return $this->_form;
+		}
+
+
+		function saveFormEdit( $formvalues = null ){
+		
+			$group_id = $this->_editing_id;
+		
+			// check form validation
+			if ( !$this->_form->validate( $formvalues ) )
+				return YDResult::warning( t( 'form errors' ), $this->_form->getErrors() );
+
+			// get form values EXCLUDING spans
+			$values = $this->_form->getValues();
+
+			// get current group permissions
+			$perms = $this->getPermissions( $group_id );
+
+			// if this group is not a root group we must get the parent group permissions to check the ones we can use
+			$userobject = new YDCMUserobject();
+			$groups     = $userobject->getElements( array( 'ydcmgroup', 'ydcmuser' ) );
+			$parent_id  = $groups[ $group_id ][ 'parent_id' ];
+
+			// if parent of this group is root, parentgroup permissions are ALL (read: null), otherwise we must get permissions of that parent
+			if ( $parent_id == 1 ) $parentgroup_perms = null;
+			else                   $parentgroup_perms = $this->getPermissions( $groups[ $parent_id ][ 'parent_id' ] );
+
+			$actions_to_add = array();
+			$actions_to_del = array();
+
+			// get all possible actions to compute actions we must add and actions we must delete
+			foreach( $this->getRegisteredActions() as $class => $actions ){
+				foreach( $actions as $action ){
+
+					// if action is selected by the user AND
+					// this is a root group OR the action belogs to the parent group
+					// we can add it
+					if ( isset( $values[ 'pclass_' . $class ][ $action ] ) && $values[ 'pclass_' . $class ][ $action ] == 1 ){
+
+						// check if action is valid:
+						// if parent group is a root a group OR the parent group has this action
+						if ( is_null( $parentgroup_perms ) || isset( $parentgroup_perms[ $class ][ $action ] ) ){
+						
+							// if action is valid we must check if we must add it or the user already has it
+							if ( ! isset( $perms[ $class ][ $action ] ) ) $actions_to_add[] = array( $class, $action );
+							
+							continue;
+						}
+
+						// if action selected is not valid we must delete it
+						$actions_to_del[] = array( $class, $action );
+					}
+					
+					// if action is not set, we will always delete it (even if is not in bd)
+					$actions_to_del[] = array( $class, $action );
+				}
+			}
+
+
+			// delete actions			
+			foreach( $actions_to_del as $ac ){
+				$this->resetValues();
+				$this->set( 'permission_id', $group_id );
+				$this->set( 'class', $ac[0] );
+				$this->set( 'action', $ac[1] );
+				$this->delete();
+			}
+
+			// add actions
+			foreach( $actions_to_add as $ac ){
+				$this->resetValues();
+				$this->set( 'permission_id', $group_id );
+				$this->set( 'class', $ac[0] );
+				$this->set( 'action', $ac[1] );
+				$this->insert();
+			}
+
+			// TODO: currently YDDatabaseObject don't have a mechanism to control the above deletes and inserts
+			return YDResult::ok( t('ydcmpermission mess permissions updated') );
 		}
 
 
