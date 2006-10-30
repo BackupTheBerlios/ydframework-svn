@@ -36,6 +36,19 @@
             $form->addElement( 'checkboxgroup', 'choose_multiple11', 'Custom Separator "XXX" and LEFT',           array('sep' => 'l', 'separator' => '&nbsp;&nbsp;XXX&nbsp;&nbsp;'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
             $form->addElement( 'checkboxgroup', 'choose_multiple12', 'Custom Separator "...", LEFT and VERTICAL',                   array('sep' => 'l', 'separator' => '...<br />'), array( 0 => 'choice 1', 1 => 'choice 2' ) );
 
+            $form->addElement( 'checkboxgroup', 'choose_multiple_big',  'Choose with column format', array(), array( 0 => 'choice 1', 'choice 2', 'choice 3', 'choice 4', 'choice 5', 'choice 6', 'choice 7', 'choice 8' ) );
+   $el2 = & $form->addElement( 'checkboxgroup', 'choose_multiple_big2', 'Choose with column format (2 columns)', array(), array( 0 => 'choice 1', 'choice 2', 'choice 3', 'choice 4', 'choice 5', 'choice 6', 'choice 7', 'choice 8' ) );
+			$el2->setColumns( 2 );
+
+   $el3 = & $form->addElement( 'checkboxgroup', 'choose_multiple_big3', 'Choose with column format (3 columns and a default "select all")', array(), array( 0 => 'choice 1', 'choice 2', 'choice 3', 'choice 4', 'choice 5', 'choice 6', 'choice 7', 'choice 8', 'choice 9' ) );
+			$el3->setColumns( 3 );
+			$el3->addSelectAll();
+
+   $el4 = & $form->addElement( 'checkboxgroup', 'choose_multiple_big4', 'Choose with column format (3 columns and a "select all" on top)', array(), array( 0 => 'choice 1', 'choice 2', 'choice 3', 'choice 4', 'choice 5', 'choice 6', 'choice 7', 'choice 8' ) );
+			$el4->setColumns( 3 );
+			$el4->addSelectAll( false );
+
+
 			// demonstrate disable on checkboxgroup
             $form->disable( 'choose_multiple',  1 );
             $form->disable( 'choose_multiple2', array( 0, 1 ) );
