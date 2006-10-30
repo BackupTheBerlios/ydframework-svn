@@ -224,8 +224,13 @@
 			// init the 'select all' html
 			$selall_html = '';
 
+			// if all checkboxes are disabled, the 'select all' will not be displayed
+			$allCheckboxesDisabled = true;
+			foreach( $this->_items as $item )
+				if ( $item->isDisabled() == false ){ $allCheckboxesDisabled = false; break; }
+
 			// check if we have more than one element and a 'select all' button is defined
-			if ( count( $this->_items ) > 1 && $this->_addSelectAll ){ 
+			if ( $allCheckboxesDisabled == false && count( $this->_items ) > 1 && $this->_addSelectAll ){ 
 
 				// compute button code
 				$selall = new YDFormElement_Checkbox( $this->_form, $this->getAttribute( 'id' ) . 'sall' );
