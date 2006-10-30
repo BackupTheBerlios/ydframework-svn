@@ -52,6 +52,25 @@
             // Set the type
             $this->_type = 'checkboxgroup';
 
+            // set default separator and default position
+            $this->_separator = '<br />';
+            $this->_position  = 'right';
+
+            // parse separator and position from array
+            if ( isset ( $attributes['sep'] ) ) {
+
+                // find horizontal and left tags
+                if ( is_int( strpos( $attributes[ 'sep' ], 'h' ) ) ) $this->_separator = '&nbsp;&nbsp;&nbsp;';
+                if ( is_int( strpos( $attributes[ 'sep' ], 'l' ) ) ) $this->_position  = 'left';
+				unset( $attributes[ 'sep' ] );
+            }
+
+			// we can even have a custom separator
+            if ( isset ( $attributes[ 'separator' ] ) ){
+				$this->_separator = $attributes[ 'separator' ];
+				unset( $attributes[ 'separator' ] );
+			}
+
             // Add the subitems
             $this->_items = array();
             foreach ( $options as $key=>$val ) {
@@ -68,25 +87,11 @@
             // Indicate that the label should be appended
             $this->_placeLabel = 'before';
 
-            // set default separator and default position
-            $this->_separator = '<br />';
-            $this->_position  = 'right';
-
-            // parse separator and position from array
-            if ( isset ( $attributes['sep'] ) ) {
-
-                // find horizontal and left tags
-                if ( is_int( strpos( $attributes['sep'], 'h' ) ) ) $this->_separator = '&nbsp;&nbsp;&nbsp;';
-                if ( is_int( strpos( $attributes['sep'], 'l' ) ) ) $this->_position  = 'left';
-            }
-
-			// we can even have a custom separator
-            if ( isset ( $attributes['separator'] ) )
-				$this->_separator = $attributes['separator'];
-
 			$this->_addSelectAll = false;
 			$this->_addSelectAll_chk_attributes = array();
 			$this->_addSelectAll_label_attributes = array();
+			
+			$this->_columns = 1;
         }
 
 
@@ -114,6 +119,16 @@
             foreach ( $val as $k=>$v ) {
                 $this->_items[$k]->setValue( $v );
             }
+        }
+
+
+        /**
+         *	This function defines the columns to export
+         *
+         *	@param	$total	Total of columns
+         */
+        function setColumns( $total ) {
+			$this->_columns = $total;
         }
 
 
@@ -198,12 +213,16 @@
          */
         function toHtml() {
 
-            // Output the HTML
-            $output = '';
+            // Output the HTML checkboxes
+            $output = array();
 
+			// cycle all items to get their html
             foreach ( $this->_items as $item )
-                if ( $this->_position == 'right' ) $output .= $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>' . $this->_separator;
-                else                               $output .= '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml() . $this->_separator;
+                if ( $this->_position == 'right' ) $output[] = $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>';
+                else                               $output[] = '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml();
+
+			// init the 'select all' html
+			$selall_html = '';
 
 			// check if we have more than one element and a 'select all' button is defined
 			if ( count( $this->_items ) > 1 && $this->_addSelectAll ){ 
@@ -223,13 +242,78 @@
 				// compute button label
 				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '>' . $selall->toHTML() . '&nbsp;<label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label></span>';
 				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label>&nbsp;' . $selall->toHTML() . '</span>';
-
-				// add button code to html output
-				if ( $this->_addSelectAll_onBottom ) $output = $output . $selall_html;
-				else                                 $output = $selall_html . $this->_separator . $output;
 			}
 
-            return $output;
+			// check if we don't want columns format
+			if ( $this->_columns == 1 ){
+			
+				// if we don't have a 'select all' just return checkboxes html
+				if ( $selall_html == '' ){
+					return implode( $this->_separator, $output );
+
+				// if 'select all' is at the end
+				}else if ( $this->_addSelectAll_onBottom ){
+					return implode( $this->_separator, $output ) . $this->_separator . $selall_html;
+
+				// if 'select all' is at the beggining
+				}else{
+					return $selall_html . $this->_separator . implode( $this->_separator, $output );
+				}
+			
+			// create a html table
+			}else{
+			
+				// init table header
+				$table = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
+			
+				// if 'select all' is defined to be on top, add a row with 'select all' column and other cols empty
+				if ( $selall_html != '' && ! $this->_addSelectAll_onBottom ){
+				
+					$table .= '<tr>';
+					$table .= '<td>' . $selall_html . '</td>';
+					
+					for( $k = 1; $k < $this->_columns; $k++ )
+						$table .= '<td>&nbsp;</td>';
+					
+					$table .= '</tr>';
+				}
+	
+				// create option checkboxes content			
+				for ( $i = 0; isset( $output[ $i ] ); ){
+				
+					$table .= '<tr>';
+				
+					for( $k = 0; $k < $this->_columns; $k++ ){
+						
+						// if we have a checkbox just add it. otherwise add an empty char
+						if ( isset( $output[ $i ] ) ) $table .= '<td>' . $output[ $i ] . '</td>';
+						else                          $table .= '<td>&nbsp;</td>';
+					
+						$i++;
+					}
+
+					$table .= '</tr>';
+					
+				}
+
+				// if 'select all' is defined to be on bottom, add empty cols and a last column with 'select all' code
+				if ( $selall_html != '' && $this->_addSelectAll_onBottom ){
+				
+					$table .= '<tr>';
+					
+					for( $k = 1; $k < $this->_columns; $k++ )
+						$table .= '<td>&nbsp;</td>';
+
+					$table .= '<td>' . $selall_html . '</td>';
+					$table .= '</tr>';
+				}
+					
+				// end table
+				$table .= '</table>';
+					
+				return $table;			
+			}
+
         }
 
     }
