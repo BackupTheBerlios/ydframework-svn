@@ -1322,6 +1322,15 @@
         }
 
         /**
+         *  Function to check if an item is disabled
+         *
+         *  @returns  TRUE if disabled. FALSE otherwise
+         */
+        function isDisabled() {
+            return isset( $this->_attributes[ 'disabled' ] );
+        }
+
+        /**
          *  Function to enable this element
          *
          *  @param  $options    (Optional) Custom options
