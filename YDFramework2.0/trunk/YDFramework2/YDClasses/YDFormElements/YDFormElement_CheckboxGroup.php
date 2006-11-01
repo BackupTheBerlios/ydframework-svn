@@ -221,16 +221,20 @@
                 if ( $this->_position == 'right' ) $output[] = $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>';
                 else                               $output[] = '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml();
 
+			// check if we have more than one item enabled, otherwise the 'select all' will not be displayed
+			$checkboxesEnabled = 0;
+			foreach( $this->_items as $item ){
+				if ( $item->isDisabled() == false ){
+					$checkboxesEnabled ++;
+					if ( $checkboxesEnabled == 2 ) break; 
+				}
+			}
+
 			// init the 'select all' html
 			$selall_html = '';
 
-			// if all checkboxes are disabled, the 'select all' will not be displayed
-			$allCheckboxesDisabled = true;
-			foreach( $this->_items as $item )
-				if ( $item->isDisabled() == false ){ $allCheckboxesDisabled = false; break; }
-
-			// check if we have more than one element and a 'select all' button is defined
-			if ( $allCheckboxesDisabled == false && count( $this->_items ) > 1 && $this->_addSelectAll ){ 
+			// check if: user wants a 'select all', we have more than one item in checkboxgroup, we have more than one item enabled
+			if ( $this->_addSelectAll && count( $this->_items ) > 1 && $checkboxesEnabled > 1 ){ 
 
 				// compute button code
 				$selall = new YDFormElement_Checkbox( $this->_form, $this->getAttribute( 'id' ) . 'sall' );
