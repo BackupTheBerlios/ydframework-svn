@@ -474,7 +474,18 @@
             return $element;
 
         }
-        
+
+
+        /**
+         *  This function returns all form elements
+         *
+         *  @returns    An array with form elements
+         */
+        function getElements() {
+            return $this->_elements;
+        }
+
+
         /**
          *  Checks if a form element name is already defined.
          *
