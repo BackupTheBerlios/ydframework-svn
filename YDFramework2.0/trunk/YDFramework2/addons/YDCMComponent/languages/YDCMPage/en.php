@@ -1,6 +1,7 @@
 <?php
 // PERMISSIONS
-$GLOBALS['t']['ydcmpage perm create'] = 'Create';
+$GLOBALS['t']['ydcmpage perm'] = 'Page management';
+$GLOBALS['t']['ydcmpage perm create'] = 'Create page';
 $GLOBALS['t']['ydcmpage perm delete'] = 'Delete';
 
 

@@ -439,44 +439,71 @@
          *
          *  @param     $name    Form name
          */
-		function setForm( $name ){
+		function setFormName( $name ){
 
 			$this->_form_name = $name;
+		}
+
+
+
+        /**
+         *  This method adds form elements for permission editing
+		 *
+		 * @param $id           Group id to edit
+         *
+		 * @returns    YDForm object pointer         
+         */
+		function & addFormEdit( $id ){
+
+			// store edition id (used later when saving details)
+			$this->editing_ID = $id;
+
+		 	return $this->_addFormDetails( $id, true );
+		}
+
+
+        /**
+         *  This method adds form elements for addind a new permission system
+		 *
+		 * @param $id    User id of this new group
+         *
+		 * @returns    YDForm object pointer         
+         */
+		function & addFormNew( $id ){
+
+		 	return $this->_addFormDetails( $id, false );
 		}
 
 
         /**
          *  This function returns an associative array with checkboxgroups
          *
-         *  @returns   Associative array:  array( CLASS => checkboxgroup )
+		 * @param $id    	User id (when adding new group), Group id (when editing group)
+		 * @param $edit   	We are adding or editing
+		 *
+		 * @returns    YDForm object pointer         
          */
-		function & addFormEdit( $group_id ){
+		function & _addFormDetails( $id, $edit ){
 
-			// store edition id (used later when saving details)
-			$this->_editing_id = $group_id;
-
-			// get current permissions of this group
-			$perms = $this->getPermissions( $group_id );
-
-			// check if we need to create a new form, or use some
-			if ( ! isset( $this->_form ) ){
-	
-				YDInclude( 'YDForm.php' );
-
-				// init form
-				$this->_form = new YDForm( $this->_form_name );
-			}
+			// init form
+			$this->_form = new YDForm( $this->_form_name );
 
 			// if this group is not a root group we must get the parent group permissions to check the ones we can use
 			$userobject = new YDCMUserobject();
 			$groups     = $userobject->getElements( array( 'ydcmgroup', 'ydcmuser' ) );
-			$parent_id  = $groups[ $group_id ][ 'parent_id' ];
+			$parent_id  = $groups[ $id ][ 'parent_id' ];
+
+			// when adding a new group, parent of $id is the master group. when editing a group, parent is a user.. so the master group is the parent of the parent
+			if ( $edit == true ) $parent_id = $groups[ $parent_id ][ 'parent_id' ];
 
 			// if parent of this group is root, parentgroup permissions are ALL (read: null), otherwise we must get permissions of that parent
 			if ( $parent_id == 1 ) $parentgroup_perms = null;
-			else                   $parentgroup_perms = $this->getPermissions( $groups[ $parent_id ][ 'parent_id' ] );
+			else                   $parentgroup_perms = $this->getPermissions( $parent_id );
 
-			// init form default array
+			// if we are editing, we must get the current group permissions
+			if ( $edit == true ) $perms = $this->getPermissions( $id );
+
+			// init form defaults array
 			$form_defaults = array();
 
 			// get all possible actions to compute checkboxgroups for each class
@@ -499,7 +526,8 @@
 					// if parentgroup is the root (id 1) or the parent group has the correspondent action, this action must be set based on current group db values
 					if ( is_null( $parentgroup_perms ) || isset( $parentgroup_perms[ $class ][ $action ] ) ){
 						
-						if ( isset( $perms[ $class ][ $action ] ) ) $form_defaults[ 'pclass_' . $class ][ $action ] = 1;
+						// if we are editing and the current group has this permission we must check it. if we are adding just uncheck it
+						if ( $edit && isset( $perms[ $class ][ $action ] ) ) $form_defaults[ 'pclass_' . $class ][ $action ] = 1;
 
 					// otherwise the action must be unset and disabled (because, if the parent group cannot do something, this group cannot do too)
 					}else{
@@ -514,7 +542,7 @@
 				$checkboxgroup->setAttribute( 'class', 'ydcmpermission_checkbox' );
 				$checkboxgroup->setLabelAttribute( 'class', 'ydcmpermission_checkbox_label' );
 
-				// disable some checkboxgroup elements
+				// disable checkboxgroup options that are not valid for this group
 				if ( ! empty( $chk_disable ) ) $this->_form->disable( 'pclass_' . $class, $chk_disable );
 			}
 
@@ -528,28 +556,71 @@
 		}
 
 
-		function saveFormEdit( $formvalues = null ){
+
+
+        /**
+         *  This method updates group permissions
+         *
+         *  @param $group_id     (Optional) Group id to update
+         *  @param $formvalues   (Optional) Custom array with user attributes
+         *
+         *  @returns    INT: total of rows affected
+         */
+		function saveFormEdit( $group_id = null, $formvalues = null ){
 		
-			$group_id = $this->_editing_id;
-		
-			// check form validation
-			if ( !$this->_form->validate( $formvalues ) )
-				return YDResult::warning( t( 'form errors' ), $this->_form->getErrors() );
+			if ( is_null( $group_id ) ) $group_id = $this->editing_ID;
+
+			return $this->_saveFormDetails( $group_id, true, $formvalues );
+		}
+
+
+        /**
+         *  This method adds a new permission system
+         *
+         *  @param $user_id      (Optional) Parent of this permission system. Must be a user id
+         *  @param $formvalues   (Optional) Custom array with user attributes
+         *
+         *  @returns    INT: total of rows affected
+         */
+		function saveFormNew( $user_id = null, $formvalues = null ){
+
+			return $this->_saveFormDetails( $user_id, false, $formvalues );
+		}
+
+
+
+        /**
+         *  This method adds/saves a permission system
+         *
+         *  @param $id           If we are editing, $id is the group id. If we are adding, $id is the user id
+         *  @param $edit         Boolean flag that defines if we are editing $id or adding to $id
+         *  @param $formvalues   (Optional) Custom array with user attributes
+         *
+         *  @returns    INT: total of rows affected
+         */
+		function _saveFormDetails( $id, $edit, $formvalues = null ){
+
+			// validate with custom values
+			if ( ! is_null( $formvalues ) ) $this->_form->validate( $formvalues );
 
 			// get form values EXCLUDING spans
 			$values = $this->_form->getValues();
 
-			// get current group permissions
-			$perms = $this->getPermissions( $group_id );
-
 			// if this group is not a root group we must get the parent group permissions to check the ones we can use
 			$userobject = new YDCMUserobject();
 			$groups     = $userobject->getElements( array( 'ydcmgroup', 'ydcmuser' ) );
-			$parent_id  = $groups[ $group_id ][ 'parent_id' ];
+			$parent_id  = $groups[ $id ][ 'parent_id' ];
+
+			// when adding a new group, parent of $id is the master group. when editing a group, parent is a user.. so the master group is the parent of the parent
+			if ( $edit == true ) $parent_id = $groups[ $parent_id ][ 'parent_id' ];
 
 			// if parent of this group is root, parentgroup permissions are ALL (read: null), otherwise we must get permissions of that parent
 			if ( $parent_id == 1 ) $parentgroup_perms = null;
-			else                   $parentgroup_perms = $this->getPermissions( $groups[ $parent_id ][ 'parent_id' ] );
+			else                   $parentgroup_perms = $this->getPermissions( $parent_id );
+
+			// if we are editing, we must get the current group permissions. if we are adding, current permissions are empty
+			if ( $edit == true ) $perms = $this->getPermissions( $id );
+			else                 $perms = array();
 
 			$actions_to_add = array();
 			$actions_to_del = array();
@@ -561,12 +632,13 @@
 					// if action is selected by the user AND
 					// this is a root group OR the action belogs to the parent group
 					// we can add it
-					if ( isset( $values[ 'pclass_' . $class ][ $action ] ) && $values[ 'pclass_' . $class ][ $action ] == 1 ){
+					if ( isset( $values[ 'pclass_' . $class ][ $action ] ) && ( $values[ 'pclass_' . $class ][ $action ] == 1 || $values[ 'pclass_' . $class ][ $action ] == 'on' ) ){
+
 
 						// check if action is valid:
 						// if parent group is a root a group OR the parent group has this action
 						if ( is_null( $parentgroup_perms ) || isset( $parentgroup_perms[ $class ][ $action ] ) ){
-						
+
 							// if action is valid we must check if we must add it or the user already has it
 							if ( ! isset( $perms[ $class ][ $action ] ) ) $actions_to_add[] = array( $class, $action );
 							
@@ -583,26 +655,31 @@
 			}
 
 
-			// delete actions			
+			$rows_deleted = 0;
+
+			// delete actions and count rows affected
 			foreach( $actions_to_del as $ac ){
 				$this->resetValues();
-				$this->set( 'permission_id', $group_id );
+				$this->set( 'permission_id', $id );
 				$this->set( 'class', $ac[0] );
 				$this->set( 'action', $ac[1] );
-				$this->delete();
+				$rows_deleted += $this->delete();
 			}
 
-			// add actions
+			$rows_added = 0;
+
+			// add actions and count total of action added
 			foreach( $actions_to_add as $ac ){
 				$this->resetValues();
-				$this->set( 'permission_id', $group_id );
+				$this->set( 'permission_id', $id );
 				$this->set( 'class', $ac[0] );
 				$this->set( 'action', $ac[1] );
 				$this->insert();
+				$rows_added ++;
 			}
 
 			// TODO: currently YDDatabaseObject don't have a mechanism to control the above deletes and inserts
-			return YDResult::ok( t('ydcmpermission mess permissions updated') );
+			return $rows_deleted + $rows_added;
 		}
 
 

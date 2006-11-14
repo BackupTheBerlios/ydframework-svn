@@ -89,20 +89,22 @@
 
 
         /**
-         *  This method deletes a group
+         *  This method deletes a user (and all children) or just the children
          *
-         *  @param $group_id       Group id
+         *  @param $group_id       Userobject id
+         *  @param $mode           (Optional) 0: delete group_id and ALL children
+         *                                    1: delete ALL children of group_id only
          *
-         *  @returns    delete()
+         *  @returns    YDResult object. OK      - user deleted
+		 *                               WARNING - no deletes where made
          */
-		function deleteUser( $group_id ){
+		function deleteGroup( $group_id, $mode = 0 ){
 		
-			// reset stuff
-			$this->resetAll();
+			$obj = new YDCMUserobject();
 			
-			$this->set( 'group_id', intval( $group_id ) );
-			
-			return $this->delete();
+			// delete user and get result
+			if ( $obj->deleteNode( $group_id, $mode ) ) return YDResult::ok( t('ydcmgroup mess delete ok') );
+			else                                        return YDResult::fatal( t('ydcmgroup mess delete empty') );
 		}
 
 
@@ -111,20 +113,26 @@
 		 *
 		 * @param $group_id     Group id to edit
          */
-		function addFormEdit( $group_id ){
+		function & addFormEdit( $group_id, $permObj = null ){
 
-		 	return $this->_addFormDetails( $group_id, true );
+			// get editing id to be used when saving
+			$this->editing_ID = $group_id;
+
+		 	return $this->_addFormDetails( $group_id, true, $permObj );
 		}
 
 
         /**
          *  This method adds form elements for addind a new group
 		 *
-		 * @param $parent_group_id    (Optional) Parent id
+		 * @param $parent_group_id    Parent id (a user id)
          */
-		function addFormNew( $parent_group_id = null ){
+		function & addFormNew( $user_id, $permObj = null ){
 
-		 	return $this->_addFormDetails( $parent_group_id, false );
+			// get editing id to be used when saving
+			$this->editing_ID = $user_id;
+
+		 	return $this->_addFormDetails( $user_id, false, $permObj );
 		}
 		 
 		
@@ -136,7 +144,7 @@
          *
 		 * @param $edit         TRUE: We are editing a group, FALSE: we are creating a group
          */
-		function & _addFormDetails( $id, $edit ){
+		function & _addFormDetails( $id, $edit, $permObj ){
 
 			YDInclude( 'YDForm.php' );
 
@@ -152,22 +160,48 @@
 			$this->_form->addFormRule( array( & $this, '_checkgroup' ), array( $edit, $id ) );
 
 
-			// if we are not editing a group, just add a submit button and return
-			if ( ! $edit ){
+			// if we adding a group, just add a submit button
+			if ( $edit == false ){
 				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label new' ) );
-				return $this->_form;
+
+			// otherwise, if we are editing a group, we must add defaults and a submit button too
+			}else{
+
+				$defaults = $this->getGroup( $id );
+				$this->_form->setDefaults( $defaults );
+
+				// state default is 'ydcmuserobject_state' because it's on userobject table
+				$this->_form->setDefault( 'state', $defaults[ 'ydcmuserobject_state' ] );
+
+				// add submit button
+				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label save' ) );
 			}
-
-			// if we are editing, set defaults and add a submit button
-			$defaults = $this->getGroup( $id );
-			$this->_form->setDefaults( $defaults );
-
-			// state default is 'ydcmuserobject_state' because it's on userobject table
-			$this->_form->setDefault( 'state', $defaults[ 'ydcmuserobject_state' ] );
-
-			// add submit button
-			$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label save' ) );
 			
+			// check if we are using the permission engine. if not, just return the form
+			if ( is_null( $permObj ) ) return $this->_form;
+
+			// include permission engine
+			YDInclude( 'YDCMPermission.php' );
+
+			// set YDPermission object form name the same name as group form
+			$permObj->setFormName( $this->_form->getName() );
+
+			// get form with all checkboxgroups
+			if ( $edit ) $perms_form = & $permObj->addFormEdit( $id );
+			else         $perms_form = & $permObj->addFormNew( $id );
+
+			// get all checkboxgroups html code
+			$perms_code = '';
+			foreach( $perms_form->getElements() as $name => $obj )
+				if ( $obj->getType() == 'checkboxgroup' ) $perms_code .= $obj->toFullHTML( '<br>', '', '<br><br>' );
+
+			// create a span and insert all checkboxgroups inside
+			$el = &	$this->_form->addElement( 'span', 'permissions', t( 'permissions' ) );
+			$el->setValue( $perms_code );
+
+			// get editing YDPermission object to be used when saving
+			$this->editing_PERMOBJ = & $permObj;
+
 			return $this->_form;
 		}
 
@@ -194,32 +228,30 @@
         /**
          *  This method updates group attributes
          *
-         *  @param $id           Group id to save attributes
          *  @param $formvalues   (Optional) Custom array with attributes
          *
          *  @returns    YDResult object. OK      - form updated
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to update
          */
-		function saveFormEdit( $id, $formvalues = null ){
+		function saveFormEdit( $formvalues = null ){
 
-			return $this->_saveFormDetails( $id, true, $formvalues );
+			return $this->_saveFormDetails( $this->editing_ID, true, $formvalues );
 		}
 
 
         /**
          *  This method adds a new group
          *
-         *  @param $parent_id    (Optional) Parent id of this new group
          *  @param $formvalues   (Optional) Custom array with attributes
          *
          *  @returns    YDResult object. OK      - form added
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to add
          */
-		function saveFormNew( $parent_id = null, $formvalues = null ){
+		function saveFormNew( $formvalues = null ){
 
-			return $this->_saveFormDetails( $parent_id, false, $formvalues );
+			return $this->_saveFormDetails( $this->editing_ID, false, $formvalues );
 		}
 
 
@@ -264,8 +296,11 @@
 				$this->setValues( $group );
 				$this->where( 'group_id = '. $id ); 
 
-				// updated and sum lines afected to userobject lines afected
+				// update and sum lines afected to userobject
 				$res += $this->update();
+
+				// if we are using the permission system, update and sum lines afected in permission table
+				if ( isset( $this->editing_PERMOBJ ) ) $res += $this->editing_PERMOBJ->saveFormEdit( $id, $formvalues );
 				
 				// check update from node update and from group update
 				if ( $res > 0 ) return YDResult::ok( t( 'ydcmgroup mess details updated' ), $res );
@@ -287,6 +322,9 @@
 				// update userobject and get new id
 				$uobj = new YDCMUserobject();
 				$res  = $uobj->addNode( $userobject, intval( $id ) );
+
+				// if we are using the permission system, add permissions and sum lines afected in permission table
+				if ( isset( $this->editing_PERMOBJ ) ) $res += $this->editing_PERMOBJ->saveFormNew( $id, $formvalues );
 
 				// create user row
 				$group = array();

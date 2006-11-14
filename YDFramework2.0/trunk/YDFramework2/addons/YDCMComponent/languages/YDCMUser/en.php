@@ -1,14 +1,18 @@
 <?php
 
+$GLOBALS['t']['ydcmuser'] = 'User management';
+
 // PERMISSIONS
+$GLOBALS['t']['ydcmuser perm'] = 'User management';
 $GLOBALS['t']['ydcmuser perm properties'] = 'See properties';
-$GLOBALS['t']['ydcmuser perm create']     = 'Create';
+$GLOBALS['t']['ydcmuser perm create']     = 'Add user';
 $GLOBALS['t']['ydcmuser perm delete']     = 'Delete';
 $GLOBALS['t']['ydcmuser perm edit']       = 'Edit';
 
 // FORM LABELS
 $GLOBALS['t']['ydcmuser label username'] = 'Username';
 $GLOBALS['t']['ydcmuser label password'] = 'Password';
+$GLOBALS['t']['ydcmuser label password2'] = 'Confirm password';
 $GLOBALS['t']['ydcmuser label name'] = 'Name';
 $GLOBALS['t']['ydcmuser label email'] = 'Email';
 $GLOBALS['t']['ydcmuser label other'] = 'Other';
@@ -32,7 +36,7 @@ $GLOBALS['t']['ydcmuser label confirm password'] = 'Confirm password';
 // FORM RULES/ERRORS/MESSAGES
 $GLOBALS['t']['ydcmuser mess username exists'] = 'Username already exists';
 $GLOBALS['t']['ydcmuser mess updated'] = 'User details updated';
-$GLOBALS['t']['ydcmuser mess impossible to update'] = 'Was not possible to update user';
+$GLOBALS['t']['ydcmuser mess impossible to update'] = 'No updates were made';
 $GLOBALS['t']['ydcmuser mess created'] = 'New user created';
 $GLOBALS['t']['ydcmuser mess impossible to create'] = 'Was not possible to create user';
 $GLOBALS['t']['ydcmuser mess email not valid'] = 'Email is not valid';
@@ -43,12 +47,20 @@ $GLOBALS['t']['ydcmuser mess passwords are required'] = 'All passwords are requi
 $GLOBALS['t']['ydcmuser mess passwords too big'] = 'All passwords must not exceed 31 characters';
 $GLOBALS['t']['ydcmuser mess passwords not alphanumeric'] = 'All passwords must be alphanumeric';
 $GLOBALS['t']['ydcmuser mess password updated'] = 'User password updated';
-$GLOBALS['t']['ydcmuser mess password not updated'] = 'User password not updated';
+$GLOBALS['t']['ydcmuser mess password not updated'] = 'No updates were made';
 
-// OTHER
-$GLOBALS['t']['ydcmuser administrator and move children up'] = 'Administrator and move children up';
+// OTHER MESSAGES
+$GLOBALS['t']['ydcmuser mess delete ok'] = 'User deleted';
+$GLOBALS['t']['ydcmuser mess delete empty'] = 'No deletes were made';
+
 $GLOBALS['t']['ydcmuser administrator and children'] = 'Administrator and children';
 $GLOBALS['t']['ydcmuser children only'] = 'Children only';
 $GLOBALS['t']['ydcmuser add group'] = 'Add group';
 $GLOBALS['t']['ydcmuser change password'] = 'Change password';
+$GLOBALS['t']['ydcmuser personal details'] = 'Personal details';
+$GLOBALS['t']['ydcmuser access'] = 'Access';
+$GLOBALS['t']['ydcmuser reset logins'] = 'reset';
+
+$GLOBALS['t']['ydcmuser passwords management'] = 'Password management';
+$GLOBALS['t']['ydcmuser passwords'] = 'Passwords';
 ?>

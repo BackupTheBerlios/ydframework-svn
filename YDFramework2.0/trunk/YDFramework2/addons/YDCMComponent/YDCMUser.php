@@ -153,21 +153,20 @@
         /**
          *  This method deletes a user (and all children) or just the children
          *
-         *  @param $user_id        User id
-         *  @param $includeParent  (Optional) Boolean TRUE (default) deletes user id and children, FALSE deletes children only
+         *  @param $userobject_id  Userobject id
+         *  @param $mode           (Optional) 0: delete user_id and ALL children
+         *                                    1: delete ALL children of user_id only
          *
-         *  @returns    TRUE if deleted, ARRAY with form errors otherwise
+         *  @returns    YDResult object. OK      - user deleted
+		 *                               WARNING - no deletes where made
          */
-		function deleteUser( $user_id, $includeParent = true ){
+		function deleteUser( $user_id, $mode = 0 ){
 		
-			// get ids to delete
-			$ids = $this->tree->getDescendants( intval( $user_id ), $includeParent, false, null, null, 'user_id' );
-
-			// delete all permissions of this users
-			$this->perm->deletePermissions( $ids );
-
-			// delete node from users table
-			$this->tree->deleteNode( $user_id, $includeParent );
+			$obj = new YDCMUserobject();
+			
+			// delete user and get result
+			if ( $obj->deleteNode( $user_id, $mode ) ) return YDResult::ok( t('ydcmuser mess delete ok') );
+			else                                       return YDResult::fatal( t('ydcmuser mess delete empty') );
 		}
 
 
@@ -195,6 +194,8 @@
 		 * @returns    YDForm object pointer         
          */
 		function & addFormNew( $id = null ){
+
+			$this->editing_ID = $id;
 
 		 	return $this->_addFormDetails( $id, false, array() );
 		}
@@ -228,9 +229,11 @@
 				$this->_form->addFormRule( array( & $this, '_checkuser' ), array( $edit, $id ) );
 			}
 
-			// add password box for new users or editing users
-			if ( ! $edit || ( $edit && ! in_array( 'password', $noneditable ) ) )
-				$this->_form->addElement( 'password', 'password', t( 'ydcmuser label password' ) );				
+			// add password box for new users
+			if ( $edit == false ){
+				$this->_form->addElement( 'password', 'password', t( 'ydcmuser label password' ) );
+				$this->_form->addElement( 'password', 'password2', t( 'ydcmuser label password2' ) );
+			}
 
 			// add state
 			if ( in_array( 'state', $noneditable ) ){
@@ -253,7 +256,7 @@
 			}else{
 				$this->_form->addElement( 'text',      'name',          t( 'ydcmuser label name' ),     array('size' => 50, 'maxlength' => 255) );
 				$this->_form->addElement( 'text',      'email',         t( 'ydcmuser label email' ) );
-				$this->_form->addElement( 'textarea',  'other',         t( 'ydcmuser label other' ),    array('rows' => 4, 'cols' => 30) );
+				$this->_form->addElement( 'textarea',  'other',         t( 'ydcmuser label other' ),    array('rows' => 15, 'cols' => 90, 'style' => 'display:none') );
 
 				$languages = new YDCMLanguages();
 				$languages = $languages->active();
@@ -333,34 +336,30 @@
         /**
          *  This method updates user attributes
          *
-         *  @param $id           (Optional) User id to force saving
          *  @param $formvalues   (Optional) Custom array with user attributes
          *
          *  @returns    YDResult object. OK      - form updated
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to update
          */
-		function saveFormEdit( $id = null, $formvalues = null ){
+		function saveFormEdit( $formvalues = null ){
 
-			if ( is_null( $id ) ) $id = $this->editing_ID;
-
-			return $this->_saveFormDetails( $id, true, $formvalues );
+			return $this->_saveFormDetails( $this->editing_ID, true, $formvalues );
 		}
 
 
         /**
          *  This method adds a new user
          *
-         *  @param $parent_id    (Optional) Group id (parent_id) of this new user
          *  @param $formvalues   (Optional) Custom array with user attributes
          *
          *  @returns    YDResult object. OK      - form added
 		 *                               WARNING - there are form errors
          *                               FATAL   - was not possible to add
          */
-		function saveFormNew( $parent_id = null, $formvalues = null ){
+		function saveFormNew( $formvalues = null ){
 
-			return $this->_saveFormDetails( $parent_id, false, $formvalues );
+			return $this->_saveFormDetails( $this->editing_ID, false, $formvalues );
 		}
 
 

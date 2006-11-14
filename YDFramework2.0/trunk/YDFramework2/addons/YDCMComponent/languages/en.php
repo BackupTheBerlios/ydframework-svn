@@ -29,7 +29,6 @@ $GLOBALS['t']['next'] = 'Next';
 $GLOBALS['t']['state'] = 'State';
 $GLOBALS['t']['add'] = 'Add';
 $GLOBALS['t']['add component'] = 'Add component';
-$GLOBALS['t']['add user'] = 'Add user';
 $GLOBALS['t']['move'] = 'Move';
 $GLOBALS['t']['move up'] = 'Move up';
 $GLOBALS['t']['move down'] = 'Move down';
@@ -41,6 +40,9 @@ $GLOBALS['t']['visitor'] = 'Visitor';
 $GLOBALS['t']['visitors'] = 'Visitors';
 $GLOBALS['t']['administrator'] = 'Administrator';
 $GLOBALS['t']['administrators'] = 'Administrators';
+$GLOBALS['t']['group'] = 'Group';
+$GLOBALS['t']['groups'] = 'Groups';
+
 
 $GLOBALS['t']['published'] = 'Published';
 $GLOBALS['t']['not published'] = 'Not published';

@@ -29,7 +29,7 @@
 
 	// add YD libs
 //	YDInclude( 'YDForm.php' );
-	YDInclude( 'YDDatabaseTree.php' );
+	YDInclude( 'YDDatabaseTree2.php' );
 //	YDInclude( 'YDDatabaseObject.php' );
 	// add YDCM libs
 //	YDInclude( 'YDCMPermissions.php' );
@@ -56,19 +56,20 @@
 
 			// register custom fields
 			$this->registerField( 'parent_id' );
-			$this->registerField( 'nleft' );
-			$this->registerField( 'nright' );
-			$this->registerField( 'nlevel' );
+//			$this->registerField( 'nleft' );
+//			$this->registerField( 'nright' );
+//			$this->registerField( 'nlevel' );
+			$this->registerField( 'lineage' );
 			$this->registerField( 'position' );
 			$this->registerField( 'type' );			
 			$this->registerField( 'reference' );			
 			$this->registerField( 'state' );
 
 			// create tree object
-			$this->tree = new YDDatabaseTree( 'default', 'YDCMUserobject', 'userobject_id', 'parent_id', 'parent_id' );
+			$this->tree = new YDDatabaseTree2( 'YDCMUserobject', 'default', 'userobject_id', 'parent_id' );
 
 			// add tree fields
-			$this->tree->addField( 'parent_id' );
+//			$this->tree->addField( 'parent_id' );
 			$this->tree->addField( 'type' );
 			$this->tree->addField( 'reference' );			
 			$this->tree->addField( 'state' );			
@@ -85,7 +86,8 @@
          */
 		function getTreeElements( $parent_id, $includeNode = true ){
 
-			return $this->tree->getDescendants( $parent_id, $includeNode );
+//			return $this->tree->getDescendants( $parent_id, $includeNode );
+			return $this->tree->getTreeElements();
 		}
 
 
@@ -107,14 +109,18 @@
          *  This method deletes a userobject (and all children) or just the children
          *
          *  @param $userobject_id  Userobject id
-         *  @param $includeParent  (Optional) Boolean TRUE (default) deletes userobject id and children, FALSE deletes children only
+         *  @param $mode           (Optional) 0: delete userobject_id and ALL children
+         *                                    1: delete ALL children of userobject_id only
          *
-         *  @returns    TRUE if deleted, ARRAY with form errors otherwise
+         *  @returns    total of lines affected
          */
-		function deleteUser( $userobject_id, $includeParent = true ){
+		function deleteNode( $userobject_id, $mode = 0 ){
 		
-			// delete node from users table
-			$this->tree->deleteNode( $userobject_id, $includeParent );
+			// delete userobject_id an children
+			if ( $mode == 0 ) return $this->tree->deleteNode( $userobject_id, true );
+
+			// delete userobject_id children
+			return $this->tree->deleteNode( $userobject_id, false );
 		}
 
 
