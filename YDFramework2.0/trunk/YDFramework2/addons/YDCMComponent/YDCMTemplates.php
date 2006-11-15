@@ -26,7 +26,6 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-	YDInclude( 'YDFileSystem.php' );
 
 	// set admin template directory (without template name directory)
 	YDConfig::set( 'YDCMTEMPLATES_ADMIN_PATH', YD_SELF_DIR, false );
@@ -47,15 +46,6 @@
 	// this is a very special component because don't have any DB table (that's way do not extends YDCMComponent)
     class YDCMTemplates {
 
-        function YDCMTemplates() {
-        
-			$this->admin_path        = YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' );
-			$this->admin_template    = YDConfig::get( 'YDCMTEMPLATES_ADMIN_TEMPLATE' );
-			$this->visitors_path     = YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' );
-			$this->visitors_template = YDConfig::get( 'YDCMTEMPLATES_VISITORS_TEMPLATE' );
-			$this->template_pack     = YDConfig::get( 'YDCMTEMPLATES_PACK' );
-		}
-
 
         /**
          *  This function returns all possible templates for administration side
@@ -64,7 +54,7 @@
          */
 		function admin_templates(){
 		
-			return $this->__getFiles( $this->admin_path );
+			return YDCMTemplates::__getFiles( YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' ) );
 		}
 
 
@@ -75,7 +65,7 @@
          */
 		function admin_template(){
 		
-			return $this->admin_template;
+			return YDConfig::get( 'YDCMTEMPLATES_ADMIN_TEMPLATE' );
 		}
 
 
@@ -88,7 +78,7 @@
          */
 		function admin_complete( $subdir = '' ){
 		
-			return $this->admin_path . '/' . $this->admin_template . '/' . $subdir;
+			return YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' ) . '/' . YDConfig::get( 'YDCMTEMPLATES_ADMIN_TEMPLATE' ) . '/' . $subdir;
 		}
 
 
@@ -99,7 +89,7 @@
          */
 		function template_pack(){
 		
-			return $this->template_pack;
+			return YDConfig::get( 'YDCMTEMPLATES_PACK' );
 		}
 
 
@@ -110,7 +100,7 @@
          */
 		function visitors_templates(){
 		
-			return $this->__getFiles( $this->visitors_path );
+			return YDCMTemplates::__getFiles( YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' ) );
 		}
 
 
@@ -121,7 +111,7 @@
          */
 		function visitors_template(){
 		
-			return $this->visitors_template;
+			return YDConfig::get( 'YDCMTEMPLATES_VISITORS_TEMPLATE' );
 		}
 
 
@@ -134,7 +124,7 @@
          */
 		function visitors_complete( $subdir = '' ){
 		
-			return $this->visitors_path . '/' . $this->visitors_template . '/' . $subdir;
+			return YDConfig::get( 'YDCMTEMPLATES_VISITORS_PATH' ) . '/' . YDConfig::get( 'YDCMTEMPLATES_VISITORS_TEMPLATE' ) . '/' . $subdir;
 		}
 
 
@@ -144,7 +134,9 @@
          *  @returns    Array of filenames, eg: array( 'default' => 'Default', 'orange' => ... )
          */
 		function __getFiles( $dir ){
-		
+
+			YDInclude( 'YDFileSystem.php' );
+
 			// init directories
 			$directories = array();
 
