@@ -916,6 +916,9 @@
 			// if is a form element, get element
 			$elem = & $form->getElement( $formElementName );
 
+			// hide form element. On some browsers we get a glitch.
+			$elem->setAttribute( 'style', 'display:none' );
+
 			// add editor as editor
 			$this->wysiwyg_forms[ $form->getName() ][] = $elem->getAttribute( 'id' );
 		}
