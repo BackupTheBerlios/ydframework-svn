@@ -577,14 +577,15 @@
         /**
          *  This method adds a new permission system
          *
-         *  @param $user_id      (Optional) Parent of this permission system. Must be a user id
+         *  @param $user_id      Parent of this permission system. Must be a user id
+         *  @param $group_id     Group id of this permissions system
          *  @param $formvalues   (Optional) Custom array with user attributes
          *
          *  @returns    INT: total of rows affected
          */
-		function saveFormNew( $user_id = null, $formvalues = null ){
+		function saveFormNew( $user_id, $group_id, $formvalues = null ){
 
-			return $this->_saveFormDetails( $user_id, false, $formvalues );
+			return $this->_saveFormDetails( $user_id, false, $formvalues, $group_id );
 		}
 
 
@@ -595,10 +596,11 @@
          *  @param $id           If we are editing, $id is the group id. If we are adding, $id is the user id
          *  @param $edit         Boolean flag that defines if we are editing $id or adding to $id
          *  @param $formvalues   (Optional) Custom array with user attributes
+         *  @param $group_id     Node id used when inserting permissions. nodeID is the node where permissions are applyed
          *
          *  @returns    INT: total of rows affected
          */
-		function _saveFormDetails( $id, $edit, $formvalues = null ){
+		function _saveFormDetails( $id, $edit, $formvalues = null, $group_id = 0 ){
 
 			// validate with custom values
 			if ( ! is_null( $formvalues ) ) $this->_form->validate( $formvalues );
@@ -654,6 +656,8 @@
 				}
 			}
 
+			// if we are adding permissions we must add to group_id recently created (not to parent)
+			if ( $edit == false ) $id = $group_id;
 
 			$rows_deleted = 0;
 

@@ -256,7 +256,7 @@
 			}else{
 				$this->_form->addElement( 'text',      'name',          t( 'ydcmuser label name' ),     array('size' => 50, 'maxlength' => 255) );
 				$this->_form->addElement( 'text',      'email',         t( 'ydcmuser label email' ) );
-				$this->_form->addElement( 'textarea',  'other',         t( 'ydcmuser label other' ),    array('rows' => 15, 'cols' => 90) );
+				$this->_form->addElement( 'textarea',  'other',         t( 'ydcmuser label other' ),    array('rows' => 15, 'cols' => 40) );
 
 				$languages = new YDCMLanguages();
 				$languages = $languages->active();

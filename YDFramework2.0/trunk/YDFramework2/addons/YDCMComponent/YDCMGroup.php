@@ -154,7 +154,6 @@
 			// add elements
 			$this->_form->addElement( 'text',     'name',        t( 'ydcmgroup label name' ) );
 			$this->_form->addElement( 'textarea', 'description', t( 'ydcmgroup label description' ), array( 'rows' => 4, 'cols' => 40 ) );
-			$this->_form->addElement( 'select',   'state',       t( 'ydcmgroup label state' ), array(), array( 0 => t( 'Blocked' ), 1 => t( 'Active' ) ) );
 
 			// add rules
 			$this->_form->addFormRule( array( & $this, '_checkgroup' ), array( $edit, $id ) );
@@ -169,9 +168,6 @@
 
 				$defaults = $this->getGroup( $id );
 				$this->_form->setDefaults( $defaults );
-
-				// state default is 'ydcmuserobject_state' because it's on userobject table
-				$this->_form->setDefault( 'state', $defaults[ 'ydcmuserobject_state' ] );
 
 				// add submit button
 				$this->_form->addElement( 'submit', '_cmdSubmit', t( 'ydcmgroup label save' ) );
@@ -280,7 +276,7 @@
 				$userobject = array();
 				$userobject['type']  = 'YDCMGroup';
 				$userobject['reference'] = $values[ 'name' ];
-				$userobject['state']     = $values[ 'state' ];
+				$userobject['state']     = 1;
 
 				// update userobject
 				$uobj = new YDCMUserobject();
@@ -312,7 +308,7 @@
 				$userobject = array();
 				$userobject['type']      = 'YDCMGroup';
 				$userobject['reference'] = $values[ 'name' ];
-				$userobject['state']     = $values[ 'state' ];
+				$userobject['state']     = 1;
 
 				// check default parent id
 				if ( is_null( $id ) ) $id = 1;
@@ -320,15 +316,18 @@
 				// TODO: check if group is valid (and, eg, is not a user node)
 
 				// update userobject and get new id
-				$uobj = new YDCMUserobject();
-				$res  = $uobj->addNode( $userobject, intval( $id ) );
+				$uobj   = new YDCMUserobject();
+				$nodeID = $uobj->addNode( $userobject, intval( $id ) );
+
+				// init result count
+				$res = $nodeID;
 
 				// if we are using the permission system, add permissions and sum lines afected in permission table
-				if ( isset( $this->editing_PERMOBJ ) ) $res += $this->editing_PERMOBJ->saveFormNew( $id, $formvalues );
+				if ( isset( $this->editing_PERMOBJ ) ) $res += $this->editing_PERMOBJ->saveFormNew( $id, $nodeID, $formvalues );
 
 				// create user row
 				$group = array();
-				$group[ 'group_id' ]    = $res;
+				$group[ 'group_id' ]    = intval( $nodeID );
 				$group[ 'name' ]        = $values[ 'name' ];
 				$group[ 'description' ] = $values[ 'description' ];
 
