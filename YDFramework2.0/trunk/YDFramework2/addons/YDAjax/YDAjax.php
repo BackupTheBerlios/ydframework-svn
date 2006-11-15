@@ -68,7 +68,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.84';
+            $this->_version = '2.9';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -108,6 +108,10 @@
 
 			// we are not on response
 			$this->onResponse = false;
+			
+			// init wysiwyg editors
+			$this->wysiwyg_forms = array();
+			$this->wysiwyg_ids   = array();
 		}
 
 	
@@ -404,7 +408,15 @@
 		}
 
 
-
+        /**
+         *	This method will compute the JS needed to execute the ajax call
+         *
+         *	@param $formElementName		Form element name
+         *	@param $serverFunction		Server function call
+         *	@param $arguments			Arguments that the call will sent
+         *	@param $options				Custom options
+         *	@param $effects				Custom effects
+         */	
 		function computeFunction( $formElementName, $serverFunction, $arguments = null, $options = null, $effects = null ){ 
 
 			// register function in xajax if not on reponse
@@ -491,8 +503,9 @@
 
 			return $functionName;
 		}
-		
 
+		
+		
         /**
          *	This method adds an effect to a response
          *
@@ -532,7 +545,13 @@
 		}
 
 
-		// internal method. compute js arguments string 
+        /**
+         *	This method will get function arguments and parse them
+         *  Function arguments can be simple integers, strings, variables, form elements and complete forms
+         *
+         *	@param $arguments		Arguments
+         *	@param $options			Custom options
+         */	
 		function _computeFunctionArguments( $arguments, $options ){
 			
 			// if there are not arguments return empty string
@@ -548,48 +567,105 @@
 			// cycle arguments to create js function to get values
 			foreach ( $arguments as $arg ){
 
-				// if is a string and it's a harcoded form name (eg: 'form xpto', where 'xpto' is a form name)
-				if ( is_string( $arg ) && ereg ( "^form (.*)$", $arg, $res ) ) { $args[] = "xajax.getFormValues('" . $res[1] . "')"; continue; }
-
-				// if is a string and it's a form name, we want the form values
-				if ( is_string( $arg ) && $this->__isForm( $arg ) ) { $args[] = "xajax.getFormValues('" . $arg . "')"; continue; }
-
 				// if argument is numeric just add it and continue
 				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
-					
-				// get the form of this argument
-				$form = $this->__getForm( $arg );
 
-				// if there's a form defined it's because the argument is a form element
-				if ( !is_null( $form ) ){
-						
+				// if is a javascript variable, just add it
+				if ( ereg ( "^var (.*)$", $arg, $res ) ){ $args[] = $res[1]; continue; }
+				
+				// check if is a hardcoded form name
+				if ( ereg ( "^form (.*)$", $arg, $res ) ) { $args[] = $this->__getJSFormElements( $res[1] ); continue; }
+
+				// check if is a form name
+				if ( $this->__isForm( $arg ) ){ $args[] = $this->__getJSFormElements( $arg ); continue; }
+				
+				// check if is a form element name
+				if ( !is_null( $form = $this->__getForm( $arg ) ) ){
+				
 					// get element object
 					$elem = & $form->getElement( $arg );
 					
-					// invoke the custom js to get the value
-					$js = $elem->getJS( $options );					
-
-					// compute javascript function name
-					$jsfunction = $this->prefix . 'get' . $elem->getName();
-
-					// add javascript function code to custom js (to be included in template head)
-					if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
-					else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
-					
-					// add function name to arguments list
-					$args[] = $jsfunction . '()';
+					// get js function name to execute
+					$args[] = $this->__getJSFormElement( $elem, $options );
 					
 					continue;
-				}
+				 }
 
-				// if it's not a form element just parse the argument string
-				// if argument is in format 'var ?' where ? is a string, it's a js variable. otherwise is a simple string
-				if ( ereg ( "^var (.*)$", $arg, $res ) ) $args[] = $res[1];
-				else                                     $args[] = "'" . htmlentities( $arg ) . "'";
+				// otherwise is a js static string
+				$args[] = "'" . htmlentities( $arg ) . "'";
 			}
 
 			// convert arguments (we don't want " and ' on code)
 			return implode( ",", $args );
+		}
+
+
+       /**
+         *	This is a helper method to compute all JS that is needed to get all elements of a form
+         *
+         *	@param $formName			Form name
+         */		
+		function __getJSFormElements( $formName ){
+
+			$js = '';
+
+			// check if form has wysiwyg editors
+			if ( isset( $this->wysiwyg_forms[ $formName ] ) ){
+
+				// include editor lib
+				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
+
+				// wysiwyg editors require to copy their html to a textarea before submit
+				foreach( $this->wysiwyg_forms[ $formName ] as $formElementID )
+					$js .= YDAjaxEditor::JScopy( $formElementID );
+			}
+	
+			// now return form values
+			$js .= "return xajax.getFormValues('" . $formName . "');";
+
+			// compute js function name
+			$jsfunction = $this->prefix . 'getForm' . $formName;
+
+			// add javascript function code to custom js (to be included in template head)
+			if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
+			else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
+					
+			// add function name to arguments list
+			return $jsfunction . '()';
+		}
+
+
+       /**
+         *	This is a helper method to compute all JS that is needed to get a form element
+         *
+         *	@param $formElement			Form element object
+         */		
+		function __getJSFormElement( $formElement, $options ){
+
+			$js = '';
+
+			// check if this element is a wysiwyg editor
+			if ( in_array( $formElement->getAttribute( 'id' ), $this->wysiwyg_ids ) ){
+
+				// include editor lib
+				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
+
+				// wysiwyg editor require to copy their html to a textarea before submit
+				$js .= YDAjaxEditor::JScopy( $formElement->getAttribute( 'id' ) );
+			}
+
+			// add JS return value
+			$js .= $formElement->getJS( $options );					
+
+			// compute javascript function name
+			$jsfunction = $this->prefix . 'get' . $formElement->getName();
+
+			// add javascript function code to custom js (to be included in template head)
+			if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
+			else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
+					
+			// add function name to arguments list
+			return $jsfunction . '()';
 		}
 
 		
@@ -820,10 +896,51 @@
 		}
 
 
+
+        /**
+         *	This method adds wysiwyg support to an form element
+         *
+         *	@param $formElementName		Form element name or a simple html id
+         */	
+		function addEditorSupport( $formElementName ){
+		
+			// get form from element name
+			$form = $this->__getForm( $formElementName );
+
+			// if element is NOT a form element just add it
+			if ( is_null( $form ) ){
+				$this->wysiwyg_ids[] = $formElementName;
+				return;
+			}
+
+			// if is a form element, get element
+			$elem = & $form->getElement( $formElementName );
+
+			// add editor as editor
+			$this->wysiwyg_forms[ $form->getName() ][] = $elem->getAttribute( 'id' );
+		}
+
+
         /**
          *	This method will process all results added in a response
          */	
 		function processResults(){
+
+			// include support for wysiwyg editors
+			if ( ! empty( $this->wysiwyg_ids ) || ! empty( $this->wysiwyg_forms ) ){
+
+				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
+
+				// add suport for wysiwyg editors applyed to IDs
+				foreach( $this->wysiwyg_ids as $htmlID )
+					$this->response->addScript( YDAjaxEditor::JSinit( $htmlID ) );
+
+				// add support for wysiwyg editors applyed to form elements
+				// foreach form, cycle all wysiwyg elements to compute their initialization
+				foreach( $this->wysiwyg_forms as $formName => $formElements )
+					foreach( $formElements as $formElementID )
+						$this->response->addScript( YDAjaxEditor::JSinit( $formElementID ) );
+			}
 
 			// return XML to client browser
 			return $this->response->getXML();
