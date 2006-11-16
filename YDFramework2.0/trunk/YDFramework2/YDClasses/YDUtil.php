@@ -266,6 +266,22 @@
             }
         }
 
+
+        /**
+         *  This function will return a array with gmts.
+         *
+         *  @returns	Array: array( -23 => '-23', ..., 0 => '0', ..., 23 => '+23' );
+         *  @static
+         */
+		function getGMT(){
+
+			$gmts = array();
+			for($i = -23; $i <= 23; $i++) 
+				if ($i < 1 ) $gmts[$i] =      strval($i);
+				else		 $gmts[$i] = '+'. strval($i);
+			return $gmts;
+		}
+
     }
 
     /**
