@@ -183,7 +183,7 @@
          *  Fetch the node data for the node identified by $id.
          *
          *  @param $id      The ID of the node to fetch.
-         *  @param $field   The unique field to select on. Defaults to null, which means that the ID field specified
+         *  @param $field   The unique field to select on. Defaults to id, which means that the ID field specified
          *                  when the object was instantiated will be used.
          *
          *  @returns An object containing the node's data, or false if node not found
@@ -193,7 +193,7 @@
             // Get the name of the field
 			if ( ! isset( $this->fields[ $field ] ) ) trigger_error( 'YDDatabaseTree::getNode, Field ' . $field . ' is not set!', YD_ERROR );
 
-			$query = 'SELECT ' . $this->_getFieldsAsString() . ' FROM ' . $this->table . ' WHERE ' . $this->fields[ $field ] . ' = ' . $id ;
+			$query = 'SELECT ' . $this->_getFieldsAsString() . ' FROM ' . $this->table . ' WHERE ' . $this->fields[ $field ] . ' = ' . $this->db->escapeSql( $id );
 
             // Execute the query and return the record
             return $this->db->getRecord( $query );
