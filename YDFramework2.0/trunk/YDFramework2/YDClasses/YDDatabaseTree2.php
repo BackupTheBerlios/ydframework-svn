@@ -586,7 +586,7 @@
             $res = $this->db->executeUpdate( $this->table, $values, $this->fields['id'] . ' = ' . $id );
 
 			// update lineage of all descendants of this node.
-			$this->db->executeSql( 'UPDATE ' . $this->table . ' SET REPLACE(' . $this->fields['lineage'] . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
+			$this->db->executeSql( 'UPDATE ' . $this->table . ' SET ' . $this->fields['lineage'] . ' = REPLACE(' . $this->fields['lineage'] . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
 
 			return $res;
         }
