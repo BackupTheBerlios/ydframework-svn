@@ -612,13 +612,14 @@
 			if ( $new_parent_id == $old_parent_id ) $new_parent_node = $old_parent_node;
             else                                    $new_parent_node = $this->getNode( $new_parent_id );
 
-			// if new parent is diferent than old parent we must update their child positions
-			if ( $new_parent_id != $old_parent_id ){
+
+			// only update positions if new parent and old parent are not the same OR if (they are same but) positions are not changed
+			if ( $new_parent_id != $old_parent_id || $new_position != $old_position ){
 
 				// add position space for this node in new parent: increase positions of new brothers that have position bigger than this node position
 				$this->resetValues();
 				$this->set( $this->__position, $this->__position . ' + 1' );
-				$this->where( $this->__parent . ' = ' . $new_parent_id . ' AND ' . $this->__position . ' > ' . $new_position );
+				$this->where( $this->__parent . ' = ' . $new_parent_id . ' AND ' . $this->__position . ' >= ' . $new_position );
 				$this->update();
 
 				// decrease positions of old brothers that have position bigger than this node position
@@ -627,7 +628,7 @@
 				$this->where( $this->__parent . ' = ' . $old_parent_id . ' AND ' . $this->__position . ' > ' . $old_position );
 				$this->update();
 			}
-	
+
 			// update node
 			$this->resetValues();
 			$this->set( $this->__id,       intval( $id ) );
