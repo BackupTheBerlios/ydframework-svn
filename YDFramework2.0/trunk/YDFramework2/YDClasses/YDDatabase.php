@@ -1187,7 +1187,7 @@
         /**
          *  This function will escape all array elements with the quotes appropriate for the database backend.
          *
-         *  @param $array  The array to escape. Eg: array( 1, null, 'hi' ) will result in string: "1, null, 'hi'"
+         *  @param $arr  The array to escape. Eg: array( 1, null, 'hi' ) will result in string: "1, null, 'hi'"
          *
          *  @returns    The escaped string surrounded by quotes.
          */
