@@ -1183,6 +1183,20 @@
             return $string;
         }
 
+
+        /**
+         *  This function will escape all array elements with the quotes appropriate for the database backend.
+         *
+         *  @param $array  The array to escape. Eg: array( 1, null, 'hi' ) will result in string: "1, null, 'hi'"
+         *
+         *  @returns    The escaped string surrounded by quotes.
+         */
+        function escapeSqlArray( $arr ) {
+
+			return implode( ',', array_map( array( 'YDDatabaseDriver', 'escapeSql' ), $arr ) );
+		}
+
+
         /**
          *  Function to prepare an SQL statement with parameters. The parameters start counting from 1.
          
