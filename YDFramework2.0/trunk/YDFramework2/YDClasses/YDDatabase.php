@@ -1193,7 +1193,7 @@
          */
         function escapeSqlArray( $arr ) {
 
-			return implode( ',', array_map( array( 'YDDatabaseDriver', 'escapeSql' ), $arr ) );
+			return implode( ',', array_map( array( &$this, 'escapeSql' ), $arr ) );
 		}
 
 
