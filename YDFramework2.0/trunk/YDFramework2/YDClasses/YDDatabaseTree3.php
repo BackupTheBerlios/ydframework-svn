@@ -213,6 +213,30 @@
 
 
         /**
+         *  Helper to fetch all elements of a tree as an assocArray
+         *
+         *  @param $columns             (Optional) Columns to retrieve. Default: add columns
+         *  @param $key                 (Optional) Key to use. Default: current table key
+         *
+         *  @returns All tree nodes
+         */
+        function _getTreeElementsAsAssocArray( $columns = array(), $key = null ) {
+
+			// get all elements except root
+			$this->where( $this->__id . ' > 1' );
+
+			// find elements
+			$this->find();
+
+			// compute key
+			if ( is_null( $key ) ) $key = $this->__id;
+
+			// return all nodes
+			return $this->getResultsAsAssocArray( $key, $columns );
+		}
+
+
+        /**
          *  Fetch the children of a node, or if no node is specified, fetch the top level items.
          *
          *  @param $id             The ID of the node to fetch child data for.
