@@ -27,7 +27,7 @@
     }
 
 	// add YDF libs needed by this class
-	YDInclude( 'YDDatabaseObject.php' );
+	require_once( YD_DIR_HOME_ADD . '/YDDatabaseObject/YDDatabaseObject.php' );
 
 
     /** Database scheme example
@@ -91,6 +91,9 @@
 			$this->__lineage  = $lineageField;
 			$this->__level    = $levelField;
 			$this->__position = $positionField;
+
+			// define a generic tree order
+			$this->order( $this->__parent . ' ASC,' . $this->__position .' ASC' );
 		}
 
 
@@ -111,7 +114,7 @@
         /**
          *  This function will escape all array elements with the quotes appropriate for the database backend.
          *
-         *  @param $array  The array to escape. Eg: array( 1, null, 'hi' ) will result in "1, null, 'hi'"
+         *  @param $arr  The array to escape. Eg: array( 1, null, 'hi' ) will result in "1, null, 'hi'"
          *
          *  @returns    The escaped string surrounded by quotes.
          */
