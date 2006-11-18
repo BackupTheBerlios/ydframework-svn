@@ -80,7 +80,7 @@
 
 			// register reserved fields
 			$this->registerKey( $idField, true );
-			$this->registerField( $parentField );
+			$this->registerKey( $parentField );
 			$this->registerField( $lineageField );
 			$this->registerField( $levelField );
 			$this->registerField( $positionField );
@@ -93,34 +93,27 @@
 			$this->__position = $positionField;
 
 			// define a generic tree order
-			$this->order( $this->__parent . ' ASC,' . $this->__position .' ASC' );
+			$this->setOrder( $this->__parent . ' ASC, ' . $this->__position . ' ASC' );
 		}
 
 
         /**
-         *  This function will escape a string so that it's safe to include it in an SQL statement and will surround it
-         *  with the quotes appropriate for the database backend.
+         *  This function defines the order used in all SELECTS
          *
-         *  @param $string  The string to escape.
-         *
-         *  @returns    The escaped string surrounded by quotes.
+         *  @param $string  The sql order string.
          */
-        function escapeSql( $string ){
+        function setOrder( $sql ){
 
-			return $this->_db->escapeSql( $string );
+			return $this->_tree_order = $sql;
         }
 
 
         /**
-         *  This function will escape all array elements with the quotes appropriate for the database backend.
-         *
-         *  @param $arr  The array to escape. Eg: array( 1, null, 'hi' ) will result in "1, null, 'hi'"
-         *
-         *  @returns    The escaped string surrounded by quotes.
+         *  This function will overide the YDDatabaseObject to reset object but init order
          */
-        function escapeSqlArray( $arr ) {
-
-			return $this->_db->escapeSqlArray( $arr );
+		function reset(){
+			parent::reset();
+			$this->order( $this->_tree_order );
 		}
 
 
@@ -145,7 +138,7 @@
          */
         function getNode( $id, $field = null ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			// if field not defined, field is id
 			if ( is_null( $field ) ) $field = $this->__id;
@@ -183,7 +176,10 @@
          */
         function getDescendants( $id, $includeSelf = false ) {
 
-			$this->resetValues();
+			// check if we want an invalid id (like 0 or 1)
+			if ( $id < 2 ) return $this->getTreeElements();
+
+			$this->reset();
 
 			return $this->_getDescendants( $id, $includeSelf );
 		}
@@ -218,7 +214,7 @@
          */
         function getTreeElements() {
 
-			$this->resetValues();
+			$this->reset();
 
 			return $this->_getTreeElements();
 		}
@@ -275,7 +271,7 @@
          */
         function getChildren( $id, $includeSelf = false ){
 
-			$this->resetValues();
+			$this->reset();
 			
 			return $this->_getChildren( $id, $includeSelf );
         }
@@ -312,7 +308,7 @@
          */
         function getPath( $id, $includeSelf=false ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			return $this->_getPath( $id, $includeSelf );
         }
@@ -331,14 +327,17 @@
             // Get the node
             $node = $this->getNode( $id ) ;
 
+			// reset values of previous getNode()
+			$this->reset();
+
             // No node, return empty array
             if ( ! $node ) return array();
 
 			// compute parents of this node. Read lineage, delete first '//', last '/', apply 'intval' to all elements and implode
-			$nodes = implode( '","', array_map( 'intval', explode('/', substr( substr( $node[ $this->__lineage ], 2 ), 0, -1 ) ) ) );
+			$nodes = array_map( 'intval', explode( '/', substr( substr( $node[ $this->__lineage ], 2 ), 0, -1 ) ) );
 
-            if ( $includeSelf == false ) $this->where( $this->__id . ' IN ("' . implode( '","', $nodes ) . '")' );
-			else                         $this->where( $this->__id . ' IN ("' . implode( '","', $nodes ) . '") OR ' . $this->__id . ' = ' . intval( $id ) );
+            if ( $includeSelf == false ) $this->where( $this->getTable() . '.' . $this->__id . ' IN (' . $this->escapeSqlArray( $nodes ) . ')' );
+			else                         $this->where( $this->getTable() . '.' . $this->__id . ' IN (' . $this->escapeSqlArray( $nodes ) . ') OR ' . $this->__id . ' = ' . intval( $id ) );
 
 			$this->find();
 
@@ -356,9 +355,12 @@
          */
         function isDescendantOf( $descendant_id, $ancestor_id ) {
 
-			$this->resetValues();
+			// if ancertor is root, element is descendant if exist
+			if ( $ancestor_id == 1 ) return ( $this->getNode( $descendant_id ) != false );
+
+			$this->reset();
 			
-			return _isDescendantOf( $descendant_id, $ancestor_id );
+			return $this->_isDescendantOf( $descendant_id, $ancestor_id );
         }
 
 
@@ -393,7 +395,7 @@
          */
         function isChildOf( $child_id, $parent_id ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			// check if there is a id that equals $child_id
 			$this->set( $this->__id, intval( $child_id ) );
@@ -415,7 +417,7 @@
          */
         function numDescendants( $id ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			return $this->_numDescendants( $id );
         }
@@ -430,22 +432,11 @@
          */
         function _numDescendants( $id ) {
 
-			// register a custom select
-			$this->registerSelect( 'num_descendants', 'COUNT(*)' );
-			
-			// search all nodes that contains this id in lineage
-			$this->where( $this->__lineage . ' LIKE "%/' . intval( $id ) . '/%"' );
+			// search all nodes that contains this id in lineage. if node is root, count all nodes
+			if ( $id > 1 ) $this->where( $this->__lineage . ' LIKE "%/' . intval( $id ) . '/%"' );
 
 			// find them
-			$this->find();
-			
-			// get total
-			$total = $this->get( 'num_descendants' );
-
-			// unregister select. otherwise could be used on by other method
-			$this->unregisterSelect( 'num_descendants' );
-
-			return $total;
+			return $this->find();
         }
 
 
@@ -458,7 +449,7 @@
          */
         function numChildren( $id ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			// search all nodes that contains this id in lineage
 			$this->set( $this->__parent, intval( $id ) );
@@ -483,7 +474,7 @@
             // No node, return empty array
             if ( ! $node ) return array();
 
-			$this->resetValues();
+			$this->reset();
 
 			// get elements that have parent $parent (this returns current element and brothers), that have id $parent (returns parent), and that have lineage like /$id/ (returns all children)
 			$this->where( $this->__parent . '=' . $node[ $this->__parent ] . ' OR ' . $this->__id . ' = ' . $node[ $this->__parent ] . ' OR ' . $this->__lineage . ' LIKE "%/' . intval( $id ) . '/%"' );
@@ -491,7 +482,7 @@
 			$this->find();
 
             // Execute the query and get the record
-            return $this->getRecords();
+            return $this->getResults();
         }
 
 
@@ -526,7 +517,7 @@
 				$position = $total_brothers + 1;
 
 			// create an empty position. To do this we must increment position of nodes that have the same parent AND have position equal or bigger than $position
-			$this->resetValues();
+			$this->reset();
 
 			// position field must increment
 			$this->set( $this->__position, $this->__position . ' + 1' );
@@ -538,7 +529,7 @@
 			$this->update();
 
 			// reset any previous value to create insert
-			$this->resetValues();
+			$this->reset();
 
 			// apply custom values
 			$this->setValues( $values );
@@ -563,7 +554,7 @@
          */
         function updateNode( $values, $id ) {
 
-			$this->resetValues();
+			$this->reset();
 
 			// get reserved field names
 			$parent   = $this->__parent;
@@ -603,7 +594,7 @@
 	            // get node details before delete. we must know the position
 	            $node = $this->getNode( $id );
 
-				$this->resetValues();
+				$this->reset();
 
 				$this->set( $this->__id, intval( $id ) );
 
@@ -612,7 +603,7 @@
 				
 				if ( $total == 0 ) return 0;
 
-				$this->resetValues();
+				$this->reset();
 
 				// decrease positions
 				$this->set( $this->__position, $this->__position . ' - 1' );
@@ -626,7 +617,7 @@
 			}
 
 			// here we want do delete child only
-			$this->resetValues();
+			$this->reset();
 
 			$this->set( $this->__parent, intval( $id ) );
 
@@ -671,20 +662,20 @@
 			if ( $new_parent_id != $old_parent_id || $new_position != $old_position ){
 
 				// add position space for this node in new parent: increase positions of new brothers that have position bigger than this node position
-				$this->resetValues();
+				$this->reset();
 				$this->set( $this->__position, $this->__position . ' + 1' );
 				$this->where( $this->__parent . ' = ' . $new_parent_id . ' AND ' . $this->__position . ' >= ' . $new_position );
 				$this->update();
 
 				// decrease positions of old brothers that have position bigger than this node position
-				$this->resetValues();
+				$this->reset();
 				$this->set( $this->__position, $this->__position . ' - 1' );
 				$this->where( $this->__parent . ' = ' . $old_parent_id . ' AND ' . $this->__position . ' > ' . $old_position );
 				$this->update();
 			}
 
 			// update node
-			$this->resetValues();
+			$this->reset();
 			$this->set( $this->__id,       intval( $id ) );
 			$this->set( $this->__parent,   intval( $new_parent_id ) );
 			$this->set( $this->__lineage,  $new_parent_node[ $this->__lineage ] . $new_parent_id . '/' );
@@ -694,7 +685,7 @@
 			
 			// update lineages of node descendants ;)
 			if ( $new_parent_id != $old_parent_id ){
-				$this->resetValues();
+				$this->reset();
 				$this->set( $this->__linage, 'REPLACE(' . $this->__lineage . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
 				$this->update();
 			}
