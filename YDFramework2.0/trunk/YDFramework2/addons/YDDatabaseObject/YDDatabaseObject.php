@@ -168,6 +168,34 @@
 
         }
 
+
+        /**
+         *  This function will escape a string so that it's safe to include it in an SQL statement and will surround it
+         *  with the quotes appropriate for the database backend.
+         *
+         *  @param $string  The string to escape.
+         *
+         *  @returns    The escaped string surrounded by quotes.
+         */
+        function escapeSql( $string ){
+
+			return $this->_db->escapeSql( $string );
+        }
+
+
+        /**
+         *  This function will escape all array elements with the quotes appropriate for the database backend.
+         *
+         *  @param $arr  The array to escape. Eg: array( 1, null, 'hi' ) will result in "1, null, 'hi'"
+         *
+         *  @returns    The escaped string surrounded by quotes.
+         */
+        function escapeSqlArray( $arr ) {
+
+			return $this->_db->escapeSqlArray( $arr );
+		}
+
+
         /**
          *  This function register the database connection.
          *
