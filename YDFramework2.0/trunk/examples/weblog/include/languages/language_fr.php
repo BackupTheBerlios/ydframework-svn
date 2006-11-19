@@ -325,7 +325,7 @@ $GLOBALS['t']['bck_name'] = 'Nom du fichier de sauvegarde';
 $GLOBALS['t']['gz_compress'] = 'Compresser la sauvegarde avec GZip';
 $GLOBALS['t']['backup'] = 'Sauvegarder';
 $GLOBALS['t']['err_bck_name'] = 'Le nom du fichier de sauvegarde est requis';
-$GLOBALS['t']['bck_name_comment'] = 'Vous pouvez utiliser "%DBNAME" pour obtenir le nom de la base et <a href="http://www.php.net/strftime" target="_blank">toute option de la fonction strftime</a> pour sp&eacute;cifier une date. L\'extension sera automatiquement ajout&eacute;e. Tout autre texte sera pr&eacute;serv&eacute;.';
+$GLOBALS['t']['bck_name_comment'] = 'Vous pouvez utiliser "%%DBNAME" pour obtenir le nom de la base et <a href="http://www.php.net/strftime" target="_blank">toute option de la fonction strftime</a> pour sp&eacute;cifier une date. L\'extension sera automatiquement ajout&eacute;e. Tout autre texte sera pr&eacute;serv&eacute;.';
 $GLOBALS['t']['bck_type'] = 'Type de sauvegarde';
 $GLOBALS['t']['bck_full'] = 'Sauvegarde Compl&egrave;te (structure et donn&eacute;es)';
 $GLOBALS['t']['bck_structure_only'] = 'Structure seule';

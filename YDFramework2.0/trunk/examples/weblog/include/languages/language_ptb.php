@@ -299,7 +299,7 @@ $GLOBALS['t']['bck_name'] = 'Arquivo de backup do Banco';
 $GLOBALS['t']['gz_compress'] = 'Compactar o backup utilizando a compress&atilde;o GZip';
 $GLOBALS['t']['backup'] = 'Backup';
 $GLOBALS['t']['err_bck_name'] = 'Preencha o nome do arquivo de Backup';
-$GLOBALS['t']['bck_name_comment'] = 'Utilize &quot;%DBNAME&quot; para o nome do banco e <a href="http://www.php.net/strftime" target="_blank">qualquer op&ccedil;&atilde;o strftime</a> para especificar a data. A extens&atilde;o ser&aacute; automaticamente preenchida. Qualquer outro texto ser&aacute; preservado.';
+$GLOBALS['t']['bck_name_comment'] = 'Utilize &quot;%%DBNAME&quot; para o nome do banco e <a href="http://www.php.net/strftime" target="_blank">qualquer op&ccedil;&atilde;o strftime</a> para especificar a data. A extens&atilde;o ser&aacute; automaticamente preenchida. Qualquer outro texto ser&aacute; preservado.';
 $GLOBALS['t']['bck_type'] = 'Tipo do Backup';
 $GLOBALS['t']['bck_full'] = 'Backup completo (estrutura e dados)';
 $GLOBALS['t']['bck_structure_only'] = 'Somente a Estrutura';

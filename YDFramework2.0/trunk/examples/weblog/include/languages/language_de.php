@@ -343,7 +343,7 @@ $GLOBALS['t']['bck_name'] = 'Dateiname f&uuml;r Datenbank-Sicherung';
 $GLOBALS['t']['gz_compress'] = 'Datenbank-Sicherung mit GZip komprimieren';
 $GLOBALS['t']['backup'] = 'Sicherung';
 $GLOBALS['t']['err_bck_name'] = 'Dateiname f&uuml;r Datenbank-Sicherung wird ben&ouml;tigt';
-$GLOBALS['t']['bck_name_comment'] = 'Use "%DBNAME" for database name and <a href="http://www.php.net/strftime" target="_blank">any strftime options</a> for time specification. The extension will be automagically added. Any other text will be preserved.';
+$GLOBALS['t']['bck_name_comment'] = 'Use "%%DBNAME" for database name and <a href="http://www.php.net/strftime" target="_blank">any strftime options</a> for time specification. The extension will be automagically added. Any other text will be preserved.';
 $GLOBALS['t']['bck_type'] = 'Sicherungstyp';
 $GLOBALS['t']['bck_full'] = 'Komplette Sicherung (Struktur und Daten)';
 $GLOBALS['t']['bck_structure_only'] = 'Nur Struktur';
