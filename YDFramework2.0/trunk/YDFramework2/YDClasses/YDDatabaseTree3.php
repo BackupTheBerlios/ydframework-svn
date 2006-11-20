@@ -55,11 +55,11 @@
         INSERT INTO nested_tree VALUES ( 5,    2, '//2/',     2, 3, 'Books & Publications');
         INSERT INTO nested_tree VALUES ( 6,    5, '//2/5/',   3, 1, 'Apache');
         INSERT INTO nested_tree VALUES ( 7,    5, '//2/5/',   3, 2, 'PostgreSQL');
-        INSERT INTO nested_tree VALUES ( 8,    5, '//2/4/',   3, 3, 'MySQL');
-        INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 1, 'Links');
+        INSERT INTO nested_tree VALUES ( 8,    5, '//2/5/',   3, 3, 'MySQL');
+        INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 4, 'Links');
         INSERT INTO nested_tree VALUES (10,    9, '//2/9/',   3, 1, 'Databases');
-        INSERT INTO nested_tree VALUES (11,    9, '//2/10/',  3, 1, 'Generators');
-        INSERT INTO nested_tree VALUES (12,    9, '//2/10/',  3, 2, 'Portals');
+        INSERT INTO nested_tree VALUES (11,    9, '//2/9/',   3, 2, 'Generators');
+        INSERT INTO nested_tree VALUES (12,    9, '//2/9/',   3, 3, 'Portals');
      */
 
     /**
@@ -686,7 +686,7 @@
 			// update lineages of node descendants ;)
 			if ( $new_parent_id != $old_parent_id ){
 				$this->reset();
-				$this->set( $this->__linage, 'REPLACE(' . $this->__lineage . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
+				$this->set( $this->__lineage, 'REPLACE(' . $this->__lineage . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
 				$this->update();
 			}
 
