@@ -729,7 +729,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="15" valign="top">&nbsp;</td>
+            <td rowspan="16" valign="top">&nbsp;</td>
             <td valign="top"><a href="constants.php">YDFramework2 constants</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=constants.php">constants.php</a>
@@ -795,6 +795,12 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=xul.php">xul.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=xul.tpl">xul.tpl</a>            </td>
+        </tr>
+        <tr>
+            <td valign="top"><a href="akismet.php">Using YDAkismet</a></td>
+            <td valign="top">
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=akismet.php">akismet.php</a>
+            </td>
         </tr>
         </table>
 

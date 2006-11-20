@@ -70,6 +70,70 @@
          *              value is returned.
          */
         function checkComment( $comment, $author, $email='', $url='', $user_ip='', $user_agent='', $referrer='' ) {
+            return $this->doCall(
+                '/1.1/comment-check', $comment, $author, $email, $url, $user_ip, $user_agent, $referrer
+            );
+        }
+
+        /**
+         *  This call is for submitting comments that weren't marked as spam but should have been.
+         *
+         *  @param  $comment    The contents of the comment.
+         *  @param  $author     The name of the author of the comment.
+         *  @param  $email      (optional) The email address of the author of the comment.
+         *  @param  $url        (optional) The url of the website of the author of the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_agent (optional) The user agent of the person who submitted the comment.
+         *  @param  $referrer   (optional) The HTTP referrer of the person who submitted the comment.
+         *
+         *  @returns    True if the comment is spam, false if the comment is not spam. If something went wrong, a null
+         *              value is returned.
+         */
+        function submitSpam( $comment, $author, $email='', $url='', $user_ip='', $user_agent='', $referrer='' ) {
+            return $this->doCall(
+                '/1.1/submit-spam', $comment, $author, $email, $url, $user_ip, $user_agent, $referrer
+            );
+        }
+
+        /**
+         *  This call is intended for the marking of false positives, things that were incorrectly marked as spam.
+         *
+         *  @param  $comment    The contents of the comment.
+         *  @param  $author     The name of the author of the comment.
+         *  @param  $email      (optional) The email address of the author of the comment.
+         *  @param  $url        (optional) The url of the website of the author of the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_agent (optional) The user agent of the person who submitted the comment.
+         *  @param  $referrer   (optional) The HTTP referrer of the person who submitted the comment.
+         *
+         *  @returns    True if the comment is spam, false if the comment is not spam. If something went wrong, a null
+         *              value is returned.
+         */
+        function submitHam( $comment, $author, $email='', $url='', $user_ip='', $user_agent='', $referrer='' ) {
+            return $this->doCall(
+                '/1.1/submit-ham', $comment, $author, $email, $url, $user_ip, $user_agent, $referrer
+            );
+        }
+
+        /**
+         *  This function performs the actual call.
+         *
+         *  @param  $url    The URL to post to
+         *  @param  $comment    The contents of the comment.
+         *  @param  $author     The name of the author of the comment.
+         *  @param  $email      (optional) The email address of the author of the comment.
+         *  @param  $url        (optional) The url of the website of the author of the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_ip    (optional) The IP address of the person who submitted the comment.
+         *  @param  $user_agent (optional) The user agent of the person who submitted the comment.
+         *  @param  $referrer   (optional) The HTTP referrer of the person who submitted the comment.
+         *
+         *  @returns    True if the comment is spam, false if the comment is not spam. If something went wrong, a null
+         *              value is returned.
+         */
+        function doCall( $url, $comment, $author, $email='', $url='', $user_ip='', $user_agent='', $referrer='' ) {
 
             // Do the request
             $result = $this->doRequest(
