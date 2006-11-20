@@ -19,6 +19,7 @@ $GLOBALS['t']['blocked'] = 'Blocked';
 $GLOBALS['t']['schedule'] = 'Schedule';
 $GLOBALS['t']['permissions'] = 'Permissions';
 $GLOBALS['t']['delete'] = 'Delete';
+$GLOBALS['t']['default'] = 'Default';
 $GLOBALS['t']['toggle state'] = 'Toggle state';
 $GLOBALS['t']['public'] = 'Public';
 $GLOBALS['t']['private'] = 'Private';
@@ -35,6 +36,25 @@ $GLOBALS['t']['move down'] = 'Move down';
 $GLOBALS['t']['edit'] = 'Edit';
 $GLOBALS['t']['properties'] = 'Properties';
 $GLOBALS['t']['please wait'] = 'Please wait';
+$GLOBALS['t']['online'] = 'Online';
+$GLOBALS['t']['offline'] = 'Offline';
+$GLOBALS['t']['offline message'] = 'Offline message';
+$GLOBALS['t']['gmt'] = 'GMT';
+$GLOBALS['t']['portal name'] = 'Portal name';
+
+// email parameters
+$GLOBALS['t']['email configuration'] = 'Email configuration';
+$GLOBALS['t']['email sender'] = 'Sender';
+$GLOBALS['t']['email host'] = 'Hostname';
+$GLOBALS['t']['email username'] = 'Username';
+$GLOBALS['t']['email password'] = 'Password';
+$GLOBALS['t']['email priority'] = 'Priority';
+$GLOBALS['t']['email helo'] = 'Helo';
+
+// languages
+$GLOBALS['t']['languages portal'] = 'Portal languages';
+$GLOBALS['t']['languages admin'] = 'Administration languages';
+
 
 $GLOBALS['t']['visitor'] = 'Visitor';
 $GLOBALS['t']['visitors'] = 'Visitors';
