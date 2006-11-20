@@ -52,9 +52,12 @@
          *
          *  @returns    Associative array of templates, eg: array( 'Default' => 'Default', 'orange' => ... )
          */
-		function admin_templates(){
+		function getNames( $path = null ){
 		
-			return YDCMTemplates::__getFiles( YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' ) );
+			// if path not set we will search the default admin path
+			if ( is_null( $path ) ) $path = YDConfig::get( 'YDCMTEMPLATES_ADMIN_PATH' );
+		
+			return YDCMTemplates::__getFiles( $path );
 		}
 
 

@@ -154,19 +154,18 @@
          *  This method deletes a user (and all children) or just the children
          *
          *  @param $userobject_id  Userobject id
-         *  @param $mode           (Optional) 0: delete user_id and ALL children
-         *                                    1: delete ALL children of user_id only
+         *  @param $deleteAll     (Optional) Delete id and all children (true by default. if false, deletes children only)
          *
          *  @returns    YDResult object. OK      - user deleted
 		 *                               WARNING - no deletes where made
          */
-		function deleteUser( $user_id, $mode = 0 ){
+		function deleteUser( $user_id, $deleteAll ){
 		
 			$obj = new YDCMUserobject();
 			
 			// delete user and get result
-			if ( $obj->deleteNode( $user_id, $mode ) ) return YDResult::ok( t('ydcmuser mess delete ok') );
-			else                                       return YDResult::fatal( t('ydcmuser mess delete empty') );
+			if ( $obj->deleteNode( $user_id, $deleteAll ) ) return YDResult::ok( t('ydcmuser mess delete ok') );
+			else                                            return YDResult::fatal( t('ydcmuser mess delete empty') );
 		}
 
 
@@ -262,18 +261,18 @@
 				$languages = $languages->active();
 				$this->_form->addElement( 'select',    'lang_id',       t( 'ydcmuser label language' ), array(), $languages );
 
-				$templates = new YDCMTemplates();
+				$templates = YDCMTemplates::getNames();
 
 				// get url to templates and set shot.png as filename
 				$attributes = array( 'border' => 1, 'src' => YDConfig::get( 'YDCMTEMPLATES_ADMIN_URL' ), 'ext' => 	YDConfig::get( 'YDCMTEMPLATES_ADMIN_EXT' ) );
 
-    	        $this->_form->addElement( 'selectimage',    'template', t( 'ydcmuser label template' ), $attributes, $templates->admin_templates() );
+    	        $this->_form->addElement( 'selectimage',    'template', t( 'ydcmuser label template' ), $attributes, $templates );
 
 				$this->_form->addRule( 'name',        'maxlength',      t( 'ydcmuser mess name too big' ),  255 );
 				$this->_form->addRule( 'email',       'email',          t( 'ydcmuser mess email not valid' ) );
 				$this->_form->addRule( 'other',       'maxlength',      t( 'ydcmuser mess other too big' ), 5000 );
 				$this->_form->addRule( 'language_id', 'in_array',       t( 'ydcmuser mess language not valid' ), array_keys( $languages ) );
-				$this->_form->addRule( 'template',    'in_array',       t( 'ydcmuser mess template not valid' ), array_keys( $templates->admin_templates() ) );
+				$this->_form->addRule( 'template',    'in_array',       t( 'ydcmuser mess template not valid' ), array_keys( $templates ) );
 			}
 
 			// add access information when editing
@@ -454,7 +453,7 @@
 				$user[ 'login_current' ] = YDStringUtil::formatDate( 0, 'datetimesql' );
 
 				// reset object
-				$this->resetAll();
+				$this->resetValues();
 
 				$this->setValues( $user );
 
