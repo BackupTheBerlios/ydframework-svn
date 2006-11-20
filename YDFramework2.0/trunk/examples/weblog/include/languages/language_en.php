@@ -256,6 +256,8 @@ $GLOBALS['t']['a_comments_spam'] = 'Spam comments';
 $GLOBALS['t']['mark_as_spam'] = 'mark as spam';
 $GLOBALS['t']['mark_as_not_spam'] = 'mark as not spam';
 $GLOBALS['t']['is_spam'] = 'Spam comment';
+$GLOBALS['t']['ip_number'] = 'IP number';
+$GLOBALS['t']['spam_delete_desc'] = 'Spam comments are automatically deleted after 7 days.';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Settings';

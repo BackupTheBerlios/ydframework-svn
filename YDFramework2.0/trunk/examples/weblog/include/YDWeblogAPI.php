@@ -132,6 +132,25 @@
             $sql = 'DELETE FROM #_comments WHERE is_spam = 1 AND created < (unix_timestamp()-604800)';
             $this->db->executeSql( $sql );
 
+            // Check against akismet if a key is there
+            if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
+
+                // Include the YDAkismet addon
+                include_once( YD_DIR_HOME_ADD . '/YDAkismet/YDAkismet.php' );
+
+                // Get the URL of the weblog
+                $weblog_url = dirname( YDRequest::getCurrentUrl( true ) ) . '/';
+
+                // Initialize YDAkismet
+                $this->akismet = new YDAkismet( $weblog_url, YDConfig::get( 'akismet_key', '' ) );
+
+            } else {
+
+                // No akismet
+                $this->akismet = null;
+
+            }
+
         }
 
         // Get the schema version
@@ -541,17 +560,8 @@
             // Check against akismet if a key is there
             if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
 
-                // Include the YDAkismet addon
-                include_once( YD_DIR_HOME_ADD . '/YDAkismet/YDAkismet.php' );
-
-                // Get the URL of the weblog
-                $weblog_url = dirname( YDRequest::getCurrentUrl( true ) ) . '/';
-
-                // Initialize YDAkismet
-                $akismet = new YDAkismet( $weblog_url, YDConfig::get( 'akismet_key', '' ) );
-
                 // Check if it's spam or not
-                $result = $akismet->checkComment(
+                $result = $this->akismet->checkComment(
                     $values['comment'], $values['username'], $values['useremail'], $values['userwebsite'],
                     $values['userip'], $values['useragent']
                 );
@@ -603,22 +613,50 @@
 
         // Update a comment and mark it as spam
         function updateCommentAsSpam( $comment_id ) {
+
+            // Update the comment
             $comment = $this->getCommentById( $comment_id );
             $comment['is_spam'] = 1;
             unset( $comment['item_title'] );
             $this->updateComment( $comment );
             $sql = 'UPDATE #_items SET num_comments = num_comments-1 WHERE id = ' . $this->str( $comment['item_id'] );
             $this->db->executeSql( $sql );
+
+            // Check against akismet if a key is there
+            if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
+
+                // Submit as spam
+                $this->akismet->submitSpam(
+                    $comment['comment'], $comment['username'], $comment['useremail'], $comment['userwebsite'],
+                    $comment['userip'], $comment['useragent']
+                );
+
+            }
+
         }
 
         // Update a comment and unmark it as spam
         function updateCommentAsNotSpam( $comment_id ) {
+
+            // Update the comment
             $comment = $this->getCommentById( $comment_id );
             $comment['is_spam'] = 0;
             unset( $comment['item_title'] );
             $this->updateComment( $comment );
             $sql = 'UPDATE #_items SET num_comments = num_comments+1 WHERE id = ' . $this->str( $comment['item_id'] );
             $this->db->executeSql( $sql );
+
+            // Check against akismet if a key is there
+            if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
+
+                // Submit as ham
+                $this->akismet->submitHam(
+                    $comment['comment'], $comment['username'], $comment['useremail'], $comment['userwebsite'],
+                    $comment['userip'], $comment['useragent']
+                );
+
+            }
+
         }
 
         // Delete a comment

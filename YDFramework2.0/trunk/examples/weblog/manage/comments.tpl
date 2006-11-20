@@ -47,61 +47,103 @@
         </th>
     </tr>
     {if $comments->set}
-        <tr>
-            <th class="adminRowL" width="17%">{t w="date"}</th>
-            <th class="adminRowL" width="15%">{t w="author"}</th>
-            <th class="adminRowL" width="30%">{t w="comment"}</th>
-            <th class="adminRowR" width="18%">{t w="actions"}</th>
-        </tr>
-        <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
-        {foreach from=$comments->set item="comment"}
-            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
-                <td class="adminRowL">
-                    {if $comment.item_is_draft eq '1'}<i>{/if}
-                    {$comment.created|date:'%Y/%m/%d %H:%M'}
-                    {if $comment.item_is_draft eq '1'}</i>{/if}
-                </td>
-                <td class="adminRowL">
-                    {if $comment.item_is_draft eq '1'}<i>{/if}
-                    {$comment.username}
-                    {if $comment.item_is_draft eq '1'}</i>{/if}
-                </td>
-                <td class="adminRowL">
-                    {*{if $comment.item_is_draft eq '1'}<i>{/if}
-                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.comment|bbcode|strip_tags|truncate}</a>
-                    {if $comment.item_title}
+        {if $filter == 'no_spam'}
+            <tr>
+                <th class="adminRowL" width="17%">{t w="date"}</th>
+                <th class="adminRowL" width="15%">{t w="author"}</th>
+                <th class="adminRowL" width="30%">{t w="comment"}</th>
+                <th class="adminRowR" width="18%">{t w="actions"}</th>
+            </tr>
+            <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
+            {foreach from=$comments->set item="comment"}
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
+                    <td class="adminRowL">
+                        {if $comment.item_is_draft eq '1'}<i>{/if}
+                        {$comment.created|date:'%Y/%m/%d %H:%M'}
+                        {if $comment.item_is_draft eq '1'}</i>{/if}
+                    </td>
+                    <td class="adminRowL">
+                        {if $comment.item_is_draft eq '1'}<i>{/if}
+                        {$comment.username}
+                        {if $comment.item_is_draft eq '1'}</i>{/if}
+                    </td>
+                    <td class="adminRowL">
+                        {*{if $comment.item_is_draft eq '1'}<i>{/if}
+                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.comment|bbcode|strip_tags|truncate}</a>
+                        {if $comment.item_title}
+                            <br/>
+                            {t w="item"}: {$comment.item_title}
+                        {/if}
+                        {if $comment.item_is_draft eq '1'}</i>{/if}*}
+                        {if $comment.item_is_draft eq '1'}<i>{/if}
+                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.item_title}</a>
                         <br/>
-                        {t w="item"}: {$comment.item_title}
-                    {/if}
-                    {if $comment.item_is_draft eq '1'}</i>{/if}*}
-                    {if $comment.item_is_draft eq '1'}<i>{/if}
-                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.item_title}</a>
-                    <br/>
-                    {$comment.comment|bbcode|strip_tags|truncate}
-                    {if $comment.item_is_draft eq '1'}</i>{/if}
-                </td>
-                <td class="adminRowR">
-                    <a href="../item.php?id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
-                    |
-                    <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
-                    |
-                    <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
-                     onClick="return YDConfirmDelete( '{$comment.comment|bbcode|strip_tags|strip|truncate|addslashes}' );">{t w="delete"}</a>
-                    <br/>
-                    {if $comment.is_spam}
-                        <a href="{$YD_SELF_SCRIPT}?do=mark_as_not_spam&id={$comment.id}">{t w="mark_as_not_spam"}</a>
-                    {else}
-                        <a href="{$YD_SELF_SCRIPT}?do=mark_as_spam&id={$comment.id}">{t w="mark_as_spam"}</a>
-                    {/if}
+                        {$comment.comment|bbcode|strip_tags|truncate}
+                        {if $comment.item_is_draft eq '1'}</i>{/if}
+                    </td>
+                    <td class="adminRowR">
+                        <a href="../item.php?id={$comment.item_id}#comment-{$comment.id}" target="_blank">{t w="view"}</a>
+                        |
+                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
+                        |
+                        <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
+                         onClick="return YDConfirmDelete( '{$comment.comment|bbcode|strip_tags|strip|truncate|addslashes}' );">{t w="delete"}</a>
+                        <br/>
+                        {if $comment.is_spam}
+                            <a href="{$YD_SELF_SCRIPT}?do=mark_as_not_spam&id={$comment.id}">{t w="mark_as_not_spam"}</a>
+                        {else}
+                            <a href="{$YD_SELF_SCRIPT}?do=mark_as_spam&id={$comment.id}">{t w="mark_as_spam"}</a>
+                        {/if}
+                    </td>
+                </tr>
+            {/foreach}
+            <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
+            <tr>
+                <td class="adminRowLNB" colspan="4">
+                    <p class="subline">{t w="total"}: {$comments->totalRows}</p>
                 </td>
             </tr>
-        {/foreach}
-        <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
-        <tr>
-            <td class="adminRowLNB" colspan="4">
-                <p class="subline">{t w="total"}: {$comments->totalRows}</p>
-            </td>
-        </tr>
+        {else}
+            <tr><td class="adminRowL" colspan="4"><i>{t w="spam_delete_desc"}</i></td></tr>
+            <tr>
+                <th class="adminRowL" width="17%">{t w="date"}</th>
+                <th class="adminRowL" width="15%">{t w="author"}</th>
+                <th class="adminRowL" width="15%">{t w="ip_number"}</th>
+                <th class="adminRowR" width="33%">{t w="actions"}</th>
+            </tr>
+            <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
+            {foreach from=$comments->set item="comment"}
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
+                    <td class="adminRowL">
+                        {$comment.created|date:'%Y/%m/%d %H:%M'}
+                    </td>
+                    <td class="adminRowL">
+                        {$comment.username}
+                    </td>
+                    <td class="adminRowL">
+                        {$comment.userip}
+                    </td>
+                    <td class="adminRowR">
+                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
+                        |
+                        <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
+                         onClick="return YDConfirmDelete( '{$comment.comment|bbcode|strip_tags|strip|truncate|addslashes}' );">{t w="delete"}</a>
+                        |
+                        {if $comment.is_spam}
+                            <a href="{$YD_SELF_SCRIPT}?do=mark_as_not_spam&id={$comment.id}">{t w="mark_as_not_spam"}</a>
+                        {else}
+                            <a href="{$YD_SELF_SCRIPT}?do=mark_as_spam&id={$comment.id}">{t w="mark_as_spam"}</a>
+                        {/if}
+                    </td>
+                </tr>
+            {/foreach}
+            <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
+            <tr>
+                <td class="adminRowLNB" colspan="4">
+                    <p class="subline">{t w="total"}: {$comments->totalRows}</p>
+                </td>
+            </tr>
+        {/if}
     {else}
         <tr>
             <td class="adminRowL" colspan="7">{t w="no_comments_found"}</td>
