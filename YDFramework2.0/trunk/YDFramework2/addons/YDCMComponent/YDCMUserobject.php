@@ -28,129 +28,23 @@
 
 
 	// add YD libs
-//	YDInclude( 'YDForm.php' );
-	YDInclude( 'YDDatabaseTree2.php' );
-//	YDInclude( 'YDDatabaseObject.php' );
-	// add YDCM libs
-//	YDInclude( 'YDCMPermissions.php' );
+	YDInclude( 'YDDatabaseTree3.php' );
 
-	// add local translation directory
-//	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMUsers/' );
-
-
-    class YDCMUserobject extends YDDatabaseObject {
+	// userobject class
+    class YDCMUserobject extends YDDatabaseTree3 {
     
         function YDCMUserobject() {
-        
-			// init DB object
-            $this->YDDatabaseObject();
 
-			// register database as default
-            $this->registerDatabase();
+			// init parent object
+			$this->YDDatabaseTree3( 'YDCMUserobject', 'default', 'userobject_id', 'parent_id', 'lineage', 'level', 'position' );
 
-			// register table for this component
-            $this->registerTable( 'YDCMUserobject' );
-
-            // register custom key
-            $this->registerKey( 'userobject_id', true );
-
-			// register custom fields
-			$this->registerField( 'parent_id' );
-//			$this->registerField( 'nleft' );
-//			$this->registerField( 'nright' );
-//			$this->registerField( 'nlevel' );
-			$this->registerField( 'lineage' );
-			$this->registerField( 'position' );
-			$this->registerField( 'type' );			
+			// add custom tree fields
+			$this->registerField( 'type' );
 			$this->registerField( 'reference' );			
 			$this->registerField( 'state' );
 
-			// create tree object
-			$this->tree = new YDDatabaseTree2( 'YDCMUserobject', 'default', 'userobject_id', 'parent_id' );
-
-			// add tree fields
-//			$this->tree->addField( 'parent_id' );
-			$this->tree->addField( 'type' );
-			$this->tree->addField( 'reference' );			
-			$this->tree->addField( 'state' );			
-		}
-
-
-        /**
-         *  This method returns all sub users of a userobject
-         *
-         *  @param  $parent_id      Parent id
-         *  @param  $includeNode    (optional) Includes the node or not. Defaults to true.
-         *
-         *  @returns    Array with user and children nodes
-         */
-		function getTreeElements( $parent_id, $includeNode = true ){
-
-//			return $this->tree->getDescendants( $parent_id, $includeNode );
-			return $this->tree->getTreeElements();
-		}
-
-
-        /**
-         *  This method checks if a userobject is descendant of another
-         *
-         *  @param      $userobject_id User id to test if id descendant
-         *  @param      $parent_id     Parent id
-         *
-         *  @returns    boolean. TRUE if is descendant, FALSE if not descendant
-         */
-		function isDescendantOf( $userobject_id, $parent_id ){
-
-			return $this->tree->isDescendantOf( intval( $userobject_id ), intval( $parent_id ) );
-		}
-
-
-        /**
-         *  This method deletes a userobject (and all children) or just the children
-         *
-         *  @param $userobject_id  Userobject id
-         *  @param $mode           (Optional) 0: delete userobject_id and ALL children
-         *                                    1: delete ALL children of userobject_id only
-         *
-         *  @returns    total of lines affected
-         */
-		function deleteNode( $userobject_id, $mode = 0 ){
-		
-			// delete userobject_id an children
-			if ( $mode == 0 ) return $this->tree->deleteNode( $userobject_id, true );
-
-			// delete userobject_id children
-			return $this->tree->deleteNode( $userobject_id, false );
-		}
-
-
-        /**
-         *  This method adds a userobject
-         *
-         *  @param $values     Array with values
-         *  @param $parent_id  Parent id
-         *
-         *  @returns    node id
-         */
-		function addNode( $values, $parent_id ){
-		
-			// add node
-			return $this->tree->addNode( $values, $parent_id );
-		}
-
-
-        /**
-         *  This method updates a userobject
-         *
-         *  @param $values  Array with values
-         *  @param $id      Userobject id
-         *
-         *  @returns    $values
-         */
-		function updateNode( $values, $id ){
-		
-			// update node
-			return $this->tree->updateNode( $values, $id );
+			// define tree order
+			$this->order( 'parent_id ASC, position ASC' );
 		}
 
 
@@ -164,7 +58,7 @@
 		function moveChildrenUp( $userobject_id ){
 		
 			// reset possible old stuff
-			$this->resetAll();
+			$this->resetValues();
 
 			// get parent_id of this userobject
 			$this->set( 'userobject_id', intval( $userobject_id ) );
@@ -176,7 +70,7 @@
 			$parent_id = $this->get( 'parent_id ' );
 
 			// reset all previous class values
-			$this->resetAll();
+			$this->resetValues();
 
 			// update all children to new parent_id
 			$this->set( 'parent_id', intval( $parent_id ) );
@@ -188,7 +82,7 @@
 
 
         /**
-         *  This method returns an associative array 
+         *  This method returns an associative array of nodes that belogs to a specific type
          *
          *  @param $type       Node type (or array of types)
          *  @param $attribute  (Optional) Attribute name or (array of attributes) to get only
@@ -197,15 +91,16 @@
          */
 		function getElements( $type, $attributes = array() ){
 
-			$this->resetAll();
+			// reset previous settings
+			$this->resetValues();
 
 			// set user id
-			$this->where( 'type IN ("' . implode( '","', $type ) . '")' );
+			$this->where( 'type IN (' . $this->_db->escapeSqlArray( $type ) . ')' );
 
 			// get all attributes
 			$this->find();
 
-			return $this->getResultsAsAssocArray( 'userobject_id', $attributes );
+			return $this->_getTreeElementsAsAssocArray( $attributes );
 		}
 
 
