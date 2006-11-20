@@ -128,8 +128,8 @@
             // The array that will hold the image metadata
             $this->imagemetadata = null;
 
-            // Delete spam comments older than 15 days
-            $sql = 'DELETE FROM #_comments WHERE is_spam = 1 AND created < (unix_timestamp()-1296000)';
+            // Delete spam comments older than 7 days
+            $sql = 'DELETE FROM #_comments WHERE is_spam = 1 AND created < (unix_timestamp()-604800)';
             $this->db->executeSql( $sql );
 
         }
