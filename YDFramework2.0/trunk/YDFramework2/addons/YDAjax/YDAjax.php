@@ -398,13 +398,18 @@
 			// if previous atribute don't have ';' in the end we should add it
 			if (strlen( $previous ) > 0 && $previous[ strlen( $previous ) - 1 ] != ';' ) $previous .= ';';
 
-			if ( in_array( 'replace', $options ) )
-				return $formElement->setAttribute( $event, $functionName );
+			if ( in_array( 'replace', $options ) ){
+				if ( !$this->onResponse ) return $formElement->setAttribute( $event, $functionName );
+				else                      return $this->addScript( $formElement->setJS( $functionName, $event, $options ) );
+			}
 
-			if ( in_array( 'prepend', $options ) )
-				return $formElement->setAttribute( $event, $functionName . $previous );
+			if ( in_array( 'prepend', $options ) ){
+				if ( !$this->onResponse ) return $formElement->setAttribute( $event, $functionName . $previous );
+				else	  				  return $this->addScript( $formElement->setJS( $functionName . $previous, $event, $options ) );
+			}
 			
-			$formElement->setAttribute( $event, $previous . $functionName );
+			if ( !$this->onResponse ) $formElement->setAttribute( $event, $previous . $functionName );
+			else                      $this->addScript( $formElement->setJS( $previous . $functionName, $event, $options ) );
 		}
 
 
