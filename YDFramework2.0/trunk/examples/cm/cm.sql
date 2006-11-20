@@ -1,3 +1,11 @@
+CREATE TABLE YDCMStatistics_downloads (
+  download_is INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  date DATETIME NULL,
+  filename VARCHAR(255) NULL,
+  PRIMARY KEY(download_is)
+)
+TYPE=InnoDB;
+
 CREATE TABLE YDCMLanguages (
   language_id VARCHAR(255) NOT NULL,
   name VARCHAR(50) NOT NULL,
@@ -11,47 +19,6 @@ TYPE=InnoDB;
 INSERT INTO `ydcmlanguages` (`language_id`,`name`,`active`,`visitors_default`,`admin_default`) VALUES ('en','English',1,1,1);
 INSERT INTO `ydcmlanguages` (`language_id`,`name`,`active`,`visitors_default`,`admin_default`) VALUES ('pt','Português',1,0,0);
 
-
-CREATE TABLE YDCMTree (
-  content_id INTEGER(10) NOT NULL AUTO_INCREMENT,
-  parent_id INTEGER UNSIGNED NULL,
-  nleft INTEGER NOT NULL DEFAULT 0,
-  nright INTEGER NOT NULL DEFAULT 0,
-  nlevel INTEGER NOT NULL DEFAULT 0,
-  position INTEGER(10) NULL DEFAULT 1,
-  type VARCHAR(20) NOT NULL,
-  reference VARCHAR(100) NOT NULL,
-  state TINYINT(1) NOT NULL,
-  access TINYINT(2) NOT NULL DEFAULT 1,
-  searcheable TINYINT(1) NOT NULL,
-  published_date_start DATETIME NOT NULL,
-  published_date_end DATETIME NOT NULL,
-  candrag TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
-  candrop TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
-  PRIMARY KEY(content_id)
-)
-TYPE=InnoDB;
-
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (1,1,1,22,1,1,'YDCMRoot','',7,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (2,1,2,3,2,1,'YDCMRootmenu','menu Code Paste',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (3,1,4,5,2,1,'YDCMRootmenu','menu Documentation',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (4,1,6,13,2,1,'YDCMRootmenu','menu Books',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (5,4,7,8,3,1,'YDCMPage','Apache',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (6,4,9,10,3,1,'YDCMPage','PostegreSQL',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (7,4,11,12,3,1,'YDCMPage','mysql',0,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (8,1,14,21,2,1,'YDCMRootmenu','links',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (9,8,15,16,3,1,'YDCMPage','databases',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (10,8,17,18,3,1,'YDCMPage','generators',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-INSERT INTO `ydcmtree` (`content_id`,`parent_id`,`nleft`,`nright`,`nlevel`,`position`,`type`,`reference`,`state`,`access`,`searcheable`,`published_date_start`,`published_date_end`,`candrag`,`candrop`) VALUES (11,8,19,20,3,1,'YDCMPage','portals',1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
-
-
-CREATE TABLE YDCMStatistics_downloads (
-  download_is INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  date DATETIME NULL,
-  filename VARCHAR(255) NULL,
-  PRIMARY KEY(download_is)
-)
-TYPE=InnoDB;
 
 CREATE TABLE YDCMStatistics_searches (
   search_id INTEGER(10) NOT NULL AUTO_INCREMENT,
@@ -90,6 +57,42 @@ INSERT INTO `ydcmuserobject` VALUES (  9,   8,  '//2/4/8/', 4, 1, 'YDCMUser',   
 INSERT INTO `ydcmuserobject` VALUES (10,   8,  '//2/4/8/', 4, 2, 'YDCMUser',     'meireles', 1);
 INSERT INTO `ydcmuserobject` VALUES (11,   5,  '//2/4/5/', 4, 3, 'YDCMUser',     'marc',1);
 INSERT INTO `ydcmuserobject` VALUES (12,   4,  '//2/4/',    3, 3, 'YDCMGroup',   'extra',1);
+
+
+CREATE TABLE YDCMTree (
+  content_id INTEGER(10) NOT NULL AUTO_INCREMENT,
+  parent_id INTEGER(10) NULL,
+  lineage VARCHAR(255) NOT NULL DEFAULT '//',
+  level INTEGER NOT NULL DEFAULT 0,
+  position INTEGER(10) NULL DEFAULT 1,
+  type VARCHAR(20) NOT NULL,
+  reference VARCHAR(100) NOT NULL,
+  state TINYINT(1) NOT NULL,
+  access TINYINT(2) NOT NULL DEFAULT 1,
+  searcheable TINYINT(1) NOT NULL,
+  published_date_start DATETIME NOT NULL,
+  published_date_end DATETIME NOT NULL,
+  candrag TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+  candrop TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY(content_id),
+  FOREIGN KEY(parent_id)
+    REFERENCES YDCMTree(content_id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
+)
+TYPE=InnoDB;
+
+INSERT INTO `ydcmtree` VALUES (  1,null,   '',              0, 1, 'YDCMRoot',         '',                               1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',0,0);
+INSERT INTO `ydcmtree` VALUES (  2,    1,  '//',            1, 2, 'YDCMRootmenu', 'menu Code Paste',      1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  3,    1,  '//',            1, 3, 'YDCMRootmenu', 'menu Documentation', 1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  4,    1,  '//',            1, 4, 'YDCMRootmenu', 'menu Books',              1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  5,    4,  '//4/',         2, 1, 'YDCMPage',         'Apache',                     1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  6,    4,  '//4/',         2, 2, 'YDCMPage',         'PostegreSQL',             1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  7,    4,  '//4/',         2, 3, 'YDCMPage',         'mysql',                       0,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  8,    1,  '//',            1, 5, 'YDCMRootmenu',  'links',                        1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  9,    8,  '//1/8/',      3, 1, 'YDCMPage',          'databases',                1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  10,  8,  '//1/8/',      3, 2, 'YDCMPage',          'generators',               1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
+INSERT INTO `ydcmtree` VALUES (  11, 10, '//1/8/10/',  4, 1, 'YDCMPage',          'portals',                    1,1,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',1,1);
 
 
 CREATE TABLE YDCMPermission (
@@ -166,8 +169,6 @@ CREATE TABLE YDCMComp (
   content_id INTEGER(10) NOT NULL,
   language_id VARCHAR(255) NULL,
   title VARCHAR(255) NULL,
-  version_default TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
-  version_date DATETIME NOT NULL,
   PRIMARY KEY(component_id),
   FOREIGN KEY(content_id)
     REFERENCES YDCMTree(content_id)
@@ -180,20 +181,20 @@ CREATE TABLE YDCMComp (
 )
 TYPE=InnoDB;
 
-INSERT INTO `ydcmcomp` VALUES (1,5,'en','Apache friends',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (2,6,'en','PostGre en',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (3,6,'pt','PostGre pt',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (4,7,'en','mySql howto',1,'2000-01-01 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (5,7,'pt','ajuda mySql',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (6,9,'en','Databases we use',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (7,9,'pt','Bases de dados',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (8,10,'en','Generators help',1,'2000-01-01 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (9,10,'pt','Ajuda sobre geradores',1,'2002-02-02 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (10,11,'en','Portals',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (11,11,'pt','Portais',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (12,8,'en','Menu Links',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (13,8,'pt','O meu menu de atalhos',1,'0000-00-00 00:00:00');
-INSERT INTO `ydcmcomp` VALUES (14,10,'en','Gener',0,'3002-02-02 00:00:00');
+INSERT INTO `ydcmcomp` VALUES (1,     5,'en','Apache friends');
+INSERT INTO `ydcmcomp` VALUES (2,     6,'en','PostGre en');
+INSERT INTO `ydcmcomp` VALUES (3,     6,'pt','PostGre pt');
+INSERT INTO `ydcmcomp` VALUES (4,     7,'en','mySql howto');
+INSERT INTO `ydcmcomp` VALUES (5,     7,'pt','ajuda mySql');
+INSERT INTO `ydcmcomp` VALUES (6,     9,'en','Databases we use');
+INSERT INTO `ydcmcomp` VALUES (7,     9,'pt','Bases de dados');
+INSERT INTO `ydcmcomp` VALUES (8,   10,'en','Generators help');
+INSERT INTO `ydcmcomp` VALUES (9,   10,'pt','Ajuda sobre geradores');
+INSERT INTO `ydcmcomp` VALUES (10, 11,'en','Portals');
+INSERT INTO `ydcmcomp` VALUES (11, 11,'pt','Portais');
+INSERT INTO `ydcmcomp` VALUES (12,  8,'en','Menu Links');
+INSERT INTO `ydcmcomp` VALUES (13,  8,'pt','O meu menu de atalhos');
+INSERT INTO `ydcmcomp` VALUES (14, 10,'en','Gener');
 
 
 CREATE TABLE YDCMLocks (
@@ -208,65 +209,6 @@ CREATE TABLE YDCMLocks (
       ON UPDATE NO ACTION,
   FOREIGN KEY(content_id)
     REFERENCES YDCMTree(content_id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-)
-TYPE=InnoDB;
-
-CREATE TABLE YDCMPage (
-  component_id INTEGER UNSIGNED NOT NULL,
-  current_version TINYINT(1) NULL,
-  html TEXT NULL,
-  xhtml TEXT NULL,
-  template_pack TINYINT(1) UNSIGNED NOT NULL,
-  template VARCHAR(255) NULL,
-  metatags TINYINT(1) NOT NULL,
-  description TEXT NULL,
-  keywords TEXT NULL DEFAULT '',
-  FOREIGN KEY(component_id)
-    REFERENCES YDCMComp(component_id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-)
-TYPE=InnoDB;
-
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (1,1,'Apache html all lang','Apache xhtml all lang',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (2,1,'PostgreSQL en html','PostgreSQL en xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (3,1,'PostgreSQL pt html','PostgreSQL pt xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (4,1,'mySQL en html','mySQL en xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (5,1,'mySQL pt html','mySQL pt xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (6,1,'Databases html','Databases xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (7,1,'Bases de dados html','Bases de dados xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (8,1,'Generators html','Generators xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (9,1,'Geradores html','Geradores xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (10,1,'Portals html','Portals xhtml',0,'',0,'','');
-INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (11,1,'Portais html','Portais xhtml',0,'',0,'','');
-
-
-CREATE TABLE YDCMGuestbook_posts (
-  post_id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
-  component_id INTEGER UNSIGNED NOT NULL,
-  date DATETIME NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NULL,
-  message TEXT NOT NULL,
-  active TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
-  website VARCHAR(255) NULL,
-  ip VARCHAR(15) NULL,
-  PRIMARY KEY(post_id),
-  FOREIGN KEY(component_id)
-    REFERENCES YDCMComp(component_id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
-)
-TYPE=InnoDB;
-
-CREATE TABLE YDCMLink (
-  component_id INTEGER UNSIGNED NOT NULL,
-  url VARCHAR(255) NOT NULL,
-  num_visits INTEGER UNSIGNED NOT NULL DEFAULT 0,
-  FOREIGN KEY(component_id)
-    REFERENCES YDCMComp(component_id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 )
@@ -320,6 +262,76 @@ CREATE TABLE YDCMHelpdesk_response (
       ON UPDATE NO ACTION,
   FOREIGN KEY(userobject_id)
     REFERENCES YDCMUserobject(userobject_id)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+)
+TYPE=InnoDB;
+
+CREATE TABLE YDCMPage (
+  component_id INTEGER UNSIGNED NOT NULL,
+  current_version TINYINT(1) NULL,
+  html TEXT NULL,
+  xhtml TEXT NULL,
+  template_pack TINYINT(1) UNSIGNED NOT NULL,
+  template VARCHAR(255) NULL,
+  metatags TINYINT(1) NOT NULL,
+  description TEXT NULL,
+  keywords TEXT NULL DEFAULT '',
+  FOREIGN KEY(component_id)
+    REFERENCES YDCMComp(component_id)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+)
+TYPE=InnoDB;
+
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (1,1,'Apache html all lang','Apache xhtml all lang',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (2,1,'PostgreSQL en html','PostgreSQL en xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (3,1,'PostgreSQL pt html','PostgreSQL pt xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (4,1,'mySQL en html','mySQL en xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (5,1,'mySQL pt html','mySQL pt xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (6,1,'Databases html','Databases xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (7,1,'Bases de dados html','Bases de dados xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (8,1,'Generators html','Generators xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (9,1,'Geradores html','Geradores xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (10,1,'Portals html','Portals xhtml',0,'',0,'','');
+INSERT INTO `ydcmpage` (`component_id`,`current_version`,`html`,`xhtml`,`template_pack`,`template`,`metatags`,`description`,`keywords`) VALUES (11,1,'Portais html','Portais xhtml',0,'',0,'','');
+
+
+CREATE TABLE YDCMLink (
+  component_id INTEGER UNSIGNED NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  num_visits INTEGER UNSIGNED NOT NULL DEFAULT 0,
+  FOREIGN KEY(component_id)
+    REFERENCES YDCMComp(component_id)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+)
+TYPE=InnoDB;
+
+CREATE TABLE YDCMGuestbook (
+  guestbook_id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  component_id INTEGER UNSIGNED NOT NULL,
+  guestbook_datecreation DATETIME NOT NULL,
+  PRIMARY KEY(guestbook_id),
+  FOREIGN KEY(component_id)
+    REFERENCES YDCMComp(component_id)
+      ON DELETE NO ACTION
+      ON UPDATE NO ACTION
+)
+TYPE=InnoDB;
+
+CREATE TABLE YDCMGuestbook_posts (
+  post_id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  guestbook_id INTEGER UNSIGNED NOT NULL,
+  post_name VARCHAR(255) NULL,
+  post_email VARCHAR(255) NULL,
+  post_message TEXT NULL,
+  post_active TINYINT(1) UNSIGNED NULL,
+  post_website VARCHAR(255) NULL,
+  ip VARCHAR(5) NULL,
+  PRIMARY KEY(post_id),
+  FOREIGN KEY(guestbook_id)
+    REFERENCES YDCMGuestbook(guestbook_id)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 )
