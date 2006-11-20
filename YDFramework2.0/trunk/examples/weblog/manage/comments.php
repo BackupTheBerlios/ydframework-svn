@@ -175,6 +175,12 @@
             $this->redirectToAction();
         }
 
+        // Empty the spam
+        function actionEmptySpam() {
+            $this->weblog->emptySpam();
+            $this->redirect( YD_SELF_SCRIPT . '?filter=spam' );
+        }
+
     }
 
     // Process the request

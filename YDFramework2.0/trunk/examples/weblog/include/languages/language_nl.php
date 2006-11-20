@@ -251,6 +251,7 @@ $GLOBALS['t']['parent'] = 'Bovenliggend Item';
 $GLOBALS['t']['change_comment_desc'] = 'Wijzig commentaar';
 $GLOBALS['t']['mail'] = 'Email';
 $GLOBALS['t']['no_comments_found'] = 'Er werden geen commentaren gevonden';
+$GLOBALS['t']['no_spam_comments_found'] = 'Er werden geen spam commentaren gevonden';
 $GLOBALS['t']['posted_from'] = 'Gepost van het IP adres';
 $GLOBALS['t']['a_comments_spam'] = 'Spam commentaren';
 $GLOBALS['t']['mark_as_spam'] = 'markeer als spam';
@@ -258,6 +259,8 @@ $GLOBALS['t']['mark_as_not_spam'] = 'markeer als niet spam';
 $GLOBALS['t']['is_spam'] = 'Spam commentaar';
 $GLOBALS['t']['ip_number'] = 'IP nummer';
 $GLOBALS['t']['spam_delete_desc'] = 'Spam commentaren worden automatisch verwijderd na 7 dagen.';
+$GLOBALS['t']['confirm_empty_spam'] = 'Bent u zeker dat u alle spam commentaren wil verwijderen?';
+$GLOBALS['t']['empty_spam_now'] = 'Verwijder nu alle spam commentaren.';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Instellingen';

@@ -941,6 +941,12 @@
             }
         }
 
+        // Delete the spam comments
+        function emptySpam() {
+            $sql = 'DELETE FROM #_comments WHERE is_spam = 1';
+            $this->db->executeSql( $sql );
+        }
+
         // Function to resize an uploaded image. Takes a YDFSImage object as it's argument
         function resizeUploadedImage( $image ) {
 

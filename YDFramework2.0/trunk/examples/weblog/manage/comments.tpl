@@ -104,7 +104,10 @@
                 </td>
             </tr>
         {else}
-            <tr><td class="adminRowL" colspan="4"><i>{t w="spam_delete_desc"}</i></td></tr>
+            <tr><td class="adminRowL" colspan="4">
+                <i>{t w="spam_delete_desc"}. <a href="{$YD_SELF_SCRIPT}?do=emptySpam"
+                 onClick="return confirm( '{t w="confirm_empty_spam"}' );">{t w="empty_spam_now"}</a></i>
+            </td></tr>
             <tr>
                 <th class="adminRowL" width="17%">{t w="date"}</th>
                 <th class="adminRowL" width="15%">{t w="author"}</th>
@@ -146,7 +149,13 @@
         {/if}
     {else}
         <tr>
-            <td class="adminRowL" colspan="7">{t w="no_comments_found"}</td>
+            <td class="adminRowL" colspan="7">
+                {if $filter == 'no_spam'}
+                    {t w="no_comments_found"}
+                {else}
+                    {t w="no_spam_comments_found"}
+                {/if}
+            </td>
         </tr>
     {/if}
 
