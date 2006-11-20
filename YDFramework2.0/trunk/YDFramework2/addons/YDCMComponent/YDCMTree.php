@@ -27,24 +27,18 @@
     }
 
 
-    class YDCMTree extends YDDatabaseObject {
+	// add YD libs
+	YDInclude( 'YDDatabaseTree3.php' );
+
+	// userobject class
+    class YDCMTree extends YDDatabaseTree3 {
     
         function YDCMTree() {
-        
-			// init component as non default
-            $this->YDDatabaseObject();
-			
-			// register database as default
-            $this->registerDatabase();
 
-			// register table for this component
-            $this->registerTable( 'YDCMTree' );
+			// init parent object
+			$this->YDDatabaseTree3( 'YDCMTree', 'default', 'content_id', 'parent_id', 'lineage', 'level', 'position' );
 
-            // register custom key
-            $this->registerKey( 'content_id', true );
-
-			// register fields	
-			$this->registerField( 'parent_id' );
+			// add custom tree fields
 			$this->registerField( 'type' );
 			$this->registerField( 'state' );
 			$this->registerField( 'reference' );
@@ -54,9 +48,9 @@
 			$this->registerField( 'published_date_end' );			
 			$this->registerField( 'candrag' );
 			$this->registerField( 'candrop' );
-			$this->registerField( 'nleft' );
-			$this->registerField( 'nright' );
 
+			// define tree order
+			$this->order( 'parent_id ASC, position ASC' );
 		}
 
 
