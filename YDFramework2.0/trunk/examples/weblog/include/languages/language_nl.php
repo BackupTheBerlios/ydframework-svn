@@ -301,6 +301,8 @@ $GLOBALS['t']['cfg_keep_stats'] = 'Houdt statistieken bij';
 $GLOBALS['t']['cfg_blocked_ips'] = 'Geblokkeerde IP adressen gescheiden door comma\'s. Je kan een sterretje gebruiken als wildcard.';
 $GLOBALS['t']['cfg_akismet_key'] = 'Akismet API key (<a href="http://wordpress.com/signup/" target="_blank">hier te verkrijgen</a>)';
 $GLOBALS['t']['cfg_max_img_size'] = 'Maximale beeldgrootte';
+$GLOBALS['t']['cfg_comment_interval'] = 'Commentaar interval in seconden';
+$GLOBALS['t']['err_comment_interval_num'] = 'Commentaar interval moet een getal zijn';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Titel';

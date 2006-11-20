@@ -144,6 +144,10 @@
             <td class="adminRowL">{t w="cfg_akismet_key"}</td>
             <td class="adminRowL">{$config.akismet_key|default:'-'}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="cfg_comment_interval"}</td>
+            <td class="adminRowL">{$config.comment_interval|default:'-'}</td>
+        </tr>
     </table>
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
@@ -285,6 +289,10 @@
             <tr>
                 <td class="adminRowL">{$form.akismet_key.label_html}</td>
                 <td class="adminRowL">{$form.akismet_key.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.comment_interval.label_html}</td>
+                <td class="adminRowL">{$form.comment_interval.html}</td>
             </tr>
         </table>
         <p>{$form._cmdSubmit.html}</p>

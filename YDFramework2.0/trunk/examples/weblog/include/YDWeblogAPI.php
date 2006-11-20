@@ -132,6 +132,13 @@
             $sql = 'DELETE FROM #_comments WHERE is_spam = 1 AND created < (unix_timestamp()-604800)';
             $this->db->executeSql( $sql );
 
+            // Delete the old IP numbers from spam check
+            $comment_interval = YDConfig::get( 'comment_interval', 10 );
+            if ( $comment_interval != '' && is_numeric( $comment_interval ) ) {
+                $sql = 'DELETE FROM #_spamcheck WHERE lastvisit < (unix_timestamp()-' . $comment_interval . ')';
+                $this->db->executeSql( $sql );
+            }
+
             // Check against akismet if a key is there
             if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
 
@@ -188,7 +195,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 6;
+            $current_schema = 7;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -246,6 +253,19 @@
                         . '  modified int(11) default NULL,'
                         . '  PRIMARY KEY  (id),'
                         . '  UNIQUE KEY img_path (img_path)'
+                        . ')'
+                    );
+                }
+
+                // Create the spamcheck table
+                if ( ! $this->dbmeta->tableExists( '#_spamcheck' ) ) {
+                    $this->db->executeSql(
+                          'CREATE TABLE #_spamcheck ('
+                        . '  id int(11) NOT NULL auto_increment,'
+                        . '  userip varchar(20) default NULL,'
+                        . '  lastvisit int(11) default NULL,'
+                        . '  PRIMARY KEY  (id),'
+                        . '  UNIQUE KEY userip (userip)'
                         . ')'
                     );
                 }
@@ -901,6 +921,24 @@
         function deleteUser( $user_id ) {
             $sql = 'DELETE FROM #_users WHERE id = ' . $this->str( $user_id );
             $this->db->executeSql( $sql );
+        }
+
+        // Check if we are in the spam_check table, which means we have a spam attack
+        function inSpamAttack() {
+            $comment_interval = YDConfig::get( 'comment_interval', 10 );
+            if ( $comment_interval != '' && is_numeric( $comment_interval ) ) {
+                $sql = 'SELECT * FROM #_spamcheck WHERE userip = ' . $this->str( $_SERVER['REMOTE_ADDR'] );
+                return $this->db->getRecord( $sql );
+            }
+        }
+
+        // Mark ourselves in the spam check table
+        function spamCheckMark() {
+            $comment_interval = YDConfig::get( 'comment_interval', 10 );
+            if ( $comment_interval != '' && is_numeric( $comment_interval ) ) {
+                $values = array( 'userip' => $_SERVER['REMOTE_ADDR'], 'lastvisit' => time() );
+                $this->db->executeInsert( '#_spamcheck', $values );
+            }
         }
 
         // Function to resize an uploaded image. Takes a YDFSImage object as it's argument

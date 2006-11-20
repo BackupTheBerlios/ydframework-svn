@@ -82,6 +82,13 @@
             // Process the form
             if ( $form->validate() === true ) {
 
+                // Post request, so check comment interval
+                if ( $this->weblog->inSpamAttack() ) {
+                    die( '<b>ERROR:</b> Comment interval exceeded. Refusing request.' );
+                } else {
+                    $this->weblog->spamCheckMark();
+                }
+
                 // Get the form values
                 $values = $form->getValues();
 

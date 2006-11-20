@@ -98,6 +98,7 @@
 
             $form->addElement( 'textarea', 'blocked_ips', t( 'cfg_blocked_ips' ), array( 'class' => 'tfMNoMCE' ) );
             $form->addElement( 'text', 'akismet_key', t( 'cfg_akismet_key' ), array( 'class' => 'tfM' ) );
+            $form->addElement( 'text', 'comment_interval', t( 'cfg_comment_interval' ), array( 'class' => 'tfM' ) );
 
             $form->addElement( 'submit', '_cmdSubmit', t('OK'), array( 'class' => 'button' ) );
 
@@ -113,6 +114,7 @@
             $form->addRule( 'weblog_entries_fp', 'numeric', t( 'err_weblog_entries_fp_num' ) );
             $form->addRule( 'max_syndicated_items', 'required', t( 'err_max_syndicated_items' ) );
             $form->addRule( 'max_syndicated_items', 'numeric', t( 'err_max_syndicated_items_num' ) );
+            $form->addRule( 'comment_interval', 'numeric', t( 'err_comment_interval_num' ) );
 
             // Add the filters
             $form->addFilters( 
@@ -174,6 +176,7 @@
             $config['akismet_key']          = YDConfig::get( 'akismet_key',          '' );
             $config['max_img_size_x']       = YDConfig::get( 'max_img_size_x',       '' );
             $config['max_img_size_y']       = YDConfig::get( 'max_img_size_y',       '' );
+            $config['comment_interval']     = YDConfig::get( 'comment_interval',     10 );
 
             // Return the configuration
             return $config;

@@ -301,6 +301,8 @@ $GLOBALS['t']['cfg_keep_stats'] = 'Track statistics';
 $GLOBALS['t']['cfg_blocked_ips'] = 'Blocked IP addresses separated by comma\'s. An asterix can be used as a wildcard.';
 $GLOBALS['t']['cfg_akismet_key'] = 'Akismet API key (<a href="http://wordpress.com/signup/" target="_blank">get one here</a>)';
 $GLOBALS['t']['cfg_max_img_size'] = 'Maximum image size';
+$GLOBALS['t']['cfg_comment_interval'] = 'Comment interval in seconds';
+$GLOBALS['t']['err_comment_interval_num'] = 'Comment interval should be numeric';
 
 // manage/item.tpl
 $GLOBALS['t']['item_title'] = 'Item Title';
