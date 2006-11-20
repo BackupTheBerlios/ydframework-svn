@@ -148,7 +148,7 @@
          */
         function getJSEvent(){ 
 
-            return 'onchange';
+            return 'onclick';
         }
 
 
