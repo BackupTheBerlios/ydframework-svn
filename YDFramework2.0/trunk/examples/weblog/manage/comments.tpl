@@ -109,16 +109,16 @@
                  onClick="return confirm( '{t w="confirm_empty_spam"}' );">{t w="empty_spam_now"}</a></i>
             </td></tr>
             <tr>
-                <th class="adminRowL" width="17%">{t w="date"}</th>
+                <th class="adminRowL" width="20%">{t w="date"}</th>
                 <th class="adminRowL" width="15%">{t w="author"}</th>
-                <th class="adminRowL" width="15%">{t w="ip_number"}</th>
+                <th class="adminRowL" width="12%">{t w="ip_number"}</th>
                 <th class="adminRowR" width="33%">{t w="actions"}</th>
             </tr>
             <tr><td class="adminRowR" colspan="4">{$comments->getBrowseBar()}</td></tr>
             {foreach from=$comments->set item="comment"}
                 <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
                     <td class="adminRowL">
-                        {$comment.created|date:'%Y/%m/%d %H:%M'}
+                        {$comment.created|date:'%Y/%m/%d %H:%M:%S'}
                     </td>
                     <td class="adminRowL">
                         {$comment.username}
