@@ -254,13 +254,14 @@ $GLOBALS['t']['no_comments_found'] = 'No comments were found';
 $GLOBALS['t']['no_spam_comments_found'] = 'No spam comments were found';
 $GLOBALS['t']['posted_from'] = 'Posted from IP address';
 $GLOBALS['t']['a_comments_spam'] = 'Spam comments';
-$GLOBALS['t']['mark_as_spam'] = 'mark as spam';
-$GLOBALS['t']['mark_as_not_spam'] = 'mark as not spam';
+$GLOBALS['t']['mark_as_spam'] = 'spam';
+$GLOBALS['t']['mark_as_not_spam'] = 'not spam';
 $GLOBALS['t']['is_spam'] = 'Spam comment';
 $GLOBALS['t']['ip_number'] = 'IP number';
 $GLOBALS['t']['spam_delete_desc'] = 'Spam comments are automatically deleted after 7 days.';
 $GLOBALS['t']['confirm_empty_spam'] = 'Are you sure you want to delete all spam comments?';
 $GLOBALS['t']['empty_spam_now'] = 'Delete all spam comments now.';
+$GLOBALS['t']['weight'] = 'Weight';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Settings';
