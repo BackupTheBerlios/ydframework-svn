@@ -80,7 +80,7 @@
 
 			// register reserved fields
 			$this->registerKey( $idField, true );
-			$this->registerKey( $parentField );
+			$this->registerField( $parentField );
 			$this->registerField( $lineageField );
 			$this->registerField( $levelField );
 			$this->registerField( $positionField );
@@ -401,7 +401,7 @@
 			$this->set( $this->__id, intval( $child_id ) );
 
 			// check if there is a parent that equals $parent_id
-			$this->set( $this->__parent, intval( $parent_id ) );
+			$this->where( $this->__parent . ' = ' . intval( $parent_id ) );
 
 			// get total of rows
 			return ( $this->find() == 1 );
@@ -452,7 +452,7 @@
 			$this->reset();
 
 			// search all nodes that contains this id in lineage
-			$this->set( $this->__parent, intval( $id ) );
+			$this->where( $this->__parent . ' = ' . intval( $id ) );
 
 			// find them
 			return $this->find();
@@ -516,17 +516,20 @@
 			if ( !is_numeric( $position ) || intval( $position ) < 1 || intval( $position ) > $total_brothers + 1 )
 				$position = $total_brothers + 1;
 
-			// create an empty position. To do this we must increment position of nodes that have the same parent AND have position equal or bigger than $position
-			$this->reset();
+			// create an empty position. To do this, if node is not added in the end, we must increment position of nodes that have the same parent and equal or bigger position 
+			if ( $position != $total_brothers + 1 ){
+	
+				$this->reset();
 
-			// position field must increment
-			$this->set( $this->__position, $this->__position . ' + 1' );
+				// position field must increment
+				$this->set( $this->__position, $this->__position . ' + 1' );
 
-			// only on new brothers with higher or equal position
-			$this->where( $this->__parent . ' = ' . intval( $parent_id ) . ' AND ' .  $this->__position . ' >= ' . intval( $position ) );
+				// only on new brothers with higher or equal position
+				$this->where( $this->__parent . ' = ' . intval( $parent_id ) . ' AND ' .  $this->__position . ' >= ' . intval( $position ) );
 
-			// lets update.
-			$this->update();
+				// lets update.
+				$this->update( array(), $this->__position );
+			}
 
 			// reset any previous value to create insert
 			$this->reset();
@@ -611,7 +614,7 @@
 				// in all elements with same parent AND position bigger than our
 				$this->where( $this->__parent . ' = ' . intval( $node[ $this->__parent ] ) . ' AND ' . $this->__position . ' > ' . intval( $node[ $this->__position ] ) );
 
-				$this->update();
+				$this->update( array(), $this->__position );
 				
 				return $total;
 			}
@@ -619,7 +622,8 @@
 			// here we want do delete child only
 			$this->reset();
 
-			$this->set( $this->__parent, intval( $id ) );
+			// we only need to delete children. Children of children will be deleted when mysql is InnoDB
+			$this->where( $this->__parent . ' = ' . intval( $id ) );
 
 			return $this->delete();
         }
@@ -661,24 +665,28 @@
 			// only update positions if new parent and old parent are not the same OR if (they are same but) positions are not changed
 			if ( $new_parent_id != $old_parent_id || $new_position != $old_position ){
 
-				// add position space for this node in new parent: increase positions of new brothers that have position bigger than this node position
-				$this->reset();
-				$this->set( $this->__position, $this->__position . ' + 1' );
-				$this->where( $this->__parent . ' = ' . $new_parent_id . ' AND ' . $this->__position . ' >= ' . $new_position );
-				$this->update();
-
 				// decrease positions of old brothers that have position bigger than this node position
 				$this->reset();
 				$this->set( $this->__position, $this->__position . ' - 1' );
 				$this->where( $this->__parent . ' = ' . $old_parent_id . ' AND ' . $this->__position . ' > ' . $old_position );
-				$this->update();
+				$this->update( array(), $this->__position );
+
+				// add position space for this node in new parent: increase positions of new brothers that have position bigger than this node position
+				$this->reset();
+				$this->set( $this->__position, $this->__position . ' + 1' );
+				$this->where( $this->__parent . ' = ' . $new_parent_id . ' AND ' . $this->__position . ' >= ' . $new_position );
+				$this->update( array(), $this->__position );
 			}
+
+			// compute lineage
+			if ( $new_parent_id == 1 ) $new_lineage = '//';
+			else                       $new_lineage = $new_parent_node[ $this->__lineage ] . $new_parent_id . '/';
 
 			// update node
 			$this->reset();
 			$this->set( $this->__id,       intval( $id ) );
 			$this->set( $this->__parent,   intval( $new_parent_id ) );
-			$this->set( $this->__lineage,  $new_parent_node[ $this->__lineage ] . $new_parent_id . '/' );
+			$this->set( $this->__lineage,  $new_lineage );
 			$this->set( $this->__level,    $this->_getLevel( $new_lineage ) );
 			$this->set( $this->__position, intval( $new_position ) );
 			$res = $this->update();
@@ -686,14 +694,66 @@
 			// update lineages of node descendants ;)
 			if ( $new_parent_id != $old_parent_id ){
 				$this->reset();
-				$this->set( $this->__lineage, 'REPLACE(' . $this->__lineage . ',"' . $old_lineage . '/' . $id . '/","' . $new_lineage . '/' . $id . '/")' );
-				$this->update();
+				$this->set( $this->__lineage, 'REPLACE(' . $this->__lineage . ',"' . $old_lineage . $id . '/","' . $new_lineage . $id . '/")' );
+				$this->where( $this->__id . ' > 1 ' );
+				$this->update( array(), $this->__lineage );
 			}
 
 			return $res;
         }
 
 
+        /**
+         *  Fetch an array of tree nodes containing a traversal of the tree. 
+         *
+         * @param $id   (optional) The ID of the node to fetch child data for.
+         *
+         * @returns An array of each node in the tree
+         */
+		function getTraversedTree( $id = 1 ) {
+		
+			$this->_tree_data = $this->getTreeElements();
+			$this->_tree_data_keys = array_keys( $this->_tree_data );
+		
+			return $this->_getTraversedTree( $id );
+		}
+
+
+        /**
+         *  Helper function to get traversal of tree. 
+         *
+         * @param $id   (optional) The ID of the node to fetch child data for.
+         *
+         * @returns An array of each node in the tree
+         */
+		function _getTraversedTree( $id = 1 ) {
+		
+			$key_match = false;
+			
+			foreach ( $this->_tree_data_keys as $key ) {
+				if ( $this->_tree_data[$key]['id'] == $id ) {
+					$key_match = true;
+					$ref = & $this->_tree_data[$key];
+					break;
+				}
+			}
+			
+			if ( $key_match ) {
+				$result = array( $ref );
+			} else {
+				$result = array();
+			}
+			
+			$children = $this->getChildren ( $id, true );
+			
+			foreach ( $children as $child ) {			
+				$child_ids = $this->getTraversedTree( $child['id'] );				
+				$result = array_merge( $result, $child_ids );
+			}
+						
+			return $result;
+		}
+		
 
     }
 ?>
