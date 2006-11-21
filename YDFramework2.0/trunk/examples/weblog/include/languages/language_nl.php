@@ -90,6 +90,7 @@ $GLOBALS['t']['err_name_email'] = 'Naam mag geen email adres zijn';
 $GLOBALS['t']['err_email'] = 'Email is niet ingegeven of niet correct';
 $GLOBALS['t']['err_website'] = 'De website is geen geldige URL';
 $GLOBALS['t']['err_comment'] = 'Een commentaar is vereist';
+$GLOBALS['t']['err_comment_length'] = 'Commentaar kan niet meer dan 2048 karakters bevatten';
 $GLOBALS['t']['with'] = 'bij';
 $GLOBALS['t']['item_closed'] = 'Dit item laat geen commentaren toe.';
 $GLOBALS['t']['spam'] = 'Spam';

@@ -90,6 +90,7 @@ $GLOBALS['t']['err_name_email'] = 'Name should not be an email address';
 $GLOBALS['t']['err_email'] = 'Email is missing or invalid';
 $GLOBALS['t']['err_website'] = 'The website specified is not a valid URL';
 $GLOBALS['t']['err_comment'] = 'Comment is required';
+$GLOBALS['t']['err_comment_length'] = 'Comment is cannot be more than 2048 characters';
 $GLOBALS['t']['with'] = 'for';
 $GLOBALS['t']['item_closed'] = 'This item does not allow comments.';
 $GLOBALS['t']['spam'] = 'Spam';
