@@ -1043,10 +1043,12 @@
          *
          *  @param $values_noquote  (optional) Associative array that defines values that
          *                          will not be quoted as strings, e.g. NOW().
+         *  @param $fields_noquote  (optional) Field or array of fields that
+         *                          will not be quoted as strings.
          *
          *  @returns  The number of rows affected.
          */
-        function update( $values_noquote=array() ) {
+        function update( $values_noquote=array(), $fields_noquote=array() ) {
 
             // before update callbacks
             $res = $this->_executeCallbacks( 'update', true );
@@ -1078,7 +1080,16 @@
                                 Your UPDATE query has no conditions and will not be executed.', YD_NOTICE );
                 return;
             }
-            
+
+            if ( ! is_array( $fields_noquote ) ) $fields_noquote = array( $fields_noquote );
+            foreach( $fields_noquote as $field_key ){
+                if ( isset( $values[ $field_key ] ) ){
+                    $values_noquote[ $field_key ] = $values[ $field_key ];
+                }else if ( isset( $keys[ $field_key ] ) ){
+                    $values_noquote[ $field_key ] = $keys[ $field_key ];
+                }
+            }
+
             $this->_query->update();
             $this->_query->table( $this->getTable() );
             $this->_query->set( $values );

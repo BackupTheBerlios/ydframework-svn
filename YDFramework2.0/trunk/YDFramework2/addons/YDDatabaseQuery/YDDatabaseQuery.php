@@ -772,7 +772,7 @@
                 if ( $this->filter_noquote && substr( $key, 0, 1 ) == '_' ) {
                     continue;
                 }
-                $update[ $this->reserved( $key ) ] = $this->reserved( $key ) . " = " . $this->escape( $value );
+                $update[ $this->reserved( $key ) ] = $this->reserved( $key ) . " = " . $value;
             }
             return ' SET ' . implode( ', ', array_values( $update ) );
         }
