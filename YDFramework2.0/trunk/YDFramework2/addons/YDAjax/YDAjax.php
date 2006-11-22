@@ -318,6 +318,14 @@
 
 
         /**
+         *	@returns  Boolean that defines the YDAjax state
+         */		
+		function isOnResponse() {
+			return $this->onResponse;
+		}
+
+
+        /**
          * This method gets the actual DOM id of an element by first seeing if it is a form element.
          *
          *  @param $id        Form element name or a generic id string.
