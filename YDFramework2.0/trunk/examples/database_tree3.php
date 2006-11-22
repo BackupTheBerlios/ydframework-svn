@@ -87,7 +87,7 @@
         function actionDefault() {
 
             // Show the link to the sitemap action
-            echo( '<a href="' . YD_SELF_SCRIPT . '?do=example">Sitemap</a>' );
+            echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=1">Sitemap</a>' );
 
             // Get a reference to the tree
             $tree = & $this->tree;
@@ -136,40 +136,76 @@
 
             // Get the node ID
             $id = ( isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) ? $_GET['id'] : 1;
-        
+
             // Add an item
             $values = array( 'title' => 'New Node - ' . time() );
             
-			$this->tree->addNode( $values, $id );
+			if ( isset( $_GET['position'] ) ) $this->tree->addNode( $values, $id, $_GET['position'] );
+			else                              $this->tree->addNode( $values, $id );
 
-            $this->actionExample( true );
+            $this->actionExample( $id );
+        }
+
+
+        // Move node
+        function actionMove() {
+
+  			YDConfig::set( 'YD_DEBUG', 0 );
+
+            // get parent of this node
+			$node = $this->tree->getNode( $_GET['id'] );
+
+			// the delete debug is what we want
+  			YDConfig::set( 'YD_DEBUG', 2 );
+
+			if ( isset( $_GET['newparent'] ) ) $newparent = $_GET['newparent']; 
+			else                               $newparent = null;
+
+            // Move node
+			$this->tree->moveNode( $_GET['id'], $newparent, $_GET['position'] );
+
+			// show parent tree
+  			YDConfig::set( 'YD_DEBUG', 0 );
+
+            // Redirect to the sitemap
+            $this->actionExample( $node[ 'parent_id' ] );
         }
 
 
         // Delete a node and it's subnodes
         function actionDelete() {
 
-            // Get a reference to the tree
-            $tree = & $this->tree;
+  			YDConfig::set( 'YD_DEBUG', 0 );
+
+            // get parent of this node
+			$node = $this->tree->getNode( $_GET['id'] );
+
+			// the delete debug is what we want
+  			YDConfig::set( 'YD_DEBUG', 2 );
 
             // Delete a node
-            $tree->deleteNode( $_GET['id'] );
-            
-            // Redirect to the sitemap
-            $this->actionExample( true );
+            if ( isset( $_GET['nodeandchildren'] ) ) $this->tree->deleteNode( $_GET['id'], true );
+			else                                     $this->tree->deleteNode( $_GET['id'], false );
 
+			// show parent tree
+  			YDConfig::set( 'YD_DEBUG', 0 );
+
+            // Redirect to the sitemap
+            $this->actionExample( $node[ 'parent_id' ] );
         }
 
+
         // Real life example
-        function actionExample( $root = false) {
+        function actionExample( $id = false ) {
 
   			YDConfig::set( 'YD_DEBUG', 0 );
   
             // Get node ID
-            $id = ( $root == false && isset( $_GET['id'] ) && is_numeric( $_GET['id'] ) ) ? $_GET['id'] : 1;
+			if ( $id == false ) $id = $_GET['id'];
 
-            // compute path
-            echo( '<p><b>Path:</b> ROOT &raquo; ' );
+            // compute root link
+            echo( '<p><b>Path:</b> <a href="' . YD_SELF_SCRIPT . '?do=example&id=1">ROOT</a> &raquo; ' );
+
             foreach ( $this->tree->getPath( $id ) as $path_item ) {
                 echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $path_item['id'] . '">' . $path_item['title'] . '</a> &raquo; ' );
             }
@@ -179,26 +215,37 @@
             echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $node['id'] . '">' . $node['title'] . '</a>' );
             echo( '</p>' );
 
-            // Show the item
-            echo( '<p><b>' . $node['title'] . '</b></p> ' );
-
             // Show the children in a table
 			echo( '<table><tr><td><b>Children:</b></td><td>actions</td></tr>' );
-            foreach ( $this->tree->getChildren( $id ) as $child ) {
+			$children = $this->tree->getChildren( $id );
+            foreach ( $children as $child ) {
 				echo( '<tr><td>' );
 
 					// show child action
                 	echo( '<a href="' . YD_SELF_SCRIPT . '?do=example&id=' . $child['id'] . '">' . $child['title'] . '</a>&nbsp;&nbsp;&nbsp;' );
 				echo( '</td><td>' );
 
-					// delete action
-	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=delete&id='  . $child['id'] . '">Delete (' . $child['title'] . ')</a><br/>' );
+					// delete action element and nodes
+	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=delete&nodeandchildren=1&id='  . $child['id'] . '">Delete ' . $child['title'] . ' and subnodes</a> | ' );
+
+					// delete action nodes only
+	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=delete&id='  . $child['id'] . '">Delete nodes of ' . $child['title'] . ' </a> | ' );
+
+					// move up
+					if ( $child['position'] != 1 )
+		                echo( '<a href="' . YD_SELF_SCRIPT . '?do=move&id='  . $child['id'] . '&position=' . ($child['position'] - 1) . '">Move up</a> | ' );
+
+					// move down
+					if ( $child['position'] != count( $children ) )
+		                echo( '<a href="' . YD_SELF_SCRIPT . '?do=move&id='  . $child['id'] . '&position=' . ($child['position'] + 1) . '">Move down</a>' );
+
 				echo( '</td></tr>' );
             }
   
   			// add node action
 			echo( '<tr><td></td><td>' );
-	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=add&id='  . $node['id'] . '">Add new node to (' . $node['title'] . ')</a><br/>' );
+	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=add&id='  . $node['id'] . '">Add new node to (' . $node['title'] . ') at bottom</a> | ' );
+	                echo( '<a href="' . YD_SELF_SCRIPT . '?do=add&position=1&id='  . $node['id'] . '">Add new node to (' . $node['title'] . ') at top</a>' );
 			echo( '</td></tr>' );
 
             echo( '</table>' );
