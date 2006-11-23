@@ -171,6 +171,7 @@
             $this->registerRule( 'maxlength_escape', array( 'YDValidateRules', 'maxlength_escape' ), 'YDValidateRules.php' );
             $this->registerRule( 'rangelength_escape', array( 'YDValidateRules', 'rangelength_escape' ), 'YDValidateRules.php' );
             $this->registerRule( 'httpurl', array( 'YDValidateRules', 'httpurl' ), 'YDValidateRules.php' );
+            $this->registerRule( 'maxhyperlinks', array( 'YDValidateRules', 'maxhyperlinks' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );

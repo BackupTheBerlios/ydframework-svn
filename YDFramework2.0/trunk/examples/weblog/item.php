@@ -67,14 +67,15 @@
             $form->setDefaults( $defaults );
 
             // Set the rules
-            $form->addRule( 'username',    'required',  t( 'err_name' ) );
-            $form->addRule( 'username',    'not_email', t( 'err_name_email' ) );
-            $form->addRule( 'username',    'maxlength', t( 'err_name_length' ), 35 );
-            $form->addRule( 'useremail',   'email',     t( 'err_email' ) );
-            $form->addRule( 'useremail',   'required',  t( 'err_email' ) );
-            $form->addRule( 'userwebsite', 'httpurl',   t( 'err_website' ) );
-            $form->addRule( 'comment',     'required',  t( 'err_comment' ) );
-            $form->addRule( 'comment',     'maxlength', t( 'err_comment_length' ), 2048 );
+            $form->addRule( 'username',    'required',      t( 'err_name' ) );
+            $form->addRule( 'username',    'not_email',     t( 'err_name_email' ) );
+            $form->addRule( 'username',    'maxlength',     t( 'err_name_length' ), 35 );
+            $form->addRule( 'useremail',   'email',         t( 'err_email' ) );
+            $form->addRule( 'useremail',   'required',      t( 'err_email' ) );
+            $form->addRule( 'userwebsite', 'httpurl',       t( 'err_website' ) );
+            $form->addRule( 'comment',     'required',      t( 'err_comment' ) );
+            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), 2048 );
+            $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), 1 );
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );

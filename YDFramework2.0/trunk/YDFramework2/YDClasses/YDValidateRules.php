@@ -358,6 +358,27 @@
         }
 
         /**
+         *	This function returns true if the variable is containing less hyperlinks than indicated, otherwise, it
+         *	returns false.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The maximum amount of hyperlinks that are allowed.
+         */
+        function maxhyperlinks( $val, $opts ) {
+            $count = intval( $opts );
+            $count1 = preg_match_all( "/href=/i", $val, $matches1 );
+            $count2 = preg_match_all( "/\[url=/i", $val, $matches2 );
+            if ( ( $count1 + $count2 ) > $count ) {
+                return false;
+            }
+            $count = preg_match_all( "/http\:\/\//i", $val, $matches );
+            if ( ( $count ) > $count ) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
          *	This rule checks if a string contains the maximum specified words or not.
          *
          *	@param $val		The value to test.

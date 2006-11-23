@@ -595,19 +595,6 @@
 
             }
 
-            // Check the amount of hyperlinks in the comments. More than 1 is marked as spam.
-            $count1 = preg_match_all( "/href=/i", $values['comment'], $matches1 );
-            $count2 = preg_match_all( "/\[url=/i", $values['comment'], $matches2 );
-            if ( ( $count1 + $count2 ) > 1 ) {
-                $values['is_spam'] = '1';
-            }
-
-            // Only 2 http links are allowed
-            $count = preg_match_all( "/http\:\/\//i", $values['comment'], $matches );
-            if ( ( $count ) > 1 ) {
-                $values['is_spam'] = '1';
-            }
-
             // Add the comment
             $result = $this->_executeInsert( '#_comments', $values );
             $comment_id = $this->db->getLastInsertID();
