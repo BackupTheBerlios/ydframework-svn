@@ -622,18 +622,29 @@
          *  This function registers a named database instance.
          *
          *  @param $name    The name of the database instance.
-         *  @param $driver  Name of the database driver or array containing drivername, file name and class name.
-         *  @param $db      Database name to use for the connection.
+         *  @param $driver  Name of the database driver, DNS string or array containing drivername, file name and class name.
+         *  @param $db      (optional) Database name to use for the connection. If empty, we are using a DSN string in driver.
          *  @param $user    (optional) User name to use for the connection.
          *  @param $pass    (optional) Password to use for the connection.
          *  @param $host    (optional) Host name to use for the connection.
          *
          *  @static
          */
-        function registerInstance( $name, $driver, $db, $user='', $pass='', $host='' ) {
+        function registerInstance( $name, $driver, $db='', $user='', $pass='', $host='' ) {
 
             // Check if the global array exists
             YDDatabase::_initNamedInstances();
+
+			// Check if we are using a DSN string, e.g. "mysql://user:password@host/database"
+			if ( $db == '' ){
+
+				$dsn    = new YDUrl( $driver );
+				$driver = $dsn->getScheme();
+				$db     = substr( $dsn->getPath(), 1 );
+				$user   = $dsn->getUser();
+				$pass   = $dsn->getPassword();
+				$host   = $dsn->getHost();
+			}
 
             // Register the instance
             $GLOBALS['YD_DB_INSTANCES'][ strtolower( $name ) ] = array( $driver, $db, $user, $pass, $host );
