@@ -195,7 +195,7 @@
          *	@returns	The password part of the URL.
          */
         function getPassword() {
-            return $this->getNamedPart( 'password' );
+            return $this->getNamedPart( 'pass' );
         }
 
         /**
