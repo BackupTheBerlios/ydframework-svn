@@ -371,8 +371,8 @@
             if ( ( $count1 + $count2 ) > $count ) {
                 return false;
             }
-            $count = preg_match_all( "/http\:\/\//i", $val, $matches );
-            if ( ( $count ) > $count ) {
+            $count3 = preg_match_all( "/http\:\/\//i", $val, $matches );
+            if ( ( $count3 ) > $count ) {
                 return false;
             }
             return true;
