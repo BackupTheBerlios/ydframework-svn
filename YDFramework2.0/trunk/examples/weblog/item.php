@@ -74,7 +74,7 @@
             $form->addRule( 'useremail',   'required',      t( 'err_email' ) );
             $form->addRule( 'userwebsite', 'httpurl',       t( 'err_website' ) );
             $form->addRule( 'comment',     'required',      t( 'err_comment' ) );
-            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), 2048 );
+            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), 1500 );
             $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), 1 );
 
             // Add the filters
