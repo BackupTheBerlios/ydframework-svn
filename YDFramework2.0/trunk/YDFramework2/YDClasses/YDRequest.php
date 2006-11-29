@@ -165,7 +165,7 @@
         /**
          *	This function will return the full URL to the current request, including hostname, port and request URI.
          *
-         *  @param  $no_qs  (optional) If set to false, the query string will be omitted. Default is false.
+         *  @param  $no_qs  (optional) If set to true, the query string will be omitted. Default is false.
          *  @param  $use_ip (optional) If set to true, the IP address of the server will be used instead of the
          *                  hostname. Default is false.
          *
