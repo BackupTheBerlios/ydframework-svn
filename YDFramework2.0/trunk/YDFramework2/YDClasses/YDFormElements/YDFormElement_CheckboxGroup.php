@@ -62,14 +62,15 @@
                 // find horizontal and left tags
                 if ( is_int( strpos( $attributes[ 'sep' ], 'h' ) ) ) $this->_separator = '&nbsp;&nbsp;&nbsp;';
                 if ( is_int( strpos( $attributes[ 'sep' ], 'l' ) ) ) $this->_position  = 'left';
-				unset( $attributes[ 'sep' ] );
+                unset( $attributes[ 'sep' ] );
+
             }
 
-			// we can even have a custom separator
+            // we can even have a custom separator
             if ( isset ( $attributes[ 'separator' ] ) ){
-				$this->_separator = $attributes[ 'separator' ];
-				unset( $attributes[ 'separator' ] );
-			}
+                $this->_separator = $attributes[ 'separator' ];
+                unset( $attributes[ 'separator' ] );
+            }
 
             // Add the subitems
             $this->_items = array();
@@ -87,11 +88,11 @@
             // Indicate that the label should be appended
             $this->_placeLabel = 'before';
 
-			$this->_addSelectAll = false;
-			$this->_addSelectAll_chk_attributes = array();
-			$this->_addSelectAll_label_attributes = array();
-			
-			$this->_columns = 1;
+            $this->_addSelectAll = false;
+            $this->_addSelectAll_chk_attributes = array();
+            $this->_addSelectAll_label_attributes = array();
+            
+            $this->_columns = 1;
         }
 
 
@@ -152,10 +153,9 @@
          *	@param	$chk_attributes		(Optional) Attributes to pass to the select all checkbox
          */
         function addSelectAll( $onBottom = true, $chk_attributes = array() ) {
-
-			$this->_addSelectAll = true;
-			$this->_addSelectAll_onBottom = $onBottom;
-			$this->_addSelectAll_chk_attributes = $chk_attributes;
+            $this->_addSelectAll = true;
+            $this->_addSelectAll_onBottom = $onBottom;
+            $this->_addSelectAll_chk_attributes = $chk_attributes;
         }
 
 
@@ -216,10 +216,15 @@
             // Output the HTML checkboxes
             $output = array();
 
-			// cycle all items to get their html
+            // cycle all items to get their html
             foreach ( $this->_items as $item )
                 if ( $this->_position == 'right' ) $output[] = $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>';
                 else                               $output[] = '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml();
+
+            // Add the <nobr> tags
+            foreach ( $output as $key => $val ) {
+                $output[$key] = '<nobr>' . $val . '</nobr> ';
+            }
 
 			// check if we have more than one item enabled, otherwise the 'select all' will not be displayed
 			$checkboxesEnabled = 0;
