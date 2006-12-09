@@ -51,6 +51,8 @@
             // Set the type
             $this->_type = 'text';
 
+            // Set dynamic
+            $this->_dynamic = false;
         }
 
         /**
@@ -66,11 +68,24 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
+            // check dynamic
+            if ( $this->_dynamic ){
+                $attribs[ 'onfocus' ] = "if(this.value=='" . $this->_value . "'){this.value=''};";
+                $attribs[ 'onblur' ]  = "if(this.value==''){this.value='" . $this->_value . "'};";
+            }
+
             // Get the HTML
             return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
         }
 
+
+        /**
+         *	This function will set dynamic content
+         */
+        function setDynamic() {
+            $this->_dynamic = true;
+        }
 
         /**
          *	This function returns the default javascript event of this element
