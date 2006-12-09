@@ -48,6 +48,12 @@
     YDConfig::set( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarStartExpanded', true, false );
 
 
+    /**
+     *  This config defines the toolbar scheme to use, eg, 'Default', 'Basic'
+     *  Default: 'Default'
+     */
+    YDConfig::set( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarSet', 'Default', false );
+
 
     /**
      *  Class definition for the YDAjaxEditor.
@@ -69,8 +75,11 @@
 			// set editor skin path
 			$js .= "oFCKeditor.Config['SkinPath'] = oFCKeditor.BasePath + 'editor/skins/" . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_Skin' ) . "/';";
 
-			// set toobar expanded on start
+			// set toolbar expanded on start
 			$js .= YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarStartExpanded' ) ? "oFCKeditor.Config['ToolbarStartExpanded'] = true;" : "oFCKeditor.Config['ToolbarStartExpanded'] = false;";
+
+			// set toolbar scheme
+			$js .= "oFCKeditor.ToolbarSet = '" . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarSet' ) . "';";
 
 			// on fckeditor we add a replace method (that will replace the textarea)
 			$js .= "oFCKeditor.ReplaceTextarea();";
