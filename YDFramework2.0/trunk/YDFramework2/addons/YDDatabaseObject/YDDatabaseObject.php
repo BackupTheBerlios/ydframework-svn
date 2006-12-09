@@ -1037,6 +1037,51 @@
 
         }
 
+
+        /**
+         *  This function inserts a form in database
+         *
+         *  @param $form       YDForm object
+         *
+         *  @param $messages   (optional) Array with predefined messages:
+         *                                'ok' for ok message, 'error' for fatal messages, 'form_err' for no validation
+         *
+         *  @param $forvalues  (optional) Custom form validation values
+         *
+         *  @returns  YDResult object with a message and a result
+         *            On 'ok', result is the new id
+         *            On 'form_err', result is array of form error messages
+         */
+        function insertForm( & $form, $messages = array(), $formvalues = null ){
+
+            YDInclude( 'YDResult.php' );
+
+            // check messages
+            $msg_ok       = isset( $messages[ 'ok' ] )       ? $messages[ 'ok' ]       : t( 'Element added' );
+            $msg_error    = isset( $messages[ 'error' ] )    ? $messages[ 'error' ]    : t( 'Impossible to add element' );
+            $msg_form_err = isset( $messages[ 'form_err' ] ) ? $messages[ 'form_err' ] : t( 'Form errors' );
+
+            // check form validation
+            if ( ! $form->validate( $formvalues ) ){
+                return YDResult::warning( $msg_form_err, $form->getErrors() );
+            }
+
+            // reset all previous information
+            $this->reset();
+
+            $this->setValues( $form->getValues() );
+
+            // insert values and check result
+            $result = $this->insert();
+
+            if ( $result ){
+                return YDResult::ok( $msg_ok, $result );
+            }else{
+                return YDResult::fatal( $msg_err, $result );
+            }
+        }
+
+
         /**
          *  This function executes an UPDATE query based on the values of the object
          *  and any value set by where.
