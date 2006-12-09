@@ -132,6 +132,7 @@
             $this->registerElement( 'autocompleter', 'YDFormElement_Autocompleter', 'YDFormElement_Autocompleter.php' );
             $this->registerElement( 'switchmenu', 'YDFormElement_SwitchMenu', 'YDFormElement_SwitchMenu.php' );
             $this->registerElement( 'grid', 'YDFormElement_Grid', 'YDFormElement_Grid.php' );
+            $this->registerElement( 'captcha', 'YDFormElement_Captcha', 'YDFormElement_Captcha.php' );
 
 
             // Add the rules
@@ -172,6 +173,7 @@
             $this->registerRule( 'rangelength_escape', array( 'YDValidateRules', 'rangelength_escape' ), 'YDValidateRules.php' );
             $this->registerRule( 'httpurl', array( 'YDValidateRules', 'httpurl' ), 'YDValidateRules.php' );
             $this->registerRule( 'maxhyperlinks', array( 'YDValidateRules', 'maxhyperlinks' ), 'YDValidateRules.php' );
+            $this->registerRule( 'captcha', array( 'YDValidateRules', 'captcha' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );
@@ -571,6 +573,8 @@
                 $this->_rules[ $element ] = array();
             }
             array_push( $this->_rules[ $element ], array( 'rule' => $rule, 'error' => $error, 'options' => $options ) );
+
+            if ( $rule == 'captcha' ) $this->addRule( $element, 'required', $error, $options );
         }
 
         /**

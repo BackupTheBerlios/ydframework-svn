@@ -736,6 +736,20 @@
 
         }
 
+        /**
+         *	This function returns true if the variable matches captcha image
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function captcha( $val, $opts='' ) {
+
+            include_once( YD_DIR_HOME . '/3rdparty/captcha/php-captcha.inc.php' );
+
+            return PhpCaptcha::Validate( $val );
+        }
+
+
     }
 
 ?>
