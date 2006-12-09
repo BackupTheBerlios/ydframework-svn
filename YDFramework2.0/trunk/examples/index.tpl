@@ -186,7 +186,7 @@
             <td width="43%"><b>&nbsp;</b></td>
         </tr>
         <tr>
-            <td rowspan="12" valign="top">&nbsp;</td>
+            <td rowspan="13" valign="top">&nbsp;</td>
             <td valign="top"><a href="form.php">Form handling and validation</a> </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form.php">form.php</a>
@@ -252,6 +252,10 @@
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_checkboxgroup.php">form_checkboxgroup.php</a>
                 <br/>
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=form_checkboxgroup.tpl">form_checkboxgroup.tpl</a>            </td>
+        </tr>
+        <tr>
+          <td valign="top"><a href="form_captcha.php">Using the captcha element</a></td>
+          <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=form_captcha.php">form_captcha.php</a> </td>
         </tr>
         <tr>
             <td colspan="2"><b>&nbsp;<br/>Using logfiles</b></td>
@@ -611,8 +615,7 @@
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/persistent_store.php">ajax/persistent_store.php</a> </td>
         </tr>
         <tr>
-          <td valign="top"><a href="ajax/form_runtime.php">Adding extra form elements in a response </a><br/>
-          </td>
+          <td valign="top"><a href="ajax/form_runtime.php">Adding extra form elements in a response </a><br/>          </td>
           <td valign="top"><a href="{$YD_SELF_SCRIPT}?do=source&id=ajax/form_runtime.php">ajax/form_runtime.php</a> </td>
           </tr>
         <tr>
@@ -799,8 +802,7 @@
         <tr>
             <td valign="top"><a href="akismet.php">Using YDAkismet</a></td>
             <td valign="top">
-                <a href="{$YD_SELF_SCRIPT}?do=source&id=akismet.php">akismet.php</a>
-            </td>
+                <a href="{$YD_SELF_SCRIPT}?do=source&id=akismet.php">akismet.php</a>            </td>
         </tr>
         </table>
 
