@@ -53,8 +53,21 @@
             $this->_type = 'captcha';
 			
 			// create default image url
-			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha';
+			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha&id=' . md5( microtime() );
+
+			// text box position
+			$this->_textPosition_left = false;
         }
+
+
+        /**
+         *	This function set text element position
+         *
+         *	@param $onleft		Boolean that defines if text is before image (TRUE) or after image (FALSE)
+         */
+        function setTextPosition( $onleft = true ) {
+			$this->_textPosition_left = $onleft;
+		}
 
 
         /**
@@ -71,8 +84,14 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-            return '<img src="' . $this->_url . '" style="vertical-align: middle"/> <input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+			$img = '<img width="150" height="40" src="' . $this->_url . '" style="vertical-align: middle"/>';
+			$txt = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
+			if ( $this->_textPosition_left ){
+				return $txt . ' ' . $img;
+			}else{
+				return $img . ' ' . $txt;
+			}
         }
 
 
