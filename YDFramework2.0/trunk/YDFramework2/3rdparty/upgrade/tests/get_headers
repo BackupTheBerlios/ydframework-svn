@@ -1,0 +1,8 @@
+<?php
+
+include("../upgrade.php");
+
+$r = get_headers("http://localhost/");
+print_r($r);
+
+?>

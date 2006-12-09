@@ -1,0 +1,8 @@
+<?php
+
+include("../upgrade.php");
+
+$r = fmod(5.7, 1.3);
+echo "fmod(5.7, 1.3) = $r\n";
+
+?>

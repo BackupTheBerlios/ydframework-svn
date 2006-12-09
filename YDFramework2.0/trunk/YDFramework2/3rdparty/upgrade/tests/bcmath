@@ -1,0 +1,14 @@
+<?php
+
+include("../ext/bcmath.php");
+
+bcscale(50);
+echo "1/17=";
+echo bcdiv("1", "17");
+echo "\n";
+
+echo "2^55%77777=";
+echo bcpowmod(2, 55, 77777);
+echo "\n";
+
+?>

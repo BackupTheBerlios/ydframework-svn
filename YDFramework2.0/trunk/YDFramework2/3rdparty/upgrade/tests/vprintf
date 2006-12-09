@@ -1,0 +1,8 @@
+<?php
+
+include("../upgrade.php");
+
+vprintf("%d, %d\n", array(17, 5));
+
+?>
+

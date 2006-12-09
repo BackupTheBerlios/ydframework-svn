@@ -1,0 +1,15 @@
+<?php
+
+include("../ext/gettext.php");
+
+#-- load
+echo "bindtextdomain(\"tar\");\n";
+bindtextdomain("tar");
+textdomain("tar");
+
+#-- query
+echo "_(\"stdin\") == \"";
+echo _("stdin");
+echo "\"\n";
+
+?>

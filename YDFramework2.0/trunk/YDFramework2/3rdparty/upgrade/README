@@ -1,0 +1,500 @@
+
+PHP downwards compatibility functions
+¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+The "upgrade.php" package implements features and functions from
+later PHP versions in pure PHP script and dynamically defines them
+at runtime.  This allows you to use said functions on outdated
+server setups with only including() a single script.  You are freed
+from wasting time with backward compatibility problems or omitting
+certain useful PHP functions or retyping workarounds then, while
+your applications remain "PHP 4.1+ COMPATIBLE" even if features of
+PHP5 were used.
+
+
+It is useful in a variety of scenarios:
+
+· If you write PHP scripts which are distributed later to a variety
+  of web servers, which may or may not run the latest PHP versions.
+
+· If your own web space providers PHP version is immemorial.
+
+· You want to use a PHP5 function, but know that it won't be
+  available elsewhere. Or you find yourself constantly writing some
+  workarounds instead of using the most useful PHP function for it.
+
+· Support of the gettext/bcmath/ftp/... extensions would make your
+  script faster and easier to maintain, but would hinder server and
+  provider independence. (See our ext/ for PHP extensions.)
+
+· If you yourself want to use a PHP application or projects, which
+  depends on features not available on your server and so breaks.
+
+· You have a sourceforge.net project homepage ;-)
+
+
+It however cannot help in other cases:
+
+· PHP5s extended object orientation language semantics aren't
+  emulated, and could never be.  You won't be able to write PHP4-
+  compatible scripts if you want or have to use them.
+
+· Newer PHP versions also sometimes change the function signatures
+  and add/allow new arguments. Because existing and core functions
+  cannot be overridden, upgradephp won't ever make them compatible
+  between versions.
+
+· PHPs safe_mode is a hurdle you either have to pay your webhoster
+  their extra fee for 'full PHP support' or make the lengthy
+  "But-how-does-this-help-security-if-there-is-no-such-Safe-Mode-
+  in-Perl/Python-enabled?"-discussion (with the dumber providers).
+  There is absolutely no safe_mode support in upgradephp, this is
+  entirely your problem.
+
+· PHP4.1 superglobals cannot be emulated for 4.0 versions.
+
+· Features which cannot be emulated therefore include: PHP5-OO,
+  superglobals, new function arguments, stream wrappers.
+
+
+Other things to note:
+
+· Speed won't suffer on up-to-date servers, because functions are
+  only emulated/deifned if they are missing (all function_exists
+  checks are built-in; you don't have to care).
+
+· Some of the functions that get defined here, are just simple
+  stubs; sometimes only there to prevent E_FATAL errors.
+
+· Emulated functions sometimes run slower than the native variant
+  would, but it generally shouldn't be slower than any workaround
+  you used for the [advanced but not widely available] functions
+  until now.
+
+· Most emulation functions leave the error reporting up to any
+  invoked parent functions (fopen, fwrite and call_user_func_array
+  for example).
+
+
+Remember that native functions will be used whereever available,
+this emulation only helps running scripts on aging PHP versions.
+
+
+
+      PEAR::PHP_Compat
+      ¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯
+      Alternatively to the "upgradephp" package, you could also give
+      the PEAR package "PHP_Compat" (by Aidan Lister & Co.) from
+      [http://pear.php.net/] a try. It comes under the PHP license
+      and contains cleaner code in some areas (exotic array funcs and
+      PHP4.0 code).
+
+      It is more thoroughly commented and emulates PHP error messages
+      completely.  In some circumstances you could benefit from its
+      divided function definitions (each in a separate file), while it
+      is possible to reassamble everything into a single script.  You
+      could then even load it in conjunction with upgrade.php then.
+
+      Note: no code from PHP_Compat has been reused here (this is more
+      a license thing, than NIH syndrome).
+
+
+
+Usage
+¯¯¯¯¯
+Simply include("upgrade.php"); in any of your scripts, if you want
+to use some of the newer PHP4.3 or PHP5 functions like stripos() or
+so.
+
+You could additionally check the PHP_VERSION, and only include the
+emulation wrapper if you depend on features from a certain PHP
+interpreter release:
+
+  <?example
+     if (PHP_VERSION < "4.3.0") { include(".../upgrade.php"); }
+  ?>
+
+Currently following functions can be emulated:
+· gzdecode
+· ob_get_headers
+· xmlentities
+· stripos
+· strripos
+· str_ireplace
+· get_headers
+· headers_list
+· fprintf
+· vfprintf
+· str_split
+· http_build_query
+· convert_uuencode
+· convert_uudecode
+· scandir
+· idate
+· time_nanosleep
+· strpbrk
+· php_real_logo_guid
+· php_egg_logo_guid
+· get_declared_interfaces
+· array_combine
+· array_walk_recursive
+· substr_compare
+· spl_classes
+· class_parents
+· session_commit
+· dns_check_record
+· dns_get_mx
+· setrawcookie
+· file_put_contents
+· count_recursive
+· file_get_contents
+· fnmatch
+· glob
+· array_key_exists
+· array_intersect_assoc
+· array_diff_assoc
+· html_entity_decode
+· str_word_count
+· str_shuffle
+· get_include_path
+· set_include_path
+· restore_include_path
+· str_rot13
+· array_change_key_case
+· array_fill
+· array_chunk
+· md5_file
+· is_a
+· fmod
+· floatval
+· is_infinite
+· is_nan
+· is_finite
+· var_export
+· strcoll
+· diskfreespace
+· disktotalspace
+· vprintf
+· vsprintf
+· import_request_variables
+· hypot
+· log1p
+· expm1
+· sinh
+· cosh
+· tanh
+· asinh
+· acosh
+· atanh
+· mhash
+· mhash_count
+· mhash_get_hash_name
+· mhash_get_block_size
+· array_udiff_uassoc
+· array_udiff_assoc
+· array_diff_uassoc
+· array_udiff
+· array_uintersect_uassoc
+· array_uintersect_assoc
+· array_uintersect
+· array_intersect_uassoc
+· dc___exec
+· bcscale
+· bcadd
+· bcsub
+· bcmul
+· bcdiv
+· bcmod
+· bcpow
+· bcpowmod
+· bcsqrt
+· bccomp
+· bc___scaledown
+· gettext
+· gettext___plural_guess
+· ngettext
+· dngettext
+· dcngettext
+· dcgettext
+· dgettext
+· textdomain
+· bindtextdomain
+· gettext___load_mo
+· gettext___load_po
+· bind_textdomain_codeset
+· _
+· mime_content_type
+· image_type_to_mime_type
+· image_type_to_extension
+· exif_imagetype
+· array_filter
+· array_map
+· is_callable
+· array_search
+· array_reduce
+· is_scalar
+· localeconv
+· call_user_func_array
+· call_user_method_array
+· array_sum
+· constant
+· is_null
+· pathinfo
+· escapeshellarg
+· is_uploaded_file
+· move_uploaded_file
+· strncasecmp
+· wordwrap
+· php_uname
+· php_sapi_name
+· posix_mkfifo
+· posix_getcwd
+· posix_kill
+· posix_uname
+· ctype_alnum
+· ctype_alpha
+· ctype_digit
+· ctype_xdigit
+· ctype_cntrl
+· ctype_space
+· ctype_upper
+· ctype_lower
+· ctype_graph
+· ctype_punct
+· ctype_print
+· odbc_connect
+· odbc_pconnect
+· odbc_close
+· odbc_exec
+· odbc_do
+· odbc_prepare
+· odbc_execute
+· odbc_fetch_array
+· odbc_fetch_row
+· odbc_fetch_object
+· odbc_fetch_into
+· odbc_free_result
+· odbc_next_result
+· odbc_num_fields
+· odbc_num_rows
+
+On a side note: You don't have to include() this func emulation
+script yourself. Leave this to your users if they use an older PHP
+version; a note often suffices. It however may be senseful to ship
+this together with your scripts - that's also why it was released
+as Public Domain (=compatible to ALL open source licenses, including
+the GNU GPL).
+
+It is safe to extract a few function bodies/definitions out of the
+script to make a shorter version (load only the needed functions);
+but you should keep the "if (function_exists(...))" wrapper code
+always.
+(PHP_Compat makes a better source, if you really need only a few
+emulated functions.)
+
+
+Omissions
+¯¯¯¯¯¯¯¯¯
+A few PHP features are specifically NOT implemented, and so still
+had to be taken care of in your scripts:
+
+· predefined STDIN, STDOUT and STDERR constants
+· UPLOAD_ERR_* constants (introduced with 4.2, officially 4.3)
+· ob_* (eventually possible)
+· clone (PHP5 language feature, but workaround exists in PHP_Compat)
+· ini_get_all (ingenious trick in PHP_Compat)
+
+It may be possible that a script in ext/ later adds support. Often
+PHP_Compat already provides loadable definitions of above features.
+
+
+ext/
+¯¯¯¯
+The ext/ subdirectory in here provides a few more or less useful
+emulations for various PHP extensions or function groups.
+
+· "ext/array" provides a few exotic array diff functions (for
+  associative arrays and for using multiple callback functions)
+
+· "ext/exotic" contains some rarely needed functions, which have
+  been removed from the main file for that and other reasons
+
+· "ext/bcmath" provides the mathematical functions with arbitrary
+  precision on Unix systems, but emulation also works on top of
+  GMP or big_int
+
+· "ext/dba" allows you to use scripts written for the dba module,
+  if your interpreter only has dbm_*() functions; but only provides
+  the minimum functionality
+
+· "ext/ftp" emulates the ftp extension using only the bare socket
+  and networking functions (should work anywhere), even has some
+  features not found in the original
+
+· "ext/gettext" simulates most of what gettext/libintl provides, and
+  seems to read .mo data files correctly - plural support is however
+  weak. There is also support for .po files, but since the libintl
+  and original gettext functions don't normally read this, that's a
+  useless feature (just for fun). You save 2K by ripping it out.
+
+· "ext/mime" simulates the mime_content_type() function, either by
+  accessing PECL::fileinfo or reading and evaluating the magic.mime
+  database itself (likely slower and a bit unclean of course)
+
+
+
+dtools/
+¯¯¯¯¯¯¯
+Please run the "updoc" script once to update your PHP manual, if you
+are planning to use the upgrade.php script. Create a symlink from your
+installed multi-file PHP manual to ease using this and the "doctests"
+utility:
+
+· The "dtools/updoc" commandline script updates your local PHP
+  documentation to carry hints about emulated functions. It'll simply
+  add a small "EMU" on top of the supported functions` description
+  pages (in the line typically listing the PHP versions).
+
+· "ckavail.php" was used to check for added functions between
+   different PHP interpreter versions, purely a development script.
+
+· "dtools/doctests" greps your local PHP manual for function use
+  examples, and executes them with the given PHP interpreter and
+  the "upgrade.php" script loaded of course. This way you get live
+  tests, but also see:
+
+· "dtools/compact" creates a collapsed version of the upgrade.php
+  script (saved into contrib/)
+
+
+
+tests/
+¯¯¯¯¯¯
+Contains stupidly short scripts, that have been used to compare
+behaviour of the original functions to that of the emulated ones.
+
+Use the "tests/_runparts" shell script (Linux) to get all tests run
+automatically. You must specify the names of two different PHP
+interpreter versions, whose output for each test will be shown side
+by side. If you don't have two, then simply give the name of your
+only PHP (-cgi) interpreter twice or simply use "false" or "cat" as
+the second argument.
+
+
+
+contrib/
+¯¯¯¯¯¯¯¯
+Holds a few library scripts, which are believed to be of higher
+quality than any of the PEAR counterparts. Probably inappropriate to
+place it in this tarball, but they usefully take advantage of the
+upgrade.php provided gzdecode(). (PEARs HTTP and XML-RPC classes
+don't even know about content-coding, btw).
+
+· "contrib/http" can be used to contact Web form scripts, or PHP
+  code utilizing "ext/phprequest" more efficiently. It especially
+  supports content-coding as per RFC2616 (HTTP standard) for saving
+  a lot of bandwidth and getting answers faster.
+
+· "contrib/xmlrpc" likewise can compress output and is used to
+  access XML-RPC and IETF XML+RPC Web services. It takes advantage
+  of supported XML and EPI-XML-RPC extensions, but runs gracefully
+  (not 100% exact XML parser) without. It was also made to provide
+  downwards compatibility. Currently you shouldn't run it against
+  old and not-HTTP standards-compliant servers and clients (=avoid
+  compression unless you use it also as server or client at the
+  other side).
+
+· "contrib/hiddenerrors" shows a nice way to hide all disturbing
+  error messages from users, but keeping them available for
+  development. It is especially useful, when premature _NOTICEs or
+  _WARNINGs could garbage (XML or binary) output or if this could
+  prevent sending any further/required HTTP headers().
+
+· "contrib/fix.php" fights magic_quotes and register_globals
+  (though here it's often better to let users of outdated PHP setups
+  run into the open knife, or die() with an error message)
+
+· "contrib/phprequest" enables your PHP interpreter to receive HTTP
+  requests with "application/vnd.php.serialized" encoding (even
+  compressed) instead of the older "multipart/form-data" and the
+  more simple "application/x-www-form-urlencoded" var post formats;
+  this is faster and type-safe if you control both ends of the wire;
+  see "contrib/README.http" for hints about the upcoming "PHP-RPC"
+
+· "contrib/exceptions" provide a scheme for PHP4-compatible
+  exception management using simple wrapper calls and agreements
+
+Please also have a peek into the README files accompaning the script
+snippets distributed in this directory.
+
+
+
+Other Notes
+¯¯¯¯¯¯¯¯¯¯¯
+· Don't care about the *.meta files everywhere. They are used in
+  other projects for plugin / include script management only and
+  have little value else.
+
+· This script doesn't reside in any CVS/SVN reposititory currently
+  because it is considered a too minor and small project.
+
+· The project homepage is <http://upgradephp.berlios.de/> and also
+  <http://freshmeat.net/p/upgradephp>.
+
+
+
+License
+¯¯¯¯¯¯¯
+Everything in here is Public Domain. There are no restrictions on how
+or where you could use it. You may redistribute it under any license
+as you wish, and you don't need to tell anyone where you got it from.
+It has absolutely no impact on the rest of YOUR project; you are free
+to include it as if you had written it yourself.
+
+You could prepend the license preamble (GNU GPL, LGPL, BSD, MPL, MSFT
+EULA, PHP, CDDL, Artistic, ...) of your choice if you want to.
+
+
+
+Author
+¯¯¯¯¯¯
+The current maintainer can be contacted under <milky*users·sf·net>
+
+Please drop me a line, if you found something important missing, or
+a really frustrating bug, and if you have feature wishes, or if you
+can name one of the functions that the php developers were too lazy
+to implement.
+
+
+
+ChangeLog
+¯¯¯¯¯¯¯¯¯
+
+v13
+  - bcmath functions changed to use faster /usr/bin/dc, wrappers for GMP
+    fixed and php_big_int.so usage possible
+  - gettext_plural0 merged into old code and speed improved
+  -
+
+v12
+  - strripos() handling of positive offsets was fixed
+  - strpbrk() fixed to not return string, if nothing found
+  - php_strip_whitespace() and php_check_syntax() moved into ext/exotic
+  + ext/bcmath using /usr/bin/bc
+  + initial mhash (HMAC) implementation with MD5 and SHA1
+  + incomplete ext/odbc
+  + ext/exceptions for PHP4
+  + extremely fast but incomplete plural form handling in gettext module
+  - core script rewritten with more exhaustive comments
+
+v11
+  - shortened (whitespace- and comment-free) script was added
+  - first gettext emulation version
+
+v10
+  (unreleased)
+
+...
+  (visit the BerliOS download page and diff it yourself)
+
+v1
+  - initial release (non-public)

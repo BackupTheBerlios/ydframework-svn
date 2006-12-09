@@ -1,0 +1,10 @@
+<?php
+
+include("../upgrade.php");
+
+$r = get_defined_functions();
+$r = $r["user"];
+echo "emulated functions are:\n";
+print_r($r);
+
+?>

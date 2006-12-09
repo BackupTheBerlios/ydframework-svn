@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#-- params
+if [ -z "$1" ]
+then
+   echo "syntax:  _runparts [php412] [php501]  | more"
+   echo "Runs all PHP scripts in the tests/ directory with two interpreter versions"
+   echo "side by side, for comparison. If you don't have two of them installed, you"
+   echo "could simply specify 'cat' or 'false' as the second argument."
+else
+
+   #-- go
+   cd `dirname $0`
+   OLD=$1
+   NEW=$2
+   [ -z "$NEW" ] && NEW="cat"
+   for SCRIPT in *
+   do
+      $OLD $SCRIPT | tr -d "\r" | fmt -w 36 -s > /tmp/1
+      $NEW $SCRIPT | tr -d "\r" | fmt -w 36 -s > /tmp/2
+      echo "-----------------------------------------------------------------"
+      echo "[32m$SCRIPT[37m"
+      echo "-----------------------------------------------------------------"
+      pr -m --columns=2 -t  /tmp/1 /tmp/2
+      echo "--"
+   done
+
+fi   

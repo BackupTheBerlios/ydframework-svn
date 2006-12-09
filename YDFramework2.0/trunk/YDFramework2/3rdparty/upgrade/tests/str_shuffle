@@ -1,0 +1,10 @@
+str_shuffle("ABCDEF") == "<?php
+
+include("../upgrade.php");
+
+srand(17);
+echo str_shuffle("ABCDEF");
+
+?>"
+
+

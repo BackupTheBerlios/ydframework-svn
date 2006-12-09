@@ -1,0 +1,160 @@
+#!/usr/local/bin/php -qC
+<?php
+/*
+   Makes small test scripts, which get extracted from the PHP manual
+   on the fly (but not every function has one there, suddenly).
+*/
+
+#-- config
+$PAUSE = 1;   // (use 3) break between tests; you should use `|less` instead
+$CLEAN = 0;   // remove test scripts after use
+$MANY = 1;    // create one testing script per function
+
+
+#-- help
+if (count($_SERVER["argv"]) < 3) {
+   echo<<<END
+
+Usage: doctest  [php-interpreter]  [/path/to/your/php/manual/]
+
+   Runs the examples from your locally installed PHP manual (any language
+   will work, but get the latest!) with the given PHP interpreter version
+   (use an older version to really test the emulated functions). You need
+   lynx or w3m installed also. Use only under U*ix/Linux.
+
+   Pipe the output through |less, |more or |most, there are built-in
+   delays. Rarely example scripts may not run (they are examples only).
+
+END;
+}
+
+#-- proceed
+else {
+
+   #-- args
+   $php = $_SERVER["argv"][1];
+   $php = trim(`which $php`);
+   if (!$php) {
+      die(__FILE__.": Given PHP interpreter not in your %PATH!\n");
+   }
+   $dir = $_SERVER["argv"][2];
+   if (!is_dir($dir) || !file_exists("$dir/function.print.html")) {
+      die(__FILE__.": PHP manual does not live under '$dir'.\n");
+   }
+   ($html = `which w3m`) or ($html = `which lynx`);
+   if (!($html = trim($html))) {
+      die(__FILE__.": lynx or w3m required.\n");
+   }
+   $tmp = "/tmp/upgrade.php.doctest.tmp";
+   $tmpdir = $tmp;
+   if ($MANY) { @unlink($tmpdir); @mkdir($tmpdir); }
+
+   #-- load emulation script
+   $emu = realpath(dirname(__FILE__) . "/../upgrade.php");
+   $emu2 = dirname($emu)."/ext/array.php";
+   $emu3 = dirname($emu)."/ext/mime.php";
+   require($emu);
+
+   #-- get function names
+   $text = file_get_contents($emu);
+   preg_match_all("/function[ ]+([_\w\d]+)\s*\(/", $text, $uu);
+   $funcs = $uu[1];
+   #-- or use user-specified list
+   if (count($_SERVER["argv"]) >= 4) {
+      $funcs = array_slice($_SERVER["argv"], 3);
+   }
+
+   #-- generate list of really emulated functions
+   $simulated = `echo '<?php echo serialize(get_defined_functions()); ?>' | $php -q`;
+   $simulated = unserialize($simulated);
+   $simulated = $simulated["internal"];
+
+   #-- all
+   foreach ($funcs as $func) {
+      if (file_exists($fn = "$dir/function.".strtr($func, "_", "-").".html")) {
+         echo "checking function '\033[31m$func\033[37m'... ";
+
+         #-- only run over emulated stuff
+         if (in_array($func, $simulated)) {
+            echo "NOT EMULATED (with your PHP version)... ";
+            // continue;
+         }
+
+         #-- grep example scripts
+         $text = `$html -dump $fn`;
+         preg_match_all("/<\?php(.+?)\?".">/ms", $text, $uu);
+
+         #-- exec each
+         if ($n = count($uu[1])) {
+
+            #-- note
+            echo "$n examples:\n\n";
+
+            #-- multiple scripts to run
+            foreach ($uu[1] as $i=>$scr) {
+
+               #-- fix output-less scripts: find last assigned-to variable name
+               if (!strpos($scr, "echo") && !strpos($scr, "print")) {
+                  if (preg_match('/^.+(\$[_\w\d\[\"\'\]]+)\s*=/s', $scr, $uu)) {
+                     $scr .= "\n\n#-- auto-added\nprint_r($uu[1]);\n";
+                  }
+                  else {
+                     $scr .= "\n\n#-- this script gives no useful output, or does it?";
+                  }
+               }
+
+               #-- fix compatibility to older PHP versions
+               $scr = preg_replace('/(\s)private(\s\$)/', '$1var$2', $scr);
+
+               #-- output sample script text from doc
+               if ($i) {
+                  echo "\n++++++++++++++++++++++++++++\n\n";
+                  sleep($PAUSE);
+               }
+               echo "\033[1;30m<?php $scr\n?".">\033[0;37m\n";
+
+               #-- create temp script, run it
+               if ($MANY) {
+                  $tmp = "$tmpdir/$func#$i.php";
+               }
+               $scr = ltrim($scr);
+               file_put_contents(
+                  $tmp,
+                  "<?php\n\n".
+                  "#-- a test script for emulated function '$func'\n".
+                  "if (function_exists('$func')) { echo \"ATTENTION: the native '$func' function will engage for this test\\n\"; }\n".
+                  "include('$emu');\n".
+                  "include('$emu2');\n".
+                  "include('$emu3');\n".
+                  "error_reporting(E_ALL);\n\n".
+                  "#-- example[$i] as taken from PHP manual page '$fn'\n".
+                  "$scr\n".
+                  "\n?".">"
+               );
+               echo "==>\033[32m\n";
+               passthru("$php $tmp");
+               echo "\033[0;37m\n\n";
+            }
+
+            #-- pause before next func/script
+            sleep($PAUSE);
+            echo "\n-------------------------------------------------------------------\n\n";
+         }
+
+         else {
+            echo "NO EXAMPLES found in doc, skipping";
+         }
+         echo "\n";
+      }
+   }
+
+   #-- clean up
+   if ($CLEAN) {
+      unlink($tmp);
+   }
+}
+
+#-- even more clean
+if ($MANY && CLEAN) { @rmdir($tmpdir); }
+
+?>

@@ -1,0 +1,8 @@
+<?php
+include "../ext/base64.php";
+
+echo base16_encode("123");
+echo "\n";
+echo base16_decode("313233");
+
+?>

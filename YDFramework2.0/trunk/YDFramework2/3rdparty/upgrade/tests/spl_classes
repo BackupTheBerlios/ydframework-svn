@@ -1,0 +1,9 @@
+<?php
+
+include("../upgrade.php");
+
+echo "print_r(spl_classes());\n\n";
+$r=spl_classes();
+print_r($r);
+
+?>

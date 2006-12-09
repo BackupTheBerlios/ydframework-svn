@@ -1,0 +1,10 @@
+<?php
+
+include("../upgrade.php");
+
+$a = 17;
+$a = array_fill(1, 17, $a);
+print_r($a);
+
+?>
+

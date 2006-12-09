@@ -1,0 +1,9 @@
+md5_file(__FILE__) = <?php
+
+include("../upgrade.php");
+
+echo md5_file(__FILE__);
+
+?>
+
+

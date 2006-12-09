@@ -1,0 +1,26 @@
+<?php
+
+include("../upgrade.php");
+
+$a = array(
+  "x1",
+  "x2\\",
+  array(
+     "x3aaa1",
+     "x3a\\a2",
+  ),
+  "x4\+end",
+);
+
+echo "__start:\n";
+array_walk_recursive($a, "outp");
+
+function outp(&$a) {
+   var_dump($a);
+   $a = stripslashes($a);
+}
+
+echo "\n__result:\n";
+var_dump($a);
+
+?>

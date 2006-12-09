@@ -222,6 +222,13 @@
     }
 
     /**
+     *	This function will include a upgrade file that simulates php functions not present in this php system
+     */
+    function YDIncludeCompatibility() {
+        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/upgrade.php' );
+    }
+
+    /**
      *	This function will add a marker to the global timer.
      *
      *	@param $name	The name of the marker.

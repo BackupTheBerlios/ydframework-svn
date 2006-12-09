@@ -1,0 +1,8 @@
+floatval("1234.567abc") = <?php
+
+include("../upgrade.php");
+
+$str = "1234.567abc";
+echo floatval($str);
+
+?>
