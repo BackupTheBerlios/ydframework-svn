@@ -270,18 +270,54 @@
         /**
          *  This function will return a array with gmts.
          *
-         *  @returns	Array: array( -23 => '-23', ..., 0 => '0', ..., 23 => '+23' );
+         *  @param $format      Format to return
+         *
+         *  @returns	Array. If format is NULL returns complete array.
+         *                                  'simple' returns: array( -11 => '(GMT -11:00)', -10 => ...
+         *                                  'full'   returns: array( -11 => '(GMT -11:00) Nome, Midway Island, Samoa', -10 => ...
          *  @static
          */
-		function getGMT(){
+		function getGMT( $format = null ){
 
-			$gmts = array();
-			for($i = -23; $i <= 23; $i++) 
-				if ($i < 1 ) $gmts[$i] =      strval($i);
-				else		 $gmts[$i] = '+'. strval($i);
+			$gmts = array(	'-11'   => array( '(GMT -11:00)', 'Nome, Midway Island, Samoa' ),
+							'-10'   => array( '(GMT -10:00)', 'Hawaii' ),
+							 '-9'   => array( '(GMT  -9:00)', 'Alaska' ),
+							 '-8'   => array( '(GMT  -8:00)', 'Pacific Time' ),
+							 '-7'   => array( '(GMT  -7:00)', 'Mountain Time' ),
+							 '-6'   => array( '(GMT  -6:00)', 'Central Time, Mexico City' ),
+							 '-5'   => array( '(GMT  -5:00)', 'Eastern Time, Bogota, Lima, Quito' ),
+							 '-4'   => array( '(GMT  -4:00)', 'Atlantic Time, Caracas, La Paz' ),
+							 '-3.5' => array( '(GMT  -3:30)', 'Newfoundland' ),
+							 '-3'   => array( '(GMT  -3:00)', 'Brazil, Buenos Aires, Georgetown, Falkland Is.' ),
+							 '-2'   => array( '(GMT  -2:00)', 'Mid-Atlantic, Ascention Is., St Helena' ),
+							 '-1'   => array( '(GMT  -1:00)', 'Azores, Cape Verde Islands' ),
+							  '0'   => array( '(GMT   0:00)', 'Casablanca, Dublin, Edinburgh, London, Lisbon, Monrovia' ),
+							  '1'   => array( '(GMT  +1:00)', 'Berlin, Brussels, Copenhagen, Madrid, Paris, Rome' ),
+							  '2'   => array( '(GMT  +2:00)', 'Kaliningrad, South Africa, Warsaw' ),
+							  '3'   => array( '(GMT  +3:00)', 'Baghdad, Riyadh, Moscow, Nairobi' ),
+							  '2.5' => array( '(GMT  +3:30)', 'Tehran' ),
+							  '4'   => array( '(GMT  +4:00)', 'Abu Dhabi, Baku, Muscat, Tbilisi' ),
+							  '4.5' => array( '(GMT  +4:30)', 'Kabul' ),
+							  '5'   => array( '(GMT  +5:00)', 'Islamabad, Karachi, Tashkent' ),
+						      '5.5' => array( '(GMT  +5:30)', 'Bombay, Calcutta, Madras, New Delhi' ),
+							  '6'   => array( '(GMT  +6:00)', 'Almaty, Colombo, Dhaka' ),
+							  '7'   => array( '(GMT  +7:00)', 'Bangkok, Hanoi, Jakarta' ),
+							  '8'   => array( '(GMT  +8:00)', 'Beijing, Hong Kong, Perth, Singapore, Taipei' ),
+							  '9'   => array( '(GMT  +9:00)', 'Osaka, Sapporo, Seoul, Tokyo, Yakutsk' ),
+							  '9.5' => array( '(GMT  +9:30)', 'Adelaide, Darwin' ),
+							 '10'   => array( '(GMT +10:00)', 'Melbourne, Papua New Guinea, Sydney, Vladivostok' ),
+							 '11'   => array( '(GMT +11:00)', 'Magadan, New Caledonia, Solomon Islands' ),
+							 '12'   => array( '(GMT +12:00)', 'Auckland, Wellington, Fiji, Marshall Island' ) );
+			
+			if ( is_null( $format ) ) return $gmts;
+
+			foreach( $gmts as $t => $arr ){
+				if ( $format == 'simple' ) $gmts[ $t ] = $arr[ 0 ];
+				else                       $gmts[ $t ] = $arr[ 0 ] . ' ' . $arr[ 1 ];
+			}
+
 			return $gmts;
 		}
-
     }
 
     /**

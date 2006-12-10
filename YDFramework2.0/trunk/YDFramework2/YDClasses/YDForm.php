@@ -133,7 +133,7 @@
             $this->registerElement( 'switchmenu', 'YDFormElement_SwitchMenu', 'YDFormElement_SwitchMenu.php' );
             $this->registerElement( 'grid', 'YDFormElement_Grid', 'YDFormElement_Grid.php' );
             $this->registerElement( 'captcha', 'YDFormElement_Captcha', 'YDFormElement_Captcha.php' );
-
+            $this->registerElement( 'timezone', 'YDFormElement_Timezone', 'YDFormElement_Timezone.php' );
 
             // Add the rules
             $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
@@ -174,6 +174,7 @@
             $this->registerRule( 'httpurl', array( 'YDValidateRules', 'httpurl' ), 'YDValidateRules.php' );
             $this->registerRule( 'maxhyperlinks', array( 'YDValidateRules', 'maxhyperlinks' ), 'YDValidateRules.php' );
             $this->registerRule( 'captcha', array( 'YDValidateRules', 'captcha' ), 'YDValidateRules.php' );
+            $this->registerRule( 'timezone', array( 'YDValidateRules', 'timezone' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );

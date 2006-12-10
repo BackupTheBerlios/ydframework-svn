@@ -750,6 +750,22 @@
         }
 
 
+        /**
+         *	This function returns true if the variable matches a valid gmt value
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function timezone( $val, $opts='' ) {
+
+			YDInclude( 'YDUtil.php' );
+
+			$arr = YDArrayUtil::getGMT();
+
+            return isset( $arr[ $val ] );
+        }
+
+
     }
 
 ?>
