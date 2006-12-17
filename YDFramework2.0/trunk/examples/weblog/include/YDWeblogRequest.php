@@ -242,7 +242,7 @@
             $this->caching = false;
             
             // Delete the cache
-            if ( sizeof( $_POST ) > 0 ) {
+            if ( sizeof( $_POST ) > 0 || YDRequest::getActionName() == 'delete' ) {
                 @ $this->clearCache();
             }
 
