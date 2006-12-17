@@ -76,6 +76,7 @@
             $form->addRule( 'comment',     'required',      t( 'err_comment' ) );
             $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), YDConfig::get( 'max_comment_length', 1500 ) );
             $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), YDConfig::get( 'max_comment_links', 1 ) );
+            $form->addFormRule( array( & $this, 'checkDuplicateComments' ) );
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
@@ -177,6 +178,15 @@
             // Display the template
             $this->display();
 
+        }
+
+        // Function to check for duplicate comments
+        function checkDuplicateComments( $fields ) {
+            if ( $this->weblog->isDuplicateComment( $fields ) === true ) {
+                return array( '__ALL__' => t( 'err_duplicate_comment' ) );
+            } else {
+                return true;
+            }
         }
 
     }

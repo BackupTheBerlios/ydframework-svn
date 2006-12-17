@@ -563,6 +563,17 @@
             return $records;
         }
 
+        // Get duplicate comments based on the current values
+        function isDuplicateComment( $values ) {
+            $values['comment'] = trim( strtolower( $values['comment'] ) );
+            $values['username'] = trim( strtolower( $values['username'] ) );
+            $sql = 'SELECT COUNT(*) AS comment_count FROM #_comments WHERE item_id = ' . $this->str( $values['item_id'] )
+                 . ' AND TRIM( LOWER( username ) ) = ' . $this->str( $values['username'] )
+                 . ' AND TRIM( LOWER( comment ) ) = ' . $this->str( $values['comment'] );
+            $result = intval( $this->db->getValueByName( $sql, 'comment_count' ) );
+            return ( $result > 0 );
+        }
+
         // Get a comment by it's ID
         function getCommentById( $comment_id ) {
             $sql = $this->_prepareQuery( 'SELECT c.id as id, c.item_id as item_id, c.username as username, c.useremail as useremail, c.userwebsite as userwebsite, c.userip as userip, c.useragent as useragent, c.userrequrl as userrequrl, c.comment as comment, c.is_spam as is_spam, c.created as created, c.modified as modified, i.title as item_title FROM #_comments c, #_items i WHERE c.item_id = i.id and c.id = ' . $this->str( $comment_id ) );

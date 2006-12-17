@@ -98,6 +98,7 @@ $GLOBALS['t']['spam'] = 'Spam';
 $GLOBALS['t']['no_spam'] = 'Geen spam';
 $GLOBALS['t']['choose_no_spam'] = 'Kies hier "geen spam"';
 $GLOBALS['t']['err_userspam'] = 'Detecteerde een spam aanval';
+$GLOBALS['t']['err_duplicate_comment'] = 'Duplicaat commentaar gededecteerd';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'Nieuw commentaar';
