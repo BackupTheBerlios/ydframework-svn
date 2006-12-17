@@ -216,6 +216,13 @@
                 if ( $this->customCss != '' )
                     $code = "\n<style type=\"text/css\">\n" . $this->customCss . "</style>";
 
+                // test if customJavascriptUrls is set
+                if ( is_array( $this->customJavascriptUrls ) ) {
+                    foreach ( $this->customJavascriptUrls as $jsUrl ) {
+                        $code .= "\n<script type=\"text/javascript\" src=\"" . $jsUrl .  "\"></script>\n";
+                    }
+                }
+
                 // add onload code to custom javascript code
                 if ( $this->customJavascriptOnload != '' )
                     $this->customJavascript .= "window.onload = function() {" . $this->customJavascriptOnload . "}\n";
@@ -228,6 +235,7 @@
 
                 // replace head end tag
                 return eregi_replace( "</head>", $code . "</head>", $tpl_source );
+
             }
 
             /**
@@ -247,6 +255,15 @@
 
                 if (!$prepend) $this->customJavascript = $this->customJavascript . $jsCode . "\n";
                 else           $this->customJavascript = $jsCode . $this->customJavascript . "\n";
+            }
+
+            /**
+             *	This function will add custom javascript url to the template head
+             *
+             *	@param $jsUrl	   Javascript url to add
+             */
+            function addJavascriptUrl( $jsUrl ) {
+                $this->customJavascriptUrls[] = $jsUrl;
             }
 
             /**
