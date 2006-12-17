@@ -60,7 +60,7 @@
             if ( isset ( $attributes['sep'] ) ) {
 
                 // find horizontal and left tags
-                if ( is_int( strpos( $attributes[ 'sep' ], 'h' ) ) ) $this->_separator = '&nbsp;&nbsp;&nbsp;';
+                if ( is_int( strpos( $attributes[ 'sep' ], 'h' ) ) ) $this->_separator = ' ';
                 if ( is_int( strpos( $attributes[ 'sep' ], 'l' ) ) ) $this->_position  = 'left';
                 unset( $attributes[ 'sep' ] );
 
