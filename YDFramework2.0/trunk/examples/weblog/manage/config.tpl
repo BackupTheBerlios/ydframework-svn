@@ -148,6 +148,14 @@
             <td class="adminRowL">{t w="cfg_comment_interval"}</td>
             <td class="adminRowL">{$config.comment_interval|default:'-'}</td>
         </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="max_comment_length"}</td>
+            <td class="adminRowL">{$config.max_comment_length|default:'-'}</td>
+        </tr>
+        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+            <td class="adminRowL">{t w="max_comment_links"}</td>
+            <td class="adminRowL">{$config.max_comment_links|default:'-'}</td>
+        </tr>
     </table>
     <p><input type="button" class="button" onClick="window.location='{$YD_SELF_SCRIPT}?do=edit';" value="{t w="change_config"}" />
 {/if}
@@ -293,6 +301,14 @@
             <tr>
                 <td class="adminRowL">{$form.comment_interval.label_html}</td>
                 <td class="adminRowL">{$form.comment_interval.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.max_comment_length.label_html}</td>
+                <td class="adminRowL">{$form.max_comment_length.html}</td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.max_comment_links.label_html}</td>
+                <td class="adminRowL">{$form.max_comment_links.html}</td>
             </tr>
         </table>
         <p>{$form._cmdSubmit.html}</p>

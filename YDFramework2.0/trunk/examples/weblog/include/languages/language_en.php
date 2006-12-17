@@ -90,8 +90,8 @@ $GLOBALS['t']['err_name_email'] = 'Name should not be an email address';
 $GLOBALS['t']['err_email'] = 'Email is missing or invalid';
 $GLOBALS['t']['err_website'] = 'The website specified is not a valid URL';
 $GLOBALS['t']['err_comment'] = 'Comment is required';
-$GLOBALS['t']['err_comment_length'] = 'Comment cannot be more than 1500 characters';
-$GLOBALS['t']['err_comment_links'] = 'Comment cannot contain more than 1 hyperlink';
+$GLOBALS['t']['err_comment_length'] = 'Comment cannot be more than ' . YDConfig::get( 'max_comment_length', 1500 ) . ' characters';
+$GLOBALS['t']['err_comment_links'] = 'Comment cannot contain more than ' . YDConfig::get( 'max_comment_links', 1 ) . ' hyperlink';
 $GLOBALS['t']['with'] = 'for';
 $GLOBALS['t']['item_closed'] = 'This item does not allow comments.';
 $GLOBALS['t']['spam'] = 'Spam';
@@ -264,6 +264,10 @@ $GLOBALS['t']['spam_delete_desc'] = 'Spam comments are automatically deleted aft
 $GLOBALS['t']['confirm_empty_spam'] = 'Are you sure you want to delete all spam comments?';
 $GLOBALS['t']['empty_spam_now'] = 'Delete all spam comments now.';
 $GLOBALS['t']['weight'] = 'Weight';
+$GLOBALS['t']['max_comment_length'] = 'Maximum lenght of comments';
+$GLOBALS['t']['err_max_comment_length'] = 'Maximum lenght of comment must be a number';
+$GLOBALS['t']['max_comment_links'] = 'Maximum number of hyperlinks in a comment';
+$GLOBALS['t']['err_max_comment_links'] = 'Maximum number of hyperlinks in a comment must be a number';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Settings';

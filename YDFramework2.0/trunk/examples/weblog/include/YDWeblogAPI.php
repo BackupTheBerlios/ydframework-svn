@@ -27,6 +27,9 @@
         if ( ! isset( $values['dflt_is_draft'] ) ) {
             $values['dflt_is_draft'] = false;
         }
+        if ( empty( $values['db_pass'] ) ) {
+            $values['db_pass'] = YDConfig::get( 'db_pass', '' );
+        }
 
         // Construct the new config text
         $cfg = '<?php' . "\n\n";

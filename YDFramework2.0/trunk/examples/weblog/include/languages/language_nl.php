@@ -90,8 +90,8 @@ $GLOBALS['t']['err_name_email'] = 'Naam mag geen email adres zijn';
 $GLOBALS['t']['err_email'] = 'Email is niet ingegeven of niet correct';
 $GLOBALS['t']['err_website'] = 'De website is geen geldige URL';
 $GLOBALS['t']['err_comment'] = 'Een commentaar is vereist';
-$GLOBALS['t']['err_comment_length'] = 'Commentaar kan niet meer dan 1500 karakters bevatten';
-$GLOBALS['t']['err_comment_links'] = 'Commentaar kan niet meer dan 1 hyperlink bevatten';
+$GLOBALS['t']['err_comment_length'] = 'Commentaar kan niet meer dan ' . YDConfig::get( 'max_comment_length', 1500 ) . ' karakters bevatten';
+$GLOBALS['t']['err_comment_links'] = 'Commentaar kan niet meer dan ' . YDConfig::get( 'max_comment_links', 1500 ) . ' hyperlink bevatten';
 $GLOBALS['t']['with'] = 'bij';
 $GLOBALS['t']['item_closed'] = 'Dit item laat geen commentaren toe.';
 $GLOBALS['t']['spam'] = 'Spam';
@@ -264,6 +264,10 @@ $GLOBALS['t']['spam_delete_desc'] = 'Spam commentaren worden automatisch verwijd
 $GLOBALS['t']['confirm_empty_spam'] = 'Bent u zeker dat u alle spam commentaren wil verwijderen?';
 $GLOBALS['t']['empty_spam_now'] = 'Verwijder nu alle spam commentaren.';
 $GLOBALS['t']['weight'] = 'Gewicht';
+$GLOBALS['t']['max_comment_length'] = 'Maximum lengte van een commentaar';
+$GLOBALS['t']['err_max_comment_length'] = 'Maximum lengte van een commentaar moet een nummer zijn';
+$GLOBALS['t']['max_comment_links'] = 'Maximum aantal hyperlinks in een commentaar';
+$GLOBALS['t']['err_max_comment_links'] = 'Maximum aantal hyperlinks in een commentaar moet een nummer zijn';
 
 // manage/config.tpl
 $GLOBALS['t']['cfg_db_settings'] = 'Database Instellingen';

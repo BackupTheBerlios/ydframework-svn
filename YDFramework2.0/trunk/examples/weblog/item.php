@@ -74,8 +74,8 @@
             $form->addRule( 'useremail',   'required',      t( 'err_email' ) );
             $form->addRule( 'userwebsite', 'httpurl',       t( 'err_website' ) );
             $form->addRule( 'comment',     'required',      t( 'err_comment' ) );
-            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), 1500 );
-            $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), 1 );
+            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), YDConfig::get( 'max_comment_length', 1500 ) );
+            $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), YDConfig::get( 'max_comment_links', 1 ) );
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
