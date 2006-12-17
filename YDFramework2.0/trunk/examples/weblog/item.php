@@ -126,7 +126,7 @@
                     $users = $this->weblog->getUsers();
 
                     // Add the comment to the email template
-                    $this->tpl->assign( 'eml_comment', $values );
+                    $this->tpl->assign( 'eml_comment', $comment );
 
                     // Create the email and send it
                     $eml = new YDEmail();
