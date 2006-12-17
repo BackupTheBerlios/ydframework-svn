@@ -149,15 +149,16 @@
                         $eml->addBcc( $user['email'], $user['name'] );
                     }
 
-                    // Set the subject
+                    // Set the subject and body
                     if ( strval( $comment['is_spam'] ) == '0' ) {
                         $eml->setSubject( t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+                        $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
                     } else {
                         $eml->setSubject( '[spam] ' . t('new_comment') . ': ' . strip_tags( $item['title'] ) );
+                        $eml->setHtmlBody( $this->fetch( 'comment_email_spam' ) );
                     }
 
                     // Send the email
-                    $eml->setHtmlBody( $this->fetch( 'comment_email' ) );
                     $eml->send();
 
                 }
