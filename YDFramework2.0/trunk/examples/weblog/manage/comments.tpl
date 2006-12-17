@@ -133,7 +133,7 @@
                         {$comment.userip}
                     </td>
                     <td class="adminRowR">
-                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="edit"}</a>
+                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{t w="view"}</a>
                         |
                         <a href="{$YD_SELF_SCRIPT}?do=delete&id={$comment.id}"
                          onClick="return YDConfirmDelete( '{$comment.comment|bbcode|strip_tags|strip|truncate|addslashes}' );">{t w="delete"}</a>
@@ -183,7 +183,13 @@
         <table width="700" cellspacing="0" cellpadding="0" border="0">
             <tr>
                 <th class="adminRowLG">&raquo; {t w="change_comment_desc"}</th>
-                <th class="adminRowLGR">&raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a></th>
+                <th class="adminRowLGR">
+                    {if $comment.is_spam}
+                        &raquo; <a href="{$YD_SELF_SCRIPT}?filter=spam"><b>{t w="back"}</b></a>
+                    {else}
+                        &raquo; <a href="{$YD_SELF_SCRIPT}"><b>{t w="back"}</b></a>
+                    {/if}
+                </th>
             </tr>
             <tr>
                 <td class="adminRowL" width="300">{t w="item"}</td>
@@ -203,31 +209,76 @@
             </tr>
             <tr>
                 <td class="adminRowL">{$form.username.label_html}</td>
-                <td class="adminRowC">{$form.username.html}</td>
-            </tr>
-            <tr>
-                <td class="adminRowL">{$form.useremail.label_html}</td>
-                <td class="adminRowC">{$form.useremail.html}</td>
-            </tr>
-            <tr>
-                <td class="adminRowL">{$form.userwebsite.label_html}</td>
-                <td class="adminRowC">{$form.userwebsite.html}</td>
-            </tr>
-            <tr>
-                <td class="adminRowL" colspan="2">
-                    {$form.comment.label_html}
-                    <br/>
-                    {$form.comment.html}
+                <td class="adminRowL">
+                    {if $comment.is_spam}
+                        {$comment.username|default:'-'}
+                    {else}
+                        {$form.username.html}
+                    {/if}
                 </td>
             </tr>
             <tr>
+                <td class="adminRowL">{$form.useremail.label_html}</td>
+                <td class="adminRowL">
+                    {if $comment.is_spam}
+                        {$comment.useremail|default:'-'}
+                    {else}
+                        {$form.useremail.html}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                <td class="adminRowL">{$form.userwebsite.label_html}</td>
+                <td class="adminRowL">
+                    {if $comment.is_spam}
+                        {$comment.userwebsite|default:'-'}
+                    {else}
+                        {$form.userwebsite.html}
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+                {if $comment.is_spam}
+                    <td class="adminRowL">{$form.comment.label_html}</td>
+                    <td class="adminRowL">
+                        {$comment.comment|htmlentities|default:'-'}
+                    </td>
+                {else}
+                    <td class="adminRowL" colspan="2">
+                        {$form.comment.label_html}
+                        <br/>
+                        {$form.comment.html}
+                    </td>
+                {/if}
+            </tr>
+            <tr>
                 <td class="adminRowL">{$form.created.label_html}</td>
-                <td class="adminRowL">{$form.created.html}</td>
+                <td class="adminRowL">
+                    {if $comment.is_spam}
+                        {$comment.created|date:'%Y/%m/%d %H:%M:%S'}
+                    {else}
+                        {$form.created.html}
+                    {/if}
+                </td>
             </tr>
             <tr>
                 <td class="adminRowL">{$form.is_spam.label_html}</td>
-                <td class="adminRowL">{$form.is_spam.html}</td>
+                <td class="adminRowL">
+                    {if $comment.is_spam}
+                        <a href="{$YD_SELF_SCRIPT}?do=mark_as_not_spam&id={$comment.id}">{t w="mark_as_not_spam"}</a>
+                    {else}
+                        {$form.is_spam.html}
+                    {/if}
+                </td>
             </tr>
+            {if $comment.is_spam}
+                <tr>
+                    <td class="adminRowL">{t w="weight"}</td>
+                    <td class="adminRowL">
+                        {$comment.comment|strlen}
+                    </td>
+                </tr>
+            {/if}
             <tr>
                 <td class="adminRowL" colspan="2" style="border: 0px;">
                     {$form._cmdSubmit.html}
