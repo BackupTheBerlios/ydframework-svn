@@ -29,15 +29,15 @@
         <div id="content" class="narrowcolumn">
 
             <h3>[spam] {t w="new_comment"}<br/>{$item.title}</h3>
-            <p><b>{t w="posted_from"}</b><br/>{$comment.userip}</p>
-            <p><b>User Agent</b><br/>{$comment.useragent|default:'-'}</p>
-            <p><b>Request URI</b><br/>{$comment.userrequrl|default:'-'}</p>
-            <p><b>{t w="name"}</b><br/>{$comment.username|default:'-'}</p>
-            <p><b>{t w="mail"}</b><br/>{$comment.useremail|default:'-'}</p>
-            <p><b>{t w="website"}</b><br/>{$comment.userwebsite|default:'-'}</p>
-            <p><b>{t w="created_on"}</b><br/>{$comment.created|date:'%Y/%m/%d %H:%M:%S'}</p>
-            <p><b>{t w="weight"}</b><br/>{$comment.comment|strlen}</p>
-            <p><b>{t w="comment"}</b><br/>{$comment.comment|htmlentities|default:'-'}</p>
+            <p><b>{t w="posted_from"}</b><br/>{$eml_comment.userip}</p>
+            <p><b>User Agent</b><br/>{$eml_comment.useragent|default:'-'}</p>
+            <p><b>Request URI</b><br/>{$eml_comment.userrequrl|default:'-'}</p>
+            <p><b>{t w="name"}</b><br/>{$eml_comment.username|default:'-'}</p>
+            <p><b>{t w="mail"}</b><br/>{$eml_comment.useremail|default:'-'}</p>
+            <p><b>{t w="website"}</b><br/>{$eml_comment.userwebsite|default:'-'}</p>
+            <p><b>{t w="created_on"}</b><br/>{$eml_comment.created|date:'%Y/%m/%d %H:%M:%S'}</p>
+            <p><b>{t w="weight"}</b><br/>{$eml_comment.comment|strlen}</p>
+            <p><b>{t w="comment"}</b><br/>{$eml_comment.comment|htmlentities|default:'-'}</p>
 
             <h3>$_GET</h3>
             {foreach from=$smarty.get item="item" key="key"}
