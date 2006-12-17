@@ -69,6 +69,9 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
+            // Empty the value
+            $attribs['value'] = '';
+
             // Get the HTML
             return '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
