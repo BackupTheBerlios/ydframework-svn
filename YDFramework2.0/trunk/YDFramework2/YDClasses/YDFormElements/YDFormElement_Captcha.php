@@ -57,16 +57,36 @@
 
 			// text box position
 			$this->_textPosition_left = false;
+			
+			// refresh button. not added by default
+			$this->_button = null;
         }
 
 
         /**
          *	This function set text element position
          *
-         *	@param $onleft		Boolean that defines if text is before image (TRUE) or after image (FALSE)
+         *	@param $onleft		Boolean that defines if text is before image (TRUE: on left) or after image (FALSE: on right)
          */
         function setTextPosition( $onleft = true ) {
 			$this->_textPosition_left = $onleft;
+		}
+
+
+        /**
+         *	This function adds a button to renew the image. Useful when image is not clear.
+         */
+        function & addRefreshButton( $caption = null ) {
+
+			if ( ! is_string( $caption ) ) $caption = 'Get another image';
+
+			include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Button.php');
+
+			$this->_button = new YDFormElement_Button( $this->_form, $this->_name . '_refreshbutton', $caption );
+			$this->_button->setAttribute( 'onclick', "document.getElementById('" . $this->getAttribute( 'id' ) . "_captcha').src = document.getElementById('" . $this->getAttribute( 'id' ) . "_captcha').src.split('&id=')[0] + '&id=' + Math.random();" );
+			$this->_button->setAttribute( 'style',   "vertical-align: middle" );
+
+			return $this->_button;
 		}
 
 
@@ -79,18 +99,21 @@
 
             // Create the list of attributes
             $attribs = array(
-                'type' => 'text', 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value, 'size' => 8
+                'type' => 'text', 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value, 'size' => 7
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-			$img = '<img width="150" height="40" src="' . $this->_url . '" style="vertical-align: middle"/>';
+			$img = '<img id="' . $this->getAttribute( 'id' ) . '_captcha" width="200" height="40" src="' . $this->_url . '" style="vertical-align: middle"/>';
 			$txt = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
 
+			if ( is_null( $this->_button ) ) $button = '';
+			else                             $button = $this->_button->toHTML();
+
 			if ( $this->_textPosition_left ){
-				return $txt . ' ' . $img;
+				return $txt . ' ' . $img . ' ' . $button;
 			}else{
-				return $img . ' ' . $txt;
+				return $img . ' ' . $txt . ' ' . $button;
 			}
         }
 
