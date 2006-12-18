@@ -41,32 +41,32 @@
 
             <h3>$_GET</h3>
             {foreach from=$smarty.get item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             <h3>$_POST</h3>
             {foreach from=$smarty.post item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             <h3>$_SERVER</h3>
             {foreach from=$smarty.server item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             <h3>$_COOKIE</h3>
             {foreach from=$smarty.cookies item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             <h3>$_ENV</h3>
             {foreach from=$smarty.env item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             <h3>$_SESSION</h3>
             {foreach from=$smarty.session item="item" key="key"}
-                <p><b>{$key}</b><br/>{$item}</p>
+                <p><b>{$key}</b><br/>{$item|htmlentities}</p>
             {/foreach}
 
             &nbsp;
@@ -80,3 +80,4 @@
 </body>
 
 </html>
+
