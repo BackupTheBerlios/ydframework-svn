@@ -2,6 +2,10 @@
 
     <ul>
 
+        <li>
+            <h2><a href="{$weblog_link}" title="{$weblog_title}">Home</a></h2>
+        </li>
+
         {if $pages}
             <li>
                 <h2>{t w="pages"}</h2>
