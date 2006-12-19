@@ -37,7 +37,7 @@
         /**
          *	This is the class constructor for the YDAkismet module.
          */
-        function YDAkismet( $blog_url, $api_key ) {
+        function YDAkismet( $blog_url, $api_key, $debug=false ) {
 
             // Initialize the parent class
             $this->YDAddOnModule();
@@ -51,6 +51,8 @@
             // Set the variables
             $this->blog_url = $blog_url;
             $this->api_key  = $api_key;
+            $this->debug    = $debug;
+            $this->error    = null;
 
         }
 
@@ -187,10 +189,20 @@
             $client = new YDHttpClient( $host, 80 );
             $client->setDebug( false );
             $client->user_agent = YD_FW_NAME . '/' . YD_FW_VERSION . ' | ' . $this->getClassName() . '/' . $this->_version;
+            if ( $this->debug ) {
+                echo( 'HTTP request: ' . $host . $url . '<br/>' );
+            }
             $result = @ $client->post( $url, $data );
             if ( $result == false ) {
+                $this->error = $client->getError();
+                if ( $this->debug ) {
+                    echo( 'HTTP request failed.<br/>' );
+                }
                 return null;
             } else {
+                if ( $this->debug ) {
+                    echo( 'HTTP request OK.<br/>' );
+                }
                 return @ $client->getContent();
             }
         }

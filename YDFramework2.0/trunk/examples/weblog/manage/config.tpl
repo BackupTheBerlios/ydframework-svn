@@ -142,7 +142,12 @@
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_akismet_key"}</td>
-            <td class="adminRowL">{$config.akismet_key|default:'-'}</td>
+            <td class="adminRowL">
+                {$config.akismet_key|default:'-'}
+                {if $config.akismet_key}
+                    [ <a href="" onClick="window.open('{$YD_SELF_SCRIPT}?do=TestAkismet','TestAkismet','width=640,height=360,scrollbars=yes,toolbar=no,location=no');return false;">test</a> ]
+                {/if}
+            </td>
         </tr>
         <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
             <td class="adminRowL">{t w="cfg_comment_interval"}</td>

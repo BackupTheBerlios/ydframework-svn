@@ -151,6 +151,46 @@
 
         }
 
+        // Action to test Akismet
+        function actionTestAkismet() {
+            echo( '<html>' );
+            echo( '<head>' );
+            echo( '    <title>Testing Akismet</title>' );
+            echo( '    <link rel="stylesheet" type="text/css" href="manage.css" />' );
+            echo( '</head>' );
+            echo( '<body>' );
+            echo( '    <p class="title">Testing Akismet service...</p>' );
+            if ( is_null( $this->weblog->akismet ) ) {
+                echo( '&nbsp;<br/><span style="font-weight:bold;color:red;">ERROR: No akismet key is specified.</span>' );
+            } else {
+                echo( 'Akismet key used for this request: ' . YDConfig::get( 'akismet_key', '' ) . '<br/>' );
+                echo( 'Sending test request to Akismet...<br/>' );
+                $this->weblog->akismet->debug = true;
+                $result = $this->weblog->akismet->checkComment(
+                    'Fuck%XXKEVDJX!!http://porn.z0rder.com/anal-porn.htm [url= http://porn.z0rder.com/anal-porn.htm ]http://porn.z0rder.com/anal-porn.htm[/url]',
+                    'PCNFZUII',
+                    '',
+                    '',
+                    '80.77.80.187',
+                    ''
+                );
+                if ( is_null( $this->weblog->akismet->error ) ) {
+                    if ( $result == NULL || $result === false ) {
+                        echo( 'Test request was marked as not spam.<br/>' );
+                    } else {
+                        echo( 'Test request was marked as spam.<br/>' );
+                    }
+                    echo( '&nbsp;<br/><span style="font-weight:bold;color:green;">Akismet connectivity is working properly</span>' );
+                } else {
+                    echo( '&nbsp;<br/><span style="font-weight:bold;color:red;">ERROR: ' . $this->weblog->akismet->error . '</span>' );
+                }
+            }
+            echo( '&nbsp;<br/>&nbsp;<br/>' );
+            echo( '[ <a href="" onClick="window.close();">close</a> ]' );
+            echo( '</body>' );
+            echo( '</html>' );
+        }
+
         // Function to get the configuration
         function getConfig() {
 
