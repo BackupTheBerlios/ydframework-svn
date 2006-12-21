@@ -56,11 +56,15 @@
 			$fonts = array( $fdir . 'VeraBd.ttf', $fdir . 'VeraIt.ttf', $fdir . 'Vera.ttf');
 
 			// create image object
-			$this->_img = new PhpCaptcha( $fonts, 150, 40 );
+			$this->_img = new PhpCaptcha( $fonts, 200, 40 );
 			
 			$this->_img->DisplayShadow( false );
 			$this->_img->UseColour( false );
-			$this->_img->SetNumChars( 4 );
+			$this->_img->SetNumChars( 5 );
+
+			// add simbols ;) 
+			// don't add possible character problems for user, eg, l <--> 1 (lower L or number ONE?), 0 <--> O (ZERO OR upper O?)
+			$this->_img->SetCharSet( "a-h,!,j-k,#,&,%,$,m-n,@,p-r,2-4,6,£,?,8-9,t-w,y-z,#,&,%,$,A-H,!,J-K,#,&,%,$,M-N,@,P-R,T-W,Y-Z,2-4,6,£,?,8-9" );
         }
 
 
@@ -71,6 +75,16 @@
          */
         function setNumChars( $num ){
 			$this->_img->setNumChars( $num );
+		}
+
+
+        /**
+         *	This function set the number of interference lines
+         *
+         *	@param $num		Number of lines
+         */
+        function setNumLines( $num ){
+			$this->_img->setNumLines( $num );
 		}
 
 
