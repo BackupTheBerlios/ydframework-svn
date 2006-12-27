@@ -589,7 +589,7 @@
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
             $values['useragent'] = $_SERVER['HTTP_USER_AGENT'];
             $values['userrequrl'] = $_SERVER['REQUEST_URI'];
-            $values['is_spam'] = 0;
+            $values['is_spam'] = '0';
 
             // Check against akismet if a key is there
             if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
@@ -608,6 +608,9 @@
                 }
 
             }
+
+            // Safe the HTML from the comment
+            $values['comment'] = YDFormFilter_safe_html( $values['comment'] );
 
             // Add the comment
             $result = $this->_executeInsert( '#_comments', $values );
@@ -629,6 +632,7 @@
 
         // Update a comment
         function updateComment( $values ) {
+            $values['comment'] = YDFormFilter_safe_html( $values['comment'] );
             return $this->db->executeUpdate( '#_comments', $values, 'id = ' . $this->str( $values['id'] ) );
         }
 

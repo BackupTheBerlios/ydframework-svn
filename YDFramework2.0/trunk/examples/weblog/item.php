@@ -80,7 +80,7 @@
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
-            $form->addFilter( 'comment', 'safe_html' );
+            //$form->addFilter( 'comment', 'safe_html' );
 
             // Process the form
             if ( $form->validate() === true ) {
