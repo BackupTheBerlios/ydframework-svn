@@ -715,13 +715,13 @@
                 $values[ $parentField ] = 0;
             }
 
-            // Check if the parent node exists
+            /*// Check if the parent node exists
             if ( isset( $values[ $parentField ] ) && intval( $values[ $parentField ] ) != 0 ) {
                 $node = $this->getNode( $values[ $parentField ] );
                 if ( ! $node ) {
                     trigger_error( 'Parent node (' . $values[ $parentField ] . ') does not exist in the tree!', YD_ERROR );
                 }
-            }
+            }*/
 
             // Perform the insert
             $this->db->executeInsert( $this->table, $values );
