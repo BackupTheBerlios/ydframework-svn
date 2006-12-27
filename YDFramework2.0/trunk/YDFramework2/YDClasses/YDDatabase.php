@@ -1708,6 +1708,7 @@
 
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+            $sql = str_replace( ' `#_', ' `' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
 
             // Log the statement
             $this->_logSql( $sql );
