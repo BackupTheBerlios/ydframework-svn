@@ -190,6 +190,7 @@
             $client->setDebug( false );
             $client->user_agent = YD_FW_NAME . '/' . YD_FW_VERSION . ' | ' . $this->getClassName() . '/' . $this->_version;
             if ( $this->debug ) {
+                echo( 'IP Adress Akismet: ' . gethostbyname( $host ) . '<br/>' );
                 echo( 'HTTP request: ' . $host . $url . '<br/>' );
             }
             $result = @ $client->post( $url, $data );
