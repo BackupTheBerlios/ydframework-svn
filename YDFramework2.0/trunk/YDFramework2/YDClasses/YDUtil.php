@@ -118,17 +118,18 @@
          *  If you enable the $fillLastRow option, it will fill the last row with null values to match the number of
          *	columns.
          *
-         *  @param $array		The single dimension array you want to convert.
-         *  @param $columns		The number of columns the table should have.
-         *  @param $fillLastRow	(optional) If true, the last row will be filled with null values so that it matches the
-         *						number of columns.
+         *  @param $array		    The single dimension array you want to convert.
+         *  @param $columns		    The number of columns the table should have.
+         *  @param $fillLastRow	    (optional) If true, the last row will be filled with null values so that it matches
+         *						    the number of columns.
+         *  @param $horizontally	(optional) If true, rows will be filled first, then it will create an new row
          *
          *  @returns	A multi-dimension array with the contents of the original array converted to a table with the
          *				indicated number of colums.
          *
          *	@static
          */
-        function convertToTable( $array, $columns, $fillLastRow=false ) {
+        function convertToTable( $array, $columns, $fillLastRow=false, $horizontal=true ) {
 
             // If the number of columns is 1, return the original array
             if ( $columns == 1 ) {
@@ -140,18 +141,47 @@
                 return $array;
             }
 
-            // Use the array_chunk function to convert to a table
-            $newArray = @array_chunk( $array, $columns );
-            if ( $newArray == null ) {
-                trigger_error( 'Failed to split the array in chunks.', YD_ERROR );
-            }
+            // Convert horizontally or vertically
+            if ( $horizontal ) {
 
-            // Pad the last row
-            if ( $fillLastRow ) {
-                $lastRow = $newArray[sizeof( $newArray )-1];
-                $numMissing = $columns - sizeof( $lastRow );
-                for ( $i = 0; $i < $numMissing; $i++ ) {
-                    array_push( $newArray[sizeof( $newArray )-1], null );
+                // Use the array_chunk function to convert to a table
+                $newArray = @array_chunk( $array, $columns );
+                if ( $newArray == null ) {
+                    trigger_error( 'Failed to split the array in chunks.', YD_ERROR );
+                }
+
+                // Pad the last row
+                if ( $fillLastRow ) {
+                    $lastRow = $newArray[sizeof( $newArray )-1];
+                    $numMissing = $columns - sizeof( $lastRow );
+                    for ( $i = 0; $i < $numMissing; $i++ ) {
+                        array_push( $newArray[sizeof( $newArray )-1], null );
+                    }
+
+                }
+
+            } else {
+
+                // Get only the values of the array
+                $array = array_values( $array );
+
+                // Check how many rows we will have
+                $rows = ceil( sizeof( $array ) / $columns );
+
+                // Keep track of the current row
+                $currentItem = 0;
+                $currentCol  = 0;
+
+                // Start with a new empty array
+                $newArray = array();
+
+                // Loop over the rows
+                while ( $currentCol < $columns ) {
+                    foreach ( range( 0, $rows-1 ) as $row ) {
+                        $newArray[$row][$currentCol] = isset( $array[$currentItem] ) ? $array[$currentItem] : null;
+                        $currentItem++;
+                    }
+                    $currentCol++;
                 }
 
             }
