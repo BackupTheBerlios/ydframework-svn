@@ -384,7 +384,7 @@
         </tr>
         <tr>
             <td valign="top">
-                <a href="database_named_instances.php">Using named database instances/a><br/>            </td>
+                <a href="database_named_instances.php">Using named database instances</a><br/>            </td>
             <td valign="top">
                 <a href="{$YD_SELF_SCRIPT}?do=source&id=database_named_instances.php">database_named_instances.php</a>            </td>
         </tr>
