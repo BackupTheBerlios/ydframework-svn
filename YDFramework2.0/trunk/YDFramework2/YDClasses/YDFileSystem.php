@@ -28,6 +28,7 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDUtil.php');
+    include_once( YD_DIR_HOME . '/3rdparty/bmp.php' );
 
     // YDFSImage cropping specific constants
     define( 'YD_FS_CROP_UNCHANGED', 1 );
@@ -443,6 +444,9 @@
             }
             if ( substr( $header, 0, 8 ) == "\211PNG\r\n\032\n" ) {
                 return 'png';
+            }
+            if ( substr( $header, 0, 2 ) == "BM" ) {
+                return 'bmp';
             }
 
             // Not an image
@@ -1077,6 +1081,8 @@
                 $src_img = imagecreatefromgif( $this->getAbsolutePath() );
             } elseif ( $img_type == 'png' ) {
                 $src_img = imagecreatefrompng( $this->getAbsolutePath() );
+            } elseif ( $img_type == 'bmp' ) {
+                $src_img = imagecreatefrombmp( $this->getAbsolutePath() );
             } else {
                 $src_img = imagecreatefromjpeg( $this->getAbsolutePath() );
             }

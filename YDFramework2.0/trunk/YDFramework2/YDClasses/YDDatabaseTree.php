@@ -649,7 +649,7 @@
                 if ( $id == 0 ) {
                     continue;
                 }
-                $query = sprintf(
+                @ $query = sprintf(
                     'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
                     $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
                 );
