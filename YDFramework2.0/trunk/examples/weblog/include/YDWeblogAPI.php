@@ -615,6 +615,11 @@
             // Safe the HTML from the comment
             $values['comment'] = YDFormFilter_safe_html( $values['comment'] );
 
+            // Check for duplicate comments
+            if ( $this->isDuplicateComment( $values ) ) {
+                $values['is_spam'] = '1';
+            }
+
             // Add the comment
             $result = $this->_executeInsert( '#_comments', $values );
             $comment_id = $this->db->getLastInsertID();
