@@ -142,6 +142,7 @@
                         <td class="adminRowL">
                             <b>{t w="h_statistics"}</b><br/>
                             &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
+                            &raquo; <a href="bad_behavior.php">{t w="a_bad_behavior"}</a><br/>
                         </td>
                     </tr>
                 {/if}

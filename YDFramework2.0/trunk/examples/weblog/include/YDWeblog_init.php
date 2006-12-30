@@ -91,6 +91,9 @@
         YDConfig::get( 'db_pass', '' ), YDConfig::get( 'db_host', 'localhost' )
     );
 
+    // Include bad behaviour
+    @ include_once( dirname( __FILE__ ) . '/Bad-Behavior/bad-behavior-ydweblog.php' );
+
     // Set the right locale
     $language = YDConfig::get( 'weblog_language', 'en' );
     $language = empty( $language ) ? 'en' : $language;

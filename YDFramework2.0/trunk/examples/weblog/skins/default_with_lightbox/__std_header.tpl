@@ -74,6 +74,8 @@
     //-->
     </script>
 
+    {$bb2_comment}
+
 </head>
 
 <body>

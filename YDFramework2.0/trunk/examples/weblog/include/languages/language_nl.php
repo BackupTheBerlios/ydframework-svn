@@ -147,6 +147,7 @@ $GLOBALS['t']['h_statistics'] = 'Statistieken';
 $GLOBALS['t']['a_statistics'] = 'Statistieken';
 $GLOBALS['t']['h_logoff'] = 'Afmelden';
 $GLOBALS['t']['a_logoff'] = 'Afmelden';
+$GLOBALS['t']['a_bad_behavior'] = 'Bad Behavior';
 
 // manage/login.tpl
 $GLOBALS['t']['username'] = 'Gebruiker';
@@ -374,5 +375,13 @@ $GLOBALS['t']['msg_install_update'] = 'Er zijn nieuwe versies beschikbaar';
 $GLOBALS['t']['development_changelog'] = 'Ontwikkel Logboek';
 $GLOBALS['t']['schema_version'] = 'Database schema versie';
 $GLOBALS['t']['installed_on'] = 'ge&iuml;nstalleerd op';
+
+// manage/bad_behavior.tpl
+$GLOBALS['t']['total_bad_requests_stopped'] = 'Total Aantal Geweigerde Requests';
+$GLOBALS['t']['requests'] = 'requests';
+$GLOBALS['t']['bad_requests_stopped'] = 'Geweigerde Requests';
+$GLOBALS['t']['ip'] = 'IP';
+$GLOBALS['t']['request_method'] = 'Methode';
+$GLOBALS['t']['url'] = 'URL';
 
 ?>

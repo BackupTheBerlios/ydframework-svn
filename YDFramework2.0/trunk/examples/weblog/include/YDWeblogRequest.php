@@ -149,6 +149,7 @@
             $this->tpl->assign( 'weblog_link_gallery_atom',    YDUrl::makeLinkAbsolute( 'xml.php?do=atomgallery' ) );
             $this->tpl->assign( 'weblog_link_archive',         YDUrl::makeLinkAbsolute( 'archive.php' ) );
             $this->tpl->assign( 'weblog_link_archive_gallery', YDUrl::makeLinkAbsolute( 'archive_gallery.php' ) );
+            $this->tpl->assign( 'bb2_comment',                 trim( bb2_insert_head() ) );
 
             // Add the Google Analytics tag
             if ( YDConfig::get( 'google_analytics', '' ) != '' ) {

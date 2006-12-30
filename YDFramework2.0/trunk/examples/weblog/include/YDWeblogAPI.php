@@ -960,6 +960,21 @@
             $this->db->executeSql( $sql );
         }
 
+        // Get the bad behavior requests count
+        function getBadBehaviorRequestsCount() {
+            $settings = bb2_read_settings();
+            return $this->db->getValueByName(
+                "SELECT COUNT(*) AS COUNT FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'"
+                , 'count'
+            );
+        }
+
+        // Get the bad behavior requests
+        function getBadBehaviorRequests() {
+            $settings = bb2_read_settings();
+            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000' ORDER BY DATE DESC" );
+        }
+
         // Function to resize an uploaded image. Takes a YDFSImage object as it's argument
         function resizeUploadedImage( $image ) {
 

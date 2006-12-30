@@ -147,6 +147,7 @@ $GLOBALS['t']['h_statistics'] = 'Statistics';
 $GLOBALS['t']['a_statistics'] = 'Statistics';
 $GLOBALS['t']['h_logoff'] = 'Logoff';
 $GLOBALS['t']['a_logoff'] = 'Logoff';
+$GLOBALS['t']['a_bad_behavior'] = 'Bad Behavior';
 
 // manage/login.tpl
 $GLOBALS['t']['username'] = 'User';
@@ -374,5 +375,13 @@ $GLOBALS['t']['msg_install_update'] = 'Newer versions are available';
 $GLOBALS['t']['development_changelog'] = 'Development Changelog';
 $GLOBALS['t']['schema_version'] = 'Database schema version';
 $GLOBALS['t']['installed_on'] = 'installed on';
+
+// manage/bad_behavior.tpl
+$GLOBALS['t']['total_bad_requests_stopped'] = 'Total Count Of Denied Requests';
+$GLOBALS['t']['requests'] = 'requests';
+$GLOBALS['t']['total_bad_requests_stopped'] = 'Denied Requests';
+$GLOBALS['t']['ip'] = 'IP';
+$GLOBALS['t']['request_method'] = 'Method';
+$GLOBALS['t']['url'] = 'URL';
 
 ?>
