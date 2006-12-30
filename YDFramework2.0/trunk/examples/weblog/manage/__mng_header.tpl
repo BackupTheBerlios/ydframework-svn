@@ -115,6 +115,7 @@
                         <b>{t w="h_contents"}</b><br/>
                         &raquo; <a href="items.php">{t w="a_items"}</a><br/>
                         &raquo; <a href="comments.php">{t w="a_comments"}</a><br/>
+                        &raquo; <a href="comments.php?filter=spam">{t w="a_comments_spam"}</a><br/>
                         &raquo; <a href="pages.php">{t w="a_pages"}</a><br/>
                         &raquo; <a href="links.php">{t w="a_links"}</a><br/>
                         &raquo; <a href="images.php">{t w="a_images"}</a><br/>

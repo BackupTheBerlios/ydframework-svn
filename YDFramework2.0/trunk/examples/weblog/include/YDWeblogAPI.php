@@ -585,6 +585,9 @@
         // Add a comment
         function addComment( $values ) {
 
+            // Remove the unneeded values
+            unset( $values['security_code'] );
+
             // Update the values
             $values['userip'] = $_SERVER['REMOTE_ADDR'];
             $values['useragent'] = $_SERVER['HTTP_USER_AGENT'];

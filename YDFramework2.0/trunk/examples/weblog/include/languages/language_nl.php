@@ -99,6 +99,8 @@ $GLOBALS['t']['no_spam'] = 'Geen spam';
 $GLOBALS['t']['choose_no_spam'] = 'Kies hier "geen spam"';
 $GLOBALS['t']['err_userspam'] = 'Detecteerde een spam aanval';
 $GLOBALS['t']['err_duplicate_comment'] = 'Duplicaat commentaar gededecteerd';
+$GLOBALS['t']['enter_security_code'] = 'Geef de veiligheidscode in';
+$GLOBALS['t']['err_security_code_not_valid'] = 'De veiligheidscode is niet correct';
 
 // comment_email.tpl
 $GLOBALS['t']['new_comment'] = 'Nieuw commentaar';

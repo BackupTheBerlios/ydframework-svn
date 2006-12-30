@@ -54,9 +54,13 @@
             $form->addElement( 'text', 'username', t( 'name' ) );
             $form->addElement( 'text', 'useremail', t( 'mail_not_published' ) );
             $form->addElement( 'text', 'userwebsite', t( 'website' ) );
+            $elem = & $form->addElement( 'captcha', 'security_code', t( 'enter_security_code' ) );
             $form->addElement( 'textarea', 'comment', '' );
             $form->addElement( 'submit', 'cmdSubmit', t( 'submit_comment' ), array( 'class' => 'button' ) );
             $form->addElement( 'hidden', 'item_id' );
+
+            // Change the text position of the captcha element
+            $elem->setTextPosition( true );
 
             // Set the defaults
             $defaults = array();
@@ -67,20 +71,19 @@
             $form->setDefaults( $defaults );
 
             // Set the rules
-            $form->addRule( 'username',    'required',      t( 'err_name' ) );
-            $form->addRule( 'username',    'not_email',     t( 'err_name_email' ) );
-            $form->addRule( 'username',    'maxlength',     t( 'err_name_length' ), 35 );
-            $form->addRule( 'useremail',   'email',         t( 'err_email' ) );
-            $form->addRule( 'useremail',   'required',      t( 'err_email' ) );
-            $form->addRule( 'userwebsite', 'httpurl',       t( 'err_website' ) );
-            $form->addRule( 'comment',     'required',      t( 'err_comment' ) );
-            $form->addRule( 'comment',     'maxlength',     t( 'err_comment_length' ), YDConfig::get( 'max_comment_length', 1500 ) );
-            $form->addRule( 'comment',     'maxhyperlinks', t( 'err_comment_links' ), YDConfig::get( 'max_comment_links', 1 ) );
-            $form->addFormRule( array( & $this, 'checkDuplicateComments' ) );
+            $form->addRule( 'username',      'required',      t( 'err_name' ) );
+            $form->addRule( 'username',      'not_email',     t( 'err_name_email' ) );
+            $form->addRule( 'username',      'maxlength',     t( 'err_name_length' ), 35 );
+            $form->addRule( 'useremail',     'email',         t( 'err_email' ) );
+            $form->addRule( 'useremail',     'required',      t( 'err_email' ) );
+            $form->addRule( 'userwebsite',   'httpurl',       t( 'err_website' ) );
+            $form->addRule( 'security_code', 'captcha',       t( 'err_security_code_not_valid' ) );
+            $form->addRule( 'comment',       'required',      t( 'err_comment' ) );
+            $form->addRule( 'comment',       'maxlength',     t( 'err_comment_length' ), YDConfig::get( 'max_comment_length', 1500 ) );
+            $form->addRule( 'comment',       'maxhyperlinks', t( 'err_comment_links' ), YDConfig::get( 'max_comment_links', 1 ) );
 
             // Add the filters
             $form->addFilters( array( 'username', 'useremail', 'userwebsite' ), 'strip_html' );
-            //$form->addFilter( 'comment', 'safe_html' );
 
             // Process the form
             if ( $form->validate() === true ) {
@@ -180,13 +183,18 @@
 
         }
 
-        // Function to check for duplicate comments
-        function checkDuplicateComments( $fields ) {
-            if ( $this->weblog->isDuplicateComment( $fields ) === true ) {
-                return array( '__ALL__' => t( 'err_duplicate_comment' ) );
-            } else {
-                return true;
-            }
+        // Reserved action that creates the image 
+        function actionShowCaptcha() {
+
+            // include captcha lib
+            YDInclude( 'YDCaptcha.php' );
+
+            // Create captcha object 
+            $captcha = new YDCaptcha();
+
+            // Return the image
+            return $captcha->Create();
+
         }
 
     }
