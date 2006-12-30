@@ -131,6 +131,9 @@ require_once(BB2_CWD . "/bad-behavior/version.inc.php");
 require_once(BB2_CWD . "/bad-behavior/core.inc.php");
 bb2_install();
 
-bb2_start(bb2_read_settings());
+// Not if in the manage section
+if ( strtolower( basename( dirname( YD_SELF_SCRIPT ) ) ) != 'manage' ) {
+    bb2_start(bb2_read_settings());
+}
 
 ?>

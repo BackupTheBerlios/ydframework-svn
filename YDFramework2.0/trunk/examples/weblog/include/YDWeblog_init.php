@@ -92,9 +92,7 @@
     );
 
     // Include bad behaviour
-    if ( strtolower( basename( dirname( YD_SELF_SCRIPT ) ) ) != 'manage' ) {
-        @include_once( dirname( __FILE__ ) . '/Bad-Behavior/bad-behavior-ydweblog.php' );
-    }
+    @include_once( dirname( __FILE__ ) . '/Bad-Behavior/bad-behavior-ydweblog.php' );
 
     // Set the right locale
     $language = YDConfig::get( 'weblog_language', 'en' );
