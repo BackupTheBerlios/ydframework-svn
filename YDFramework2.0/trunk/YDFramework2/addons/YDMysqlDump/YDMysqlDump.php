@@ -256,12 +256,13 @@
                 // test type of element
                 foreach( $row as $element ) {
                 
-                    if ( is_numeric( $element ) ) {
-                        
-                        // if element is numeric just add it
-                        array_push( $insert, $element );
-                        
-                    } else if ( !$element ) {
+                    //if ( is_numeric( $element ) ) {
+                    //    
+                    //    // if element is numeric just add it
+                    //    array_push( $insert, $element );
+                    //    
+                    //} else
+                    if ( !$element ) {
                         
                         // if element is empty insert string NULL
                         array_push( $insert, "NULL" );
