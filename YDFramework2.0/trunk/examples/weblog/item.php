@@ -191,6 +191,7 @@
 
             // Create captcha object 
             $captcha = new YDCaptcha();
+            $captcha->_img->SetCharSet( "2-4,6,8-9,2-4,6,8-9" );
 
             // Return the image
             return $captcha->Create();
