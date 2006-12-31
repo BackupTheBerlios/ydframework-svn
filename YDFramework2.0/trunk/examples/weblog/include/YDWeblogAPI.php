@@ -142,6 +142,10 @@
                 $this->db->executeSql( $sql );
             }
 
+            // Cleanup the bad behaviour table
+            $sql = 'DELETE FROM #_bad_behavior WHERE DATE_SUB( `date`, INTERVAL 1 day ) < DATE_SUB( CURDATE(), INTERVAL 1 day ) AND request_method = \'GET\' AND `key` = \'00000000\'';
+            $this->db->executeSql( $sql );
+
             // Check against akismet if a key is there
             if ( YDConfig::get( 'akismet_key', '' ) != '' ) {
 
