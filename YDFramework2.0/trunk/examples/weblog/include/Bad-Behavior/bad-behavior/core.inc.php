@@ -23,7 +23,7 @@ function bb2_table_structure($name)
 		`server_protocol` TEXT NOT NULL,
 		`http_headers` TEXT NOT NULL,
 		`user_agent` TEXT NOT NULL,
-		`request_entity` TEXT NOT NULL,
+		`request_entity` TEXT NULL,
 		`key` TEXT NOT NULL,
 		INDEX (`ip`(15)),
 		INDEX (`user_agent`(10)),

@@ -380,6 +380,7 @@ $GLOBALS['t']['installed_on'] = 'installed on';
 $GLOBALS['t']['total_bad_requests_stopped'] = 'Total Count Of Denied Requests';
 $GLOBALS['t']['requests'] = 'requests';
 $GLOBALS['t']['total_bad_requests_stopped'] = 'Denied Requests';
+$GLOBALS['t']['post_requests'] = 'POST Requests';
 $GLOBALS['t']['ip'] = 'IP';
 $GLOBALS['t']['request_method'] = 'Method';
 $GLOBALS['t']['url'] = 'URL';

@@ -16,7 +16,8 @@
 
             // Get the count and number of requests
             $requests_count = $this->weblog->getBadBehaviorRequestsCount();
-            $requests = $this->weblog->getBadBehaviorRequests();
+            //$requests = $this->weblog->getBadBehaviorRequests();
+            $requests = $this->weblog->getBadBehaviorPostRequests();
 
             // Get the pagesize and current page from the URL
             $page = @ $_GET['page'];

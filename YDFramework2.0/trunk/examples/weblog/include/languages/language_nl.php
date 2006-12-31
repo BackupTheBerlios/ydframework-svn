@@ -380,6 +380,7 @@ $GLOBALS['t']['installed_on'] = 'ge&iuml;nstalleerd op';
 $GLOBALS['t']['total_bad_requests_stopped'] = 'Total Aantal Geweigerde Requests';
 $GLOBALS['t']['requests'] = 'requests';
 $GLOBALS['t']['bad_requests_stopped'] = 'Geweigerde Requests';
+$GLOBALS['t']['post_requests'] = 'POST Requests';
 $GLOBALS['t']['ip'] = 'IP';
 $GLOBALS['t']['request_method'] = 'Methode';
 $GLOBALS['t']['url'] = 'URL';

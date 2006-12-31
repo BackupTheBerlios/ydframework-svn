@@ -15,7 +15,7 @@
             <tr><td colspan="7">&nbsp;</td></tr>
             <tr>
                 <th class="adminRowLG" colspan="7">
-                    &raquo; {t w="bad_requests_stopped"}
+                    &raquo; {t w="post_requests"}
                 </th>
             </tr>
             <tr>
@@ -26,7 +26,7 @@
             </tr>
             <tr><td class="adminRowR" colspan="5">{$requests->getBrowseBar()}</td></tr>
             {foreach from=$requests->set item="request"}
-                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);" {if $comment.item_is_draft eq '1'}style="color: gray"{/if}>
+                <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                     <td class="adminRowL">{$request.date}</td>
                     <td class="adminRowL">{$request.ip}</td>
                     <td class="adminRowL">{$request.request_method}</td>

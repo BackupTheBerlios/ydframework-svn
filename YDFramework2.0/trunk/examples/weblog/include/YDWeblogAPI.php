@@ -964,7 +964,7 @@
         function getBadBehaviorRequestsCount() {
             $settings = bb2_read_settings();
             return $this->db->getValueByName(
-                "SELECT COUNT(*) AS COUNT FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'"
+                "SELECT COUNT(*) AS COUNT FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '0'"
                 , 'count'
             );
         }
@@ -972,7 +972,13 @@
         // Get the bad behavior requests
         function getBadBehaviorRequests() {
             $settings = bb2_read_settings();
-            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000' ORDER BY DATE DESC" );
+            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '0' ORDER BY DATE DESC" );
+        }
+
+        // Get the bad behavior post requests
+        function getBadBehaviorPostRequests() {
+            $settings = bb2_read_settings();
+            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE request_method = 'POST' ORDER BY DATE DESC" );
         }
 
         // Function to resize an uploaded image. Takes a YDFSImage object as it's argument
