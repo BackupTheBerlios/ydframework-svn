@@ -132,6 +132,7 @@ $GLOBALS['t']['a_view_site'] = 'Toon site';
 $GLOBALS['t']['h_contents'] = 'Inhoud';
 $GLOBALS['t']['a_weblogs'] = 'Weblogs';
 $GLOBALS['t']['a_items'] = 'Items';
+$GLOBALS['t']['a_concepts'] = 'Concepten';
 $GLOBALS['t']['a_comments'] = 'Commentaren';
 $GLOBALS['t']['a_links'] = 'Links';
 $GLOBALS['t']['a_pages'] = 'Pagina\'s';

@@ -132,6 +132,7 @@ $GLOBALS['t']['a_view_site'] = 'View site';
 $GLOBALS['t']['h_contents'] = 'Contents';
 $GLOBALS['t']['a_weblogs'] = 'Weblogs';
 $GLOBALS['t']['a_items'] = 'Items';
+$GLOBALS['t']['a_concepts'] = 'Concepts';
 $GLOBALS['t']['a_comments'] = 'Comments';
 $GLOBALS['t']['a_links'] = 'Links';
 $GLOBALS['t']['a_pages'] = 'Pages';
