@@ -979,6 +979,12 @@
             return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000' ORDER BY DATE DESC" );
         }
 
+        // Get the bad behavior request by it's id
+        function getBadBehaviorRequestById( $id ) {
+            $settings = bb2_read_settings();
+            return $this->db->getRecord( "SELECT * FROM " . $settings['log_table'] . " WHERE id = " . $this->str( $id ) );
+        }
+
         // Get the bad behavior post requests
         function getBadBehaviorPostRequests() {
             $settings = bb2_read_settings();

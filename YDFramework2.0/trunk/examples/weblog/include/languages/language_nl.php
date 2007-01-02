@@ -385,5 +385,12 @@ $GLOBALS['t']['post_requests'] = 'POST Requests';
 $GLOBALS['t']['ip'] = 'IP';
 $GLOBALS['t']['request_method'] = 'Methode';
 $GLOBALS['t']['url'] = 'URL';
+$GLOBALS['t']['request_details'] = 'Details request';
+$GLOBALS['t']['id'] = 'ID';
+$GLOBALS['t']['server_protocol'] = 'Server Protocol';
+$GLOBALS['t']['http_headers'] = 'HTTP Headers';
+$GLOBALS['t']['user_agent'] = 'User Agent';
+$GLOBALS['t']['request_entity'] = 'Request Entiteit';
+$GLOBALS['t']['key'] = 'Code';
 
 ?>
