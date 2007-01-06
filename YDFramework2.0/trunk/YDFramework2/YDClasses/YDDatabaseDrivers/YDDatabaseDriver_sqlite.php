@@ -204,16 +204,13 @@
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
 
-            // Log the statement
-            $this->_logSql( $sql );
-
-            // Connect
-            $result = $this->connect();
-
             // Handle errors
             if ( ! $result && $this->_failOnError === true ) {
                 trigger_error( $GLOBALS['YD_SQLITE_error'], YD_ERROR );
             }
+
+            // Record the start time
+            $timer = new YDTimer();
 
             // Execute the query
             $result = @sqlite_query( $sql, $this->_conn );
@@ -222,6 +219,9 @@
             if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( sqlite_error_string( sqlite_last_error( $this->_conn ) ), YD_ERROR );
             }
+
+            // Log the statement
+            $this->_logSql( $sql, $timer->getElapsed() );
 
             // Return the result
             return $result;

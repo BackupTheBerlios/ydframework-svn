@@ -264,9 +264,6 @@
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
 
-            // Log the statement
-            $this->_logSql( $sql );
-
             // Connect
             $result = $this->connect();
 
@@ -275,6 +272,9 @@
                 $error = ocierror();
                 trigger_error( $error['message'], YD_ERROR );
             }
+
+            // Record the start time
+            $timer = new YDTimer();
 
             // Create statement
             $stmt = OCIParse( $this->_conn, $sql );
@@ -296,6 +296,9 @@
                 }
                 trigger_error( $error['message'], YD_ERROR );
             }
+
+            // Log the statement
+            $this->_logSql( $sql, $timer->getElapsed() );
 
             // Return the result
             return $stmt;

@@ -196,9 +196,6 @@
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
 
-            // Log the SQL
-            $this->_logSql( $sql );
-
             // Connect
             $result = $this->connect();
 
@@ -207,6 +204,9 @@
                 trigger_error( pg_last_error(), YD_ERROR );
             }
 
+            // Record the start time
+            $timer = new YDTimer();
+
             // Perform the query
             $result = @pg_query( $this->_conn, $sql );
 
@@ -214,6 +214,9 @@
             if ( $result === false && $this->_failOnError === true ) {
                 trigger_error( pg_last_error( $this->conn ), YD_ERROR );
             }
+
+            // Log the statement
+            $this->_logSql( $sql, $timer->getElapsed() );
 
             // Return the result
             return $result;
