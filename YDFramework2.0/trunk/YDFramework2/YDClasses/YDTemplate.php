@@ -80,6 +80,7 @@
                 $this->register_modifier( 'date_format', 'YDTemplate_modifier_date_format' );
                 $this->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
                 $this->register_modifier( 'bbcode', 'YDTemplate_modifier_bbcode' );
+                $this->register_modifier( 'absoluteurl', 'YDTemplate_modifier_absoluteurl' );
 
                 // Register the custom functions
                 $this->register_function( 't', 'YDTemplate_function_t' );
@@ -557,6 +558,17 @@
         YDInclude( 'YDBBCode.php' );
         $cls = new YDBBCode();
         return $cls->toHtml( $text, true, false, true, YDRequest::getCurrentUrl() );
+    }
+
+    /**
+     *	This template modifier converts an url to an absolute one
+     *
+     *  @param  $url   The url to convert
+     *
+     *  @returns    The url formatted as an absolute url.
+     */
+    function YDTemplate_modifier_absoluteurl( $url ) {
+        return YDUrl::makeLinkAbsolute( $url );
     }
 
     /**
