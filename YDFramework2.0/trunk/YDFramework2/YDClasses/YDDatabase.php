@@ -1468,6 +1468,11 @@
             $sql = str_ireplace( ' INSERT ', ' INSERT ', $sql );
             $sql = str_ireplace( ' UNION ', YD_CRLF . 'UNION' . YD_CRLF, $sql );
             $sql = str_ireplace( ' FROM ', YD_CRLF . 'FROM ', $sql );
+            $sql = str_ireplace( ' LEFT JOIN ', YD_CRLF . 'LEFT JOIN ', $sql );
+            $sql = str_ireplace( ' RIGHT JOIN ', YD_CRLF . 'RIGHT JOIN ', $sql );
+            $sql = str_ireplace( ' JOIN ', YD_CRLF . 'JOIN ', $sql );
+            $sql = str_ireplace( 'LEFT' . YD_CRLF . 'JOIN ', 'LEFT JOIN ', $sql );
+            $sql = str_ireplace( 'RIGHT' . YD_CRLF . 'JOIN ', 'RIGHT JOIN ', $sql );
             $sql = str_ireplace( ' INTO ', YD_CRLF . 'INTO ', $sql );
             $sql = str_ireplace( ' VALUES ', YD_CRLF . 'VALUES ', $sql );
             $sql = str_ireplace( ' LEFT JOIN ', YD_CRLF . 'LEFT JOIN ', $sql );
