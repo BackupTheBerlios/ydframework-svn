@@ -162,24 +162,13 @@
                 $debug .= 'INCLUDED FILES (' . sizeof( $includeFiles ) . ' files - ' . $includeFilesSize . ')' . YD_CRLF . YD_CRLF;
                 $debug .= "\t" . implode( "\n\t", $includeFiles ) . YD_CRLF . YD_CRLF;
 
-                // Create the list of include directories
-                $include_dirs = explode( YD_PATHDELIM, ini_get( 'include_path' ) );
-                $debug .= 'INCLUDES SEARCH PATH (' . sizeof( $include_dirs ) . ' directories)' . YD_CRLF . YD_CRLF;
-                foreach ( $include_dirs as $path ) {
-                    if ( realpath( $path ) ) {
-                        $debug .= "\t" . realpath( $path ) . YD_CRLF;
-                    } else {
-                        $debug .= "\t" . $path . YD_CRLF;
-                    }
-                }
-                $debug .= YD_CRLF;
-
                 // Add the queries if any
                 if ( sizeof( $GLOBALS['YD_SQL_QUERY'] ) > 0 ) {
                     $debug .= 'EXECUTED SQL QUERIES (' . sizeof( $GLOBALS['YD_SQL_QUERY'] ) . ' queries)' . YD_CRLF . YD_CRLF;
                     foreach ( $GLOBALS['YD_SQL_QUERY'] as $key=>$query ) {
+                        $debug .= "\t" . '---- SQL QUERY ' . ($key+1) . ' ----' . YD_CRLF;
                         foreach ( explode( YD_CRLF, trim( $query ) ) as $line ) {
-                            $debug .= "\t[" . ( $key+1 ) . ']' . "\t" . rtrim( $line ) . YD_CRLF;
+                            $debug .= "\t\t" . rtrim( $line ) . YD_CRLF;
                         }
                         $debug .= YD_CRLF;
                     }
