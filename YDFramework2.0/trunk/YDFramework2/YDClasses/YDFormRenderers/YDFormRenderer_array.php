@@ -95,8 +95,15 @@
                 // Update the value
                 $element->_value = $this->_form->getValue( $name );
 
+                // Add the hidden_html value
+                $elementArray = $element->toArray();
+                $attribs = array(
+                    'type' => 'hidden', 'name' => $elementArray['id'], 'value' => $elementArray['value']
+                );
+                $elementArray['hidden_html'] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+
                 // Add the form element
-                $form[ $name ] = $element->toArray();
+                $form[ $name ] = $elementArray;
 
                 // Add errors if any
                 if ( array_key_exists( $name, $this->_form->_errors ) ) {

@@ -651,7 +651,7 @@
             }
 
             // Special treatment for GET forms
-            if ( $this->_method == 'get' ) {
+            if ( $this->_method == 'get' && ! $this->isSubmitted() ) {
                 if ( ! isset( $_GET[$this->_name . '_' . $name] ) && ! is_null( $element->_default ) ) {
                     $value = $element->getDefault();
                 }
