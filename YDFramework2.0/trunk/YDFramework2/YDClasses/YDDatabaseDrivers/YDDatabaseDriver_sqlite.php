@@ -217,6 +217,8 @@
 
             // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
+                echo( '<b>Stacktrace:</b> <pre>' . YDDebugUtil::getStackTrace() . '</pre>' );
+                echo( '<b>SQL Statement:</b> <pre>' . $this->formatSql( $sql ) . '</pre>' );
                 trigger_error( sqlite_error_string( sqlite_last_error( $this->_conn ) ), YD_ERROR );
             }
 

@@ -294,6 +294,8 @@
                 if ( ! empty( $error['sqltext'] ) ) {
                     $error['message'] .= ' (SQL: ' . $error['sqltext'] . ')';
                 }
+                echo( '<b>Stacktrace:</b> <pre>' . YDDebugUtil::getStackTrace() . '</pre>' );
+                echo( '<b>SQL Statement:</b> <pre>' . $this->formatSql( $sql ) . '</pre>' );
                 trigger_error( $error['message'], YD_ERROR );
             }
 

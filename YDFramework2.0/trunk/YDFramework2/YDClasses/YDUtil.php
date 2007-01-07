@@ -384,6 +384,22 @@
     class YDDebugUtil extends YDBase {
 
         /**
+         *  Trigger an error
+         *
+         *  @param  $error  The error to raise.
+         *  @param  $sql    (optional) The SQL statement to log with the error.
+         *  @param  $level  (optional) The type of error to be raised. Default is YD_ERROR.
+         */
+        function error( $msg, $sql=null, $level=YD_ERROR ) {
+            echo( '<p><b><font color="red">An error occured</font></b></p>' );
+            echo( '<b>Stacktrace:</b> <pre>' . YDDebugUtil::getStackTrace() . '</pre>' );
+            if ( ! empty( $sql ) ) {
+                echo( '<b>SQL Statement:</b> <pre>' . $this->formatSql( $sql ) . '</pre>' );
+            }
+            trigger_error( $msg, $level );
+        }
+
+        /**
          *	Function to output a debug message. These message are only shown if the constant YD_DEBUG is set to 1. You
          *	can turn on debugging by specifying the YD_DEBUG parameter in the url and assigning it the value 1.
          *

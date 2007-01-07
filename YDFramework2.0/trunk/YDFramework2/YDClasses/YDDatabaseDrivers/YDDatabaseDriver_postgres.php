@@ -212,6 +212,8 @@
 
             // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
+                echo( '<b>Stacktrace:</b> <pre>' . YDDebugUtil::getStackTrace() . '</pre>' );
+                echo( '<b>SQL Statement:</b> <pre>' . $this->formatSql( $sql ) . '</pre>' );
                 trigger_error( pg_last_error( $this->conn ), YD_ERROR );
             }
 

@@ -781,6 +781,17 @@
 
         }
 
+        /**
+         *  This function formats an SQL statement.
+         *
+         *  @param $sql         The SQL statement to format.
+         *
+         *  @returns    The formatted SQL statement
+         */
+        function formatSql( $sql ) {
+            return YDDatabaseDriver::formatSql( $sql );
+        }
+
     }
 
     /**
@@ -1442,6 +1453,37 @@
         }
 
         /**
+         *  This function formats an SQL statement.
+         *
+         *  @param $sql         The SQL statement to format.
+         *
+         *  @returns    The formatted SQL statement
+         */
+        function formatSql( $sql ) {
+
+            // Split the SQL in different lines
+            $sql = str_ireplace( ' SELECT ', ' SELECT ', $sql );
+            $sql = str_ireplace( ' UPDATE ', ' UPDATE ', $sql );
+            $sql = str_ireplace( ' DELETE ', ' DELETE ', $sql );
+            $sql = str_ireplace( ' INSERT ', ' INSERT ', $sql );
+            $sql = str_ireplace( ' UNION ', YD_CRLF . 'UNION' . YD_CRLF, $sql );
+            $sql = str_ireplace( ' FROM ', YD_CRLF . 'FROM ', $sql );
+            $sql = str_ireplace( ' INTO ', YD_CRLF . 'INTO ', $sql );
+            $sql = str_ireplace( ' VALUES ', YD_CRLF . 'VALUES ', $sql );
+            $sql = str_ireplace( ' LEFT JOIN ', YD_CRLF . 'LEFT JOIN ', $sql );
+            $sql = str_ireplace( ' RIGHT JOIN ', YD_CRLF . 'RIGHT JOIN ', $sql );
+            $sql = str_ireplace( ' INNER JOIN ', YD_CRLF . 'INNER JOIN ', $sql );
+            $sql = str_ireplace( ' WHERE ', YD_CRLF . 'WHERE ', $sql );
+            $sql = str_ireplace( ' ORDER BY ', YD_CRLF . 'ORDER BY ', $sql );
+            $sql = str_ireplace( ' GROUP BY ', YD_CRLF . 'GROUP BY ', $sql );
+            $sql = str_ireplace( ' LIMIT ', YD_CRLF . 'LIMIT ', $sql );
+
+            // Return the formatted statement
+            return $sql;
+
+        }
+
+        /**
          *  This function will log the SQL statement to the debug log and keep track of the number of queries that were
          *  executed. This will only happen if YD_DEBUG equals 1 or 2
          *
@@ -1455,21 +1497,8 @@
             // Show debugging info if needed
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 
-                // Split the SQL in different lines
-                $sql = str_ireplace( ' SELECT ', ' SELECT ', $sql );
-                $sql = str_ireplace( ' UPDATE ', ' UPDATE ', $sql );
-                $sql = str_ireplace( ' DELETE ', ' DELETE ', $sql );
-                $sql = str_ireplace( ' INSERT ', ' INSERT ', $sql );
-                $sql = str_ireplace( ' FROM ', YD_CRLF . 'FROM ', $sql );
-                $sql = str_ireplace( ' INTO ', YD_CRLF . 'INTO ', $sql );
-                $sql = str_ireplace( ' VALUES ', YD_CRLF . 'VALUES ', $sql );
-                $sql = str_ireplace( ' LEFT JOIN ', YD_CRLF . 'LEFT JOIN ', $sql );
-                $sql = str_ireplace( ' RIGHT JOIN ', YD_CRLF . 'RIGHT JOIN ', $sql );
-                $sql = str_ireplace( ' INNER JOIN ', YD_CRLF . 'INNER JOIN ', $sql );
-                $sql = str_ireplace( ' WHERE ', YD_CRLF . 'WHERE ', $sql );
-                $sql = str_ireplace( ' ORDER BY ', YD_CRLF . 'ORDER BY ', $sql );
-                $sql = str_ireplace( ' GROUP BY ', YD_CRLF . 'GROUP BY ', $sql );
-                $sql = str_ireplace( ' LIMIT ', YD_CRLF . 'LIMIT ', $sql );
+                // Format the SQL statement
+                $sql = $this->formatSql( $sql );
 
                 // Get the backtrace
                 $trace = debug_backtrace();
@@ -1735,7 +1764,7 @@
 
             // Handle errors
             if ( $result === false && $this->_failOnError === true ) {
-                trigger_error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), YD_ERROR );
+                YDDebugUtil::error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), $sql );
             }
 
             // Log the statement
