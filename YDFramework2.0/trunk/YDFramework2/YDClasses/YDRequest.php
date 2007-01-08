@@ -615,13 +615,35 @@
         }
 
         /**
-         *  Action to include the JavaScript for the bbtextarea field.
-         *
          *  @internal
          */
         function actionJsBBTextArea() {
             header( 'Content-Type: application/x-javascript' );
             die( readfile( dirname( __FILE__ ) . '/../javascript/bbtextarea.js' ) );
+        }
+
+        /**
+         *  @internal
+         */
+        function actionJsShMain() {
+            header( 'Content-Type: application/x-javascript' );
+            die( readfile( dirname( __FILE__ ) . '/../javascript/sh_main.min.js' ) );
+        }
+
+        /**
+         *  @internal
+         */
+        function actionJsShSql() {
+            header( 'Content-Type: application/x-javascript' );
+            die( readfile( dirname( __FILE__ ) . '/../javascript/sh_sql.js' ) );
+        }
+
+        /**
+         *  @internal
+         */
+        function actionCssShStyle() {
+            header( 'Content-Type: text/css' );
+            die( readfile( dirname( __FILE__ ) . '/../javascript/sh_style.css' ) );
         }
 
     }

@@ -1502,25 +1502,15 @@
             // Show debugging info if needed
             if ( YDConfig::get( 'YD_DEBUG' ) == 1 || YDConfig::get( 'YD_DEBUG' ) == 2 ) {
 
-                // Format the SQL statement
-                $sql = $this->formatSql( $sql );
-
-                // Get the backtrace
-                $trace = debug_backtrace();
-
-                // Format the SQL
-                $sql_final = '';
-                foreach ( explode( YD_CRLF, YDDebugUtil::getStackTrace() ) as $line ) {
-                    $sql_final .= $line . YD_CRLF;
-                }
-                $sql_final .= 'SQL Statement:' . YD_CRLF;
-                foreach ( explode( YD_CRLF, $sql ) as $line ) {
-                    $sql_final .= '    ' . $line . YD_CRLF;
-                }
-                $sql_final .= YD_CRLF . 'SQL Query Time: ' . $elapsed . ' ms' . YD_CRLF;
+                // Construct the array with the data for the SQL statement
+                $data = array(
+                    'trace' => YDDebugUtil::getStackTrace(),
+                    'sql'   => $sql = $this->formatSql( $sql ),
+                    'time'  => $elapsed
+                );
 
                 // Add it to the query log
-                array_push( $GLOBALS['YD_SQL_QUERY'], $sql_final );
+                array_push( $GLOBALS['YD_SQL_QUERY'], $data );
 
             }
 
