@@ -140,36 +140,53 @@
          *  @param $id      The ID of the node to fetch.
          *  @param $field   (Optional) The unique field to select on. Defaults to id, which means that the ID field specified
          *                  when the object was instantiated will be used.
+         *  @param $class   (optional) Relation name
+         *  @param $prefix  (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
          *  @returns An object containing the node's data, or false if node not found
          */
-        function getNode( $id, $field = null ) {
+        function getNode( $id, $field = null, $class = null, $prefix = false ) {
 
 			$this->resetAll();
 
-			// if field not defined, field is id
-			if ( is_null( $field ) ) $field = $this->__id;
-	
-			// set field
-			$this->set( $field, $id );
-
             // get node
-            return $this->_getNode();
+            return $this->_getNode( $id, $field, $class, $prefix );
         }
 
 
         /**
          *  Helper method to fetch a node.
          *
+         *  @param $id      The ID of the node to fetch.
+         *  @param $field   (optional) The unique field to select on. Defaults to id, which means that the ID field specified
+         *                             when the object was instantiated will be used.
+         *  @param $class   (optional) Relation name
+         *  @param $prefix  (optional) Adds the relation's vars as prefixes to the keys. Default: true.
+         *
          *  @returns An object containing the node's data, or false if node not found
          */
-        function _getNode() {
+        function _getNode( $id, $field = null, $class = null, $prefix = true ) {
+
+			// if field not defined, field is id
+			if ( is_null( $field ) ) $field = $this->__id;
+	
+			// set local field
+			if ( is_null( $class ) ){
+
+				// set field value
+				$this->set( $field, $id );
+			}else{
+
+				// load relation and set field
+				$this->load( $class );
+				$this->$class->set( $field, $id );
+			}
 
 			// check results
 			if ( $this->findAll() == 0 ) return false;
 
             // Execute the query and return the record
-            return $this->getValues();
+            return $this->getValues( false, false, false, $prefix );
         }
 
 
@@ -280,14 +297,16 @@
          *  Fetch the children of a node, or if no node is specified, fetch the top level items.
          *
          *  @param $id             The ID of the node to fetch child data for.
+         *  @param $includeSelf    (optional) Include self node in results. Default: false.
+         *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
          *  @returns The children of the passed id
          */
-        function getChildren( $id, $includeSelf = false ){
+        function getChildren( $id, $includeSelf = false, $prefix = false ){
 
 			$this->resetAll();
 			
-			return $this->_getChildren( $id, $includeSelf );
+			return $this->_getChildren( $id, $includeSelf, $prefix );
         }
 
 
@@ -295,10 +314,12 @@
          *  Helper to fetch the children of a node, or if no node is specified, fetch the top level items.
          *
          *  @param $id             The ID of the node to fetch child data for.
+         *  @param $includeSelf    (optional) Include self node in results. Default: false.
+         *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
          *  @returns The children of the passed id
          */
-        function _getChildren( $id, $includeSelf = false ){
+        function _getChildren( $id, $includeSelf = false, $prefix = false  ){
 
             // get just children
 			if ( $includeSelf == false ) $this->where(       $this->__table_parent . ' = ' . intval( $id ) );
@@ -306,7 +327,7 @@
 
 			$this->findAll();
 
-			return $this->getResults();
+			return $this->getResults( false, false, false, $prefix );
         }
 
 
@@ -317,14 +338,15 @@
          *
          *  @param $id             The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
+         *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
          *  @returns An array of each node to passed node
          */
-        function getPath( $id, $includeSelf=false ) {
+        function getPath( $id, $includeSelf = false, $prefix = false ) {
 
 			$this->resetAll();
 
-			return $this->_getPath( $id, $includeSelf );
+			return $this->_getPath( $id, $includeSelf, $prefix );
         }
 
 
@@ -333,10 +355,11 @@
          *
          *  @param $id             The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
+         *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
          *  @returns An array of each node to passed node
          */
-        function _getPath( $id, $includeSelf = false ) {
+        function _getPath( $id, $includeSelf = false, $prefix = false ) {
 
             // Get the node
             $node = $this->getNode( intval($id) ) ;
@@ -355,7 +378,7 @@
 
 			$this->findAll();
 
-			return $this->getResults();
+			return $this->getResults( false, false, false, $prefix );
         }
 
 
