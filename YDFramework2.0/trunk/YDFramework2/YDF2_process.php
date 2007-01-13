@@ -238,7 +238,7 @@
                 $debug .= sprintf( '<tr><th %s>File</th><th %s>Size</th></tr>', $font, $font );
                 foreach ( $includeFilesWithSize as $size=>$file ) {
                     $debug .= sprintf(
-                        '<tr><td %s>%s ms</td><td %s>%s ms</td></tr>',
+                        '<tr><td %s>%s</td><td %s>%s</td></tr>',
                         $font, realpath( $file ), $font, YDStringUtil::formatFileSize( $size )
                     );
                 }
