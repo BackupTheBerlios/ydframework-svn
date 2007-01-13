@@ -175,7 +175,7 @@ if (!function_exists("gettext")) {
    #   (must have been loaded beforehand)
    function textdomain($default="NULL") {
       global $_GETTEXT;
-      $prev = $_GETTEXT["%domain"];
+      $prev = @$_GETTEXT["%domain"];
       if (isset($default)) {
          $_GETTEXT["%domain"] = $default;
       }
@@ -241,7 +241,7 @@ if (!function_exists("gettext")) {
       
          #-- plural-forms header
          if (function_exists("gettext___plural_guess")
-         and ($h = $_GETTEXT[$domain]["%po-header"]["plural-forms"]))
+         and ($h = @$_GETTEXT[$domain]["%po-header"]["plural-forms"]))
          {
             $h = preg_replace("/[(){}\[\]^\s*\\]+/", "", $h);  // rm whitespace
             gettext___plural_guess($h, 0);  // pre-decode into algorithm type integer
