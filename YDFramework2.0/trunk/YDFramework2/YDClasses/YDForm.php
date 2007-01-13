@@ -1383,6 +1383,16 @@
         }
 
         /**
+         *  Function to set options of a form element
+         *
+         *  @param  $array    Associative array with options
+         */
+        function setOptions( $array ) {
+            foreach( $array as $key => $val )
+                $this->setOption( $key, $val );
+        }
+
+        /**
          *  Function to delete an option of a form element
          *
          *  @param  $key    The name of the option
