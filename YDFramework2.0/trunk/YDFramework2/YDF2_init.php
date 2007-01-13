@@ -226,6 +226,8 @@
      */
     function YDIncludeCompatibility() {
         include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/upgrade.php' );
+        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/gettext.php' );
+        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/array.php' );
     }
 
     /**
@@ -352,6 +354,15 @@
         function & set( $name, $value ) { 
             $this->$name = $value; 
             return $this->$name; 
+        } 
+
+        /**
+         *  This function deletes a variable in the object.
+         *
+         *  @param  $name   The variable name.
+         */
+        function unsetVar( $name ) { 
+            if ( isset( $this->$name ) ) unset( $this->$name ); 
         } 
 
         /**
