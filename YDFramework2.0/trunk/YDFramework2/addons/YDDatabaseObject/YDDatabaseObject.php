@@ -836,7 +836,7 @@
          *  @param $only_current (optional) Returns only the current object results. Default: false.
          *  @param $only_fields  (optional) Returns only defined fields. Default: false.
          *  @param $columns      (optional) Returns the columns names instead of the fields names.
-         *  @param $prefix       (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *  @param $prefix       (optional) Adds the relation's vars as prefixes to the keys. Default: true.
          *
          *  @returns  An array with the results.
          */
@@ -1048,11 +1048,13 @@
          *
          *  @param $forvalues  (optional) Custom form validation values
          *
+         *  @param $onDate     (optional) When element is a date (read: array ), we should convert to this format. Default: 'datetimesql'
+         *
          *  @returns  YDResult object with a message and a result
          *            On 'ok', result is the new id
          *            On 'form_err', result is array of form error messages
          */
-        function insertForm( & $form, $messages = array(), $formvalues = null ){
+        function insertForm( & $form, $messages = array(), $formvalues = null, $onDate = 'datetimesql' ){
 
             YDInclude( 'YDResult.php' );
 
@@ -1069,7 +1071,15 @@
             // reset all previous information
             $this->reset();
 
-            $this->setValues( $form->getValues() );
+			// get form values
+			$values = $form->getValues();
+
+			// convert dates
+			foreach( $values as $element => $value )
+				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $form->getValue( $element ), $onDate );
+
+			// apply values
+            $this->setValues( $values );
 
             // insert values and check result
             $result = $this->insert();
@@ -1077,7 +1087,7 @@
             if ( $result ){
                 return YDResult::ok( $msg_ok, $result );
             }else{
-                return YDResult::fatal( $msg_err, $result );
+                return YDResult::fatal( $msg_error, $result );
             }
         }
 
