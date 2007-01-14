@@ -323,7 +323,7 @@
 
             // get just children
 			if ( $includeSelf == false ) $this->where(       $this->__table_parent . ' = ' . intval( $id ) );
-			else                         $this->where( '(' . $this->__table_parent . ' = ' . intval( $id ) . ' OR ' . $this->__table_parent . ' = ' . intval( $id ) . ')' );
+			else                         $this->where( '(' . $this->__table_parent . ' = ' . intval( $id ) . ' OR ' . $this->__table_id . ' = ' . intval( $id ) . ')' );
 
 			$this->findAll();
 
@@ -373,8 +373,11 @@
 			// compute parents of this node. Read lineage, delete first '//', last '/', apply 'intval' to all elements and implode
 			$nodes = array_map( 'intval', explode( '/', substr( substr( $node[ $this->__lineage ], 2 ), 0, -1 ) ) );
 
-            if ( $includeSelf == false ) $this->where(       $this->__table_id . ' IN (' . $this->escapeSqlArray( $nodes ) . ')' );
-			else                         $this->where( '(' . $this->__table_id . ' IN (' . $this->escapeSqlArray( $nodes ) . ') OR ' . $this->__table_id . ' = ' . intval( $id ) . ')' );
+			// if we want current node too, lets add it to nodes array
+            if ( $includeSelf == true ) $nodes[] = intval( $id );
+
+			// apply where clause
+			$this->where( $this->__table_id . ' IN (' . $this->escapeSqlArray( $nodes ) . ')' );
 
 			$this->findAll();
 
