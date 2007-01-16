@@ -968,27 +968,29 @@
         function getBadBehaviorRequestsCount() {
             $settings = bb2_read_settings();
             return $this->db->getValueByName(
-                "SELECT COUNT(*) AS COUNT FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000'"
+                "SELECT COUNT(*) AS COUNT FROM #_bad_behavior WHERE `key` NOT LIKE '00000000'"
                 , 'count'
             );
         }
 
         // Get the bad behavior requests
         function getBadBehaviorRequests() {
-            $settings = bb2_read_settings();
-            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE `key` NOT LIKE '00000000' ORDER BY DATE DESC" );
+            return $this->db->getRecords( "SELECT * FROM #_bad_behavior WHERE `key` NOT LIKE '00000000' ORDER BY DATE DESC" );
         }
 
         // Get the bad behavior request by it's id
         function getBadBehaviorRequestById( $id ) {
-            $settings = bb2_read_settings();
-            return $this->db->getRecord( "SELECT * FROM " . $settings['log_table'] . " WHERE id = " . $this->str( $id ) );
+            return $this->db->getRecord( "SELECT * FROM #_bad_behavior WHERE id = " . $this->str( $id ) );
         }
 
         // Get the bad behavior post requests
         function getBadBehaviorPostRequests() {
-            $settings = bb2_read_settings();
-            return $this->db->getRecords( "SELECT * FROM " . $settings['log_table'] . " WHERE request_method = 'POST' ORDER BY DATE DESC" );
+            return $this->db->getRecords( "SELECT * FROM #_bad_behavior WHERE request_method = 'POST' ORDER BY DATE DESC" );
+        }
+
+        // Delete the bad behavior requests
+        function emptyBadBehaviour() {
+            $this->db->executeSql( 'DELETE FROM #_bad_behavior' );
         }
 
         // Function to resize an uploaded image. Takes a YDFSImage object as it's argument

@@ -392,5 +392,7 @@ $GLOBALS['t']['http_headers'] = 'HTTP Headers';
 $GLOBALS['t']['user_agent'] = 'User Agent';
 $GLOBALS['t']['request_entity'] = 'Request Entity';
 $GLOBALS['t']['key'] = 'Key';
+$GLOBALS['t']['confirm_empty_bb'] = 'Are you sure you want to delete all request information?';
+$GLOBALS['t']['empty_bb_now'] = 'Delete all request information now.';
 
 ?>

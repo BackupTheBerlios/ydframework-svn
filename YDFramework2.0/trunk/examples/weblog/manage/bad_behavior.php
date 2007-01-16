@@ -54,6 +54,12 @@
 
         }
 
+        // Empty the request information
+        function actionEmptyBadBehaviour() {
+            $this->weblog->emptyBadBehaviour();
+            $this->redirect( YD_SELF_SCRIPT );
+        }
+
     }
 
     // Process the request

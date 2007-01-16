@@ -19,6 +19,10 @@
                         &raquo; {t w="post_requests"}
                     </th>
                 </tr>
+                <tr><td class="adminRowL" colspan="5">
+                    <i><a href="{$YD_SELF_SCRIPT}?do=emptyBadBehaviour"
+                     onClick="return confirm( '{t w="confirm_empty_bb"}' );">{t w="empty_bb_now"}</a></i>
+                </td></tr>
                 <tr>
                     <th class="adminRowL">{t w="date"}</th>
                     <th class="adminRowL">{t w="ip"}</th>
