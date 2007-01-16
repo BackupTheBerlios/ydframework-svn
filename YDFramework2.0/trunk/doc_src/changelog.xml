@@ -5,6 +5,15 @@
 
     <para>This is the overview of the different releases.</para>
 
+    <sect1 id="changelog_ydf_v2_2_final">
+
+        <title>Yellow Duck Framework 2.1 Final</title>
+
+        <para>Released on: 16 january 2007</para>
+        <para>Build number: 2316</para>
+
+    </sect1>
+
     <sect1 id="changelog_ydf_v2_0_final">
 
         <title>Yellow Duck Framework 2.0 Final</title>
