@@ -215,6 +215,7 @@ $GLOBALS['t']['req_useremail'] = 'Email address is missing or invalid';
 $GLOBALS['t']['req_loginpass'] = 'Password is required';
 $GLOBALS['t']['user_dup'] = 'User already exists';
 $GLOBALS['t']['change_user_desc'] = 'Changing user:';
+$GLOBALS['t']['is_admin_user'] = 'Administrator';
 
 // manage/images.tpl
 $GLOBALS['t']['upload_image'] = 'Upload image';

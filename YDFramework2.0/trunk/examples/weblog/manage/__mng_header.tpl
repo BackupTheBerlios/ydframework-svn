@@ -123,26 +123,28 @@
                         &raquo; <a href="categories.php">{t w="a_categories"}</a><br/>
                     </td>
                 </tr>
-                <tr>
-                    <td class="adminRowL">
-                        <b>{t w="h_global_settings"}</b><br/>
-                        &raquo; <a href="users.php">{t w="a_users"}</a><br/>
-                        &raquo; <a href="config.php">{t w="a_settings"}</a><br/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="adminRowL">
-                        <b>{t w="h_diagtools"}</b><br/>
-                        &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
-                        &raquo; <a href="dbbackup.php">{t w="a_db_backup"}</a><br/>
-                        &raquo; <a href="cache.php">{t w="a_cleanup_cache"}</a><br/>
-                    </td>
-                </tr>
-                {if $google_analytics}
+                {if $user.is_admin}
+                    <tr>
+                        <td class="adminRowL">
+                            <b>{t w="h_global_settings"}</b><br/>
+                            &raquo; <a href="users.php">{t w="a_users"}</a><br/>
+                            &raquo; <a href="config.php">{t w="a_settings"}</a><br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminRowL">
+                            <b>{t w="h_diagtools"}</b><br/>
+                            &raquo; <a href="serverinfo.php">{t w="a_server_info"}</a><br/>
+                            &raquo; <a href="dbbackup.php">{t w="a_db_backup"}</a><br/>
+                            &raquo; <a href="cache.php">{t w="a_cleanup_cache"}</a><br/>
+                        </td>
+                    </tr>
                     <tr>
                         <td class="adminRowL">
                             <b>{t w="h_statistics"}</b><br/>
-                            &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
+                            {if $google_analytics}
+                                &raquo; <a href="https://www.google.com/analytics/home/" target="_blank">{t w="cfg_google_analytics"}</a><br/>
+                            {/if}
                             &raquo; <a href="bad_behavior.php">{t w="a_bad_behavior"}</a><br/>
                         </td>
                     </tr>

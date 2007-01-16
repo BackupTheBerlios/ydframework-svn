@@ -206,7 +206,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 7;
+            $current_schema = 8;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -227,9 +227,13 @@
                 $this->executeIfPresent( 'allow_comments', $fields, 'ALTER TABLE #_items DROP allow_comments' );
                 $this->executeIfPresent( 'auto_close', $fields, 'ALTER TABLE #_items DROP auto_close' );
 
-                // Add any missing pages field
+                // Add any missing pages fields
                 $fields = $this->dbmeta->getFields( '#_pages' );
                 $this->executeIfMissing( 'is_draft', $fields, 'ALTER TABLE #_pages ADD is_draft TINYINT(1) DEFAULT "0" NOT NULL AFTER body' );
+
+                // Add any missing users fields
+                $fields = $this->dbmeta->getFields( '#_users' );
+                $this->executeIfMissing( 'is_admin', $fields, 'ALTER TABLE #_users ADD is_admin TINYINT(1) DEFAULT "1" NOT NULL AFTER password' );
 
                 // Get the list of indexes for the items table
                 $indexes = $this->dbmeta->getIndexes( '#_items' );
@@ -243,6 +247,7 @@
                 $indexes = $this->dbmeta->getIndexes( '#_users' );
                 $this->executeIfPresent( 'email', $indexes, 'ALTER TABLE #_users DROP INDEX email' );
                 $this->executeIfMissing( 'name',  $indexes, 'ALTER TABLE #_users ADD UNIQUE name (name)' );
+                $this->executeIfMissing( 'is_admin',  $indexes, 'ALTER TABLE #_users ADD INDEX is_admin (is_admin)' );
 
                 // Fix the shemaversion table if needed
                 $this->db->executeSql( 'ALTER TABLE #_schemaversion CHANGE installed installed INT(11)' );

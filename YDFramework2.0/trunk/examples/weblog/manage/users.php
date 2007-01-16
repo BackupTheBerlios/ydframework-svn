@@ -10,7 +10,7 @@
         function users() {
 
             // Initialize the parent
-            $this->YDWeblogAdminRequest();
+            $this->YDWeblogAdminRequest( true );
 
         }
 
@@ -118,6 +118,31 @@
 
         }
 
+        // Change the user level
+        function actionChangeUserLevel() {
+
+            // Get the ID from the query string
+            $id = $this->getIdFromQS();
+
+            // Get the user details
+            $user = $this->weblog->getUserByID( $id );
+            unset( $user['password'] );
+
+            // Redirect if we are changing ourselves
+            if ( $this->user['id'] == $user['id'] ) {
+                $this->redirectToAction();
+            }
+
+            // Change the values
+            $user['is_admin'] = ( $user['is_admin'] == '1' ) ? '0' : '1';
+
+            // Save the userdata
+            $this->weblog->saveUser( $user );
+
+            // Redirect to the default action
+            $this->redirectToAction();
+
+
         // Check the user credentials
         function checkUserCredentials( $params ) {
 
@@ -131,6 +156,7 @@
                 return true;
             }
 
+        }
         }
 
     }

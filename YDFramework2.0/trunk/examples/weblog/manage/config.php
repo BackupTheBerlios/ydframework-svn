@@ -13,7 +13,7 @@
         function config() {
 
             // Initialize the parent
-            $this->YDWeblogAdminRequest();
+            $this->YDWeblogAdminRequest( true );
 
         }
 

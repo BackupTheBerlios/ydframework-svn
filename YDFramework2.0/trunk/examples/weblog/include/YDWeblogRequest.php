@@ -234,7 +234,7 @@
     class YDWeblogAdminRequest extends YDWeblogRequest {
 
         // Class constructor
-        function YDWeblogAdminRequest() {
+        function YDWeblogAdminRequest( $req_admin=false ) {
 
             // Initialize the parent
             $this->YDWeblogRequest();
@@ -257,6 +257,9 @@
             foreach ( $dbmeta->getTables() as $table ) {
                 $this->weblog->db->executeSql( 'optimize table ' . $table );
             }
+
+            // Check for admin access
+            $this->req_admin = $req_admin;
 
         }
 
@@ -387,6 +390,16 @@
                 }
             }
             return false;
+        }
+
+        // Function when authentication has succeeded
+        function authenticationSucceeded() {
+
+            // Check if allowed
+            if ( $this->req_admin === true && $this->user['is_admin'] != '1' ) {
+                $this->redirect( 'index.php' );
+            }
+
         }
 
         // Failed authentication, forwards to the login action

@@ -8,7 +8,10 @@
 
         // Class constructor
         function bad_behavior() {
-            $this->YDWeblogAdminRequest();
+
+            // Initialize parent
+            $this->YDWeblogAdminRequest( true );
+
         }
 
         // Default action

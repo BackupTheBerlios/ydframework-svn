@@ -8,7 +8,10 @@
 
         // Class constructor
         function cache() {
-            $this->YDWeblogAdminRequest();
+
+            // Initialize parent
+            $this->YDWeblogAdminRequest( true );
+
         }
 
         // Default action

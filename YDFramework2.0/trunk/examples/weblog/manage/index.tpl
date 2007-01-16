@@ -55,41 +55,43 @@
     </table>
 {/if}
 
-<p class="title">&nbsp;<br/>{t w="a_admin_home"} &raquo; {t w="overview"}</p>
+{if $user.is_admin}
+    <p class="title">&nbsp;<br/>{t w="a_admin_home"} &raquo; {t w="overview"}</p>
 
-<table width="700" cellspacing="0" cellpadding="0" border="0">
-<tr><td width="350" align="left" valign="top">
+    <table width="700" cellspacing="0" cellpadding="0" border="0">
+    <tr><td width="350" align="left" valign="top">
 
-    <table width="340" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <th class="adminRowLG">&raquo; <a href="serverinfo.php"><b>{t w="a_server_info"}</b></a></th>
-            <th class="adminRowLGR" colspan="2"><a href="serverinfo.php"><img src="images/more_details.gif" border="0" /></a></th>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL" width="300">{t w="username"}</td>
-            <td class="adminRowL" width="400" colspan="2">{$user.name|lower}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="server"}</td>
-            <td class="adminRowL" colspan="2">{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</td>
-        </tr>
+        <table width="340" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <th class="adminRowLG">&raquo; <a href="serverinfo.php"><b>{t w="a_server_info"}</b></a></th>
+                <th class="adminRowLGR" colspan="2"><a href="serverinfo.php"><img src="images/more_details.gif" border="0" /></a></th>
+            </tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL" width="300">{t w="username"}</td>
+                <td class="adminRowL" width="400" colspan="2">{$user.name|lower}</td>
+            </tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL">{t w="server"}</td>
+                <td class="adminRowL" colspan="2">{$smarty.server.SERVER_NAME}{if $smarty.server.SERVER_PORT != '80'}:{$smarty.server.SERVER_PORT}{/if}</td>
+            </tr>
+        </table>
+    </td>
+    <td width="350" align="right" valign="top">
+        <table width="340" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <th class="adminRowLG" colspan="3">&raquo; {t w="a_statistics"}</th>
+            </tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL">{t w="totalItems"}</td>
+                <td class="adminRowL" colspan="2">{$totalItems} {t w="items"}</td>
+            </tr>
+            <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
+                <td class="adminRowL">{t w="totalComments"}</td>
+                <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
+            </tr>
+        </table>
+    </td></tr>
     </table>
-</td>
-<td width="350" align="right" valign="top">
-    <table width="340" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <th class="adminRowLG" colspan="3">&raquo; {t w="a_statistics"}</th>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="totalItems"}</td>
-            <td class="adminRowL" colspan="2">{$totalItems} {t w="items"}</td>
-        </tr>
-        <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
-            <td class="adminRowL">{t w="totalComments"}</td>
-            <td class="adminRowL" colspan="2">{$totalComments} {t w="comments" lower=true}</td>
-        </tr>
-    </table>
-</td></tr>
-</table>
+{/if}
 
 {include file="__mng_footer.tpl"}

@@ -13,7 +13,7 @@
         function serverinfo() {
 
             // Initialize the parent
-            $this->YDWeblogAdminRequest();
+            $this->YDWeblogAdminRequest( true );
 
         }
 

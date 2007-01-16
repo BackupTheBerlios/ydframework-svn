@@ -30,15 +30,29 @@
     {if $users}
         <tr>
             <th class="adminRowL" width="20%" style="vertical-align: bottom;">{t w="username"}</th>
-            <th class="adminRowL" width="30%" style="vertical-align: bottom;">{t w="useremail"}</th>
-            <th class="adminRowL" width="25%" style="vertical-align: bottom;">{t w="created"}</th>
+            <th class="adminRowL" width="35%" style="vertical-align: bottom;">{t w="useremail"}</th>
+            <th class="adminRowL" width="20%" style="vertical-align: bottom;">{t w="is_admin_user"}</th>
             <th class="adminRowR" width="25%" style="vertical-align: bottom;">{t w="actions"}</th>
         </tr>
         {foreach from=$users item="usr"}
             <tr onMouseOver="YDRowMouseOver(this);" onMouseOut="YDRowMouseOut(this);">
                 <td class="adminRowL">{$usr.name}</td>
                 <td class="adminRowL"><a href="mailto:{$usr.email}">{$usr.email}</a>&nbsp;</td>
-                <td class="adminRowL">{$usr.created|date|lower}</td>
+                <td class="adminRowL">
+                    {if strtolower( $usr.name ) neq strtolower( $user.name )}
+                        {if $usr.is_admin}
+                            <a style="color: green;" href="{$YD_SELF_SCRIPT}?do=changeUserLevel&id={$usr.id}">{t w="yes"}</a>
+                        {else}
+                            <a style="color: red;" href="{$YD_SELF_SCRIPT}?do=changeUserLevel&id={$usr.id}">{t w="no"}</a>
+                        {/if}
+                    {else}
+                        {if $usr.is_admin}
+                            <span class="disabled">{t w="yes"}</span>
+                        {else}
+                            <span class="disabled">{t w="no"}</span>
+                        {/if}
+                    {/if}
+                </td>
                 <td class="adminRowR">
                     <a href="{$YD_SELF_SCRIPT}?do=edit&id={$usr.id}">{t w="edit"}</a>
                     |

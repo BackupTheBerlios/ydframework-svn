@@ -215,6 +215,7 @@ $GLOBALS['t']['req_useremail'] = 'Email address ontbreekt of is incorrect';
 $GLOBALS['t']['req_loginpass'] = 'Paswoord is vereist';
 $GLOBALS['t']['user_dup'] = 'Gebruiker bestaat al';
 $GLOBALS['t']['change_user_desc'] = 'Wijzig gebruiker:';
+$GLOBALS['t']['is_admin_user'] = 'Administrator';
 
 // manage/images.tpl
 $GLOBALS['t']['upload_image'] = 'Upload beeld';
