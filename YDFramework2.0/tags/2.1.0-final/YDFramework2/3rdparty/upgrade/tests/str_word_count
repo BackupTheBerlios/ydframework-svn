@@ -1,0 +1,14 @@
+<?php
+
+include("../upgrade.php");
+
+
+$r = str_word_count("This is-a sample string.", 2);
+echo 'str_word_count("This is-a sample string.", 2) = ';
+print_r($r);
+
+
+?>
+
+
+

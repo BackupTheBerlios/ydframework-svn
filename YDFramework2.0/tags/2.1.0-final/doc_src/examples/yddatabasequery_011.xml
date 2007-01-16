@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the resulting SQL query</title>
+    <programlisting><![CDATA[UPDATE `user` SET `name` = 'David', `email` = 'email@host.com',
+`admin` = 1, `purple` = null WHERE id = 144]]></programlisting>
+</example>

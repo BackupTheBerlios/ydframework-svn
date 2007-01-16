@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: a more complex example of finding data using YDDatabaseObject</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // This find will retrieve all rows of the table because it doesn't have a filter defined
+    $rows = $user->find();
+
+    // Reset all query items defined before
+    // By default, all registered fields and selects are automatically included
+    // to the SELECT clause. This call will delete such fields from the query
+    $user->resetQuery();
+
+    // Add WHERE statement
+    $user->where( $user->getTable() . ".id > 100", "AND" );
+    $user->where( $user->getTable() . ".name LIKE 'a%'", "AND" );
+
+    // Add a GROUP BY statement
+    // The second parameter defines if DESC is added to the item
+    $user->group( "id", false );
+
+    // Add a HAVING statement
+    $user->having( "birth_year > 1970" ); // consider "birth_year" = YEAR( users.birthday )
+                                             // registered select in the class
+
+    // Add an ORDER statement
+    $user->order( "name" );
+
+    // Add a registered select
+    $user->select( 'birth_year' );
+
+    // Set the limit
+    // 20 = max. number of rows
+    $user->limit( 20 );
+    
+    // Set the offset
+    // 0  = where to start from    
+    $user->offset( 0 );
+
+?>]]></programlisting>
+</example>

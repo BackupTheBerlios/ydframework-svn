@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The pages table</title>
+    <programlisting><![CDATA[CREATE TABLE pages (
+  id int(11) NOT NULL auto_increment,
+  user_id int(11) NOT NULL default '1',
+  title varchar(255) NOT NULL default '',
+  body longtext,
+  created int(11) default NULL,
+  modified int(11) default NULL,
+  PRIMARY KEY  (id),
+  KEY user_id (user_id)
+) TYPE=MyISAM;]]></programlisting>
+</example>

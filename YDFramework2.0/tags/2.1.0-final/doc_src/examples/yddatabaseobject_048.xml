@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YD_DBOBJECT_DELETE configuration option</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // No criteria (id) - all rows of the table should be deleted
+    $rows = $user->delete(); // Returns a notice by default
+
+    // You can set this configuration and execute the query to update all rows
+    YDConfig::set( 'YD_DBOBJECT_DELETE', true );
+
+    // Deleting all rows
+    $rows = $user->delete();
+
+?>]]></programlisting>
+</example>

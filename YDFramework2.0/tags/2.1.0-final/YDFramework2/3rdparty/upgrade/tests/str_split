@@ -1,0 +1,15 @@
+<?php
+
+include("../upgrade.php");
+
+
+?>
+$str = "Hello Friend";
+$r = str_split($str, 3);
+print_r($r);
+
+<?php
+$str = "Hello_Friend";
+$r = str_split($str, 3);
+print_r($r);
+?>

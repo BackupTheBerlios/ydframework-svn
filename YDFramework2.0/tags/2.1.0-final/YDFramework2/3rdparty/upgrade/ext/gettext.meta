@@ -1,0 +1,6 @@
+api: PHP
+type: functions
+title: gettext()
+description: emulates gettext functionality
+priority: auto
+category: library

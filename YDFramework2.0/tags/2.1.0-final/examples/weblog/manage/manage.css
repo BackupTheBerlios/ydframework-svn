@@ -1,0 +1,275 @@
+select, input, textarea, body, p, .normal, li, td {
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Verdana, Arial, Sans-Serif;
+}
+
+body, p, .normal, li, td, th {
+	font-size: 10pt;
+	line-height: 16pt;
+}
+
+a {
+	color: #417690;
+	text-decoration: underline;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.image {
+	border:1px;
+	border-color: #000066;
+	color: #000066;
+	border-style: solid;
+}
+
+p.title	{
+	font-size: 150%;
+	font-weight: normal;
+	color: #417690;
+}
+
+p.titleTop {
+	font-size: 150%;
+	font-weight: normal;
+	color: white;
+}
+
+p.textTop {
+	font-weight: normal;
+	color: white;
+}
+
+.subline {
+	color: gray;
+	font-size: 8pt;
+}
+
+.disabled {
+	color: gray;
+}
+
+.error {
+	color: red;
+	margin: 0;
+	padding: 10px;
+	background-color: #f8f8f8;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
+
+.required {
+	color: red;
+}
+
+input, textarea, select	{
+	margin:2px;
+	padding:2px;
+	border:1px solid #ccc;
+}
+
+input[type=checkbox], input[type=radio] {
+	border: none;
+}
+
+input.tfXS {
+	width: 100px;
+}
+
+input.tfS {
+	width: 300px;
+}
+
+input.tfL {
+	width: 400px;
+}
+
+input.tfM {
+	width: 400px;
+}
+
+textarea {
+	width: 700px;
+	height: 300px;
+	font-family: "Lucida Sans Typewriter", "Andale Mono", "Courier New", "Courier";
+	font-size: 9pt;
+	line-height: 14pt;
+}
+
+textarea.tfMNoMce {
+	width: 400px;
+	height: 100px;
+}
+
+td.bbtoolbar {
+	background: url(images/nav-bg-editor.gif);
+}
+
+select.tfS {
+	width: 200px;
+	border:1px solid #ccc;
+}
+
+input.button {
+	width: 120px;
+	color: #417690;
+	font-weight: bold;
+	background: white url(images/nav-bg.gif) bottom repeat-x; 
+}
+
+td, th {
+	vertical-align: top
+}
+
+th {
+	font-weight: bold;
+}
+
+td.adminRowL, th.adminRowL {
+	border-bottom: 1px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: left;
+}
+
+td.adminRowLG, th.adminRowLG {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 4px;
+	text-align: left;
+	color: #417690;
+	background: url(images/nav-bg.gif);
+}
+
+td.adminRowLGR, th.adminRowLGR {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 4px;
+	text-align: right;
+	color: #417690;
+	background: url(images/nav-bg.gif);
+}
+
+td.adminRowELG, th.adminRowELG {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 4px;
+	text-align: left;
+	color: red;
+	background: url(images/nav-bg.gif);
+}
+
+td.adminRowEL, th.adminRowEL {
+	border-bottom: 1px solid #DDDDDD;
+	border-top: 1px solid #DDDDDD;
+	padding: 4px;
+	text-align: left;
+	color: red;
+	background-color: #f8f8f8;
+}
+
+td.adminRowLNB, th.adminRowLNB {
+	border-bottom: 0px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: left;
+}
+
+td.adminRowCNB, th.adminRowCNB {
+	border-bottom: 0px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: center;
+}
+
+td.adminRowRNB, th.adminRowRNB {
+	border-bottom: 0px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: right;
+}
+
+td.adminRowC, th.adminRowC {
+	border-bottom: 1px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: center;
+}
+
+td.adminRowR, th.adminRowR {
+	border-bottom: 1px solid #DDDDDD;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	text-align: right;
+}
+
+table {
+	border-width: 0px;
+}
+
+td.topRow, td.topRowR {
+	padding-bottom: 8px;
+	background:#94da3a url(images/nav-toprow.gif) repeat-x;
+}
+
+td.topRowR {
+	text-align: right;
+}
+
+p.langRow, a.langRow {
+	color: white;
+}
+
+td.langRowL {
+	background-color: #417690;
+	background: url(images/default-bg.gif);
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 0px;
+	text-align: left;
+}
+
+td.langRowR {
+	background-color: #417690;
+	background: url(images/default-bg.gif);
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 0px;
+	text-align: right;
+}
+
+td.langRowE {
+	background-color: #000066;
+	padding: 2px;
+	padding-left: 4px;
+}
+
+td.leftCol {
+	width: 200px;
+}
+
+a.leftColSelected {
+	color: darkred;
+	font-weight: bold;
+}
+
+a.leftColUnselected {
+	font-weight: bold;
+}
+
+a.yes {
+	color: green;
+}
+
+a.no {
+	color: red;
+}
+
+a.helpLink {
+	cursor: pointer;
+}
+
+input[type=checkbox], input[type=radio] { border:none; }
+input[type=submit], input[type=button] { background:white url(images/nav-bg.gif) bottom repeat-x; }
+
+form {
+	margin: 0px;
+}

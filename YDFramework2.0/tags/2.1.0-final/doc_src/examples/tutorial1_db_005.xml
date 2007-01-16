@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: Establishing the database connection</title>
+    <programlisting><![CDATA[<?php
+
+    // Make the database connection
+    $this->db = YDDatabase::getInstance(
+        $GLOBALS['db']['type'], $GLOBALS['db']['name'],
+        $GLOBALS['db']['user'], $GLOBALS['db']['pass'],
+        $GLOBALS['db']['host']
+    );
+
+?>]]></programlisting>
+</example>

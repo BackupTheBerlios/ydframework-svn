@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydurl">
+
+    <title>Using URLs and downloading data</title>
+
+    <para>Establishing HTTP connections to other sites is a common thing to do in a web application. The Yellow Duck Framework provides us with some very nice and advanced classes to handle this.</para>
+
+    <sect1 id="ydurl_raw_http">
+
+        <title>Raw HTTP connections</title>
+
+        <para>For making HTTP connections, you can use the YDHttpClient class. This class is based on the HttpClient class from Simon Willison. This class has the following features:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Implements a useful subset of the HTTP 1.0 and 1.1 protocols.</listitem>
+            <listitem>Includes cookie support.</listitem>
+            <listitem>Ability to set the user agent and referal fields.</listitem>
+            <listitem>Can automatically handle redirected pages.</listitem>
+            <listitem>Can be used for multiple requests, with any cookies sent by the server resent for each additional request.</listitem>
+            <listitem>Support for gzip encoded content, which can dramatically reduce the amount of bandwidth used in a transaction.</listitem>
+            <listitem>Object oriented, with static methods providing a useful shortcut for simple requests.</listitem>
+            <listitem>The ability to only read the page headers - useful for implementing tools such as link checkers.</listitem>
+            <listitem>Support for file uploads</listitem>
+        </itemizedlist>
+
+        <para>The YDHttpClient class has one additional feature that is not found in the original HttpClient class, which is the option to specify the content-type that is going to be used for the request. This is changed by setting the contenttype class variable.</para>
+
+        <para>Here's and example showing how to use the YDHttpClient class:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydurl_001.xml" />
+
+        <para>As the API is the same as the HttpClient class, you can refer to the documentation of the HttpClient class to find out how to use this class. This documentation can be found on the following website:</para>
+
+        <para><ulink url="http://scripts.incutio.com/httpclient/manual.php" /></para>
+
+        <para>Samples scripts can be found here.</para>
+
+        <para><ulink url="http://scripts.incutio.com/httpclient/examples.php" /></para>
+
+    </sect1>
+
+    <sect1 id="ydurl_ydurl_class">
+
+        <title>The YDUrl class</title>
+
+        <para>To facilitate using URLs and getting data from other websites, a class YDUrl was constructed. This class builds on top of the YDHttpClient class and provides some very easy functions to get data from an URL.</para>
+
+        <para>The YDUrl class allows you to:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>Parse an URL and get the specific parts from the URL (such as scheme, host, port, path, query and fragment).</listitem>
+            <listitem>Easily get the contents of an URL (optionally applying a regular expression to the result).</listitem>
+            <listitem>Easily get the headers for an URL</listitem>
+            <listitem>Easily get the status code for an URL.</listitem>
+            <listitem>Easily change parts of the URL</listitem>
+        </itemizedlist>
+
+        <para>Here's an example that shows you what is possible:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydurl_002.xml" />
+
+        <para>There is also a function called getPathSubdirectories. This function will return the list of directories that appear after the first occurence of the indicated directory in the path part of the string. The following code examples show you how this can be used:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydurl_003.xml" />
+
+        <para>There is a similar function for path segments, called getPathSubsegments. The following code examples show you how this can be used:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydurl_004.xml" />
+
+    </sect1>
+
+    <sect1 id="ydurl_altering">
+
+        <title>Changing the contents of an URL</title>
+
+        <para>Sometimes, you will need to alter an YDUrl object and get the updated URL. Therefor, we provide the following methods:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><emphasis role="bold">setNamedPart:</emphasis> set the value of a named part. The allowed parts are: scheme, host, port, user, pass, path, query and fragment.</listitem>
+            <listitem><emphasis role="bold">setQueryVar:</emphasis> set the value of a query variable.</listitem>
+            <listitem><emphasis role="bold">deleteQueryVar:</emphasis> removes the query variable.</listitem>
+        </itemizedlist>
+
+        <para>After changing the URL, you can use the YDUrl::getURL() function to retrieve the updated url.</para>
+
+        <para>The following code sample illustrates how you can change an URL:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydurl_005.xml" />
+
+    </sect1>
+
+    <sect1 id="ydurl_caching">
+
+        <title>Caching of the downloaded data</title>
+
+        <para>To increase performance and reduce bandwith usage, the data downloaded using the YDUrl class is cached to disk. If the URL you are connecting to supports caching, it will try to use this information to determine the validity of the cached information. Currently, the YDUrl class checks the Etag and Last-Modified headers to validate the cache.</para>
+
+        <para>If the URL you are connecting to doesn't return these headers, a generic cache lifetime value will be used. By default, this is set to 1 hour. If you want, this can be changed by altering the YD_HTTP_CACHE_TIMEOUT constants.</para>
+
+        <para>If you only want to use the YD_HTTP_CACHE_TIMEOUT and do not want the YDUrl class to check the headers of the URL first (as this might be too slow for your needs), you can disable the checking of the headers by setting the YD_HTTP_CACHE_USEHEAD constant to 0.</para>
+
+    </sect1>
+
+</chapter>

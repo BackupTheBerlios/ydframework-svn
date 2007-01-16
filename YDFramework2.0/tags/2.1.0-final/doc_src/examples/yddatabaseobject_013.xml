@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering the table</title>
+    <programlisting><![CDATA[<?php
+
+    // Register the table name 'users'
+    $this->registerTable( 'users' );
+
+?>]]></programlisting>
+</example>

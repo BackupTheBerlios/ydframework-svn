@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting the dates</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDate.php' );
+    
+    // The current datetime
+    $date = new YDDate();
+
+    // Getting a formatted string
+    echo $date->get( 'ISO' ); // 2005-05-25 23:01:22
+    
+    // Getting the current datetime
+    echo YDDate::now( 'ISO' ); // 2005-05-25 23:01:22
+    
+    // Array
+    $array = $date->toArray();
+
+    // Timestamp
+    $ts = $date->getTimestamp();
+    
+    // Directly from the date variables
+    $day   = $date->day;
+    $month = $date->month;
+    $year  = $date->year;
+    $hours = $date->hours_with_zero;
+    
+    // MySQL timestamp string
+    $ts = $date->timestamp_string;
+    
+    // Getting a custom format string
+    echo $date->getCustom( '%Y' ); // year
+    
+    // Getting the current datetime as a custom format string
+    echo YDDate::nowCustom( '%Y' ); // 2005
+
+?>]]></programlisting>
+</example>

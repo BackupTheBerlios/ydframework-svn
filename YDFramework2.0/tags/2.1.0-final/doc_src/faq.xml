@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="faq">
+
+    <title>Frequently Asked Questions</title>
+
+    <sect1 id="faq_license">
+
+        <title>What license is the Yellow Duck Framework published under?</title>
+
+        <para>The Yellow Duck Framework is published under the GNU Lesser General Public License. A copy of this license can be found in <xref linkend="appendixE" />.</para>
+
+    </sect1>
+
+    <sect1 id="faq_learning">
+
+        <title>How do I start learning the Yellow Duck Framework?</title>
+
+        <para>To learn the Yellow Duck Framework, there are different approaches. The following chapters in the userguide will definitely help you to get up and running faster:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><xref linkend="firstsample"/></listitem>
+            <listitem><xref linkend="tutorial"/></listitem>
+            <listitem><xref linkend="tutorial1"/></listitem>
+            <listitem><xref linkend="tutorial2"/></listitem>
+            <listitem><xref linkend="ydrequest"/></listitem>
+        </itemizedlist>
+
+        <para>Once you read these chapters, you can go through the other chapters to find out more about specific parts of the documentation.</para>
+
+    </sect1>
+
+    <sect1 id="faq_author">
+
+        <title>Who wrote the Yellow Duck Framework?</title>
+
+        <para>Pieter Claerhout (<ulink url="http://www.yellowduck.be/">www.yellowduck.be</ulink>) wrote the initial Yellow Duck Framework and is still maintaining it.</para>
+
+    </sect1>
+
+    <sect1 id="faq_support">
+
+        <title>Where can I get support for the Yellow Duck Framework?</title>
+
+        <para>Currently, the only way to get support is to use the online support forum. This forum can be found on the following location: <ulink  url="http://ydframework.berlios.de/forum/" />.</para>
+
+    </sect1>
+
+    <sect1 id="faq_mailing_list">
+
+        <title>Is there a mailing list?</title>
+
+        <para>No, there is no mailing list and there are no plans to create one.</para>
+
+    </sect1>
+
+    <sect1 id="faq_contributing">
+
+        <title>How can I contribute?</title>
+
+        <para>If you want to contribute code, you can request write access to the Subversion server by sending an email to <ulink url="mailto:pieter@yellowduck.be">pieter@yellowduck.be</ulink>. However, there are some rules you need to keep in mind when you are contributing code to this project:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>All you classes should contain <ulink url="http://www.doxygen.org/">DoxyGen</ulink> docstrings so that they are automatically included in the API documentation.</listitem>
+                <listitem>All class names should start with the characters "YD".</listitem>
+                <listitem>All constants should start with the characters "YD_".</listitem>
+                <listitem>Provide an example (preferable a lot of examples) on how to use the class.</listitem>
+                <listitem>Provide documentation about the class you wrote so that this can be included in the standard documentation.</listitem>
+            </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="faq_error_running_php_exe">
+
+        <title>Cannot instantiate non-existent class: php.exe</title>
+
+        <para>If you get this error message, it means you are running an old build of the Yellow Duck Framework. Make sure you upgrade to build 1123 or newer.</para>
+
+        <para>The reason why this error pops up, is because you are running PHP as a CGI executable. If you do so, the $_SERVER['SCRIPT_NAME'] variable is not populated. In builds prior to build 1123, the Yellow Duck Framework was looking at this variable. As of build 1123, we are now looking at the $_SERVER['PHP_SELF'] instead which is available in both CGI as well as Apache module environments.</para>
+
+    </sect1>
+
+    <sect1 id="faq_overriding_methods">
+
+        <title>Changing the YDRequest behaviour</title>
+
+        <para>Sometimes, you want to change the way the YDRequest class works and behaves. For example, you might want to redirect to the default action if a non existing action was requested. The way this should be done is by subclassing the YDRequest class and re-implementing the methods you want to behave differently.</para>
+
+    </sect1>
+
+    <sect1 id="faq_why_addons">
+
+        <title>What's the motivation behind the addons?</title>
+
+        <para>Addons are pieces of extra software that are not part of the core of the framework, but nevertheless can be handy for a lot of people. The core modules of the framework try to cover most of the needs of a web developer and tries to be as generic as possible. For some modules, this is not possible however as they are either too specific in terms of functionality or in terms of what they are able to do. Those modules generally end up being written as an addon.</para>
+
+    </sect1>
+
+    <sect1 id="faq_freshmeat_record">
+
+        <title>Where can I find the framework on freshmeat.net?</title>
+
+        <para>The Yellow Duck Framework is listed on freshmeat.net under <ulink url="http://freshmeat.net/projects/ydframework">http://freshmeat.net/projects/ydframework</ulink>.</para>
+
+    </sect1>
+
+    <sect1 id="faq_berlios_record">
+
+        <title>Where can I find the framework on berlios.de?</title>
+
+        <para>The Yellow Duck Framework is listed on berlios.de under <ulink url="http://developer.berlios.de/projects/ydframework">http://developer.berlios.de/projects/ydframework</ulink>.</para>
+
+    </sect1>
+
+    <sect1 id="faq_php5">
+
+        <title>Does the Yellow Duck Framework run on PHP5?</title>
+
+        <para>Yes, it does, but it doesn't take any advantage of the new features of PHP5. Full support for PHP5 with using the new features from PHP5 is planned for Yellow Duck Framework 3.0.</para>
+
+    </sect1>
+
+</chapter>

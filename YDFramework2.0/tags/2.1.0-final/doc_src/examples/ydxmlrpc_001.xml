@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: XML data for invoking an XML/RPC request</title>
+    <programlisting><![CDATA[<?xml version="1.0"?>
+<methodCall>
+    <methodName>tide.getTideForDay</methodName>
+    <params>
+        <param>
+            <value>
+                <string>2004-05-11</string>
+            </value>
+        </param>
+    </params>
+</methodCall>]]></programlisting>
+</example>

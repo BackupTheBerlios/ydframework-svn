@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: inserting data using the YDDatabaseObject class</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set the user data
+    $user->name  = 'Bill';
+    $user->email = 'bill@host.com';
+
+    // Insert the user data and return the auto-increment primary key (id)
+    $id = $user->insert();
+
+?>]]></programlisting>
+</example>

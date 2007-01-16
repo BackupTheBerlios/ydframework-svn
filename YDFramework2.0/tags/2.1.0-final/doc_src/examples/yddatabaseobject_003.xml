@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the result from the example</title>
+    <programlisting><![CDATA[array(
+
+    'id' => 123,
+    'name' => 'John',
+    'email' => 'john@host.com'
+
+    );]]></programlisting>
+</example>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the fetch method</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set a criteria
+    $user->country = 'Spain';
+
+    // Search using the criteria defined
+    $rows = $user->find();
+
+    // Using the count method to retrieve the total
+    $rows = $user->count();
+
+    // Consider that the search have found 3 rows with users Pieter, David and Francisco
+    while ( $user->fetch() ) {
+        print_r( $user->getValues() );
+    }
+
+?>]]></programlisting>
+</example>

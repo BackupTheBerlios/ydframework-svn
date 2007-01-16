@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating files using the YDFSFile class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+
+    // Create a dummy file
+    $dir = new YDFSDirectory( '.' );
+    $file = $dir->createFile( 'dummy.txt', 'initial contents' );
+
+    // Update the contents
+    $file->setContents( 'new contents' );
+
+    // Append the contents
+    $file->setContents( '\nappended contents', true );
+
+?>]]></programlisting>
+
+</example>

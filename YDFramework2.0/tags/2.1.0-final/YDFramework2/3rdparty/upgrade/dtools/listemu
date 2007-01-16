@@ -1,0 +1,31 @@
+#!/usr/local/bin/php -qC
+<?php
+/*
+   Prints the list of emulated functions.
+*/
+
+#-- basedir
+$dir = realpath(dirname(__FILE__) . "/../");
+
+#-- grep for function definitions
+$text = "";
+$text .= implode("", file("$dir/upgrade.php"));
+$text .= implode("", file("$dir/ext/array.php"));
+$text .= implode("", file("$dir/ext/bcmath.php"));
+$text .= implode("", file("$dir/ext/gettext.php"));
+$text .= implode("", file("$dir/ext/mime.php"));
+$text .= implode("", file("$dir/ext/old.php"));
+$text .= implode("", file("$dir/ext/posix.php"));
+$text .= implode("", file("$dir/ext/ctype.php"));
+$text .= implode("", file("$dir/ext/odbc.php"));
+if (preg_match_all("/function[ ]+([_\w\d]+)\s*\(/", $text, $uu)) {
+   $list = array_unique($uu[1]);
+}
+
+#-- print
+echo "Following functions can be emulated currently:\n";
+foreach ($list as $func) {
+   echo "· $func\n";
+}
+
+?>

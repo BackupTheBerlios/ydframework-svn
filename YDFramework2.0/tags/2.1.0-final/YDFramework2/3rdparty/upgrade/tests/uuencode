@@ -1,0 +1,11 @@
+<?php
+
+include("../upgrade.php");
+
+$uu = convert_uuencode("ABCDEFGHIJ");
+echo "\$uu = \"$uu\"\n\n";
+
+$text = convert_uudecode($uu);
+echo "\$text = \"$text\"\n\n";
+
+?>

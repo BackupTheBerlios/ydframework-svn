@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<programlisting># Auto include the Framework files
+php_value auto_prepend_file "C:/YDFramework2/YDF2_init.php"
+php_value auto_append_file "C:/YDFramework2/YDF2_process.php"</programlisting>

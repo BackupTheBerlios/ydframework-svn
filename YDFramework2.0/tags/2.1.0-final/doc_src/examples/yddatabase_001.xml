@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting a database instance</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDDatabase.php' );
+    $db = YDDatabase::getInstance(
+        'mysql', 'test', 'root', '', 'localhost'
+    );
+
+?>]]></programlisting>
+</example>

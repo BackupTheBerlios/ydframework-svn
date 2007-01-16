@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>phpdomxml-0.9.0 docs</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<link type="text/css" rel="stylesheet" href="index.css" title="phpdomxml docs stylesheet" />
+</head>
+
+<body>
+
+	<div id="container">
+
+	<a href="../index.php">Index</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="index.html">Quick Docs</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="examples.php">Usage Examples</a><br />
+	<hr />
+
+	<h1><span class="name">phpdomxml</span>-0.9.0 Quick Docs</h1>
+
+	<p>
+	This project is my tiny contribution to the open source community. <span class="name">phpdomxml</span> is an <span class="title" title="Object Oriented Programming">OOP</span> implementation
+	of the <span class="title" title="Extensible Markup Language">XML</span> <span class="title" title="Document Object Model">DOM</span> for
+	<a href="http://www.php.net"><span class="title" title="PHP: Hypertext Preprocessor">PHP</span></a>. It tries not
+	to be a 100% complete implementation of the nifty <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html">w3c standards</a>.
+	In fact, its aim is to be a light-weight implementation for 'every-day' usage of <span class="title" title="Extensible Markup Language">XML</span>-documents in a <span class="title" title="PHP: Hypertext Preprocessor">PHP</span> 4.10+ environment.
+	<span class="name">phpdomxml</span> does not rely on any external libraries, it does however require the <a href="http://www.php.net/xml">expat XML parser functions</a> for <span class="title" title="PHP: Hypertext Preprocessor">PHP</span>, which should be included by default.
+	</p>
+
+	<p>
+	The methods and properties follow the design as layed out by the World Wide
+	Web Consorticum and as was implemented in ECMAScript or compatible languages
+	like Javascript and Actionscript. <span class="name">phpdomxml</span> does not support validating by
+	DTD through the document type definition. The document type is recorded when
+	reading an XML document, but not used.
+	</p>
+
+	<h1>Implementation</h1>
+
+	<p>
+	This project started out as a necassity for an <span class="title" title="Object Oriented Programming">OOP</span> implementation
+	of the <span class="title" title="Extensible Markup Language">XML</span> <span class="title" title="Document Object Model">DOM</span> for
+	<a href="http://www.php.net"><span class="title" title="PHP: Hypertext Preprocessor">PHP</span></a>.
+	A few months ago PHP 5.0 was released and, though I didn't find the time to look under the hood,
+	it seems to have a very solid implementation of the DOM. Since it will take some time for hosting providers to
+	make the switch from PHP 4.x to PHP 5.0, it seemed like a good idea to release this work to the open source community.
+	</p>
+
+	<p>
+	There are some beautiful implementations of the XML DOM for PHP out there. I, however, took
+	the liberty of making some shortcuts by treating some of the objects as simple (associative)
+	PHP arrays. For instance, the Attr and NamedNodeMap interfaces are dropped and the attributes of an element can be
+	addressed by using the <tt>attributes</tt> array of an <tt>XML_Node</tt> interface, or by using the
+	DOM-compliant <tt>XML_Element::getAttribute()</tt>.
+	</p>
+
+	<p>
+	The following interfaces are not implemented in <span class="name">phpdomxml</span>: Attr,
+	DocumentFragment, DocumentType, DOMImplementation, Entity, EntityReference, NamedNodeMap,
+	NodeList, Notation and ProcessingInstruction.
+	</p>
+
+	<h1>Interfaces</h1>
+
+	<p>
+	The list below specifies interfaces and their methods and properties.
+	Elements denoted in <span class="check">red</span> are w3c standards that are implemented in <span class="name">phpdomxml</span>-0.9.0.
+	Elements denoted in <span class="extra">green</span> are extensions to the standard.
+	</p>
+
+	<ul>
+		<li><span class="check">XML_CDATASection</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-667469212">spec</a>)<br />
+			<span class="desc">Inherits the XML_CharacterData interface through the XML_Text interface.</span>
+		</li>
+		<li><span class="check">XML_CharacterData</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-FF21A306">spec</a>)<br />
+			<span class="desc">The XML_CharacterData interface extends XML_Node with a set of
+			attributes and methods for accessing character data in the DOM.</span>
+			<p>Properties</p>
+			<ul>
+				<li><span class="check">data</span></li>
+				<li><span class="check">length</span></li>
+			</ul>
+			<p>Methods</p>
+			<ul>
+				<li><span class="check">appendData</span> (<a href="examples.php?batch=batch3#example4">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-32791A2F">spec</a>)<br />
+					<span class="desc">Append the string to the end of the character data of the node.</span>
+				</li>
+				<li><span class="check">deleteData</span> (<a href="examples.php?batch=batch3#example5">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-7C603781">spec</a>)<br />
+					<span class="desc">Deletes specified data.</span>
+				</li>
+				<li><span class="check">insertData</span> (<a href="examples.php?batch=batch3#example2">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-3EDB695F">spec</a>)<br />
+					<span class="desc">Insert a string at the specified offset.</span>
+				</li>
+				<li><span class="check">replaceData</span> (<a href="examples.php?batch=batch3#example6">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-E5CBA7FB">spec</a>)<br />
+					<span class="desc">Replace the characters starting at the specified offset with the specified string.</span>
+				</li>
+				<li><span class="check">substringData</span> (<a href="examples.php?batch=batch3#example3">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-6531BCCF">spec</a>)<br />
+					<span class="desc">Extracts a range of data from the node.</span>
+				</li>
+			</ul>
+
+		</li>
+		<li><span class="check">XML_Comment</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1728279322">spec</a>)<br />
+			 <span class="desc">From this object are accessible comments in XML,
+			 i.e. all characters between "&lt;!--" and "--&gt;".
+			 Extends XML_CharacterData.</span>
+		</li>
+		<li><span class="check">XML_Document</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#i-Document">spec</a>)<br />
+			<span class="desc">The Document interface represents the entire XML document. Conceptually, it is the root
+			of the document tree, and provides the primary access to the document's data.
+			Extends XML_Node.</span>
+			<p>Properties</p>
+			<ul>
+				<li>docType</li>
+				<li>documentElement</li>
+				<li>implementation</li>
+			</ul>
+			<p>Methods</p>
+			<ul>
+				<li>createAttribute</li>
+				<li>createAttributeNS</li>
+				<li><span class="check">createCDATASection</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-D26C0AF8">spec</a>)<br />
+					<span class="desc">Creates a CDATASection node whose value is the specified string.</span>
+				</li>
+				<li><span class="check">createComment</span> (<a href="examples.php?batch=batch3#example1">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1334481328">spec</a>)<br />
+					<span class="desc">Creates a Comment node given the specified string.</span>
+				</li>
+				<li>createDocumentFragment</li>
+				<li><span class="check">createElement</span> (<a href="examples.php?batch=batch1#example2">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-2141741547">spec</a>)<br />
+					<span class="desc">Creates an element of the type specified. Note that the instance returned implements
+					the Element interface, so attributes can be specified directly on the returned object.</span>
+				</li>
+				<li>createElementNS</li>
+				<li>createEntityReference</li>
+				<li>createProcessingInstruction</li>
+				<li><span class="check">createTextNode</span> (<a href="examples.php?batch=batch1#example2">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1975348127">spec</a>)<br />
+					<span class="desc">Creates a Text node given the specified string.</span>
+				</li>
+				<li><span class="check">getElementById</span> (<a href="examples.php?batch=batch4#example2">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-getElBId">spec</a>)<br />
+					<span class="desc">Returns the Element whose ID is given by elementId. If no such element exists, returns null.</span>
+				</li>
+				<li><span class="check">getElementsByTagName</span> (<a href="examples.php?batch=batch5#example1">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-A6C9094">spec</a>)<br />
+				 	<span class="desc">Returns an <u>array</u> containing all Elements of the given name in the same order as they appear
+					 in the source document.</span>
+				 </li>
+				<li>getElementsByTagNameNS</li>
+				<li>importNode</li>
+			</ul>
+
+		</li>
+		<li><span class="check">XML_Element</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-745549614">spec</a>)<br />
+		 	<span class="desc">Apart from text, XML_Element nodes are the most common objects in every XML document.
+		 	Extends XML_Node.</span>
+			<p>Properties</p>
+			<ul>
+				<li><span class="check">tagName</span><br />
+					<span class="desc">The name of the element.</span>
+				</li>
+			</ul>
+			<p>Methods</p>
+			<ul>
+				<li><span class="check">getAttribute</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-666EE0F9">spec</a>)<br />
+					<span class="desc">Retrieves an attribute value by name.</span>
+				</li>
+				<li>getAttributeNode</li>
+				<li>getAttributeNodeNS</li>
+				<li>getAttributeNS</li>
+				<li><span class="extra">getElementById</span><br />
+					<span class="desc">Return element with specified attribute 'id' set or null if none found.</span>
+				</li>
+				<li><span class="check">getElementsByTagName</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1938918D">spec</a>)<br />
+					<span class="desc">Returns an <u>array</u> containing all Elements with the given tag name in the
+					same order as they appear in the source document.</span>
+				</li>
+				<li>getElementsByTagNameNS</li>
+				<li><span class="check">hasAttribute</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-ElHasAttr">spec</a>)<br />
+					<span class="desc">Returns true when an attribute with a given name is specified on this element, false otherwise.</span>
+				</li>
+				<li>hasAttributeNS</li>
+				<li><span class="check">removeAttribute</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-6D6AC0F9">spec</a>)<br />
+					<span class="desc">Removes an attribute by name.</span>
+				</li>
+				<li>removeAttributeNode</li>
+				<li>removeAttributeNS</li>
+				<li><span class="check">setAttribute</span> (<a href="examples.php?batch=batch2#example1">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-F68F082">spec</a>)<br />
+					<span class="desc">Adds a new attribute, or changes an existing one.</span>
+					</li>
+				<li>setAttributeNode</li>
+				<li>setAttributeNodeNS</li>
+				<li>setAttributeNS</li>
+			</ul>
+
+		</li>
+		<li><span class="check">XML_Node</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1950641247">spec</a>)<br />
+			<span class="desc">The Node interface is the primary datatype for the entire Document Object Model.
+			It represents a single node in the document tree.</span>
+			<p>Properties</p>
+			<ul>
+				<li><span class="check">attributes</span><br />
+					<span class="desc">An <u>array</u> containing the attributes of this node (if it is an Element)
+					or null otherwise.</span>
+				</li>
+				<li><span class="check">childNodes</span><br />
+					<span class="desc">An <u>array</u> that contains all children of this node.</span>
+				</li>
+				<li><span class="check">firstChild</span> (<a href="examples.php?batch=batch2#example2">example</a>)<br />
+					<span class="desc">The first child of this node. If there is no such node, this returns null.</span>
+				</li>
+				<li><span class="check">lastChild</span> (<a href="examples.php?batch=batch2#example3">example</a>)<br />
+					<span class="desc">The last child of this node. If there is no such node, this returns null.</span>
+				</li>
+				<li>localName</li>
+				<li>namespaceURI</li>
+				<li><span class="check">nextSibling</span> (<a href="examples.php?batch=batch2#example2">example</a>)<br />
+					<span class="desc">The node immediately following this node. If there is no such node, this returns null.</span>
+				</li>
+				<li><span class="check">nodeName</span> (<a href="examples.php?batch=batch5#example1">example</a>)<br />
+					<span class="desc">The name of this node.</span>
+				</li>
+				<li><span class="check">nodeType</span><br />
+					<span class="desc">
+						A code representing the type of the underlying object
+						<ul>
+							<li>XML_ELEMENT_NODE = 1</li>
+							<li>XML_TEXT_NODE = 3</li>
+							<li>XML_CDATA_SECTION_NODE = 4</li>
+							<li>XML_COMMENT_NODE = 8</li>
+							<li>XML_DOCUMENT_NODE = 9</li>
+						</ul>
+					</span>
+				</li>
+				<li><span class="check">nodeValue</span> (<a href="examples.php?batch=batch5#example1">example</a>)<br />
+					<span class="desc">The value of this node.</span>
+				</li>
+				<li><span class="check">ownerDocument</span><br />
+					<span class="desc">The Document object associated with this node. This is also the Document object
+					used to create new nodes.</span>
+				</li>
+				<li><span class="check">parentNode</span><br />
+					<span class="desc">The parent of this node. All nodes, except XML_Document may have a parent.
+					However, if a node has just been created and not yet added to the tree, or if it has been removed
+					from the tree, this is null.</span>
+				</li>
+				<li>prefix</li>
+				<li><span class="check">previousSibling</span> (<a href="examples.php?batch=batch2#example3">example</a>)<br />
+					<span class="desc">The node immediately preceding this node. If there is no such node, this returns null.</span>
+				</li>
+			</ul>
+			<p>Methods</p>
+			<ul>
+				<li><span class="check">appendChild</span> (<a href="examples.php?batch=batch1#example3">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-184E7107">spec</a>)<br />
+					<span class="desc">Adds a new child to the end of the list of children of this node.
+					If the new child is already in the tree, it is first removed.</span>
+				</li>
+				<li>cloneNode *</li>
+				<li><span class="check">hasAttributes</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-NodeHasAttrs">spec</a>)<br />
+					<span class="desc">Returns whether this node (if it is an element) has any attributes.</span>
+				</li>
+				<li><span class="check">hasChildNodes</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-810594187">spec</a>)<br />
+					<span class="desc">Returns whether this node has any children.</span>
+				</li>
+				<li><span class="check">insertBefore</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-952280727">spec</a>)<br />
+					<span class="desc">Inserts a new child before an existing child node (refChild). If refChild is null, the new child
+					is added at the end of the list of children.</span>
+				</li>
+				<li>isSupported</li>
+				<li>normalize</li>
+				<li><span class="check">removeChild</span> (<a href="examples.php?batch=batch4#example3">example</a>) (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1734834066">spec</a>)<br />
+					<span class="desc">Removes the indicated child node from the list of children, and returns it.</span>
+				</li>
+				<li>replaceChild *</li>
+			</ul>
+
+		</li>
+		<li><span class="check">XML_Text</span> (<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-1312295772">spec</a>)<br />
+			<span class="desc">The XML_Text interface inherits from XML_CharacterData and represents the textual
+			content (termed character data in XML) of an Element.</span>
+			<p>Methods</p>
+			<ul>
+				<li>splitText *</li>
+			</ul>
+
+		</li>
+		<li><span class="extra">XML</span><br />
+			<span class="desc">The XML object inherits from XML_Document and serves as access point for
+			your XML needs in projects..</span>
+			<p>Methods</p>
+			<ul>
+				<li><span class="extra">load</span><br />
+					<span class="desc">Load an XML document from the specified URL.</span>
+				</li>
+				<li><span class="extra">save</span><br />
+					<span class="desc">Save an XML document to the specified file or URL.</span>
+				</li>
+				<li><span class="extra">parseXML</span><br />
+					<span class="desc">Parses the XML text in the specified argument.</span>
+				</li>
+				<li><span class="extra">send</span><br />
+					<span class="desc">Encodes the specified XML object into an XML document and sends
+					it to the specified URL using the POST method.</span>
+				</li>
+				<li><span class="extra">sendAndLoad</span><br />
+					<span class="desc">Encodes the specified XML object into an XML document, sends it to a specified
+					URL using the POST method, downloads the server's response and then loads it into a given target object.</span>
+				</li>
+			</ul>
+
+		</li>
+		<li><span class="extra">XML_Parser</span><br />
+			<span class="desc">The XML_Parser parses an XML document into a DOM object.</span>
+			<p>Methods</p>
+			<ul>
+				<li><span class="extra">parse</span><br />
+					<span class="desc">Parse a raw XML document.</span>
+				</li>
+			</ul>
+
+		</li>
+		
+	</ul>
+
+	<h1>License</h1>
+
+	<p>
+	Licensed under the <a href="http://www.gnu.org/copyleft/gpl.html">GNU General Public License</a> (GPL).
+	</p>
+
+	<p>
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License, or
+	at your option) any later version.
+	</p>
+
+	<p>
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	</p>
+
+	<hr />
+
+	<p class="copyright">
+	&copy; 2005 <a href="http://webtweakers.com">webtweakers.com</a>,
+	Bas van Gaalen, 14 April 2005. <a href="http://validator.w3.org/check/referer">valid xhtml</a>
+	</p>
+
+	</div>	
+
+</body>
+</html>

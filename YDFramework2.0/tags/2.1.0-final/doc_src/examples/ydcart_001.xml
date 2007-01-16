@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDCart class</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the YDCart module
+    YDInclude( 'YDCart.php' );
+
+    // Create a new cart with the default session variable
+    $cart = new YDCart();
+
+    // Create a new cart with a custom session variable
+    $cart = new YDCart( 'MyCustomCartName' );
+
+?>]]></programlisting>
+</example>

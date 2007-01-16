@@ -1,0 +1,10 @@
+<?php
+
+include("../upgrade.php");
+
+echo 'strripos("aaaabc_DEFff_ABCccc", "a") == ';
+echo strripos("aaaabc_DEFff_ABCccc", "a");
+
+?>
+
+

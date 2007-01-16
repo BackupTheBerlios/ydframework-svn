@@ -1,0 +1,9 @@
+str_rot13('upgrade.php v4') = "<?php
+
+include("../upgrade.php");
+
+echo str_rot13('upgrade.php v4');
+
+?>"
+
+

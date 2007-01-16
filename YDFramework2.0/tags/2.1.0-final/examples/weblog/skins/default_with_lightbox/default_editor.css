@@ -1,0 +1,10 @@
+body, td, pre {
+	font-size: 62.5%;
+	font-size: 0.8em;
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	margin: 2px;
+}
+
+body {
+	background-color: #FFFFFF;
+}

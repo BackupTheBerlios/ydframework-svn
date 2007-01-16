@@ -1,0 +1,9 @@
+<?php
+
+include("../upgrade.php");
+include("../ext/mime.php");
+
+$t = mime_content_type(__FILE__);
+echo "mime_content_type(__FILE__) = $t\n\n";
+
+?>

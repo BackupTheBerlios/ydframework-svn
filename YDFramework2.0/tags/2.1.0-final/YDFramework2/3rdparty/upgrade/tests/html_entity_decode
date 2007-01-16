@@ -1,0 +1,10 @@
+<?php
+
+include("../upgrade.php");
+
+echo 'html_entity_decode("&lt;&amp;&gt;&auml;&szlig;") = ';
+echo html_entity_decode("&lt;&amp;&gt;&auml;&szlig;");
+
+?>
+
+

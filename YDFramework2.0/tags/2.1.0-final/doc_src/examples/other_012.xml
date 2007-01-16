@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: using the YDBrowserInfo class</title>
+    <programlisting><![CDATA[<?php
+
+    // Instantiate a new YDBrowserInfo object
+    $browser = new YDBrowserInfo();
+
+    // Dump the different properties
+    YDDebugUtil::dump( $browser->agent, 'Agent' );
+    YDDebugUtil::dump( $browser->browser, 'Browser name' );
+    YDDebugUtil::dump( $browser->version, 'Version' );
+    YDDebugUtil::dump( $browser->platform, 'Platform' );
+    YDDebugUtil::dump( $browser->dotnet, 'Installed .NET runtimes' );
+    YDDebugUtil::dump(
+        $browser->getBrowserLanguages(), 'Languages supported by the browser'
+    );
+    YDDebugUtil::dump( $browser->getLanguage(), 'Negotiated language' );
+
+?>]]></programlisting>
+</example>

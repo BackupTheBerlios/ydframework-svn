@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: an RSS 2.0 XML file</title>
+    <programlisting><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
+<rss version="2.0">
+    <channel>
+        <title>Yellow Duck Framework</title>
+        <description>News about the YDF</description>
+        <link>http://localhost/ydf/?do=rss20</link>
+        <lastBuildDate>Sat, 22 May 2004 13:36:15+0100</lastBuildDate>
+        <item>
+            <title>Title 1</title>
+            <link>http://localhost/ydf/?do=rss20#1</link>
+            <description>Description 1</description>
+            <guid>d1c9daf41c19e53ed46f8081d4ab99b7</guid>
+        </item>
+        <item>
+            <title>Title 2</title>
+            <link>http://localhost/ydf/?do=rss20#2</link>
+            <description>Description 2</description>
+            <guid>7dbd540a343ecc960efa3c1d9f715e74</guid>
+        </item>
+    </channel>
+</rss>]]></programlisting>
+</example>

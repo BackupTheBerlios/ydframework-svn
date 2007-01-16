@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: an example of using the YDDatabaseObject class</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set the user id
+    $user->id = 123;
+
+    // Find the user with that id
+    $user->find();
+
+    // Add all user information to an array
+    $array = $user->getValues();
+
+    // Print this information
+    print_r( $array );
+
+?>]]></programlisting>
+</example>

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the original array converted to a nested array</title>
+    <programlisting><![CDATA[<?php
+
+    array (
+        'admin' =>
+        array (
+            0 =>
+            array(
+                'id' => 1, 'name' => 'Pieter', 'group' => 'admin'
+            ),
+            1 =>
+            array(
+                'id' => 2, 'name' => 'Fiona', 'group' => 'admin'
+            ),
+        ),
+        'user' =>
+        array (
+            0 =>
+            array(
+                'id' => 3, 'name' => 'Bert', 'group' => 'user'
+            ),
+        ),
+        'guest' =>
+        array (
+            0 =>
+            array(
+                'id' => 3, 'name' => 'Jan', 'group' => 'guest'
+            ),
+        ),
+    )
+
+?>]]></programlisting>
+</example>

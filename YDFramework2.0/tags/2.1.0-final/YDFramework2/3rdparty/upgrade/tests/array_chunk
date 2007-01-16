@@ -1,0 +1,12 @@
+<?php
+
+include("../upgrade.php");
+
+$a = array("a", "b", "c", "d", "e");
+$r = array_chunk($a, 2, 1);
+echo 'array_chunk($a, 2, 1) = ';
+print_r($r);
+
+?>
+
+

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: getting data from the database using getRecord(s)</title>
+    <programlisting><![CDATA[<?php
+
+    // Includes
+    YDInclude( 'YDDatabase.php' );
+
+    // Get the database connection
+    $db = new YDDatabase( 'sqlite', 'mydb.db' );
+
+    // Get maximum 10 records
+    $result = $db->getRecords(
+        'select * from users', 10
+    );
+
+    // Get maximum 10 records starting from record 5
+    $result = $db->getRecords(
+        'select * from users', 10, 5
+    );
+
+?>]]></programlisting>
+</example>

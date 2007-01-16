@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Yellow Duck Framework directory structure</title>
+    <programlisting>+- <emphasis role="bold">YDFramework-2.0</emphasis>
+   +- <emphasis role="bold">docs</emphasis>
+   +- <emphasis role="bold">examples</emphasis>
+   +- _default.htaccess
+   +- index.php
+   +- license.txt
+   +- <emphasis role="bold">YDFramework2</emphasis>
+      +- <emphasis role="bold">3rdparty</emphasis>
+      +- <emphasis role="bold">temp</emphasis>
+      +- <emphasis role="bold">YDClasses</emphasis>
+      +- YDF2_functions.php
+      +- YDF2_init.php
+      +- YDF2_process.php
+      +- YDF2_version.php</programlisting>
+</example>

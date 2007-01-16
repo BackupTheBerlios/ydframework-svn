@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: instantiating the YDForm class</title>
+    <programlisting><![CDATA[<?php
+
+    YDInclude( 'YDForm.php' );
+    $form = new YDForm( 'myForm' );
+
+?>]]></programlisting>
+</example>

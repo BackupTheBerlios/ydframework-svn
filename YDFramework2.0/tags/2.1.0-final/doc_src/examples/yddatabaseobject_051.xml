@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: many-to-many relationship</title>
+    <programlisting><![CDATA[// user class
+
+Local: user
+Foreign: group
+Cross: user_group
+
+// group class
+
+Local: group
+Foreign: user
+Cross: user_group
+
+// user_group class
+// 1st relation (one-to-many)
+
+Local: user_group
+Foreign: user
+
+// user_group class
+// 2nd relation (one-to-many)
+
+Local: user_group
+Foreign: group]]></programlisting>
+</example>

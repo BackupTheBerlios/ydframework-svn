@@ -1,0 +1,136 @@
+pre.sh_sourceCode {
+  background-color: white;
+  color: black;
+  font-style: normal;
+  font-weight: normal;
+}
+
+pre.sh_sourceCode span.sh_keyword {
+  color: blue;
+}
+
+pre.sh_sourceCode span.sh_type {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_string {
+  color: red;
+}
+
+pre.sh_sourceCode span.sh_specialchar {
+  color: #FFC0CB;
+}
+
+pre.sh_sourceCode span.sh_comment {
+  color: #A52A2A;
+  font-style: italic;
+}
+
+pre.sh_sourceCode span.sh_number {
+  color: purple;
+}
+
+pre.sh_sourceCode span.sh_preproc {
+  color: #00008B;
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_symbol {
+  color: #8B0000;
+}
+
+pre.sh_sourceCode span.sh_function {
+  color: black;
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_cbracket {
+  color: red;
+}
+
+pre.sh_sourceCode span.sh_todo {
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_linenum {
+  color: black;
+}
+
+pre.sh_sourceCode span.sh_url {
+  color: blue;
+}
+
+pre.sh_sourceCode span.sh_date {
+  color: blue;
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_time {
+  color: #00008B;
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_ip {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_file {
+  color: #00008B;
+  font-weight: bold;
+}
+
+pre.sh_sourceCode span.sh_name {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_variable {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_italics {
+  color: #006400;
+  font-style: italic;
+}
+
+pre.sh_sourceCode span.sh_bold {
+  color: #006400;
+  font-weight: bold
+}
+
+pre.sh_sourceCode span.sh_underline {
+  color: #006400;
+  text-decoration: underline;
+}
+
+pre.sh_sourceCode span.sh_fixed {
+  color: green;
+  font-family: monospace;
+}
+
+pre.sh_sourceCode span.sh_argument {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_optionalargument {
+  color: purple;
+}
+
+pre.sh_sourceCode span.sh_math {
+  color: #FFA500;
+}
+
+pre.sh_sourceCode span.sh_bibtex {
+  color: blue;
+}
+
+pre.sh_sourceCode span.sh_oldfile {
+  color: #FFA500;
+}
+
+pre.sh_sourceCode span.sh_newfile {
+  color: #006400;
+}
+
+pre.sh_sourceCode span.sh_difflines {
+  color: blue;
+}

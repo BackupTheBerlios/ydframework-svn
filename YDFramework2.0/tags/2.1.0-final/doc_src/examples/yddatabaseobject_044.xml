@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: inserting information</title>
+    <programlisting><![CDATA[<?php
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Add data
+    $user->name    = 'John Fulano';
+    $user->email   = 'johnfulano@host.com';
+    $user->country = 'Brazil';
+
+    // Inserts only the defined variables in the object
+    $id = $user->insert();
+
+?>]]></programlisting>
+</example>

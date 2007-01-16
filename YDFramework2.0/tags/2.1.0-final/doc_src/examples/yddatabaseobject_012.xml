@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering the database</title>
+    <programlisting><![CDATA[<?php
+
+    // Register the database connection
+    $this->registerDatabase(
+        YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' )
+    );
+
+?>]]></programlisting>
+</example>

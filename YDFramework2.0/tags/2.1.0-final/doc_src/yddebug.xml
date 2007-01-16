@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="yddebug">
+
+    <title>Debugging tools</title>
+
+    <para>Debugging is an integral part of every web application. Debugging is the art of finding problems in your web application and fixing them. In the Yellow Duck Framework, there are a number of tools in addition to the standard PHP tools that will help you debugging your applications based on the Yellow Duck Framework.</para>
+
+    <sect1 id="yddebug_showing_debug">
+
+        <title>Showing debug information</title>
+
+        <para>When the Yellow Duck Framework is initialized, it automatically defines a constant called YD_DEBUG which is a boolean telling us if we are running in debug mode or not. Depending on this setting, the framework will either show or hide debugging information.</para>
+
+        <para>There are a number of ways of turning on debugging in the Yellow Duck Framework. The first and easiest one is to add the parameter YD_DEBUG=1 to the URL of the request. This will enable showing of the debug messages.</para>
+
+        <para>Take a look at the following URLs which demonstrate this</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><![CDATA[http://localhost/test.php?YD_DEBUG=1]]></listitem>
+            <listitem><![CDATA[http://localhost/test.php?id=01&YD_DEBUG=1]]></listitem>
+        </itemizedlist>
+
+        <para>This option will turn on the debug messages for the current request only. If you are developing a new application, it might be easier to constantly turn on debugging. This is done by defining a constant called YD_DEBUG before you include the YDF2_init.php file. Having this constant defined before you initialize the framework will override the default debugging settings, and will force the debugging to be turned on or off.</para>
+
+        <note>For release applications, you want to prevent users from seeing debug information. In order to prevent people from using the YD_DEBUG URL parameter to show debug information, which can reveal confidential information, make sure you define the YD_DEBUG constant with a value of 0 before you initialize the framework.</note>
+
+        <para>Now that we know how debugging information can be enabled, let's have a look at how the Yellow Duck Framework displays this information. We specifically choose not to use any popup windows for this or display the information in the visible HTML code, since both methods are not easy to handle. In the Yellow Duck Framework, debugging information is added to the source code in the form of HTML comments. This makes it easy to find them without screwing up the layout of your pages.</para>
+
+        <para>By default, the debug information is shown as HTML comments and are not visible in the visual HTML output. During the development cycle, it might be needed to have the debug information visible in the HTML output. To do this, you need to append "YD_DEBUG=2" to the url to have the info show up. The URLs then look as follows:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><![CDATA[http://localhost/test.php?YD_DEBUG=2]]></listitem>
+            <listitem><![CDATA[http://localhost/test.php?id=01&YD_DEBUG=2]]></listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="yddebug_standard_info">
+
+        <title>Standard debug information</title>
+
+        <para>By default, the Yellow Duck Framework shows a whole bunch of standard extra information if you turn on debugging. The following information is always shown in debugging mode:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>The total processing time in seconds for the request.</listitem>
+            <listitem>The total filesize of the include files.</listitem>
+            <listitem>The list of the full paths and file sizes of the included files.</listitem>
+        </itemizedlist>
+
+        <para>Here is how this information looks like:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/yddebug_001.xml" />
+
+        <para>In the next section, we will see that it's very easy to add your own debugging information.</para>
+
+    </sect1>
+
+    <sect1 id="yddebug_adding_debug">
+
+        <title>Adding debug information</title>
+
+        <para>To add your own debugging information, you can use the YDDebugUtil module. This module has three static functions specifically designed for debugging purposes.</para>
+
+        <para>By using the static function call YDDebugUtil::debug, we can show our own debugging information. This function takes a variable number of arguments and will glue all these together before showing the debug message.</para>
+
+        <para>The static function call YDDebugUtil::dump will dump the contents of any variable and display it on the screen. It basically does the same as the native var_dump function from PHP, but the output is much more readable.</para>
+
+        <para>The static function call YDDebugUtil::r_dump does the same as the YDDebugUtil::dump function, but it will return the information instead of displaying it. If you combine this function together with the function YDDebugUtil::debug, you can dump the contents of a variable as a debug message.</para>
+
+    </sect1>
+
+</chapter>

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating an SQL UPDATE query</title>
+    <programlisting><![CDATA[<?php
+
+        // The values
+        $values = array(
+                     'name' => 'David',
+                     'email' => 'email@host.com',
+                     'admin' => 1,
+                     'purple' => null
+                  );
+
+        // Includes
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+        
+        // Update query
+        $q->update();
+
+        // Add a table
+        // The table method is an alias of the from method
+        $q->table( 'user' );
+
+        // Set the values
+        // The set method is an alias of the values method
+        $q->set( $values );
+
+        // Add the where clause
+        $q->where( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getQuery() );
+
+?>]]></programlisting>
+</example>

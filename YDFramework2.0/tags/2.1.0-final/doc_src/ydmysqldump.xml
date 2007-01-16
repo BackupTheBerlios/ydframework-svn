@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydmysqldump">
+
+    <title>Addon: YDMysqlDump for creating MySQL backups</title>
+
+    <para>The YDMysqlDump module defines a system that is able to make a backup of a MySQL database and is also able to restore the database from a database backup. This module however only works with MySQL right now.</para>
+
+    <sect1 id="ydmysqldump_overview">
+
+        <title>Overview of the YDMySqlDump module</title>
+
+        <para>To get started with the YDMysqlDump module, you need to have a <literal>YDDatabaseDriver</literal> instance pointing to a MySQL database. With this database driver instance, you can create a new YDMysqlDump instance which will interact with the database for making the backups and restoring them.</para>
+
+        <para>The database backup format is a plain SQL file, much like you get with the <literal>mysqldump</literal> utility. The format of both utilities is interchangeable. The following sample gives you a preview of what a MySQL dump looks like:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydmysqldump_001.xml" />
+
+        <para>By default, the backup file is called "backup.sql" and is stored in the <literal>YDFramework2/temp</literal> directory.</para>
+
+    </sect1>
+
+    <sect1 id="ydmysqldump_example">
+
+        <title>An example on using YDMysqlDump</title>
+
+        <para>The following code sample shows you how you can use the YDMysqlDump module to create a database backup:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydmysqldump_002.xml" />
+
+    </sect1>
+
+</chapter>

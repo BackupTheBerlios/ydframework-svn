@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the global timers in the debug output</title>
+    <programlisting><![CDATA[Yellow Duck Framework Debug Information
+
+Processing time(s):
+
+    Elapsed   Diff    Marker
+    0 m       0 ms    -- Start
+    29 ms     29 ms   Reading file
+    30 ms     1 ms    Finished reading file
+    30 ms     0 ms    YDBBCode object
+    30 ms     0 ms    Conversion to BBCode
+    41 ms     11 ms   -- Finish
+
+Total size include files: 76.3 KB
+
+Included files: 
+
+    26.5 KB   c:\ydf\YDFramework2\YDClasses\YDFileSystem.php
+    18.8 KB   c:\ydf\YDFramework2\YDClasses\YDUtil.php
+    9.5 KB    c:\ydf\YDFramework2\YDClasses\YDRequest.php
+    7.2 KB    c:\ydf\YDFramework2\YDF2_init.php
+    5.8 KB    c:\ydf\YDFramework2\YDClasses\YDExecutor.php
+    5.6 KB    c:\ydf\YDFramework2\YDClasses\YDBBCode.php
+    1.9 KB    c:\ydf\examples\timer.php
+    1.2 KB    c:\ydf\YDFramework2\YDF2_process.php
+
+Number of SQL queries: 0]]></programlisting>
+</example>

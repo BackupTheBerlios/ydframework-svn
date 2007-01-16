@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: deleting data with the YDDatabaseObject class</title>
+    <programlisting><![CDATA[<?php
+
+    // Include the database object class
+    YDInclude( 'YDDatabaseObject.php' );
+
+    // Create a new user object
+    $user = YDDatabaseObject::getInstance( 'user' );
+
+    // Set the user data
+    $user->id  = 123;
+
+    // Delete the user based on the object values
+    $result = $user->delete();
+
+?>]]></programlisting>
+</example>

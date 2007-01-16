@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the result from the fetch method</title>
+    <programlisting><![CDATA[array(
+    'id' => 1,
+    'name' => 'Pieter',
+    'country' => 'Spain',
+    ...
+)
+array(
+    'id' => 2,
+    'name' => 'David',
+    'country' => 'Spain',
+    ...
+)
+array(
+    'id' => 3,
+    'name' => 'Francisco',
+    'country' => 'Spain',
+    ...
+)]]></programlisting>
+</example>

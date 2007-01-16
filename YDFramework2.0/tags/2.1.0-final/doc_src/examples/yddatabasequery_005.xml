@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: the resulting SQL query</title>
+    <programlisting><![CDATA[SELECT `id`, `name`, `g`.`id` AS `gid`, `g`.`name` AS `group_name`,
+`a`.`id` AS `aid`, `a`.`name` AS `attach_name` FROM `user` AS `u` LEFT JOIN `group` AS `g`
+ON ( u.group_id = g.id ) INNER JOIN `attach` AS `a` ON ( g.attach_id = a.id OR ( a.size > 150
+AND a.status = 3 ) ) WHERE g.id = 144 ORDER BY `a`.`name` LIMIT 50]]></programlisting>
+</example>

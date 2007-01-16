@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: The statistics_init table</title>
+    <programlisting><![CDATA[CREATE TABLE statistics_init (
+  created varchar(10) NOT NULL default ''
+) TYPE=MyISAM;]]></programlisting>
+</example>

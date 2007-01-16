@@ -1,0 +1,9 @@
+<?php
+
+include("../upgrade.php");
+
+$r = scandir("..");
+echo "..\n\n";
+print_r($r);
+
+?>

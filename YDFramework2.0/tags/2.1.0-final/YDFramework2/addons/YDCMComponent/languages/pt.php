@@ -1,0 +1,67 @@
+<?php
+
+// components
+$GLOBALS['t']['ydcmpage'] = 'P&aacute;gina';
+$GLOBALS['t']['ydcmpage s'] = 'P&aacute;ginas';
+$GLOBALS['t']['ydcmrootmenu'] = 'Menu';
+$GLOBALS['t']['ydcmrootmenu s'] = 'Menus';
+
+$GLOBALS['t']['save'] = 'Guardar';
+$GLOBALS['t']['close'] = 'Fechar';
+$GLOBALS['t']['open'] = 'Abrir';
+$GLOBALS['t']['help'] = 'Ajuda';
+$GLOBALS['t']['back'] = 'Voltar';
+$GLOBALS['t']['not applicable'] = 'N&atilde;o aplic&aacute;vel';
+$GLOBALS['t']['yes'] = 'Sim';
+$GLOBALS['t']['no'] = 'N&atilde;o';
+$GLOBALS['t']['active'] = 'Activo';
+$GLOBALS['t']['blocked'] = 'Bloqueado';
+$GLOBALS['t']['schedule'] = 'Calend&aacute;rio';
+$GLOBALS['t']['permissions'] = 'Permiss&otilde;es';
+$GLOBALS['t']['delete'] = 'Eliminar';
+$GLOBALS['t']['toggle state'] = 'Inverter estado';
+$GLOBALS['t']['public'] = 'P&uacute;blico';
+$GLOBALS['t']['private'] = 'Privado';
+$GLOBALS['t']['not allowed'] = 'N&atilde;o permitido';
+$GLOBALS['t']['total'] = 'Total';
+$GLOBALS['t']['previous'] = 'Anterior';
+$GLOBALS['t']['next'] = 'Seguinte';
+$GLOBALS['t']['state'] = 'Estado';
+$GLOBALS['t']['add'] = 'Adicionar';
+$GLOBALS['t']['add component'] = 'Adicionar component';
+$GLOBALS['t']['add user'] = 'Adicionar utilizador';
+$GLOBALS['t']['move'] = 'Mover';
+$GLOBALS['t']['move up'] = 'Mover para cima';
+$GLOBALS['t']['move down'] = 'Mover para baixo';
+$GLOBALS['t']['edit'] = 'Editar';
+$GLOBALS['t']['properties'] = 'Propriedades';
+$GLOBALS['t']['please wait'] = 'Por favor aguarde';
+
+$GLOBALS['t']['visitor'] = 'Visitante';
+$GLOBALS['t']['visitors'] = 'Visitantes';
+$GLOBALS['t']['administrator'] = 'Administrador';
+$GLOBALS['t']['administrators'] = 'Administradores';
+
+$GLOBALS['t']['published'] = 'Publicado';
+$GLOBALS['t']['not published'] = 'Não publicado';
+$GLOBALS['t']['schedule'] = 'Calend&aacute;rio';
+
+$GLOBALS['t']['translate'] = 'Traduzir';
+$GLOBALS['t']['translate to'] = 'Traduzir para';
+
+$GLOBALS['t']['total versions'] = 'Total de versões';
+$GLOBALS['t']['general config'] = 'Configuração geral';
+$GLOBALS['t']['content versions'] = 'Versões';
+
+$GLOBALS['t']['content'] = 'Conte&uacute;do';
+$GLOBALS['t']['general view'] = 'Vista geral';
+$GLOBALS['t']['statistics'] = 'Estat&iacute;sticas';
+$GLOBALS['t']['administration'] = 'Administra&ccedil;&atilde;o';
+$GLOBALS['t']['system information'] = 'Informa&ccedil;&otilde;es do sistema';
+$GLOBALS['t']['backup'] = 'C&oacute;pias de seguran&ccedil;a';
+$GLOBALS['t']['audit'] = 'Auditoria';
+$GLOBALS['t']['user management'] = 'Gest&atilde;o de utilizadores';
+$GLOBALS['t']['general configuration'] = 'Configura&ccedil;&atilde;o geral';
+
+$GLOBALS['t']['form errors'] = 'Erros no formulario';
+?>

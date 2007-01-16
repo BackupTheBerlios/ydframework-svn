@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: registering an XML/RPC method</title>
+    <programlisting><![CDATA[function registerMethod( $method, $function, $signature, $help="" ) {}]]></programlisting>
+</example>

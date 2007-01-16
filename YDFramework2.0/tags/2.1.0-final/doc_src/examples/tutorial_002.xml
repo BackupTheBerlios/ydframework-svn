@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: index.php (with the new class constructor)</title>
+    <programlisting>&lt;?php
+
+    // Initialize the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' );
+
+    // Includes
+    YDInclude( 'YDRequest.php' );
+    YDInclude( 'YDFileSystem.php' );
+    YDInclude( 'YDUtil.php' );
+    YDInclude( 'YDForm.php' );
+    YDInclude( 'YDTemplate.php' );
+
+    // Class definition for the index request
+    class index extends YDRequest {
+
+        // Class constructor
+        function index() {
+
+            // Initialize the parent class
+            $this->YDRequest();
+
+            <emphasis role="bold">// Initialize the template object
+            $this->template = new YDTemplate();
+
+            // Set the path to the data directory
+            $this->dataDir = new YDFSDirectory( dirname( __FILE__ ) . '/data/' );
+
+            // Check if the data directory is writeable
+            if ( ! $this->dataDir->isWriteable() ) {
+                trigger_error( 'Data directory must be writable!', YD_ERROR );
+            }</emphasis>
+
+        }
+
+        // Default action
+        function actionDefault() {
+        }
+
+        // Add Note action
+        function actionAddNote() {
+        }
+
+        // Delete note action
+        function actionDeleteNote() {
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+
+?&gt;</programlisting>
+</example>

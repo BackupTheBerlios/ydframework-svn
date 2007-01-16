@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: XML describing a YDXmlForm object</title>
+    <programlisting><![CDATA[<form name="form1" method="post" action="/ydframework/examples/form_xml.php" target="_self">
+    <attributes>
+    </attributes>
+    <elements>
+        <element name="txt" type="text">
+            <labels>
+                <label id="default" value="Enter text:" />
+            </labels>
+            <values>
+                <value id="default" value="" />
+            </values>
+            <attributes>
+            </attributes>
+            <options>
+            </options>
+        </element>
+        <element name="cmdSubmit" type="submit">
+            <labels>
+                <label id="default" value="" />
+            </labels>
+            <values>
+                <value id="default" value="submit" />
+            </values>
+            <attributes>
+            </attributes>
+            <options>
+            </options>
+        </element>
+    </elements>
+    <rules>
+    </rules>
+    <comparerules>
+    </comparerules>
+    <filters>
+    </filters>
+</form>]]></programlisting>
+</example>

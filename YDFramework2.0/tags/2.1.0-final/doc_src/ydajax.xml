@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydajax">
+
+    <title>Using AJAX with the Yellow Duck Framework</title>
+
+    <para>Lately, a technique called <literal>AJAX</literal> is getting a lot of attention. AJAX is everything about making web applications much more interactive without the need of constantly reloading the webpages. It was originally introduced with <ulink url="http://gmail.com/">Google Mail</ulink> but is now used quite often in different websites and web engines.</para>
+
+    <sect1 id="ydajax_introduction">
+
+        <title>What is AJAX?</title>
+
+        <para>AJAX or Asynchronous JavaScript and XML is a term describing a web development technique for creating interactive web applications using a combination of:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>HTML (or XHTML) and Cascading Style Sheets for presenting information</listitem>
+            <listitem>The Document Object Model manipulated through JavaScript to dynamically display and interact with the information presented</listitem>
+            <listitem>The XMLHttpRequest object to interchange and manipulate data asynchronously with the web server (commonly using XML and XSLT, although AJAX applications can use other technologies, including preformatted HTML, plain text, JSON and JSON-RPC as alternatives to XML/XSLT)</listitem>
+        </itemizedlist>
+
+        <para>AJAX is not a technology in itself, but a term that refers to the use of a group of technologies together.</para>
+
+        <para>AJAX applications use web browsers that support the above technologies as a platform to run on. Browsers that support these technologies include Mozilla, Firefox, Internet Explorer, Opera, Konqueror and Safari. Please note: "Opera does not support XSL formatting objects, and neither does it natively support XSLT transformations" (<ulink url="http://www.opera.com/docs/specs/">http://www.opera.com/docs/specs/</ulink>).</para>
+
+    </sect1>
+
+    <sect1 id="ydajax_compared_to_traditional_webapps">
+
+        <title>Compared to traditional web applications</title>
+
+        <para>Traditional web applications allow users to fill out forms, and when these forms are submitted, a request is sent to a web server. The web server acts upon whatever was sent by the form, and then responds back by sending a new web page. A lot of bandwidth is wasted since much of the HTML from the first page is present in the second page. Because a request to the web server has to be transmitted on every interaction with the application, the application's response time is dependent on the response time of the web server. This leads to user interfaces that are much slower than their native counterparts.</para>
+
+        <para>AJAX applications, on the other hand, can send requests to the web server to retrieve only the data that is needed, usually using SOAP or some other XML-based web services dialect, and using JavaScript in the client to process the web server response. The result is more responsive applications, since the amount of data interchanged between the web browser and web server is vastly reduced. Web server processing time is also saved, since a lot of this is done on the computer from which the request came.</para>
+
+        <para>The following image shows how a traditional web application handles user interaction comparing it to how an Ajax application handles it.</para>
+
+        <para><mediaobject>
+            <imageobject role="html">
+                <imagedata fileref="ajax-fig1_small.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="ajax-fig1_small.gif" width="117.5mm" scalefit="0.5" align="center" />
+            </imageobject>
+        </mediaobject></para>
+
+        <para>The next image shows how the different components of Ajax applications interacts with each other comparing it to how traditional web applications do it.</para>
+
+        <para><mediaobject>
+            <imageobject role="html">
+                <imagedata fileref="ajax-fig2_small.gif" />
+            </imageobject>
+            <imageobject role="fo">
+                <imagedata fileref="ajax-fig2_small.gif" width="117.5mm" scalefit="0.5" align="center" />
+            </imageobject>
+        </mediaobject></para>
+
+        <para>A concrete example: Many sites use a table element to display tabular data. To change the sort order of the data with a traditional web application, the user would click on the table header which would send a request to the web server to reload the page with the new sort order. The web server would then construct a new SQL query with the new sort order, execute it and fetch the data from the database and reconstruct the web page and send it back to the user. Using AJAX technologies, this event could instead have been handled with a client-side JavaScript that dynamically generates a view of the tabular data with DHTML.</para>
+
+    </sect1>
+
+    <sect1 id="ydajax_example">
+
+        <title>An example of using AJAX with the Yellow Duck Framework</title>
+
+        <para>The following example shows you a very basic application that uses AJAX to communicate between the server and the client.</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydajax_001.xml" />
+
+        <para>This is the template that goes along with this request class:</para>
+
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/ydajax_002.xml" />
+
+        <para>This is probably the easiest example that demonstrates the idea behind AJAX. The webpage has a DIV element that is hidden by default. When the user clicks the button, a new request object is instantiated and a request is send to the server. Important is that this happens without reloading the webpage. Once the request is executed, the webpage will interpret the result and display it in the DIV element.</para>
+
+        <para>Of course, if the server would return XML data, we could interpret that data and rebuild a bigger part of the database. It could also be used to add something to a database e.g. without reloading the page.</para>
+
+    </sect1>
+
+    <sect1 id="ydajax_future">
+
+        <title>AJAX and the Yellow Duck Framework in the future</title>
+
+        <para>Right now, AJAX is still very new and not yet integrated in the Yellow Duck Framework. Once the AJAX technique is more common, we will add a library to the Yellow Duck Framework that will help you on two sides:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>A library the encapsulates the logic of comminicating with the server</listitem>
+            <listitem>An YDAjaxRequest class that is able to interact with a client in a very straightforward way.</listitem>
+        </itemizedlist>
+
+        <para>There is no fixed timeline yet however on when this will be available.</para>
+
+    </sect1>
+
+    <sect1 id="ydajax_more_info">
+
+        <title>Where can I find more information about AJAX?</title>
+
+        <para>If you want to learn more about AJAX, you can check the following websites:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem><ulink url="http://en.wikipedia.org/wiki/AJAX">http://en.wikipedia.org/wiki/AJAX</ulink></listitem>
+            <listitem><ulink url="http://wiki.rubyonrails.com/rails/show/UnderstandingAjax">http://wiki.rubyonrails.com/rails/show/UnderstandingAjax</ulink></listitem>
+            <listitem><ulink url="http://www.adaptivepath.com/publications/essays/archives/000385.php">http://www.adaptivepath.com/publications/essays/archives/000385.php</ulink></listitem>
+        </itemizedlist>
+
+    </sect1>
+
+</chapter>

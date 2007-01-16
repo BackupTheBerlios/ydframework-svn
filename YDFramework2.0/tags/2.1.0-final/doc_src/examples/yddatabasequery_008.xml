@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: creating an SQL INSERT query</title>
+    <programlisting><![CDATA[<?php
+
+        // The values
+        $values = array(
+                     'name' => 'David',
+                     'email' => 'email@host.com',
+                     'admin' => 1,
+                     'purple' => null
+                  );
+
+        // Includes
+        YDInclude( 'YDDatabase.php' );
+        YDInclude( 'YDDatabaseQuery.php' );
+
+        // Database instance
+        $db = YDDatabase::getInstance( 'mysql', 'database', 'user', 'pass', 'host' );
+
+        // Instantiate the class
+        $q = YDDatabaseQuery::getInstance( $db );
+
+        // Insert query
+        $q->insert();
+    
+        // Add a table
+        // The into method is an alias of the from method
+        $q->into( 'user' );
+
+        // Set the values
+        $q->values( $values );
+
+        // Add the where clause
+        $q->where( "id = 144" );
+
+        // Show the SQL statement
+        YDDebugUtil::dump( $q->getQuery() );
+
+?>]]></programlisting>
+</example>

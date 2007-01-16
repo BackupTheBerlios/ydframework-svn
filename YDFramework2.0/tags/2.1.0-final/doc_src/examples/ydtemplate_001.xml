@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: template.php</title>
+    <programlisting>&lt;?php
+    
+    // Initialize the Yellow Duck Framework
+    require_once( dirname( __FILE__ ) . '/YDFramework2/YDF2_init.php' ); 
+    
+    // Inherit from the YDRequest class
+    class template extends YDRequest {
+
+        // This is the class constructor for our class.
+        function template() {
+
+            // Initialize the parent class.
+            $this->YDRequest();
+
+        }
+        
+        // The default action
+        funcion actionDefault() {
+        
+            // This is the array we are going to use in the template
+            $array = array(
+                array(
+                    'author' => 'Stephen King',
+                    'title' => 'The Stand'
+                ),
+                array(
+                    'author' => 'Neal Stephenson',
+                    'title' => 'Cryptonomicon'
+                ),
+                array(
+                    'author' => 'Milton Friedman',
+                    'title' => 'Free to Choose'
+                )
+            );
+        
+            // Instantiate a template object
+            $template = new YDTemplate();
+        
+            // Assign the variables
+            $template->assign( 'title', 'This is the title' );
+            $template->assign( 'books', $array );
+        
+            // Output the template
+            $template->display();
+        
+        }
+
+    }
+
+    // Process the request
+    YDInclude( 'YDF2_process.php' );
+    
+?&gt;</programlisting>
+</example>

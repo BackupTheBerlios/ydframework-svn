@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<example>
+    <title>Code listing: file naming conventions</title>
+    <programlisting><![CDATA[// Many-to-many relationship
+
+Local class: user
+Foreign class: group
+Cross class: user_group
+
+// Defined keys in the classes
+Local key: id
+Foreign key: id
+Cross keys: user_id, group_id
+
+// Table names defined in the classes
+
+Local table name: users
+Foreign table name: groups
+Cross table name: users_groups
+
+// Default naming in a registerRelation without any additional configuration
+
+// Local
+Class: user
+Field: id (defined key)
+
+// Foreign
+Class: group
+Field: id (defined key)
+
+// Cross
+Class: user_group (combination of Local and Foreign classes)
+Local Field: users_id (combination of Local table and Local Key)
+Foreign Field: groups_id (combination of Foreign table and Foreign Key)
+
+// Default relation between the tables
+
+users (user)          users_groups (user_group)   groups (group)
+-------------------   -------------------------   -------------------
+id....................user_id
+                      group_id....................id
+name                  active                      name
+email                 joined                      active
+...                   ...                         ...]]></programlisting>
+</example>

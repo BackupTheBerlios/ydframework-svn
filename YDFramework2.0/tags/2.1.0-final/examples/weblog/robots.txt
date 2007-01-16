@@ -1,0 +1,5 @@
+User-agent: *
+Crawl-Delay: 10
+Disallow: /manage
+Disallow: /skins
+Disallow: /include
