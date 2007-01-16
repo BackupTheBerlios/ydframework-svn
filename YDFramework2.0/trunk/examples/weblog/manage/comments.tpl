@@ -68,13 +68,6 @@
                         {if $comment.item_is_draft eq '1'}</i>{/if}
                     </td>
                     <td class="adminRowL">
-                        {*{if $comment.item_is_draft eq '1'}<i>{/if}
-                        <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.comment|bbcode|strip_tags|truncate}</a>
-                        {if $comment.item_title}
-                            <br/>
-                            {t w="item"}: {$comment.item_title}
-                        {/if}
-                        {if $comment.item_is_draft eq '1'}</i>{/if}*}
                         {if $comment.item_is_draft eq '1'}<i>{/if}
                         <a href="{$YD_SELF_SCRIPT}?do=edit&id={$comment.id}">{$comment.item_title}</a>
                         <br/>
@@ -107,7 +100,7 @@
             </tr>
         {else}
             <tr><td class="adminRowL" colspan="5">
-                <i>{t w="spam_delete_desc"}. <a href="{$YD_SELF_SCRIPT}?do=emptySpam"
+                <i>{t w="spam_delete_desc"} <a href="{$YD_SELF_SCRIPT}?do=emptySpam"
                  onClick="return confirm( '{t w="confirm_empty_spam"}' );">{t w="empty_spam_now"}</a></i>
             </td></tr>
             <tr>

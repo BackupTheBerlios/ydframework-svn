@@ -142,8 +142,12 @@
                 $this->db->executeSql( $sql );
             }
 
-            // Cleanup the bad behaviour table
+            // Cleanup the bad behaviour table part 1
             $sql = 'DELETE FROM #_bad_behavior WHERE DATE_SUB( `date`, INTERVAL 1 day ) < DATE_SUB( CURDATE(), INTERVAL 1 day ) AND request_method = \'GET\' AND `key` = \'00000000\'';
+            $this->db->executeSql( $sql );
+
+            // Cleanup the bad behaviour table part 2
+            $sql = 'DELETE FROM #_bad_behavior WHERE DATE_SUB( `date`, INTERVAL 7 day ) < DATE_SUB( CURDATE(), INTERVAL 7 day )';
             $this->db->executeSql( $sql );
 
             // Check against akismet if a key is there

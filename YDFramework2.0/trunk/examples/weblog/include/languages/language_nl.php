@@ -392,6 +392,7 @@ $GLOBALS['t']['http_headers'] = 'HTTP Headers';
 $GLOBALS['t']['user_agent'] = 'User Agent';
 $GLOBALS['t']['request_entity'] = 'Request Entiteit';
 $GLOBALS['t']['key'] = 'Code';
+$GLOBALS['t']['bb_delete_desc'] = 'Request informatie wordt automatisch verwijderd na 7 dagen.';
 $GLOBALS['t']['confirm_empty_bb'] = 'Bent u zeker dat u alle request informatie wil verwijderen?';
 $GLOBALS['t']['empty_bb_now'] = 'Verwijder nu alle request informatie.';
 
