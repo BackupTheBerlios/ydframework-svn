@@ -1,7 +1,7 @@
 @echo off
 
-rem Yellow Duck Framework version 2.0
-rem Copyright (c) copyright 2002-2005 Pieter Claerhout
+rem Yellow Duck Framework version 2.1
+rem Copyright (c) copyright 2002-2007 Pieter Claerhout
 rem
 rem This library is free software; you can redistribute it and/or
 rem modify it under the terms of the GNU Lesser General Public

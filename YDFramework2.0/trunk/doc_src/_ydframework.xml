@@ -50,7 +50,7 @@
 <book>
 
     <bookinfo>
-        <title>Yellow Duck Framework 2.0</title>
+        <title>Yellow Duck Framework 2.1</title>
         <subtitle>User Guide</subtitle>
         <authorgroup>
             <author>
@@ -59,11 +59,11 @@
             </author>
         </authorgroup>
         <copyright>
-            <year>2002</year><year>2005</year>
+            <year>2002</year><year>2007</year>
             <holder role="mailto:pieter@yellowduck.be">Pieter Claerhout</holder>
         </copyright>
         <abstract>
-            <para>This document contains the user guide for the Yellow Duck Framework version 2.0.</para>
+            <para>This document contains the user guide for the Yellow Duck Framework version 2.1.</para>
             <para>The Yellow Duck Framework is an object oriented framework written in <ulink url="http://www.php.net/">PHP</ulink> which makes it a lot easier and faster to create websites and web applications.</para>
         </abstract>
     </bookinfo>

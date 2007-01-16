@@ -2,8 +2,8 @@
 
     /*
 
-        Yellow Duck Framework version 2.0
-        (c) Copyright 2002-2005 Pieter Claerhout
+        Yellow Duck Framework version 2.1
+        (c) Copyright 2002-2007 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -45,7 +45,7 @@
             // Setup the module
             $this->_author = 'Pieter Claerhout';
             $this->_version = '1.0';
-            $this->_copyright = '(c) Copyright 2002-2005 Pieter Claerhout';
+            $this->_copyright = '(c) Copyright 2002-2007 Pieter Claerhout';
             $this->_description = 'This class is an interface to the Akismet comment spam checking webservice.';
 
             // Set the variables

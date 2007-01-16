@@ -2,8 +2,8 @@
 
     /*
 
-        Yellow Duck Framework version 2.0
-        (c) Copyright 2002-2005 Pieter Claerhout
+        Yellow Duck Framework version 2.1
+        (c) Copyright 2002-2007 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or
         modify it under the terms of the GNU Lesser General Public
@@ -49,7 +49,7 @@
             // Setup the module
             $this->_author = 'Pieter Claerhout';
             $this->_version = '1.0';
-            $this->_copyright = '(c) 2005 Pieter Claerhout, pieter@yellowduck.be';
+            $this->_copyright = '(c) 2002-2007 Pieter Claerhout, pieter@yellowduck.be';
             $this->_description = 'This addon class defines a RSS/ATOM feed. You can use this class to create RSS and '
                                . 'Atom feeds in a very easy and straightforward way. If you set up your class instance, '
                                . 'you can automatically output to the different versions of RSS and ATOM with the same '

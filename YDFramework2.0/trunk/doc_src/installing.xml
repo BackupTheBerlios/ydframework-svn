@@ -16,7 +16,7 @@
             <listitem>Webserver capable of executing PHP scripts, such as <ulink url="http://httpd.apache.org/">Apache</ulink> or <ulink url="http://www.microsoft.com/iis/">Microsoft IIS</ulink></listitem>
         </itemizedlist>
 
-        <para>The Yellow Duck Framework was primarily tested on the Windows platform and also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. PHP 5 works but the Yellow Duck Framework 2.0 will not take advantage of the new features provided with PHP 5 (such as exceptions and the new object model). The testing is mainly done using the Apache webserver.</para>
+        <para>The Yellow Duck Framework was primarily tested on the Windows platform and also has undergone extensive testing on Linux based systems. Currently, the Yellow Duck Framework is only supported with PHP version 4. PHP 5 works but the Yellow Duck Framework 2.1 will not take advantage of the new features provided with PHP 5 (such as exceptions and the new object model). The testing is mainly done using the Apache webserver.</para>
 
         <warning>It is preferred to run PHP as an Apache module or as an Microsft IIS ISAPI module for achieving the best performance. The Yellow Duck Framework works equally well under a CGI as well as under an mod_php environment.</warning>
 
@@ -32,7 +32,7 @@
 
         <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="examples/installing_001.xml" />
 
-        <para>The main directory of the framework, called <literal>YDFramework-2.0</literal> in this example, contains all the different files for the framework, including documentation, examples and license information. In this directory, there is a directory called <literal>YDFramework2</literal>, which contains the core framework files. There are a number of subdirectories in the <literal>YDFramework2</literal> directory which each have a specific function:</para>
+        <para>The main directory of the framework, called <literal>YDFramework2</literal> in this example, contains all the different files for the framework, including documentation, examples and license information. In this directory, there is a directory called <literal>YDFramework2</literal>, which contains the core framework files. There are a number of subdirectories in the <literal>YDFramework2</literal> directory which each have a specific function:</para>
 
         <itemizedlist spacing="compact">
             <listitem><emphasis role="bold"><literal>3rdparty</literal>:</emphasis> This directory contains the third party libraries that are needed for the Yellow Duck Framework to work properly. In here, you will find copies of <ulink url="http://smarty.php.net/">Smarty</ulink> and <ulink url="http://phpmailer.sourceforge.net/">PHP Mailer</ulink>.</listitem>

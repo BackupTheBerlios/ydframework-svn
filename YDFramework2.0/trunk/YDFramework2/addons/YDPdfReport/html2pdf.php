@@ -2,7 +2,7 @@
  
     /*
 
-        Yellow Duck Framework version 2.0
+        Yellow Duck Framework version 2.1
         Copyright (C) (c) copyright 2004 Pieter Claerhout
 
         This library is free software; you can redistribute it and/or

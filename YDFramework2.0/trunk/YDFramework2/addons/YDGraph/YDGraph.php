@@ -2,8 +2,8 @@
 
     /*
 
-        Yellow Duck Framework version 2.0
-        (c) Copyright 2002-2005 Pieter Claerhout
+        Yellow Duck Framework version 2.1
+        (c) Copyright 2002-2007 Pieter Claerhout
 
         This program is free software; you can redistribute it and/or
         modify it under the terms of the GNU General Public License
@@ -141,7 +141,9 @@
          *                 Default: 0.1
          */
         function setPadding( $value = 0.1 ){
+
             $this->up_padding = $value;
+
         }
 
         /**
@@ -550,8 +552,11 @@
             // plot graph
             foreach($this->m_series as $series){
                 
+
                 $cnt = count($series->m_values);
+
                 if ($cnt == 0) continue;
+
                 
                 // LINE PLOT
                 if($series->m_type == 'line'){
