@@ -18,7 +18,7 @@ rem License along with this library; if not, write to the Free Software
 rem Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 rem Print some general info
-echo Yellow Duck Framework 2.0
+echo Yellow Duck Framework 2.1
 echo Building HTML version of the User Guide
 echo.
 
