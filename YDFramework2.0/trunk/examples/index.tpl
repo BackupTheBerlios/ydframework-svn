@@ -33,7 +33,7 @@
 <body>
 
     <div class="header">
-        <h2>Yellow Duck Framework 2.0</h2>
+        <h2>{$YD_FW_NAME}</h2>
     </div>
 
     <div class="page">
