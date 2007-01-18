@@ -185,6 +185,17 @@
         'trk' => array( 'turkish', 'tr' ),
     );
 
+    // Default translations
+    $GLOBALS['t'] = array(
+        'years' => 'years',
+        'months' => 'months',
+        'weeks' => 'weeks',
+        'days' => 'days',
+        'hours' => 'hours',
+        'minutes' => 'minutes',
+        'ago' => 'ago',
+    );
+
     /**
      *	This function will include a file from the filesystem. It works similar to the require_once function but it
      *	knows about the include path for the Yellow Duck Framework.

@@ -81,6 +81,7 @@
                 $this->register_modifier( 'dump', 'YDTemplate_modifier_dump' );
                 $this->register_modifier( 'bbcode', 'YDTemplate_modifier_bbcode' );
                 $this->register_modifier( 'absoluteurl', 'YDTemplate_modifier_absoluteurl' );
+                $this->register_modifier( 'timesince', 'YDTemplate_modifier_timesince' );
 
                 // Register the custom functions
                 $this->register_function( 't', 'YDTemplate_function_t' );
@@ -650,6 +651,15 @@
     function YDTemplate_modifier_dump( $obj ) {
         var_dump( $obj );
         return;
+    }
+
+    /*
+     *	This template modifier will dump the contents of the variable using var_dump.
+     *
+     *  @param  $obj    The object to dump.
+     */
+    function YDTemplate_modifier_timesince( $obj ) {
+        return YDStringUtil::timesince( $obj );
     }
 
 ?>

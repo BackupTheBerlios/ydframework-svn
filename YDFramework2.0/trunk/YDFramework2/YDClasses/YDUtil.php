@@ -989,6 +989,59 @@
             }
         }
 
+        /**
+         *  Show the time that has elapsed since a given time.
+         *
+         *  @param  $time   The time in seconds
+         *
+         *  @returns    The elapsed time
+         */
+        function timesince( $time ) {
+
+            // Convert to integer
+            if ( is_string( $time ) && is_numeric( $time ) ) {
+                $time = intval( $time );
+            }
+
+            // Array of time period chunks
+            $chunks = array(
+                array( 60 * 60 * 24 * 365 , t('years') ),
+                array( 60 * 60 * 24 * 30 , t('months') ),
+                array( 60 * 60 * 24 * 7, t('weeks') ),
+                array( 60 * 60 * 24 , t('days') ),
+                array( 60 * 60 , t('hours') ),
+                array( 60 , t('minutes') ),
+            );
+
+            // Difference in seconds
+            $since = time() - $time;
+
+            // The first chunk
+            for ( $i = 0, $j = sizeof( $chunks ); $i < $j; $i++ ) {
+                $seconds = $chunks[$i][0];
+                $name = $chunks[$i][1];
+                if ( ( $count = floor( $since / $seconds ) ) != 0 ) {
+                    break;
+                }
+            }
+
+            // Set output var
+            $output = ( $count == 1 ) ? '1 '.$name : $count . ' ' . $name;
+
+            // step two: the second chunk
+            if ( $i + 1 < $j ) {
+                $seconds2 = $chunks[$i + 1][0];
+                $name2 = $chunks[$i + 1][1];
+                if ( ( $count2 = floor( ( $since - ( $seconds * $count ) ) / $seconds2 ) ) != 0 ) {
+                    $output .= ($count2 == 1) ? ', 1 '.$name2 : ", $count2 {$name2}s";
+                }
+            }
+
+            // Return the output
+            return $output . ' ' . t('ago');
+
+        }
+
     }
 
     /**
