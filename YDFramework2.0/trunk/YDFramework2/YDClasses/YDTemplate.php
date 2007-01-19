@@ -606,7 +606,7 @@
         if ( empty( $string ) ) {
             $string = "now";
         }
-        if ( is_numeric( $string ) && $time != -1 ) {
+        if ( is_numeric( $string ) && $string != -1 ) {
             return intval( $string );
         }
         if ( preg_match( '/^\d{14}$/', $string ) ) {
