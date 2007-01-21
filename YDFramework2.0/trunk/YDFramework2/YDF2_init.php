@@ -57,6 +57,7 @@
     @define( 'YD_FW_VERSION', '2.1 (build ' . YD_FW_REVISION . ')' );
     @define( 'YD_FW_NAMEVERS', YD_FW_NAME . ' ' . YD_FW_VERSION );
     @define( 'YD_FW_HOMEPAGE', 'http://ydframework.berlios.de/' );
+    @define( 'YD_FW_POWERED_BY', sprintf( 'Powered by <a href="%s">%s</a>', YD_FW_HOMEPAGE, YD_FW_NAMEVERS ) );
     @define( 'YD_FW_COPYRIGHT', '(c) 2002-2007 Pieter Claerhout, pieter@yellowduck.be' );
 
     // Directory paths
