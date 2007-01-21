@@ -82,6 +82,7 @@
                 $this->register_modifier( 'bbcode', 'YDTemplate_modifier_bbcode' );
                 $this->register_modifier( 'absoluteurl', 'YDTemplate_modifier_absoluteurl' );
                 $this->register_modifier( 'timesince', 'YDTemplate_modifier_timesince' );
+                $this->register_modifier( 'url', 'YDTemplate_modifier_url' );
 
                 // Register the custom functions
                 $this->register_function( 't', 'YDTemplate_function_t' );
@@ -139,6 +140,7 @@
                 $this->assign( 'YD_FW_VERSION', YD_FW_VERSION );
                 $this->assign( 'YD_FW_NAMEVERS', YD_FW_NAMEVERS );
                 $this->assign( 'YD_FW_HOMEPAGE', YD_FW_HOMEPAGE );
+                $this->assign( 'YD_FW_POWERED_BY', YD_FW_POWERED_BY );
                 $this->assign( 'YD_FW_COPYRIGHT', YD_FW_COPYRIGHT );
                 $this->assign( 'YD_SELF_SCRIPT', YD_SELF_SCRIPT );
                 $this->assign( 'YD_SELF_FILE', YD_SELF_FILE );
@@ -660,6 +662,21 @@
      */
     function YDTemplate_modifier_timesince( $obj ) {
         return YDStringUtil::timesince( $obj );
+    }
+
+    /**
+     *	This template modifier formats an url with an optional title.
+     *
+     *  @param  $url        The url to format as a HTML hyperlink
+     *  @param  $title      (optional) If null and no string is given, the url will be used.
+     *
+     *  @returns    The formatted url.
+     */
+    function YDTemplate_modifier_url( $url, $title=null ) {
+        if ( empty( $title ) ) {
+            $title = $url;
+        }
+        return sprintf( '<a href="%s">%s</a>', $url, $title );
     }
 
 ?>
