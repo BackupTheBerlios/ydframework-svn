@@ -25,7 +25,7 @@
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
-    
+
     // Auto execute config value. Default: true.
     YDConfig::set( 'YD_AUTO_EXECUTE', true, false );
 
@@ -233,7 +233,7 @@
                 $debug .= '</table></p></dd>';
 
                 // Add the included files
-                $debug .= '<p ' . $font . '><i>Included files</i></p>';
+                $debug .= '<p ' . $font . '><i>Included files (' . $includeFilesSize . ')</i></p>';
                 $debug .= '<dd><p><table width="90%" border="1" cellspacing="0" cellpadding="2">';
                 $debug .= sprintf( '<tr><th %s>File</th><th %s>Size</th></tr>', $font, $font );
                 foreach ( $includeFilesWithSize as $size=>$file ) {
