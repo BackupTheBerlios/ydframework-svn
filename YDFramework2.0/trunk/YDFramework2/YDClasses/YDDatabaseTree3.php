@@ -538,10 +538,15 @@
          *  @param $values      The field values of the node. Do NOT define parent_id here!
          *  @param $parent_id   The parent ID of the node. If not set, node will be added as a root child (its parent will be 1)
          *  @param $position    (optional) Node position. If not set, node will be added at the end position
+         *  @param $onDate      (optional) When element of $values is a date (read: array ), we should convert to this format. Default: 'datetimesql'
          *
          *  @returns    The ID of the newly inserted node.
          */
-        function addNode( $values, $parent_id = 1, $position = null ) {
+        function addNode( $values, $parent_id = 1, $position = null, $onDate = 'datetimesql' ) {
+
+			// check values
+			foreach( $values as $element => $value )
+				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $value, $onDate );
 
             // compute linege. to do that we must check if we want to add node to root
             if ( $parent_id == 1 ) { 
@@ -598,10 +603,15 @@
          *
          *  @param $values      The field values of the node. Do NOT update position, parent_id, lineage or level
          *  @param $id          (optional) The ID of the node to update.
+         *  @param $onDate      (optional) When element of $values is a date (read: array ), we should convert to this format. Default: 'datetimesql'
          *
          *  @returns    Total of lines affected
          */
-        function updateNode( $values, $id ) {
+        function updateNode( $values, $id, $onDate = 'datetimesql' ) {
+
+			// check values
+			foreach( $values as $element => $value )
+				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $value, $onDate );
 
 			$this->resetAll();
 
