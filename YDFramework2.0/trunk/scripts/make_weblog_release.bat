@@ -10,7 +10,7 @@ rem   - gzip
 rem   - sed
 
 :config_settings
-set SVN_HOME=svn://svn.berlios.de/ydframework/YDFramework2.0
+set SVN_HOME=http://svn.berlios.de/svnroot/repos/ydframework/YDFramework2.0
 set BLDTYPE=
 set SVN_URL=
 set SVN_REV=
