@@ -21,8 +21,40 @@
 
     */
 
+    /*! @page page_YDSimpleCMS Addons - Simple CMS
+
+      The Simple CMS addon can be used to build a basic content management system.
+
+      @section page_YDSimpleCMS_01 A generic overview
+
+      Not written yet...
+
+      @section page_YDSimpleCMS_02 The module approach
+
+      Not written yet...
+    */
+
     /**
-     * @addtogroup YDSimpleCMS Addons - Simple CMS
+     *  @addtogroup YDSimpleCMS Addons - Simple CMS
+     *
+     *  @ref page_YDSimpleCMS More information about the Simple CMS addon.
+     *
+     *  @todo
+     *      Consolidate the two request classes into one. Based on the scope, it should know if you need to force
+     *      authentication or not.
+     *
+     *  @todo
+     *      Make a link from the module to the request instance
+     *
+     *  @todo
+     *      Make a link from the template to the module instance and module manager (so that you can access these from
+     *      the template)
+     *
+     *  @todo
+     *      Make the run method a static method of the request class
+     *
+     *  @todo
+     *      make login module based?
      */
 
     // Check if the framework is loaded
@@ -41,6 +73,9 @@
     // Configuration
     YDConfig::set( 'YD_AUTO_EXECUTE', false );
 
+    // The global list with admin menu
+    $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] = array();
+
     // Includes
     YDInclude( 'YDForm.php' );
     YDInclude( 'YDRequest.php' );
@@ -49,20 +84,6 @@
     YDInclude( 'YDFileSystem.php' );
     YDInclude( 'YDF2_process.php' );
     YDInclude( 'YDSimpleCMS_CoreModules.php' );
-
-    // Register the database instance and prefix
-    YDDatabase::registerInstance(
-        'default', 'mysql',
-        YDConfig::get( 'db_name' ), YDConfig::get( 'db_user' ),
-        YDConfig::get( 'db_pass' ), YDConfig::get( 'db_host' )
-    );
-    YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix' ) );
-
-    // The global list with admin action
-    $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] = array();
-
-    // The database connection
-    $GLOBALS['db'] = YDDatabase::getNamedInstance();
 
     /**
      *  This is the global YDSimpleCMS class that houses all cms related functions.
@@ -144,19 +165,59 @@
 
         }
 
+        /**
+         *  This function returns a database connection.
+         *
+         *  @returns    A database connection.
+         *
+         *  @static
+         */
+        function getDbConnection() {
+
+            // Register the database instance and prefix
+            YDDatabase::registerInstance(
+                'default', 'mysql',
+                YDConfig::get( 'db_name' ), YDConfig::get( 'db_user' ),
+                YDConfig::get( 'db_pass' ), YDConfig::get( 'db_host' )
+            );
+            YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix' ) );
+        
+            // The database connection
+            return YDDatabase::getNamedInstance();
+
+        }
+
     }
 
     /**
-     *  Override the template class
+     *  Custom template class for the SimpleCMS package. This is a customization of the stock YDTemplate class.
+     *
+     *  The main differences with the normal template class are:
+     *      - Support for masterpages
+     *      - Different handling of template directories
+     *
+     *  The template directories are determined as follows (depending of the scope of the template class:
+     *      - scope public:
+     *          - skins_{scope}/{currentSkinFromConfig}
+     *      - scope admin:
+     *          - skins_{scope}
      *
      *  @ingroup YDSimpleCMS
      */
     class YDSimpleCMSTemplate extends YDTemplate {
 
-        // The scope of the template
+        /**
+         *  The scope which is going to be used for the template.
+         *
+         *  Can be either public or admin.
+         */
         var $scope;
 
-        // The constructor
+        /**
+         *  The class constructor the the YDSimpleCMSTemplate class.
+         *
+         *  @param  $scope  The scope which is going to be used for the template. Can be either public or admin.
+         */
         function YDSimpleCMSTemplate( $scope ) {
 
             // Initialize the parent
@@ -167,7 +228,18 @@
 
         }
 
-        // Fetch the template using a master
+        /**
+         *  This function will fetch the specified template, and surround it with the contents of the indicated master
+         *  page, which should be in the skins directory.
+         *
+         *  The placeholder you can use in the master page to place the contents is \#\#content\#\#
+         *
+         *  @param  $template   (optional) The name of the template to use. If empty, the name of the module will be
+         *                      used as the name of the template.
+         *  @param  $master     (optional) The name of the masterpage to use. Defaults to '__master'.
+         *
+         *  @returns    The result from the parsed template.
+         */
         function fetchWithMaster( $template='', $master='__master' ) {
 
             // Set the variables
@@ -190,7 +262,16 @@
 
         }
 
-        // Fetch the template using a master
+        /**
+         *  This function will output the specified template, and surround it with the contents of the indicated master
+         *  page, which should be in the skins directory.
+         *
+         *  The placeholder you can use in the master page to place the contents is \#\#content\#\#
+         *
+         *  @param  $template   (optional) The name of the template to use. If empty, the name of the module will be
+         *                      used as the name of the template.
+         *  @param  $master     (optional) The name of the masterpage to use. Defaults to '__master'.
+         */
         function displayWithMaster( $template='', $master='__master' ) {
             echo( $this->fetchWithMaster( $template, $master ) );
         }
@@ -198,17 +279,40 @@
     }
 
     /**
-     *  Define the CMS request class.
+     *  Define the CMS public request class.
+     *
+     *  The public request class doesn't perform any user authentication.
      *
      *  @ingroup YDSimpleCMS
      */
     class YDSimpleCMSPublicRequest extends YDRequest {
 
-        // Class variables
+        /**
+         *  The scope which is going to be used for the template.
+         *
+         *  Can be either public or admin.
+         */
         var $requestScope  = 'public';
+
+        /**
+         *  The default module for the request class.
+         *
+         *  Currently defaults to 'page' for the public request class.
+         */
         var $defaultModule = 'page';
 
-        // Default action
+        /**
+         *  The default action for the public request.
+         *
+         *  Currently, it does the following items:
+         *      - Creates an instance of YDSimpleCMSModuleManager
+         *      - Loads all the modules using the instance
+         *      - Runs the module and action specified by the query string
+         *
+         *  @todo
+         *      Needs to be implemented properly so that it can do all it's stuff based on the ID passed in the qeury
+         *      string of the request.
+         */
         function actionDefault() {
             $moduleManager = new YDSimpleCMSModuleManager();
             $moduleManager->loadAllModules();
@@ -220,17 +324,42 @@
     }
 
     /**
-     *  Define the CMS request class.
+     *  Define the CMS admin request class.
+     *
+     *  This class forces authentication against the database (the \#_users table). Only if the authentication succeeds,
+     *  you will be able to access the request.
+     *
+     *  It also supports modules and action via specific query string parameters:
+     *      - module: the module to load (defaults to 'admin' )
+     *      - action: the action to load from the module (defaults to 'show')
+     *
+     *  The authentication credentials are stored in cookies with the following name:
+     *      - YD_SIMPLECMS_{siteId}_USER
+     *      - YD_SIMPLECMS_{siteId}_PASS
      *
      *  @ingroup YDSimpleCMS
      */
     class YDSimpleCMSAdminRequest extends YDSimpleCMSPublicRequest {
 
-        // Class variables
+        /**
+         *  The scope which is going to be used for the template.
+         *
+         *  Can be either public or admin.
+         */
         var $requestScope  = 'admin';
+
+        /**
+         *  The default module for the request class.
+         *
+         *  Currently defaults to 'admin' for the admin request class.
+         */
         var $defaultModule = 'admin';
 
-        // Constructor
+        /**
+         *  The constructor for the admin CMS request.
+         *
+         *  This one forces authentication and requires a configuration variable called 'YD_SIMPLECMS_SITEID' to be set.
+         */
         function YDSimpleCMSAdminRequest() {
 
             // Initialize the parent
@@ -251,7 +380,10 @@
 
         }
 
-        // Login function
+        /**
+         *  This action takes care of handling the login form. It can show and validate a login form and redirects to
+         *  default action of the request class when the user is authenticated.
+         */
         function actionLogin() {
 
             // Redirect to default action if already logged in
@@ -302,13 +434,22 @@
 
         }
 
-        // Logout action
+        /**
+         *  This action takes care of logging out the current user. This is done by removing the authentication cookie.
+         *
+         *  After the logout, the user is redirected to the login page.
+         */
         function actionLogout() {
             $this->setCookie( $this->cookieNamePass, null );
             $this->redirectToAction( 'login' );
         }
 
-        // Check for authentication
+        /**
+         *  This function will check if the current user is authenticated or not. It will check this against the
+         *  authentication cookies.
+         *
+         *  @returns    True if the user is authenticated, false if the user is not authenticated.
+         */
         function isAuthenticated() {
             $cookieUser = $this->getCookie( $this->cookieNameUser );
             $cookiePass = $this->getCookie( $this->cookieNamePass );
@@ -322,17 +463,31 @@
             return false;
         }
 
-        // Redirect to the login if the authentication failed
+        /**
+         *  This function is executec if the authenticated failed. It redirects the user to the login page.
+         */
         function authenticationFailed() {
             $this->forward( 'login' );
         }
 
-        // Function to check the login
+        /**
+         *  This function verifies the user credentials against the database.
+         *
+         *  @param  $fields     The fields which are containing the loginName and loginPass attributes.
+         *  @param  $md5        (optional) If sett to false, it means that the password is passed as clear text. If set
+         *                      to true, the password is passed to this function as an MD5 checksum.
+         *
+         *  @returns    If the login is valid, this function will return true. If not, it will return an array with the
+         *              error message.
+         *
+         *  @todo
+         *      Need model class to encapsulate the database calls.
+         */
         function checkLogin( $fields, $md5=false ) {
             if ( $md5 === false ) {
                 $fields['loginPass'] = md5( $fields['loginPass'] );
             }
-            $db = YDDatabase::getNamedInstance();
+            $db = YDSimpleCMS::getDbConnection();
             $result = $db->getRecord(
                 'SELECT * FROM #_users WHERE name = \'' . $db->escape( $fields['loginName'] ) . '\' AND password = \'' . $db->escape( $fields['loginPass'] ) . '\''
             );
@@ -353,42 +508,109 @@
      */
     class YDSimpleCMSModule extends YDBase {
 
-        // Class variables
+        /**
+         *  The nice name of the CMS module.
+         */
         var $name          = 'SimpleCMS Generic Module';
+
+        /**
+         *  The full description of the CMS module.
+         */
         var $description   = 'Base module for all the SimpleCMS modules.';
+
+        /**
+         *  The version number of the CMS module.
+         */
         var $version       = '1.0';
+
+        /**
+         *  The name of the author of the CMS module.
+         */
         var $authorName    = 'Pieter Claerhout';
+
+        /**
+         *  The email address of the author of the CMS module.
+         */
         var $authorEmail   = 'pieter@yellowduck.be';
+
+        /**
+         *  The website address of the author of the CMS module.
+         */
         var $authorUrl     = 'http://www.yellowduck.be';
+
+        /**
+         *  A reference to the module manager instance that loaded this module.
+         */
         var $manager       = null;
+
+        /**
+         *  The current scope of the CMS module.
+         *
+         *  Currently, the value can only be public or admin.
+         */
         var $currentScope  = null;
+
+        /**
+         *  The name of the action that is currently being executed.
+         */
         var $currentAction = null;
 
-        // Constructor
+        /**
+         *  The class constructor the the YDSimpleCMSModule class.
+         *
+         *  @param  $manager    A reference to the module manager instance that loaded this module.
+         */
         function YDSimpleCMSModule( $manager ) {
             $this->manager = & $manager;
             $this->tpl = new YDSimpleCMSTemplate( 'public' );
         }
 
-        // Install the module
+        /**
+         *  Placeholder function that gets called if the module is installed.
+         *
+         *  @todo
+         *      Still needs to be implemented
+         */
         function install() {
         }
 
-        // Uninstall the module
+        /**
+         *  Placeholder function that gets called if the module is uninstalled.
+         *
+         *  @todo
+         *      Still needs to be implemented
+         */
         function uninstall() {
         }
 
-        // Check if the module is required or not
+        /**
+         *  This function will indicate if the module is a required one or not. The required modules are basically not
+         *  in the modules directory.
+         *
+         *  @returns    True if the module is required, false otherwise.
+         */
         function isRequired() {
             return ! is_file( YD_SIMPLECMS_MODULE_DIR . '/' . $this->getClassName() . YD_SIMPLECMS_MODULE_EXT );
         }
 
-        // Get the module name
+        /**
+         *  This function returns the short name of the module.
+         *
+         *  @returns    The short name of the module.
+         */
         function getModuleName() {
             return substr( $this->getClassName(), strlen( YD_SIMPLECMS_MODULE_PREFIX ) );
         }
 
-        // Display the module
+        /**
+         *  This function will output the template associated with this module. It will also assign the following
+         *  standard variables to the template instance:
+         *      - currentAction: the name of the current action
+         *      - currentScope: the current scope of the module ('public' or 'admin')
+         *      - adminMenu: an array containing all the menus and menu items for the admin section.
+         *      - currentUser: the full user details for the user which is currently logged in. If no user is logged in,
+         *                     this variable will contain a null value.
+         */
         function display( $name='' ) {
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
@@ -402,7 +624,14 @@
             $this->tpl->displayWithMaster( $name );
         }
 
-        // Run an action in the module
+        /**
+         *  This function triggers the indicated action in the indicated scope.
+         *
+         *  This function gets triggered by the module manager when this one wants to trigger an action.
+         *
+         *  @param  $scope  The scope in which to run the action.
+         *  @param  $action The action to run.
+         */
         function runAction( $scope, $action ) {
             $moduleFunctionName = YD_SIMPLECMS_ACTION_PREFIX . $scope . '_' . $action;
             if ( ! $this->hasMethod( $moduleFunctionName ) ) {
@@ -422,7 +651,12 @@
      */
     class YDSimpleCMSModuleManager extends YDBase {
 
-        // Load the plugins
+        /**
+         *  This function will load all modules from the modules directory. Loading a module only means that the file
+         *  containing the module is included.
+         *
+         *  @static
+         */
         function loadAllModules() {
             if ( is_dir( YD_SIMPLECMS_MODULE_DIR ) ) {
                 $modulesDir = new YDFSDirectory( YD_SIMPLECMS_MODULE_DIR );
@@ -432,7 +666,17 @@
             }
         }
 
-        // Run a module
+        /**
+         *  This function will run the specified module and action in the indicated scope.
+         *
+         *  @attention
+         *      This function should only be called after the loadAllModules function has been executed. If not, this
+         *      function will fail as the include files are not loaded yet.
+         *
+         *  @param  $scope  The scope in which to run the module and action. Can be 'public' or 'admin'.
+         *  @param  $module The name of the module to run.
+         *  @param  $action The name of the action to run.
+         */
         function runModule( $scope, $module, $action ) {
 
             // Convert everything to lowercase
@@ -473,7 +717,11 @@
 
         }
 
-        // Get the list of modules
+        /**
+         *  This function returns a list with an instance of each loaded module.
+         *
+         *  @returns    A list with an instance of each loaded module.
+         */
         function getModuleList() {
             $modules = array();
             foreach ( get_declared_classes() as $class ) {
