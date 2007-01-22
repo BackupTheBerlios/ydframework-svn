@@ -71,9 +71,9 @@
      *
      *  @ingroup YDDatabase
      */
-    class YDDatabaseTree3 extends YDDatabaseObject {
+    class YDDatabaseObjectTree extends YDDatabaseObject {
     
-        function YDDatabaseTree3( $table, $db = 'default', $idField = 'id', $parentField = 'parent_id', $lineageField = 'lineage', $levelField = 'level', $positionField = 'position' ) {
+        function YDDatabaseObjectTree( $table, $db = 'default', $idField = 'id', $parentField = 'parent_id', $lineageField = 'lineage', $levelField = 'level', $positionField = 'position' ) {
         
 			// init DB object
             $this->YDDatabaseObject();
