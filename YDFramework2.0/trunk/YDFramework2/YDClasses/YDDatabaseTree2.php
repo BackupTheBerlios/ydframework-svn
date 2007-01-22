@@ -253,6 +253,8 @@
          *
          *  @param $id             The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
+         *  @param $specificPart   (optional) Whether or not we want a specific column. Use the name of the column if
+         *                         want one, otherwise, set to null to get all columns.
          *
          *  @returns The children of the passed node
          */

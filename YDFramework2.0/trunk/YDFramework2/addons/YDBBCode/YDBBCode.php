@@ -163,11 +163,11 @@
         /**
          *  Function to handle the code tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -186,11 +186,11 @@
         /**
          *  Function to handle the color tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -209,11 +209,11 @@
         /**
          *  Function to handle the size tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -232,11 +232,11 @@
         /**
          *  Function to handle the quote tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -254,11 +254,11 @@
         /**
          *  Function to handle the url tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -277,11 +277,11 @@
         /**
          *  Function to handle the email tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */
@@ -300,11 +300,11 @@
         /**
          *  Function to handle the img tag.
          *
-         *  @params $action         The action that is executed.
-         *  @params $attributes     The attributes specified in the tag
-         *  @params $content        The content value of the tag.
-         *  @params $params         The parameters for the tag
-         *  @params $node_object    A reference to the node object.
+         *  @param $action         The action that is executed.
+         *  @param $attributes     The attributes specified in the tag
+         *  @param $content        The content value of the tag.
+         *  @param $params         The parameters for the tag
+         *  @param $node_object    A reference to the node object.
          *
          *  @returns    The html version of the tag.
          */

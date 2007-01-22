@@ -280,7 +280,8 @@
     /**
      *  This function is used to load translations from a $GLOBALS['t'] array.
      *
-     *  @param  $t  The name of the translated string.
+     *  @param  $t      The name of the translated string.
+     *  @param  $params (optional) An array of parameters that are passed to the sprintf function.
      *
      *  @returns    The translated string.
      */

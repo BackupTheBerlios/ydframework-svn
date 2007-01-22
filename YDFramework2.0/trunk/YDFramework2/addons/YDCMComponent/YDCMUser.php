@@ -153,7 +153,7 @@
         /**
          *  This method deletes a user (and all children) or just the children
          *
-         *  @param $userobject_id  Userobject id
+         *  @param $user_id       Userobject id
          *  @param $deleteAll     (Optional) Delete id and all children (true by default. if false, deletes children only)
          *
          *  @returns    YDResult object. OK      - user deleted

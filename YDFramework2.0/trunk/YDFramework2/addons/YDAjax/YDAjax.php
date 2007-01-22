@@ -652,6 +652,7 @@
          *	This is a helper method to compute all JS that is needed to get a form element
          *
          *	@param $formElement			Form element object
+         *  @param $options             The options for the form element
          */		
 		function __getJSFormElement( $formElement, $options ){
 

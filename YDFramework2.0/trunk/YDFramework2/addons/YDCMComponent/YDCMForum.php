@@ -155,7 +155,7 @@ INSERT INTO ydcmforum_announcements VALUES ( 4, 4, '2006-10-14 10:14', "Help: Re
         /**
          *  This method return an element
          *
-         *  @param $is  Id to search for
+         *  @param $id  Id to search for
          *
          *  @returns    Element as array
          */

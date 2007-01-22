@@ -107,7 +107,7 @@
         /**
          *  This function defines the order used in all SELECTS
          *
-         *  @param $string  The sql order string.
+         *  @param $sql  The sql order string.
          */
         function setOrder( $sql ){
 
@@ -666,9 +666,9 @@
         /**
          *  Move a node to a different parent node.
          *
-         *  @param  $id         	The ID of the node to move
+         *  @param  $id             The ID of the node to move
          *  @param  $new_parent_id  (optional) The ID of the new parent node. If not set, will be moved in same parent
-         *  @param  $position   	(optional) The new position.
+         *  @param  $new_position   (optional) The new position.
          */
         function moveNode( $id, $new_parent_id = null, $new_position = null ) {
 

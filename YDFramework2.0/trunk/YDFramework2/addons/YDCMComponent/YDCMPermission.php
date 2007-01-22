@@ -242,6 +242,7 @@
          *  This function returns a class description
          *
          *  @param     $class    Class name
+         *  @param     $title    The title for the class
          *
          *  @returns   description STRING
          */

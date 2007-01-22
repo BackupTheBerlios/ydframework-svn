@@ -85,7 +85,7 @@
          *  This method returns an associative array of nodes that belogs to a specific type
          *
          *  @param $type       Node type (or array of types)
-         *  @param $attribute  (Optional) Attribute name or (array of attributes) to get only
+         *  @param $attributes (Optional) Attribute name or (array of attributes) to get only
          *
          *  @returns    Associative array
          */

@@ -122,7 +122,7 @@
          *  @param $columns		    The number of columns the table should have.
          *  @param $fillLastRow	    (optional) If true, the last row will be filled with null values so that it matches
          *						    the number of columns.
-         *  @param $horizontally	(optional) If true, rows will be filled first, then it will create an new row
+         *  @param $horizontal  	(optional) If true, rows will be filled first, then it will create an new row
          *
          *  @returns	A multi-dimension array with the contents of the original array converted to a table with the
          *				indicated number of colums.
@@ -386,7 +386,7 @@
         /**
          *  Trigger an error
          *
-         *  @param  $error  The error to raise.
+         *  @param  $msg    The error to raise.
          *  @param  $sql    (optional) The SQL statement to log with the error.
          *  @param  $level  (optional) The type of error to be raised. Default is YD_ERROR.
          */

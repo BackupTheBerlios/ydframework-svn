@@ -1046,7 +1046,7 @@
          *  @param $messages   (optional) Array with predefined messages:
          *                                'ok' for ok message, 'error' for fatal messages, 'form_err' for no validation
          *
-         *  @param $forvalues  (optional) Custom form validation values
+         *  @param $formvalues (optional) Custom form validation values
          *
          *  @param $onDate     (optional) When element is a date (read: array ), we should convert to this format. Default: 'datetimesql'
          *

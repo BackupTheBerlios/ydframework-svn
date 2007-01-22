@@ -112,6 +112,7 @@
          *  This method adds form elements for group editing
 		 *
 		 * @param $group_id     Group id to edit
+		 * @param $permObj    The permission object.
          */
 		function & addFormEdit( $group_id, $permObj = null ){
 
@@ -125,7 +126,8 @@
         /**
          *  This method adds form elements for addind a new group
 		 *
-		 * @param $parent_group_id    Parent id (a user id)
+		 * @param $user_id    User ID
+		 * @param $permObj    The permission object.
          */
 		function & addFormNew( $user_id, $permObj = null ){
 
@@ -143,6 +145,7 @@
          *                      If you will ADD a new group this is the parent id. Use NULL to add it to the root tree
          *
 		 * @param $edit         TRUE: We are editing a group, FALSE: we are creating a group
+		 * @param $permObj    The permission object.
          */
 		function & _addFormDetails( $id, $edit, $permObj ){
 

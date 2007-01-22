@@ -67,9 +67,6 @@
      *  - getPageUrl: the URL of the given page
      *
      *  All these options are available as class variables.
-     *
-     *  @todo
-     *      Improve performance with very large recordsets (millions of rows).
      */
     class YDRecordSet extends YDBase {
 
@@ -544,6 +541,8 @@
          *                          YD_BROWSEBAR_FULL. The full one shows all page numbers, the short one doesn't.
          *  @param  $currentLink    (optional) Boolean indicating if you should be able to click on the link for the
          *                          current page or not.
+         *  @param  $allLink        (optional) If not null or empty, a link to show all records is added. The contents
+         *                          of this variable is used as the title for the link.
          *
          *  @returns    The browsebar as formatted HTML.
          */
@@ -1071,9 +1070,6 @@
 
          *
          *  @returns    The records matching the SQL statement as a YDRecordSet object.
-         *
-         *  @todo
-         *      Performance needs to be improved. This is a quick and dirty solution right now.
          */
         function getRecordsAsSet( $sql, $page=-1, $pagesize=-1, $pagevar = 'page', $sizevar = 'size' ) {
 
