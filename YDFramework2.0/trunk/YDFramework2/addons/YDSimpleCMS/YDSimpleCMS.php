@@ -321,6 +321,14 @@
             $this->tpl = new YDSimpleCMSTemplate( 'public' );
         }
 
+        // Install the module
+        function install() {
+        }
+
+        // Uninstall the module
+        function uninstall() {
+        }
+
         // Check if the module is required or not
         function isRequired() {
             return ! is_file( YD_SIMPLECMS_MODULE_DIR . '/' . $this->getClassName() . YD_SIMPLECMS_MODULE_EXT );
