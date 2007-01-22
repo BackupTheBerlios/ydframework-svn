@@ -60,6 +60,59 @@
     // The database connection
     $GLOBALS['db'] = YDDatabase::getNamedInstance();
 
+    // Global YDSimpleCMS class
+    class YDSimpleCMS extends YDBase {
+
+        // Run the request in the indicated scope
+        // @static
+        function run( $scope ) {
+            $baseClass = ( strtolower( $scope ) == 'public' ) ? 'YDSimpleCMSPublicRequest' : 'YDSimpleCMSAdminRequest';
+            $clsInst = new YDExecutor( $baseClass . '.php' );
+            @session_start();
+            $clsInst->execute();
+        }
+
+        // Function to show an error
+        function showError() {
+            $args = func_get_args();
+            if ( sizeof( $args > 0 ) ) {
+                $args[0] = '<font color="red"><b>ERROR:</b> ' . $args[0] . '</font>';
+            }
+            call_user_func_array( 'printf', $args );
+            die();
+        }
+
+        // Function to add an admin menu item
+        function addAdminMenu( $title, $subtitle, $module, $action ) {
+
+            // Link to the menu items
+            $menu = & $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'];
+
+            // Construct the URL
+            $url = YD_SELF_SCRIPT . '?module=' . $module . '&action=' . $action;
+
+            // Add the first level if needed
+            if ( ! isset( $menu[$title] ) ) {
+                $menu[$title] = array();
+                $menu[$title]['title']    = $title;
+                $menu[$title]['children'] = array();
+            }
+
+            // Check if we have a subname or not
+            if ( $subtitle == null ) {
+                $menu[$title]['url'] = $url;
+            } else {
+                if ( ! isset( $menu[$title][ $action ] ) ) {
+                    $menu[$title]['children'][$subtitle] = array();
+                    $menu[$title]['children'][$subtitle]['title'] = $subtitle;
+                    $menu[$title]['children'][$subtitle]['url']   = $url;
+                }
+            }
+
+        }
+
+    }
+
     // Override the template class
     class YDSimpleCMSTemplate extends YDTemplate {
 
@@ -116,23 +169,11 @@
 
         // Default action
         function actionDefault() {
-
-            // Instantiate the module manager
-            YDGlobalTimerMarker( 'Instantiate module manager' );
             $moduleManager = new YDSimpleCMSModuleManager();
-
-            // Load the modules
-            YDGlobalTimerMarker( 'Loading all modules' );
             $moduleManager->loadAllModules();
-
-            // Get the parameters from the query string
             $module = $this->getQueryStringParameter( 'module', $this->defaultModule );
             $action = $this->getQueryStringParameter( 'action', 'show' );
-
-            // Run the module
-            YDGlobalTimerMarker( 'Running module' );
             $moduleManager->runModule( $this->requestScope, $module, $action );
-
         }
 
     }
@@ -292,43 +333,27 @@
 
         // Display the module
         function display( $name='' ) {
-
-            // Assign the standard variables
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
             $this->tpl->assign( 'adminMenu',     $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] );
             if ( isset( $GLOBALS['user'] ) ) {
                 $this->tpl->assign( 'currentUser', $GLOBALS['user'] );
             }
-
-            // Get the template name
             if ( $name == '' ) {
                 $name = $this->getModuleName();
             }
-
-            // Display the template
             $this->tpl->displayWithMaster( $name );
-
         }
 
         // Run an action in the module
         function runAction( $scope, $action ) {
-
-            // Get the function name
             $moduleFunctionName = YD_SIMPLECMS_ACTION_PREFIX . $scope . '_' . $action;
-
-            // Check if the function exists
             if ( ! $this->hasMethod( $moduleFunctionName ) ) {
-                YDSimpleCMSShowError( 'Module %s function not found: %s', $this->getModuleName(), $moduleFunctionName );
+                YDSimpleCMS::showError( 'Module %s function not found: %s', $this->getModuleName(), $moduleFunctionName );
             }
-
-            // Set the variables
             $this->currentScope  = $scope;
             $this->currentAction = $action;
-
-            // Execute the function
             call_user_func( array( $this, $moduleFunctionName ) );
-
         }
 
     }
@@ -338,20 +363,12 @@
 
         // Load the plugins
         function loadAllModules() {
-
-            // Include the modules if any
             if ( is_dir( YD_SIMPLECMS_MODULE_DIR ) ) {
-
-                // Convert it to a directory object
                 $modulesDir = new YDFSDirectory( YD_SIMPLECMS_MODULE_DIR );
-
-                // Load the modules
                 foreach ( $modulesDir->getContents( YD_SIMPLECMS_MODULE_PATTERN ) as $module ) {
                     include_once( $module->getAbsolutePath() );
                 }
-
             }
-
         }
 
         // Run a module
@@ -367,7 +384,7 @@
 
             // Check if the class exists
             if ( ! class_exists( $moduleClassName ) ) {
-                YDSimpleCMSShowError( 'Module class not found: %s', $moduleClassName );
+                YDSimpleCMS::showError( 'Module class not found: %s', $moduleClassName );
             }
 
             // Create the class instance
@@ -408,58 +425,11 @@
 
     }
 
-    // Function to show an error
-    function YDSimpleCMSShowError() {
-        $args = func_get_args();
-        if ( sizeof( $args > 0 ) ) {
-            $args[0] = '<font color="red"><b>ERROR:</b> ' . $args[0] . '</font>';
-        }
-        call_user_func_array( 'printf', $args );
-        die();
-    }
-
-    // Function to run a CMS app
-    function YDSimpleCMSRunRequest( $baseClass ) {
-        $baseClass = ( strtolower( $baseClass ) == 'public' ) ? 'YDSimpleCMSPublicRequest' : 'YDSimpleCMSAdminRequest';
-        $clsInst = new YDExecutor( $baseClass . '.php' );
-        @session_start();
-        $clsInst->execute();
-    }
-
-    // Function to add an admin menu item
-    function YDSimpleCMSAddAdminMenu( $title, $subtitle, $module, $action ) {
-
-        // Link to the menu items
-        $menu = & $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'];
-
-        // Construct the URL
-        $url = YD_SELF_SCRIPT . '?module=' . $module . '&action=' . $action;
-
-        // Add the first level if needed
-        if ( ! isset( $menu[$title] ) ) {
-            $menu[$title] = array();
-            $menu[$title]['title']    = $title;
-            $menu[$title]['children'] = array();
-        }
-
-        // Check if we have a subname or not
-        if ( $subtitle == null ) {
-            $menu[$title]['url'] = $url;
-        } else {
-            if ( ! isset( $menu[$title][ $action ] ) ) {
-                $menu[$title]['children'][$subtitle] = array();
-                $menu[$title]['children'][$subtitle]['title'] = $subtitle;
-                $menu[$title]['children'][$subtitle]['url']   = $url;
-            }
-        }
-
-    }
-
     // Add menu items
-    YDSimpleCMSAddAdminMenu( 'Admin',   null,       'admin', 'show' );
-    YDSimpleCMSAddAdminMenu( 'Admin',   'Logout',   'admin', 'logout' );
-    YDSimpleCMSAddAdminMenu( 'Content', 'Pages',    'page',  'show' );
-    YDSimpleCMSAddAdminMenu( 'Options', 'Modules',  'admin', 'modules' );
-    YDSimpleCMSAddAdminMenu( 'Options', 'Settings', 'admin', 'settings' );
+    YDSimpleCMS::addAdminMenu( 'Admin',   null,       'admin', 'show' );
+    YDSimpleCMS::addAdminMenu( 'Admin',   'Logout',   'admin', 'logout' );
+    YDSimpleCMS::addAdminMenu( 'Content', 'Pages',    'page',  'show' );
+    YDSimpleCMS::addAdminMenu( 'Options', 'Modules',  'admin', 'modules' );
+    YDSimpleCMS::addAdminMenu( 'Options', 'Settings', 'admin', 'settings' );
 
 ?>

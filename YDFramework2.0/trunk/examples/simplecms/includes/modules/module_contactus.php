@@ -18,6 +18,6 @@
     }
 
     // Add menu items
-    YDSimpleCMSAddAdminMenu( 'Content',    'Contact Us', 'contactus', 'show' );
+    YDSimpleCMS::addAdminMenu( 'Content',    'Contact Us', 'contactus', 'show' );
 
 ?>

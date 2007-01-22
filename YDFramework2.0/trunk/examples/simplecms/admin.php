@@ -4,6 +4,6 @@
     include_once( dirname( __FILE__ ) . '/includes/YDSimpleCMSApp.php' );
 
     // Run the CMS request
-    YDSimpleCMSRunRequest( 'admin' );
+    YDSimpleCMS::run( 'admin' );
 
 ?>

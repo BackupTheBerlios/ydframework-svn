@@ -18,7 +18,7 @@
     }
 
     // Add menu items
-    YDSimpleCMSAddAdminMenu( 'Newsletters', 'Create Newsletter',    'newsletter', 'create' );
-    YDSimpleCMSAddAdminMenu( 'Newsletters', 'Archived Newsletters', 'newsletter', 'show' );
+    YDSimpleCMS::addAdminMenu( 'Newsletters', 'Create Newsletter',    'newsletter', 'create' );
+    YDSimpleCMS::addAdminMenu( 'Newsletters', 'Archived Newsletters', 'newsletter', 'show' );
 
 ?>
