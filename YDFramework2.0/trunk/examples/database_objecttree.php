@@ -59,15 +59,15 @@
     // Includes
     YDInclude( 'YDRequest.php' );
     YDInclude( 'YDDatabase.php' );
-    YDInclude( 'YDDatabaseTree3.php' );
+    YDInclude( 'YDDatabaseObjectTree.php' );
 
 	YDConfig::set( 'YD_DEBUG', 2 );
 
     // Class definition
-    class database_tree3 extends YDRequest {
+    class database_objecttree extends YDRequest {
 
         // Class constructor
-        function database_tree3() {
+        function database_objecttree() {
 
             // Call the parent
             $this->YDRequest();
@@ -76,7 +76,7 @@
             $db = YDDatabase::getInstance( 'mysql', 'tree_test', 'root', '', 'localhost' );
 
             // Get the tree instance
-            $this->tree = new YDDatabaseTree3( 'nested_tree', $db );
+            $this->tree = new YDDatabaseObjectTree( 'nested_tree', $db );
 			
 			// register extra column
 			$this->tree->registerField( 'title', true );
