@@ -1,0 +1,20 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Yellow Duck Framework test\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2007-01-22 21:37-0000\n"
+"Last-Translator: Francisco Azevedo <francisco@fusemail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: PORTUGAL\n"
+"X-Poedit-SourceCharset: iso-8859-15\n"
+"X-Poedit-Basepath: D:\\www\\main\\examples\\\n"
+"X-Poedit-SearchPath-0: translation\n"
+
+#: translation/index.tpl:3
+msgid "car"
+msgstr "super Car"
+
