@@ -303,8 +303,14 @@
         if ( empty( $t ) ) {
             return '';
         }
-        $t = strtolower( $t );
-        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%%$t%%" );
+
+		// check gettext patern
+		if ( ereg ( "^\_\([\'\"](.*)[\'\"]\)$", $t, $res ) ){
+			$out = gettext( $res[1] );
+		}else{
+			$t = strtolower( $t );
+			$out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%%$t%%" );
+		}
         array_unshift( $params, $out );
         return call_user_func_array( 'sprintf', $params );
     }
@@ -547,6 +553,32 @@
                 foreach ( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] as $dir )
                     @include( $dir . '/' . YDLocale::get() . '.php' );
         }
+
+
+        /**
+         *	This method will activate gettext support
+         *
+         *	@param	$filename	(Optional) Filename to search in locale directory
+         *	@param	$directory	(Optional) Directory name where language directories are stored
+         */
+		function useGettext( $filename = 'ydframework', $directory = null ){
+
+			// get current locale
+			$locale = YDConfig::get( YD_LOCALE_KEY, 'en' );
+
+			// set environment
+			$_ENV["LANG" ]      = $locale;
+			$_ENV["LANGUAGE"]   = $locale;
+			$_ENV["LC_MESSAGE"] = $locale;
+			$_ENV["LC_ALL"]     = $locale;
+
+			// check directory
+			if ( ! is_string( $directory ) ) $directory = YD_DIR_HOME . '/locale/';
+
+			bindtextdomain( $filename, $directory );
+			textdomain( $filename );
+		}
+
 
         /**
          *	@returns	The current locale.
