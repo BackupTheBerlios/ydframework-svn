@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -37,6 +41,8 @@
     /**
      *	This is the YDHttpClient class. It extends the HttpClient class and adds support for specifying the content
      *	type.
+     *
+     *  @ingroup YDFramework
      */
     class YDHttpClient extends HttpClient {
 

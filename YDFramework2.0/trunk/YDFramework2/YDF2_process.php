@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
     /**
      *	This is the executor class that contains all the logic for executing requests. It will instantiate the request
      *	class and execute the right functions to get the request processed correctly.
+     *
+     *  @ingroup YDFramework
      */
     class YDExecutor extends YDBase {
 

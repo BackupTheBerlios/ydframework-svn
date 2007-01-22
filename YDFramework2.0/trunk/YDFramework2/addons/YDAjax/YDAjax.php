@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDAjax Addons - Ajax
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -56,6 +60,8 @@
 
     /**
      *  Class definition for the YDAjax addon.
+     *
+     *  @ingroup YDAjax
      */
     class YDAjax extends xajax{
 

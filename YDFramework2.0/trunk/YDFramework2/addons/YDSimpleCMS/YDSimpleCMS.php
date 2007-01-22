@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     * @addtogroup YDSimpleCMS Addons - Simple CMS
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -60,11 +64,24 @@
     // The database connection
     $GLOBALS['db'] = YDDatabase::getNamedInstance();
 
-    // Global YDSimpleCMS class
-    class YDSimpleCMS extends YDBase {
+    /**
+     *  This is the global YDSimpleCMS class that houses all cms related functions.
+     *
+     *  @ingroup YDSimpleCMS
+     */
+    class YDSimpleCMS {
 
-        // Run the request in the indicated scope
-        // @static
+        /**
+         *  This is a static function that will run a request.
+         *
+         *  @param  $scope  The scope in which the request needs to run. You can choose between public and admin. If you
+         *                  choose admin, authentication will be enforced, with public, it's not.
+         *
+         *  @static
+         *
+         *  @todo
+         *      Replace scope with a defined constant (YD_SIMPLECMS_SCOPE_PUBLIC and YD_SIMPLECMS_SCOPE_ADMIN)
+         */
         function run( $scope ) {
             $baseClass = ( strtolower( $scope ) == 'public' ) ? 'YDSimpleCMSPublicRequest' : 'YDSimpleCMSAdminRequest';
             $clsInst = new YDExecutor( $baseClass . '.php' );
@@ -72,7 +89,13 @@
             $clsInst->execute();
         }
 
-        // Function to show an error
+        /**
+         *  This function will show an error for the CMS application.
+         *
+         *  The parameters that are supported are the same ones as the sprintf and printf functions.
+         *
+         *  @static
+         */
         function showError() {
             $args = func_get_args();
             if ( sizeof( $args > 0 ) ) {
@@ -82,7 +105,17 @@
             die();
         }
 
-        // Function to add an admin menu item
+        /**
+         *  This function will add an entry to the administration menu.
+         *
+         *  @param  $title      The title of the menu in which this needs to appear.
+         *  @param  $subtitle   The title of the submenu item that needs to be added. If you use a null value for this
+         *                      parameter, only the main menu item is created.
+         *  @param  $module     The module that is linked to this menu item.
+         *  @param  $action     The module action that is linked to this menu item.
+         *
+         *  @static
+         */
         function addAdminMenu( $title, $subtitle, $module, $action ) {
 
             // Link to the menu items
@@ -113,7 +146,11 @@
 
     }
 
-    // Override the template class
+    /**
+     *  Override the template class
+     *
+     *  @ingroup YDSimpleCMS
+     */
     class YDSimpleCMSTemplate extends YDTemplate {
 
         // The scope of the template
@@ -160,7 +197,11 @@
 
     }
 
-    // Define the CMS request class
+    /**
+     *  Define the CMS request class.
+     *
+     *  @ingroup YDSimpleCMS
+     */
     class YDSimpleCMSPublicRequest extends YDRequest {
 
         // Class variables
@@ -178,7 +219,11 @@
 
     }
 
-    // Define the CMS request class
+    /**
+     *  Define the CMS request class.
+     *
+     *  @ingroup YDSimpleCMS
+     */
     class YDSimpleCMSAdminRequest extends YDSimpleCMSPublicRequest {
 
         // Class variables
@@ -301,7 +346,11 @@
 
     }
 
-    // Define a CMS module
+    /**
+     *  Define a CMS module
+     *
+     *  @ingroup YDSimpleCMS
+     */
     class YDSimpleCMSModule extends YDBase {
 
         // Class variables
@@ -366,7 +415,11 @@
 
     }
 
-    // The module manager class
+    /**
+     *  The module manager class
+     *
+     *  @ingroup YDSimpleCMS
+     */
     class YDSimpleCMSModuleManager extends YDBase {
 
         // Load the plugins

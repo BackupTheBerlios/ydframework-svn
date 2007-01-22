@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDPdfReport Addons - PdfReport
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,6 +35,8 @@
 
     /**
      *  This class defines a YDPdfProject object.
+     *
+     *  @ingroup YDPdfReport
      */
     class YDPdfReport extends YDAddOnModule {
 

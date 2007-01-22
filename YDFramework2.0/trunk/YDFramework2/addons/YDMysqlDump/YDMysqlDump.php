@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDMysqlDump Addons - MysqlDump
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
 
     /**
      *  This class defines a mySql backup/restore system object.
+     *
+     *  @ingroup YDMysqlDump
      */
     class YDMysqlDump extends YDAddOnModule {
 

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -33,6 +37,8 @@
      *  This class defines a YDDateFormat object.
      *
      *  @author  David Bittencourt <muitocomplicado@hotmail.com>
+     *
+     *  @ingroup YDFramework
      */
     class YDDateFormat extends YDBase {
         
@@ -159,6 +165,8 @@
      *  This class defines a YDDate object.
      *
      *  @author  David Bittencourt <muitocomplicado@hotmail.com>
+     *
+     *  @ingroup YDFramework
      */
     class YDDate extends YDBase {
         

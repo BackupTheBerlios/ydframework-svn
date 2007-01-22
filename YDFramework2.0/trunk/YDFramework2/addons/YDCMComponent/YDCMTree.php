@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -30,7 +34,9 @@
 	// add YD libs
 	YDInclude( 'YDDatabaseTree3.php' );
 
-	// userobject class
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMTree extends YDDatabaseTree3 {
     
         function YDCMTree() {

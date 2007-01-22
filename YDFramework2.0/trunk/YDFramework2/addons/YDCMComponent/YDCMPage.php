@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -34,7 +38,9 @@
 	// set page form name
 	YDConfig::set( 'YDCMPAGE_FORMPAGE', 'YDCMPageForm', false );
 
-
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMPage extends YDCMComponent {
     
         function YDCMPage( $id = null ) {

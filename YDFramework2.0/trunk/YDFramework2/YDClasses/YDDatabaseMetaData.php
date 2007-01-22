@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
     /**
      *  This class allows you to query the internal metadata from a database. It allows you to list tables, fields and
      *  indexes for all supported database engines in the Yellow Duck Framework.
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseMetaData extends YDBase {
 

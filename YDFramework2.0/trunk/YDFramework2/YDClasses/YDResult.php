@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -59,6 +63,8 @@
 
     /**
      *  This class defines an YDResult object.
+     *
+     *  @ingroup YDFramework
      */
     class YDResult extends YDBase {
 

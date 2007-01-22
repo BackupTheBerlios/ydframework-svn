@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabaseQuery Addons - DatabaseQuery
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -28,6 +32,8 @@
 
     /**
      *  The YDDatabaseQuery class defines an object-oriented interface to create SQL queries.
+     *
+     *  @ingroup YDDatabaseQuery
      */
     class YDDatabaseQuery extends YDAddOnModule {
 
@@ -106,6 +112,8 @@
 
     /**
      *  This class defines a YDSqlQueryDriver object.
+     *
+     *  @ingroup YDDatabaseQuery
      */
     class YDDatabaseQueryDriver extends YDBase {
 
@@ -1083,6 +1091,8 @@
     
     /**
      *  This class defines a YDSqlQueryDriver_mysql object.
+     *
+     *  @ingroup YDDatabaseQuery
      */
     class YDDatabaseQueryDriver_mysql extends YDDatabaseQueryDriver {
 

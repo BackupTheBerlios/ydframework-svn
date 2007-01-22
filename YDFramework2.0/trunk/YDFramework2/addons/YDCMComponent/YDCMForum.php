@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -122,6 +126,9 @@ INSERT INTO ydcmforum_announcements VALUES ( 4, 4, '2006-10-14 10:14', "Help: Re
 	define( 'YD_FORUM_ANNOUNCEMENTS_ONHOMEPAGEANDFORUMS', 20 );
 	define( 'YD_FORUM_ANNOUNCEMENTS_ONHOMEPAGE',          10 );
 
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMForum_announcements extends YDDatabaseObject {
     
         function YDCMForum_announcements() {

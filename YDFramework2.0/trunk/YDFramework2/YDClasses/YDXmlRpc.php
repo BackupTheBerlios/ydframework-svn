@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -34,6 +38,8 @@
     /**
      *	This is the actual implementation of the YDXmlRpcClient class. It extends the IXR_Client class and adds support
      *	for GZip compressed communications based on the YDHttpClient class.
+     *
+     *  @ingroup YDFramework
      */
     class YDXmlRpcClientCore extends IXR_Client {
 
@@ -124,6 +130,8 @@
 
     /**
      *	This class defines an XML/RPC client.
+     *
+     *  @ingroup YDFramework
      */
     class YDXmlRpcClient extends YDBase {
 
@@ -183,6 +191,8 @@
      *	This class implements the actual XML/RPC server.
      *
      *	@internal
+     *
+     *  @ingroup YDFramework
      */
     class YDXmlRpcServerImpl extends IXR_IntrospectionServer {
 
@@ -249,6 +259,8 @@
      *		When raising errors in this class, make sure you raise the right kind or error. If you have an XML/RPC
      *		request that needs to return an error, you need to return an IXR_Error. If you are not serving an XML/RPC
      *		request, you need to return a YDError or YDFatalError.
+     *
+     *  @ingroup YDFramework
      */
     class YDXmlRpcServer extends YDRequest {
 

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -126,6 +130,8 @@
 
     /**
      *	This class houses all different path related functions.
+     *
+     *  @ingroup YDFramework
      */
     class YDPath extends YDBase {
 
@@ -458,6 +464,8 @@
 
     /**
      *  This class defines a filesystem file.
+     *
+     *  @ingroup YDFramework
      */
     class YDFSFile extends YDBase {
 
@@ -855,6 +863,8 @@
 
     /**
      *	This class defines an image file.
+     *
+     *  @ingroup YDFramework
      */
     class YDFSImage extends YDFSFile {
 
@@ -1240,6 +1250,8 @@
 
     /**
      *  This class defines a filesystem directory.
+     *
+     *  @ingroup YDFramework
      */
     class YDFSDirectory extends YDBase {
 

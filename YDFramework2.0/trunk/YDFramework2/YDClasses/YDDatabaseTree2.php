@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,36 +35,36 @@
 
     /**
      *  This class implements a database tree
-
-	    CREATE TABLE nested_tree (
-            id int NOT NULL auto_increment,
-            parent_id int NULL,
-			lineage varchar(255) NOT NULL default '//',
-            level int NOT NULL default '1',
-            position int NOT NULL default '1',
-            title varchar(255) NOT NULL default '',
-            PRIMARY KEY (id),
-			FOREIGN KEY (parent_id)
-                REFERENCES nested_tree(id)
-                     ON DELETE CASCADE
-                     ON UPDATE CASCADE
-        );
-
-
-        INSERT INTO nested_tree VALUES ( 1, null, '',         0, 1, '');
-        INSERT INTO nested_tree VALUES ( 2,    1, '//',       1, 1, 'General Resources');
-        INSERT INTO nested_tree VALUES ( 3,    2, '//2/',     2, 1, 'Code Paste');
-        INSERT INTO nested_tree VALUES ( 4,    2, '//2/',     2, 2, 'Documentation');
-        INSERT INTO nested_tree VALUES ( 5,    2, '//2/',     2, 3, 'Books & Publications');
-        INSERT INTO nested_tree VALUES ( 6,    5, '//2/5/',   3, 1, 'Apache');
-        INSERT INTO nested_tree VALUES ( 7,    5, '//2/5/',   3, 2, 'PostgreSQL');
-        INSERT INTO nested_tree VALUES ( 8,    5, '//2/4/',   3, 3, 'MySQL');
-        INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 1, 'Links');
-        INSERT INTO nested_tree VALUES (10,    9, '//2/9/',   3, 1, 'Databases');
-        INSERT INTO nested_tree VALUES (11,    9, '//2/10/',  3, 1, 'Generators');
-        INSERT INTO nested_tree VALUES (12,    9, '//2/10/',  3, 2, 'Portals');
+     *
+     *  CREATE TABLE nested_tree (
+     *      id int NOT NULL auto_increment,
+     *      parent_id int NULL,
+     *      lineage varchar(255) NOT NULL default '//',
+     *      level int NOT NULL default '1',
+     *      position int NOT NULL default '1',
+     *      title varchar(255) NOT NULL default '',
+     *      PRIMARY KEY (id),
+     *      FOREIGN KEY (parent_id)
+     *          REFERENCES nested_tree(id)
+     *               ON DELETE CASCADE
+     *               ON UPDATE CASCADE
+     *  );
+     *
+     *  INSERT INTO nested_tree VALUES ( 1, null, '',         0, 1, '');
+     *  INSERT INTO nested_tree VALUES ( 2,    1, '//',       1, 1, 'General Resources');
+     *  INSERT INTO nested_tree VALUES ( 3,    2, '//2/',     2, 1, 'Code Paste');
+     *  INSERT INTO nested_tree VALUES ( 4,    2, '//2/',     2, 2, 'Documentation');
+     *  INSERT INTO nested_tree VALUES ( 5,    2, '//2/',     2, 3, 'Books & Publications');
+     *  INSERT INTO nested_tree VALUES ( 6,    5, '//2/5/',   3, 1, 'Apache');
+     *  INSERT INTO nested_tree VALUES ( 7,    5, '//2/5/',   3, 2, 'PostgreSQL');
+     *  INSERT INTO nested_tree VALUES ( 8,    5, '//2/4/',   3, 3, 'MySQL');
+     *  INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 1, 'Links');
+     *  INSERT INTO nested_tree VALUES (10,    9, '//2/9/',   3, 1, 'Databases');
+     *  INSERT INTO nested_tree VALUES (11,    9, '//2/10/',  3, 1, 'Generators');
+     *  INSERT INTO nested_tree VALUES (12,    9, '//2/10/',  3, 2, 'Portals');
+     *
+     *  @ingroup YDDatabase
      */
-
     class YDDatabaseTree2 extends YDBase {
 
         /**

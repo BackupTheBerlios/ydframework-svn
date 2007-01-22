@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDBBCode Addons - BBCode
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -36,6 +40,8 @@
     /**
      *	This class implements a BBCode parser. By default, it supports a number of standard codes that can be
      *	implemented. The following codes are supported by default: img, url, mail, email, color, b, i, u, code, quote, p
+     *
+     *  @ingroup YDBBCode
      */
     class YDBBCode extends YDAddOnModule {
 

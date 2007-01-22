@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -39,6 +43,8 @@
     /**
      *  This class is able to save and load persistent data. This data stay active between different requests and allows
      *  you to share data between different requests and different sessions.
+     *
+     *  @ingroup YDFramework
      */
     class YDPersistent extends YDBase {
 

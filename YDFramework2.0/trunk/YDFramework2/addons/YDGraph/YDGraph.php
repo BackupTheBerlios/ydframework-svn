@@ -29,6 +29,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDGraph Addons - Graph
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -54,6 +58,8 @@
 
     /**
      *	This class implements an addon module that is able to draw graphs using the GD library.
+     *
+     *  @ingroup YDGraph
      */
     class YDGraph extends YDAddOnModule {
 
@@ -745,6 +751,8 @@
 
     /**
      *  @internal
+     *
+     *  @ingroup YDGraph
      */
     class series{
         var $m_values, $m_seriesTitle, $m_strokeColor, $m_fillColor;

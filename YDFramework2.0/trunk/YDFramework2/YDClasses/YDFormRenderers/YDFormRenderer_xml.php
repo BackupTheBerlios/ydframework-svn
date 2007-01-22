@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDForm Core - Form
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
 
     /**
      *	This is the class that is able to render/import a form to/from XML.
+     *
+     *  @ingroup YDForm
      */
     class YDFormRenderer_xml extends YDFormRenderer {
 

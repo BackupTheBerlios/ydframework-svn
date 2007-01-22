@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -28,6 +32,8 @@
 
     /**
      *	This class contains abstract functions implementing the validation rules.
+     *
+     *  @ingroup YDFramework
      */
     class YDValidateRules extends YDBase {
 

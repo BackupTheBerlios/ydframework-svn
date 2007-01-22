@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDAkismet Addons - Akismet
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,6 +35,8 @@
 
     /**
      *	This class is an interface to the Akismet comment spam checking webservice.
+     *
+     *  @ingroup YDAkismet
      */
     class YDAkismet extends YDAddOnModule {
 

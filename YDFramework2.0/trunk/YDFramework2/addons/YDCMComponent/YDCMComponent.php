@@ -21,28 +21,35 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-	// include YDF libs
+    // include YDF libs
     YDInclude( 'YDDatabaseObject.php' );
-	YDInclude( 'YDDatabaseTree.php' );
-	YDInclude( 'YDUrl.php' );
-	YDInclude( 'YDResult.php' );
+    YDInclude( 'YDDatabaseTree.php' );
+    YDInclude( 'YDUrl.php' );
+    YDInclude( 'YDResult.php' );
 
-	// include YDCM libs
-	YDInclude( 'YDCMComp.php' );
+    // include YDCM libs
+    YDInclude( 'YDCMComp.php' );
 
-	// add generic translation directory
-	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+    // add generic translation directory
+    YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMComponent extends YDDatabaseObject {
 
         function YDCMComponent( $type, $id ) {
 
-			// init DB object
+            // init DB object
             $this->YDDatabaseObject();
 
             $this->_author = 'unknown author';

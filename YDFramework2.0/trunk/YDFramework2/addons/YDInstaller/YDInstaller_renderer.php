@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDInstaller Addons - Installer
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,6 +35,8 @@
 
     /**
      *        This is the class that is able to render a form object to HTML.
+     *
+     *  @ingroup YDInstaller
      */
     class YDInstaller_renderer extends YDFormRenderer {
 

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDForm Core - Form
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -37,6 +41,8 @@
 
     /**
      *  This class defines an object oriented HTML form.
+     *
+     *  @ingroup YDForm
      */
     class YDForm extends YDBase {
 
@@ -1266,6 +1272,8 @@
 
     /**
      *  This is the base class for all form elements.
+     *
+     *  @ingroup YDForm
      */
     class YDFormElement extends YDBase {
 
@@ -1654,6 +1662,8 @@
 
     /**
      *  This is the class that is able to render a form object to whatever.
+     *
+     *  @ingroup YDForm
      */
     class YDFormRenderer extends YDBase {
 

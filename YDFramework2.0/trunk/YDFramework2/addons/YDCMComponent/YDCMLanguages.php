@@ -21,12 +21,18 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMLanguages extends YDDatabaseObject {
 
         function YDCMLanguages() {

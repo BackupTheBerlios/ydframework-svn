@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -36,7 +40,9 @@
 	// add translations directory for generic translations
 	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
 
-
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMPermission extends YDDatabaseObject {
     
         function YDCMPermission() {

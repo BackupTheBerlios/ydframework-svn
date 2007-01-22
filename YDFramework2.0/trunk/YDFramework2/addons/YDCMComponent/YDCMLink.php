@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -28,7 +32,9 @@
 
 	YDInclude( 'YDCMComponent.php' );
 
-
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMLink extends YDCMComponent {
     
         function YDCMLink() {

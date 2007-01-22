@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,23 +35,23 @@
 
 
     /** Database scheme example
-		
-	    CREATE TABLE nested_tree (
+        
+        CREATE TABLE nested_tree (
             id int NOT NULL auto_increment,
             parent_id int NULL,
-			lineage varchar(255) NOT NULL default '//',
+            lineage varchar(255) NOT NULL default '//',
             level int NOT NULL default '1',
             position int NOT NULL default '1',
             title varchar(255) NOT NULL default '',
             PRIMARY KEY (id),
-			FOREIGN KEY (parent_id)
+            FOREIGN KEY (parent_id)
                 REFERENCES nested_tree(id)
                      ON DELETE CASCADE
                      ON UPDATE CASCADE
         )TYPE=InnoDB;
-
-		Note: root node must have ID 1, PARENT null and LINEAGE '' !
-
+    
+        Note: root node must have ID 1, PARENT null and LINEAGE '' !
+       
         INSERT INTO nested_tree VALUES ( 1, null, '',         0, 1, '');
         INSERT INTO nested_tree VALUES ( 2,    1, '//',       1, 1, 'General Resources');
         INSERT INTO nested_tree VALUES ( 3,    2, '//2/',     2, 1, 'Code Paste');
@@ -64,6 +68,8 @@
 
     /**
      *	This is the actual implementation of the lineage tree algorithm but as an YDDatabaseObject
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseTree3 extends YDDatabaseObject {
     

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabaseQuery Addons - DatabaseQuery
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,6 +35,8 @@
 
     /**
      *  This class defines a YDSqlQueryDriver_postgres object.
+     *
+     *  @ingroup YDDatabaseQuery
      */
     class YDDatabaseQueryDriver_postgres extends YDDatabaseQueryDriver {
 

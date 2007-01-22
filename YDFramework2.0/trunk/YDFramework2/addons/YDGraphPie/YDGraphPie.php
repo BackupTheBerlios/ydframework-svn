@@ -29,6 +29,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDGraphPie Addons - GraphPie
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -40,8 +44,9 @@
 
     /**
      * This class implements an addon module that is able to draw pie graphs using the GD library.
+     *
+     *  @ingroup YDGraphPie
      */
-
     class YDGraphPie extends YDAddOnModule {
 
         

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -31,6 +35,8 @@
 
     /**
      *	This class defines a database driver for Oracle8i using the OCI8 interface.
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseDriver_oracle extends YDDatabaseDriver {
 

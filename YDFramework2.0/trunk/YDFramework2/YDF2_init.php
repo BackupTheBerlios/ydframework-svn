@@ -33,6 +33,10 @@
      *	Author: Pieter Claerhout, pieter@yellowduck.be
      */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Set the error reporting correctly.
     error_reporting( E_ALL );
 
@@ -202,6 +206,8 @@
      *	knows about the include path for the Yellow Duck Framework.
      *
      *	@param $file	File to be included.
+     *
+     *  @ingroup YDFramework
      */
     function YDInclude( $file ) {
 
@@ -235,6 +241,8 @@
 
     /**
      *	This function will include a upgrade file that simulates php functions not present in this php system
+     *
+     *  @ingroup YDFramework
      */
     function YDIncludeCompatibility() {
         include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/upgrade.php' );
@@ -246,6 +254,8 @@
      *	This function will add a marker to the global timer.
      *
      *	@param $name	The name of the marker.
+     *
+     *  @ingroup YDFramework
      */
     function YDGlobalTimerMarker( $name ) {
         if ( ! isset( $GLOBALS['timer'] ) ) {
@@ -261,6 +271,8 @@
      *	@param $value	The value to fix.
      *
      *	@returns	The fixed value.
+     *
+     *  @ingroup YDFramework
      */
     function YDRemoveMagicQuotes( & $value ) {
         if ( get_magic_quotes_gpc() == 1 ) {
@@ -284,19 +296,23 @@
      *  @param  $params (optional) An array of parameters that are passed to the sprintf function.
      *
      *  @returns    The translated string.
+     *
+     *  @ingroup YDFramework
      */
     function t( $t, $params=array() ) {
         if ( empty( $t ) ) {
             return '';
         }
         $t = strtolower( $t );
-        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "<font color=\"red\">%%$t%%</font>" );
+        $out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "%%$t%%" );
         array_unshift( $params, $out );
         return call_user_func_array( 'sprintf', $params );
     }
 
     /**
      *  This is the base class for all other YD classes.
+     *
+     *  @ingroup YDFramework
      */
     class YDBase {
 
@@ -421,6 +437,8 @@
 
     /**
      *	This is the class that hold the global configuration.
+     *
+     *  @ingroup YDFramework
      */
     class YDConfig extends YDBase {
 
@@ -488,6 +506,8 @@
 
     /**
      *	This is the class that hold the locale information.
+     *
+     *  @ingroup YDFramework
      */
     class YDLocale extends YDBase {
 
@@ -558,6 +578,8 @@
 
     /**
      *	This is the base class for all other YD classes.
+     *
+     *  @ingroup YDFramework
      */
     class YDAddOnModule extends YDBase {
 

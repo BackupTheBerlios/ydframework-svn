@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
     /**
      *  This class implements a database tree as described on:
      *  http://www.phpriot.com/d/articles/php/application-design/nested-trees-2/
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseTree extends YDBase {
 

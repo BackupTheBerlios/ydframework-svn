@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -29,6 +33,8 @@
     /**
      *	This is a general timer class that starts counting when it's instantiated, and which returns the elapsed time as
      *	soon as the finish method is called.
+     *
+     *  @ingroup YDFramework
      */
     class YDTimer extends YDBase {
 
@@ -108,6 +114,8 @@
     /**
      *  This class houses all the array related utility functions. All the methods are implemented as static methods and
      *	do not require you to create a class instance in order to use them.
+     *
+     *  @ingroup YDFramework
      */
     class YDArrayUtil extends YDBase {
 
@@ -380,6 +388,8 @@
     /**
      *	This class houses all the debug related utility functions. All the methods are implemented as static methods and
      *	do not require you to create a class instance in order to use them.
+     *
+     *  @ingroup YDFramework
      */
     class YDDebugUtil extends YDBase {
 
@@ -515,6 +525,8 @@
     /**
      *	This class houses all the object and class related utility functions. All the methods are implemented as static
      *	methods and do not require you to create a class instance in order to use them.
+     *
+     *  @ingroup YDFramework
      */
     class YDObjectUtil extends YDBase {
 
@@ -600,6 +612,8 @@
     /**
      *	This class houses all the string related utility functions. All the methods are implemented as static methods
      *	and do not require you to create a class instance in order to use them.
+     *
+     *  @ingroup YDFramework
      */
     class YDStringUtil extends YDBase {
 
@@ -1047,6 +1061,8 @@
     /**
      *	This class uses the HTTP_USER_AGENT varaible to get information about the browser the visitor used to perform
      *	the request. We determine the browser name, the version and the platform it's running on.
+     *
+     *  @ingroup YDFramework
      */
     class YDBrowserInfo extends YDBase {
 
@@ -1230,6 +1246,8 @@
      *  This class allows you to generate GUIDs (global unique identifier).
      *
      *  More info: http://www.ietf.org/rfc/rfc4122.txt
+     *
+     *  @ingroup YDFramework
      */
     class YDGuidUtil extends YDBase {
 
@@ -1270,6 +1288,8 @@
 
     /**
      *  This class allows you to perform LDAP releated tasks.
+     *
+     *  @ingroup YDFramework
      */
     class YDLdapUtil extends YDBase {
 

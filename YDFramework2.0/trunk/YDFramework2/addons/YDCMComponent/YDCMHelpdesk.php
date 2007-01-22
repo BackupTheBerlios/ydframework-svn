@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -51,7 +55,9 @@
                                                     'medium'       => array( 'color' => '#FF9900' ), 
 													'high'         => array( 'color' => '#FF9900' ) ), false );
 
-
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMHelpdesk extends YDCMComponent {
     
         function YDCMHelpdesk() {

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFeedCreator Addons - FeedCreator
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -35,6 +39,8 @@
      *	This class defines a RSS/ATOM feed. You can use this class to create RSS and Atom feeds in a very easy and
      *	straightforward way. If you set up your class instance, you can automatically output to the different versions
      *	of RSS and ATOM with the same source data.
+     *
+     *  @ingroup YDFeedCreator
      */
     class YDFeedCreator extends YDAddOnModule {
 

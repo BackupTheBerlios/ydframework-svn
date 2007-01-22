@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabaseObject Addons - DatabaseObject
+     */
+
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
     }
@@ -79,6 +83,8 @@
 
     /**
      *  This class defines a YDDatabaseObject object.
+     *
+     *  @ingroup YDDatabaseObject
      */
     class YDDatabaseObject extends YDAddOnModule {
 
@@ -2259,6 +2265,8 @@
 
     /**
      *  This class defines a YDDatabaseObject_Field object.
+     *
+     *  @ingroup YDDatabaseObject
      */
     class YDDatabaseObject_Field extends YDBase {
 
@@ -2468,6 +2476,8 @@
 
     /**
      *  This class defines a YDDatabaseObject_Relation object.
+     *
+     *  @ingroup YDDatabaseObject
      */
     class YDDatabaseObject_Relation extends YDBase {
 
@@ -2972,6 +2982,8 @@
 
     /**
      *  This class defines a YDDatabaseObject_Select object.
+     *
+     *  @ingroup YDDatabaseObject
      */
     class YDDatabaseObject_Select extends YDBase {
 

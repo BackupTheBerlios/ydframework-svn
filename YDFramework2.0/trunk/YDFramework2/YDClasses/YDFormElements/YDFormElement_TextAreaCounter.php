@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDForm Core - Form
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -32,6 +36,8 @@
 
     /**
      *	This is the class that define a text area form element.
+     *
+     *  @ingroup YDForm
      */
     class YDFormElement_TextAreaCounter extends YDFormElement {
 

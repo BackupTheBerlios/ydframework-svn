@@ -20,6 +20,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDInstaller Addons - Installer
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -35,6 +39,8 @@
 
     /**
      *  This class defines a YDInstaller object.
+     *
+     *  @ingroup YDInstaller
      */
     class YDInstaller extends YDRequest {
 

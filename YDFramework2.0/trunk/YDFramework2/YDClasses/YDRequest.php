@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -30,6 +34,8 @@
      *	This class implements a request. The request is the base class you can use to base your scripts on. The request
      *	class is the one taking care of the action dispatching when a script is executed. Also the authentication
      *	framework is implemented in this class.
+     *
+     *  @ingroup YDFramework
      */
     class YDRequest extends YDBase {
 

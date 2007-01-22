@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDDatabase Core - Database
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -67,6 +71,8 @@
      *  - getPageUrl: the URL of the given page
      *
      *  All these options are available as class variables.
+     *
+     *  @ingroup YDDatabase
      */
     class YDRecordSet extends YDBase {
 
@@ -614,6 +620,8 @@
 
     /**
      *  This class defines a database object.
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabase extends YDBase {
 
@@ -795,6 +803,8 @@
 
     /**
      *  This class defines a database driver.
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseDriver extends YDBase {
 
@@ -1552,6 +1562,8 @@
 
     /**
      *  This class defines a database driver for MySQL.
+     *
+     *  @ingroup YDDatabase
      */
     class YDDatabaseDriver_mysql extends YDDatabaseDriver {
 

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -38,6 +42,8 @@
     /**
      *  This class is a wrapper around phpdomxml. Documentation can be found on:
      *  http://phpdomxml.webtweakers.com/
+     *
+     *  @ingroup YDFramework
      */
     class YDXml extends _XML {
 

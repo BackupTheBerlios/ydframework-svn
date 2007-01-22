@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -47,6 +51,8 @@
 
     /**
      *  This class defines the logging static functions.
+     *
+     *  @ingroup YDFramework
      */
     class YDLog extends YDBase {
 

@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDFramework Core
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -45,7 +49,9 @@
         include_once( SMARTY_DIR . '/Smarty.class.php' );
 
         /**
-         *	This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/
+         *  This class is a wrapper around Smarty. Documentation can be found on: http://smarty.php.net/
+         *
+         *  @ingroup YDFramework
          */
         class YDTemplate extends Smarty {
 
@@ -342,7 +348,9 @@
     } else {
 
         /**
-         *	This class is template engine based on PHP.
+         *  This class is template engine based on PHP.
+         *
+         *  @ingroup YDFramework
          */
         class YDTemplate extends YDBase {
 

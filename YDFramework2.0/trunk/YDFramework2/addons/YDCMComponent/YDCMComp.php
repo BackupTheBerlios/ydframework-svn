@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -29,6 +33,9 @@
 	require_once( dirname( __FILE__ ) . '/YDCMTree.php' );
 	require_once( dirname( __FILE__ ) . '/YDCMLanguages.php' );
 
+    /**
+     *  @ingroup YDCMComponent
+     */
     class YDCMComp extends YDDatabaseObject {
     
         function YDCMComp( $type, $id ) {

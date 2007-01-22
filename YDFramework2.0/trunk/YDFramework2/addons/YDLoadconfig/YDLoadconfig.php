@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDLoadconfig Addons - Loadconfig
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -29,6 +33,8 @@
 
     /**
      *  This class reads a database table to apply correspondent YDConfig
+     *
+     *  @ingroup YDLoadconfig
      */
     class YDLoadconfig extends YDAddOnModule {
 

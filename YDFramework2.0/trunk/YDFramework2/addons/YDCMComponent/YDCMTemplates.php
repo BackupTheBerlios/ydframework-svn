@@ -21,6 +21,10 @@
 
     */
 
+    /*
+     *  @addtogroup YDCMComponent Addons - CMComponent
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -43,7 +47,12 @@
 	YDConfig::set( 'YDCMTEMPLATES_PACK', false, false );
 
 
-	// this is a very special component because don't have any DB table (that's way do not extends YDCMComponent)
+
+    /**
+     *  This is a very special component because don't have any DB table (that's way do not extends YDCMComponent)
+     *
+     *  @ingroup YDCMComponent
+     */
     class YDCMTemplates {
 
 

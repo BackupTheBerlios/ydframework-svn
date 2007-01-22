@@ -21,6 +21,10 @@
 
     */
 
+    /**
+     *  @addtogroup YDForm Core - Form
+     */
+
     // Check if the framework is loaded
     if ( ! defined( 'YD_FW_NAME' ) ) {
         die( 'Yellow Duck Framework is not loaded.' );
@@ -30,7 +34,9 @@
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
 
     /**
-     *        This is the class that is able to render a form object to HTML.
+     *  This is the class that is able to render a form object to HTML.
+     *
+     *  @ingroup YDForm
      */
     class YDFormRenderer_html extends YDFormRenderer {
 
