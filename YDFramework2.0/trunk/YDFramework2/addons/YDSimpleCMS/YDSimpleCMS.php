@@ -60,20 +60,18 @@
     }
 
     // Constants
-    define( 'YD_SIMPLECMS_ACTION_PREFIX',  'action_' );
-    define( 'YD_SIMPLECMS_MODULE_PREFIX',  'module_' );
-    define( 'YD_SIMPLECMS_MODULE_EXT',     '.php' );
-    define( 'YD_SIMPLECMS_MODULE_PATTERN', YD_SIMPLECMS_MODULE_PREFIX . '*' . YD_SIMPLECMS_MODULE_EXT );
-    define( 'YD_SIMPLECMS_MODULE_DIR',     dirname( YD_SELF_FILE ) . '/includes/modules' );
-    define( 'YD_SIMPLECMS_SKINS_DIR',      dirname( YD_SELF_FILE ) . '/includes/skins_' );
-    define( 'YD_SIMPLECMS_SCOPE_PUBLIC',   'public' );
-    define( 'YD_SIMPLECMS_SCOPE_ADMIN',    'admin' );
+    define( 'YD_SIMPLECMS_PACKAGE_NAME',   'YD_SIMPLECMS' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_ACTION_PREFIX',  'action_' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_PREFIX',  'module_' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_EXT',     '.php' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_PATTERN', YD_SIMPLECMS_MODULE_PREFIX . '*' . YD_SIMPLECMS_MODULE_EXT );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_DIR',     dirname( YD_SELF_FILE ) . '/includes/modules' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_SKINS_DIR',      dirname( YD_SELF_FILE ) . '/includes/skins_' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_PUBLIC',   'public' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_ADMIN',    'admin' );
 
     // Configuration
     YDConfig::set( 'YD_AUTO_EXECUTE', false );
-
-    // The global list with admin menu
-    $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] = array();
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php' );
@@ -87,9 +85,68 @@
     /**
      *  This is the global YDSimpleCMS class that houses all cms related functions.
      *
+     *  @todo
+     *      Add the following functions:
+     *          - initialize(): checks against $GLOBALS['YD_SIMPLECMS'] to see if we are initialized. If not, we need
+     *             tostill initialize the cms package. Initializing means:
+     *              - Setup the database connection under $GLOBALS['YD_SIMPLECMS']['db']
+     *              - Negotiate the languages for public and admin under $GLOBALS['YD_SIMPLECMS']['languages']
+     *              - Initializes the module manager under $GLOBALS['YD_SIMPLECMS']['moduleManager']
+     *          - getLanguages(): returns $GLOBALS['YD_SIMPLECMS']['languages'], but issues initialize first if not done
+     *            yet (to make sure we are initialized properly).
+     *          - getDatabase(): returns $GLOBALS['YD_SIMPLECMS']['db'], but issues initialize first if not done yet (to
+     *            make sure we are initialized properly).
+     *          - getModuleManager(): returns $GLOBALS['YD_SIMPLECMS']['moduleManager'], but issues initialize first if
+     *            not done yet (to make sure we are initialized properly).
+     *          - isInitialized(): returns a boolean indicating if the CMS package was initialized or not.
+     *          - initializeIfNeeded(): shortcut for checking isInitialized and then doing initialize if needed.
+     *      \n
+     *      We could do all this in the request class, but that would mean the modules will not have access to it. This
+     *      way, we kind of make a pseudo singleton class that can be accessed from anywhere in the code.
+     *
      *  @ingroup YDSimpleCMS
      */
     class YDSimpleCMS {
+
+        /**
+         *  This function initializes the SimpleCMS package. It performs the following items:
+         *      - Create a new global array under $GLOBALS['YD_SIMPLECMS']
+         *      - Adds a database connection under $GLOBALS['YD_SIMPLECMS']['db']
+         *      - Adds a language array under $GLOBALS['YD_SIMPLECMS']['languages']
+         *      - Adds a module manager instance under $GLOBALS['YD_SIMPLECMS']['moduleManager']
+         *      - Adds a array under $GLOBALS['YD_SIMPLECMS']['adminMenu'] to keep track of the admin menu
+         *      - Adds a null value under $GLOBALS['YD_SIMPLECMS']['user'] to keep track of the current user
+         *
+         *  Even if you call this function multiple times, the initialization will only be done once.
+         *
+         *  @todo
+         *      Negotiate the language and put it as an array under $GLOBALS['YD_SIMPLECMS']['languages']
+         */
+        function initialize() {
+
+            // Check if the initialization is already done or not
+            if ( ! isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME] ) || ! is_array( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME] ) ) {
+
+                // Create the array
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME] = array();
+
+                // Setup the database connection
+                YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix' ) );
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['db'] = YDDatabase::getInstance(
+                    'mysql',
+                    YDConfig::get( 'db_name' ), YDConfig::get( 'db_user' ),
+                    YDConfig::get( 'db_pass' ), YDConfig::get( 'db_host' )
+                );
+
+                // The global list with admin menu
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] = array();
+
+                // The current user
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] = null;
+
+            }
+
+        }
 
         /**
          *  This is a static function that will run a request.
@@ -156,7 +213,7 @@
         function addAdminMenu( $title, $subtitle, $module, $action ) {
 
             // Link to the menu items
-            $menu = & $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'];
+            $menu = & $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'];
 
             // Construct the URL
             $url = YD_SELF_SCRIPT . '?module=' . $module . '&action=' . $action;
@@ -189,18 +246,7 @@
          *  @static
          */
         function getDbConnection() {
-
-            // Register the database instance and prefix
-            YDDatabase::registerInstance(
-                'default', 'mysql',
-                YDConfig::get( 'db_name' ), YDConfig::get( 'db_user' ),
-                YDConfig::get( 'db_pass' ), YDConfig::get( 'db_host' )
-            );
-            YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix' ) );
-        
-            // The database connection
-            return YDDatabase::getNamedInstance();
-
+            return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['db'];
         }
 
     }
@@ -382,6 +428,9 @@
             // Initialize the parent
             $this->YDSimpleCMSPublicRequest();
 
+            // Make sure the CMS package is initialized
+            YDSimpleCMS::initialize();
+
             // Indicate we require login
             $this->setRequiresAuthentication( true );
 
@@ -511,7 +560,7 @@
             if ( $result === false ) {
                 return array( '__ALL__' => t( 'err_login_all' ) );
             } else {
-                $GLOBALS['user'] = $result;
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] = $result;
                 return true;
             }
         }
@@ -631,9 +680,9 @@
         function display( $name='' ) {
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
-            $this->tpl->assign( 'adminMenu',     $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] );
-            if ( isset( $GLOBALS['user'] ) ) {
-                $this->tpl->assign( 'currentUser', $GLOBALS['user'] );
+            $this->tpl->assign( 'adminMenu',     $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
+            if ( isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] ) ) {
+                $this->tpl->assign( 'currentUser', $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] );
             }
             if ( $name == '' ) {
                 $name = $this->getModuleName();
@@ -719,13 +768,13 @@
 
             // Sort the admin menu items
             if ( $scope == YD_SIMPLECMS_SCOPE_ADMIN ) {
-                ksort( $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] );
-                foreach ( $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] as $key=>$val ) {
-                    if ( isset( $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'][$key]['children'] ) ) {
-                        ksort( $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'][$key]['children'] );
+                ksort( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
+                foreach ( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] as $key=>$val ) {
+                    if ( isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'][$key]['children'] ) ) {
+                        ksort( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'][$key]['children'] );
                     }
                 }
-                $moduleInstance->tpl->assign( 'adminMenu', $GLOBALS['YD_SIMPLECMS_ADMIN_MENU'] );
+                $moduleInstance->tpl->assign( 'adminMenu', $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
             }
 
             // Create a link to ourselves
@@ -753,7 +802,10 @@
 
     }
 
-    // Add menu items
+    // Initialize SimpleCMS
+    YDSimpleCMS::initialize();
+
+    // Add the default admin menu items
     YDSimpleCMS::addAdminMenu( 'Admin',   null,       'admin', 'show' );
     YDSimpleCMS::addAdminMenu( 'Admin',   'Logout',   'admin', 'logout' );
     YDSimpleCMS::addAdminMenu( 'Content', 'Pages',    'page',  'show' );
