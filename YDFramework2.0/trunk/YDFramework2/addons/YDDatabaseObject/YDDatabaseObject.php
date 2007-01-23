@@ -1082,7 +1082,7 @@
 
 			// convert dates
 			foreach( $values as $element => $value )
-				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $form->getValue( $element ), $onDate );
+				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $value, $onDate );
 
 			// apply values
             $this->setValues( $values );
