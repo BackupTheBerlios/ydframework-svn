@@ -72,6 +72,23 @@
      *
      *  All these options are available as class variables.
      *
+     *  @todo
+     *      Refactor this class so that it's easier to be subclasses to provide custom functionality. This way, we can
+     *      abstract the actual paging regardless of how the data is gathered. We only need to have the part of the data
+     *      we really need and the total size of the list of items to do the paging.
+     *
+     *  @todo
+     *      We should try to see if there is a way to make this work together directly with a database instance instead 
+     *      of using arrays. This would be the only way to improve the performance of this class with large arrays.
+     *
+     *  @todo
+     *      Evaluate if we need to change the persistent sorting from a persistent variable to a session variable. This
+     *      way, if the session expires, the default sorting is applied again.
+     *
+     *  @todo
+     *      Should we give or generate a name for the recordset so that different recordsets with the same fields still
+     *      can have different sortfields applied (which is currently not possible)?
+     *
      *  @ingroup YDDatabase
      */
     class YDRecordSet extends YDBase {
@@ -93,7 +110,10 @@
          *  @param  $sortdir    (optional) The name of the query string variable indicating the direction. Defaults to
          *                      "sortdir"
          */
-        function YDRecordSet( $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size', $sortvar='sortfld', $sortdir='sortdir' ) {
+        function YDRecordSet(
+            $records, $page=-1, $pagesize=null, $pagevar='page', $sizevar='size',
+            $sortvar='sortfld', $sortdir='sortdir'
+        ) {
 
             // Include the YDPersistent library
             include_once( YD_DIR_HOME_CLS . '/YDPersistent.php');
@@ -617,7 +637,6 @@
 
     }
 
-
     /**
      *  This class defines a database object.
      *
@@ -642,16 +661,16 @@
             // Check if the global array exists
             YDDatabase::_initNamedInstances();
 
-			// Check if we are using a DSN string, e.g. "mysql://user:password@host/database"
-			if ( $db == '' ){
+            // Check if we are using a DSN string, e.g. "mysql://user:password@host/database"
+            if ( $db == '' ){
 
-				$dsn    = new YDUrl( $driver );
-				$driver = $dsn->getScheme();
-				$db     = substr( $dsn->getPath(), 1 );
-				$user   = $dsn->getUser();
-				$pass   = $dsn->getPassword();
-				$host   = $dsn->getHost();
-			}
+                $dsn    = new YDUrl( $driver );
+                $driver = $dsn->getScheme();
+                $db     = substr( $dsn->getPath(), 1 );
+                $user   = $dsn->getUser();
+                $pass   = $dsn->getPassword();
+                $host   = $dsn->getHost();
+            }
 
             // Register the instance
             $GLOBALS['YD_DB_INSTANCES'][ strtolower( $name ) ] = array( $driver, $db, $user, $pass, $host );
@@ -712,6 +731,11 @@
          *  @param $host    (optional) Host name to use for the connection.
          *
          *  @returns    An instance of YDDatabaseDriver
+         *
+         *  @todo
+         *      Doublecheck this piece of code as there seems to be a possible problem that you cannot have more than
+         *      one connection to a database. If you use two different database instances, it seems that they still
+         *      point to the same table, which should not be the case.
          *
          *  @static
          */

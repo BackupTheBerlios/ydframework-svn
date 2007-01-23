@@ -37,6 +37,20 @@
      *  This class implements a database tree as described on:
      *  http://www.phpriot.com/d/articles/php/application-design/nested-trees-2/
      *
+     *  @todo
+     *      Add support for joins so that you can link in other tables in the tree. Without this functionality, this
+     *      class is rather limited. We might need to give the table with the tree itself a common prefix so that we
+     *      can differentiate between the fields that should be stored in the table and the fields that should not be
+     *      stored in the database (which are the ones from the join tables).
+     *
+     *  @todo
+     *      Check if using YDDatabaseQuery can make the queries easier to understand and change.
+     *
+     *  @todo
+     *      Add support for moving items up and down. The algorithm can be something like:
+     *          - Move up: currentItem+1, nextItem-1
+     *          - Move down: currentItem-1, previousItem+1
+     *
      *  @ingroup YDDatabase
      */
     class YDDatabaseTree extends YDBase {
@@ -51,9 +65,7 @@
          *  @param $sortField      (optional) Name of the field to sort data. Default is position, title.
          */
         function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='position, title' ) {
-
             $this->db = YDDatabase::getNamedInstance( $db );
-
             $this->table = $table;
             $this->fields = array(
                 'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
@@ -629,6 +641,11 @@
 
         /**
          *  Rebuilds the tree data and saves it to the database
+         *
+         *  @todo
+         *      Check if there is any way of optimizing this part so that we don't have to issue and update statement
+         *      for each item in the table. If I understand the algorithm correctly, only part of the tree data should
+         *      be updated when we change an item.
          */
         function rebuild() {
 
@@ -642,8 +659,8 @@
             $data_ori = array_merge( $data );
 
             // Keep track of the number and level
-            $n     = 0; // Need a variable to hold the running n tally
-            $level = 0; // Need a variable to hold the running level tally
+            $n     = 0;
+            $level = 0;
 
             // Invoke the recursive function. Start it processing on the fake "root node" generated in 
             // getTreeWithChildren(). because this node doesn't really exist in the database, we give it an initial 
@@ -720,14 +737,6 @@
             if ( ! isset( $values[ $parentField ] ) ) {
                 $values[ $parentField ] = 0;
             }
-
-            /*// Check if the parent node exists
-            if ( isset( $values[ $parentField ] ) && intval( $values[ $parentField ] ) != 0 ) {
-                $node = $this->getNode( $values[ $parentField ] );
-                if ( ! $node ) {
-                    trigger_error( 'Parent node (' . $values[ $parentField ] . ') does not exist in the tree!', YD_ERROR );
-                }
-            }*/
 
             // Perform the insert
             $this->db->executeInsert( $this->table, $values );

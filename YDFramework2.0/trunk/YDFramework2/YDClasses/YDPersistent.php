@@ -44,6 +44,11 @@
      *  This class is able to save and load persistent data. This data stay active between different requests and allows
      *  you to share data between different requests and different sessions.
      *
+     *  @todo
+     *      The default scope of the persistent variable should be the current script in stead of the root of the site.
+     *      The problem is that if you use the variable for e.g. storing sorting data, and use different ones over
+     *      different pages, they clash with each other.
+     *
      *  @ingroup YDFramework
      */
     class YDPersistent extends YDBase {

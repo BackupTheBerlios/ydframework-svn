@@ -267,6 +267,13 @@
          *					the default action.
          *	@param $params	(optional) The $_GET parameters as an associative array that need to be added to the URL
          *					before redirecting. They will automatically get URL encoded.
+         *
+         *  @todo
+         *      Use the YDUrl class to construct the URL as it's easier to work with and will help with the todo item
+         *      that should strip the default action from the URL.
+         *
+         *  @todo
+         *      If the only query string parameter is the do parameter with the value default, we should omit it.
          */
         function redirectToAction( $action='default', $params=array() ) {
             if ( is_null( $action ) ) {
@@ -303,11 +310,7 @@
          *	@returns	Returns a boolean indicating if the request was initialized properly or not.
          */
         function isInitialized() {
-            if ( $this->__isInitialized == true ) {
-                return true;
-            } else {
-                return false;
-            };
+            return ( $this->__isInitialized == true );
         }
 
         /**
@@ -391,11 +394,7 @@
          *	@param $bool	Boolean indicating if this request requires authentication or not.
          */
         function setRequiresAuthentication( $bool ) {
-            if ( $bool == true ) {
-                $this->__requiresAuthentication = true;
-            } else {
-                $this->__requiresAuthentication = false;
-            }
+            $this->__requiresAuthentication = ( $bool == true ) ? true : false;
         }
 
         /**
@@ -404,11 +403,7 @@
          *	@returns	This function returns true or false to indicate if this requires authentication or not.
          */
         function getRequiresAuthentication() {
-            if ( $this->__requiresAuthentication == false ) {
-                return false;
-            } else {
-                return true;
-            }
+            return ( $this->__requiresAuthentication == false ) ? false : true;
         }
 
         /**
@@ -466,27 +461,36 @@
          *
          *  By default no YDRequest action callbacks are defined.
          *
-         *  Callbacks are disabled when an action forwards to another
-         *  action. This is to prevent duplicated processing of callbacks.
-         *  "redirectToAction" is a more compatible with callbacks.
+         *  Callbacks are disabled when an action forwards to another action. This is to prevent duplicated processing 
+         *  of callbacks. "redirectToAction" is a more compatible with callbacks.
          *
-         *  Processing of callbacks and actions in the context of a request
-         *  is executed in this order:
+         *  Processing of callbacks and actions in the context of a request is executed in this order:
          *
-         *    1. (optional) before 'action' callbacks - apply to all actions
-         *    2. (optional) before callback for the current action
-         *	  3. Current action
-         *    4. (optional) after callback for the current action
-         *    5. (optional) after 'action' callbacks - apply to all actions
+         *      -# (optional) before 'action' callbacks - apply to all actions
+         *      -# (optional) before callback for the current action
+         *      -# Current action
+         *      -# (optional) after callback for the current action
+         *      -# (optional) after 'action' callbacks - apply to all actions
          *
-         *	example 1: will execute my_before_callback() before each action
-         *		$this->registerCallback( 'my_before_callback', 'action', true );
+         *  Some usage examples:
          *
-         *	example 2: will execute my_after_callback() after each action
-         *		$this->registerCallback( 'my_after_callback', 'action', false );
+         *      - example 1:\n
+         *          will execute my_before_callback() before each action
+         *          @code
+         *  $this->registerCallback( 'my_before_callback', 'action', true );
+         *          @endcode
          *
-         *	example 3: will execute my_deafult_after_callback() after actionDefault
-         *		$this->registerCallback( 'my_deafult_after_callback', 'actionDefault', false );
+         *      - example 2:\n
+         *          will execute my_after_callback() after each action
+         *          @code
+         *  $this->registerCallback( 'my_after_callback', 'action', false );
+         *          @endcode
+         *
+         *      - example 3:\n
+         *          will execute my_deafult_after_callback() after actionDefault
+         *          @code
+         *  $this->registerCallback( 'my_deafult_after_callback', 'actionDefault', false );
+         *          @endcode
          *
          *  @param $method  The method name.
          *  @param $action  The action or array of actions that trigger the call.
