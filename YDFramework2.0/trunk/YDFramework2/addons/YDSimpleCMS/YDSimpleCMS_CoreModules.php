@@ -26,7 +26,7 @@
      */
 
     /**
-     *  The page module
+     *  The page module which handles a basic page object.
      *
      *  @ingroup YDSimpleCMS
      */
@@ -53,7 +53,7 @@
     }
 
     /**
-     *  The admin module
+     *  The admin module which implements most of the standard admin functions.
      *
      *  @ingroup YDSimpleCMS
      */
@@ -79,7 +79,8 @@
 
         // List the plugins
         function action_admin_modules() {
-            $this->tpl->assign( 'modules', $this->manager->getModuleList() );
+            $moduleManager = & YDSimpleCMS::getModuleManager();
+            $this->tpl->assign( 'modules', $moduleManager->getModuleList() );
             $this->display();
         }
 

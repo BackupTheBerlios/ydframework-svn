@@ -106,6 +106,8 @@
          *
          *  @todo
          *      Negotiate the language and put it as an array under $GLOBALS['YD_SIMPLECMS']['languages']
+         *
+         *  @static
          */
         function initialize() {
 
@@ -133,6 +135,9 @@
                 $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager'] = new YDSimpleCMSModuleManager();
                 $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager']->loadAllModules();
 
+                // Set the default scope
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['scope'] = YD_SIMPLECMS_SCOPE_PUBLIC;
+
             }
 
         }
@@ -148,6 +153,7 @@
          *  @static
          */
         function run( $scope ) {
+            YDSimpleCMS::setVar( 'scope', $scope );
             $baseClass = ( strtolower( $scope ) == YD_SIMPLECMS_SCOPE_PUBLIC ) ? 'YDSimpleCMSPublicRequest' : 'YDSimpleCMSAdminRequest';
             $clsInst = new YDExecutor( $baseClass . '.php' );
             @session_start();
@@ -246,13 +252,20 @@
          *  @static
          */
         function & getAdminMenu() {
-            return YDSimpleCMS::getVar( 'adminMenu' );
+            $adminMenu = & YDSimpleCMS::getVar( 'adminMenu' );
+            ksort( $adminMenu );
+            foreach ( $adminMenu as $key=>$val ) {
+                if ( isset( $adminMenu[$key]['children'] ) ) {
+                    ksort( $adminMenu[$key]['children'] );
+                }
+            }
+            return $adminMenu;
         }
 
         /**
          *  This function returns an instance of the module manager class.
          *
-         *  @returns    An instance of the module manager class..
+         *  @returns    An instance of the module manager class.
          *
          *  @static
          */
@@ -261,11 +274,36 @@
         }
 
         /**
+         *  This function returns the current scope in which the request runs.
+         *
+         *  @returns    Returns YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
+         *
+         *  @static
+         */
+        function & getScope() {
+            return YDSimpleCMS::getVar( 'scope' );
+        }
+
+        /**
+         *  This function returns the details of the current user which is logged in. If no one is logged in, it will
+         *  return a null value.
+         *
+         *  @returns    Returns the details of the currently logged in user.
+         *
+         *  @static
+         */
+        function & getCurrentUser() {
+            return YDSimpleCMS::getVar( 'currentUser' );
+        }
+
+        /**
          *  This function returns one of the named variables from the global CMS scope.
          *
          *  @param  $var    The name of the variable you want to retrieve.
          *
          *  @returns    The contents of that variable, false if the variable doesn't exist.
+         *
+         *  @static
          */
         function & getVar( $var ) {
 
@@ -274,12 +312,25 @@
 
             // Return the variable if it's set, otherwise return false
             if ( ! isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var] ) ) {
-                return false;
+                $var = false;
+                return $var;
             }
 
             // Return a reference to the variable
             return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var];
 
+        }
+        
+        /**
+         *  This function sets a YDSimpleCMS variable.
+         *
+         *  @param  $var    The variable to set.
+         *  @param  $value  The value to set the variable to.
+         *
+         *  @static
+         */
+        function setVar( $var, $value ) {
+            $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var] = $value;
         }
 
     }
@@ -302,29 +353,6 @@
     class YDSimpleCMSTemplate extends YDTemplate {
 
         /**
-         *  The scope which is going to be used for the template.
-         *
-         *  Can be either YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
-         */
-        var $scope;
-
-        /**
-         *  The class constructor the the YDSimpleCMSTemplate class.
-         *
-         *  @param  $scope  The scope which is going to be used for the template. Can be either
-         *                  YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
-         */
-        function YDSimpleCMSTemplate( $scope ) {
-
-            // Initialize the parent
-            $this->YDTemplate();
-
-            // Set the scope
-            $this->scope = $scope;
-
-        }
-
-        /**
          *  This function will fetch the specified template, and surround it with the contents of the indicated master
          *  page, which should be in the skins directory.
          *
@@ -338,9 +366,12 @@
          */
         function fetchWithMaster( $template='', $master='__master' ) {
 
+            // Get the current scope
+            $scope = YDSimpleCMS::getScope();
+            
             // Set the variables
-            $this->template_dir = YD_SIMPLECMS_SKINS_DIR . $this->scope;
-            if ( $this->scope == YD_SIMPLECMS_SCOPE_PUBLIC ) {
+            $this->template_dir = YD_SIMPLECMS_SKINS_DIR . $scope;
+            if ( $scope == YD_SIMPLECMS_SCOPE_PUBLIC ) {
                 $this->template_dir .= '/' . YDConfig::get( 'YD_SIMPLECMS_PUBLIC_SKIN', 'default' );
             }
 
@@ -384,13 +415,6 @@
     class YDSimpleCMSPublicRequest extends YDRequest {
 
         /**
-         *  The scope which is going to be used for the template.
-         *
-         *  Can be either YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
-         */
-        var $requestScope  = YD_SIMPLECMS_SCOPE_PUBLIC;
-
-        /**
          *  The default module for the request class.
          *
          *  Currently defaults to 'page' for the public request class.
@@ -413,7 +437,7 @@
             $module = $this->getQueryStringParameter( 'module', $this->defaultModule );
             $action = $this->getQueryStringParameter( 'action', 'show' );
             $moduleManager = & YDSimpleCMS::getModuleManager();
-            $moduleManager->runModule( $this->requestScope, $module, $action );
+            $moduleManager->runModule( $module, $action );
         }
 
     }
@@ -437,13 +461,6 @@
     class YDSimpleCMSAdminRequest extends YDSimpleCMSPublicRequest {
 
         /**
-         *  The scope which is going to be used for the template.
-         *
-         *  Can be either YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
-         */
-        var $requestScope  = YD_SIMPLECMS_SCOPE_ADMIN;
-
-        /**
          *  The default module for the request class.
          *
          *  Currently defaults to 'admin' for the admin request class.
@@ -464,7 +481,7 @@
             $this->setRequiresAuthentication( true );
 
             // Instantiate the template object
-            $this->tpl = new YDSimpleCMSTemplate( YD_SIMPLECMS_SCOPE_ADMIN );
+            $this->tpl = new YDSimpleCMSTemplate();
 
             // Get the site id
             $this->siteId = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
@@ -589,7 +606,7 @@
             if ( $result === false ) {
                 return array( '__ALL__' => t( 'err_login_all' ) );
             } else {
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] = $result;
+                YDSimpleCMS::setVar( 'currentUser', $result );
                 return true;
             }
         }
@@ -634,18 +651,6 @@
         var $authorUrl     = 'http://www.yellowduck.be';
 
         /**
-         *  A reference to the module manager instance that loaded this module.
-         */
-        var $manager       = null;
-
-        /**
-         *  The current scope of the CMS module.
-         *
-         *  Currently, the value can only be YD_SIMPLECMS_SCOPE_PUBLIC or YD_SIMPLECMS_SCOPE_ADMIN.
-         */
-        var $currentScope  = null;
-
-        /**
          *  The name of the action that is currently being executed.
          */
         var $currentAction = null;
@@ -656,8 +661,7 @@
          *  @param  $manager    A reference to the module manager instance that loaded this module.
          */
         function YDSimpleCMSModule() {
-            $this->manager = & YDSimpleCMS::getModuleManager();
-            $this->tpl = new YDSimpleCMSTemplate( YD_SIMPLECMS_SCOPE_PUBLIC );
+            $this->tpl = new YDSimpleCMSTemplate();
         }
 
         /**
@@ -710,12 +714,10 @@
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
             $this->tpl->assign( 'adminMenu',     YDSimpleCMS::getAdminMenu() );
-            if ( isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] ) ) {
-                $this->tpl->assign( 'currentUser', $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] );
+            if ( YDSimpleCMS::getCurrentUser() ) {
+                $this->tpl->assign( 'currentUser', YDSimpleCMS::getCurrentUser() );
             }
-            if ( $name == '' ) {
-                $name = $this->getModuleName();
-            }
+            $name = ( $name == '' ) ? $this->getModuleName() : $name;
             $this->tpl->displayWithMaster( $name );
         }
 
@@ -769,15 +771,13 @@
          *      This function should only be called after the loadAllModules function has been executed. If not, this
          *      function will fail as the include files are not loaded yet.
          *
-         *  @param  $scope  The scope in which to run the module and action. Can be YD_SIMPLECMS_SCOPE_PUBLIC or
-         *                  YD_SIMPLECMS_SCOPE_ADMIN.
          *  @param  $module The name of the module to run.
          *  @param  $action The name of the action to run.
          */
-        function runModule( $scope, $module, $action ) {
+        function runModule( $module, $action ) {
 
             // Convert everything to lowercase
-            $scope  = strtolower( $scope );
+            $scope  = YDSimpleCMS::getScope();
             $module = strtolower( $module );
             $action = strtolower( $action );
 
@@ -798,12 +798,6 @@
             // Sort the admin menu items
             if ( $scope == YD_SIMPLECMS_SCOPE_ADMIN ) {
                 $adminMenu = & YDSimpleCMS::getAdminMenu();
-                ksort( $adminMenu );
-                foreach ( $adminMenu as $key=>$val ) {
-                    if ( isset( $adminMenu[$key]['children'] ) ) {
-                        ksort( $adminMenu[$key]['children'] );
-                    }
-                }
                 $moduleInstance->tpl->assign( 'adminMenu', $adminMenu );
             }
 
@@ -823,7 +817,7 @@
         function getModuleList() {
             $modules = array();
             foreach ( get_declared_classes() as $class ) {
-                if ( substr( $class, 0, strlen( YD_SIMPLECMS_MODULE_PREFIX ) ) == YD_SIMPLECMS_MODULE_PREFIX ) {
+                if ( YDStringUtil::startsWith( $class, YD_SIMPLECMS_MODULE_PREFIX ) ) {
                     $modules[$class] = new $class( $this );
                 }
             }
