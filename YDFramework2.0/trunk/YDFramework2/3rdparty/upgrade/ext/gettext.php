@@ -43,7 +43,7 @@ if (!function_exists("gettext")) {
       }
 
       #-- look up string
-      if (($trans = $_GETTEXT[$domain][$msg])
+      if (($trans = @$_GETTEXT[$domain][$msg])
       or ($pli) and ($trans = $_GETTEXT[$domain][$msg2]))
       {
          // handle plural entries
