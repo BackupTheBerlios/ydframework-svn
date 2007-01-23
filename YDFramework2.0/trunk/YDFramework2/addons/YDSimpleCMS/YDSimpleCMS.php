@@ -23,20 +23,6 @@
 
     /**
      *  @addtogroup YDSimpleCMS Addons - Simple CMS
-     *
-     *  @todo
-     *      Consolidate the two request classes into one. Based on the scope, it should know if you need to force
-     *      authentication or not.
-     *
-     *  @todo
-     *      Make a link from the module to the request instance
-     *
-     *  @todo
-     *      Make a link from the template to the module instance and module manager (so that you can access these from
-     *      the template)
-     *
-     *  @todo
-     *      Make login module based?
      */
 
     // Check if the framework is loaded
@@ -154,8 +140,7 @@
          */
         function run( $scope ) {
             YDSimpleCMS::setVar( 'scope', $scope );
-            $baseClass = ( strtolower( $scope ) == YD_SIMPLECMS_SCOPE_PUBLIC ) ? 'YDSimpleCMSPublicRequest' : 'YDSimpleCMSAdminRequest';
-            $clsInst = new YDExecutor( $baseClass . '.php' );
+            $clsInst = new YDExecutor( 'YDSimpleCMSRequest.php' );
             @session_start();
             $clsInst->execute();
         }
@@ -404,22 +389,57 @@
         }
 
     }
-
+    
     /**
-     *  Define the CMS public request class.
+     *  Define the SimpleCMS request class. This is the base classes for all requests in the framework.
      *
-     *  The public request class doesn't perform any user authentication.
+     *  Depending on the current scope, authetication will be enforced or not. It works as follows:
+     *      - YD_SIMPLECMS_SCOPE_PUBLIC: authetication is performed but not enforced
+     *      - YD_SIMPLECMS_SCOPE_ADMIN: authetication is performed and enforced
+     *
+     *  It also supports modules and action via specific query string parameters:
+     *      - module: the module to load (defaults to 'admin' )
+     *      - action: the action to load from the module (defaults to 'show')
+     *
+     *  The authentication credentials are stored in cookies with the following name:
+     *      - YD_SIMPLECMS_{siteId}_USER
+     *      - YD_SIMPLECMS_{siteId}_PASS
      *
      *  @ingroup YDSimpleCMS
      */
-    class YDSimpleCMSPublicRequest extends YDRequest {
+    class YDSimpleCMSRequest extends YDRequest {
 
         /**
-         *  The default module for the request class.
+         *  The constructor for the admin CMS request.
          *
-         *  Currently defaults to 'page' for the public request class.
+         *  This one forces authentication and requires a configuration variable called 'YD_SIMPLECMS_SITEID' to be set.
          */
-        var $defaultModule = 'page';
+        function YDSimpleCMSRequest() {
+
+            // Initialize the parent
+            $this->YDRequest();
+            
+            // Setup the default module based on the current scope
+            if ( YDSimpleCMS::getScope() == YD_SIMPLECMS_SCOPE_PUBLIC ) {
+                $this->defaultModule = 'page';
+            } else {
+                $this->defaultModule = 'admin';
+            }
+
+            // Indicate we require login
+            $this->setRequiresAuthentication( true );
+
+            // Instantiate the template object
+            $this->tpl = new YDSimpleCMSTemplate();
+
+            // Get the site id
+            $this->siteId = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
+
+            // The names of the cookies
+            $this->cookieNameUser = 'YD_SIMPLECMS_' . $this->siteId . '_USER';
+            $this->cookieNamePass = 'YD_SIMPLECMS_' . $this->siteId . '_PASS';
+
+        }
 
         /**
          *  The default action for the public request.
@@ -438,58 +458,6 @@
             $action = $this->getQueryStringParameter( 'action', 'show' );
             $moduleManager = & YDSimpleCMS::getModuleManager();
             $moduleManager->runModule( $module, $action );
-        }
-
-    }
-
-    /**
-     *  Define the CMS admin request class.
-     *
-     *  This class forces authentication against the database (the \#_users table). Only if the authentication succeeds,
-     *  you will be able to access the request.
-     *
-     *  It also supports modules and action via specific query string parameters:
-     *      - module: the module to load (defaults to 'admin' )
-     *      - action: the action to load from the module (defaults to 'show')
-     *
-     *  The authentication credentials are stored in cookies with the following name:
-     *      - YD_SIMPLECMS_{siteId}_USER
-     *      - YD_SIMPLECMS_{siteId}_PASS
-     *
-     *  @ingroup YDSimpleCMS
-     */
-    class YDSimpleCMSAdminRequest extends YDSimpleCMSPublicRequest {
-
-        /**
-         *  The default module for the request class.
-         *
-         *  Currently defaults to 'admin' for the admin request class.
-         */
-        var $defaultModule = 'admin';
-
-        /**
-         *  The constructor for the admin CMS request.
-         *
-         *  This one forces authentication and requires a configuration variable called 'YD_SIMPLECMS_SITEID' to be set.
-         */
-        function YDSimpleCMSAdminRequest() {
-
-            // Initialize the parent
-            $this->YDSimpleCMSPublicRequest();
-
-            // Indicate we require login
-            $this->setRequiresAuthentication( true );
-
-            // Instantiate the template object
-            $this->tpl = new YDSimpleCMSTemplate();
-
-            // Get the site id
-            $this->siteId = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
-
-            // The names of the cookies
-            $this->cookieNameUser = 'YD_SIMPLECMS_' . $this->siteId . '_USER';
-            $this->cookieNamePass = 'YD_SIMPLECMS_' . $this->siteId . '_PASS';
-
         }
 
         /**
@@ -572,7 +540,11 @@
                     return true;
                 }
             }
-            return false;
+            if ( YDSimpleCMS::getScope() == YD_SIMPLECMS_SCOPE_PUBLIC ) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         /**
@@ -726,18 +698,34 @@
          *
          *  This function gets triggered by the module manager when this one wants to trigger an action.
          *
-         *  @param  $scope  The scope in which to run the action. Can be YD_SIMPLECMS_SCOPE_PUBLIC or
-         *                  YD_SIMPLECMS_SCOPE_ADMIN
          *  @param  $action The action to run.
          */
-        function runAction( $scope, $action ) {
+        function runAction( $action ) {
+            $scope = YDSimpleCMS::getScope();
             $moduleFunctionName = YD_SIMPLECMS_ACTION_PREFIX . $scope . '_' . $action;
             if ( ! $this->hasMethod( $moduleFunctionName ) ) {
-                YDSimpleCMS::showError( 'Module %s function not found: %s', $this->getModuleName(), $moduleFunctionName );
+                YDSimpleCMS::showError(
+                    'Module "%s" does not have a function called "%s"',
+                    $this->getModuleName(), $moduleFunctionName
+                );
             }
             $this->currentScope  = $scope;
             $this->currentAction = $action;
             call_user_func( array( $this, $moduleFunctionName ) );
+        }
+
+        /**
+         *  This function forces the user to logout.
+         */
+        function action_admin_logout() {
+            YDRequest::redirect( YD_SELF_SCRIPT . '?do=logout' );
+        }
+
+        /**
+         *  This function forces the user to logout.
+         */
+        function action_public_logout() {
+            $this->action_admin_logout();
         }
 
     }
@@ -805,7 +793,7 @@
             $moduleInstance->manager = & $this;
 
             // Run the action
-            $moduleInstance->runAction( $scope, $action );
+            $moduleInstance->runAction( $action );
 
         }
 

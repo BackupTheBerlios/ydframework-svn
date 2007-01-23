@@ -72,11 +72,6 @@
             $this->display();
         }
 
-        // Admin logout function
-        function action_admin_logout() {
-            YDRequest::redirect( YD_SELF_SCRIPT . '?do=logout' );
-        }
-
         // List the plugins
         function action_admin_modules() {
             $moduleManager = & YDSimpleCMS::getModuleManager();
