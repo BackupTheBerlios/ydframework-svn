@@ -206,7 +206,7 @@
         function upgradeSchemaIfNeeded() {
 
             // The current weblog schema version
-            $current_schema = 8;
+            $current_schema = 9;
 
             // Get the schema version
             $installed_schema = $this->getSchemaVersion();
@@ -282,6 +282,27 @@
                         . '  lastvisit int(11) default NULL,'
                         . '  PRIMARY KEY  (id),'
                         . '  UNIQUE KEY userip (userip)'
+                        . ')'
+                    );
+                }
+
+                // Create the bad_behavior table
+                if ( ! $this->dbmeta->tableExists( '#_bad_behavior' ) ) {
+                    $this->db->executeSql(
+                          'CREATE TABLE #_bad_behavior ('
+                        . '  id INT(11) NOT NULL auto_increment,'
+                        . '  ip TEXT NOT NULL,'
+                        . '  date DATETIME NOT NULL default \'0000-00-00 00:00:00\','
+                        . '  request_method TEXT NOT NULL,'
+                        . '  request_uri TEXT NOT NULL,'
+                        . '  server_protocol TEXT NOT NULL,'
+                        . '  http_headers TEXT NOT NULL,'
+                        . '  user_agent TEXT NOT NULL,'
+                        . '  request_entity TEXT NULL,'
+                        . '  `key` TEXT NOT NULL,'
+                        . '  INDEX (ip(15)),'
+                        . '  INDEX (user_agent(10)),'
+                        . '  PRIMARY KEY (id)'
                         . ')'
                     );
                 }
