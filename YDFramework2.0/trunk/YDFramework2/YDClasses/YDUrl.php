@@ -403,6 +403,18 @@
         }
 
         /**
+         *	This function will set an array of variables
+         *
+         *	@param	$arr	Associative array.
+         */
+        function setQueryVars( $arr ) {
+            foreach( $arr as $name => $val ){
+                $this->setQueryVar( $name, $val );
+            }
+        }
+
+
+        /**
          *	This function will delete the indicated query variable if it exists.
          *
          *	@param	$name	The name of the query variable to delete.
