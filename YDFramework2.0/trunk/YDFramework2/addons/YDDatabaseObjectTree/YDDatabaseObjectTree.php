@@ -22,7 +22,7 @@
     */
 
     /**
-     *  @addtogroup YDDatabase Core - Database
+     *  @addtogroup YDDatabaseObjectTree Addons - DatabaseObjectTree
      */
 
     // Check if the framework is loaded
@@ -33,43 +33,45 @@
 	// add YDF libs needed by this class
 	require_once( YD_DIR_HOME_ADD . '/YDDatabaseObject/YDDatabaseObject.php' );
 
-
-    /** Database scheme example
-        
-        CREATE TABLE nested_tree (
-            id int NOT NULL auto_increment,
-            parent_id int NULL,
-            lineage varchar(255) NOT NULL default '//',
-            level int NOT NULL default '1',
-            position int NOT NULL default '1',
-            title varchar(255) NOT NULL default '',
-            PRIMARY KEY (id),
-            FOREIGN KEY (parent_id)
-                REFERENCES nested_tree(id)
-                     ON DELETE CASCADE
-                     ON UPDATE CASCADE
-        )TYPE=InnoDB;
-    
-        Note: root node must have ID 1, PARENT null and LINEAGE '' !
-       
-        INSERT INTO nested_tree VALUES ( 1, null, '',         0, 1, '');
-        INSERT INTO nested_tree VALUES ( 2,    1, '//',       1, 1, 'General Resources');
-        INSERT INTO nested_tree VALUES ( 3,    2, '//2/',     2, 1, 'Code Paste');
-        INSERT INTO nested_tree VALUES ( 4,    2, '//2/',     2, 2, 'Documentation');
-        INSERT INTO nested_tree VALUES ( 5,    2, '//2/',     2, 3, 'Books & Publications');
-        INSERT INTO nested_tree VALUES ( 6,    5, '//2/5/',   3, 1, 'Apache');
-        INSERT INTO nested_tree VALUES ( 7,    5, '//2/5/',   3, 2, 'PostgreSQL');
-        INSERT INTO nested_tree VALUES ( 8,    5, '//2/5/',   3, 3, 'MySQL');
-        INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 4, 'Links');
-        INSERT INTO nested_tree VALUES (10,    9, '//2/9/',   3, 1, 'Databases');
-        INSERT INTO nested_tree VALUES (11,    9, '//2/9/',   3, 2, 'Generators');
-        INSERT INTO nested_tree VALUES (12,    9, '//2/9/',   3, 3, 'Portals');
-     */
-
     /**
-     *	This is the actual implementation of the lineage tree algorithm but as an YDDatabaseObject
+     *	This is the actual implementation of the lineage tree algorithm but as an YDDatabaseObject.
      *
-     *  @ingroup YDDatabase
+     *  The DatabaseObjectTree needs to have the following database schema.
+     *  
+     *  @code
+     *	CREATE TABLE nested_tree (
+     *	    id int NOT NULL auto_increment,
+     *	    parent_id int NULL,
+     *	    lineage varchar(255) NOT NULL default '//',
+     *	    level int NOT NULL default '1',
+     *	    position int NOT NULL default '1',
+     *	    title varchar(255) NOT NULL default '',
+     *	    PRIMARY KEY (id),
+     *	    FOREIGN KEY (parent_id)
+     *	        REFERENCES nested_tree(id)
+     *	             ON DELETE CASCADE
+     *	             ON UPDATE CASCADE
+     *	)TYPE=InnoDB;
+     *  @endcode
+     *
+     *  Note: root node must have ID 1, PARENT null and LINEAGE '' !
+     * 
+     *  @code
+     *  INSERT INTO nested_tree VALUES ( 1, null, '',         0, 1, '');
+     *  INSERT INTO nested_tree VALUES ( 2,    1, '//',       1, 1, 'General Resources');
+     *  INSERT INTO nested_tree VALUES ( 3,    2, '//2/',     2, 1, 'Code Paste');
+     *  INSERT INTO nested_tree VALUES ( 4,    2, '//2/',     2, 2, 'Documentation');
+     *  INSERT INTO nested_tree VALUES ( 5,    2, '//2/',     2, 3, 'Books & Publications');
+     *  INSERT INTO nested_tree VALUES ( 6,    5, '//2/5/',   3, 1, 'Apache');
+     *  INSERT INTO nested_tree VALUES ( 7,    5, '//2/5/',   3, 2, 'PostgreSQL');
+     *  INSERT INTO nested_tree VALUES ( 8,    5, '//2/5/',   3, 3, 'MySQL');
+     *  INSERT INTO nested_tree VALUES ( 9,    2, '//2/',     2, 4, 'Links');
+     *  INSERT INTO nested_tree VALUES (10,    9, '//2/9/',   3, 1, 'Databases');
+     *  INSERT INTO nested_tree VALUES (11,    9, '//2/9/',   3, 2, 'Generators');
+     *  INSERT INTO nested_tree VALUES (12,    9, '//2/9/',   3, 3, 'Portals');
+     *  @endcode
+     *
+     *  @ingroup YDDatabaseObjectTree
      */
     class YDDatabaseObjectTree extends YDDatabaseObject {
     
