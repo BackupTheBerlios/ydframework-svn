@@ -58,19 +58,8 @@
      *
      *  @todo
      *      Add the following functions:
-     *          - initialize(): checks against $GLOBALS['YD_SIMPLECMS'] to see if we are initialized. If not, we need
-     *             tostill initialize the cms package. Initializing means:
-     *              - Setup the database connection under $GLOBALS['YD_SIMPLECMS']['db']
-     *              - Negotiate the languages for public and admin under $GLOBALS['YD_SIMPLECMS']['languages']
-     *              - Initializes the module manager under $GLOBALS['YD_SIMPLECMS']['moduleManager']
      *          - getLanguages(): returns $GLOBALS['YD_SIMPLECMS']['languages'], but issues initialize first if not done
      *            yet (to make sure we are initialized properly).
-     *          - getDatabase(): returns $GLOBALS['YD_SIMPLECMS']['db'], but issues initialize first if not done yet (to
-     *            make sure we are initialized properly).
-     *          - getModuleManager(): returns $GLOBALS['YD_SIMPLECMS']['moduleManager'], but issues initialize first if
-     *            not done yet (to make sure we are initialized properly).
-     *          - isInitialized(): returns a boolean indicating if the CMS package was initialized or not.
-     *          - initializeIfNeeded(): shortcut for checking isInitialized and then doing initialize if needed.
      *      \n
      *      We could do all this in the request class, but that would mean the modules will not have access to it. This
      *      way, we kind of make a pseudo singleton class that can be accessed from anywhere in the code.
@@ -87,6 +76,7 @@
          *      - Adds a module manager instance under $GLOBALS['YD_SIMPLECMS']['moduleManager']
          *      - Adds a array under $GLOBALS['YD_SIMPLECMS']['adminMenu'] to keep track of the admin menu
          *      - Adds a null value under $GLOBALS['YD_SIMPLECMS']['user'] to keep track of the current user
+         *      - Stores the current scope in $GLOBALS['YD_SIMPLECMS']['scope']
          *
          *  Even if you call this function multiple times, the initialization will only be done once.
          *
@@ -164,9 +154,8 @@
         }
 
         /**
-         *  This function will show an error for the CMS application.
-         *
-         *  The parameters that are supported are the same ones as the sprintf and printf functions.
+         *  This function will show an error for the CMS application. The parameters that are supported are the same
+         *  ones as the sprintf and printf functions.
          *
          *  @static
          */
@@ -629,8 +618,6 @@
 
         /**
          *  The class constructor the the YDSimpleCMSModule class.
-         *
-         *  @param  $manager    A reference to the module manager instance that loaded this module.
          */
         function YDSimpleCMSModule() {
             $this->tpl = new YDSimpleCMSTemplate();

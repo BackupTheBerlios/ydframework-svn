@@ -32,20 +32,46 @@
      */
     class module_page extends YDSimpleCMSModule {
 
-        // Class variables
+        /**
+         *  The nice name of the CMS module.
+         */
         var $name        = 'SimpleCMS Page Module';
-        var $description = 'SimpleCMS module to manage pages.';
-        var $version     = '1.0';
-        var $authorName  = 'Pieter Claerhout';
-        var $authorEmail = 'pieter@yellowduck.be';
-        var $authorUrl   = 'http://www.yellowduck.be';
 
-        // Public main function
+        /**
+         *  The full description of the CMS module.
+         */
+        var $description = 'SimpleCMS module to manage pages.';
+
+        /**
+         *  The version number of the CMS module.
+         */
+        var $version       = '1.0';
+
+        /**
+         *  The name of the author of the CMS module.
+         */
+        var $authorName    = 'Pieter Claerhout';
+
+        /**
+         *  The email address of the author of the CMS module.
+         */
+        var $authorEmail   = 'pieter@yellowduck.be';
+
+        /**
+         *  The website address of the author of the CMS module.
+         */
+        var $authorUrl     = 'http://www.yellowduck.be';
+
+        /**
+         *  This is the default public action which currently just displays the template.
+         */
         function action_public_show() {
             $this->display();
         }
 
-        // Admin main function
+        /**
+         *  This is the default admin action for the page module.
+         */
         function action_admin_show() {
             $this->display();
         }
@@ -59,27 +85,55 @@
      */
     class module_admin extends YDSimpleCMSModule {
 
-        // Class variables
+        /**
+         *  The nice name of the CMS module.
+         */
         var $name         = 'SimpleCMS Admin Module';
-        var $description  = 'SimpleCMS module to manage everything ;-)';
-        var $version      = '1.0';
-        var $authorName   = 'Pieter Claerhout';
-        var $authorEmail  = 'pieter@yellowduck.be';
-        var $authorUrl    = 'http://www.yellowduck.be';
 
-        // Admin main function
+        /**
+         *  The full description of the CMS module.
+         */
+        var $description  = 'SimpleCMS module to manage everything ;-)';
+
+        /**
+         *  The version number of the CMS module.
+         */
+        var $version       = '1.0';
+
+        /**
+         *  The name of the author of the CMS module.
+         */
+        var $authorName    = 'Pieter Claerhout';
+
+        /**
+         *  The email address of the author of the CMS module.
+         */
+        var $authorEmail   = 'pieter@yellowduck.be';
+
+        /**
+         *  The website address of the author of the CMS module.
+         */
+        var $authorUrl     = 'http://www.yellowduck.be';
+
+        /**
+         *  This is the default admin action for the admin module.
+         */
         function action_admin_show() {
             $this->display();
         }
 
-        // List the plugins
+        /**
+         *  This action will list all the plugins which are available on the system.
+         */
         function action_admin_modules() {
             $moduleManager = & YDSimpleCMS::getModuleManager();
             $this->tpl->assign( 'modules', $moduleManager->getModuleList() );
             $this->display();
         }
 
-        // The settings action
+        /**
+         *  This action will allow you to change the settings.
+         */
         function action_admin_settings() {
             $this->display();
         }
