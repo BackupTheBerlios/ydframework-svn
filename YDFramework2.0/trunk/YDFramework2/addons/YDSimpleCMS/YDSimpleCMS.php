@@ -21,23 +21,8 @@
 
     */
 
-    /*! @page page_YDSimpleCMS Addons - Simple CMS
-
-      The Simple CMS addon can be used to build a basic content management system.
-
-      @section page_YDSimpleCMS_01 A generic overview
-
-      Not written yet...
-
-      @section page_YDSimpleCMS_02 The module approach
-
-      Not written yet...
-    */
-
     /**
      *  @addtogroup YDSimpleCMS Addons - Simple CMS
-     *
-     *  @ref page_YDSimpleCMS More information about the Simple CMS addon.
      *
      *  @todo
      *      Consolidate the two request classes into one. Based on the scope, it should know if you need to force
@@ -144,6 +129,10 @@
                 // The current user
                 $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] = null;
 
+                // The module manager instance
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager'] = new YDSimpleCMSModuleManager();
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager']->loadAllModules();
+
             }
 
         }
@@ -213,7 +202,7 @@
         function addAdminMenu( $title, $subtitle, $module, $action ) {
 
             // Link to the menu items
-            $menu = & $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'];
+            $menu = & YDSimpleCMS::getAdminMenu();
 
             // Construct the URL
             $url = YD_SELF_SCRIPT . '?module=' . $module . '&action=' . $action;
@@ -245,8 +234,52 @@
          *
          *  @static
          */
-        function getDbConnection() {
-            return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['db'];
+        function & getDb() {
+            return YDSimpleCMS::getVar( 'db' );
+        }
+
+        /**
+         *  This function returns the array with the menu items for the admin menu.
+         *
+         *  @returns    The array with the admin menu.
+         *
+         *  @static
+         */
+        function & getAdminMenu() {
+            return YDSimpleCMS::getVar( 'adminMenu' );
+        }
+
+        /**
+         *  This function returns an instance of the module manager class.
+         *
+         *  @returns    An instance of the module manager class..
+         *
+         *  @static
+         */
+        function & getModuleManager() {
+            return YDSimpleCMS::getVar( 'moduleManager' );
+        }
+
+        /**
+         *  This function returns one of the named variables from the global CMS scope.
+         *
+         *  @param  $var    The name of the variable you want to retrieve.
+         *
+         *  @returns    The contents of that variable, false if the variable doesn't exist.
+         */
+        function & getVar( $var ) {
+
+            // Initialize the SimpleCMS package
+            YDSimpleCMS::initialize();
+
+            // Return the variable if it's set, otherwise return false
+            if ( ! isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var] ) ) {
+                return false;
+            }
+
+            // Return a reference to the variable
+            return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var];
+
         }
 
     }
@@ -377,10 +410,9 @@
          *      string of the request.
          */
         function actionDefault() {
-            $moduleManager = new YDSimpleCMSModuleManager();
-            $moduleManager->loadAllModules();
             $module = $this->getQueryStringParameter( 'module', $this->defaultModule );
             $action = $this->getQueryStringParameter( 'action', 'show' );
+            $moduleManager = & YDSimpleCMS::getModuleManager();
             $moduleManager->runModule( $this->requestScope, $module, $action );
         }
 
@@ -427,9 +459,6 @@
 
             // Initialize the parent
             $this->YDSimpleCMSPublicRequest();
-
-            // Make sure the CMS package is initialized
-            YDSimpleCMS::initialize();
 
             // Indicate we require login
             $this->setRequiresAuthentication( true );
@@ -553,7 +582,7 @@
             if ( $md5 === false ) {
                 $fields['loginPass'] = md5( $fields['loginPass'] );
             }
-            $db = YDSimpleCMS::getDbConnection();
+            $db = YDSimpleCMS::getDb();
             $result = $db->getRecord(
                 'SELECT * FROM #_users WHERE name = \'' . $db->escape( $fields['loginName'] ) . '\' AND password = \'' . $db->escape( $fields['loginPass'] ) . '\''
             );
@@ -626,8 +655,8 @@
          *
          *  @param  $manager    A reference to the module manager instance that loaded this module.
          */
-        function YDSimpleCMSModule( $manager ) {
-            $this->manager = & $manager;
+        function YDSimpleCMSModule() {
+            $this->manager = & YDSimpleCMS::getModuleManager();
             $this->tpl = new YDSimpleCMSTemplate( YD_SIMPLECMS_SCOPE_PUBLIC );
         }
 
@@ -680,7 +709,7 @@
         function display( $name='' ) {
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
-            $this->tpl->assign( 'adminMenu',     $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
+            $this->tpl->assign( 'adminMenu',     YDSimpleCMS::getAdminMenu() );
             if ( isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] ) ) {
                 $this->tpl->assign( 'currentUser', $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] );
             }
@@ -761,20 +790,21 @@
             }
 
             // Create the class instance
-            $moduleInstance = new $moduleClassName( $this );
+            $moduleInstance = new $moduleClassName();
 
             // Set the correct template scope
             $moduleInstance->tpl->scope = $scope;
 
             // Sort the admin menu items
             if ( $scope == YD_SIMPLECMS_SCOPE_ADMIN ) {
-                ksort( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
-                foreach ( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] as $key=>$val ) {
-                    if ( isset( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'][$key]['children'] ) ) {
-                        ksort( $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'][$key]['children'] );
+                $adminMenu = & YDSimpleCMS::getAdminMenu();
+                ksort( $adminMenu );
+                foreach ( $adminMenu as $key=>$val ) {
+                    if ( isset( $adminMenu[$key]['children'] ) ) {
+                        ksort( $adminMenu[$key]['children'] );
                     }
                 }
-                $moduleInstance->tpl->assign( 'adminMenu', $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] );
+                $moduleInstance->tpl->assign( 'adminMenu', $adminMenu );
             }
 
             // Create a link to ourselves
