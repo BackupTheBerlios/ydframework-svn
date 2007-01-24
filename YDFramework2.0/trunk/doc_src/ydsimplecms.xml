@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<chapter id="ydsimplecms">
+
+    <title>Addon: YDSimpleCMS, a content management framework</title>
+
+    <para>YDSimpleCMS is a content management framework inside the Yellow Duck Framework that makes it easy to build extensible and module content management systems.</para>
+
+    <sect1 id="ydsimplecms_introduction">
+
+        <title>Introduction</title>
+
+        <para>Currently, it's in the early stages of development, but the plan is to support the following features:</para>
+
+        <itemizedlist spacing="compact">
+            <listitem>All contents is stored in a hierarchy in the database.</listitem>
+            <listitem>Multilingual content and user interface.</listitem>
+            <listitem>Modular approach to make extending the CMS easy and straightforward.</listitem>
+            <listitem>Themeable user interface.</listitem>
+        </itemizedlist>
+
+    </sect1>
+
+    <sect1 id="ydsimplecms_overview">
+
+        <title>Overview</title>
+
+        <para>The YDSimpleCMS package uses different classes and items to do it's work. This chapter will try to give you a general overview of all the different classes that are used in the CMS framework.</para>
+
+        <sect2 id="ydsimplecms_overview_scope">
+
+            <title>YDSimpleCMS scopes</title>
+
+            <para>The YDSimpleCMS package uses the concept of "scopes" to define requests. We basically support two different request scope which are identified by the following constants:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>YD_SIMPLECMS_SCOPE_PUBLIC</listitem>
+                <listitem>YD_SIMPLECMS_SCOPE_ADMIN</listitem>
+            </itemizedlist>
+
+            <para>Whenever a SimpleCMS request is executed, it defines the scope for that request. Depending on the scope, different things happen with the request. In both scopes, a standard number of tasks are executed:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>A connection with the database will be established</listitem>
+                <listitem>An array which contains the menus and menu items for the administration menu is created and populated</listitem>
+                <listitem>An instance of a module manager is created</listitem>
+                <listitem>The ID of the site gets determined from the configuration</listitem>
+                <listitem>The details of the browser are captured in a YDBrowserInfo object</listitem>
+                <listitem>The language is negotiated with the browser</listitem>
+            </itemizedlist>
+
+            <para>However, after the initial setup, it depends on the scope to know how the request is going to be processed.</para>
+
+            <sect3 id="ydsimplecms_overview_scope_public">
+
+                <title>YD_SIMPLECMS_SCOPE_PUBLIC</title>
+
+                <para>The most important feature about the public scope is that authentication is not enforced. The user authentication does happen and the user details are populated, but if the authentication fails, the page will still be rendered.</para>
+
+            </sect3>
+
+            <sect3 id="ydsimplecms_overview_scope_admin">
+
+                <title>YD_SIMPLECMS_SCOPE_ADMIN</title>
+
+                <para>The admin scope enforces authentication and will present the user with a login screen if the authentication fails. The user credentials are checked against the the #_users database table.</para>
+
+            </sect3>
+
+        </sect2>
+
+        <sect2 id="ydsimplecms_overview_ydsimplecms">
+
+            <title>YDSimpleCMS class</title>
+
+            <para>This YDSimpleCMS class is the heart of the SimpleCMS package and is the one that kicks in everything. Using it's run functions, you can process a new request. Depending on the scope of the request, you will either use YDSimpleCMS::runPublicRequest() or YDSimpleCMS::runAdminRequest(). Calling this function starts the request processing.</para>
+
+            <para>The request processing happens in different steps and is always performed in the same manner.</para>
+
+            <para>The first step is that the YDSimpleCMS package is initialized. This will run the common initialization functions to get the YDSimpleCMS package into a ready state. The initialization performs the following steps:</para>
+
+            <itemizedlist spacing="compact">
+                <listitem>A connection with the database will be established</listitem>
+                <listitem>An array which contains the menus and menu items for the administration menu is created and populated</listitem>
+                <listitem>An instance of a module manager is created</listitem>
+                <listitem>The ID of the site gets determined from the configuration</listitem>
+                <listitem>The details of the browser are captured in a YDBrowserInfo object</listitem>
+                <listitem>The language is negotiated with the browser</listitem>
+            </itemizedlist>
+
+            <para>Once the initialization is done, an new instance of the YDSimpleCMSRequest class is created. This class will then take over the request processing and perform the login procedure.</para>
+
+            <para>After the login procedure, the query string variables called "module" and "action" are examined to find out which module and module action that needs to be run.</para>
+
+            <para>The YDSimpleCMSRequest class now hands over the request processing to the module which does it's thing and renders output.</para>
+
+        </sect2>
+
+    </sect1>
+
+</chapter>
