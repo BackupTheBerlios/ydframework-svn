@@ -572,6 +572,9 @@
 			$_ENV["LC_MESSAGE"] = $locale;
 			$_ENV["LC_ALL"]     = $locale;
 
+			// added php5 environment flag
+			putenv( "LANGUAGE=" . $locale );
+
 			// check directory
 			if ( ! is_string( $directory ) ) $directory = YD_DIR_HOME . '/locale/';
 
