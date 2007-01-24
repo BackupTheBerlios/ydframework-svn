@@ -22,6 +22,16 @@
     */
 
     /**
+     *  @todo
+     *      Add multiple levels of templates so that you can have default templates which can be overridden (ala cakephp)
+     *
+     *  @todo
+     *      Add configuration option to define the error handling function. By default, it should just render an _error
+     *      template with the debug stacktrace and so on. By overridding the template, you can customize it.
+     *
+     *  @todo
+     *      Add options to supply multiple templates for each object type (e.g. page.tpl, page_homepage.tpl, ...)
+     *
      *  @addtogroup YDSimpleCMS Addons - Simple CMS
      */
 
@@ -121,7 +131,7 @@
         /**
          *  This is a static function that will run a request.
          *
-         *  @param  $scope  The scope in which the request needs to run. You can choose between 
+         *  @param  $scope  The scope in which the request needs to run. You can choose between
          *                  YD_SIMPLECMS_SCOPE_PUBLIC and YD_SIMPLECMS_SCOPE_ADMIN. If you choose
          *                  YD_SIMPLECMS_SCOPE_ADMIN, authentication will be enforced, with YD_SIMPLECMS_SCOPE_PUBLIC,
          *                  it's not.
@@ -294,7 +304,7 @@
             return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var];
 
         }
-        
+
         /**
          *  This function sets a YDSimpleCMS variable.
          *
@@ -342,7 +352,7 @@
 
             // Get the current scope
             $scope = YDSimpleCMS::getScope();
-            
+
             // Set the variables
             $this->template_dir = YD_SIMPLECMS_SKINS_DIR . $scope;
             if ( $scope == YD_SIMPLECMS_SCOPE_PUBLIC ) {
@@ -378,7 +388,7 @@
         }
 
     }
-    
+
     /**
      *  Define the SimpleCMS request class. This is the base classes for all requests in the framework.
      *
@@ -407,7 +417,7 @@
 
             // Initialize the parent
             $this->YDRequest();
-            
+
             // Setup the default module based on the current scope
             if ( YDSimpleCMS::getScope() == YD_SIMPLECMS_SCOPE_PUBLIC ) {
                 $this->defaultModule = 'page';
