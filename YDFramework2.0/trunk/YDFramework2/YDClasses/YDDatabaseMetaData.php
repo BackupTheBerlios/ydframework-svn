@@ -44,7 +44,8 @@
         /**
          *  Constructor. Set the database connection
          *
-         *  @param $db             The YDDatabase object pointing to the database
+         *  @param $db  (optional) The YDDatabase object pointing to the database. If you use a null value, the default
+         *              database instance will be used (using YDDatabase::getNamedInstance()).
          */
         function YDDatabaseMetaData( $db=null ) {
             if ( is_null( $db ) ) {
