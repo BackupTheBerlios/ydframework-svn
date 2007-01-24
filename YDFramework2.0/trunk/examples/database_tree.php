@@ -6,6 +6,12 @@
     /*
 
         // ==== Schema description =====================================================================================
+        CREATE TABLE category (
+          id int(11) NOT NULL auto_increment,
+          category varchar(50) NOT NULL default '0',
+          PRIMARY KEY  (`id`)
+        );
+
         CREATE TABLE nested_tree (
             id int(11) NOT NULL auto_increment,
             parent_id int(11) NOT NULL default '0',
@@ -23,35 +29,42 @@
         // =============================================================================================================
 
         // ==== Default values for testing =============================================================================
-        INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1,0);
-        INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2,0);
-        INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2,0);
-        INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2,0);
-        INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3,0);
-        INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3,0);
-        INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3,0);
-        INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2,0);
-        INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3,0);
-        INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3,0);
-        INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3,0);
+        INSERT INTO category VALUES (1,'cat1');
+        INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1,0,1);
+        INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2,0,1);
+        INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2,0,1);
+        INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2,0,1);
+        INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3,0,1);
+        INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3,0,1);
+        INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3,0,1);
+        INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2,0,1);
+        INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3,0,1);
+        INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3,0,1);
+        INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3,0,1);
         // =============================================================================================================
 
         // ==== Sample data dump =======================================================================================
-        +----+-----------+----------------------+-------+--------+--------+----------+
-        | id | parent_id | title                | nleft | nright | nlevel | position |
-        +----+-----------+----------------------+-------+--------+--------+----------+
-        |  1 |         0 | General Resources    |     1 |     22 |      1 |        0 |
-        |  2 |         1 | Code Paste           |     2 |      3 |      2 |        0 |
-        |  3 |         1 | Documentation        |     4 |      5 |      2 |        0 |
-        |  4 |         1 | Books & Publications |     6 |     13 |      2 |        0 |
-        |  5 |         4 | Apache               |     7 |      8 |      3 |        0 |
-        |  6 |         4 | PostgreSQL           |     9 |     10 |      3 |        0 |
-        |  7 |         4 | MySQL                |    11 |     12 |      3 |        0 |
-        |  8 |         1 | Links                |    14 |     21 |      2 |        0 |
-        |  9 |         8 | Databases            |    15 |     16 |      3 |        0 |
-        | 10 |         8 | Generators           |    17 |     18 |      3 |        0 |
-        | 11 |         8 | Portals              |    19 |     20 |      3 |        0 |
-        +----+-----------+----------------------+-------+--------+--------+----------+
+        +----+----------+
+        | id | category |
+        +----+----------+
+        |  1 | cat1     |
+        +----+----------+
+
+        +----+-----------+----------------------+-------+--------+--------+----------+--------+
+        | id | parent_id | title                | nleft | nright | nlevel | position | cat_id |
+        +----+-----------+----------------------+-------+--------+--------+----------+--------+
+        |  1 |         0 | General Resources    |     1 |     22 |      1 |        0 |      1 |
+        |  2 |         1 | Code Paste           |    10 |     11 |      2 |        0 |      1 |
+        |  3 |         1 | Documentation        |    12 |     13 |      2 |        0 |      1 |
+        |  4 |         1 | Books & Publications |     2 |      9 |      2 |        0 |      1 |
+        |  5 |         4 | Apache               |     3 |      4 |      3 |        0 |      1 |
+        |  6 |         4 | PostgreSQL           |     7 |      8 |      3 |        0 |      1 |
+        |  7 |         4 | MySQL                |     5 |      6 |      3 |        0 |      1 |
+        |  8 |         1 | Links                |    14 |     21 |      2 |        0 |      1 |
+        |  9 |         8 | Databases            |    15 |     16 |      3 |        0 |      1 |
+        | 10 |         8 | Generators           |    17 |     18 |      3 |        0 |      1 |
+        | 11 |         8 | Portals              |    19 |     20 |      3 |        0 |      1 |
+        +----+-----------+----------------------+-------+--------+--------+----------+--------+
         // =============================================================================================================
 
     */
@@ -76,6 +89,12 @@
             // Get the tree instance
             $this->tree = new YDDatabaseTree( $db, 'nested_tree' );
 
+            // Add some fields
+            $this->tree->addField( 't2.category' );
+
+            // Add a join table
+            $this->tree->addJoinTable( 'JOIN category t2 ON t1.cat_id = t2.id' );
+
         }
 
         // Default action
@@ -89,6 +108,7 @@
 
             // Get a single node
             YDDebugUtil::dump( $tree->getNode( 2 ), '$tree->getNode( 2 )' );
+            YDDebugUtil::dump( $tree->getNode( 2, 'id' ), '$tree->getNode( 2, \'id\' )' );
 
             // Get the children of a single node
             YDDebugUtil::dump( $tree->getChildren( 2 ), '$tree->getChildren( 2 )' );

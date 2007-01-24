@@ -33,6 +33,9 @@
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
 
+    // Configure the default for this class
+    YDConfig::set( 'YD_DBTREE_TABLEPREFIX', 't1', false );
+
     /**
      *  This class implements a database tree as described on:
      *  http://www.phpriot.com/d/articles/php/application-design/nested-trees-2/
@@ -40,6 +43,12 @@
      *  Schema description
      *
      *  @code
+     *  CREATE TABLE category (
+     *    id int(11) NOT NULL auto_increment,
+     *    category varchar(50) NOT NULL default '0',
+     *    PRIMARY KEY  (`id`)
+     *  );
+     *
      *  CREATE TABLE nested_tree (
      *      id int(11) NOT NULL auto_increment,
      *      parent_id int(11) NOT NULL default '0',
@@ -48,6 +57,7 @@
      *      nright int(11) NOT NULL default '0',
      *      nlevel int(11) NOT NULL default '0',
      *      position int(11) NOT NULL default '0',
+     *      cat_id int(11) NOT NULL default '0',
      *      PRIMARY KEY  (id),
      *      KEY nested_tree_parent_id (parent_id),
      *      KEY nested_tree_nleft (nleft),
@@ -59,47 +69,50 @@
      *  Default values for testing
      *
      *  @code
-     *  INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1,0);
-     *  INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2,0);
-     *  INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2,0);
-     *  INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2,0);
-     *  INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3,0);
-     *  INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3,0);
-     *  INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3,0);
-     *  INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2,0);
-     *  INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3,0);
-     *  INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3,0);
-     *  INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3,0);
+     *  INSERT INTO category VALUES (1,'cat1');
+     *
+     *  INSERT INTO nested_tree VALUES (1,0,'General Resources',1,22,1,0,1);
+     *  INSERT INTO nested_tree VALUES (2,1,'Code Paste',2,3,2,0,1);
+     *  INSERT INTO nested_tree VALUES (3,1,'Documentation',4,5,2,0,1);
+     *  INSERT INTO nested_tree VALUES (4,1,'Books & Publications',6,13,2,0,1);
+     *  INSERT INTO nested_tree VALUES (5,4,'Apache',7,8,3,0,1);
+     *  INSERT INTO nested_tree VALUES (6,4,'PostgreSQL',9,10,3,0,1);
+     *  INSERT INTO nested_tree VALUES (7,4,'MySQL',11,12,3,0,1);
+     *  INSERT INTO nested_tree VALUES (8,1,'Links',14,21,2,0,1);
+     *  INSERT INTO nested_tree VALUES (9,8,'Databases',15,16,3,0,1);
+     *  INSERT INTO nested_tree VALUES (10,8,'Generators',17,18,3,0,1);
+     *  INSERT INTO nested_tree VALUES (11,8,'Portals',19,20,3,0,1);
      *  @endcode
      *
      *  Sample data dump
      *
      *  @code
-     *  +----+-----------+----------------------+-------+--------+--------+----------+
-     *  | id | parent_id | title                | nleft | nright | nlevel | position |
-     *  +----+-----------+----------------------+-------+--------+--------+----------+
-     *  |  1 |         0 | General Resources    |     1 |     22 |      1 |        0 |
-     *  |  2 |         1 | Code Paste           |     2 |      3 |      2 |        0 |
-     *  |  3 |         1 | Documentation        |     4 |      5 |      2 |        0 |
-     *  |  4 |         1 | Books & Publications |     6 |     13 |      2 |        0 |
-     *  |  5 |         4 | Apache               |     7 |      8 |      3 |        0 |
-     *  |  6 |         4 | PostgreSQL           |     9 |     10 |      3 |        0 |
-     *  |  7 |         4 | MySQL                |    11 |     12 |      3 |        0 |
-     *  |  8 |         1 | Links                |    14 |     21 |      2 |        0 |
-     *  |  9 |         8 | Databases            |    15 |     16 |      3 |        0 |
-     *  | 10 |         8 | Generators           |    17 |     18 |      3 |        0 |
-     *  | 11 |         8 | Portals              |    19 |     20 |      3 |        0 |
-     *  +----+-----------+----------------------+-------+--------+--------+----------+
+     *  +----+----------+
+     *  | id | category |
+     *  +----+----------+
+     *  |  1 | cat1     |
+     *  +----+----------+
+     *
+     *  +----+-----------+----------------------+-------+--------+--------+----------+--------+
+     *  | id | parent_id | title                | nleft | nright | nlevel | position | cat_id |
+     *  +----+-----------+----------------------+-------+--------+--------+----------+--------+
+     *  |  1 |         0 | General Resources    |     1 |     22 |      1 |        0 |      1 |
+     *  |  2 |         1 | Code Paste           |    10 |     11 |      2 |        0 |      1 |
+     *  |  3 |         1 | Documentation        |    12 |     13 |      2 |        0 |      1 |
+     *  |  4 |         1 | Books & Publications |     2 |      9 |      2 |        0 |      1 |
+     *  |  5 |         4 | Apache               |     3 |      4 |      3 |        0 |      1 |
+     *  |  6 |         4 | PostgreSQL           |     7 |      8 |      3 |        0 |      1 |
+     *  |  7 |         4 | MySQL                |     5 |      6 |      3 |        0 |      1 |
+     *  |  8 |         1 | Links                |    14 |     21 |      2 |        0 |      1 |
+     *  |  9 |         8 | Databases            |    15 |     16 |      3 |        0 |      1 |
+     *  | 10 |         8 | Generators           |    17 |     18 |      3 |        0 |      1 |
+     *  | 11 |         8 | Portals              |    19 |     20 |      3 |        0 |      1 |
+     *  +----+-----------+----------------------+-------+--------+--------+----------+--------+
      *  @endcode
      *
      *  @todo
-     *      Add support for joins so that you can link in other tables in the tree. Without this functionality, this
-     *      class is rather limited. We might need to give the table with the tree itself a common prefix so that we
-     *      can differentiate between the fields that should be stored in the table and the fields that should not be
-     *      stored in the database (which are the ones from the join tables).
-     *
-     *  @todo
-     *      Check if using YDDatabaseQuery can make the queries easier to understand and change.
+     *      Change the sort fields from a string separated list of fields to an array so that we can properly remove and
+     *      add the table prefix. Right now, it should work but there might be cases where it's failing.
      *
      *  @todo
      *      Add support for moving items up and down. The algorithm can be something like:
@@ -122,12 +135,58 @@
         function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='position, title' ) {
             $this->db = YDDatabase::getNamedInstance( $db );
             $this->table = $table;
+            $this->tablePrefix = YDConfig::get( 'YD_DBTREE_TABLEPREFIX', 't1' );
+            $this->joins = array();
             $this->fields = array(
-                'id' => $idField, 'parent' => $parentField, 'sort' => $sortField,
-                'nleft' => 'nleft', 'nright' => 'nright', 'nlevel' => 'nlevel', 'position' => 'position'
+                'id'        => $this->_addTablePrefix( $idField ),
+                'parent'    => $this->_addTablePrefix( $parentField ),
+                'sort'      => $this->_addTablePrefix( $sortField ),
+                'nleft'     => $this->_addTablePrefix( 'nleft' ),
+                'nright'    => $this->_addTablePrefix( 'nright' ),
+                'nlevel'    => $this->_addTablePrefix( 'nlevel' ),
+                'position'  => $this->_addTablePrefix( 'position' ),
             );
             $this->_use_query_cache = true;
             $this->_query_cache = array();
+        }
+
+        /**
+         *  This function adds the default table prefix to the field name.
+         *
+         *  @param  $field  The name of the field to add the prefix to.
+         *
+         *  @returns    The name of the field with the prefix added to it.
+         */
+        function _addTablePrefix( $field ) {
+            $field = explode( ', ', $field );
+            foreach ( $field as $key=>$val ) {
+                if ( strpos( $val, '.' ) === false && ! YDStringUtil::startsWith( $val, $this->tablePrefix . '.' ) ) {
+                    $val = $this->tablePrefix . '.' . $val;
+                }
+                $field[$key] = $val;
+            }
+            return join( ', ', $field );
+        }
+
+        /**
+         *  This function removes the default table prefix to the field name.
+         *
+         *  @param  $field  The name of the field to remove the prefix from.
+         *
+         *  @returns    The name of the field with the prefix removed from it.
+         */
+        function _removeTablePrefix( $field ) {
+            $field = explode( ', ', $field );
+            foreach ( $field as $key=>$val ) {
+                if ( YDStringUtil::startsWith( $val, $this->tablePrefix . '.' ) ) {
+                    $field[$key] = substr( $val, strlen( $this->tablePrefix )+1 );
+                }
+                $pos = strpos( $val, '.' );
+                if ( $pos !== false ) {
+                    $field[$key] = substr( $val, $pos+1 );
+                }
+            }
+            return join( ', ', $field );
         }
 
         /**
@@ -149,7 +208,31 @@
          *  @internal
          */
         function _getFieldsAsString() {
-            return join( ',', $this->_getFields() );
+            return join( ', ', $this->_getFields() );
+        }
+
+        /**
+         *  A utility function to return an array of the tables that need to be selected in SQL select queries.
+         *
+         *  @returns array   An indexed array of tables to select
+         *
+         *  @internal
+         */
+        function _getTables() {
+            $result = array_values( $this->joins );
+            array_unshift( $result, $this->table . ' ' . $this->tablePrefix );
+            return $result;
+        }
+
+        /**
+         *  Get the tables and joins joined as single string.
+         *
+         *  @returns A single string with the tables and joins joined as a string
+         *
+         *  @internal
+         */
+        function _getTablesAsString() {
+            return join( ' ', $this->_getTables() );
         }
 
         /*
@@ -178,10 +261,14 @@
          */
         function _toNodeArray( $node ) {
             $arr = array();
-
-            foreach ( $this->fields as $f )
-                if ( isset( $node[ $f ] ) ) $arr[ $f ] = $node[ $f ];
-
+            foreach ( $this->fields as $fieldItem ) {
+                $fieldItem = explode( ', ', $this->_removeTablePrefix( $fieldItem ) );
+                foreach( $fieldItem as $f ) {
+                    if ( isset( $node[ $f ] ) ) {
+                        $arr[ $f ] = $node[ $f ];
+                    }
+                }
+            }
             return $arr;
         }
 
@@ -260,6 +347,17 @@
         }
 
         /**
+         *  Add a join table to the list of tables to will get returned by this class.
+         *
+         *  @param  $join   The full join statement such as LEFT JOIN x ON x = Z
+         */
+        function addJoinTable( $join ) {
+            if ( ! in_array( $join, $this->joins ) ) {
+                $this->joins[ $join ] = $join;
+            }
+        }
+
+        /**
          *  Set the sort field.
          *
          *  @param $sortField      (optional) Name of the field to sort data. Default is title.
@@ -282,15 +380,18 @@
             // Get the name of the field
             $field = is_null( $field ) ? $this->fields['id'] : $field;
             $field = empty( $field )   ? $this->fields['id'] : $field;
+            $field = $this->_addTablePrefix( $field );
 
             // The query to execute
             if ( is_int( $id ) ) {
                 $query = sprintf(
-                    'select %s from %s where %s = %d', $this->_getFieldsAsString(), $this->table, $field, $id
+                    'select %s from %s where %s = %d',
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(), $field, $id
                 );
             } else {
                 $query = sprintf(
-                    'select %s from %s where %s = \'%s\'', $this->_getFieldsAsString(), $this->table, $field, $id
+                    'select %s from %s where %s = \'%s\'',
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(), $field, $id
                 );
             }
 
@@ -315,7 +416,9 @@
          *
          *  @returns The descendants of the passed now
          */
-        function getDescendants( $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null, $order=null, $specificPart=null ) {
+        function getDescendants(
+            $id=0, $includeSelf=false, $childrenOnly=false, $max_level=null, $order=null, $specificPart=null
+        ) {
 
             // Get the ID field
             $idField = $this->fields['id'];
@@ -331,7 +434,7 @@
             } else {
                 $nleft = $node['nleft'];
                 $nright = $node['nright'];
-                $parent_id = $node[$idField];
+                $parent_id = $node[$this->_removeTablePrefix($idField)];
             }
 
             // Get the order
@@ -348,39 +451,47 @@
                 if ( $includeSelf ) {
                     $query = sprintf(
                         'select %s from %s where %s = %d or %s = %d %s',
-                        $this->_getFieldsAsString(), $this->table, $this->fields['id'], $parent_id, $this->fields['parent'], $parent_id, $order
+                        $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                        $this->_addTablePrefix( $this->fields['id'] ), $parent_id,
+                        $this->_addTablePrefix( $this->fields['parent'] ), $parent_id, $order
                     );
                 } else {
                     $query = sprintf(
                         'select %s from %s where %s = %d %s',
-                        $this->_getFieldsAsString(), $this->table, $this->fields['parent'], $parent_id, $order
+                        $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                        $this->_addTablePrefix( $this->fields['parent'] ), $parent_id, $order
                     );
                 }
 
             } else {
-                
+
                 // Include all
                 if ( $nleft > 0 && $includeSelf ) {
                     $query = sprintf(
-                        'select %s from %s where nleft >= %d and nright <= %d %s',
-                         $this->_getFieldsAsString(), $this->table, $nleft, $nright, $order
+                        'select %s from %s where %s.nleft >= %d and %s.nright <= %d %s',
+                        $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                        $this->tablePrefix, $nleft, $this->tablePrefix, $nright, $order
                     );
                 } else if ( $nleft > 0 ) {
                     $query = sprintf(
-                        'select %s from %s where nleft > %d and nright < %d %s',
-                        $this->_getFieldsAsString(), $this->table, $nleft, $nright, $order
+                        'select %s from %s where %s.nleft > %d and %snright < %d %s',
+                        $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                        $this->tablePrefix, $nleft, $this->tablePrefix, $nright, $order
                     );
                 } else {
-                    $query = sprintf( 'select %s from %s where id > 0 %s', $this->_getFieldsAsString(), $this->table, $order );
+                    $query = sprintf(
+                        'select %s from %s where %s.id > 0 %s',
+                        $this->_getFieldsAsString(), $this->_getTablesAsString(), $this->tablePrefix, $order
+                    );
                 }
-                
+
             }
 
             // Add the level constraint
             if ( ! is_null( $max_level ) ) {
                 $max_level = ( $includeSelf ) ? $max_level : $max_level + 1;
                 $max_level = ( $includeSelf ) ? $node['nlevel'] + $max_level - 1 : $node['nlevel'] + $max_level;
-                $query = str_replace( 'where ', 'where nlevel <= ' . $max_level . ' and ', $query );
+                $query = str_replace( 'where ', 'where ' . $this->tablePrefix . '.nlevel <= ' . $max_level . ' and ', $query );
             }
 
             // Get the results as an array
@@ -389,7 +500,7 @@
             // Reformat the array
             $arr = array();
             foreach ( $records as $record ) {
-                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
+                $arr[ $record[$this->_removeTablePrefix($idField)] ] = $this->_fromNodeArray( $record );
             }
 
             // check if we want a specific column
@@ -398,7 +509,7 @@
                 // init temporary array
                 $nodes = array();
                 foreach ( $arr as $node )
-                    array_push( $nodes, $node[ $specificPart ] );
+                    array_push( $nodes, $node[ $this->_removeTablePrefix($specificPart) ] );
 
                 return $nodes;
             }
@@ -422,7 +533,7 @@
         }
 
         /**
-         *  Fetch the path to a node. If an invalid node is passed, an empty array is returned. If a top level node is 
+         *  Fetch the path to a node. If an invalid node is passed, an empty array is returned. If a top level node is
          *  passed, an array containing on that node is included (if 'includeSelf' is set to true, otherwise an empty
          *  array).
          *
@@ -447,13 +558,15 @@
             // Include ourselves?
             if ( $includeSelf ) {
                 $query = sprintf(
-                    'select %s from %s where nleft <= %d and nright >= %d order by nlevel',
-                    $this->_getFieldsAsString(), $this->table, $node['nleft'], $node['nright']
+                    'select %s from %s where %s.nleft <= %d and %s.nright >= %d order by %s.nlevel',
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                    $this->tablePrefix, $node['nleft'], $this->tablePrefix, $node['nright'], $this->tablePrefix
                 );
             } else {
                 $query = sprintf(
-                    'select %s from %s where nleft < %d and nright > %d order by nlevel',
-                    $this->_getFieldsAsString(), $this->table, $node['nleft'], $node['nright']
+                    'select %s from %s where %s.nleft < %d and %s.nright > %d order by %s.nlevel',
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(),
+                    $this->tablePrefix, $node['nleft'], $this->tablePrefix, $node['nright'], $this->tablePrefix
                 );
             }
 
@@ -463,7 +576,7 @@
             // Reformat the array
             $arr = array();
             foreach ( $records as $record ) {
-                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
+                $arr[ $record[$this->_removeTablePrefix($idField)] ] = $this->_fromNodeArray( $record );
             }
 
             // Return the result
@@ -491,8 +604,9 @@
 
             // The query
             $query = sprintf(
-                'select count(*) as is_descendant from %s where %s = %d and nleft > %d and nright < %d',
-                $this->table, $this->fields['id'], $descendant_id, $node['nleft'], $node['nright']
+                'select count(*) as is_descendant from %s where %s = %d and %s.nleft > %d and %s.nright < %d',
+                $this->_getTablesAsString(), $this->_addTablePrefix( $this->fields['id'] ), $descendant_id,
+                $this->tablePrefix, $node['nleft'], $this->tablePrefix, $node['nright']
             );
 
             // Execute the query and get the record
@@ -520,7 +634,8 @@
             // The query
             $query = sprintf(
                 'select count(*) as is_child from %s where %s = %d and %s = %d',
-                $this->table, $this->fields['id'], $child_id, $this->fields['parent'], $parent_id
+                $this->_getTablesAsString(), $this->_addTablePrefix( $this->fields['id'] ),
+                $child_id, $this->_addTablePrefix( $this->fields['parent'] ), $parent_id
             );
 
             // Execute the query and get the record
@@ -548,7 +663,7 @@
             if ( $id == 0 ) {
 
                 // The query
-                $query = sprintf('select count(*) as num_descendants from %s', $this->table );
+                $query = sprintf('select count(*) as num_descendants from %s', $this->_getTablesAsString() );
 
                 // Execute the query and get the record
                 $record = $this->_getRecord( $query );
@@ -586,7 +701,8 @@
 
             // The query
             $query = sprintf(
-                'select count(*) as num_children from %s where %s = %d', $this->table, $this->fields['parent'], $id
+                'select count(*) as num_children from %s where %s = %d',
+                $this->_getTablesAsString(), $this->_addTablePrefix( $this->fields['parent'] ), $id
             );
 
             // Execute the query and get the record
@@ -603,7 +719,7 @@
         }
 
         /**
-         *  Fetch the immediately family of a node. More specifically, fetch a node's parent, siblings and children. If 
+         *  Fetch the immediately family of a node. More specifically, fetch a node's parent, siblings and children. If
          *  the node isn't valid, fetch the first level of nodes from the tree.
          *
          * @param $id   The ID of the node to fetch child data for.
@@ -616,21 +732,21 @@
             $node = $this->_toNodeArray( $this->getNode( $id ) );
 
             // The ID and parent field
-            $idField = $this->fields['id'];
-            $parentField = $this->fields['parent'];
+            $idField = $this->_addTablePrefix( $this->fields['id'] );
+            $parentField = $this->_addTablePrefix( $this->fields['parent'] );
 
             // Is the passed node valid?
-            if ( $node[$idField] > 0 ) {
+            if ( $node[$this->_removeTablePrefix($idField)] > 0 ) {
                 $query = sprintf(
                     'select %s from %s where %s = %s or %s = %s or %s = %s order by nleft',
-                    $this->_getFieldsAsString(), $this->table, $idField, $node[$parentField], $parentField,
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(), $idField, $node[$parentField], $parentField,
                     $node[$parentField], $parentField, $node[$idField]
                 );
 
             } else {
                 $query = sprintf(
                     'select %s from %s where %s = 0 order by nleft',
-                    $this->_getFieldsAsString(), $this->table, $parentField
+                    $this->_getFieldsAsString(), $this->_getTablesAsString(), $parentField
                 );
             }
 
@@ -641,7 +757,7 @@
             $arr = array();
             foreach ( $records as $record ) {
                 $record['num_descendants'] = ( $record['nright'] - $record['nleft'] - 1 ) / 2;
-                $arr[ $record[$idField] ] = $this->_fromNodeArray( $record );
+                $arr[ $record[$this->_removeTablePrefix($idField)] ] = $this->_fromNodeArray( $record );
             }
 
             // Return the result
@@ -658,12 +774,13 @@
         function getTreeWithChildren() {
 
             // The ID and parent field
-            $idField = $this->fields['id'];
-            $parentField = $this->fields['parent'];
+            $idField     = $this->_removeTablePrefix( $this->fields['id'] );
+            $parentField = $this->_removeTablePrefix( $this->fields['parent'] );
 
             // The query
             $query = sprintf(
-                'select %s from %s order by %s', $this->_getFieldsAsString(), $this->table, $this->fields['sort']
+                'select %s from %s order by %s',
+                $this->_getFieldsAsString(), $this->_getTablesAsString(), $this->_addTablePrefix( $this->fields['sort'] )
             );
 
             // Get the records
@@ -717,8 +834,8 @@
             $n     = 0;
             $level = 0;
 
-            // Invoke the recursive function. Start it processing on the fake "root node" generated in 
-            // getTreeWithChildren(). because this node doesn't really exist in the database, we give it an initial 
+            // Invoke the recursive function. Start it processing on the fake "root node" generated in
+            // getTreeWithChildren(). because this node doesn't really exist in the database, we give it an initial
             // nleft value of 0 and an nlevel of 0.
             $this->_generateTreeData( $data, 0, 0, $n );
 
@@ -729,7 +846,8 @@
                 }
                 @ $query = sprintf(
                     'update %s set nlevel = %d, nleft = %d, nright = %d where %s = %d',
-                    $this->table, $row->nlevel, $row->nleft, $row->nright, $this->fields['id'], $id
+                    $this->table, $row->nlevel, $row->nleft, $row->nright,
+                    $this->_removeTablePrefix( $this->fields['id'] ), $id
                 );
                 $this->db->executeSql( $query );
             }
@@ -737,7 +855,7 @@
         }
 
         /**
-         *  Generate the tree data. A single call to this generates the n-values for 1 node in the tree. This function 
+         *  Generate the tree data. A single call to this generates the n-values for 1 node in the tree. This function
          *  assigns the passed in n value as the node's nleft value. It then processes all the node's children (which in
          *  turn recursively processes that node's children and so on), and when it is finally done, it takes the update
          *  n-value and assigns it as its nright value. Because it is passed as a reference, the subsequent changes in
@@ -783,7 +901,7 @@
             $this->_clearCache();
 
             // Add the parent field if needed
-            $parentField = $this->fields['parent'];
+            $parentField = $this->_removeTablePrefix( $this->fields['parent'] );
             if ( ! is_null( $parent_id ) && ! isset( $values[ $parentField ] ) ) {
                 $values[ $parentField ] = $parent_id;
             }
@@ -791,6 +909,12 @@
             // Use 0 if no parent ID specified (the root element)
             if ( ! isset( $values[ $parentField ] ) ) {
                 $values[ $parentField ] = 0;
+            }
+
+            // Remove the table prefixes from the values
+            foreach ( $values as $key=>$val ) {
+                unset( $values[ $key ] );
+                $values[ $this->_removeTablePrefix( $key ) ] = $val;
             }
 
             // Perform the insert
@@ -862,13 +986,16 @@
             }
 
             // Get the list of IDs to delete
-			$nodes_to_delete = $this->getDescendants( $id, $includeParent, false, null, null, $this->fields['id'] );
+            $nodes_to_delete = $this->getDescendants( $id, $includeParent, false, null, null, $this->fields['id'] );
 
             // Check if there is something to delete
             if ( sizeof( $nodes_to_delete ) > 0 ) {
 
                 // The query to execute
-                $query = 'delete from ' . $this->table . ' where ' . $this->fields['id'] . ' in ( ' . join( ', ', $nodes_to_delete ) . ' )';
+                $query = sprintf(
+                    'DELETE FROM %s WHERE %s IN ( %s )',
+                    $this->table, $this->_removeTablePrefix( $this->fields['id'] ), join( ', ', $nodes_to_delete )
+                );
 
                 // Delete the nodes
                 $this->db->executeSql( $query );
