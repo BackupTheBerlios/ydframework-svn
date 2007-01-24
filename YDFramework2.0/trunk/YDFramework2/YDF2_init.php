@@ -564,7 +564,7 @@
 		function useGettext( $filename = 'ydframework', $directory = null ){
 
 			// get current locale
-			$locale = YDConfig::get( YD_LOCALE_KEY, 'en' );
+			$locale = YDLocale::get();
 
 			// set environment
 			$_ENV["LANG" ]      = $locale;
