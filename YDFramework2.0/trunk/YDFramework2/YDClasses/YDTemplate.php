@@ -95,7 +95,7 @@
 
                 // custom javascript code
                 $this->customJavascript       = '';
-                $this->customJavascriptOnload = '';
+                $this->customJavascriptOnload = array();
 
                 // custom Css code
                 $this->customCss = '';
@@ -234,12 +234,15 @@
                 }
 
                 // add onload code to custom javascript code
-                if ( $this->customJavascriptOnload != '' )
-                    $this->customJavascript .= "window.onload = function() {" . $this->customJavascriptOnload . "}\n";
-
+                if ( ! empty( $this->customJavascriptOnload ) ){ 
+					$onLoad = "window.onload = function() {" . implode( '', $this->customJavascriptOnload ) . "}\n"; 
+				}else{
+					$onLoad = '';
+				}
+				
                 // test if customJavascript is set
                 if ( $this->customJavascript != '' ) 
-                    $code .= "\n<script type=\"text/javascript\">\n" . $this->customJavascript . "</script>\n";
+                    $code .= "\n<script type=\"text/javascript\">\n" . $this->customJavascript . $onLoad . "</script>\n";
 
                 if ( $code == '' ) return $tpl_source;
 
@@ -257,15 +260,18 @@
              */
             function addJavascript( $jsCode, $prepend = false, $onload = false ) {
 
+				// check if we really have js code
+				if ( empty( $jsCode ) ) return;
+
                 if ( $onload ){
-                    if ( !$prepend ) $this->customJavascriptOnload = $this->customJavascriptOnload . $jsCode . "\n";
-                    else             $this->customJavascriptOnload = $jsCode . $this->customJavascriptOnload . "\n";
-                    return;
+                    if ( $prepend ) return array_unshift( $this->customJavascriptOnload, $jsCode );
+                    else            return array_push(    $this->customJavascriptOnload, $jsCode );
                 }
 
-                if (!$prepend) $this->customJavascript = $this->customJavascript . $jsCode . "\n";
-                else           $this->customJavascript = $jsCode . $this->customJavascript . "\n";
+                if ( $prepend ) return $this->customJavascript = $jsCode . $this->customJavascript . "\n";
+				else            return $this->customJavascript = $this->customJavascript . $jsCode . "\n";
             }
+
 
             /**
              *	This function will add custom javascript url to the template head

@@ -174,22 +174,23 @@
 			$this->template->addJavascript( trim( $html ), true );
 
 			// compute ONLOAD code
-			$onload = '';
+			$onload = array();
 
 				// export effects js
 				foreach( $this->effects as $eff_name => $eff_code )
-					$onload  .= "\n\t" . $eff_code;
+					$onload[] = $eff_code;
 
 				// send js waiting message creation code
 				if( $this->waitingMessageCode != '' )
-					$onload  .= "\n\t" . $this->waitingMessageCode;
+					$onload[] = $this->waitingMessageCode;
 
 				// send autocompleter functions code
 				if( !empty( $this->autocompleterCodeFunctions ) )
-					$onload  .= "\n\t" . implode( "\n\t", $this->autocompleterCodeFunctions );
+					$onload[] = implode( "\n\t", $this->autocompleterCodeFunctions );
 
 			// add all code to template html
-			$this->template->addJavascript( $onload, false, true );
+			if ( ! empty( $onLoad ) )
+				$this->template->addJavascript( implode( '', $onload ), false, true );
 		}
 
 
