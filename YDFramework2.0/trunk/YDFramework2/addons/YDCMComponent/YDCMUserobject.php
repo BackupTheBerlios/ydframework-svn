@@ -32,25 +32,26 @@
 
 
 	// add YD libs
-	YDInclude( 'YDDatabaseTree3.php' );
+	require_once( YD_DIR_HOME_ADD . '/YDDatabaseObjectTree/YDDatabaseObjectTree.php' );
+
 
     /**
      *  @ingroup YDCMComponent
      */
-    class YDCMUserobject extends YDDatabaseTree3 {
+    class YDCMUserobject extends YDDatabaseObjectTree {
     
         function YDCMUserobject() {
 
 			// init parent object
-			$this->YDDatabaseTree3( 'YDCMUserobject', 'default', 'userobject_id', 'parent_id', 'lineage', 'level', 'position' );
+			$this->YDDatabaseObjectTree( 'YDCMUserobject', 'default', 'userobject_id', 'userobject_parent_id', 'userobject_lineage', 'userobject_level', 'userobject_position' );
 
 			// add custom tree fields
-			$this->registerField( 'type' );
-			$this->registerField( 'reference' );			
-			$this->registerField( 'state' );
+			$this->registerField( 'userobject_type' );
+			$this->registerField( 'userobject_reference' );			
+			$this->registerField( 'userobject_state' );
 
 			// define tree order
-			$this->order( 'parent_id ASC, position ASC' );
+			$this->order( 'userobject_parent_id ASC, userobject_position ASC' );
 		}
 
 
@@ -73,14 +74,14 @@
 			if ( $this->find() != 1 ) return false;
 
 			// save parent_id for future use
-			$parent_id = $this->get( 'parent_id ' );
+			$parent_id = $this->get( 'userobject_parent_id ' );
 
 			// reset all previous class values
 			$this->resetValues();
 
 			// update all children to new parent_id
-			$this->set( 'parent_id', intval( $parent_id ) );
-			$this->where( 'parent_id', $userobject_id );
+			$this->set( 'userobject_parent_id', intval( $parent_id ) );
+			$this->where( 'userobject_parent_id', $userobject_id );
 
 			// update node
 			return $this->update();
@@ -101,7 +102,7 @@
 			$this->resetValues();
 
 			// set user id
-			$this->where( 'type IN (' . $this->_db->escapeSqlArray( $type ) . ')' );
+			$this->where( 'userobject_type IN (' . $this->_db->escapeSqlArray( $type ) . ')' );
 
 			// get all attributes
 			$this->find();

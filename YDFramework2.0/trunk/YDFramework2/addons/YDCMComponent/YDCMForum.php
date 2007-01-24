@@ -338,7 +338,7 @@ INSERT INTO ydcmforum_announcements VALUES ( 4, 4, '2006-10-14 10:14', "Help: Re
 
 
 	// last user login date.
-	YDConfig::set( 'YD_FORUM_LASTLOGINDATE', YDStringUtil::formatDate( time(), 'datetimesql' ), false );
+	YDConfig::set( 'YD_FORUM_LASTLOGINDATE', '1900-01-01 01:01:01', false );
 
 
     class YDCMForum_topics extends YDDatabaseObject {
@@ -445,7 +445,7 @@ INSERT INTO ydcmforum_announcements VALUES ( 4, 4, '2006-10-14 10:14', "Help: Re
          */
 		function getElementsAsRecordSet( $forum_id, $page = 1 ){
 		
-			return new YDRecordSet( $this->getElements( $forum_id ), $page, 20 );
+			return new YDRecordSet( $this->getElements( $forum_id ), $page, 1 );
 		}
 
 

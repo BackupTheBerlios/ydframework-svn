@@ -32,31 +32,74 @@
 
 
 	// add YD libs
-	YDInclude( 'YDDatabaseTree3.php' );
+	YDInclude( 'YDDatabaseObjectTree.php' );
 
     /**
      *  @ingroup YDCMComponent
      */
-    class YDCMTree extends YDDatabaseTree3 {
+    class YDCMTree extends YDDatabaseObjectTree {
     
         function YDCMTree() {
 
 			// init parent object
-			$this->YDDatabaseTree3( 'YDCMTree', 'default', 'content_id', 'parent_id', 'lineage', 'level', 'position' );
+			$this->YDDatabaseObjectTree( 'YDCMTree', 'default', 'tree_id', 'tree_parent_id', 'tree_lineage', 'tree_level', 'tree_position' );
 
-			// add custom tree fields
-			$this->registerField( 'type' );
-			$this->registerField( 'state' );
-			$this->registerField( 'reference' );
-			$this->registerField( 'access' );			
-			$this->registerField( 'searcheable' );			
-			$this->registerField( 'published_date_start' );
-			$this->registerField( 'published_date_end' );			
-			$this->registerField( 'candrag' );
-			$this->registerField( 'candrop' );
+			// add tree fields
+			$this->registerField( 'tree_type' );
+			$this->registerField( 'tree_access' );			
+			$this->registerField( 'tree_state' );
+			$this->registerField( 'tree_searcheable' );			
+			$this->registerField( 'tree_published_datestart' );
+			$this->registerField( 'tree_published_dateend' );			
+			$this->registerField( 'tree_candrag' );
+			$this->registerField( 'tree_candrop' );
+			$this->registerField( 'tree_inline' );
+			$this->registerField( 'tree_url' );
+			$this->registerField( 'tree_urltarget' );
 
-			// define tree order
-			$this->order( 'parent_id ASC, position ASC' );
+			// set relation with names table
+       		$rel = & $this->registerRelation( 'ydcmtree_titles', false, 'ydcmtree_titles' );
+			$rel->setLocalKey( 'ydcmtree.tree_id' );
+			$rel->setForeignKey( 'ydcmtree_titles.tree_id' );
+
+			// init language code to be the current locale code	
+			$this->setLanguage( null );
+		}
+
+
+        /**
+         *  This reset overides the parent resetAll() because we must redefine the language code deleted by parent reset()
+         */
+		function resetAll(){
+		
+			// resets object stuff
+			parent::resetAll();
+
+			// apply the language code deleted in previous parent reset
+			$this->where( 'ydcmtree_titles.language_id = ' . $this->escapeSQL( $this->_language_id ) );
+		}
+		
+
+        /**
+         *  This method defines the language code to use in all sql queries
+         *
+         *  @param $language_id  (Optional) Language id code, eg 'en'. By default current locale is used
+         */
+		function setLanguage( $language_id = null ){
+		
+			if ( ! is_string( $language_id ) ) $this->_language_id = YDLocale::get();
+			else                               $this->_language_id = $language_id;
+		}
+
+
+		function getSubElements( $id, $inline = false ){
+
+			$this->resetAll();
+
+			if ( $inline ) $this->where( $this->getTable() . '.tree_inline = 1' );
+			else           $this->where( $this->getTable() . '.tree_inline = 0' );
+
+			return $this->_getChildren( $id, false, false );
 		}
 
 
@@ -66,7 +109,7 @@
          *  @param $x  Id of dragable node
          *
          *  @param $y  Id of dropable node
-
+         *
          *  @returns    false if elements are invalid, an associative array with node information
          */
 		function getDragDropElements( $x = null, $y = null){
@@ -89,6 +132,30 @@
 
 
 
+	}
+
+
+    class YDCMTree_titles extends YDDatabaseObject {
+    
+        function YDCMTree_titles() {
+        
+			// init component as non default
+            $this->YDDatabaseObject();
+			
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMTree_titles' );
+
+            // register key
+            $this->registerKey( 'tree_id', true );
+			$this->registerKey( 'language_id', false );
+
+			// register fields	
+			$this->registerField( 'title_html' );
+			$this->registerField( 'title_reference' );
+		}
 	}
 
 ?>

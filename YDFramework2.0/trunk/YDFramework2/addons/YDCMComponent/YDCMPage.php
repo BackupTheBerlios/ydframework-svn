@@ -30,49 +30,103 @@
         die( 'Yellow Duck Framework is not loaded.' );
     }
 
-	YDInclude( 'YDCMComponent.php' );
+//	YDInclude( 'YDCMComponent.php' );
+
+	// include YDF libs
+    YDInclude( 'YDCMComponent.php' );
+//    YDInclude( 'YDCMTree.php' );
 
 	// add local translation directory
-	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+//	YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/YDCMPage/' );
 
 	// set page form name
-	YDConfig::set( 'YDCMPAGE_FORMPAGE', 'YDCMPageForm', false );
+//	YDConfig::set( 'YDCMPAGE_FORMPAGE', 'YDCMPageForm', false );
 
     /**
      *  @ingroup YDCMComponent
      */
-    class YDCMPage extends YDCMComponent {
+    class YDCMPage extends YDCMComponent{
     
-        function YDCMPage( $id = null ) {
+        function YDCMPage() {
 
-			// init component
-            $this->YDCMComponent( 'YDCMPage', $id );
+			// init DB object
+            $this->YDCMComponent( 'YDCMPage' );
+
+/*            $this->_author = 'unknown author';
+            $this->_version = 'unknown version';
+            $this->_copyright = 'no copyright';
+            $this->_description = 'no description';
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( 'YDCMPage' );
 
             $this->_author = 'Francisco Azevedo';
             $this->_version = '0.1';
             $this->_copyright = '(c) Copyright 2006 Francisco Azevedo';
             $this->_description = 'This is a page component';
-
+*/
             // define custom fields
-			$this->registerField( 'current_version' );
-			$this->registerField( 'html' );
-			$this->registerField( 'xhtml' );
-			$this->registerField( 'template_pack' );
-			$this->registerField( 'template' );
-			$this->registerField( 'metatags' );			
-			$this->registerField( 'description' );
-			$this->registerField( 'keywords' );			
+//			$this->registerKey( 'component_id', false );
+//			$this->registerField( 'current_version' );
+			$this->registerField( 'page_html',        false, 'textarea', _('ydcmuser label html'),        array( 'cols' => 50, 'rows' => 5 ) );
+//			$this->registerField( 'xhtml' );
+//			$this->registerField( 'template_pack' );
+			$this->registerField( 'page_template',    false, 'select',   _('ydcmuser label template') );
+			$this->registerField( 'page_metatags',    false, 'select',   _('ydcmuser label metatags'),    array(), array( 0 => _('no'), 1 => _('yes') ) );
+			$this->registerField( 'page_description', false, 'textarea', _('ydcmuser label description'), array( 'cols' => 50, 'rows' => 5 ) );
+			$this->registerField( 'page_keywords',    false, 'textarea', _('ydcmuser label keywords'),    array( 'cols' => 50, 'rows' => 5 ) );
 
-			// we don't have custom relations
+/*
+
+	        $form->addElement( 'text',           'reference',            t('ydcmuser label reference'),      array('size' => 25, 'maxlength' => 35) );
+	        $form->addElement( 'text',           'title',                t('ydcmuser label title'),          array('size' => 70, 'maxlength' => 70) );
+	        $form->addElement( 'textarea',       'content',              t('ydcmuser label content') );
+	        $form->addElement( 'select',         'access',               t('ydcmuser label access'),         array(), $access);
+	        $form->addElement( 'select',         'state',                t('ydcmuser label state'),          array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+	        $form->addElement( 'datetimeselect', 'published_date_start', t('ydcmuser label published_date_start') );
+	        $form->addElement( 'datetimeselect', 'published_date_end',   t('ydcmuser label published_date_end'));
+	        $form->addElement( 'select',         'template',             t('ydcmuser label template'),       array(), $templates->visitors_templates());
+	        $form->addElement( 'select',         'metatags',             t('ydcmuser label metatags'),       array(), array( 0 => t('no'), 1 => t('yes') ) );
+	        $form->addElement( 'textarea',       'description',          t('ydcmuser label description'),    array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'textarea',       'keywords',             t('ydcmuser label keywords'),       array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'select',         'searcheable',          t('ydcmuser label searcheable'),         array(), array( 0 => t('no'), 1 => t('yes') ) );
+*/
+
+
+			// virtual relation with ydcmcomp
+/*       		$rel = & $this->registerRelation( 'ydcmcomp', false, 'ydcmcomp' );
+			$rel->setLocalKey( 'ydcmpage.component_id' );
+			$rel->setForeignKey( 'ydcmcomp.component_id' );
+
+			// virtual relation with ydcmtree
+       		$rel = & $this->registerRelation( 'ydcmtree', false, 'ydcmtree' );
+			$rel->setLocalKey( 'ydcmpage.component_id' );
+			$rel->setForeignKey( 'ydcmtree.content_id' );
+*/
 		}
 
 		
+/*
+		function getElement( $id ){
+
+			$this->reset();
+			$this->load( 'ydcmcomp' );
+			$this->ydcmcomp->set( 'reference', $id );
+//			$this->set( 'component_id', intval( $id ) );
+			$this->findAll();
+			return $this->getValues( false, false, false, false );
+		}
+*/
+
         /**
          *  This function will render this element (to be used in a menu)
          *
          *  @returns    Html link
          */
-		function render( $component, & $url ){
+/*		function render( $component, & $url ){
 
 			$url->setQueryVar( 'component', $component[ 'type' ] );
 			$url->setQueryVar( 'id',        $component[ 'content_id' ] );
@@ -80,19 +134,26 @@
 			return '<a href="' . $url->getUrl() . '">' . $component[ 'title' ] . '</a>';
 		}
 
+		function renderContent( $id ){
+		
+			$element = $this->getElement( $id );
+		
+			return $element[ 'html' ];
+		}
+*/
 
         /**
          *  This function returns the page form (form admin edition)
          *
          *  @returns    YDForm object
          */
-		function getFormPage(){
+		function _getForm(){
 
 			YDInclude( 'YDForm.php' );
 
 			// get template and language object
-			$templates = YDCMComponent::module( 'YDCMTemplates' );
-			$languages = YDCMComponent::module( 'YDCMLanguages' );
+			$templates = new YDCMTemplates();
+			$languages = new YDCMLanguages();
 
 			// create access options
 			$access = array( 0 => t('public'), 1 => t('private') );
@@ -102,29 +163,22 @@
 									0	=> t('use custom template') );
 	
 			// create form object
-			$form = new YDForm( YDConfig::get( 'YDCMPAGE_FORMPAGE' ) );
+			$form = new YDForm( 'page' );
 
-	        $form->addElement( 'text',           'reference',            t('page_reference'),      array('size' => 25, 'maxlength' => 35) );
-	        $form->addElement( 'text',           'title',                t('page_title'),          array('size' => 70, 'maxlength' => 70) );
-	        $form->addElement( 'textarea',       'html',                 t('page_html') );
-	        $form->addElement( 'textarea',       'xhtml',                t('page_xhtml') );
-	        $form->addElement( 'select',         'access',               t('page_access'),         array(), $access);
-	        $form->addElement( 'select',         'state',                t('page_state'),          array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
-	        $form->addElement( 'datetimeselect', 'published_date_start', t('page_startdate') );
-	        $form->addElement( 'datetimeselect', 'published_date_end',   t('page_enddate'));
-	        $form->addElement( 'select',         'template_pack',        '',                       array(), $template_pack );
-	        $form->addElement( 'select',         'template',             t('page_template'),       array(), $templates->visitors_templates());
-	        $form->addElement( 'select',         'metatags',             t('page_metatags'),       array(), array( 0 => t('no'), 1 => t('yes') ) );
-	        $form->addElement( 'textarea',       'description',          t('page_description'),    array( 'cols' => 50, 'rows' => 5 ) );
-	        $form->addElement( 'textarea',       'keywords',             t('page_keywords'),       array( 'cols' => 50, 'rows' => 5 ) );
-	        $form->addElement( 'select',         'searcheable',          t('page_search'),         array(), array( 0 => t('no'), 1 => t('yes') ) );
-	        $form->addElement( 'hidden',         'content_id' );
-	        $form->addElement( 'hidden',         'parent_id' );
-	        $form->addElement( 'hidden',         'language_id' );
+	        $form->addElement( 'text',           'reference',            t('ydcmuser label reference'),      array('size' => 25, 'maxlength' => 35) );
+	        $form->addElement( 'text',           'title',                t('ydcmuser label title'),          array('size' => 70, 'maxlength' => 70) );
+	        $form->addElement( 'textarea',       'content',              t('ydcmuser label content') );
+	        $form->addElement( 'select',         'access',               t('ydcmuser label access'),         array(), $access);
+	        $form->addElement( 'select',         'state',                t('ydcmuser label state'),          array(), array(1 => t('yes'), 0 => t('no'), 2 => t('schedule')) );
+	        $form->addElement( 'datetimeselect', 'published_date_start', t('ydcmuser label published_date_start') );
+	        $form->addElement( 'datetimeselect', 'published_date_end',   t('ydcmuser label published_date_end'));
+	        $form->addElement( 'select',         'template',             t('ydcmuser label template'),       array(), $templates->visitors_templates());
+	        $form->addElement( 'select',         'metatags',             t('ydcmuser label metatags'),       array(), array( 0 => t('no'), 1 => t('yes') ) );
+	        $form->addElement( 'textarea',       'description',          t('ydcmuser label description'),    array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'textarea',       'keywords',             t('ydcmuser label keywords'),       array( 'cols' => 50, 'rows' => 5 ) );
+	        $form->addElement( 'select',         'searcheable',          t('ydcmuser label searcheable'),         array(), array( 0 => t('no'), 1 => t('yes') ) );
 
 			// parent of new page is 0 by default
-			$form->setDefault( 'content_id',  0 );
-			$form->setDefault( 'parent_id',   0 );
 			$form->setDefault( 'language_id', $languages->adminDefault() );
 
 			// add form rules

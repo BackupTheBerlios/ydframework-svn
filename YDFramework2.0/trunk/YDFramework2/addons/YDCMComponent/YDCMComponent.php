@@ -31,356 +31,187 @@
     }
 
     // include YDF libs
-    YDInclude( 'YDDatabaseObject.php' );
-    YDInclude( 'YDDatabaseTree.php' );
-    YDInclude( 'YDUrl.php' );
-    YDInclude( 'YDResult.php' );
+    require_once( YD_DIR_HOME_ADD . '/YDDatabaseObject/YDDatabaseObject.php' );
 
-    // include YDCM libs
-    YDInclude( 'YDCMComp.php' );
 
-    // add generic translation directory
-    YDLocale::addDirectory( dirname( __FILE__ ) . '/languages/' );
+    class YDCMComponent extends YDDatabaseObject{
 
     /**
      *  @ingroup YDCMComponent
      */
-    class YDCMComponent extends YDDatabaseObject {
-
-        function YDCMComponent( $type, $id ) {
+        function YDCMComponent( $table ) {
 
             // init DB object
             $this->YDDatabaseObject();
+
+			// register database as default
+            $this->registerDatabase();
+
+			// register table for this component
+            $this->registerTable( $table );
 
             $this->_author = 'unknown author';
             $this->_version = 'unknown version';
             $this->_copyright = 'no copyright';
             $this->_description = 'no description';
 
-			// register database as default
-            $this->registerDatabase();
+			// init language code to be the current locale code	
+			$this->setLanguage( null );
 
-			// register table for this component
-            $this->registerTable( $type );
+			// virtual relation with tree titles
+       		$rel = & $this->registerRelation( 'ydcmtree_titles', false, 'ydcmtree_titles' );
+			$rel->setLocalKey( $table . '.tree_id' );
+			$rel->setForeignKey( 'ydcmtree_titles.tree_id' );
+			$rel->setForeignConditions( 'ydcmtree_titles.language_id = ' . $this->escapeSQL( $this->_language_id ) . ' AND ydcmtree_titles.language_id = ' . $table . '.language_id' );
 
-			// add standard relation
-			$this->registerField( 'component_id' );
-       		$rel = & $this->registerRelation( 'YDCMComp', false, 'YDCMComp' );
-			$rel->setLocalKey( 'component_id' );
-			$rel->setForeignKey( 'component_id' );
+			// virtual relation with ydcmtree
+       		$rel = & $this->registerRelation( 'ydcmtree', false, 'ydcmtree' );
+			$rel->setLocalKey( $table . '.tree_id' );
+			$rel->setForeignKey( 'ydcmtree.tree_id' );
+			$rel->setForeignConditions( 'ydcmtree.tree_state = 1' );
 
-			// add comp object
-			$this->comp = new YDCMComp( $type, $id );
-			
-			$this->_id = intval( $id );
+			// register key
+			$this->registerKey( 'tree_id', false );
+
+			// init form elements
+            $this->_form_elements = array();
+
+			// init form
+            $this->_form = null;
 		}
 
 
         /**
-         *  This function sets a new id for this component
+         *  This function registers a field.
          *
-         *  @param $id           Component id
+         *  @param $name  The field name.
+         *  @param $null  (optional) The field can be null? Default: false.
+         *
+         *  @returns      A reference to the field object.
          */
-		function setId( $id ){
+        function & registerField( $name, $null = false, $formelement_type = null, $formelement_caption = '', $formelement_attribs = array(), $formelement_options = array() ) {
 
-			// set id for all operations in this class
-			$this->_id       = intval( $id );
+			// add form element
+			if ( ! is_null( $formelement_type ) )
+				$this->_form_elements[ $name ] = array( $formelement_type, $formelement_caption, $formelement_attribs, $formelement_options );
 
-			// set id for internal YDComp object
-			$this->comp->_id = intval( $id );
-		}
+			return parent::registerField( $name, $null );
+        }
+
+        
+        /**
+         *  This function registers a key.
+         *
+         *  @param $name  The field name.
+         *  @param $auto  (optional) The key is a auto-increment field? Default: false.
+         *
+         *  @returns      A reference to the field object.
+         */
+        function & registerKey( $name, $auto = false, $formelement_type = null, $formelement_caption = '', $formelement_attribs = array(), $formelement_options = array() ) {
+
+			if ( ! is_null( $formelement_type ) )
+				$this->_form_elements[ $name ] = array( $formelement_type, $formelement_caption, $formelement_attribs, $formelement_options );
+
+			return parent::registerKey( $name, $auto );
+        }
 
 
         /**
-         *  This function renders this element for menu
+         *  This method returns the current form. If your form must have custom login, overwride this method with your getForm
          *
-         *  @returns    The YDDatabaseTree object for YDComponent static methods
+         *  @returns 	A YDForm object
          */
-		function __getYDDatabaseTree(){
+		function & getForm( $add_tree_elements = true, $add_title_elements = true ){
 		
-			// TODO: position is required and we must change order from 'parent_id' to 'parent_id ASC, position ASC'
-			$tree = new YDDatabaseTree( 'default', 'YDCMTree', 'content_id', 'parent_id', 'parent_id' );
+			// return form if already computed
+			if ( ! is_null( $this->_form ) ) return $this->_form;		
 
-			// TODO: set sort by parent & position
-			// $tree->setSortField( 'parent_id ASC, position ASC' );
+			// compute form object
+			$this->_form = new YDForm( $this->getTable() );
 
-			// add tree fields
-			$tree->addField( 'type' );
-			$tree->addField( 'state' );
-			$tree->addField( 'reference' );
-			$tree->addField( 'access' );
-			$tree->addField( 'searcheable' );
-			$tree->addField( 'published_date_start' );
-			$tree->addField( 'published_date_end' );
-			$tree->addField( 'candrag' );
-			$tree->addField( 'candrop' );
-			
-			return $tree;		
+			// add title form elements
+			if ( $add_title_elements ){
+		        $this->_form->addElement( 'text',           'title',                t('ydcmuser label title'),     array('size' => 70, 'maxlength' => 70) );
+			}
+
+			// add node form elements
+			if ( $add_tree_elements ){
+		        $this->_form->addElement( 'text',           'reference',            t('ydcmuser label reference'), array('size' => 25, 'maxlength' => 35) );
+	    	    $this->_form->addElement( 'select',         'language',             t('ydcmuser label language') );
+		        $this->_form->addElement( 'select',         'access',               t('ydcmuser label access'),         array(), array( 0 => _('private'), 1 => _('public') ) );
+		        $this->_form->addElement( 'select',         'state',                t('ydcmuser label state'),          array(), array( 1 => _('yes'), 0 => _('no'), 2 => _('schedule') ) );
+		        $this->_form->addElement( 'datetimeselect', 'published_date_start', t('ydcmuser label published_date_start' ) );
+		        $this->_form->addElement( 'datetimeselect', 'published_date_end',   t('ydcmuser label published_date_end' ) );
+			}
+
+			// add custom form elements
+			foreach( $this->_form_elements as $name => $info )
+				$this->_form->addElement( $info[0], $name, $info[1], $info[2], $info[3] );
+
+			// return object
+			return $this->_form;
 		}
 
 
         /**
-         *  This function renders this element for menu
+         *  This method defines the language code to use in all sql queries
          *
-         *  @param $id        Component id
-         *  @param $url       Url object
-         *
-         *  @returns    An html string
+         *  @param $language_id  (Optional) Language id code, eg 'en'. By default current locale is used
          */
-		function render( $id, & $url ){
+		function setLanguage( $language_id = null ){
 		
-			return '';
+			if ( ! is_string( $language_id ) ) $this->_language_id = YDLocale::get();
+			else                               $this->_language_id = $language_id;
 		}
 
 
         /**
-         *  This function will render a menu
+         *  This method returns an element searching by its reference
          *
-         *  @returns    An array with all direct children
+         *  @param $reference  Reference string
          */
-		function renderMenu(){
+		function getElementByReference( $reference ){
+
+			$this->resetAll();
+			$this->load( 'ydcmtree_titles' );
+			$this->ydcmtree_titles->set( 'title_reference', $reference );
+			$this->findAll();
+
+			return $this->getValues( false, false, false, false );
+		}
+
+
+		function getElementById( $id ){
+
+			$this->resetAll();
+			$this->set( 'tree_id', $id );
+			$this->findAll();
+
+			return $this->getValues( false, false, false, false );
+		}
+
 		
-			return $this->comp->renderMenu();
-		}
-
 
         /**
-         *  This function returns all node attributes
+         *  This method returns all elements of this table
          *
-         *  @returns    An array with node attributes
+         *  @returns 	An array with all table elements
          */
-		function getNode(){
+		function getElements( $content_id = null, $prefix = false ){
 
-			// check if we have already node attributes (some sort of caching)
-			if ( !isset( $this->__nodeProperties ) ) 
-				$this->__nodeProperties = $this->comp->getNode();
-		
-			return $this->__nodeProperties;
+			$this->resetAll();
+	
+			if ( is_numeric( $content_id ) ){
+				$this->set( 'tree_id', intval( $content_id ) );
+			}
+
+			$this->findAll();
+
+			return $this->getResults( false, false, false, $prefix );
 		}
 
 
-		function getInfo(){
-		
-			return $this->comp->getInfo();
-		}
 
-        /**
-         *  This function returns a node attribute
-         *
-         *  @param $attribute           Attribute name
-         *
-         *  @returns    The node attribute
-         */
-		function get( $attribute ){
-
-			$node = $this->getNode();
-
-			// return attribute if exists 
-			if ( isset( $node[ $attribute ] ) ) return $node[ $attribute ];
-
-			return false;
-		}
-
-
-        /**
-         *  This function returns all elements (except root)
-         *
-         *  @returns    all tree elements 
-         *  @static
-         */
-		function getTreeElements( $id = null ){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			// check if we have a custom id
-			if( is_null( $id ) ) $id = $this->_id;
-
-			// TODO: check if return element is a array
-			return $tree->getDescendants( $id );
-		}
-
-
-        /**
-         *  This function checks if elements are valid drag&dropable
-         *
-         *  @param $x  Id of dragable node
-         *  @param $y  Id of dropable node
-         *
-         *  @returns    false if elements are invalid, an associative array with node types (eg: array( $x => 'PHCMPage', $y => 'PHCMRootmenu ))'
-         *  @static
-         */
-		function getDragDropElements( $x = null, $y = null ){
-		
-			// get tree module
-			$treeObj = YDCMComponent::module( 'YDCMTree' );
-
-			// check drop validation
-			return $treeObj->getDragDropElements( $x, $y );
-		}
-
-
-        /**
-         *  This function returns the path to current node
-         *
-         *  @returns    An array with all parents
-         */
-		function getPath(){
-
-			return $this->comp->getPath();
-		}
-
-
-        /**
-         *  This function returns all direct elements of a menu
-         *
-         *  @returns    An array with all direct children
-         */
-		function getMenu(){
-
-			return $this->comp->getMenu();
-		}
-
-
-        /**
-         *  This function returns the path string to current node
-         *
-         *  @param $separator    (Optional) Html separator string
-         *  @param $classParents (Optional) Html class for html links of parents
-         *  @param $classCurrent (Optional) Url object for element links
-         *
-         *  @returns    An html string
-         */
-		function getBreadcrum( $separator = ' &gt; ', $classParents = 'breadParents', $classCurrent = 'breadCurrent' ){
-
-			// get breadcrum from component
-			return $this->comp->getBreadcrum( $separator, $classParents, $classCurrent );
-		}
-
-
-        /**
-         *  This function returns the component author
-         *
-         *  @returns    component author
-         */
-		function getAuthor(){
-
-			return $this->_author;
-		}
-
-
-        /**
-         *  This function returns the component version
-         *
-         *  @returns    component version
-         */
-		function getVersion(){
-
-			return $this->_version;
-		}
-
-
-        /**
-         *  This function returns the component copyright
-         *
-         *  @returns    component copyright
-         */
-		function getCopyright(){
-
-			return $this->_copyright;
-		}
-
-
-        /**
-         *  This function returns the component description
-         *
-         *  @returns    component description
-         */
-		function getDescription(){
-
-			return $this->_description;
-		}
-
-
-        /**
-         *  This function sets a node state
-         *
-         *  @param $state      The state code
-         *  @param $id         (optional) The ID of the node. Defaults to null.
-         *
-         *  @returns    1 if state changed, 0 otherwise
-         */
-		function setState( $state, $id = null ){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			// check if static
-			if( is_null( $id ) ) $id = $this->_id;
-
-			return $tree->updateNode( array( 'state' => $state ), $id );
-		}
-
-
-        /**
-         *  This function deletes the tree part of a component only
-         *
-         */
-		function deleteNode(){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			return $tree->deleteNode( $this->_id );
-		}
-
-
-        /**
-         *  This function adds a standard node in the tree. Experimental
-         *
-         *  @param $values      Node values
-         *  @param $parent_id   (optional) The parent id for the node. Defaults to null.
-         */
-		function addNode( $values, $parent_id = null ){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			// use YDDatabasetree method
-			return $tree->addNode( $values, $parent_id );
-		}
-
-
-        /**
-         *  This function updates a node
-         *
-         *  @param $values      Node values
-         *  @param $node_id     (optional) The ID of the node. Defaults to null.
-         */
-		function updateNode( $values, $node_id = null ){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			// use YDDatabasetree method
-			return $tree->updateNode( $values, $node_id );
-		}
-
-
-        /**
-         *  This function moves a node
-         *
-         *  @param $x  X value
-         *  @param $y  Y value
-         */
-		function moveNode( $x, $y ){
-
-			// init db tree object
-			$tree = YDCMComponent::__getYDDatabaseTree();
-
-			// use YDDatabasetree method
-			return $tree->moveNode( $x, $y );
-		}
 
 
     }
