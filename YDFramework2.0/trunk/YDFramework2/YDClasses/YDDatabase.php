@@ -866,15 +866,40 @@
             $this->_fmtTimeStamp = 'Y-m-d H:i:s';
             $this->_fmtQuote = "'";
 
+            // The language index to use
+            $this->_languageIndex = null;
+
         }
 
         /**
-         *  Functioo to indicate if an SQL error should die the script or not.
+         *  Function to indicate if an SQL error should die the script or not.
          *
          *  @param $val     (optional) True if you want the script to die on an error, false otherwise.
          */
         function setFailOnError( $val=true ) { 
             $this->_failOnError = ( bool ) $val; 
+        }
+
+        /**
+         *  This function sets the language index which will be used to retrieve the fields. If you set this to a non
+         *  null value, it will replace all occurrences of "_@" with "_{$val}". This is very handy if you put the fields
+         *  in the database as follows:
+         *      - id
+         *      - title_1
+         *      - title_2
+         *      - title_3
+         *
+         *  If you then use the following query, provided you have set the correct language index, the right column will
+         *  be retrieved:
+         *
+         *  @code
+         *  SELECT id, title_@ FROM mytable;
+         *  @endcode
+         *
+         *  @param $val     (optional) True if you want the script to die on an error, false otherwise.
+         */
+        function setLanguageIndex( $val=null ) { 
+            $this->_languageIndex = $val; 
         }
 
         /**
@@ -1235,7 +1260,6 @@
             return $string;
         }
 
-
         /**
          *  This function will escape all array elements with the quotes appropriate for the database backend.
          *
@@ -1244,31 +1268,29 @@
          *  @returns    The escaped string surrounded by quotes.
          */
         function escapeSqlArray( $arr ) {
-
-			return implode( ',', array_map( array( &$this, 'escapeSql' ), $arr ) );
-		}
-
+            return implode( ',', array_map( array( &$this, 'escapeSql' ), $arr ) );
+        }
 
         /**
          *  Function to prepare an SQL statement with parameters. The parameters start counting from 1.
          
          *  This works as follows:
          *
-         *  \code
+         *  @code
          *  $sql = 'SELECT * FROM comments WHERE id = :1 and author = :2'
-         *  \endcode
+         *  @endcode
          *
          *  After a function call as follows:
          *
-         *  \code
+         *  @code
          *  prepareSql( $sql, 1, 'Pieter Claerhout' );
-         *  \endcode
+         *  @endcode
          *
          *  The SQL statement becomes:
          *
-         *  \code
+         *  @code
          *  SELECT * FROM comments WHERE id = '1' and author = 'Pieter Claerhout'
-         *  \endcode
+         *  @endcode
          *
          *  All the arguments are automatically escaped.
          *
@@ -1294,6 +1316,11 @@
             // Update the SQL statement
             foreach ( $args as $key => $arg ) {
                 $sql = str_replace( ':' . ($key+1), $this->escapeSql( $arg ), $sql );
+            }
+
+            // Update the language placeholders
+            if ( ! is_null( $this->_languageIndex ) ) {
+                $sql = str_replace( '_@', '_' . $this->_languageIndex, $sql );
             }
 
             // Return the SQL statement
