@@ -50,6 +50,7 @@
     define( YD_SIMPLECMS_PACKAGE_NAME . '_SKINS_DIR',      dirname( YD_SELF_FILE ) . '/includes/skins_' );
     define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_PUBLIC',   'public' );
     define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_ADMIN',    'admin' );
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE',  YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE' );
 
     // Configuration
     YDConfig::set( 'YD_AUTO_EXECUTE', false );
@@ -123,6 +124,50 @@
 
                 // Set the default scope
                 $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['scope'] = YD_SIMPLECMS_SCOPE_PUBLIC;
+
+                // Get the site Id
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['siteId'] = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
+
+                // Create a browser information object
+                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['browserInfo'] = new YDBrowserInfo();
+                $browserInfo = & $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['browserInfo'];
+
+                // -- Negotiate the language --
+                // Set the list of languages and the default language
+                $language = YDConfig::get( 'site_default_lang', '' );
+                $languages = array();
+
+                // Get the current URL
+                $url = new YDUrl( YDRequest::getNormalizedCurrentUrl() );
+
+                // Get the list of languages
+                foreach ( array_slice( YDConfig::get( 'site_languages', array() ), 0, 4 ) as $key=>$lang ) {
+                    if ( ! empty( $lang[0] ) ) {
+                        $lang[0] = strtolower( $lang[0] );
+                        $url->setQueryVar( 'lang', $lang[0] );
+                        $languages[ $lang[0] ] = array(
+                            'name' => $lang[1], 'idx' => $key + 1, 'code' => $lang[0], 'url' => $url->getUrl(),
+                        );
+                    }
+                }
+
+                // Get the current language
+                $languages = array_keys( $languages );
+                $lang = $browserInfo->getLanguage( $languages );
+                $languageCookieName = YD_SIMPLECMS_PACKAGE_NAME . '_' . YDSimpleCms::getSiteId() . '_LANG';
+                if ( YDRequest::getCookie( $languageCookieName, '', $languages ) != '' ) {
+                    $lang = YDRequest::getCookie( $languageCookieName, '', $languages );
+                }
+                //if ( $this->getQueryStringParameter( 'lang', '', $languages ) != '' ) {
+                //    $lang = $this->getQueryStringParameter( 'lang', '', $languages );
+                //}
+                $lang = strtolower( $lang );
+
+                // Set the right locale
+                YDLocale::set( $lang );
+
+                YDDebugUtil::dump( $language, 'language' );
+                YDDebugUtil::dump( $languages, 'languages' );
 
             }
 
@@ -281,6 +326,17 @@
         }
 
         /**
+         *  This function returns a YDBrowserInfo object for the current request.
+         *
+         *  @returns    Returns a YDBrowserInfo object for the current request.
+         *
+         *  @static
+         */
+        function & getBrowserInfo() {
+            return YDSimpleCMS::getVar( 'browserInfo' );
+        }
+
+        /**
          *  This function returns one of the named variables from the global CMS scope.
          *
          *  @param  $var    The name of the variable you want to retrieve.
@@ -303,6 +359,17 @@
             // Return a reference to the variable
             return $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME][$var];
 
+        }
+
+        /**
+         *  This function returns the current site ID.
+         *
+         *  @returns    Returns the current site ID.
+         *
+         *  @static
+         */
+        function getSiteId() {
+            return YDSimpleCMS::getVar( 'siteId' );
         }
 
         /**
@@ -432,11 +499,11 @@
             $this->tpl = new YDSimpleCMSTemplate();
 
             // Get the site id
-            $this->siteId = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
+            $this->siteId = YDSimpleCMS::getSiteId();
 
             // The names of the cookies
-            $this->cookieNameUser = 'YD_SIMPLECMS_' . $this->siteId . '_USER';
-            $this->cookieNamePass = 'YD_SIMPLECMS_' . $this->siteId . '_PASS';
+            $this->cookieNameUser = YD_SIMPLECMS_PACKAGE_NAME . '_' . $this->siteId . '_USER';
+            $this->cookieNamePass = YD_SIMPLECMS_PACKAGE_NAME . '_' . $this->siteId . '_PASS';
 
         }
 
