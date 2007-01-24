@@ -453,6 +453,26 @@
          *      string of the request.
          */
         function actionDefault() {
+            if ( YDSimpleCMS::getScope() == YD_SIMPLECMS_SCOPE_PUBLIC ) {
+                $this->actionDefaultPublic();
+            } else {
+                $this->actionDefaultAdmin();
+            }
+        }
+
+        /**
+         *  This is the action handler for a public request. Currently, it does the same thing as the action handler
+         *  for an admin request.
+         */
+        function actionDefaultPublic() {
+            $this->actionDefaultAdmin();
+        }
+
+        /**
+         *  This is the action handler for an admin request. Currently, it does the same thing as the action handler
+         *  for a public request.
+         */
+        function actionDefaultAdmin() {
             $module = $this->getQueryStringParameter( 'module', $this->defaultModule );
             $action = $this->getQueryStringParameter( 'action', 'show' );
             $moduleManager = & YDSimpleCMS::getModuleManager();
