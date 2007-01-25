@@ -44,6 +44,7 @@
     YDConfig::set( 'YD_DB_DEFAULTPAGESIZE', 20, false );
     YDConfig::set( 'YD_DB_TABLEPREFIX', '', false );
     YDConfig::set( 'YD_DB_ALLOW_PERSISTENT_SORT', false, false );
+    YDConfig::set( 'YD_DB_LANGUAGE_INDEX', null, false );
 
     YDConfig::set( 'YD_DB_RS_CYCLENAVIGATION', false, false );
 
@@ -866,9 +867,6 @@
             $this->_fmtTimeStamp = 'Y-m-d H:i:s';
             $this->_fmtQuote = "'";
 
-            // The language index to use
-            $this->_languageIndex = null;
-
         }
 
         /**
@@ -878,28 +876,6 @@
          */
         function setFailOnError( $val=true ) { 
             $this->_failOnError = ( bool ) $val; 
-        }
-
-        /**
-         *  This function sets the language index which will be used to retrieve the fields. If you set this to a non
-         *  null value, it will replace all occurrences of "_@" with "_{$val}". This is very handy if you put the fields
-         *  in the database as follows:
-         *      - id
-         *      - title_1
-         *      - title_2
-         *      - title_3
-         *
-         *  If you then use the following query, provided you have set the correct language index, the right column will
-         *  be retrieved:
-         *
-         *  @code
-         *  SELECT id, title_@ FROM mytable;
-         *  @endcode
-         *
-         *  @param $val     (optional) True if you want the script to die on an error, false otherwise.
-         */
-        function setLanguageIndex( $val=null ) { 
-            $this->_languageIndex = $val; 
         }
 
         /**
@@ -1319,8 +1295,9 @@
             }
 
             // Update the language placeholders
-            if ( ! is_null( $this->_languageIndex ) ) {
-                $sql = str_replace( '_@', '_' . $this->_languageIndex, $sql );
+            $languageIndex = YDConfig::get( 'YD_DB_LANGUAGE_INDEX', null );
+            if ( ! is_null( $languageIndex ) ) {
+                $sql = str_replace( '_@', '_' . $languageIndex, $sql );
             }
 
             // Return the SQL statement
