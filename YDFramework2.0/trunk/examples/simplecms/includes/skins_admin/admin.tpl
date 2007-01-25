@@ -1,22 +1,6 @@
 {if $currentAction == 'show'}
     <h1>Admin Home</h1>
-    {foreach from=$adminMenu item="menuItem"}
-        <p>
-            {if $menuItem.url}
-                <a href="{$menuItem.url}"><b>{$menuItem.title}</b></a>
-            {else}
-                <b>{$menuItem.title}</b>
-            {/if}
-            {foreach from=$menuItem.children item="menuSubItem"}
-                <br/>
-                {if $menuSubItem.url}
-                    <a href="{$menuSubItem.url}">{$menuSubItem.title}</a>
-                {else}
-                    {$menuSubItem.title}
-                {/if}
-            {/foreach}
-        </p>
-    {/foreach}
+    <p>Welcome</p>
 {/if}
 
 {if $currentAction == 'modules'}

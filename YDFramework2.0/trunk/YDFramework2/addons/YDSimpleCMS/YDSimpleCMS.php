@@ -52,6 +52,9 @@
     define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_ADMIN',    'admin' );
     define( YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE',  YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE' );
 
+    // Versions and numbers
+    define( YD_SIMPLECMS_PACKAGE_NAME . '_NAME', 'Yellow Duck Content Manager' );
+
     // Configuration
     YDConfig::set( 'YD_AUTO_EXECUTE', false );
 
@@ -166,8 +169,8 @@
                 // Set the right locale
                 YDLocale::set( $lang );
 
-                YDDebugUtil::dump( $language, 'language' );
-                YDDebugUtil::dump( $languages, 'languages' );
+                //YDDebugUtil::dump( $language, 'language' );
+                //YDDebugUtil::dump( $languages, 'languages' );
 
             }
 
@@ -233,6 +236,9 @@
          *  @param  $action     The module action that is linked to this menu item.
          *
          *  @static
+         *
+         *  @todo
+         *      Should become a member of the YDSimpleCMSModule class instead.
          */
         function addAdminMenu( $title, $subtitle, $module, $action ) {
 
@@ -417,6 +423,14 @@
          */
         function fetchWithMaster( $template='', $master='__master' ) {
 
+            // Add the standard variables
+            $this->assign( YD_SIMPLECMS_PACKAGE_NAME . '_NAME', YD_SIMPLECMS_NAME );
+            $this->assign( 'adminMenu',     YDSimpleCMS::getAdminMenu() );
+            if ( YDSimpleCMS::getCurrentUser() ) {
+                $this->assign( 'currentUser', YDSimpleCMS::getCurrentUser() );
+            }
+            $this->assign( 'currentScope', YDSimpleCMS::getScope() );
+
             // Get the current scope
             $scope = YDSimpleCMS::getScope();
 
@@ -560,10 +574,10 @@
 
             // Create the login form
             $form = new YDForm( 'loginForm' );
-            $form->addElement( 'text', 'loginName', t('username') );
-            $form->addElement( 'password', 'loginPass', t('password') );
+            $form->addElement( 'text', 'loginName', t('username'), array( 'class'=>'tfL' ) );
+            $form->addElement( 'password', 'loginPass', t('password'), array( 'class'=>'tfL' ) );
             $form->addElement( 'checkbox', 'loginRememberMe', t('remember_me') );
-            $form->addElement( 'submit', 'cmdSubmit', 'Login' );
+            $form->addElement( 'submit', 'cmdSubmit', 'Login', array( 'class'=>'button' ) );
             $form->setDefault( 'loginRememberMe', true );
 
             // Add the rules
@@ -769,10 +783,6 @@
         function display( $name='' ) {
             $this->tpl->assign( 'currentAction', $this->currentAction );
             $this->tpl->assign( 'currentScope',  $this->currentScope );
-            $this->tpl->assign( 'adminMenu',     YDSimpleCMS::getAdminMenu() );
-            if ( YDSimpleCMS::getCurrentUser() ) {
-                $this->tpl->assign( 'currentUser', YDSimpleCMS::getCurrentUser() );
-            }
             $name = ( $name == '' ) ? $this->getModuleName() : $name;
             $this->tpl->displayWithMaster( $name );
         }
