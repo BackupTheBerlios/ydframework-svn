@@ -2,7 +2,7 @@
 
     // The generic settings
     YDConfig::set( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
-    YDConfig::set( 'YD_DEBUG', 2 );
+    YDConfig::set( 'YD_DEBUG', 1 );
     YDConfig::set( 'YD_SIMPLECMS_PUBLIC_SKIN', 'default' );
 
     // The database settings

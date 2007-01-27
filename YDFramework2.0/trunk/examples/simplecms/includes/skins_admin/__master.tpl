@@ -68,7 +68,7 @@
             {/if}
         </td>
         <td align="left" valign="top">
-            ##content##
+            {$content}
             <p class="subline">
                 &nbsp<br/>
                 {t w="powered_by"} <a href="{$YD_FW_HOMEPAGE}" class="subline" target="_blank">{$YD_FW_NAME}</a>

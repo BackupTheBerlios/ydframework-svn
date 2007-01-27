@@ -42,18 +42,18 @@
 
     // Constants
     define( 'YD_SIMPLECMS_PACKAGE_NAME',   'YD_SIMPLECMS' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_ACTION_PREFIX',  'action_' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_PREFIX',  'module_' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_EXT',     '.php' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_PATTERN', YD_SIMPLECMS_MODULE_PREFIX . '*' . YD_SIMPLECMS_MODULE_EXT );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_MODULE_DIR',     dirname( YD_SELF_FILE ) . '/includes/modules' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_SKINS_DIR',      dirname( YD_SELF_FILE ) . '/includes/skins_' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_PUBLIC',   'public' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_SCOPE_ADMIN',    'admin' );
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE',  YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE' );
+    define( 'YD_SIMPLECMS_ACTION_PREFIX',  'action_' );
+    define( 'YD_SIMPLECMS_MODULE_PREFIX',  'module_' );
+    define( 'YD_SIMPLECMS_MODULE_EXT',     '.php' );
+    define( 'YD_SIMPLECMS_MODULE_PATTERN', YD_SIMPLECMS_MODULE_PREFIX . '*' . YD_SIMPLECMS_MODULE_EXT );
+    define( 'YD_SIMPLECMS_MODULE_DIR',     dirname( YD_SELF_FILE ) . '/includes/modules' );
+    define( 'YD_SIMPLECMS_SKINS_DIR',      dirname( YD_SELF_FILE ) . '/includes/skins_' );
+    define( 'YD_SIMPLECMS_SCOPE_PUBLIC',   'public' );
+    define( 'YD_SIMPLECMS_SCOPE_ADMIN',    'admin' );
+    define( 'YD_SIMPLECMS_SITE_LANGUAGE',  YD_SIMPLECMS_PACKAGE_NAME . '_SITE_LANGUAGE' );
 
     // Versions and numbers
-    define( YD_SIMPLECMS_PACKAGE_NAME . '_NAME', 'Yellow Duck Content Manager' );
+    define( 'YD_SIMPLECMS_NAME', 'Yellow Duck Content Manager' );
 
     // Configuration
     YDConfig::set( 'YD_AUTO_EXECUTE', false );
@@ -63,7 +63,6 @@
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php' );
     include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
     include_once( YD_DIR_HOME_CLS . '/YDTemplate.php' );
-    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
     include_once( YD_DIR_HOME . '/YDF2_process.php' );
     include_once( dirname( __FILE__ ) . '/YDSimpleCMS_CoreModules.php' );
 
@@ -106,70 +105,71 @@
 
                 // Create the array
                 $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME] = array();
+                $settings = & $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME];
 
                 // Setup the database connection
                 YDConfig::set( 'YD_DB_TABLEPREFIX', YDConfig::get( 'db_prefix' ) );
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['db'] = YDDatabase::getInstance(
+                $settings['db'] = YDDatabase::getInstance(
                     'mysql',
                     YDConfig::get( 'db_name' ), YDConfig::get( 'db_user' ),
                     YDConfig::get( 'db_pass' ), YDConfig::get( 'db_host' )
                 );
 
                 // The global list with admin menu
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['adminMenu'] = array();
+                $settings['adminMenu'] = array();
 
                 // The current user
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['currentUser'] = null;
+                $settings['currentUser'] = null;
 
                 // The module manager instance
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager'] = new YDSimpleCMSModuleManager();
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['moduleManager']->loadAllModules();
+                $settings['moduleManager'] = new YDSimpleCMSModuleManager();
+                $settings['moduleManager']->loadAllModules();
 
                 // Set the default scope
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['scope'] = YD_SIMPLECMS_SCOPE_PUBLIC;
+                $settings['scope'] = YD_SIMPLECMS_SCOPE_PUBLIC;
 
                 // Get the site Id
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['siteId'] = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
+                $settings['siteId'] = YDConfig::get( 'YD_SIMPLECMS_SITEID', 'SAMPLESITE' );
 
                 // Create a browser information object
-                $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['browserInfo'] = new YDBrowserInfo();
-                $browserInfo = & $GLOBALS[YD_SIMPLECMS_PACKAGE_NAME]['browserInfo'];
+                $settings['browserInfo'] = new YDBrowserInfo();
+                $browserInfo = & $settings['browserInfo'];
 
-                // -- Negotiate the language --
-                // Set the list of languages and the default language
-                $language = YDConfig::get( 'site_default_lang', '' );
-                $languages = array();
-
-                // Get the current URL
-                $url = new YDUrl( YDRequest::getNormalizedCurrentUrl() );
-
-                // Get the list of languages
-                foreach ( array_slice( YDConfig::get( 'site_languages', array() ), 0, 4 ) as $key=>$lang ) {
-                    if ( ! empty( $lang[0] ) ) {
-                        $lang[0] = strtolower( $lang[0] );
-                        $url->setQueryVar( 'lang', $lang[0] );
-                        $languages[ $lang[0] ] = array(
-                            'name' => $lang[1], 'idx' => $key + 1, 'code' => $lang[0], 'url' => $url->getUrl(),
-                        );
-                    }
-                }
-
-                // Get the current language
-                $languages = array_keys( $languages );
-                $lang = $browserInfo->getLanguage( $languages );
-                $languageCookieName = YD_SIMPLECMS_PACKAGE_NAME . '_' . YDSimpleCms::getSiteId() . '_LANG';
-                if ( YDRequest::getCookie( $languageCookieName, '', $languages ) != '' ) {
-                    $lang = YDRequest::getCookie( $languageCookieName, '', $languages );
-                }
-                //if ( $this->getQueryStringParameter( 'lang', '', $languages ) != '' ) {
-                //    $lang = $this->getQueryStringParameter( 'lang', '', $languages );
-                //}
-                $lang = strtolower( $lang );
-
-                // Set the right locale
-                YDLocale::set( $lang );
-
-                //YDDebugUtil::dump( $language, 'language' );
+//                // -- Negotiate the language --
+//                // Set the list of languages and the default language
+//                $language = YDConfig::get( 'site_default_lang', '' );
+//                $languages = array();
+//
+//                // Get the current URL
+//                $url = new YDUrl( YDRequest::getNormalizedCurrentUrl() );
+//
+//                // Get the list of languages
+//                foreach ( array_slice( YDConfig::get( 'site_languages', array() ), 0, 4 ) as $key=>$lang ) {
+//                    if ( ! empty( $lang[0] ) ) {
+//                        $lang[0] = strtolower( $lang[0] );
+//                        $url->setQueryVar( 'lang', $lang[0] );
+//                        $languages[ $lang[0] ] = array(
+//                            'name' => $lang[1], 'idx' => $key + 1, 'code' => $lang[0], 'url' => $url->getUrl(),
+//                        );
+//                    }
+//                }
+//
+//                // Get the current language
+//                $languages = array_keys( $languages );
+//                $lang = $browserInfo->getLanguage( $languages );
+//                $languageCookieName = YD_SIMPLECMS_PACKAGE_NAME . '_' . YDSimpleCms::getSiteId() . '_LANG';
+//                if ( YDRequest::getCookie( $languageCookieName, '', $languages ) != '' ) {
+//                    $lang = YDRequest::getCookie( $languageCookieName, '', $languages );
+//                }
+//                //if ( $this->getQueryStringParameter( 'lang', '', $languages ) != '' ) {
+//                //    $lang = $this->getQueryStringParameter( 'lang', '', $languages );
+//                //}
+//                $lang = strtolower( $lang );
+//
+//                // Set the right locale
+//                YDLocale::set( $lang );
+//
+//                //YDDebugUtil::dump( $language, 'language' );
                 //YDDebugUtil::dump( $languages, 'languages' );
 
             }
@@ -445,8 +445,9 @@
 
             // Check if there is a __standard page
             if ( is_file( $this->template_dir . '/' . $master . '.tpl' ) ) {
-                $standard = $this->fetch( $master );
-                $output = str_replace( '##content##', $output, $standard );
+                $this->assign( 'content', $output );
+                $output = $this->fetch( $master );
+                //$output = str_replace( '##content##', $output, $standard );
             }
 
             // Return the output
@@ -839,9 +840,8 @@
          */
         function loadAllModules() {
             if ( is_dir( YD_SIMPLECMS_MODULE_DIR ) ) {
-                $modulesDir = new YDFSDirectory( YD_SIMPLECMS_MODULE_DIR );
-                foreach ( $modulesDir->getContents( YD_SIMPLECMS_MODULE_PATTERN ) as $module ) {
-                    include_once( $module->getAbsolutePath() );
+                foreach ( glob( YD_SIMPLECMS_MODULE_DIR . '/' . YD_SIMPLECMS_MODULE_PATTERN ) as $module ) {
+                    include_once( $module );
                 }
             }
         }

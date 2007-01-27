@@ -16,7 +16,7 @@
         </p>
     {/if}
 
-    ##content##
+    {$content}
 
     <small>{$YD_FW_POWERED_BY}</small>
 
