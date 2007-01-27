@@ -96,6 +96,9 @@
          *  @todo
          *      Negotiate the language and put it as an array under $GLOBALS['YD_SIMPLECMS']['languages']
          *
+         *  @todo
+         *      Language settings should be specific for each scope
+         *
          *  @static
          */
         function initialize() {
