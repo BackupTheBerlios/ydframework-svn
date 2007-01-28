@@ -1294,12 +1294,6 @@
                 $sql = str_replace( ':' . ($key+1), $this->escapeSql( $arg ), $sql );
             }
 
-            // Update the language placeholders
-            $languageIndex = YDConfig::get( 'YD_DB_LANGUAGE_INDEX', null );
-            if ( ! is_null( $languageIndex ) ) {
-                $sql = str_replace( '_@', '_' . $languageIndex, $sql );
-            }
-
             // Return the SQL statement
             return $sql;
 
@@ -1775,6 +1769,12 @@
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
             $sql = str_replace( ' `#_', ' `' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
+
+            // Update the language placeholders
+            $languageIndex = YDConfig::get( 'YD_DB_LANGUAGE_INDEX', null );
+            if ( ! is_null( $languageIndex ) ) {
+                $sql = str_replace( '_@', '_' . $languageIndex, $sql );
+            }
 
             // Connect
             $result = $this->connect();

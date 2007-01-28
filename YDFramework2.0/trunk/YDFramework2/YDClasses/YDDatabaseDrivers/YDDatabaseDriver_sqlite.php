@@ -210,6 +210,12 @@
             // Add the table prefix
             $sql = str_replace( ' #_', ' ' . YDConfig::get( 'YD_DB_TABLEPREFIX', '' ), $sql );
 
+            // Update the language placeholders
+            $languageIndex = YDConfig::get( 'YD_DB_LANGUAGE_INDEX', null );
+            if ( ! is_null( $languageIndex ) ) {
+                $sql = str_replace( '_@', '_' . $languageIndex, $sql );
+            }
+
             // Handle errors
             if ( ! $result && $this->_failOnError === true ) {
                 trigger_error( $GLOBALS['YD_SQLITE_error'], YD_ERROR );
