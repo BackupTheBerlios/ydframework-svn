@@ -70,6 +70,7 @@
             $this->_target = empty( $target ) ? '_self' : $target;
             $this->_attributes = $attributes;
             $this->_legend = null;
+            $this->_defaultItem = null;
 
             // The list of known elements, rules, filters and validators
             $this->_regElements = array();
@@ -359,6 +360,15 @@
             foreach ( $array as $key => $val ) {
                 $this->setDefault( $key, $val );
             }
+        }
+
+        /**
+         *  This function set the default item for the form.
+         *
+         *  @param $name   The name of the default form item.
+         */
+        function setDefaultItem( $name ) {
+            $this->_defaultItem = $name;
         }
 
         /**

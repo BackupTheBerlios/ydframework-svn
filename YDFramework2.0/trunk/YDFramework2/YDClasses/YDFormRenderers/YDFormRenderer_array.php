@@ -80,6 +80,18 @@
             $form['name']   = $this->_form->_name;
             $form['legend'] = $this->_form->_legend;
 
+            // Add a script for the default item
+            if (
+                ! empty( $this->_form->_defaultItem )
+                &&
+                array_key_exists( $this->_form->_defaultItem, $this->_form->_elements )
+            ) {
+                $form['endtag'] .= sprintf(
+                    '<script type="text/javascript">document.getElementById("%s").focus();</script>',
+                    addslashes( $this->_form->_name . '_' . $this->_form->_defaultItem )
+                 );
+            }
+
             // Add the fieldset and legend tag if any
             if ( ! empty( $this->_form->_legend ) ) {
 
