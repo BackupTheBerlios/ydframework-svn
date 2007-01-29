@@ -52,6 +52,15 @@
          */
         function YDFormElement_Radio( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
+            // set default separator
+            $this->_separator = '';
+
+            // parse separator
+            if ( isset ( $attributes['sep'] ) && $attributes['sep'] == 'v' ) {
+                $this->_separator = '<br />';
+                unset( $attributes[ 'sep' ] );
+            }
+
             // Initialize the parent
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
 
@@ -77,7 +86,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Create the HTML
-            $out = '';
+            $out = array();
             if ( sizeof( $this->_options ) > 0 ) {
                 foreach ( $this->_options as $key=>$val ) {
                     $attribsElement = $attribs;
@@ -86,15 +95,15 @@
                     if ( $this->_value == strval( $key ) ) {
                         $attribsElement['checked'] = 'checked';
                     }
-                    $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /><label for="' . $attribsElement['id'] . '">' . $val . '</label>';
+                    $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /><label for="' . $attribsElement['id'] . '">' . $val . '</label>';
 
                 }
             } else {
-                $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
+                $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
             }
 
             // Return the HTML
-            return $out;
+            return implode( $this->_separator, $out );
 
         }
 
