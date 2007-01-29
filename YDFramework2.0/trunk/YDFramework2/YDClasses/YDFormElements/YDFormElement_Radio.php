@@ -82,14 +82,15 @@
                 foreach ( $this->_options as $key=>$val ) {
                     $attribsElement = $attribs;
                     $attribsElement['value'] = $key;
+                    $attribsElement['id'] .= $key;
                     if ( $this->_value == strval( $key ) ) {
                         $attribsElement['checked'] = 'checked';
                     }
-                    $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' />' . $val;
+                    $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /><label for="' . $attribsElement['id'] . '">' . $val . '</label>';
 
                 }
             } else {
-                $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />' . $this->_value;
+                $out .= '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
             }
 
             // Return the HTML
