@@ -31,6 +31,10 @@
     }
 
 
+	// load YD libs
+	require_once( YD_DIR_HOME_ADD . '/YDDatabaseObject/YDDatabaseObject.php' );
+
+
     /**
      *  This class reads a database table to apply correspondent YDConfig
      *
@@ -91,11 +95,11 @@
 			// clean possible previous results
 			$this->_results = array();
 
-            // cycle all tables to get their column names
+			// cycle all tables to get their column names
 			foreach( $this->_tables as $tablename => $columns ){
 
 				// copy default db object
-	            $db = $this->db;
+				$db = $this->db;
 
 				// register table
 				$db->registerTable( $tablename );
@@ -110,6 +114,8 @@
 				// add results
 				$this->_results = array_merge( $this->_results, $db->getResultsAsAssocArray( $columns[0], $columns[1] ) );
 			}
+			
+			return $this->_results;
         }
 
 
