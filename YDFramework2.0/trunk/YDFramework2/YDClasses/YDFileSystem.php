@@ -1056,7 +1056,7 @@
             }
 
             // Get the cache filename
-            $cacheFName = YD_DIR_TEMP . '/' . $this->_createThumbnailName( $width, $height );
+            $cacheFName = YD_DIR_TEMP . '/' . $this->_createThumbnailName( $width, $height, $crop );
 
             // Check if caching is enabled
             if ( $cache === true ) {
@@ -1239,9 +1239,10 @@
          *
          *	@param $width	The maximum width of the thumbnail.
          *	@param $height	The maximum height of the thumbnail.
+         *	@param $crop	Indicate if is the cropped version.
          */
-        function _createThumbnailName( $width, $height ) {
-            $cacheFName = $this->getAbsolutePath() . '/' . $width . '/' . $height . '/' . $this->getLastModified();
+        function _createThumbnailName( $width, $height, $crop ) {
+            $cacheFName = $this->getAbsolutePath() . '/' . $width . '/' . $height . '/' . strval( $crop ) . $this->getLastModified();
             $cacheFName = YD_TMP_PRE . 'N_' . md5( $cacheFName ) . '.' . strtolower( $this->getExtension() );
             return $cacheFName;
         }
