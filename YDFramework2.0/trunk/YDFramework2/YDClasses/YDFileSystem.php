@@ -779,7 +779,7 @@
                     // Check if we need to raise an error
                     if ( $failOnError == true ) {
                         trigger_error(
-                            'Failed deleting the file "' . $file . '" from the directory "' . $this->getPath() . '".',
+                            'Failed deleting the file "' . $filename . '" from the directory "' . $this->getPath() . '".',
                             YD_ERROR
                         );
                     }
