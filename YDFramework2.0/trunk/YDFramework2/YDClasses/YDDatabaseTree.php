@@ -558,9 +558,10 @@
             // Include ourselves?
             if ( $includeSelf ) {
                 $query = sprintf(
-                    'select %s from %s where %s.nleft <= %d and %s.nright >= %d order by %s.nlevel',
+                    'select %s from %s where ( %s.nleft <= %d and %s.nright >= %d ) or %s.id = %d order by %s.nlevel',
                     $this->_getFieldsAsString(), $this->_getTablesAsString(),
-                    $this->tablePrefix, $node['nleft'], $this->tablePrefix, $node['nright'], $this->tablePrefix
+                    $this->tablePrefix, $node['nleft'], $this->tablePrefix, $node['nright'], $this->tablePrefix,
+                    $id, $this->tablePrefix
                 );
             } else {
                 $query = sprintf(
