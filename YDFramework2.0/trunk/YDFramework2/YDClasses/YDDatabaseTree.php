@@ -33,9 +33,6 @@
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDDatabase.php' );
 
-    // Configure the default for this class
-    YDConfig::set( 'YD_DBTREE_TABLEPREFIX', 't1', false );
-
     /**
      *  This class implements a database tree as described on:
      *  http://www.phpriot.com/d/articles/php/application-design/nested-trees-2/
@@ -135,7 +132,7 @@
         function YDDatabaseTree( $db='default', $table, $idField='id', $parentField='parent_id', $sortField='position, title' ) {
             $this->db = YDDatabase::getNamedInstance( $db );
             $this->table = $table;
-            $this->tablePrefix = YDConfig::get( 'YD_DBTREE_TABLEPREFIX', 't1' );
+            $this->tablePrefix = $table;
             $this->joins = array();
             $this->fields = array(
                 'id'        => $this->_addTablePrefix( $idField ),
