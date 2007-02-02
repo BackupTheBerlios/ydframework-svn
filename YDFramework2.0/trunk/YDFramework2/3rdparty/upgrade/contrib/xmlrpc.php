@@ -288,7 +288,7 @@ function xmlrpc_response_unmarshall(&$response) {
    else {
       return xmlrpc_error(-32600, "xml+rpc: invalid response", 0, "GLBLVRS");
    }
-   return(NULL);
+   //return(NULL);
 }
 
 
