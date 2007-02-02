@@ -1023,10 +1023,10 @@
             // Apply the form rules
             foreach ( $this->_formrules as $rule ) {
 
-                // Check if the callback is valid
-                if ( ! is_callable( $rule[0] ) ) {
-                    trigger_error( 'The callback specified for the form "' . $rule[0] . '" is not valid', YD_ERROR );
-                }
+//                // Check if the callback is valid
+//                if ( ! is_callable( $rule[0] ) ) {
+//                    trigger_error( 'The callback specified for the form "' . $rule[0] . '" is not valid', YD_ERROR );
+//                }
 
                 // Get the form values
                 $values = $this->getValues();
