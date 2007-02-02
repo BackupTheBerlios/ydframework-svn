@@ -97,6 +97,8 @@
          *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
          *
          *  @returns    The value of the query string variable as a string.
+         * 
+         *  @static
          */
         function getQueryStringParameter( $name, $default='', $values=null, $use_keys=false ) {
             if ( isset( $_GET[$name] ) ) {
@@ -124,9 +126,11 @@
          *  @param  $use_keys   (optional) Use the keys from the values array instead of the values. Defaults to false.
          *
          *  @returns    The value of the query string variable as an integer.
+         * 
+         *  @static
          */
         function getQueryStringParameterAsInt( $name, $default=null, $values=null, $use_keys=false ) {
-            $value = $this->getQueryStringParameter( $name, $default, $values, $use_keys );
+            $value = YDRequest::getQueryStringParameter( $name, $default, $values, $use_keys );
             return is_numeric( $value ) ? intval( $value ) : $default;
         }
 
