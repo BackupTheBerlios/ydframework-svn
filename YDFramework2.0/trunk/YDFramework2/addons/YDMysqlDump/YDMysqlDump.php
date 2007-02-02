@@ -31,7 +31,7 @@
     }
 
 	// include filesystem functions
-	include_once( 'YDFileSystem.php' );
+	include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php' );
 
 
     /**
