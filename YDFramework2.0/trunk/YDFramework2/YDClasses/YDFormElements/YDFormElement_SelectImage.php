@@ -131,12 +131,12 @@
 			// compute image source
 			$source = $this->_img_src;
 
-			// compute selected option. If default value was set and that value is valid, use it. Otherwise use 1st option
+			// compute selected option. If default value was set and that value is valid, use it. Otherwise use 1st option if exist
 			if ( ! empty( $this->_value ) && isset( $this->_options[ $this->_value ] ) ){
 				$source .= $this->_value;
 			}else{
 				$values  = array_keys( $this->_options );
-				$source .= $values[0];
+				$source .= isset( $values[0] ) ? $values[0] : '';
 			}
 
 			// add extension
