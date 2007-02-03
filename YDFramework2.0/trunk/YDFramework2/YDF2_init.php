@@ -518,9 +518,11 @@
     class YDLocale extends YDBase {
 
         /**
-         *	@param	$locale	Sets the current locale
+         *	@param	$locale		Sets the current locale
+         *	@param	$domain		(Optional) Filename to search in locale directory
+         *	@param	$directory	(Optional) Directory name where language directories are stored
          */
-        function set( $locale ) {
+        function set( $locale, $domain = null, $directory = null ) {
 
             // Check if the locale exists or not
             if ( ! array_key_exists( strtolower( $locale ), $GLOBALS[ 'YD_LANGUAGES' ] ) ) {
@@ -543,6 +545,24 @@
             // Set the locale
             YDConfig::set( YD_LOCALE_KEY, $locale );
 
+            // check if we want to use gettext
+            if ( is_string( $domain ) ){
+
+                // set environment
+                $_ENV["LANG" ]      = $locale;
+                $_ENV["LANGUAGE"]   = $locale;
+                $_ENV["LC_MESSAGE"] = $locale;
+                $_ENV["LC_ALL"]     = $locale;
+
+                // added php5 environment flag
+                putenv( "LANGUAGE=" . $locale );
+
+                // set gettext domain
+                bindtextdomain( $domain, $directory );
+                textdomain( $domain );
+                return;
+            }
+
             // initialize t array
             if ( ! isset( $GLOBALS['t'] ) ) {
                 $GLOBALS['t'] = array();
@@ -553,35 +573,6 @@
                 foreach ( $GLOBALS[ 'YD_LANGUAGES_DIRECTORIES' ] as $dir )
                     @include( $dir . '/' . YDLocale::get() . '.php' );
         }
-
-
-        /**
-         *	This method will activate gettext support
-         *
-         *	@param	$filename	(Optional) Filename to search in locale directory
-         *	@param	$directory	(Optional) Directory name where language directories are stored
-         */
-		function useGettext( $filename = 'ydframework', $directory = null ){
-
-			// get current locale
-			$locale = YDLocale::get();
-
-			// set environment
-			$_ENV["LANG" ]      = $locale;
-			$_ENV["LANGUAGE"]   = $locale;
-			$_ENV["LC_MESSAGE"] = $locale;
-			$_ENV["LC_ALL"]     = $locale;
-
-			// added php5 environment flag
-			putenv( "LANGUAGE=" . $locale );
-
-			// check directory
-			if ( ! is_string( $directory ) ) $directory = YD_DIR_HOME . '/locale/';
-
-			bindtextdomain( $filename, $directory );
-			textdomain( $filename );
-		}
-
 
         /**
          *	@returns	The current locale.
