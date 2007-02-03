@@ -472,9 +472,26 @@
             foreach ( $elements as $element ) {
                 $this->$element->_value = isset( $this->_value[ $element ] ) ? $this->_value[ $element ] : '';
             }
-            
+
+            // Check year value if belongs to options. If not, prepend or append that value to options
+            if( ! in_array( $this->year->_value, $this->year->_options ) ){
+                $years = array_keys( $this->year->_options );
+
+                if ( $this->year->_value < $years[0] ){
+                    array_unshift( $years, $this->year->_value );
+                }
+                elseif ( $this->year->_value > $years[ count ( $years ) - 1 ] ){
+                    array_push( $years, $this->year->_value );
+                }
+
+                $this->year->_options = array();
+
+                foreach( $years as $year ){
+                    $this->year->_options[ $year ] = $year;
+                }
+            }
+
             // Convert to HTML
-            
             $dates = array( 'day', 'month', 'year' );
             $times = array( 'hours', 'minutes', 'seconds' );
             
