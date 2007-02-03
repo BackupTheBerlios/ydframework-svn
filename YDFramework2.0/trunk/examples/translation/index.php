@@ -10,11 +10,8 @@
 	YDInclude( 'YDRequest.php' );
 	YDInclude( 'YDTemplate.php' );
 
-	// set locale: you can use 'en', 'pt' and 'fr'
-	YDLocale::set( 'pt' );
-
-	// use gettext engine. use 'test' filenames, language directories are in 'locale' sub directory
-	YDLocale::useGettext( 'test', dirname( __FILE__ ) . '/locale/' );
+	// set locale: you can use 'en', 'pt' and 'fr' and use gettext engine with 'test' filenames inside 'locale' language directory
+	YDLocale::set( 'pt', 'test', dirname( __FILE__ ) . '/locale/' );
 
 
 	// Class definition
