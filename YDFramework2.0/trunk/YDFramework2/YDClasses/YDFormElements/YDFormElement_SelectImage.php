@@ -65,7 +65,7 @@
 
 			// check if ext exist
 			if ( isset( $attributes['ext'] ) ){
-				$this->_img_ext = "." . $attributes['ext'];
+				$this->_img_ext = $attributes['ext'];
 				unset( $attributes['ext'] );
 			}
 
