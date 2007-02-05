@@ -474,7 +474,7 @@
                     );
                 } else if ( $nleft > 0 ) {
                     $query = sprintf(
-                        'select %s from %s where %s.nleft > %d and %snright < %d %s',
+                        'select %s from %s where %s.nleft > %d and %s.nright < %d %s',
                         $this->_getFieldsAsString(), $this->_getTablesAsString(),
                         $this->tablePrefix, $nleft, $this->tablePrefix, $nright, $order
                     );
@@ -992,7 +992,7 @@
 
             // Return if unknown node
             if ( ! $node ) {
-                return;
+                return false;
             }
 
             // Get the list of IDs to delete
