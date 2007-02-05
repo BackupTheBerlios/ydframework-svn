@@ -1510,6 +1510,7 @@
             $sql = str_ireplace( ' ORDER BY ', YD_CRLF . 'ORDER BY ', $sql );
             $sql = str_ireplace( ' GROUP BY ', YD_CRLF . 'GROUP BY ', $sql );
             $sql = str_ireplace( ' LIMIT ', YD_CRLF . 'LIMIT ', $sql );
+            $sql = str_ireplace( ' ON DUPLICATE KEY UPDATE ', YD_CRLF . 'ON DUPLICATE KEY UPDATE ', $sql );
 
             // Return the formatted statement
             return $sql;
