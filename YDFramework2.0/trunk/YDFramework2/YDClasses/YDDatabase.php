@@ -975,14 +975,14 @@
          *
          *  @returns    A single value matching the SQL statement. False when no record was found.
          */
-        function getValue( $sql, $index=0 ) {
+        function getValue( $sql, $index=0, $default=false ) {
             $records = $this->getRecord( $sql );
             if (! $records ) {
-                return false;
+                return $default;
             }
             $record = array_values( $records );
             if ( ! isset( $record[ $index ] ) ) {
-                return false;
+                return $default;
             }
             return $record[ $index ];
         }
