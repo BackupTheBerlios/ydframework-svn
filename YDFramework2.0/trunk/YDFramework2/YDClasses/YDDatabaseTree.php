@@ -420,8 +420,11 @@
             // Get the ID field
             $idField = $this->fields['id'];
 
-            // Get the node
-            $node = $this->_toNodeArray( $this->getNode( $id ) );
+            // Get the node if it's not given by a numeric ID
+            $node = is_numeric( $id ) ? $this->getNode( $id ) : $id;
+
+            // Convert the node
+            $node = $this->_toNodeArray( $node );
 
             // Find nleft, nright and parent_id
             if ( ! $node ) {
@@ -544,8 +547,11 @@
             // Get the ID field
             $idField = $this->fields['id'];
 
-            // Get the node
-            $node = $this->_toNodeArray( $this->getNode( $id ) );
+            // Get the node if it's not given by a numeric ID
+            $node = is_numeric( $id ) ? $this->getNode( $id ) : $id;
+
+            // Convert the node
+            $node = $this->_toNodeArray( $node );
 
             // No node, return empty array
             if ( ! $node ) {
@@ -592,8 +598,11 @@
          */
         function isDescendantOf( $descendant_id, $ancestor_id ) {
 
-            // Get the node
-            $node = $this->_toNodeArray( $this->getNode( $ancestor_id ) );
+            // Get the node if it's not given by a numeric ID
+            $node = is_numeric( $ancestor_id ) ? $this->getNode( $ancestor_id ) : $ancestor_id;
+
+            // Convert the node
+            $node = $this->_toNodeArray( $node );
 
             // No node, return empty array
             if ( ! $node ) {
@@ -726,8 +735,11 @@
          */
         function getImmediateFamily( $id ) {
 
-            // Get the node
-            $node = $this->_toNodeArray( $this->getNode( $id ) );
+            // Get the node if it's not given by a numeric ID
+            $node = is_numeric( $id ) ? $this->getNode( $id ) : $id;
+
+            // Convert the node
+            $node = $this->_toNodeArray( $node );
 
             // The ID and parent field
             $idField = $this->_addTablePrefix( $this->fields['id'] );
