@@ -821,7 +821,7 @@
                 foreach ( $timings as $timing ) {
                     $debug .= sprintf(
                         '<tr><td %s>%s ms</td><td %s>%s ms</td><td %s>%s</td></tr>',
-                        $font, $timing[0], $font, $timing[0], $font, $timing[2]
+                        $font, $timing[0], $font, $timing[1], $font, $timing[2]
                     );
                 }
                 $debug .= '</table></p></dd>';
