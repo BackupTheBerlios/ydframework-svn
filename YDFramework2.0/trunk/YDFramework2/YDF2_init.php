@@ -305,8 +305,8 @@
         }
 
 		// check gettext patern
-		if ( ereg ( "^\_\([\'\"](.*)[\'\"]\)$", $t, $res ) ){
-			$out = gettext( $res[1] );
+		if ( preg_match ( "/^\_\((\"|.{2})(.+)(\"|.{2})\)$/", $t, $res ) ){
+			$out = gettext( $res[2] );
 		}else{
 			$t = strtolower( $t );
 			$out = ( array_key_exists( $t, $GLOBALS['t'] ) ? $GLOBALS['t'][$t] : "#$t#" );
