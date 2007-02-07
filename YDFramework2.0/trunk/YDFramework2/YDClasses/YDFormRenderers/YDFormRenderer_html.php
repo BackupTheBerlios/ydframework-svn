@@ -105,6 +105,17 @@
                 }
                 if ( $element['type'] == 'hidden' ) {
                     $html .= $element['html'] . YD_CRLF;
+                }
+                elseif ( $element['type'] == 'fieldset' ) {
+
+                    // if we had already a fieldset, we must close tag
+                    if ( isset( $this->_fsets ) ){
+                        $html .= '</fieldset>';
+                    }
+
+                    // add fieldset start and set fieldsets in use
+                    $html .= '<fieldset>' . $element['html'];
+                    $this->_fsets = true;
                 } else {
                     $html .= '<p>';
                     if ( $element['placeLabel'] == 'after' ) {
@@ -130,6 +141,11 @@
                     }
                     $html .= '</p>' . YD_CRLF;
                 }
+            }
+
+            // Close last fieldset, if exist
+            if ( isset( $this->_fsets ) ){
+                $html .= '</fieldset>';
             }
 
             // Add the buttons
