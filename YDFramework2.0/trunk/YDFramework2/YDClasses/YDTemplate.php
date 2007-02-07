@@ -268,8 +268,8 @@
                     else            return array_push(    $this->customJavascriptOnload, $jsCode );
                 }
 
-                if ( $prepend ) return $this->customJavascript = $jsCode . $this->customJavascript . "\n";
-				else            return $this->customJavascript = $this->customJavascript . $jsCode . "\n";
+                if ( $prepend ) return $this->customJavascript = $jsCode . $this->customJavascript;
+				else            return $this->customJavascript = $this->customJavascript . $jsCode;
             }
 
 
