@@ -141,6 +141,8 @@
             $this->registerElement( 'grid', 'YDFormElement_Grid', 'YDFormElement_Grid.php' );
             $this->registerElement( 'captcha', 'YDFormElement_Captcha', 'YDFormElement_Captcha.php' );
             $this->registerElement( 'timezone', 'YDFormElement_Timezone', 'YDFormElement_Timezone.php' );
+            $this->registerElement( 'fieldset', 'YDFormElement_Fieldset', 'YDFormElement_Fieldset.php' );
+            $this->registerElement( 'hr', 'YDFormElement_HR', 'YDFormElement_HR.php' );
 
             // Add the rules
             $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
