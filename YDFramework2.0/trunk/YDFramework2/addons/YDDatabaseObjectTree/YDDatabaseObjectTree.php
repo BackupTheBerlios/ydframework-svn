@@ -211,7 +211,7 @@
         function getDescendants( $id, $includeSelf = false, $maxLevel = null, $prefix = false ) {
 
 			// check if we want an invalid id (like 0 or 1)
-			if ( $id < 2 ) return $this->getTreeElements();
+			if ( $id < 2 ) return $this->getTreeElements( $prefix );
 
 			$this->resetAll();
 
@@ -249,22 +249,26 @@
         /**
          *  Fetch all elements of a tree
          *
+         *  @param $prefix          (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *
          *  @returns All tree nodes
          */
-        function getTreeElements() {
+        function getTreeElements( $prefix = false ) {
 
 			$this->resetAll();
 
-			return $this->_getTreeElements();
+			return $this->_getTreeElements( $prefix );
 		}
 
 
         /**
          *  Helper to fetch all elements of a tree
          *
+         *  @param $prefix          (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *
          *  @returns All tree nodes
          */
-        function _getTreeElements() {
+        function _getTreeElements( $prefix = false ) {
 
 			// get all elements except root
 			$this->where( $this->__table_id . ' > 1' );
@@ -273,7 +277,7 @@
 			$this->findAll();
 
 			// return all nodes
-			return $this->getResults();
+			return $this->getResults( false, false, false, $prefix );
 		}
 
 
