@@ -1045,60 +1045,6 @@
 
 
         /**
-         *  This function inserts a form in database
-         *
-         *  @param $form       YDForm object
-         *
-         *  @param $messages   (optional) Array with predefined messages:
-         *                                'ok' for ok message, 'error' for fatal messages, 'form_err' for no validation
-         *
-         *  @param $formvalues (optional) Custom form validation values
-         *
-         *  @param $onDate     (optional) When element is a date (read: array ), we should convert to this format. Default: 'datetimesql'
-         *
-         *  @returns  YDResult object with a message and a result
-         *            On 'ok', result is the new id
-         *            On 'form_err', result is array of form error messages
-         */
-        function insertForm( & $form, $messages = array(), $formvalues = null, $onDate = 'datetimesql' ){
-
-            YDInclude( 'YDResult.php' );
-
-            // check messages
-            $msg_ok       = isset( $messages[ 'ok' ] )       ? $messages[ 'ok' ]       : t( 'Element added' );
-            $msg_error    = isset( $messages[ 'error' ] )    ? $messages[ 'error' ]    : t( 'Impossible to add element' );
-            $msg_form_err = isset( $messages[ 'form_err' ] ) ? $messages[ 'form_err' ] : t( 'Form errors' );
-
-            // check form validation
-            if ( ! $form->validate( $formvalues ) ){
-                return YDResult::warning( $msg_form_err, $form->getErrors() );
-            }
-
-            // reset all previous information
-            $this->reset();
-
-			// get form values
-			$values = $form->getValues();
-
-			// convert dates
-			foreach( $values as $element => $value )
-				if ( is_array( $value ) ) $values[ $element ] = YDStringUtil::formatDate( $value, $onDate );
-
-			// apply values
-            $this->setValues( $values );
-
-            // insert values and check result
-            $result = $this->insert();
-
-            if ( $result ){
-                return YDResult::ok( $msg_ok, $result );
-            }else{
-                return YDResult::fatal( $msg_error, $result );
-            }
-        }
-
-
-        /**
          *  This function executes an UPDATE query based on the values of the object
          *  and any value set by where.
          *
