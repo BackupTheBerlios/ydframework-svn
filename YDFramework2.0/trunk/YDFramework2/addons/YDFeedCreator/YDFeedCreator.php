@@ -339,6 +339,7 @@
             }
             
             $xml->loadArray( $feed );
+            $xml->encoding = $this->_encoding;
             return $xml->toString();
 
         }
