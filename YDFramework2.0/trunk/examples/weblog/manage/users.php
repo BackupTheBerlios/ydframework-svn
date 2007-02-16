@@ -142,6 +142,7 @@
             // Redirect to the default action
             $this->redirectToAction();
 
+        }
 
         // Check the user credentials
         function checkUserCredentials( $params ) {
@@ -156,7 +157,6 @@
                 return true;
             }
 
-        }
         }
 
     }
