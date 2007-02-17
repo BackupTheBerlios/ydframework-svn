@@ -705,7 +705,8 @@
         function getValues() {
             $vars = array();
             foreach ( $this->_elements as $name => $element ) {
-                if ( $element->getType() == 'span' ) {
+                $elType = $element->getType();
+                if ( $elType == 'span' || $elType == 'fieldset' || $elType == 'hr' ) {
                     continue;
                 }
                 $vars[ $name ] = $this->getValue( $name );
