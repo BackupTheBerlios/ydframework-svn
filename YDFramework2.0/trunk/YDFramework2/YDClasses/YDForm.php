@@ -143,6 +143,7 @@
             $this->registerElement( 'timezone', 'YDFormElement_Timezone', 'YDFormElement_Timezone.php' );
             $this->registerElement( 'fieldset', 'YDFormElement_Fieldset', 'YDFormElement_Fieldset.php' );
             $this->registerElement( 'hr', 'YDFormElement_HR', 'YDFormElement_HR.php' );
+            $this->registerElement( 'selectnumeric', 'YDFormElement_SelectNumeric', 'YDFormElement_SelectNumeric.php' );
 
             // Add the rules
             $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
