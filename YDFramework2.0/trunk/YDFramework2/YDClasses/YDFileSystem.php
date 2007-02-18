@@ -926,10 +926,7 @@
             header( 'Content-type: ' . $content_type );
 
             // Output the thumbnail
-            echo( $this->_createThumbnail( $width, $height, $cache, $crop ) );
-
-            // Stop the execution
-            die();
+            die( $this->_createThumbnail( $width, $height, $cache, $crop ) );
 
         }
 
@@ -1071,10 +1068,8 @@
                     header( 'Content-type: ' . $img->getMimeType() );
 
                     // Output the image
-                    $f = fopen( $cacheFName, 'rb' );
-                    $data = fread( $f, filesize( $cacheFName ) );
-                    fclose( $f );
-                    die( $data );
+                    readfile( $cacheFName );
+                    die();
 
                 }
 
