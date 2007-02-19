@@ -432,15 +432,16 @@
             }
 
             // Check if we have an extension
-            if ( YDPath::getExtension( $path ) && strtolower( YDPath::getExtension( $path ) ) != 'tmn' ) {
-                if ( in_array( strtolower( YDPath::getExtension( $path ) ), array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
-                    return strtolower( YDPath::getExtension( $path ) );
+            $extension = strtolower( YDPath::getExtension( $path ) );
+            if ( $extension && $extension != 'tmn' ) {
+                if ( in_array( $extension, array( 'jpg', 'png', 'gif', 'jpeg' ) ) ) {
+                    return $extension;
                 }
             }
 
             // No extension, read the file
             $fp = fopen( $path, 'rb' );
-            $header = fread( $fp, 32 );
+            $header = fread( $fp, 8 );
             fclose( $fp );
             if ( substr( $header, 0, 6 ) == 'GIF87a' || substr( $header, 0, 6 ) == 'GIF89a' ) {
                 return 'gif';
@@ -1060,17 +1061,8 @@
 
                 // Output the cached version if any
                 if ( is_file( $cacheFName ) ) {
-
-                    // Create a new image for the cache file
-                    $img = new YDFSImage( $cacheFName );
-
-                    // Set the content type
-                    header( 'Content-type: ' . $img->getMimeType() );
-
-                    // Output the image
                     readfile( $cacheFName );
                     die();
-
                 }
 
             }
