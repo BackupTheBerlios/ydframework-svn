@@ -1371,7 +1371,9 @@
          *					match this pattern will not be included in the result.
          *	@param $class	(optional) If you specify a not null value for this option, this function will return the
          *					items in the directory as the indicated class. If an empty string is given, it will return
-         *					the list of filenames instead of objects.
+         *					the list of filenames instead of objects. If a string 'fullpath' is given, it will return
+         *					the list of filenames using the fullpath. If a string 'hash' is given, it will return a list 
+         *					of filenames as a associative array with filename basename has key and filename fullpath has value.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage, YDFSFile
          *					and YDFSDirectory classes. If you only need a single class, you can also specify it as a
          *					string.
@@ -1452,7 +1454,7 @@
             $fileList2 = array();
             foreach ( $fileList as $file ) {
                 $file = $this->getPath() . '/' . $file;
-                if ( ! is_null( $class ) && $class != '' ) {
+                if ( ! is_null( $class ) && $class != '' && $class != 'fullpath' && $class != 'hash' ) {
                     $fileObj = new $class( $file );
                 } else {
                     if ( is_dir( $file ) ) {
@@ -1497,14 +1499,20 @@
             }
 
             // Return a simple list if needed
-            if ( $class === '' ) {
+            if ( is_string( $class ) ) {
 
                 // Initialize a list for the files only
                 $fileOnlyList = array();
 
                 // Add the files
                 foreach ( $fileList2 as $file ) {
-                    array_push( $fileOnlyList, basename( $file->_path ) );
+                    $filename = $class === '' ? basename( $file->_path ) : realpath( $file->_path );
+
+                    if ( $class === 'hash' ){
+                        $fileOnlyList[ basename( $file->_path ) ] = $filename;
+                    }else{
+                        $fileOnlyList[] = $filename;
+                    }
                 }
 
                 // Return the fileOnlyList array
@@ -1525,7 +1533,9 @@
          *					match this pattern will not be included in the result.
          *	@param $class	(optional) If you specify a not null value for this option, this function will return the
          *					items in the directory as the indicated class. If an empty string is given, it will return
-         *					the list of filenames instead of objects.
+         *					the list of filenames instead of objects. If a string 'fullpath' is given, it will return
+         *					the list of filenames using the fullpath. If a string 'hash' is given, it will return a list 
+         *					of filenames as a associative array with filename basename has key and filename fullpath has value.
          *	@param $classes	(optional) An array with the classes to include. Standard, it includes YDFSImage and
          *					YDFSFile classes. If you only need a single class, you can also specify it as a string.
          *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
@@ -1533,7 +1543,7 @@
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
-        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ), $sort_by_date=false, $sort_order='asc'  ) {
+        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ), $sort_by_date=false, $sort_order='asc') {
             $files = array();
             foreach ( $this->_getSubdirectories( $this->_path ) as $dir ) {
                 $dir = new YDFSDirectory( $dir );
