@@ -95,11 +95,11 @@
                     if ( $this->_value == strval( $key ) ) {
                         $attribsElement['checked'] = 'checked';
                     }
-                    $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /><label for="' . $attribsElement['id'] . '">' . $val . '</label>';
+                    $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /> <label for="' . $attribsElement['id'] . '">' . $val . '</label>';
 
                 }
             } else {
-                $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /><label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
+                $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /> <label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
             }
 
             // Return the HTML
