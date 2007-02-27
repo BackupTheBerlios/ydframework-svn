@@ -120,11 +120,17 @@
         /**
          *	This function sets the value for the element.
          *
-         *	@param	$val	(optional) The value for this object.
+         *	@param	$val	(optional) The value for this object as array or a key integer for selection.
          */
         function setValue( $val=array() ) {
-            foreach ( $val as $k=>$v ) {
-                $this->_items[$k]->setValue( $v );
+
+            // check if is numeric
+            if ( is_integer( $val ) ){
+                $this->_items[ intval( $val ) ]->setValue( 1 );
+            }else{
+                foreach ( $val as $k=>$v ) {
+                    $this->_items[$k]->setValue( $v );
+                }
             }
         }
 
