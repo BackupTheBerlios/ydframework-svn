@@ -1540,12 +1540,13 @@
          *					YDFSFile classes. If you only need a single class, you can also specify it as a string.
          *  @param $sort_by_date (optional) Sorts the items by date. Default is false.
          *  @param $sort_order    (optional) Whether the sort direction is ascending or descending. Default is "ASC".
+         *  @param $levels        (optional) Integer that defines how deep should the cycle go. Default: -1 (infinite).
          *
          *	@returns	Array of YDFile objects for the files that match the pattern.
          */
-        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ), $sort_by_date=false, $sort_order='asc') {
+        function getFilesRecursively( $pattern='', $class=null, $classes=array( 'YDFSFile', 'YDFSImage' ), $sort_by_date=false, $sort_order='asc', $levels = -1 ) {
             $files = array();
-            foreach ( $this->_getSubdirectories( $this->_path ) as $dir ) {
+            foreach ( $this->_getSubdirectories( $this->_path, $levels ) as $dir ) {
                 $dir = new YDFSDirectory( $dir );
                 $files = array_merge( $files, $dir->getContents( $pattern, $class, $classes, $sort_by_date, $sort_order ) );
             }
@@ -1556,19 +1557,21 @@
          *	Helper function to get the contents of a directory recursively.
          *
          *  @param  $path   The path to get the subdirectories from.
+         *  @param  $levels (optional) Integer that defines how deep should the cycle go. Default: -1 (infinite).
          *
          *  @returns    The list of subdirectories of the given path.
          *
          *  @internal
          */
-        function _getSubdirectories( $path ) {
+        function _getSubdirectories( $path, $levels = -1 ) {
             $dirlist = array( $path );
+            if ( $levels == 0 ) return $dirlist;
             $dirHandle = opendir( $path );
             while ( false !== ( $file = readdir( $dirHandle ) ) ) {
                 if ( $file != '.' && $file != '..' ) {
                     if ( is_dir( $path . '/' . $file ) ) {
                         array_push( $dirlist, $path . '/' . $file );
-                        $dirlist = array_merge( $dirlist, $this->_getSubdirectories( $path . '/' . $file ) );
+                        $dirlist = array_merge( $dirlist, $this->_getSubdirectories( $path . '/' . $file, $levels - 1 ) );
                     }
                 }
             }
