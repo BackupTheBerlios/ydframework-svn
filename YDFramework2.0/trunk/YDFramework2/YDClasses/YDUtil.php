@@ -204,12 +204,13 @@
          *
          *	@param $array	The array to convert.
          *	@param $key		The column to use as the key name.
+         *	@param $append	(Optional) Boolean that defines if values are append to array (TRUE) or if are assigned (FALSE).
          *
          *	@returns	A new array which is a nested using the given column name.
          *
          *	@static
          */
-        function convertToNested( $array, $key ) {
+        function convertToNested( $array, $key, $append = true ) {
 
             // Start with the a new array
             $new = array();
@@ -219,8 +220,14 @@
                 if ( ! array_key_exists( $key, $item ) ) {
                     trigger_error( 'YDArrayUtil::convertToNested: key "' . $key . '" not found', YD_ERROR );
                 }
-                if ( ! isset( $new[ $item[ $key ] ] ) ) { $new[ $item[ $key ] ] = array(); }
-                array_push( $new[ $item[ $key ] ], $item );
+
+                // append values or assign them
+                if ( $append == true ){
+                    if ( ! isset( $new[ $item[ $key ] ] ) ) { $new[ $item[ $key ] ] = array(); }
+                    array_push( $new[ $item[ $key ] ], $item );
+                }else{
+                    $new[ $item[ $key ] ] = $item;
+                }
             }
 
             // Return the new array
