@@ -108,7 +108,7 @@
 
 
 			// define a generic tree order
-			$this->setOrder( $this->__table_parent . ' ASC, ' . $this->__table_position . ' ASC' );
+			$this->setOrder( $this->__table_level . ' ASC,' . $this->__table_position . ' ASC' );
 		}
 
 
@@ -686,6 +686,37 @@
 
 
         /**
+         *  Move a node upper (decreasing the position on same parent).
+         *
+         *  @param  $id             The ID of the node to move
+         */
+		function moveNodeUp( $id ){
+
+			// get current node position
+			$node = $this->getNode( $id );
+
+			// check if node can be moved up
+			if ( $node[ $this->__position ] < 2 ) return false;
+			
+			return $this->moveNode( $id, null, $node[ $this->__position ] - 1 );
+		}
+
+
+        /**
+         *  Move a node upper (decreasing the position on same parent).
+         *
+         *  @param  $id             The ID of the node to move
+         */
+		function moveNodeDown( $id ){
+
+			// get current node position
+			$node = $this->getNode( $id );
+
+			return $this->moveNode( $id, null, $node[ $this->__position ] + 1 );
+		}
+
+
+        /**
          *  Move a node to a different parent node.
          *
          *  @param  $id             The ID of the node to move
@@ -753,6 +784,20 @@
 				$this->set( $this->__lineage, 'REPLACE(' . $this->__table_lineage . ',"' . $old_lineage . $id . '/","' . $new_lineage . $id . '/")' );
 				$this->where( $this->__table_id . ' > 1 ' );
 				$this->update( array(), $this->__lineage );
+
+				// update levels of node descendants
+				$new_level = $this->_getLevel( $new_lineage );
+				$old_level = $this->_getLevel( $old_lineage );
+
+				$diff_level = $new_level - $old_level;
+
+				$this->resetAll();
+
+				if ( $diff_level > 0 ) $this->set( $this->__level, $this->__level . '+' . abs( $diff_level ) );
+				else                   $this->set( $this->__level, $this->__level . '-' . abs( $diff_level ) );
+
+				$this->where( $this->__table_lineage . ' LIKE "%/' . intval( $id ) . '/%"' );
+				$this->update(array(), $this->__level );
 			}
 
 			return $res;
