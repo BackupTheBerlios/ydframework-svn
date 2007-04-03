@@ -70,7 +70,19 @@
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
 
+            // set if we want to use LABEL for each option label or just a just a simple string
+            $this->_enableLabels = true;
         }
+
+
+        /**
+         *	This function sets if we want default LABEL element for each option.
+         */
+        function enableLabels( $flag ){
+
+            $this->_enableLabels = $flag;
+        }
+
 
         /**
          *	This function will return the element as HTML.
@@ -95,11 +107,12 @@
                     if ( $this->_value == strval( $key ) ) {
                         $attribsElement['checked'] = 'checked';
                     }
-                    $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /> <label for="' . $attribsElement['id'] . '">' . $val . '</label>';
-
+                    $label = $this->_enableLabels ? '<label for="' . $attribsElement['id'] . '">' . $val . '</label>' : $val;
+                    $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribsElement ) . ' /> ' . $label . ' ';
                 }
             } else {
-                $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /> <label for="' . $attribs['id'] . '">' . $this->_value . '</label>';
+                $label = $this->_enableLabels ? '<label for="' . $attribs['id'] . '">' . $this->_value . '</label>' : $this->_value;
+                $out[] = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' /> ' . $label . ' ';
             }
 
             // Return the HTML
