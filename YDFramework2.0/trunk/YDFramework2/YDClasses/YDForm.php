@@ -1154,7 +1154,7 @@
             if ( sizeof( $array ) == 0 ) { return ''; }
             $out = '';
             foreach ( $array as $key=>$value ) {
-                if ( is_string( $value ) ){
+                if ( ! is_object( $value ) ){
                     $out .= ' ' . strval( $key ) . '="' . str_replace( '&amp;', '&', htmlspecialchars( strval( $value ) ) ) . '"';
                 }
             }
