@@ -74,7 +74,7 @@
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
-            $this->_version = '2.9';
+            $this->_version = '3.0b';
             $this->_copyright = '(c) Copyright 2002-2006 Francisco Azevedo';
             $this->_description = 'This class makes ajax easy for YDF developers';
 
@@ -91,52 +91,34 @@
 			// initilize template
 			$this->template = & $template;
 			
-			// custom javascript (we need more than the javascript provided by xajax)
-			$this->customjs          = array();
-			$this->customjsVariables = array();
-			$this->customjsTop       = array();
-			$this->customjsBottom    = array();
-
 			// response object
 			$this->response = new YDAjaxResponse( YDConfig::get( 'YD_AJAX_ENCODING' ) );
 
 			// by default we don't use effects (then js effects lib won't be loaded)
 			$this->effects = array();
-			
-			// waiting message code
-			$this->waitingMessageCode = '';
-			$this->waitingMessageCodeFunction = '';
-			
+
 			// autocompleter code
 			$this->autocompleterCode = '';
 			$this->autocompleterCss  = '';
 			$this->autocompleterCodeFunctions = array();
 
-			// we are not on response
-			$this->onResponse = false;
-			
 			// init wysiwyg editors
 			$this->wysiwyg_forms = array();
-			$this->wysiwyg_ids   = array();
-		}
-
-	
 
 
-		// internal method to add js to the template
-		function __assignTemplateCode(){
-			
-			// use default url
-			$html  = "var xajaxRequestUri     = \"" . YDRequest::getNormalizedUri() . "\";\n";
+			// compute default ajax header
+			$html  = "var xajaxRequestUri     = \"" . YDRequest::getNormalizedUri() . "\";";
+
+			$debug = YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false";
 
 			// check debug option
-			$html .= "var xajaxDebug          = " . ( YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false" ) . ";\n";
-			$html .= "var xajaxStatusMessages = " . ( YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false" ) . ";\n";
-			$html .= "var xajaxWaitCursor     = " . ( YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false" ) . ";\n";
+			$html .= "var xajaxDebug          = " . $debug . ";";
+			$html .= "var xajaxStatusMessages = " . $debug . ";";
+			$html .= "var xajaxWaitCursor     = " . $debug . ";";
 
 			// use post
-			$html .= "var xajaxDefinedGet     = 0;\n";
-			$html .= "var xajaxDefinedPost    = 1;\n";
+			$html .= "var xajaxDefinedGet  = 0;";
+			$html .= "var xajaxDefinedPost = 1;";
 
 			// get standard xajax code
 			$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js' ) . "\n";
@@ -144,53 +126,8 @@
 			// include generic effects lib .. yes, it must be ALWAYS included
 			$html .= file_get_contents( dirname( __FILE__ ) . '/js/prototype.lite.js_moo.fx.js_moo.fx.pack.js' ) . "\n";
 
-			// send autocompleter code
-			$html .= $this->autocompleterCode;
-
-			// send js function to hide waiting message
-			$html .= $this->waitingMessageCodeFunction;
-
-			// loop xajax functions created on-the-fly
-			foreach( $this->aFunctions as $sFunction => $bExists )
-				$html .= $this->_wrap( $sFunction, $this->aFunctionRequestTypes[$sFunction] );
-
-			// add custom js TOP code
-			if ( !empty( $this->customjsTop ) )
-				$html .= implode( "\n", $this->customjsTop ) . "\n";
-
-			// add YDAjax js variables
-			foreach( $this->customjsVariables as $variable => $declaration )
-				$html .= "var " . $variable . " = " . $declaration . ";\n";
-
-			// add YDAjax js functions
-			foreach( $this->customjs as $function => $declaration )
-				$html .= "function " . $function . "{" . $declaration . "}\n";
-
-			// add js custom BOTTOM code
-			if ( !empty( $this->customjsBottom ) )
-				$html .= implode( "\n", $this->customjsBottom ) . "\n";
-
-			// add all code to template html
-			$this->template->addJavascript( trim( $html ), true );
-
-			// compute ONLOAD code
-			$onload = array();
-
-				// export effects js
-				foreach( $this->effects as $eff_name => $eff_code )
-					$onload[] = $eff_code;
-
-				// send js waiting message creation code
-				if( $this->waitingMessageCode != '' )
-					$onload[] = $this->waitingMessageCode;
-
-				// send autocompleter functions code
-				if( !empty( $this->autocompleterCodeFunctions ) )
-					$onload[] = implode( "\n\t", $this->autocompleterCodeFunctions );
-
-			// add all code to template html
-			if ( ! empty( $onLoad ) )
-				$this->template->addJavascript( implode( '', $onload ), false, true );
+			// add default header to template
+			$this->template->addJavascript( $html, true, false );
 		}
 
 
@@ -198,18 +135,11 @@
          *	This function adds custom javascript to a response.
          *
          *	@param $js		Javascript code.
+         *	@param $at_end	(Optional) Boolean that defines if code should be added only at the response end. Default: false
          */
-		function addScript( $js ){
+		function addScript( $js, $at_end = false ){
 
-			return $this->response->addScript( $js );
-		}
-
-
-        /**
-         *	This function resets the internal flag that defines if we are processing events or results (responses)
-         */
-		function clearResponse() {
-			$this->onResponse = false;
+			return $this->response->addScript( $js, $at_end );
 		}
 
 
@@ -249,28 +179,31 @@
 			$options['style.top']        = '40%';
 			$options['style.left']       = '50%';
 			$options['style.marginLeft'] = '-' . round( intval( $options['style.width'] ) / 2) . 'px';
-			$options['style.zindex']     = 9999;
+			$options['style.zIndex']     = 9999;
 			$options['innerHTML']        = '<center>' . $html . '</center>';
 
 			// create js for html element creation
-			$this->waitingMessageCode  = "var " . $this->wtID . " = document.createElement('div');";
+			$waitingMessageCode  = "var " . $this->wtID . " = document.createElement('div');";
 
 			// append div box to document body
-			$this->waitingMessageCode .= "document.body.appendChild(" . $this->wtID . ");";
+			$waitingMessageCode .= "document.body.appendChild(" . $this->wtID . ");";
 			
 			// add id
-			$this->waitingMessageCode .= $this->wtID . ".id = '" . $this->wtID ."id';";
+			$waitingMessageCode .= $this->wtID . ".id = '" . $this->wtID ."id';";
 			
 			// create start effect
 			if ( is_null( $effectStart ) )
 				$effectStart = new YDAjaxEffect( '', 'hide', '', 0 );
 
 			// append start code
-			$this->waitingMessageCode .= $effectStart->getJSHead( $this->wtID ."id" ) . $effectStart->getJSBody( $this->wtID ."id" );
+			$waitingMessageCode .= $effectStart->getJSHead( $this->wtID ."id" ) . $effectStart->getJSBody( $this->wtID ."id" );
 			
 			// add custom options
 			foreach( $options as $name => $value )
-				$this->waitingMessageCode .= $this->wtID . "." . $name . " = '" . $value . "';";
+				$waitingMessageCode .= $this->wtID . "." . $name . " = '" . $value . "';";
+
+			// add waiting message code (that creates the message div) to template
+			$this->template->addJavascript( $waitingMessageCode, false, true );
 
 			// create show effect
 			if ( is_null( $effectShow ) )
@@ -281,33 +214,44 @@
 				$effectHide = new YDAjaxEffect( '', 'hide', '', 0 );
 
 			// create js functions to show/hide div
-			$this->waitingMessageCodeFunction  = "xajax.loadingFunction     = function(){" . $effectShow->getJSHead( $this->wtID . "id" ) . $effectShow->getJSBody( $this->wtID ."id" ) . "}\n";
-			$this->waitingMessageCodeFunction .= "xajax.doneLoadingFunction = function(){" . $effectHide->getJSHead( $this->wtID . "id" ) . $effectHide->getJSBody( $this->wtID ."id" ) . "}\n";
+			$waitingMessageCodeFunction  = "xajax.loadingFunction     = function(){" . $effectShow->getJSHead( $this->wtID . "id" ) . $effectShow->getJSBody( $this->wtID ."id" ) . "}\n";
+			$waitingMessageCodeFunction .= "xajax.doneLoadingFunction = function(){" . $effectHide->getJSHead( $this->wtID . "id" ) . $effectHide->getJSBody( $this->wtID ."id" ) . "}\n";
+
+			// add waiting message code (that invokes the load/done show/hide) to template 'onload' section
+			$this->template->addJavascript( $waitingMessageCodeFunction, false, false );
 		}
 
 
 		// internal method to get a form of an element
-		function __getForm( $name ){
+		function & __getForm( $name ){
 
-			if ( !is_null( $this->form_0 ) && $this->form_0->isElement( $name ) ) return $this->form_0;
-			if ( !is_null( $this->form_1 ) && $this->form_1->isElement( $name ) ) return $this->form_1;
-			if ( !is_null( $this->form_2 ) && $this->form_2->isElement( $name ) ) return $this->form_2;
-			if ( !is_null( $this->form_3 ) && $this->form_3->isElement( $name ) ) return $this->form_3;
+			if ( is_object( $this->form_0 ) && $this->form_0->isElement( $name ) ) return $this->form_0;
+			if ( is_object( $this->form_1 ) && $this->form_1->isElement( $name ) ) return $this->form_1;
+			if ( is_object( $this->form_2 ) && $this->form_2->isElement( $name ) ) return $this->form_2;
+			if ( is_object( $this->form_3 ) && $this->form_3->isElement( $name ) ) return $this->form_3;
 
-			return null;
+			$null = null;
+
+			return $null;
 		}
 
-		// internal method to check if a form exist
+
+        /**
+         *	This private method returns true if a form name exists
+         *
+         *	@param $formName		form name string
+         */		
 		function __isForm( $formName ){
 		
-			if ( !is_null( $this->form_0 ) && $this->form_0->getName() == $formName ) return true;
-			if ( !is_null( $this->form_1 ) && $this->form_1->getName() == $formName ) return true;
-			if ( !is_null( $this->form_2 ) && $this->form_2->getName() == $formName ) return true;
-			if ( !is_null( $this->form_3 ) && $this->form_3->getName() == $formName ) return true;
+			if ( is_object( $this->form_0 ) && $this->form_0->getName() == $formName ) return true;
+			if ( is_object( $this->form_1 ) && $this->form_1->getName() == $formName ) return true;
+			if ( is_object( $this->form_2 ) && $this->form_2->getName() == $formName ) return true;
+			if ( is_object( $this->form_3 ) && $this->form_3->getName() == $formName ) return true;
 			
 			return false;
 		}
-		
+
+
         /**
          *	This method adds a form
          *
@@ -325,10 +269,12 @@
 
 
         /**
-         *	@returns  Boolean that defines the YDAjax state
+         * This method checks if current context is response
+         *
+         *	@returns  Boolean true if on response. False otherwise
          */		
 		function isOnResponse() {
-			return $this->onResponse;
+			return $this->canProcessRequests();
 		}
 
 
@@ -385,10 +331,10 @@
          *	@param $arguments			(Optional) Arguments for this function call
          *	@param $event				(Optional) Html event name (auto-detection by default when using null).
          *	@param $options				(Optional) Custom options.
-         *	@param $effects				(Optional) Effect or array of effects to execute on event (before ajax call).
+         *	@param $effects				DEPRECATED (Optional) Effect or array of effects to execute on event (before ajax call).
          */		
 		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){ 
-		 
+
 			// if formElementName is "*" we want to define a default event (only before responses)
 			if ( $formElementName === "*" )
 				return $this->registerCatchAllFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
@@ -414,17 +360,25 @@
 			if (strlen( $previous ) > 0 && $previous[ strlen( $previous ) - 1 ] != ';' ) $previous .= ';';
 
 			if ( in_array( 'replace', $options ) ){
-				if ( !$this->onResponse ) return $formElement->setAttribute( $event, $functionName );
+				if ( !$this->isOnResponse() ) return $formElement->setAttribute( $event, $functionName );
 				else                      return $this->addScript( $formElement->setJS( $functionName, $event, $options ) );
 			}
 
 			if ( in_array( 'prepend', $options ) ){
-				if ( !$this->onResponse ) return $formElement->setAttribute( $event, $functionName . $previous );
+				if ( !$this->isOnResponse() ) return $formElement->setAttribute( $event, $functionName . $previous );
 				else	  				  return $this->addScript( $formElement->setJS( $functionName . $previous, $event, $options ) );
 			}
 			
-			if ( !$this->onResponse ) $formElement->setAttribute( $event, $previous . $functionName );
+			if ( !$this->isOnResponse() ) $formElement->setAttribute( $event, $previous . $functionName );
 			else                      $this->addScript( $formElement->setJS( $previous . $functionName, $event, $options ) );
+
+			// cycle methods for last one			
+			foreach( $this->aFunctions as $sFunction => $bExists ){}
+
+			// if last one exists, add code to template
+			if ( isset( $sFunction ) ){
+				$this->template->addJavascript( $this->_wrap( $sFunction, $this->aFunctionRequestTypes[$sFunction] ) );
+			}
 		}
 
 
@@ -439,13 +393,13 @@
          */	
 		function computeFunction( $formElementName, $serverFunction, $arguments = null, $options = null, $effects = null ){ 
 
-			// register function in xajax if not on reponse
-			if ( !$this->onResponse )
-				$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
+			// register function in xajax
+			$this->registerFunction( array( $serverFunction[1], $serverFunction[0], $serverFunction[1] ) );
 
-			if( !$this->onResponse ) $serverFunctionName = $serverFunction[1];
-			else                     $serverFunctionName = $serverFunction;
+			if( !$this->isOnResponse() ) $serverFunctionName = $serverFunction[1];
+			else           	             $serverFunctionName = $serverFunction;
 
+			// check options array
 			if ( !is_array( $options ) ) $options = array( $options );
 			
 			// get function name
@@ -475,12 +429,12 @@
 							$id = $element->getAttribute( 'id' );
 						
 							// if before response, add effect js to template. otherwise add it to response
-							if ( !$this->onResponse)	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
+							if ( !$this->isOnResponse())	$this->effects[ $effect->getVariable() ] = $effect->getJSHead( $id );
 							else						$this->response->addScript( $effect->getJSHead( $id ) );
 						
 						}
 						else{
-							if ( !$this->onResponse )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
+							if ( !$this->isOnResponse() )	$this->effects[ $effect->getVariable() ] = $effect->getJSHead();
 							else						$this->response->addScript( $effect->getJSHead() );
 							}
 					}
@@ -494,7 +448,8 @@
 			if ( ereg ( "^(.*)(\(.*\))$", $formElementName, $res ) ){
 
 				// if we are before reponse we must add function to template
-				if ( !$this->onResponse ) return $this->customjs[ $res[0] ] = $functionName;
+				if ( !$this->isOnResponse() ) //return $this->customjs[ $res[0] ] = $functionName;
+				return $this->template->addJavascript( "function " . $res[0] . "{" . $functionName . "}\n", true );
 				
 				// create js variable to handle ajax request
 				$js  = $this->prefix . $serverFunction .'=function(){return xajax.call("' . $serverFunction .'", arguments, 1);};';
@@ -507,7 +462,7 @@
 			}
 
 			
-			if( $this->onResponse ){
+			if( $this->isOnResponse() ){
 			
 				// create js variable to handle ajax request
 				$js  = $this->prefix . $serverFunction . '=function(){return xajax.call("' . $serverFunction . '", arguments, 1);};';
@@ -560,7 +515,7 @@
 			$js .= $effect->getJSBody( $id );
 
 			// if effect is added before a response we must included it on "onload" effects
-			if ( !$this->onResponse )  $this->effects[ $effect->getVariable() ] = $effect->getJSBody( $id );
+			if ( !$this->isOnResponse() )  $this->effects[ $effect->getVariable() ] = $effect->getJSBody( $id );
 			else                       $this->response->addScript( $js );
 		}
 
@@ -647,7 +602,8 @@
 			$jsfunction = $this->prefix . 'getForm' . $formName;
 
 			// add javascript function code to custom js (to be included in template head)
-			if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
+			if ( !$this->isOnResponse() ) //$this->customjs[$jsfunction . '()' ] = $js;
+									  $this->template->addJavascript( "function " . $jsfunction . '()' . "{" . $js . "}\n", true );
 			else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
 					
 			// add function name to arguments list
@@ -682,130 +638,14 @@
 			$jsfunction = $this->prefix . 'get' . $formElement->getName();
 
 			// add javascript function code to custom js (to be included in template head)
-			if ( !$this->onResponse ) $this->customjs[$jsfunction . '()' ] = $js;
+			if ( !$this->isOnResponse() ) //$this->customjs[$jsfunction . '()' ] = $js;
+									  $this->template->addJavascript( "function " . $jsfunction . '()' . "{" . $js . "}\n", true );
 			else                      $this->response->addScript( $jsfunction . '=function(){' . $js . '}' );
 					
 			// add function name to arguments list
 			return $jsfunction . '()';
 		}
 
-		
-        /**
-         *	This method adds confirmation to a element event
-         *
-         *	@param $formElementName		Form element name or js function.
-         *	@param $message				Message to display
-         *	@param $event				(Optional) Event name (auto-detection by default when using null).
-         *	@param $dependence			(Optional) Element name or array of names that this element depends of
-         */		
-		function addConfirmation( $formElementName, $message, $event = null, $dependence = null ){
-
-			if ( !is_null( $dependence ) ){
-				$jsvariable = $this->prefix . 'change' . $formElementName . 'var';
-				$this->_addDependence( $dependence, $jsvariable );
-			}
-
-			// check element
-			if ( ereg ( "^(.*)\(.*\)$", $formElementName, $function ) ){
-			
-				if ( !isset( $this->customjs[ $function[0] ] ) ) die( "Function " . $function[0] . " is not defined." );
-				
-				// if this is a dependent element
-				if ( !is_null( $dependence ) ) $this->customjs[ $function[0] ] = 'if (' . $jsvariable . ' == false || confirm("' . addslashes( $message ) . '")) { ' . $this->customjs[ $function[0] ] . ' }';
-				else                           $this->customjs[ $function[0] ] = 'if (confirm("' . addslashes( $message ) . '")) { ' . $this->customjs[ $function[0] ] . ' }';
-
-				return;				
-			}
-
-			// get form of this element
-			$form = $this->__getForm( $formElementName );
-
-			// if form is null, it's because formElementName doesn't exist
-			if ( is_null( $form ) ) die( '"' . $formElementName . '" is not a element of any defined form.' ); 
-
-			// get element
-			$elem = & $form->getElement( $formElementName );
-
-			// check default event
-			if ( is_null( $event ) ) $event = $elem->getJSEvent();
-
-			// check if atribute exist
-			$attribute = $elem->getAttribute( $event );
-			if ( is_null( $attribute ) ) die( "Element " . $formElementName . " doesn't have atribute " . $event );
-
-			// create confirmation function name
-			$function = $this->prefix . 'confirm' . $event . $formElementName . '()';
-
-			// if this is a dependent element
-			if ( !is_null( $dependence ) ) $this->customjs[ $function ] = 'if (' . $jsvariable . ' == false || confirm("' . addslashes( $message ) . '")) { ' . $attribute . ' }';
-			else                           $this->customjs[ $function ] = 'if (confirm("' . addslashes( $message ) . '")) { ' . $attribute . ' }';
-
-			// override element atribute
-			$elem->setAttribute( strtolower( $event ), $function );
-		}
-
-
-		// internal method. This adds dependence to form elements
-		function _addDependence( $dependence, $jsvariable ){
-		
-			// add variable to custom variables
-			$this->customjsVariables[ $jsvariable ] = 'false';
-		
-			if ( !is_array( $dependence ) ) $dependence = array( $dependence );
-		
-			// cycle form elements
-			foreach ( $dependence as $formElementName ){
-
-				if ( !$this->form->isElement( $formElementName ) ) die( "Form element " . $formElementName . " doesn't exist" );
-				
-				// get element
-				$elem = & $this->form->getElement( $formElementName );
-				
-				// get previous atribute onchange
-				$attribute = ( is_null( $elem->getAttribute( 'onchange' ) ) ) ? '' : $elem->getAttribute( 'onchange' );
-				
-				// compute new atribute 'onchange'
-				$elem->setAttribute( 'onchange', $jsvariable . ' = true;' . $attribute );
-			}
-		}
-
-
-        /**
-         *	This method creates an alias (a js function) to a event
-         *
-         *	@param $formElementName		Form element name or js function.
-         *	@param $functionName		Javascript function name (string).
-         *	@param $event				(Optional) Event name (auto-detection by default when using null).
-         */		
-		function addAlias( $formElementName, $functionName, $event = null ){
-
-			// check element
-			if ( ereg ( "^(.*)\(.*\)$", $formElementName, $function ) ){
-			
-				if ( !isset( $this->customjs[ $formElementName ] ) ) die( "Function " . $formElementName . " is not defined." );
-				
-				$this->customjs[ $functionName ] = $this->customjs[ $formElementName ];
-				
-				return;				
-			}
-
-			// get form of this element
-			$form = $this->__getForm( $formElementName );
-			
-			// get element object
-			$elem = & $form->getElement( $formElementName );
-			
-			// if we don't define a event we must check default one
-			if ( is_null( $event ) ) $event = $elem->getJSEvent();
-			
-			// get atribute from element
-			$attribute = $elem->getAttribute( $event );
-			
-			// check if atribute exist
-			if ( !$attribute ) $attribute = 'false';
-		
-			$this->customjs[$functionName] = $attribute;
-		}
 
 
         /**
@@ -815,12 +655,6 @@
 
 			// check autocompleters
 			$this->__computeAutocompletersCode();
-			
-			// add js code
-			$this->__assignTemplateCode();
-
-			// we will start a response
-			$this->onResponse = true;
 
 			// process all requests and exit
 			return $this->processRequests();
@@ -882,9 +716,6 @@
          *	@param $options				(Optional) Aditional options.
          */	
 		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
-		
-			// if is not a form element, assign result to a html id
-			$form = $this->__getForm( $formElementName );
 
 			// if result is a string we must parse it. Javascript strings cannot contain new lines
 			if ( is_string( $result ) ){
@@ -894,6 +725,9 @@
 				$result = str_replace( "\n", " ", $result );
 				$result = str_replace( "\r", " ", $result );
 			}
+
+			// if is not a form element, assign result to a html id
+			$form = & $this->__getForm( $formElementName );
 
 			// if $formElementName is really an form element
 			if ( !is_null( $form ) ){
@@ -921,27 +755,21 @@
         /**
          *	This method adds wysiwyg support to an form element
          *
-         *	@param $formElementName		Form element name or a simple html id
+         *	@param $formElementId		Form element name or a simple html id
+         *	@param $formname		    (Optional) Form name or null ( for autodiscovery )
          */	
-		function addEditorSupport( $formElementName ){
+		function addEditorSupport( $formElementId, $formname = null ){
 		
-			// get form from element name
-			$form = $this->__getForm( $formElementName );
+			// check if form name is defined. If yes, convert formElemenId in form name
+			if ( is_null( $formname ) ){
+				$form = $this->__getForm( $formElementId );
 
-			// if element is NOT a form element just add it
-			if ( is_null( $form ) ){
-				$this->wysiwyg_ids[] = $formElementName;
-				return;
+				$formname = $form->getName();
+				$elementID = $elem->getAttribute( 'id' );
 			}
 
-			// if is a form element, get element
-			$elem = & $form->getElement( $formElementName );
-
-			// hide form element. On some browsers we get a glitch.
-			$elem->setAttribute( 'style', 'display:none' );
-
-			// add editor as editor
-			$this->wysiwyg_forms[ $form->getName() ][] = $elem->getAttribute( 'id' );
+			// add editor
+			$this->wysiwyg_forms[ $formname ][] = $formElementId;
 		}
 
 
@@ -954,10 +782,6 @@
 			if ( ! empty( $this->wysiwyg_ids ) || ! empty( $this->wysiwyg_forms ) ){
 
 				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
-
-				// add suport for wysiwyg editors applyed to IDs
-				foreach( $this->wysiwyg_ids as $htmlID )
-					$this->response->addScript( YDAjaxEditor::JSinit( $htmlID ) );
 
 				// add support for wysiwyg editors applyed to form elements
 				// foreach form, cycle all wysiwyg elements to compute their initialization
@@ -1020,8 +844,6 @@
 			return $response;
 		}
 
-
-
 	}
 
 
@@ -1033,8 +855,36 @@
 	
 		function YDAjaxResponse( $encoding ){
 			$this->xajaxResponse( $encoding );
+			$this->_end_scripts = array();
 		}
+
 		
+        /**
+         *	This function adds custom javascript to a response.
+         *
+         *	@param $js		Javascript code.
+         *	@param $at_end	(Optional) Boolean that defines if code should be added only at the response end. Default: false
+         */
+		function addScript( $js, $at_end = false ){
+
+			if ( $at_end ){
+				$this->_end_scripts[] = $js;
+			}else{
+				parent::addScript( $js );
+			}
+		}
+
+
+        /**
+         *	This function private method returns all xml needed in ajax
+         */
+		function getXML(){
+		
+			foreach( $this->_end_scripts as $js )
+				parent::addScript( $js );
+			
+			return parent::getXML();
+		}
 	}
 
 

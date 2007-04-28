@@ -56,6 +56,13 @@
 
 
     /**
+     *  This config defines the editor language
+     *  Default: 'en'
+     */
+    YDConfig::set( 'YD_AJAXEDITOR_FCKEDITOR_DefaultLanguage', 'en', false );
+
+
+    /**
      *  Class definition for the YDAjaxEditor.
      */
     class YDAjaxEditor{
@@ -79,7 +86,14 @@
 			$js .= YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarStartExpanded' ) ? "oFCKeditor.Config['ToolbarStartExpanded'] = true;" : "oFCKeditor.Config['ToolbarStartExpanded'] = false;";
 
 			// set toolbar scheme
-			$js .= "oFCKeditor.ToolbarSet = '" . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarSet' ) . "';";
+			$js .= 'oFCKeditor.ToolbarSet = "' . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarSet' ) . '";';
+
+			// set size and language
+			$js .= "oFCKeditor.Height = 510;";
+			$js .= 'oFCKeditor.Width = "100%";';
+			$js .= 'oFCKeditor.Config["AutoDetectLanguage"] = false;';
+			$js .= 'oFCKeditor.Config["DefaultLanguage"] = "' . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_DefaultLanguage' ) . '";';
+
 
 			// on fckeditor we add a replace method (that will replace the textarea)
 			$js .= "oFCKeditor.ReplaceTextarea();";
