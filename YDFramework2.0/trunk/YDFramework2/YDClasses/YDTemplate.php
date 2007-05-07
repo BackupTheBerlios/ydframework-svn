@@ -209,6 +209,17 @@
                 $this->assign( $name, $fetched );
             }
 
+
+            /**
+             *	This function will assign multiple values from an array
+             */
+            function assignArray( $values ) {
+                foreach( $values as $k => $v ){
+                    $this->assign( $k, $v );
+                }
+            }
+
+
             /**
              *	This function will parse the template and will assign custom code to head.
              *
@@ -468,6 +479,17 @@
                 $fetched = $this->fetch( $file, $cache_id, $compile_id, false );
                 $this->assign( $name, $fetched );
             }
+
+
+            /**
+             *	This function will assign multiple values from an array
+             */
+            function assignArray( $values ) {
+                foreach( $values as $k => $v ){
+                    $this->assign( $k, $v );
+                }
+            }
+
 
             /**
              *	This function will add a YDForm object to the template. It will automatically convert the form to an array
