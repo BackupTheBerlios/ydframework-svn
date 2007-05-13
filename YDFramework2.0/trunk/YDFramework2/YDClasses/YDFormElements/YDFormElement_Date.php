@@ -474,7 +474,7 @@
             }
 
             // Check year value if belongs to options. If not, prepend or append that value to options
-            if( ! in_array( $this->year->_value, $this->year->_options ) ){
+            if( isset( $this->year ) && ! in_array( $this->year->_value, $this->year->_options ) ){
                 $years = array_keys( $this->year->_options );
 
                 if ( $this->year->_value < $years[0] ){
