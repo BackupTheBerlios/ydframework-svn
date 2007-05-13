@@ -127,7 +127,7 @@
             // check if is numeric
             if ( is_integer( $val ) ){
                 $this->_items[ intval( $val ) ]->setValue( 1 );
-            }else{
+            }elseif ( is_array( $val ) ){
                 foreach ( $val as $k=>$v ) {
                     $this->_items[$k]->setValue( $v );
                 }
