@@ -244,10 +244,10 @@
      *
      *  @ingroup YDFramework
      */
-    function YDIncludeCompatibility() {
-        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/upgrade.php' );
-        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/gettext.php' );
-        include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/array.php' );
+    function YDIncludeCompatibility( $core = true, $gettext = true, $array = true ) {
+        if ( $core )    include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/upgrade.php' );
+        if ( $gettext ) include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/gettext.php' );
+        if ( $array )   include_once( dirname( __FILE__ ) . '/3rdparty/upgrade/ext/array.php' );
     }
 
     /**
