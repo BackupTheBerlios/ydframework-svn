@@ -764,11 +764,23 @@
          */
         function timezone( $val, $opts='' ) {
 
-			YDInclude( 'YDUtil.php' );
+			YDInclude( 'YDList.php' );
 
-			$arr = YDArrayUtil::getGMT();
+            return in_array( $val, YDList::gmts( 'keys' ) );
+        }
 
-            return isset( $arr[ $val ] );
+
+        /**
+         *	This function returns true if the variable matches a valid country code
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function country( $val, $opts='' ) {
+
+			YDInclude( 'YDList.php' );
+
+            return in_array( $val, YDList::countries( 'keys' ) );
         }
 
 

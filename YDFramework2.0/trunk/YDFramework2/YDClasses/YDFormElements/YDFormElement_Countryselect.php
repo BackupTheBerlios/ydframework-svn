@@ -35,14 +35,14 @@
     include_once( YD_DIR_HOME_CLS . '/YDList.php');
 
     /**
-     *	This is the class that define a select timezone.
+     *	This is the class that define a select country.
      *
      *  @ingroup YDForm
      */
-    class YDFormElement_Timezone extends YDFormElement_Select {
+    class YDFormElement_Countryselect extends YDFormElement_Select {
 
         /**
-         *	This is the class constructor for the YDFormElement_Timezone class.
+         *	This is the class constructor for the YDFormElement_Coutryselect class.
          *
          *	@param $form		The name of the form to which this element is connected.
          *	@param $name		The name of the form element.
@@ -50,16 +50,13 @@
          *	@param $attributes	(optional) The attributes for the form element.
          *	@param $options		(optional) Format string: 'simple' or 'full'
          */
-        function YDFormElement_Timezone( $form, $name, $label='', $attributes=array(), $options='full' ) {
+        function YDFormElement_Countryselect( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
             // initialize parent
-            $this->YDFormElement_Select( $form, $name, $label, $attributes, YDList::gmts( $options ) );
+            $this->YDFormElement_Select( $form, $name, $label, $attributes, YDList::countries() );
 
             // set type
-            $this->_type = 'timezone';
-
-			// set default
-			$this->setDefault( 0 );
+            $this->_type = 'countryselect';
         }
 
     }

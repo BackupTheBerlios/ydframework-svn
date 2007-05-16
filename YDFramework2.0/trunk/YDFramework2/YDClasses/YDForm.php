@@ -144,6 +144,7 @@
             $this->registerElement( 'fieldset', 'YDFormElement_Fieldset', 'YDFormElement_Fieldset.php' );
             $this->registerElement( 'hr', 'YDFormElement_HR', 'YDFormElement_HR.php' );
             $this->registerElement( 'selectnumeric', 'YDFormElement_SelectNumeric', 'YDFormElement_SelectNumeric.php' );
+            $this->registerElement( 'countryselect', 'YDFormElement_Countryselect', 'YDFormElement_Countryselect.php' );
 
             // Add the rules
             $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
@@ -185,6 +186,7 @@
             $this->registerRule( 'maxhyperlinks', array( 'YDValidateRules', 'maxhyperlinks' ), 'YDValidateRules.php' );
             $this->registerRule( 'captcha', array( 'YDValidateRules', 'captcha' ), 'YDValidateRules.php' );
             $this->registerRule( 'timezone', array( 'YDValidateRules', 'timezone' ), 'YDValidateRules.php' );
+            $this->registerRule( 'country', array( 'YDValidateRules', 'country' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );

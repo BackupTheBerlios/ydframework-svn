@@ -45,6 +45,7 @@
          *  @param $format      Format to return:     NULL  returns complete array.
          *                                        'simple'  returns: array( -11 => '(GMT -11:00)', -10 => ...
          *                                          'full'  returns: array( -11 => '(GMT -11:00) Nome, Midway Island, Samoa', -10 => ...
+         *                                          'keys'  returns keys only
          *
          *  @returns	Array. If format is 
          *  @static
@@ -83,6 +84,9 @@
             );
             if ( is_null( $format ) ) {
                 return $g;
+            }
+            if ( $format == 'keys' ) {
+                return array_keys( $g );
             }
             foreach( $g as $t => $arr ){
                 if ( $format == 'simple' ) $g[ $t ] = $arr[ 0 ];
