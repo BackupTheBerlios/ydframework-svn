@@ -205,17 +205,18 @@
          *  @param $includeSelf     (optional) Whether or not to include the passed node in results. 
          *  @param $maxLevel        (optional) Max level to retrieve. Eg: 10 returns all descendants with level smaller than 10; NULL retrieve all descendants.
          *  @param $prefix          (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *  @param $minLevel        (optional) Min level to retrieve. Eg: 2 returns all descendants with level bigger than 2; NULL retrieve all descendants.
          *
          *  @returns The descendants of the passed now
          */
-        function getDescendants( $id, $includeSelf = false, $maxLevel = null, $prefix = false ) {
+        function getDescendants( $id, $includeSelf = false, $maxLevel = null, $prefix = false, $minLevel = null ) {
 
 			// check if we want an invalid id (like 0 or 1)
 			if ( $id < 2 ) return $this->getTreeElements( $prefix );
 
 			$this->resetAll();
 
-			return $this->_getDescendants( $id, $includeSelf, $maxLevel, $prefix );
+			return $this->_getDescendants( $id, $includeSelf, $maxLevel, $prefix, $minLevel );
 		}
 
 
@@ -226,10 +227,11 @@
          *  @param $includeSelf     (optional) Whether or not to include the passed node in results. 
          *  @param $maxLevel        (optional) Max level to retrieve. Eg: 10 returns all descendants with level smaller than 10; NULL retrieve all descendants.
          *  @param $prefix          (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *  @param $minLevel        (optional) Min level to retrieve. Eg: 2 returns all descendants with level bigger than 2; NULL retrieve all descendants.
          *
          *  @returns The descendants of id
          */
-        function _getDescendants( $id, $includeSelf = false, $maxLevel = null, $prefix = false ) {
+        function _getDescendants( $id, $includeSelf = false, $maxLevel = null, $prefix = false, $minLevel = null ) {
 
             // get just children
 			if ( $includeSelf == false ) $this->where(       $this->__table_lineage . ' LIKE "%/' . intval( $id ) . '/%"' );
@@ -237,6 +239,9 @@
 
 			// check max level to retrieve
 			if ( is_numeric( $maxLevel ) ) $this->where( $this->__table_level . '<' . intval( $maxLevel ) );
+
+			// check min level to retrieve
+			if ( is_numeric( $minLevel ) ) $this->where( $this->__table_level . '>' . intval( $minLevel ) );
 
 			// find nodes
 			$this->findAll();
@@ -325,7 +330,7 @@
         /**
          *  Helper to fetch the children of a node, or if no node is specified, fetch the top level items.
          *
-         *  @param $id             The ID of the node to fetch child data for.
+         *  @param $id             The ID of the node to fetch child data for. When includeSelf is false ID can be an array.
          *  @param $includeSelf    (optional) Include self node in results. Default: false.
          *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
@@ -334,8 +339,14 @@
         function _getChildren( $id, $includeSelf = false, $prefix = false  ){
 
             // get just children
-			if ( $includeSelf == false ) $this->where(       $this->__table_parent . ' = ' . intval( $id ) );
-			else                         $this->where( '(' . $this->__table_parent . ' = ' . intval( $id ) . ' OR ' . $this->__table_id . ' = ' . intval( $id ) . ')' );
+			if ( $includeSelf == false ){
+				
+				if ( ! is_array( $id ) ) $id = array( $id );
+				
+				$this->where( $this->__table_parent . " IN ('" . implode( "','", $id ) . "')" );
+			}else{
+			    $this->where( '(' . $this->__table_parent . ' = ' . intval( $id ) . ' OR ' . $this->__table_id . ' = ' . intval( $id ) . ')' );
+			}
 
 			$this->findAll();
 
@@ -351,14 +362,15 @@
          *  @param $id             The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
          *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *  @param $minLevel       (optional) Level where path should start. By default, starts from level 1 ( root ).
          *
          *  @returns An array of each node to passed node
          */
-        function getPath( $id, $includeSelf = false, $prefix = false ) {
+        function getPath( $id, $includeSelf = false, $prefix = false, $minLevel = 1 ) {
 
 			$this->resetAll();
 
-			return $this->_getPath( $id, $includeSelf, $prefix );
+			return $this->_getPath( $id, $includeSelf, $prefix, $minLevel );
         }
 
 
@@ -368,13 +380,14 @@
          *  @param $id             The ID of the node to fetch child data for.
          *  @param $includeSelf    (optional) Whether or not to include the passed node in the the results.
          *  @param $prefix         (optional) Adds the relation's vars as prefixes to the keys. Default: false.
+         *  @param $minLevel       (optional) Level where path should start. By default, starts from level 1 ( root ).
          *
          *  @returns An array of each node to passed node
          */
-        function _getPath( $id, $includeSelf = false, $prefix = false ) {
+        function _getPath( $id, $includeSelf = false, $prefix = false, $minLevel = 1 ) {
 
             // Get the node
-            $node = $this->getNode( intval($id) ) ;
+            $node = $this->getNode( intval( $id ) ) ;
 
 			// reset values of previous getNode()
 			$this->resetAll();
@@ -387,6 +400,13 @@
 
 			// if we want current node too, lets add it to nodes array
             if ( $includeSelf == true ) $nodes[] = intval( $id );
+
+            // check start level
+            if ( $minLevel > 1 ){
+                for( $i = 1; $i < $minLevel && count( $nodes ) > 0; $i++ ){
+                    array_shift( $nodes );
+                }
+            }
 
 			// apply where clause
 			$this->where( $this->__table_id . ' IN (' . $this->escapeSqlArray( $nodes ) . ')' );
