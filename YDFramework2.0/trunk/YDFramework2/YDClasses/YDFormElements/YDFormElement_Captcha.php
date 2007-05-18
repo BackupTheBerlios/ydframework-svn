@@ -103,9 +103,11 @@
          */
         function toHtml() {
 
+            $size = YDConfig::get( 'YD_CAPTCHA_NUMCHARS', 5 );
+
             // Create the list of attributes
             $attribs = array(
-                'type' => 'text', 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value, 'size' => 7
+                'type' => 'text', 'name' => $this->_form . '_' . $this->_name, 'value' => $this->_value, 'size' => $size, 'maxlength' => $size 
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
