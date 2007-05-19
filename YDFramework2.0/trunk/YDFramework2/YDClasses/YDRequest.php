@@ -56,6 +56,7 @@
             // Set up the request class
             $this->__isInitialized = true;
             $this->__requiresAuthentication = false;
+            $this->__requiresAuthenticationExceptions = array();
 
             // setup the callbacks object
             $this->_callbacks = new YDBase();
@@ -395,19 +396,23 @@
          *	This function indicates that this request needs authentication. If you change this to true, it will cause
          *	the Yellow Duck Framework to check the isAuthenticated function to see if you are authenticated or not.
          *
-         *	@param $bool	Boolean indicating if this request requires authentication or not.
+         *	@param $bool		Boolean indicating if this request requires authentication or not.
+         *	@param $exceptions	(Optional) Array of actions to be ignored even if authentication check is true.
          */
-        function setRequiresAuthentication( $bool ) {
+        function setRequiresAuthentication( $bool, $exceptions = array() ) {
             $this->__requiresAuthentication = ( $bool == true ) ? true : false;
+            $this->__requiresAuthenticationExceptions = array_map( 'strtolower', $exceptions );
         }
 
         /**
          *	This function will return true or false to indicate whether this class needs authentication or not.
          *
+         *  @param  $action  (Optional) Check authentication for a specific action name.
+         *
          *	@returns	This function returns true or false to indicate if this requires authentication or not.
          */
-        function getRequiresAuthentication() {
-            return ( $this->__requiresAuthentication == false ) ? false : true;
+        function getRequiresAuthentication( $action = '' ) {
+            return ( $this->__requiresAuthentication == true && ! in_array( $action, $this->__requiresAuthenticationExceptions ) );
         }
 
         /**

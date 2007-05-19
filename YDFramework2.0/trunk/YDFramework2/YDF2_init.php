@@ -669,8 +669,11 @@
                 );
             }
 
+            // Get the action name
+            $action = 'action' . $this->clsInst->getActionName();
+
             // Only if authentication is required
-            if ( $this->clsInst->getRequiresAuthentication() ) {
+            if ( $this->clsInst->getRequiresAuthentication( $action ) ) {
                 $result = $this->clsInst->isAuthenticated();
                 if ( $result ) {
                     $this->clsInst->authenticationSucceeded();
@@ -679,9 +682,6 @@
                     $this->finish();
                 }
             }
-
-            // Get the action name
-            $action = 'action' . $this->clsInst->getActionName();
 
             // Check if the action exists
             if ( ! $this->clsInst->hasMethod( $action ) ) {
