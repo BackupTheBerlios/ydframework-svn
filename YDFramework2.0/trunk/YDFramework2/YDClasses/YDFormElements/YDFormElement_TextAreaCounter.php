@@ -74,8 +74,7 @@
             $attributes['onkeyup'] = $attributes['onkeydown'];
             
             // Span counter
-            $span = new YDFormElement_Span( $form, $name . '_counter', '', $options['attributes'], $options['options'] );
-            $span->setValue( $options['maxlength'] );
+            $span = new YDFormElement_Span( $form, $name . '_counter', $options['maxlength'], $options['attributes'], $options['options'] );
             
             // Add counter span to the label
             $label .= $options['before'] . $span->toHtml() . $options['after'];
