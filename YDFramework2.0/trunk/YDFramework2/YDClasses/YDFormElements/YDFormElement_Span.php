@@ -45,7 +45,7 @@
          *
          *        @param $form                The name of the form to which this element is connected.
          *        @param $name                The name of the form element.
-         *        @param $label                (optional) The label for the form element.
+         *        @param $label               HTML content.
          *        @param $attributes        (optional) The attributes for the form element.
          *        @param $options                (optional) The options for the elment.
          */
@@ -58,10 +58,13 @@
             $this->_type = 'span';
 
             // Set the value correctly
-            $this->setValue( $label );
+            $this->_customValue = $label;
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
+
+            // Span don't have label
+            $this->_placeLabel = 'none';
 
             // Indicate we are a button type
             $this->_isButton = false;
@@ -92,7 +95,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-            return '<span' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</span>';
+            return '<span' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_customValue . '</span>';
 
         }
 
