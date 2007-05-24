@@ -154,7 +154,7 @@
          *	@param $attribute	(optional) Element attribute
          *	@param $options		(optional) The options for the elment.
          */
-        function setJS( $result, $attribute = null, $options = null ){ 
+        function setJS( $result = '', $attribute = null, $options = null ){ 
 
              // if atribute is not defined we must create the default one
              if ( is_null( $attribute ) ) $attribute = 'value';
@@ -163,7 +163,17 @@
              $result = htmlspecialchars( $result );
 
              // assign result
-             return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+             $js = '';
+
+             // add text result, if exists
+             if ( is_string( $result ) && $result != '' ){
+                 $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+             }
+
+             // set a new captcha image
+             $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) . '_captcha").src = "' . $this->_url . '";';
+
+             return $js;
         }
 
     }
