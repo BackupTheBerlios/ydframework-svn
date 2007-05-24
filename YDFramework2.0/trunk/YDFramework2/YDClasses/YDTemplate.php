@@ -157,6 +157,21 @@
                 // Add custom javascript
                 $this->register_outputfilter( array( &$this, "__assignHeadCode") );
 
+                // check for multiple directories to choose the one that has the file
+                if ( is_array( $this->template_dir ) ){
+
+                    if ( strpos( $file, '.' ) === false ){
+                        $file = $file . '.tpl';
+                    }
+
+                    foreach( $this->template_dir as $dir ){
+                        if ( is_file ( $dir . '/' . $file ) ){
+                            $this->template_dir = realpath( $dir );
+                            break;
+                        }
+                    }
+                }
+
                 // Get the template name
                 $tplName = $this->_getTemplateName( $file );
 
