@@ -713,34 +713,31 @@
             // Convert to lowercase and trim
             $val = strtolower( trim( $val ) );
 
+            // Check lenght
+            if ( strlen( $val ) > 255 ) return false;
+
             // Add http:// if needed
-            if ( substr( $val, 0, 7 ) != 'http://' ) {
+            if ( substr( $val, 0, 7 ) != 'http://' && substr( $val, 0, 8 ) != 'https://' ) {
                 $val = 'http://' . $val;
             }
 
-            // Check if it starts with http://
-            if ( ! YDStringUtil::startsWith( $val, 'http://' ) ) {
-                return false;
-            }
+            // Compute expression
+            $expression = '/^(https?:\/\/)' . 
+                          '?(([0-9a-z_!~*\'().&=+$%-]+:)?[0-9a-z_!~*\'().&=+$%-]+@)?' . // user@
+                          '(([0-9]{1,3}\.){3}[0-9]{1,3}' . // IP
+                          '|' . // or domain
+                          '([0-9a-z_!~*\'()-]+\.)*' . // tertiary domain(s), eg www.
+                          '([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.' . // second level domain
+                          '[a-z]{2,6}' /*)'*/ . // first level domain, eg com
+                          '|' . // or localhost
+                          'localhost)' .
+                          '(:[0-9]{1,5})?' . // port
+                          '((\/?)|' . // a slash isn't required if there is no file name
+                          '(\/[0-9a-z_!~*\'().;?:@&=+$,%#-]+)+\/?)$/'; 
 
-            // Check the hostname
-            $host = substr( $val, 7 );
-            if ( strpos( $host, '/' ) !== false ) {
-                $host = trim( substr( $host, 0, strpos( $host, '/' ) ) );
-            }
-            if ( strpos( $host, ':' ) !== false ) {
-                $host = trim( substr( $host, 0, strpos( $host, ':' ) ) );
-            }
-
-            // Localhost is allowed
-            if ( $host == 'localhost' ) {
-                return true;
-            }
-
-            // Check that we have at least a dot
-            return ( strpos( $host, '.' ) === false ) ? false : true;
-
+             return YDValidateRules::regex( $val, $expression );
         }
+
 
         /**
          *	This function returns true if the variable matches captcha image
