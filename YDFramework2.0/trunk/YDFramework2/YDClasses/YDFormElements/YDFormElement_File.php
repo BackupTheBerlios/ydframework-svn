@@ -32,7 +32,6 @@
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
-    include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
 
     /**
      *	This is the class that define a file upload form element.
@@ -118,6 +117,8 @@
 
             //@chmod( realpath( $dir ), 0700 );
             //@chmod( $path, 0700 );
+
+            include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
 
             // Provide an interface to some more useful information on the file
             $this->fileo = new YDFSFile( $path );
