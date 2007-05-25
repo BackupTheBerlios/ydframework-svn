@@ -502,6 +502,26 @@
 
 
         /**
+         *  This function returns all elements of a given type.
+         *
+         *  @param $type    Form element type.
+         *
+         *  @returns    Array of form elements
+         */
+        function & getElementsByType( $type ){
+
+            $elements = array();
+            foreach( $this->_elements as $name => $el ){
+                if ( $el->getType() == $type ){
+                    array_push( $elements, & $this->_elements[ $name ] );
+                }
+            }
+
+            return $elements;
+        }
+
+
+        /**
          *  This function returns all form elements
          *
          *  @returns    An array with form elements
