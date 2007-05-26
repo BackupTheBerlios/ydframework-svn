@@ -223,9 +223,9 @@
          *  you use the default toHtml function.
          *
          *  @param $start   The HTML that should be added before the label.
-         *  @param $end     The HTML that should be added after the label.
+         *  @param $end     (Optional) The HTML that should be added after the label.
          */
-        function setHtmlRequired( $start, $end ) {
+        function setHtmlRequired( $start, $end = '' ) {
             $this->_htmlRequiredStart = $start;
             $this->_htmlRequiredEnd = $end;
         }
