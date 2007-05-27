@@ -423,6 +423,15 @@
             unset( $this->_url_parsed['query'][$name] );
         }
 
+
+        /**
+         *	This function will delete the indicated query variable if it exists.
+         */
+        function deleteQueryVars() {
+            $this->_url_parsed['query'] = array();
+        }
+
+
         /**
          *	Function to get the contents of the URL. It will get the contents using Gzip compression if possible in
          *	order to save bandwidth. It uses the HTTP Client class from Simon Willison to do the dirty work.
