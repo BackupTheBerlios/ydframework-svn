@@ -90,6 +90,10 @@
 
         /**
          *	This function adds a button to renew the image. Useful when image is not clear.
+         *
+         *  @param $caption  The string to display in the button.
+         *
+         *  @returns    The button object.
          */
         function & addRefreshButton( $caption = null ) {
 
@@ -107,7 +111,7 @@
         /**
          *	This function makes the image clicable to get a new one.
          */
-        function & addRefreshImage() {
+        function addRefreshImage() {
             $this->_refreshimage = true;
         }
 
