@@ -75,6 +75,9 @@
 
             if ( isset( $options[ 'refreshimage' ] ) )
                 $this->addRefreshImage();
+
+            // compute image
+            $this->img = new YDFormElement_Img( $form, $name . 'captcha', $this->_url, array( 'width' => 200, 'height' => 40 ) );
         }
 
 
@@ -131,15 +134,13 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
-            // compute image
-            $img = new YDFormElement_Img( $this->_form, $attribs[ 'name' ] . 'captcha', $this->_url, array( 'width' => 200, 'height' => 40 ) );
 
             // add image auto-refresh
             if ( $this->_refreshimage == true ){
-                $img->setAttribute( 'onclick', "document.getElementById('" . $img->getAttribute( 'id' ) . "').src = document.getElementById('" . $img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
-                $img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
+                $this->img->setAttribute( 'onclick', "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $this->img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
             }else{
-                $img->setAttribute( 'style',   "vertical-align: middle;" );
+                $this->img->setAttribute( 'style',   "vertical-align: middle;" );
             }
 
             // compute text box html
@@ -149,14 +150,14 @@
             if ( is_null( $this->_button ) ){
                 $button_HTML = '';
             }else{
-                $this->_button->setAttribute( 'onclick', "document.getElementById('" . $img->getAttribute( 'id' ) . "').src = document.getElementById('" . $img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $this->_button->setAttribute( 'onclick', "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
                 $button_HTML = $this->_button->toHTML();
             }
 
             if ( $this->_textPosition_left ){
-                return $txt_HTML . ' ' . $img->toHTML() . ' ' . $button_HTML;
+                return $txt_HTML . ' ' . $this->img->toHTML() . ' ' . $button_HTML;
             }else{
-                return $img->toHTML() . ' ' . $txt_HTML . ' ' . $button_HTML;
+                return $this->img->toHTML() . ' ' . $txt_HTML . ' ' . $button_HTML;
             }
         }
 
@@ -206,7 +207,7 @@
              }
 
              // set a new captcha image
-             $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) . '_captcha").src = "' . $this->_url . '";';
+             $js .= 'document.getElementById("' . $this->img->getAttribute( 'id' ) . '").src = "' . $this->_url . '";';
 
              return $js;
         }
