@@ -33,6 +33,7 @@
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
     include_once( YD_DIR_HOME . '/3rdparty/captcha/php-captcha.inc.php' );
+    include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Img.php');
 
     /**
      *	This is the class that define a captcha form element.
@@ -61,11 +62,19 @@
 			// create default image url
 			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha&id=' . md5( microtime() );
 
-			// text box position
-			$this->_textPosition_left = false;
-			
-			// refresh button. not added by default
-			$this->_button = null;
+            // text box position
+            $this->_textPosition_left = false;
+
+            // refresh button or refresh image. not added by default
+            $this->_button = null;
+            $this->_refreshimage = false;
+
+            // add refresh button
+            if ( isset( $options[ 'refreshbutton' ] ) )
+                $this->addRefreshButton( $options[ 'refreshbutton' ] );
+
+            if ( isset( $options[ 'refreshimage' ] ) )
+                $this->addRefreshImage();
         }
 
 
@@ -84,16 +93,23 @@
          */
         function & addRefreshButton( $caption = null ) {
 
-			if ( ! is_string( $caption ) ) $caption = 'Get another image';
+            if ( empty( $caption ) ) $caption = 'Get another image';
 
 			include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Button.php');
 
 			$this->_button = new YDFormElement_Button( $this->_form, $this->_name . '_refreshbutton', $caption );
-			$this->_button->setAttribute( 'onclick', "document.getElementById('" . $this->getAttribute( 'id' ) . "_captcha').src = document.getElementById('" . $this->getAttribute( 'id' ) . "_captcha').src.split('&id=')[0] + '&id=' + Math.random();" );
 			$this->_button->setAttribute( 'style',   "vertical-align: middle" );
 
 			return $this->_button;
 		}
+
+
+        /**
+         *	This function makes the image clicable to get a new one.
+         */
+        function & addRefreshImage() {
+            $this->_refreshimage = true;
+        }
 
 
         /**
@@ -111,18 +127,33 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
-            // Get the HTML
-			$img = '<img id="' . $this->getAttribute( 'id' ) . '_captcha" width="200" height="40" src="' . $this->_url . '" style="vertical-align: middle"/>';
-			$txt = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+            // compute image
+            $img = new YDFormElement_Img( $this->_form, $attribs[ 'name' ] . 'captcha', $this->_url, array( 'width' => 200, 'height' => 40 ) );
 
-			if ( is_null( $this->_button ) ) $button = '';
-			else                             $button = $this->_button->toHTML();
+            // add image auto-refresh
+            if ( $this->_refreshimage == true ){
+                $img->setAttribute( 'onclick', "document.getElementById('" . $img->getAttribute( 'id' ) . "').src = document.getElementById('" . $img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
+            }else{
+                $img->setAttribute( 'style',   "vertical-align: middle;" );
+            }
 
-			if ( $this->_textPosition_left ){
-				return $txt . ' ' . $img . ' ' . $button;
-			}else{
-				return $img . ' ' . $txt . ' ' . $button;
-			}
+            // compute text box html
+            $txt_HTML = '<input' . YDForm::_convertToHtmlAttrib( $attribs ) . ' />';
+
+            // compute refresh button html
+            if ( is_null( $this->_button ) ){
+                $button_HTML = '';
+            }else{
+                $this->_button->setAttribute( 'onclick', "document.getElementById('" . $img->getAttribute( 'id' ) . "').src = document.getElementById('" . $img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $button_HTML = $this->_button->toHTML();
+            }
+
+            if ( $this->_textPosition_left ){
+                return $txt_HTML . ' ' . $img->toHTML() . ' ' . $button_HTML;
+            }else{
+                return $img->toHTML() . ' ' . $txt_HTML . ' ' . $button_HTML;
+            }
         }
 
 
