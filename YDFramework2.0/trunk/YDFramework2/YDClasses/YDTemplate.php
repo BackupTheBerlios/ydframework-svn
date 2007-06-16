@@ -170,6 +170,15 @@
                             break;
                         }
                     }
+
+                    // check if a valid directory was found
+                    if ( is_array( $this->template_dir ) ){
+                        trigger_error(
+                            'Was not possible to find "' . $file . '" in ' . count( $this->template_dir ) . ' template directories.',
+                            YD_ERROR
+                        );
+                    }
+
                 }
 
                 // Get the template name
