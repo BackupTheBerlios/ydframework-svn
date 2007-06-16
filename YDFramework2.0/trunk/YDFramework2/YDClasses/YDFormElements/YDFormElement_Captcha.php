@@ -68,13 +68,17 @@
             // refresh button or refresh image. not added by default
             $this->_button = null;
             $this->_refreshimage = false;
+            $this->_refreshcaption = 'Get another image';
 
             // add refresh button
-            if ( isset( $options[ 'refreshbutton' ] ) )
-                $this->addRefreshButton( $options[ 'refreshbutton' ] );
+            if ( isset( $options[ 'refreshbutton' ] ) || in_array( 'refreshbutton', $options ) )
+                $this->addRefreshButton();
 
-            if ( isset( $options[ 'refreshimage' ] ) )
+            if ( isset( $options[ 'refreshimage' ] ) || in_array( 'refreshimage', $options ) )
                 $this->addRefreshImage();
+
+            if ( isset( $options[ 'refreshcaption' ] ) )
+                $this->_refreshcaption = $options[ 'refreshcaption' ];
 
             // compute image
             $this->img = new YDFormElement_Img( $form, $name . 'captcha', $this->_url, array( 'width' => 200, 'height' => 40 ) );
@@ -92,19 +96,25 @@
 
 
         /**
-         *	This function adds a button to renew the image. Useful when image is not clear.
+         *	This function sets the button caption and the image caption
          *
          *  @param $caption  The string to display in the button.
+         */
+        function setRefreshCaption( $caption ) {
+            $this->_refreshcaption = $caption;
+        }
+
+
+        /**
+         *	This function adds a button to renew the image. Useful when image is not clear.
          *
          *  @returns    The button object.
          */
-        function & addRefreshButton( $caption = null ) {
-
-            if ( empty( $caption ) ) $caption = 'Get another image';
+        function & addRefreshButton() {
 
 			include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Button.php');
 
-			$this->_button = new YDFormElement_Button( $this->_form, $this->_name . '_refreshbutton', $caption );
+			$this->_button = new YDFormElement_Button( $this->_form, $this->_name . '_refreshbutton', $this->_refreshcaption );
 			$this->_button->setAttribute( 'style',   "vertical-align: middle" );
 
 			return $this->_button;
@@ -139,8 +149,10 @@
             if ( $this->_refreshimage == true ){
                 $this->img->setAttribute( 'onclick', "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
                 $this->img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
+                $this->img->setAttribute( 'title',   $this->_refreshcaption );
             }else{
                 $this->img->setAttribute( 'style',   "vertical-align: middle;" );
+                $this->img->setAttribute( 'title',   $this->_label );
             }
 
             // compute text box html
