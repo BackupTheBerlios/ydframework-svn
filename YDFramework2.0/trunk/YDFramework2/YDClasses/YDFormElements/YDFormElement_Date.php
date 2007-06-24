@@ -132,12 +132,18 @@
         /**
          *      This function returns the value of the element.
          *
-         *      @returns        Value of this object.
+         *      @param  $field     (Optional) Custom field to retrieve.
+         *      @returns        	Value of this object.
          */
-        function getValue() {
+        function getValue( $field = null ) {
 
             // add timestamp to values array
             $this->_value['timestamp'] = $this->getTimeStamp();
+
+            if ( is_string( $field ) ){
+                return $this->_value[ $field ];
+            }
+
             return $this->_value;
         }
         
