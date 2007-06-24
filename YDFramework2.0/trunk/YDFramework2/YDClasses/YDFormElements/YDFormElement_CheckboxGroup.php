@@ -98,7 +98,14 @@
             $this->_addSelectAll_chk_attributes = array();
             $this->_addSelectAll_label_attributes = array();
             
-            $this->_columns = 1;
+
+            // check columns definition
+            if ( isset ( $attributes[ 'columns' ] ) ){
+                $this->_columns = $attributes[ 'columns' ];
+                unset( $attributes[ 'columns' ] );
+            }else{
+                $this->_columns = 1;
+            }
         }
 
 
