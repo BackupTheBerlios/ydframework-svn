@@ -781,6 +781,20 @@
         }
 
 
+        /**
+         *	This function returns true if the variable matches a valid countrye state.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	Country code to search.
+         */
+        function state( $val, $opts ) {
+
+            YDInclude( 'YDList.php' );
+
+            return in_array( $val, YDList::states( $opts, 'keys' ) );
+        }
+
+
     }
 
 ?>

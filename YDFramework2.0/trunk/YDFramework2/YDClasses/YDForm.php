@@ -145,6 +145,7 @@
             $this->registerElement( 'hr', 'YDFormElement_HR', 'YDFormElement_HR.php' );
             $this->registerElement( 'selectnumeric', 'YDFormElement_SelectNumeric', 'YDFormElement_SelectNumeric.php' );
             $this->registerElement( 'countryselect', 'YDFormElement_Countryselect', 'YDFormElement_Countryselect.php' );
+            $this->registerElement( 'stateselect', 'YDFormElement_Stateselect', 'YDFormElement_Stateselect.php' );
 
             // Add the rules
             $this->registerRule( 'value', array( 'YDValidateRules', 'value' ), 'YDValidateRules.php' );
@@ -187,6 +188,7 @@
             $this->registerRule( 'captcha', array( 'YDValidateRules', 'captcha' ), 'YDValidateRules.php' );
             $this->registerRule( 'timezone', array( 'YDValidateRules', 'timezone' ), 'YDValidateRules.php' );
             $this->registerRule( 'country', array( 'YDValidateRules', 'country' ), 'YDValidateRules.php' );
+            $this->registerRule( 'state', array( 'YDValidateRules', 'state' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );
@@ -1518,6 +1520,24 @@
         function getType() {
             return $this->_type;
         }
+
+
+        /**
+         *      Checks the type of the form element.
+         *
+         *      @param  $type	Element type or array of types to check
+         *      @returns        Boolean true or false.
+         */
+        function isType( $type ) {
+			
+			// if element is a list of types check array
+			if ( is_array( $type ) ){
+				return in_array( $this->_type, $type );
+			}
+			
+            return ( $type == $this->_type );
+        }
+
         
         /**
          *      Gets a specific attribute
