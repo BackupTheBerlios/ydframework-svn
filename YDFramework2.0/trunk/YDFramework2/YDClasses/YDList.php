@@ -97,6 +97,49 @@
 
 
         /**
+         *  This function will return a array of states.
+         *
+         *  @param $country     Country to search.
+         *  @param $format      Format to return:     NULL  returns complete array.
+         *                                          'keys'  returns keys only.
+         *
+         *  @returns	Array.
+         *  @static
+         */
+        function states( $country, $format = null ){
+            $s = array( 'PT' => array(  'AV' => 'Aveiro',
+                                        'BE' => 'Beja',
+                                        'BR' => 'Braga',
+                                        'BG' => 'Bragança',
+                                        'CB' => 'Castelo Branco',
+                                        'CO' => 'Coimbra',
+                                        'EV' => 'Évora',
+                                        'FA' => 'Faro',
+                                        'GU' => 'Guarda',
+                                        'LE' => 'Leiria',
+                                        'LI' => 'Lisboa',
+                                        'PL' => 'Portalegre',
+                                        'PO' => 'Porto',
+                                        'SA' => 'Santarém',
+                                        'SE' => 'Setúbal',
+                                        'VC' => 'Viana do Castelo',
+                                        'VI' => 'Viseu',
+                                        'VR' => 'Vila Real' ) );
+
+            // check if country code exists
+            if ( ! isset( $s[ $country ] ) ){
+                return array();
+            }
+
+            if ( $format == 'keys' ) {
+                return array_keys( $s[ $country] );
+            }
+
+            return $s[ $country ];
+        }
+
+
+        /**
          *  This function will return a array with countries.
          *
          *  @param $format      Format to return.   NULL  returns complete array
