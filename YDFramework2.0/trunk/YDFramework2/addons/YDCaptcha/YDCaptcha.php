@@ -35,7 +35,7 @@
      *  This config defines the total characters to use
      *  Default: 5.
      */
-    YDConfig::set( 'YD_CAPTCHA_NUMCHARS', 5, false );
+    YDConfig::set( 'YD_CAPTCHA_NUMCHARS', 4, false );
 
 
     /**
@@ -51,6 +51,12 @@
      */
     YDConfig::set( 'YD_CAPTCHA_SHADOW', false, false );
 
+
+    /**
+     *  This config defines the charset scheme.
+     *  Default: 'simple'. Can be: 'simple', 'complex', 'letters', 'numeric' or a custom scheme.
+     */
+    YDConfig::set( 'YD_CAPTCHA_CHARSET', 'simple', false );
 
 
     // include antispam lib
@@ -86,10 +92,6 @@
 
             // create image object
             $this->_img = new PhpCaptcha( $fonts, 200, 40 );
-            
-            // add simbols ;) 
-            // don't add possible character problems for user, eg, l <--> 1 (lower L or number ONE?), 0 <--> O (ZERO OR upper O?)
-            $this->_img->SetCharSet( "a-h,!,j-k,#,&,%,$,m-n,@,p-r,2-4,6,£,?,8-9,t-w,y-z,#,&,%,$,A-H,!,J-K,#,&,%,$,M-N,@,P-R,T-W,Y-Z,2-4,6,£,?,8-9" );
         }
 
 
@@ -97,6 +99,25 @@
          *  This function exports the image
          */
         function create() {
+
+            // add simbols ;) 
+            // don't add possible character problems for user, eg, l <--> 1 (lower L or number ONE?), 0 <--> O (ZERO OR upper O?)
+            switch( $ch = YDConfig::get( 'YD_CAPTCHA_CHARSET' ) ){
+
+                case 'simple' :  $this->_img->SetCharSet( "a-h,6,2-4,8,j-k,m-n,p-r,2-4,6,8-9,t-w,y-z,A-H,J-K,M-N,6,2-4,8,9,P-R,T-W,Y-Z,2-4,6,8-9" );
+                                 break;
+
+                case 'complex' : $this->_img->SetCharSet( "a-h,!,j-k,#,&,%,$,m-n,@,p-r,2-4,6,£,?,8-9,t-w,y-z,#,&,%,$,A-H,!,J-K,#,&,%,$,M-N,@,P-R,T-W,Y-Z,2-4,6,£,?,8-9" );
+                                 break;
+
+                case 'letters' : $this->_img->SetCharSet( "a-h,j-k,J-K,M-N,m-n,p-r,t-w,y-z,A-H,J-K,M-N,P-R,p-r,t-w,T-W,Y-Z" );
+                                 break;
+
+                case 'numeric' : $this->_img->SetCharSet( "2-4,6,6,3,2,8-9,2-4,6,8-9,8-9,6,2-4,9,7,8,6,3,2" );
+                                 break;
+
+                default :        $this->_img->SetCharSet( $ch );
+            }
 
             $this->_img->DisplayShadow( YDConfig::get( 'YD_CAPTCHA_SHADOW' ) );
             $this->_img->useColour( YDConfig::get( 'YD_CAPTCHA_COLOR' ) );
