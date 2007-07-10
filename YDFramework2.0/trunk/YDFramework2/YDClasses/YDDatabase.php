@@ -45,6 +45,7 @@
     YDConfig::set( 'YD_DB_TABLEPREFIX', '', false );
     YDConfig::set( 'YD_DB_ALLOW_PERSISTENT_SORT', false, false );
     YDConfig::set( 'YD_DB_LANGUAGE_INDEX', null, false );
+    YDConfig::set( 'YD_DB_UTF8_SUPPORT', false, false );
 
     YDConfig::set( 'YD_DB_RS_CYCLENAVIGATION', false, false );
 
@@ -1648,6 +1649,9 @@
                 }
                 if ( ! @mysql_select_db( $this->_db, $conn ) ) {
                     return false;
+                }
+                if ( YDConfig::get( 'YD_DB_UTF8_SUPPORT' ) ){
+                    @mysql_query( "SET NAMES 'utf8'", $conn );
                 }
                 $this->_conn = $conn;
             }
