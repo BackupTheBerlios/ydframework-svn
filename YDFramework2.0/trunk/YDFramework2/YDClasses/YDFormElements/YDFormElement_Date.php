@@ -34,6 +34,10 @@
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
     include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Select.php');
 
+    // Custom month names
+    YDConfig::set( 'YD_FORMELEMENT_DATE_MONTHNAMES', null, false ); 
+
+
     /**
      *  This is the class that define a datetime select form element.
      *
@@ -167,15 +171,25 @@
                 
                 if ( $part == 'month' ) {
                     if ( ! isset( $this->_options[ 'monthnumber' ] ) ) {
-                        $format = '%B';
-                        if ( isset( $this->_options[ 'monthabbr' ] ) ) {
-                            $format = '%b';
+
+                        // check if we have a custom month list
+                        $month_list = YDConfig::get( 'YD_FORMELEMENT_DATE_MONTHNAMES' );
+
+                        if ( is_null( $month_list ) ){
+
+                            $format = '%B';
+                            if ( isset( $this->_options[ 'monthabbr' ] ) ) {
+                                $format = '%b';
+                            }
+                            $value = strtolower( strftime( $format, mktime( 0, 0, 0, $i, 1, 2000 ) ) );
+                            if ( isset( $this->_options[ 'monthucfirst' ] ) ) {
+                                $value = ucfirst( $value );
+                            }
+                            $arr[$i] = $value;
+                        }else{
+                            $arr[$i] = $month_list[ $i - 1 ];
                         }
-                        $value = strtolower( strftime( $format, mktime( 0, 0, 0, $i, 1, 2000 ) ) );
-                        if ( isset( $this->_options[ 'monthucfirst' ] ) ) {
-                            $value = ucfirst( $value );
-                        }
-                        $arr[$i] = $value;
+
                     } else {
                         $arr[$i] = ( strlen( $i ) == 1 ) ? '0' . $i : $i;
                     }
