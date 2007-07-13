@@ -519,10 +519,11 @@
 
         /**
          *	@param	$locale		Sets the current locale
-         *	@param	$domain		(Optional) Filename to search in locale directory
-         *	@param	$directory	(Optional) Directory name where language directories are stored
+         *	@param	$domain		(Optional) Gettext: Filename to search in locale directory
+         *	@param	$directory	(Optional) Gettext: Directory name where language directories are stored
+         *	@param	$charset	(Optional) Gettext: Custom charset, eg 'UTF-8'. By default not set.
          */
-        function set( $locale, $domain = null, $directory = null ) {
+        function set( $locale, $domain = null, $directory = null, $charset = null ) {
 
             // Check if the locale exists or not
             if ( ! array_key_exists( strtolower( $locale ), $GLOBALS[ 'YD_LANGUAGES' ] ) ) {
@@ -560,6 +561,12 @@
                 // set gettext domain
                 bindtextdomain( $domain, $directory );
                 textdomain( $domain );
+
+                // apply charset
+                if ( is_string( $charset ) ){
+                    bind_textdomain_codeset( $domain, $charset );
+                }
+
                 return;
             }
 
