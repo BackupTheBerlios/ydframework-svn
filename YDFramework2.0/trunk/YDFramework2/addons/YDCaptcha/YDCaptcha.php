@@ -53,6 +53,13 @@
 
 
     /**
+     *  This config defines the image background color
+     *  Default: "#FFFFFF".
+     */
+    YDConfig::set( 'YD_CAPTCHA_BGCOLOR', "#FFFFFF", false );
+
+
+    /**
      *  This config defines the charset scheme.
      *  Default: 'simple'. Can be: 'simple', 'complex', 'letters', 'numeric' or a custom scheme.
      */
@@ -122,6 +129,13 @@
             $this->_img->DisplayShadow( YDConfig::get( 'YD_CAPTCHA_SHADOW' ) );
             $this->_img->useColour( YDConfig::get( 'YD_CAPTCHA_COLOR' ) );
             $this->_img->SetNumChars( YDConfig::get( 'YD_CAPTCHA_NUMCHARS' ) );
+
+            // apply image color
+            $bgcolor = YDConfig::get( 'YD_CAPTCHA_BGCOLOR' ); 
+
+            $this->_img->_red   = hexdec( substr( $bgcolor, 1, 2 ) );
+            $this->_img->_green = hexdec( substr( $bgcolor, 3, 2 ) );
+            $this->_img->_blue  = hexdec( substr( $bgcolor, 5, 2 ) );
 
             return $this->_img->Create();
         }

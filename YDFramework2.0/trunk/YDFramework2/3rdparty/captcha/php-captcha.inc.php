@@ -107,8 +107,11 @@
          $this->SetFileType(CAPTCHA_FILE_TYPE);   
          $this->SetWidth($iWidth);
          $this->SetHeight($iHeight);
+         $this->_red = 255;
+         $this->_green = 255;
+         $this->_blue = 255;
       }
-      
+
       function CalculateSpacing() {
          $this->iSpacing = (int)($this->iWidth / $this->iNumChars);
       }
@@ -362,7 +365,7 @@
          }
          
          // allocate white background colour
-         imagecolorallocate($this->oImage, 255, 255, 255);
+         imagecolorallocate($this->oImage, $this->_red, $this->_green, $this->_blue);
          
          // check for owner text
          if ($this->sOwnerText != '') {
