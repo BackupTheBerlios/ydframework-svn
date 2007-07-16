@@ -106,7 +106,7 @@
          *  @returns	Array.
          *  @static
          */
-        function states( $country, $format = null ){
+        function states( $country = null, $format = null ){
             $s = array( 'PT' => array(  'AV' => 'Aveiro',
                                         'BE' => 'Beja',
                                         'BR' => 'Braga',
@@ -125,6 +125,11 @@
                                         'VC' => 'Viana do Castelo',
                                         'VI' => 'Viseu',
                                         'VR' => 'Vila Real' ) );
+
+            // check if country exists
+            if ( is_null( $country ) ){
+                return $s;
+            }
 
             // check if country code exists
             if ( ! isset( $s[ $country ] ) ){
