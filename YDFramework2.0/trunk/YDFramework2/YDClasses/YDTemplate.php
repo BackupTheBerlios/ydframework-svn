@@ -753,10 +753,8 @@
         require_once( YD_DIR_HOME_CLS . '/YDList.php');
 
         foreach( YDList::states() as $country => $stateList ){
-            foreach( $stateList as $code => $name ){
-                if( $statecode == $code ){
-                    return $name;
-                }
+            if( isset( $stateList[ $statecode ] ) ){
+               return $stateList[ $statecode ];
             }
         }
 
