@@ -1011,6 +1011,30 @@
 
         }
 
+        /**
+         *  Creates a random password string
+         *
+         *  @param  $length   Password length. By default 6
+         *
+         *  @returns    String
+         */
+        function generatePassword( $length = 6 ) {
+
+            $chrs = "abcdefg12345hijklmnpABCDEFGHIJKLMNPqrstuvwxyzQRSTUVWXYZ6789";
+
+            // init generator ( used when php version is smaller than 4.2.0 )
+            srand( (double) microtime() * 1000000 );
+
+            $pass = "";
+
+            // add chars
+            while( $length-- ){
+                $pass .= $chrs[ rand( 0, 58 ) ];
+            }
+
+            return $pass;
+        }
+
     }
 
     /**
