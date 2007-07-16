@@ -89,6 +89,8 @@
                 $this->register_modifier( 'absoluteurl', 'YDTemplate_modifier_absoluteurl' );
                 $this->register_modifier( 'timesince', 'YDTemplate_modifier_timesince' );
                 $this->register_modifier( 'url', 'YDTemplate_modifier_url' );
+                $this->register_modifier( 'state', 'YDTemplate_modifier_state' );
+
 
                 // Register the custom functions
                 $this->register_function( 't', 'YDTemplate_function_t' );
@@ -737,6 +739,28 @@
             $title = $url;
         }
         return sprintf( '<a href="%s">%s</a>', $url, $title );
+    }
+
+    /**
+     *	This template modifier replaces a state code with a name
+     *
+     *  @param  $statecode       The state code
+     *
+     *  @returns    The state name.
+     */
+    function YDTemplate_modifier_state( $statecode ) {
+
+        require_once( YD_DIR_HOME_CLS . '/YDList.php');
+
+        foreach( YDList::states() as $country => $stateList ){
+            foreach( $stateList as $code => $name ){
+                if( $statecode == $code ){
+                    return $name;
+                }
+            }
+        }
+
+        return $statecode;
     }
 
 ?>
