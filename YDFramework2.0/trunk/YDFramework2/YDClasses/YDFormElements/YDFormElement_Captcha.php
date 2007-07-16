@@ -144,10 +144,12 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
+            // compute on click
+            $onclick = "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();document.getElementById('" . $this->getAttribute( 'id' ) . "').value='';document.getElementById('" . $this->getAttribute( 'id' ) . "').focus();";
 
             // add image auto-refresh
             if ( $this->_refreshimage == true ){
-                $this->img->setAttribute( 'onclick', "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $this->img->setAttribute( 'onclick', $onclick );
                 $this->img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
                 $this->img->setAttribute( 'title',   $this->_refreshcaption );
             }else{
@@ -162,7 +164,7 @@
             if ( is_null( $this->_button ) ){
                 $button_HTML = '';
             }else{
-                $this->_button->setAttribute( 'onclick', "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();" );
+                $this->_button->setAttribute( 'onclick', $onclick );
                 $button_HTML = $this->_button->toHTML();
             }
 
