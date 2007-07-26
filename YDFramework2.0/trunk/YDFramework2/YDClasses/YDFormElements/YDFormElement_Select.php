@@ -71,15 +71,23 @@
          */
         function toHtml() {
 
+            // when using a multiple select, we should check if name ends with '[]'
+            if( isset( $this->_attributes[ 'multiple' ] ) && strpos( $this->_name, '[]' ) === false ){
+                $this->_name .= '[]';
+            }
+
             // Create the list of attributes
             $attribs = array( 'name' => $this->_form . '_' . $this->_name );
             $attribs = array_merge( $this->_attributes, $attribs );
+
+            // check if value is array ( used on multiple select ) or a simple value
+            if ( ! is_array( $this->_value ) ) $this->_value = array( $this->_value );
 
             // Get the HTML
             $html = '';
             $html .= '<select' . YDForm::_convertToHtmlAttrib( $attribs ) . '>';
             foreach ( $this->_options as $val=>$label ) {
-                if ( strval( $this->_value ) == strval( $val ) ) {
+                if ( in_array( strval( $val ), $this->_value ) ) {
                     $html .= '<option value="' . $val . '" selected="selected">' . $label . '</option>';
                 } else {
                     $html .= '<option value="' . $val . '">' . $label . '</option>';
