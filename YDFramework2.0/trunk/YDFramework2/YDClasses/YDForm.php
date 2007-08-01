@@ -220,6 +220,15 @@
         }
 
         /**
+         *  This function sets the form name.
+         *
+         *  @param  $name     Form name.
+         */
+        function setName( $name ) {
+            $this->_name = $name;
+        }
+
+        /**
          *  This function will set the HTML that is added before and after the element
          *  label to indicate that the element is required. This only has affect if
          *  you use the default toHtml function.
@@ -1336,13 +1345,22 @@
             $this->_name = $name;
             $this->_label = $label;
             $this->_attributes = $attributes;
-            $this->_options = $options;
             $this->_type = '';
             $this->_value = '';
             $this->_default = null;
             $this->_raw_default = false;
             $this->_isButton = false;
 			$this->_label_attributes = array();
+
+            // Initialize options
+            if ( is_array( $options ) ){      
+                $this->_options = $options;
+            }else{
+                $this->_options = array();
+                foreach( explode( ';', $options ) as $opt ){
+                    $this->_options[ trim( $opt ) ] = $opt;
+                }
+            }
 
             // Indicate where the label should be
             $this->_placeLabel = 'before';
