@@ -35,7 +35,7 @@
      *  This config defines the total characters to use
      *  Default: 5.
      */
-    YDConfig::set( 'YD_CAPTCHA_NUMCHARS', 4, false );
+    YDConfig::set( 'YD_CAPTCHA_NUMCHARS', 5, false );
 
 
     /**
