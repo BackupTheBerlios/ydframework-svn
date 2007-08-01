@@ -48,7 +48,7 @@
          *	@param $name		The name of the form element.
          *	@param $label		(optional) The label for the form element.
          *	@param $attributes	(optional) The attributes for the form element.
-         *	@param $options		(optional) The options for the elment.
+         *	@param $options		(optional) The options for the element.
          */
         function YDFormElement_CheckboxGroup( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
@@ -80,8 +80,8 @@
 
             // Add the subitems
             $this->_items = array();
-            foreach ( $options as $key=>$val ) {
-                $item = new YDFormElement_Checkbox( $form, $name . '[' . $key . ']', $val, $attributes, $options );
+            foreach ( $this->_options as $key=>$val ) {
+                $item = new YDFormElement_Checkbox( $form, $name . '[' . $key . ']', $val, $attributes );
                 $this->_items[ $key ] = $item;
 
                 // delete attribute. otherwise we would get a 'sep' attribute in html
@@ -136,7 +136,11 @@
                 $this->_items[ intval( $val ) ]->setValue( 1 );
             }elseif ( is_array( $val ) ){
                 foreach ( $val as $k=>$v ) {
-                    $this->_items[$k]->setValue( $v );
+
+                    // if checkbox checkbox exist, set value
+                    if ( isset( $this->_items[$k] ) ){
+                        $this->_items[$k]->setValue( $v );
+                    }
                 }
             }
         }
@@ -299,14 +303,17 @@
 				// init table header
 				$table = '<table width="100%" border="0" cellpadding="0" cellspacing="0">';
 			
+				// compute width of each column
+				$width = 'width="' . intval( 100 / $this->_columns ) . '%"';
+			
 				// if 'select all' is defined to be on top, add a row with 'select all' column and other cols empty
 				if ( $selall_html != '' && ! $this->_addSelectAll_onBottom ){
 				
 					$table .= '<tr>';
-					$table .= '<td>' . $selall_html . '</td>';
+					$table .= '<td ' . $width . '>' . $selall_html . '</td>';
 					
 					for( $k = 1; $k < $this->_columns; $k++ )
-						$table .= '<td>&nbsp;</td>';
+						$table .= '<td ' . $width . '>&nbsp;</td>';
 					
 					$table .= '</tr>';
 				}
@@ -319,8 +326,8 @@
 					for( $k = 0; $k < $this->_columns; $k++ ){
 						
 						// if we have a checkbox just add it. otherwise add an empty char
-						if ( isset( $output[ $i ] ) ) $table .= '<td>' . $output[ $i ] . '</td>';
-						else                          $table .= '<td>&nbsp;</td>';
+						if ( isset( $output[ $i ] ) ) $table .= '<td ' . $width . '>' . $output[ $i ] . '</td>';
+						else                          $table .= '<td ' . $width . '>&nbsp;</td>';
 					
 						$i++;
 					}
@@ -335,9 +342,9 @@
 					$table .= '<tr>';
 					
 					for( $k = 1; $k < $this->_columns; $k++ )
-						$table .= '<td>&nbsp;</td>';
+						$table .= '<td ' . $width . '>&nbsp;</td>';
 
-					$table .= '<td>' . $selall_html . '</td>';
+					$table .= '<td ' . $width . '>' . $selall_html . '</td>';
 					$table .= '</tr>';
 				}
 					
