@@ -44,15 +44,35 @@
          *	@param $opts	(not required)
          */
         function required( $val, $opts='' ) {
+
             if ( is_null( $val ) ) {
                 return false;
-            } elseif ( is_array( $val ) && sizeof( $val ) == 0 ) {
-                return false;
-            } elseif ( is_string( $val ) && strlen( $val ) == 0 ) {
-                return false;
-            } else {
-                return true;
             }
+
+            // check if element is an array
+            if ( is_array( $val ) ){
+
+                // check its size
+                if ( sizeof( $val ) == 0 ) {
+                    return false;
+                }
+
+                // check if there is any 'on' (selected) value (useful on a checkboxgroup)
+                foreach( $val as $k => $v ){
+                    if( $v === 'on' ){
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // check if is an empty string
+            if ( is_string( $val ) && strlen( $val ) == 0 ) {
+                return false;
+            }
+
+            // value is ok
+            return true;
         }
 
         /**
