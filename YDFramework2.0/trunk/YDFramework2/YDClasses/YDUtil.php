@@ -1122,6 +1122,53 @@
         }
 
         /**
+         *  Get the ip of the client computer.
+         *
+         *  @returns The ip of the client computer.
+         *
+         *  @static
+         */
+        function getIP() {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+
+        /**
+         *  Get the agent of the client computer.
+         *
+         *  @returns The agent of the client computer.
+         */
+        function getAgent() {
+            return $this->agent;
+        }
+
+        /**
+         *  Get the browser of the client computer.
+         *
+         *  @returns The browser of the client computer.
+         */
+        function getBrowser() {
+            return $this->browser;
+        }
+
+        /**
+         *  Get the platform of the client computer.
+         *
+         *  @returns The platform of the client computer.
+         */
+        function getPlatform() {
+            return $this->platform;
+        }
+
+        /**
+         *  Get the dotnet of the client computer.
+         *
+         *  @returns The dotnet of the client computer.
+         */
+        function getDotnet() {
+            return $this->dotnet;
+        }
+
+        /**
          *  Get the hostname of the client computer.
          *
          *  @returns The hostname of the client computer in lowercase.
@@ -1129,7 +1176,7 @@
          *  @static
          */
         function getComputerName() {
-            return strtolower( gethostbyaddr( $_SERVER['REMOTE_ADDR'] ) );
+            return strtolower( gethostbyaddr( YDBrowserInfo::getIP() ) );
         }
 
         /**
