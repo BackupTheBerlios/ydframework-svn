@@ -35,6 +35,12 @@
     YDConfig::set( 'YD_HTTP_CACHE_TIMEOUT', 3600, false );
     YDConfig::set( 'YD_HTTP_CACHE_USEHEAD', 1, false );
 
+    // Default separators
+    YDConfig::set( 'YD_URL_SEPARATOR_QUERIES', '&amp;', false );
+    YDConfig::set( 'YD_URL_SEPARATOR_VARIABLES', '=', false );
+    YDConfig::set( 'YD_URL_SEPARATOR_PATH', '?', false );
+
+
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php' );
 
@@ -339,24 +345,31 @@
          */
         function getUri() {
 
+            $sep_queries   = YDConfig::get( 'YD_URL_SEPARATOR_QUERIES' );
+            $sep_variables = YDConfig::get( 'YD_URL_SEPARATOR_VARIABLES' );
+            $sep_path      = YDConfig::get( 'YD_URL_SEPARATOR_PATH' );
+
             // Build the query string
             $querystr = '';
-            foreach ( $this->getNamedPart( 'query' ) as $key=>$value ) {
+            $query = $this->getNamedPart( 'query' );
+            ksort( $query );
+
+            foreach ( $query as $key=>$value ) {
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key1=>$val ) {
-                        $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&amp;';
-                        $querystr .= rawurlencode( $key  . '[' . $key1 . ']' ) . '=' . rawurlencode( $val );
+                        $querystr .= ( strlen( $querystr ) < 1 ) ? '' : $sep_queries;
+                        $querystr .= rawurlencode( $key  . '[' . $key1 . ']' ) . $sep_variables . rawurlencode( $val );
                     }
                 } else {
-                    $querystr .= ( strlen( $querystr ) < 1 ) ? '' : '&amp;';
-                    $querystr .= rawurlencode( $key ) . '=' . rawurlencode( $value );
+                    $querystr .= ( strlen( $querystr ) < 1 ) ? '' : $sep_queries;
+                    $querystr .= rawurlencode( $key ) . $sep_variables . rawurlencode( $value );
                 }
             }
 
             // Build the URI
             $uri = $this->getNamedPart( 'path' ) ? $this->getNamedPart( 'path' ) : '';
-            $uri .= $querystr ? '?'.$querystr : '';
-            $uri .= $this->getNamedPart( 'fragment' ) ? '#'.$this->getNamedPart( 'fragment' ) : '';
+            $uri .= $querystr ? $sep_path . $querystr : '';
+            $uri .= $this->getNamedPart( 'fragment' ) ? '#' . $this->getNamedPart( 'fragment' ) : '';
 
             // Return the URI
             return $uri;
@@ -368,11 +381,12 @@
          *	the named query variable is not existing. If the name of the query variable indicates that it should be an
          *	array, it will makes sure an array is returned.
          *
-         *	@param	$name	The name of the query variable to retrieve.
+         *	@param	$name		The name of the query variable to retrieve.
+         *	@param	$default	(Optional) return value if name doesn't exist. By default: ''
          *
          *	@returns	The contents of the query variable.
          */
-        function getQueryVar( $name ) {
+        function getQueryVar( $name, $default = '' ) {
             if ( isset( $this->_url_parsed['query'][$name] ) ) {
                 if ( substr( $name, -2, 2 ) == '[]' ) {
                     if ( ! is_array( $this->_url_parsed['query'][$name] ) ) {
@@ -381,7 +395,11 @@
                 }
                 return $this->_url_parsed['query'][$name];
             } else {
-                return ( substr( $name, -2, 2 ) == '[]' ) ? array() : '';
+                if( substr( $name, -2, 2 ) == '[]' && $default == '' ){
+                    return array();
+                }else{
+                    return $default;
+                }
             }
         }
 
