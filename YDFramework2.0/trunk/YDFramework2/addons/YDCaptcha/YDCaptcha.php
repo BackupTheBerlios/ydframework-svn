@@ -137,7 +137,11 @@
             $this->_img->_green = hexdec( substr( $bgcolor, 3, 2 ) );
             $this->_img->_blue  = hexdec( substr( $bgcolor, 5, 2 ) );
 
-            return $this->_img->Create();
+            if( $this->_img->Create() == false ){
+
+                YDInclude( 'YDFilesystem.php' );
+                YDFSImage::_error( 'YD_gd_not_installed' );
+            }
         }
 
   }
