@@ -524,7 +524,7 @@
             $elements = array();
             foreach( $this->_elements as $name => $el ){
                 if ( $el->getType() == $type ){
-                    array_push( $elements, & $this->_elements[ $name ] );
+                    array_push( $elements, $this->_elements[ $name ] );
                 }
             }
 
