@@ -39,6 +39,11 @@
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php');
     include_once( YD_DIR_HOME_CLS . '/YDUrl.php');
 
+
+    // This config enables action url filtering. True by default
+    YDConfig::set( 'YD_FORM_URLFILTER', true, false );
+
+
     /**
      *  This class defines an object oriented HTML form.
      *
@@ -205,9 +210,10 @@
             $this->registerRenderer( 'xml', 'YDFormRenderer_xml', 'YDFormRenderer_xml.php' );
 
             // Clean the action URL
-            $url = new YDUrl( $this->_action );
-            $this->_action = $url->getUri();
-
+            if( YDConfig::get( 'YD_FORM_URLFILTER' ) ){
+                $url = new YDUrl( $this->_action );
+                $this->_action = $url->getUri();
+            }
         }
 
         /**
