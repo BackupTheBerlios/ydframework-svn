@@ -161,10 +161,18 @@
         /**
          *	Sets the plain text part of a message. All HTML tags are automatically removed from the text.
          *
-         *	@param $text	The text to set.
+         *	@param $text		The text to set.
+         *	@param $textOnly	(Optional) Boolean that defines if email is text only. By default: false
          */
-        function setTxtBody( $text ) {
-            $this->_msg->AltBody = strip_tags( $text );
+        function setTxtBody( $text, $textOnly = false ) {
+
+            if( $textOnly == false){
+                $this->_msg->AltBody = strip_tags( $text );
+            }else{
+                $this->_msg->AltBody = '';
+                $this->_msg->Body    = strip_tags( $text );
+                $this->_msg->IsHTML( false );			
+            }
         }
 
         /**
