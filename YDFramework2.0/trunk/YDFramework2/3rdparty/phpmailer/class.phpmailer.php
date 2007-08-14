@@ -551,7 +551,7 @@ class PHPMailer
         
                 if($this->SMTPAuth)
                 {
-                    if(!$this->smtp->Authenticate($this->Username, 
+                    if(!@$this->smtp->Authenticate($this->Username, 
                                                   $this->Password))
                     {
                         $this->SetError($this->Lang("authenticate"));
