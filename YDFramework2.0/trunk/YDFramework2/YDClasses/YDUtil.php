@@ -654,20 +654,14 @@
             }
 
             // Check the standard formats
-            if ( strtolower( $format ) == 'date' ) {
-                $format = '%d %B %Y';
-            }
-            if ( strtolower( $format ) == 'datetime' ) {
-                $format = '%d %B %Y %H:%M';
-            }
-            if ( strtolower( $format ) == 'datetimesql' ) {
-                $format = '%Y-%m-%d %H:%M:%S';
-            }
-            if ( strtolower( $format ) == 'time' ) {
-                $format = '%H:%M';
-            }
-            if ( strtolower( $format ) == 'file' ) {
-                $format = '%d-%m-%Y %H:%M';
+            switch( strtolower( $format ) ){
+                case 'date' :           $format = '%d %B %Y'; break;
+                case 'datetime' :       $format = '%d %B %Y %H:%M'; break;
+                case 'datetimesql' :    $format = '%Y-%m-%d %H:%M:%S'; break;
+                case 'datesimple' :     $format = '%d/%m/%Y'; break;
+                case 'datetimesimple' : $format = '%d/%m/%Y %H:%M'; break;
+                case 'time' :           $format = '%H:%M'; break;
+                case 'file' :           $format = '%d-%m-%Y %H:%M'; break;
             }
 
             // Set the new locale
