@@ -39,7 +39,9 @@
     YDConfig::set( 'YD_URL_SEPARATOR_QUERIES', '&amp;', false );
     YDConfig::set( 'YD_URL_SEPARATOR_VARIABLES', '=', false );
     YDConfig::set( 'YD_URL_SEPARATOR_PATH', '?', false );
-
+    YDConfig::set( 'YD_URL_SEPARATOR_EXTENSION', '', false );
+    YDConfig::set( 'YD_URL_ENCODE_KEYS', true, false );
+    YDConfig::set( 'YD_URL_ENCODE_VALUES', true, false );
 
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDRequest.php' );
@@ -348,6 +350,9 @@
             $sep_queries   = YDConfig::get( 'YD_URL_SEPARATOR_QUERIES' );
             $sep_variables = YDConfig::get( 'YD_URL_SEPARATOR_VARIABLES' );
             $sep_path      = YDConfig::get( 'YD_URL_SEPARATOR_PATH' );
+            $sep_extension = YDConfig::get( 'YD_URL_SEPARATOR_EXTENSION' );
+            $encode_keys   = YDConfig::get( 'YD_URL_ENCODE_KEYS' );
+            $encode_values = YDConfig::get( 'YD_URL_ENCODE_VALUES' );
 
             // Build the query string
             $querystr = '';
@@ -358,17 +363,22 @@
                 if ( is_array( $value ) ) {
                     foreach ( $value as $key1=>$val ) {
                         $querystr .= ( strlen( $querystr ) < 1 ) ? '' : $sep_queries;
-                        $querystr .= rawurlencode( $key  . '[' . $key1 . ']' ) . $sep_variables . rawurlencode( $val );
+                        $querystr .= $encode_keys ? rawurlencode( $key  . '[' . $key1 . ']' ) : $key  . '[' . $key1 . ']';
+                        $querystr .= $sep_variables;
+                        $querystr .= $encode_values ? rawurlencode( $val ) : $val;
                     }
                 } else {
                     $querystr .= ( strlen( $querystr ) < 1 ) ? '' : $sep_queries;
-                    $querystr .= rawurlencode( $key ) . $sep_variables . rawurlencode( $value );
+                    $querystr .= $encode_keys ? rawurlencode( $key ) : $key;
+                    $querystr .= $sep_variables;
+                    $querystr .= $encode_values ? rawurlencode( $value ) : $value;
                 }
             }
 
             // Build the URI
             $uri = $this->getNamedPart( 'path' ) ? $this->getNamedPart( 'path' ) : '';
             $uri .= $querystr ? $sep_path . $querystr : '';
+            $uri .= $sep_extension;
             $uri .= $this->getNamedPart( 'fragment' ) ? '#' . $this->getNamedPart( 'fragment' ) : '';
 
             // Return the URI
