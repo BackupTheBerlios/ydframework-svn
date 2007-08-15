@@ -1610,6 +1610,17 @@
             return $this->_name;
         }
 
+
+        /**
+         *  Function to set the label of a form element
+         *
+         *  @param  $label    The label string
+         */
+        function setLabel( $label ) {
+            $this->_label = $label;
+        }
+
+
         /**
          *      Gets the label of the form element.
          *
