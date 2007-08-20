@@ -1043,7 +1043,7 @@
             $max_y = empty( $max_y ) ? 999999 : $max_y;
 
             // Do nothing if maximum sizes are specified
-            if ( $max_x == 99999 && $max_y == 999999 ) {
+            if ( $max_x == 999999 && $max_y == 999999 ) {
                 return $image;
             }
 
