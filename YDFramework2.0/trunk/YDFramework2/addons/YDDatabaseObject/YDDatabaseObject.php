@@ -304,8 +304,8 @@
             $rel_obj = new YDDatabaseObject_Relation( $name, $this->getClassName(), $manytomany,
                                                       $foreign_class, $cross_class );
 
-            return $this->_relations->set( $name, $rel_obj );
-
+            $this->_relations->set( $name, $rel_obj );
+            return $rel_obj;
         }
 
         /**
