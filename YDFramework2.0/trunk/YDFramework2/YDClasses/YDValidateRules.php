@@ -71,6 +71,11 @@
                 return false;
             }
 
+            // check if is int
+            if ( is_int( $val ) && $val == 0 ){
+                return false;
+            }
+
             // value is ok
             return true;
         }
@@ -256,6 +261,18 @@
             return $result;
         }
 
+
+        /**
+         *	This function returns true if the variable contains only letters and numbers
+         *  Strict version - special characters are invalid.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function alphanumericstrict( $val, $opts='' ) {
+            return YDValidateRules::regex( $val, '/^([a-zA-Z0-9]+)$/' );
+        }
+
         /**
          *	This function returns true if the variable contains only numbers.
          *
@@ -263,7 +280,17 @@
          *	@param $opts	(not required)
          */
         function numeric( $val, $opts='' ) {
-            return YDValidateRules::regex( $val, '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
+            return YDValidateRules::regex( strval( $val ), '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
+        }
+
+        /**
+         *	This function returns true if the variable is an array.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function isarray( $val, $opts='' ) {
+            return is_array( $val );
         }
 
         /**
@@ -312,6 +339,18 @@
         function exact( $val, $opts ) {
             return $val === $opts;
         }
+
+
+        /**
+         *	This function returns true if the variable is not exactly as specified in the options.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The value to compare with.
+         */
+        function not( $val, $opts ) {
+            return strval( $val ) != strval( $opts );
+        }
+
 
         /**
          *	This function returns true if the variable is in the array specified in the options.
@@ -814,6 +853,27 @@
             return in_array( $val, YDList::states( $opts, 'keys' ) );
         }
 
+
+        /**
+         *	This function returns true if the variable is an array and each element is in opts.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	The array in which the value should be.
+         */
+        function checkboxgroupvalues( $val, $opts ) {
+
+            if( ! is_array( $val ) || ! is_array( $opts ) ){
+                return false;
+            }
+
+            foreach( $val as $value => $enable ){
+                if( ! in_array( $value, $opts ) || $enable != 'on' ){
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
     }
 
