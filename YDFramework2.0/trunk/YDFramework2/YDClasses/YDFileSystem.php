@@ -681,6 +681,7 @@
             // Clear the stat cache
             clearstatcache();
 
+            return true;
         }
 
         /**
