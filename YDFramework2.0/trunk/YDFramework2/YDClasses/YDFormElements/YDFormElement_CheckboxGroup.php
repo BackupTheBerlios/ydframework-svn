@@ -34,6 +34,9 @@
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
     include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Checkbox.php');
 
+    // Custom selectall name
+    YDConfig::set( 'YD_FORMELEMENT_CHKGROUP_SELALL', null, false ); 
+
     /**
      *	This is the class that define a checkbox form element.
      *
@@ -142,7 +145,9 @@
                         $this->_items[$k]->setValue( $v );
                     }
                 }
-            }
+            }elseif( isset( $this->_items[ strval( $val ) ] ) ){
+				$this->_items[ strval( $val ) ]->setValue( 1 );
+			}
         }
 
 
@@ -273,12 +278,15 @@
 				foreach( $this->getValue() as $elem => $value )
 					if ( $value != 1 ){ $selall->setValue(0); break; }
 
-				// check default translation
-				if( !isset( $GLOBALS['t']['select all'] ) ) $GLOBALS['t']['select all'] = 'select all';
-
+				// get global 'select all' parameter
+				$selall_label = YDConfig::get( 'YD_FORMELEMENT_CHKGROUP_SELALL' );
+				if( is_null( $selall_label ) ){
+					$selall_label = t( 'select all' );
+				}
+	
 				// compute button label
-				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '>' . $selall->toHTML() . '&nbsp;<label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label></span>';
-				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label for="' . $selall->getAttribute( 'id' ) . '">' . t( 'select all' ) . '</label>&nbsp;' . $selall->toHTML() . '</span>';
+				if ( $this->_position == 'right' ) $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '>' . $selall->toHTML() . '&nbsp;<label for="' . $selall->getAttribute( 'id' ) . '">' . $selall_label . '</label></span>';
+				else                               $selall_html = '<span ' . YDForm::_convertToHtmlAttrib( $this->_addSelectAll_chk_attributes ) . '><label for="' . $selall->getAttribute( 'id' ) . '">' . $selall_label . '</label>&nbsp;' . $selall->toHTML() . '</span>';
 			}
 
 			// check if we don't want columns format
