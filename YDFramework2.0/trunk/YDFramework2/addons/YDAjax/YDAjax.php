@@ -128,6 +128,9 @@
 
 			// add default header to template
 			$this->template->addJavascript( $html, true, false );
+			
+			// array to store events already added
+			$this->_eventsAdded = array();
 		}
 
 
@@ -216,6 +219,23 @@
 			// create js functions to show/hide div
 			$waitingMessageCodeFunction  = "xajax.loadingFunction     = function(){" . $effectShow->getJSHead( $this->wtID . "id" ) . $effectShow->getJSBody( $this->wtID ."id" ) . "}\n";
 			$waitingMessageCodeFunction .= "xajax.doneLoadingFunction = function(){" . $effectHide->getJSHead( $this->wtID . "id" ) . $effectHide->getJSBody( $this->wtID ."id" ) . "}\n";
+
+			// add waiting message code (that invokes the load/done show/hide) to template 'onload' section
+			$this->template->addJavascript( $waitingMessageCodeFunction, false, false );
+		}
+
+
+        /**
+         *	This function sets YDAjax to use a custom js function when invoke/close an ajax connection
+         *
+         *	@param $onopen      Javascript function to invoke when opening the box
+         *	@param $onclose     Javascript function to invoke when closing the box
+         */
+		function useWaitingCode( $onopen, $onclose ){
+
+			// create js functions to show/hide div
+			$waitingMessageCodeFunction  = "xajax.loadingFunction     = " . $onopen  . ";\n";
+			$waitingMessageCodeFunction .= "xajax.doneLoadingFunction = " . $onclose . ";\n";
 
 			// add waiting message code (that invokes the load/done show/hide) to template 'onload' section
 			$this->template->addJavascript( $waitingMessageCodeFunction, false, false );
@@ -334,6 +354,17 @@
          *	@param $effects				DEPRECATED (Optional) Effect or array of effects to execute on event (before ajax call).
          */		
 		 function addEvent( $formElementName, $serverFunction, $arguments = null, $event = null, $options = null, $effects = null ){ 
+
+			// compute event signature
+			$sig = $formElementName . serialize( $serverFunction );
+
+			// check if event already added
+			if( in_array( $sig, $this->_eventsAdded ) ){
+				return;
+			}
+
+			// add signature to list
+			$this->_eventsAdded[] = $sig;
 
 			// if formElementName is "*" we want to define a default event (only before responses)
 			if ( $formElementName === "*" )
@@ -715,7 +746,7 @@
          *	@param $attribute			(Optional) Optional atribute to apply result (auto-detection by default when using null).
          *	@param $options				(Optional) Aditional options.
          */	
-		function addResult( $formElementName, $result, $attribute = null, $options = array() ){
+		function addResult( $formElementName, & $result, $attribute = null, $options = array() ){
 
 			// if result is a string we must parse it. Javascript strings cannot contain new lines
 			if ( is_string( $result ) ){
@@ -750,7 +781,7 @@
 			$result = 'document.getElementById("' . $formElementName . '").' . $attribute . ' = "' . $result . '";';
 			
 			// assign result to form element using the id
-			return $this->response->addScript( &$result  );
+			return $this->response->addScript( $result );
 		}
 
 

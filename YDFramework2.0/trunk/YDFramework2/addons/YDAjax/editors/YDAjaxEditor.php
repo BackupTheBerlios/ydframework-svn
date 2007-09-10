@@ -75,7 +75,7 @@
 		
 			// start by creating an FCKeditor object
 			$js  = "oFCKeditor = new FCKeditor( '" . $htmlID ."' );";
-			
+
 			// set the editor path
 			$js .= "oFCKeditor.BasePath = '" . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_Url' ) . "';";
 			
@@ -89,15 +89,14 @@
 			$js .= 'oFCKeditor.ToolbarSet = "' . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_ToolbarSet' ) . '";';
 
 			// set size and language
-			$js .= "oFCKeditor.Height = 510;";
-			$js .= 'oFCKeditor.Width = "100%";';
+			$js .= "oFCKeditor.Height = 210;";
+			$js .= 'oFCKeditor.Width = "90%";';
 			$js .= 'oFCKeditor.Config["AutoDetectLanguage"] = false;';
 			$js .= 'oFCKeditor.Config["DefaultLanguage"] = "' . YDConfig::get( 'YD_AJAXEDITOR_FCKEDITOR_DefaultLanguage' ) . '";';
 
 
 			// on fckeditor we add a replace method (that will replace the textarea)
 			$js .= "oFCKeditor.ReplaceTextarea();";
-
 			return $js;
 		}
 

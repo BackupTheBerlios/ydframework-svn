@@ -180,7 +180,7 @@ class xajaxResponse
 	// addScript() adds a Javascript command message to the XML response
 	// $sJS is a string containing Javascript code to be executed
 	// usage: $objResponse->addScript("var x = prompt('get some text');");
-	function addScript($sJS)
+	function addScript(& $sJS)
 	{
 		$this->xml .= $this->_cmdXML(array("n"=>"js"),$sJS);
 	}
@@ -333,7 +333,7 @@ class xajaxResponse
 	}
 
 	// private method, used internally
-	function _cmdXML($aAttributes, $sData)
+	function _cmdXML($aAttributes, & $sData)
 	{
 		if ($this->bOutputEntities) {
 			if (function_exists('mb_convert_encoding')) {
@@ -346,7 +346,7 @@ class xajaxResponse
 		$xml = "<cmd";
 		foreach($aAttributes as $sAttribute => $sValue)
 			$xml .= " $sAttribute=\"$sValue\"";
-		if ($sData !== null && !stristr($sData,'<![CDATA['))
+		if ($sData !== null )//&& !strstr($sData,'<![CDATA['))
 			$xml .= "><![CDATA[$sData]]></cmd>";
 		else if ($sData !== null)
 			$xml .= ">$sData</cmd>";
