@@ -59,9 +59,6 @@
 
             // Indicate if filters need to be applied
             $this->_applyFilters = false;
-
-            // If options is just an element we should add create an array with it
-            if( !is_array( $options ) ) $this->_options = array( $options );
         }
 
         /**
