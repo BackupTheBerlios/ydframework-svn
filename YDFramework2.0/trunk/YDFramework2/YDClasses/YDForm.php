@@ -165,6 +165,7 @@
             $this->registerRule( 'lettersonly', array( 'YDValidateRules', 'lettersonly' ), 'YDValidateRules.php' );
             $this->registerRule( 'character', array( 'YDValidateRules', 'character' ), 'YDValidateRules.php' );
             $this->registerRule( 'alphanumeric', array( 'YDValidateRules', 'alphanumeric' ), 'YDValidateRules.php' );
+            $this->registerRule( 'alphanumericstrict', array( 'YDValidateRules', 'alphanumericstrict' ), 'YDValidateRules.php' );
             $this->registerRule( 'numeric', array( 'YDValidateRules', 'numeric' ), 'YDValidateRules.php' );
             $this->registerRule( 'digit', array( 'YDValidateRules', 'digit' ), 'YDValidateRules.php' );
             $this->registerRule( 'nopunctuation', array( 'YDValidateRules', 'nopunctuation' ), 'YDValidateRules.php' );
