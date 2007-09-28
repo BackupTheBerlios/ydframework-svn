@@ -875,6 +875,21 @@
             return true;
         }
 
+
+        /**
+         *	This function returns true if the variable value is contained in the indicated range.
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	Array containing the minimum and maximum values.
+         */
+        function rangevalue( $val, $opts ) {
+            if ( ( floatval( $val ) >= floatval( $opts[0] ) ) && ( floatval( $val ) <= floatval( $opts[1] ) ) ) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
     }
 
 ?>
