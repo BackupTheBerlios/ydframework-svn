@@ -151,7 +151,7 @@
          *  @param $class   (optional) Relation name
          *  @param $prefix  (optional) Adds the relation's vars as prefixes to the keys. Default: false.
          *
-         *  @returns An object containing the node's data, or false if node not found
+         *  @returns An array containing the node's data, or false if node not found
          */
         function getNode( $id, $field = null, $class = null, $prefix = false ) {
 
@@ -171,7 +171,7 @@
          *  @param $class   (optional) Relation name
          *  @param $prefix  (optional) Adds the relation's vars as prefixes to the keys. Default: true.
          *
-         *  @returns An object containing the node's data, or false if node not found
+         *  @returns An array containing the node's data, or false if node not found
          */
         function _getNode( $id, $field = null, $class = null, $prefix = true ) {
 
@@ -785,9 +785,14 @@
 				$this->update( array(), $this->__position );
 			}
 
-			// compute lineage
-			if ( $new_parent_id == 1 ) $new_lineage = '//';
-			else                       $new_lineage = $new_parent_node[ $this->__lineage ] . $new_parent_id . '/';
+			// compute lineage. check if new parent id is root, if new parent is defined but node don't exist in db, or normal
+			if ( $new_parent_id == 1 ){
+				$new_lineage = '//';
+			}elseif( $new_parent_node == false ){
+				$new_lineage = '//' . $new_parent_id . '/';
+			}else{
+				$new_lineage = $new_parent_node[ $this->__lineage ] . $new_parent_id . '/';
+			}
 
 			// update node
 			$this->resetAll();
