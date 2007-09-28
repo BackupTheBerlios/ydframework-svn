@@ -556,7 +556,7 @@
                 $_ENV["LC_ALL"]     = $locale;
 
                 // added php5 environment flag
-                putenv( "LANGUAGE=" . $locale );
+                @putenv( "LANGUAGE=" . $locale );
 
                 // set gettext domain
                 bindtextdomain( $domain, $directory );
