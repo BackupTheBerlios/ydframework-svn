@@ -215,7 +215,7 @@
         function getFreeSpace( $path, $format = false, $decimals = 1 ) {
 
             // get free disk space on the path
-            $space = disk_free_space( $path );
+            $space = disk_free_space( dirname( $path ) );
 
             // return number of bytes if we don't want to format
             if ( $format == false ) return $space;
