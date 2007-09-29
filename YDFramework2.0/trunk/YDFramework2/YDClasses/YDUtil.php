@@ -1008,11 +1008,17 @@
         /**
          *  Creates a random password string
          *
-         *  @param  $length   Password length. By default 6
+         *  @param  $length		Password length. By default 6
+         *  @param  $lengthmax	(Optional) Password max length. If defined, a password length between $length and $maxlength will be generated.
          *
          *  @returns    String
          */
-        function generatePassword( $length = 6 ) {
+        function generatePassword( $length = 6, $lengthmax = null ) {
+
+            // check length
+            if( ! is_null( $lengthmax ) ){
+                $length = rand( $length, $lengthmax );
+            }
 
             $chrs = "abcdefg12345hijklmnpABCDEFGHIJKLMNPqrstuvwxyzQRSTUVWXYZ6789";
 
