@@ -145,9 +145,19 @@
                         $this->_items[$k]->setValue( $v );
                     }
                 }
+
+            // check if val is a string key/checkbox name
             }elseif( isset( $this->_items[ strval( $val ) ] ) ){
-				$this->_items[ strval( $val ) ]->setValue( 1 );
-			}
+                $this->_items[ strval( $val ) ]->setValue( 1 );
+
+            // if value is a string (that is not a key/checkbox), explode it
+            }elseif( is_string( $val ) ){
+                foreach( explode( ';', $val ) as $v ){
+                    if ( isset( $this->_items[$v] ) ){
+                        $this->_items[$v]->setValue( 1 );
+                    }
+                }
+            }
         }
 
 
