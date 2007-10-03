@@ -156,6 +156,17 @@
                 $this->assign( 'YD_FW_REVISION', YD_FW_REVISION );
                 $this->assign( 'YD_ACTION', YDRequest::getActionName() );
 
+                // check if a custom resource is defined
+                if ( strpos( $file, ':' ) !== false ){
+
+                    // display or return the result
+                    if ( $display == true ) {
+                        echo( parent::fetch( $file ) );
+                        return;
+                    }
+                    return parent::fetch( $file );
+                }
+
                 // Add custom javascript
                 $this->register_outputfilter( array( &$this, "__assignHeadCode") );
 
