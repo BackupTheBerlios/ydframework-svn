@@ -648,7 +648,7 @@
         function addCompareRule( $elements, $rule, $error ) {
 
             // Check if we have a valid rule
-            if ( ! in_array( strtolower( $rule ), array( 'equal', 'asc', 'desc' ) ) ) {
+            if ( ! in_array( strtolower( $rule ), array( 'equal', 'diff', 'asc', 'desc' ) ) ) {
                 trigger_error( 'Unknown compare rule "' . $rule . '"', YD_ERROR );
             }
 
@@ -992,8 +992,9 @@
                 // Check the type of the rule
                 switch ( $rule['rule'] ) {
 
-                    // Equal rule
+                    // Equal and Different rule
                     case 'equal':
+                    case 'diff':
 
                         // Get the values for each element
                         $values = array();
@@ -1007,7 +1008,13 @@
                         }
                         
                         // Check if the value is the same for each element
-                        if ( sizeof( array_unique( $values ) ) > 1 ) {
+                        if ( $rule['rule'] == 'equal' && sizeof( array_unique( $values ) ) > 1 ) {
+                            $this->_errors[ $rule['elements'][0] ] =  $rule['error'];
+                            return false;
+                        }
+
+                        // Check if the value is the same for each element
+                        if ( $rule['rule'] == 'diff' && sizeof( array_unique( $values ) ) != count( $rule['elements'] ) ) {
                             $this->_errors[ $rule['elements'][0] ] =  $rule['error'];
                             return false;
                         }
@@ -1359,6 +1366,7 @@
             $this->_raw_default = false;
             $this->_isButton = false;
 			$this->_label_attributes = array();
+            $this->_help = '';
 
             // Initialize options
             if ( is_array( $options ) ){      
@@ -1638,6 +1646,26 @@
 
 
         /**
+         *  Function to set the help string of a form element
+         *
+         *  @param  $help    The help string
+         */
+        function setHelp( $help ) {
+            $this->_help = $help;
+        }
+
+
+        /**
+         *      Gets the help string of the form element.
+         *
+         *      @returns        The help string of the form element.
+         */
+        function getHelp() {
+            return $this->_help;
+        }
+
+
+        /**
          *      Sets label attribute
          *
          *      @param  $attribute	Attribute name
@@ -1703,6 +1731,7 @@
                 'placeLabel'  => $this->_placeLabel,
                 'html'        => $this->toHtml(),
                 'isButton'    => $this->isButton(),
+                'help'        => $this->_help
             );
         }
 

@@ -139,7 +139,7 @@
                         }
                         $html .= $element['html'];
                     }
-                    $html .= '</p>' . YD_CRLF;
+                    $html .= ' ' . $element['help'] . '</p>' . YD_CRLF;
                 }
             }
 
