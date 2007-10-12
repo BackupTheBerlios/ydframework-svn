@@ -70,7 +70,7 @@
          *
          *	@param $template		Template object.
          */
-        function YDAjax( & $template ){
+        function YDAjax( & $template, $url_string = null ){
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
@@ -105,9 +105,13 @@
 			// init wysiwyg editors
 			$this->wysiwyg_forms = array();
 
+			// check url
+			if( is_null( $url_string ) ){
+				$url_string = YDRequest::getNormalizedUri();
+			}
 
 			// compute default ajax header
-			$html  = "var xajaxRequestUri     = \"" . YDRequest::getNormalizedUri() . "\";";
+			$html  = "var xajaxRequestUri     = \"" . $url_string . "\";";
 
 			$debug = YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false";
 
