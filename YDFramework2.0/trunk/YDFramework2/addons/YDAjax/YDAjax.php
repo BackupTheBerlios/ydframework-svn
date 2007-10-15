@@ -102,8 +102,10 @@
 			$this->autocompleterCss  = '';
 			$this->autocompleterCodeFunctions = array();
 
-			// init wysiwyg editors
-			$this->wysiwyg_forms = array();
+            // init wysiwyg editors
+            $this->wysiwyg_editorpath  = dirname( __FILE__ ) . '/editors/YDAjaxEditor.php';
+            $this->wysiwyg_editorclass = 'YDAjaxEditor';
+            $this->wysiwyg_forms       = array();
 
 			// check url
 			if( is_null( $url_string ) ){
@@ -622,12 +624,12 @@
 			// check if form has wysiwyg editors
 			if ( isset( $this->wysiwyg_forms[ $formName ] ) ){
 
-				// include editor lib
-				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
+                // include editor lib
+                require_once( $this->wysiwyg_editorpath );
 
-				// wysiwyg editors require to copy their html to a textarea before submit
-				foreach( $this->wysiwyg_forms[ $formName ] as $formElementID )
-					$js .= YDAjaxEditor::JScopy( $formElementID );
+                // wysiwyg editors require to copy their html to a textarea before submit. Use JScopy static method
+                foreach( $this->wysiwyg_forms[ $formName ] as $formElementID )
+                    $js .= call_user_func( array( $this->wysiwyg_editorclass, 'JScopy' ), $formElementID );//YDAjaxEditor::JScopy( $formElementID );
 			}
 	
 			// now return form values
@@ -812,21 +814,22 @@
 
 
         /**
+         *	This method defined the path and classname to editor JScopy static method
+         *
+         *	@param $path		File path
+         *	@param $classname	Class name to invoke
+         */	
+        function setEditor( $path, $classname ){
+
+            $this->wysiwyg_editorpath  = $path;
+            $this->wysiwyg_editorclass = $classname;
+        }
+
+
+        /**
          *	This method will process all results added in a response
          */	
 		function processResults(){
-
-			// include support for wysiwyg editors
-			if ( ! empty( $this->wysiwyg_ids ) || ! empty( $this->wysiwyg_forms ) ){
-
-				require_once( dirname( __FILE__ ) . '/editors/YDAjaxEditor.php' );
-
-				// add support for wysiwyg editors applyed to form elements
-				// foreach form, cycle all wysiwyg elements to compute their initialization
-				foreach( $this->wysiwyg_forms as $formName => $formElements )
-					foreach( $formElements as $formElementID )
-						$this->response->addScript( YDAjaxEditor::JSinit( $formElementID ) );
-			}
 
 			// return XML to client browser
 			return $this->response->getXML();
