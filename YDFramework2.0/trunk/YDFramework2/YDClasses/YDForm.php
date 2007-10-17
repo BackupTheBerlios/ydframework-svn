@@ -196,6 +196,7 @@
             $this->registerRule( 'country', array( 'YDValidateRules', 'country' ), 'YDValidateRules.php' );
             $this->registerRule( 'state', array( 'YDValidateRules', 'state' ), 'YDValidateRules.php' );
             $this->registerRule( 'checkboxgroupvalues', array( 'YDValidateRules', 'checkboxgroupvalues' ), 'YDValidateRules.php' );
+            $this->registerRule( 'safe', array( 'YDValidateRules', 'safe' ), 'YDValidateRules.php' );
 
             // Add the filters
             $this->registerFilter( 'trim', 'trim' );

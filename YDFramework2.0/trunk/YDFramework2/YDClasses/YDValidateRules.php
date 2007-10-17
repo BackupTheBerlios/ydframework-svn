@@ -890,6 +890,19 @@
             }
         }
 
+
+        /**
+         *	This function returns true if the variable value is a safe html (do not contain possible XSS html code).
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	No options.
+         */
+        function safe( $val, $opts = array() ) {
+            require_once( YD_DIR_HOME . '/3rdparty/safehtml/classes/safehtml.php' );
+            $_safehtml = new safehtml();
+            return ( $_safehtml->parse( $val ) === $val );
+        }
+
     }
 
 ?>
