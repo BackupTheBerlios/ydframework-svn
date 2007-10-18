@@ -161,10 +161,10 @@
 
                     // display or return the result
                     if ( $display == true ) {
-                        echo( parent::fetch( $file ) );
+                        echo( parent::fetch( $file, $cache_id, $compile_id ) );
                         return;
                     }
-                    return parent::fetch( $file );
+                    return parent::fetch( $file, $cache_id, $compile_id );
                 }
 
                 // Add custom javascript
@@ -394,6 +394,49 @@
                     trigger_error( 'Template not found: ' . $tplName, YD_ERROR );
                 }
                 return $tplName;
+            }
+
+
+            /**
+             * This method overrides Smarty method to make file names compatible with 'string:' resource
+             * using the filename md5 in name (instead of real filename) because on 'string:' resources, the content 
+             * is passed as filename. So, if we use the Smarty method, filenames will be ugly and the resource limited 
+             * to a tiny text ( because of filesystem filenames limit ).
+             *
+             * get a concrete filename for automagically created content
+             *
+             * @param string $auto_base
+             * @param string $auto_source
+             * @param string $auto_id
+             * @return string
+             * @staticvar string|null
+             * @staticvar string|null
+             */
+        
+            function _get_auto_filename($auto_base, $auto_source = null, $auto_id = null)
+            {
+                $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
+                $_return = $auto_base . DIRECTORY_SEPARATOR;
+        
+                if(isset($auto_id)) {
+                    // make auto_id safe for directory names
+                    $auto_id = str_replace('%7C',$_compile_dir_sep,(urlencode($auto_id)));
+                    // split into separate directories
+                    $_return .= $auto_id . $_compile_dir_sep;
+                }
+        
+                if(isset($auto_source)) {
+                    // make source name safe for filename
+                    $_filename = urlencode(basename($auto_source));
+                    $_crc32 = sprintf('%08X', crc32($auto_source));
+                    // prepend %% to avoid name conflicts with
+                    // with $params['auto_id'] names
+                    $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
+                              substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
+                    $_return .= '%%' . $_crc32 . '%%' . md5( $_filename );
+                }
+        
+                return $_return;
             }
 
         }
