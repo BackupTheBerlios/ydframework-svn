@@ -580,7 +580,15 @@
 			foreach ( $arguments as $arg ){
 
 				// if argument is numeric just add it and continue
-				if ( is_numeric( $arg ) ) { $args[] = $arg; continue; }
+				if ( is_numeric( $arg ) ) {
+					$args[] = $arg; continue;
+				}
+
+				// if not numeric, argument must be a string
+				if ( ! is_string( $arg ) ){ 
+					$args[] = '"?"';
+					continue;
+				}
 
 				// if is a javascript variable, just add it
 				if ( ereg ( "^var (.*)$", $arg, $res ) ){ $args[] = $res[1]; continue; }
