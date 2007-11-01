@@ -583,7 +583,13 @@
 
 				// get parent lineage and compute node lineage
 				$parent_node = $this->getNode( $parent_id );
-				$lineage     = $parent_node[ $this->__lineage ] . $parent_id . '/';
+				
+				// check if parent node was found
+				if( isset( $parent_node[ $this->__lineage ] ) ){
+					$lineage     = $parent_node[ $this->__lineage ] . $parent_id . '/';
+				}else{
+					$lineage     = '//' . $parent_id . '/';
+				}
 			}
 
 			// get how much brothers we will have
