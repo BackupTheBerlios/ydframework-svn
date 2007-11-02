@@ -864,6 +864,60 @@
 
         }
 
+
+        /**
+         *  This function will replace a string to a valid url one based on ascii conversion ( by: http://ascii.cl/htmlcodes.htm )
+         *
+         *  @param  $s		String to convert.
+         *  @param  $utf8 	(Optional) Flag that defines if string should be converted from UTF8 to ISO before conversion.
+         *
+         *  @returns    A converted string.
+         *
+         *  @static
+         */
+        function convertToSafe( $s, $utf8 = false ){
+
+            if( $utf8 ){
+                $s = utf8_decode( $s );
+            }
+
+            $res = '';
+            for( $i = 0; $i < strlen( $s ); $i++ ){
+
+                $ord = ord( $s{$i} );
+                if ($ord==32) { $res .= '_';    continue; }
+                if ($ord<48)  { $res .= '-';    continue; }
+                if ($ord<58)  { $res .= $s{$i}; continue; }
+                if ($ord<65)  { $res .= '-';    continue; }
+                if ($ord<91)  { $res .= $s{$i}; continue; }
+                if ($ord<96)  { $res .= '_';    continue; }
+                if ($ord<97)  { $res .= '-';    continue; }
+                if ($ord<123) { $res .= $s{$i}; continue; }
+                if ($ord<192) { $res .= '-';    continue; }
+                if ($ord<199) { $res .= 'A';    continue; }
+                if ($ord<200) { $res .= 'C';    continue; }
+                if ($ord<204) { $res .= 'E';    continue; }
+                if ($ord<208) { $res .= 'I';    continue; }
+                if ($ord<209) { $res .= 'D';    continue; }
+                if ($ord<210) { $res .= 'N';    continue; }
+                if ($ord<217) { $res .= 'O';    continue; }
+                if ($ord<224) { $res .= 'U';    continue; }
+                if ($ord<231) { $res .= 'a';    continue; }
+                if ($ord<232) { $res .= 'c';    continue; }
+                if ($ord<236) { $res .= 'e';    continue; }
+                if ($ord<240) { $res .= 'i';    continue; }
+                if ($ord<241) { $res .= 'o';    continue; }
+                if ($ord<242) { $res .= 'n';    continue; }
+                if ($ord<249) { $res .= 'o';    continue; }
+                if ($ord<253) { $res .= 'u';    continue; }
+                if ($ord<256) { $res .= 'y';    continue; }
+                $res .= '_';
+            }
+
+            return $res;
+        }
+
+
         /**
          *  This function will check if the specified string starts with the indicated text or not. You can specify if
          *  this needs to happen case-sensitively or not.
