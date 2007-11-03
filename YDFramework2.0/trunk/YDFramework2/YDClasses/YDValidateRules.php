@@ -284,6 +284,16 @@
         }
 
         /**
+         *	This function returns true if the variable is a md5 string
+         *
+         *	@param $val		The value to test.
+         *	@param $opts	(not required)
+         */
+        function md5( $val, $opts='' ) {
+            return YDValidateRules::regex( $val, '/^([a-z0-9]{32})$/' );
+        }
+
+        /**
          *	This function returns true if the variable is an array.
          *
          *	@param $val		The value to test.
