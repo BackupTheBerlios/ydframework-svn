@@ -466,6 +466,25 @@
 
         }
 
+
+        /**
+         *  This function will add a new element to the form, where element is an object
+         *
+         *  @param $instance    The object (form element) to add.
+         *  @param $name        The name of the form element.
+         *
+         *  @returns    A reference to the element that was added.
+         */
+        function & addElementByObject( $instance, $name ) {
+
+            // Register the element in the class.
+            $this->_elements[ $name ] = $instance;
+
+            // Return the reference to the instance
+            return $this->_elements[ $name ];
+        }
+
+
         /**
          *  This function will add multiple form elements at once.
          *
