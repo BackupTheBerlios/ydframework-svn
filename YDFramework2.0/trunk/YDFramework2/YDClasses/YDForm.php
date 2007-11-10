@@ -1650,6 +1650,14 @@
             $this->_label = $label;
         }
 
+        /**
+         *  Function to set where to place label.
+         *
+         *  @param  $place    String. ( eg: 'after', 'before', 'none' )
+         */
+        function setPlaceLabel( $place ) {
+            $this->_placeLabel = $place;
+        }
 
         /**
          *      Gets the label of the form element.
