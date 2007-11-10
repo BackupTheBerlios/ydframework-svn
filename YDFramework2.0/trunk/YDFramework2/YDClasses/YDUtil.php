@@ -636,7 +636,7 @@
             }
 
             // If text, convert to number
-            if ( is_string( $timestamp ) ) {
+            if ( is_string( $timestamp ) && ! empty( $timestamp ) ) {
                 $timestamp = strtotime( $timestamp );
             }
 
@@ -671,7 +671,7 @@
             }
 
             // Return the formatted date
-            $timestamp = strftime( $format, $timestamp );
+            $timestamp = strftime( $format, intval( $timestamp ) );
 
             // Reset the old locale
             if ( ! is_null( $locale ) ) {
