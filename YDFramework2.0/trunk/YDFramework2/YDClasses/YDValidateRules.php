@@ -254,6 +254,9 @@
          *	@param $opts	(not required)
          */
         function alphanumeric( $val, $opts='' ) {
+            if ( is_string( $val ) == false ) {
+                return false;
+            }
             $result = YDValidateRules::regex( $val, '/([\w^ ]+)$/' );
             if ( $result === true ) {
                 $result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
@@ -270,6 +273,9 @@
          *	@param $opts	(not required)
          */
         function alphanumericstrict( $val, $opts='' ) {
+            if ( is_string( $val ) == false ) {
+                return false;
+            }
             return YDValidateRules::regex( $val, '/^([a-zA-Z0-9]+)$/' );
         }
 
@@ -280,6 +286,9 @@
          *	@param $opts	(not required)
          */
         function numeric( $val, $opts='' ) {
+            if ( is_string( $val ) == false ) {
+                return false;
+            }
             return YDValidateRules::regex( strval( $val ), '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
         }
 
