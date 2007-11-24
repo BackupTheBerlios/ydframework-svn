@@ -200,24 +200,21 @@
         /**
          *	This function sets an element value using javascript
          *
-         *	@param $result		The result value
+         *	@param $result		(optional) The result value
          *	@param $attribute	(optional) Element attribute
          *	@param $options		(optional) The options for the elment.
          */
-        function setJS( $result = '', $attribute = null, $options = null ){ 
+        function setJS( $result = null, $attribute = null, $options = null ){ 
 
              // if atribute is not defined we must create the default one
              if ( is_null( $attribute ) ) $attribute = 'value';
-
-             // convert $result
-             $result = htmlspecialchars( $result );
 
              // assign result
              $js = '';
 
              // add text result, if exists
-             if ( is_string( $result ) && $result != '' ){
-                 $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+             if ( is_string( $result ) ){
+                 $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . htmlspecialchars( $result ) . '";';
              }
 
              // set a new captcha image
