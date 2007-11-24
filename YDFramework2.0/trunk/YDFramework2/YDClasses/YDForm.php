@@ -171,6 +171,7 @@
             $this->registerRule( 'nopunctuation', array( 'YDValidateRules', 'nopunctuation' ), 'YDValidateRules.php' );
             $this->registerRule( 'nonzero', array( 'YDValidateRules', 'nonzero' ), 'YDValidateRules.php' );
             $this->registerRule( 'exact', array( 'YDValidateRules', 'exact' ), 'YDValidateRules.php' );
+            $this->registerRule( 'not', array( 'YDValidateRules', 'not' ), 'YDValidateRules.php' );
             $this->registerRule( 'in_array', array( 'YDValidateRules', 'in_array' ), 'YDValidateRules.php' );
             $this->registerRule( 'not_in_array', array( 'YDValidateRules', 'not_in_array' ), 'YDValidateRules.php' );
             $this->registerRule( 'i_in_array', array( 'YDValidateRules', 'i_in_array' ), 'YDValidateRules.php' );
@@ -941,11 +942,12 @@
                                 'The callback specified for the rule "' . $rule['rule'] . '" is not valid', YD_ERROR
                             );
                         }
+
+                        $el = & $this->getElement( $element );
+                        $type = $el->getType();
                         
                         // Date elements and rules
                         if ( in_array( $rule['rule'], array( 'date', 'time', 'datetime' ) ) ) {
-                            $el = & $this->getElement( $element );
-                            $type = $el->getType();
                             if ( in_array( $type, array( 'date', 'dateselect', 'timeselect', 'datetimeselect' ) ) ) {
                                 $rule['options'] = array ( 'options' => $el->getOptions(), 'elements' => $el->_getElements() );
                             }
@@ -983,7 +985,7 @@
                             // Check the rule
                             // @todo Are we able to handle arrays?
                             $result = call_user_func(
-                                $ruleDetails['callback'], $value, $rule['options']
+                                $ruleDetails['callback'], $value, $rule['options'], $el
                             );
 
                             // If the result is false, add the error

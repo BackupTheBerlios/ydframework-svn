@@ -40,29 +40,37 @@
         /**
          *	This function returns false if the variable is empty, otherwise, it returns true.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function required( $val, $opts='' ) {
+        function required( $val, $opts='', $formelement = null ) {
 
-            if ( is_null( $val ) ) {
-                return false;
-            }
+            $type = $formelement->getType();
 
-            // check if element is an array
-            if ( is_array( $val ) ){
+            if( $type == 'checkboxgroup' ){
 
-                // check its size
-                if ( sizeof( $val ) == 0 ) {
-                    return false;
-                }
-
-                // check if there is any 'on' (selected) value (useful on a checkboxgroup)
+                // check if there is any 'on' (selected) value
                 foreach( $val as $k => $v ){
                     if( $v === 'on' ){
                         return true;
                     }
                 }
+                return false;
+            }
+
+            if( $type == 'dateselect' || $type == 'datetimeselect' || $type == 'date' ){
+
+                return ( is_array( $val ) && isset( $val[ 'timestamp' ] ) && intval( $val[ 'timestamp' ] ) > 0 );
+            }
+
+            // check default types
+            if ( is_null( $val ) ) {
+                return false;
+            }
+
+            // check if element is an array
+            if ( is_array( $val ) && sizeof( $val ) == 0 ){
                 return false;
             }
 
@@ -80,13 +88,15 @@
             return true;
         }
 
+
         /**
          *	This function returns true if the variable is equal to the specified value, otherwise, it returns false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The required value.
+         *	@param $val			The value to test.
+         *	@param $opts		The required value.
+         *	@param $formelement	(not required)
          */
-        function value( $val, $opts ) {
+        function value( $val, $opts, $formelement = null ) {
             return $val === $opts;
         }
 
@@ -94,10 +104,11 @@
          *	This function returns true if the variable is smaller than the specified length, otherwise, it returns
          *	false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The maximum length of the variable.
+         *	@param $val			The value to test.
+         *	@param $opts		The maximum length of the variable.
+         *	@param $formelement	(not required)
          */
-        function maxlength( $val, $opts ) {
+        function maxlength( $val, $opts, $formelement = null ) {
             if ( strlen( $val ) <= intval( $opts ) ) {
                 return true;
             } else {
@@ -109,10 +120,11 @@
          *	This function returns true if the variable is bigger than the specified length, otherwise, it returns
          *	false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The minimum length of the variable.
+         *	@param $val			The value to test.
+         *	@param $opts		The minimum length of the variable.
+         *	@param $formelement	(not required)
          */
-        function minlength( $val, $opts ) {
+        function minlength( $val, $opts, $formelement = null ) {
             if ( strlen( $val ) >= intval( $opts ) ) {
                 return true;
             } else {
@@ -123,10 +135,11 @@
         /**
          *	This function returns true if the length of the variable is contained in the indicated range.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	Array containing the minimum and maximum length.
+         *	@param $val			The value to test.
+         *	@param $opts		Array containing the minimum and maximum length.
+         *	@param $formelement	(not required)
          */
-        function rangelength( $val, $opts ) {
+        function rangelength( $val, $opts, $formelement = null ) {
             if ( ( strlen( $val ) >= intval( $opts[0] ) ) && ( strlen( $val ) <= intval( $opts[1] ) ) ) {
                 return true;
             } else {
@@ -138,10 +151,11 @@
          *	This function returns true if the escaped variable is smaller than the specified length, otherwise, it returns
          *	false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	Array containing the maximum length and the database driver object.
+         *	@param $val			The value to test.
+         *	@param $opts		Array containing the maximum length and the database driver object.
+         *	@param $formelement	(not required)
          */
-        function maxlength_escape( $val, $opts ) {
+        function maxlength_escape( $val, $opts, $formelement = null ) {
             if ( strlen( $opts[1]->escape( $val ) ) <= intval( $opts[0] ) ) {
                 return true;
             } else {
@@ -153,10 +167,11 @@
          *	This function returns true if the escaped variable is bigger than the specified length, otherwise, it returns
          *	false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	Array containing the minimum length and the database driver object.
+         *	@param $val			The value to test.
+         *	@param $opts		Array containing the minimum length and the database driver object.
+         *	@param $formelement	(not required)
          */
-        function minlength_escape( $val, $opts ) {
+        function minlength_escape( $val, $opts, $formelement = null ) {
             if ( strlen( $opts[1]->escape( $val ) ) >= intval( $opts[0] ) ) {
                 return true;
             } else {
@@ -167,10 +182,11 @@
         /**
          *  This function returns true if the length of the escaped variable is contained in the indicated range.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	Array containing the minimum length, maximum length and the database driver object.
+         *	@param $val			The value to test.
+         *	@param $opts		Array containing the minimum length, maximum length and the database driver object.
+         *	@param $formelement	(not required)
          */
-        function rangelength_escape( $val, $opts ) {
+        function rangelength_escape( $val, $opts, $formelement = null ) {
             if ( ( strlen( $opts[2]->escape( $val ) ) >= intval( $opts[0] ) ) && ( strlen( $opts[2]->escape( $val ) ) <= intval( $opts[1] ) ) ) {
                 return true;
             } else {
@@ -182,10 +198,11 @@
          *	This function returns true if the variable matches the given regular expression (PCRE syntax), otherwise, it
          *	returns false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The regular expression to use (PCRE syntax).
+         *	@param $val			The value to test.
+         *	@param $opts		The regular expression to use (PCRE syntax).
+         *	@param $formelement	(not required)
          */
-        function regex( $val, $opts ) {
+        function regex( $val, $opts, $formelement = null ) {
             if ( preg_match( $opts, $val ) ) {
                 return true;
             } else {
@@ -196,40 +213,44 @@
         /**
          *	This function returns true if the variable is a correctly formatted email address.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function email( $val, $opts='' ) {
+        function email( $val, $opts='', $formelement = null ) {
             return YDValidateRules::regex( $val, '/^((\"[^\"\f\n\r\t\v\b]+\")|([\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+(\.[\w\!\#\$\%\&\'\*\+\-\~\/\^\`\|\{\}]+)*))@((\[(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))\])|(((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9]))\.((25[0-5])|(2[0-4][0-9])|([0-1]?[0-9]?[0-9])))|((([A-Za-z0-9\-])+\.)+[A-Za-z\-]+))$/' );
         }
 
         /**
          *  This function returns true if the variable is not a correctly formatted email address.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function not_email( $val, $opts='' ) {
+        function not_email( $val, $opts='', $formelement = null ) {
             return ( YDValidateRules::email( $val ) ) ? false : true;
         }
 
         /**
          *  This function returns true if the variable is a correctly formatted IP address.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function ip( $val, $opts='' ) {
+        function ip( $val, $opts='', $formelement = null ) {
             return YDValidateRules::regex( $val, '/\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/' );
         }
 
         /**
          *	This function returns true if the variable contains only letters.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function lettersonly( $val, $opts='' ) {
+        function lettersonly( $val, $opts='', $formelement = null ) {
             $result = YDValidateRules::regex( $val, '/([\D^ ]+)$/' );
             if ( $result === true ) {
                 $result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
@@ -240,26 +261,25 @@
         /**
          *	This function returns true if the variable contains only single character.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function character( $val, $opts='' ) {
+        function character( $val, $opts='', $formelement = null ) {
             return ( strlen( strval( $val ) ) == 1 ) && YDValidateRules::lettersonly( $val, array() );
         }
 
         /**
          *	This function returns true if the variable contains only letters and numbers.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function alphanumeric( $val, $opts='' ) {
-            if ( is_string( $val ) == false ) {
-                return false;
-            }
-            $result = YDValidateRules::regex( $val, '/([\w^ ]+)$/' );
+        function alphanumeric( $val, $opts='', $formelement = null ) {
+            $result = YDValidateRules::regex( strval( $val ), '/([\w^ ]+)$/' );
             if ( $result === true ) {
-                $result = YDValidateRules::nopunctuation( $val, array() ) ? true : false;
+                $result = YDValidateRules::nopunctuation( strval( $val ), array() ) ? true : false;
             }
             return $result;
         }
@@ -269,82 +289,83 @@
          *	This function returns true if the variable contains only letters and numbers
          *  Strict version - special characters are invalid.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function alphanumericstrict( $val, $opts='' ) {
-            if ( is_string( $val ) == false ) {
-                return false;
-            }
-            return YDValidateRules::regex( $val, '/^([a-zA-Z0-9]+)$/' );
+        function alphanumericstrict( $val, $opts='', $formelement = null ) {
+            return YDValidateRules::regex( strval( $val ), '/^([a-zA-Z0-9]+)$/' );
         }
 
         /**
          *	This function returns true if the variable contains only numbers.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function numeric( $val, $opts='' ) {
-            if ( is_string( $val ) == false ) {
-                return false;
-            }
+        function numeric( $val, $opts='', $formelement = null ) {
             return YDValidateRules::regex( strval( $val ), '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)/' );
         }
 
         /**
          *	This function returns true if the variable is a md5 string
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function md5( $val, $opts='' ) {
-            return YDValidateRules::regex( $val, '/^([a-z0-9]{32})$/' );
+        function md5( $val, $opts='', $formelement = null ) {
+            return YDValidateRules::regex( strval( $val ), '/^([a-z0-9]{32})$/' );
         }
 
         /**
          *	This function returns true if the variable is an array.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function isarray( $val, $opts='' ) {
+        function isarray( $val, $opts='', $formelement = null ) {
             return is_array( $val );
         }
 
         /**
          *	This function returns true if the variable contains only contains one digit (0-9).
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function digit( $val, $opts='' ) {
+        function digit( $val, $opts='', $formelement = null ) {
             return ( strlen( strval( $val ) ) == 1 ) && YDValidateRules::numeric( $val, array() );
         }
 
         /**
          *	This function returns true if the variable contains no punctuation characters.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function nopunctuation( $val, $opts='' ) {
-            return YDValidateRules::regex( $val, '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/' );
+        function nopunctuation( $val, $opts='', $formelement = null ) {
+            return YDValidateRules::regex( strval( $val ), '/^[^().\/\*\^\?#!@$%+=,\"\'><~\[\]{}]+$/' );
         }
 
         /**
          *	This function returns true if the variable is a number not starting with 0.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          *
          *	@todo
          *		Allows things other than digits
          */
-        function nonzero( $val, $opts='' ) {
-            $result = YDValidateRules::regex( $val, '/^-?[1-9][0-9]*/' );
+        function nonzero( $val, $opts='', $formelement = null ) {
+            $result = YDValidateRules::regex( strval( $val ), '/^-?[1-9][0-9]*/' );
             if ( $result === true ) {
-                $result = YDValidateRules::numeric( $val, array() ) ? true : false;
+                $result = YDValidateRules::numeric( strval( $val ), array() ) ? true : false;
             }
             return $result;
         }
@@ -352,10 +373,11 @@
         /**
          *	This function returns true if the variable is exactly as specified in the options.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The value to compare with.
+         *	@param $val			The value to test.
+         *	@param $opts		The value to compare with.
+         *	@param $formelement	(not required)
          */
-        function exact( $val, $opts ) {
+        function exact( $val, $opts, $formelement = null ) {
             return $val === $opts;
         }
 
@@ -363,10 +385,11 @@
         /**
          *	This function returns true if the variable is not exactly as specified in the options.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The value to compare with.
+         *	@param $val			The value to test.
+         *	@param $opts		The value to compare with.
+         *	@param $formelement	(not required)
          */
-        function not( $val, $opts ) {
+        function not( $val, $opts, $formelement = null ) {
             return strval( $val ) != strval( $opts );
         }
 
@@ -374,20 +397,22 @@
         /**
          *	This function returns true if the variable is in the array specified in the options.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The array in which the value should be.
+         *	@param $val			The value to test.
+         *	@param $opts		The array in which the value should be.
+         *	@param $formelement	(not required)
          */
-        function in_array( $val, $opts ) {
+        function in_array( $val, $opts, $formelement = null ) {
             return in_array( $val, $opts, true );
         }
 
         /**
          *	This function returns true if the variable is not in the array specified in the options.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The array in which the value should not be.
+         *	@param $val			The value to test.
+         *	@param $opts		The array in which the value should not be.
+         *	@param $formelement	(not required)
          */
-        function not_in_array( $val, $opts ) {
+        function not_in_array( $val, $opts, $formelement = null ) {
             return ! in_array( $val, $opts, true );
         }
 
@@ -395,10 +420,11 @@
          *	This function returns true if the variable is in the array specified in the options. This function is
          *  case insensitive.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The array in which the value should be.
+         *	@param $val			The value to test.
+         *	@param $opts		The array in which the value should be.
+         *	@param $formelement	(not required)
          */
-        function i_in_array( $val, $opts ) {
+        function i_in_array( $val, $opts, $formelement = null ) {
             foreach ( $opts as $i=>$j ) {
                 if ( is_string( $j ) ) {
                     $opts[$i] = strtolower( $j );
@@ -420,10 +446,11 @@
          *	This function returns true if the variable is not in the array specified in the options. This function is
          *  case insensitive.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The array in which the value should not be.
+         *	@param $val			The value to test.
+         *	@param $opts		The array in which the value should not be.
+         *	@param $formelement	(not required)
          */
-        function i_not_in_array( $val, $opts ) {
+        function i_not_in_array( $val, $opts, $formelement = null ) {
             foreach ( $opts as $i=>$j ) {
                 if ( is_string( $j ) ) {
                     $opts[$i] = strtolower( $j );
@@ -445,10 +472,11 @@
          *	This function returns true if the variable is containing less hyperlinks than indicated, otherwise, it
          *	returns false.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The maximum amount of hyperlinks that are allowed.
+         *	@param $val			The value to test.
+         *	@param $opts		The maximum amount of hyperlinks that are allowed.
+         *	@param $formelement	(not required)
          */
-        function maxhyperlinks( $val, $opts ) {
+        function maxhyperlinks( $val, $opts, $formelement = null ) {
             $count = intval( $opts );
             $count1 = preg_match_all( "/href=/i", $val, $matches1 );
             $count2 = preg_match_all( "/\[url=/i", $val, $matches2 );
@@ -465,10 +493,11 @@
         /**
          *	This rule checks if a string contains the maximum specified words or not.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The maximum number of words allowed.
+         *	@param $val			The value to test.
+         *	@param $opts		The maximum number of words allowed.
+         *	@param $formelement	(not required)
          */
-        function maxwords( $val, $opts ) {
+        function maxwords( $val, $opts, $formelement = null ) {
             if ( $opts < sizeof( explode( ' ', trim( $val ) ) ) ) {
                 return false;
             }
@@ -478,10 +507,11 @@
         /**
          *	This rule checks if a string contains the minimum specified words or not.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The minimum number of words allowed.
+         *	@param $val			The value to test.
+         *	@param $opts		The minimum number of words allowed.
+         *	@param $formelement	(not required)
          */
-        function minwords( $val, $opts ) {
+        function minwords( $val, $opts, $formelement = null ) {
             if ( $opts > sizeof( explode( ' ', trim( $val ) ) ) ) {
                 return false;
             }
@@ -492,40 +522,44 @@
          *	This rule allows to use an external function/method for validation, either by registering it or by passing a
          *	callback as a format parameter.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The name of the function to use.
+         *	@param $val			The value to test.
+         *	@param $opts		The name of the function to use.
+         *	@param $formelement	(not required)
          */
-        function callback( $val, $opts ) {
-            return call_user_func( $opts, $val );
+        function callback( $val, $opts, $formelement = null ) {
+            return call_user_func( $opts, $val, $type );
         }
 
         /**
          *	This rule checks if a file was uploaded.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function uploadedfile( $val, $opts='' ) {
+        function uploadedfile( $val, $opts='', $formelement = null ) {
             return is_uploaded_file( $val['tmp_name'] ) && ( filesize( $val['tmp_name'] ) > 0 );
         }
 
         /**
          *	This rule checks if a file upload exceeded the file size or not.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The maximum file size in bytes.
+         *	@param $val			The value to test.
+         *	@param $opts		The maximum file size in bytes.
+         *	@param $formelement	(not required)
          */
-        function maxfilesize( $val, $opts ) {
+        function maxfilesize( $val, $opts, $formelement = null ) {
             return ( filesize( $val['tmp_name'] ) <= intval( $opts ) );
         }
 
         /**
          *	This rule checks if a file upload had the right mime type.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The required mime type or an array of allowed mime types.
+         *	@param $val			The value to test.
+         *	@param $opts		The required mime type or an array of allowed mime types.
+         *	@param $formelement	(not required)
          */
-        function mimetype( $val, $opts ) {
+        function mimetype( $val, $opts, $formelement = null ) {
             if ( ! is_array( $opts ) ) {
                 $opts = array( $opts );
             }
@@ -535,20 +569,22 @@
         /**
          *	This rule checks if a file upload had the filename based on a regular expression.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The regex to which the filename should match.
+         *	@param $val			The value to test.
+         *	@param $opts		The regex to which the filename should match.
+         *	@param $formelement	(not required)
          */
-        function filename( $val, $opts ) {
+        function filename( $val, $opts, $formelement = null ) {
             return YDValidateRules::regex( $val['name'], $opts );
         }
 
         /**
          *	This rule checks if a file upload has the right file extension (case insensitive). 
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The file extension it should match (can also be an array of extensions).
+         *	@param $val			The value to test.
+         *	@param $opts		The file extension it should match (can also be an array of extensions).
+         *	@param $formelement	(not required)
          */
-        function extension( $val, $opts ) {
+        function extension( $val, $opts, $formelement = null ) {
             include_once( YD_DIR_HOME_CLS . '/YDFileSystem.php');
             if ( ! is_array( $opts ) ) {
                 $opts = array( $opts );
@@ -561,10 +597,11 @@
          *	This checks if the array with day, month, year, hours, minutes and seconds
          *  elements is valid or not.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	An array with the options and elements of the date element.
+         *	@param $val			The value to test.
+         *	@param $opts		An array with the options and elements of the date element.
+         *	@param $formelement	(not required)
          */
-        function date( $val, $opts=array() ) {
+        function date( $val, $opts=array(), $formelement = null ) {
            
             if ( ! is_array( $val ) ) {
                 return false;
@@ -751,37 +788,14 @@
         }
 
         /**
-         *	This checks if the array with hours, minutes and seconds elements is a valid time or not.
-         *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
-         *
-         *  @deprecated    The date rule should be used instead.
-         */
-        function time( $val, $opts=array() ) {
-            return YDValidateRules::date( $val, $opts );
-        }
-
-        /**
-         *	This checks if the array with hours and minutes, days, months and years elements is a valid datetime or not.
-         *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
-         *
-         *  @deprecated    The date rule should be used instead.
-         */
-        function datetime( $val, $opts=array() ) {
-            return YDValidateRules::date( $val, $opts );
-        }
-
-        /**
          *  This checks if the specified text is a valid HTTP url. It should start with http:// and it should have at
          *  least one dot in there.
          *
-         *  @param $val     The value to test.
-         *  @param $opts    (not required)
+         *  @param $val     	The value to test.
+         *  @param $opts    	(not required)
+         *	@param $formelement	(not required)
          */
-        function httpurl( $val, $opts=array() ) {
+        function httpurl( $val, $opts=array(), $formelement = null ) {
 
             // Return true if empty
             if ( empty( $val ) ) {
@@ -820,10 +834,11 @@
         /**
          *	This function returns true if the variable matches captcha image
          *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
          */
-        function captcha( $val, $opts='' ) {
+        function captcha( $val, $opts='', $formelement = null ) {
 
             include_once( YD_DIR_HOME . '/3rdparty/captcha/php-captcha.inc.php' );
 
@@ -832,76 +847,45 @@
 
 
         /**
-         *	This function returns true if the variable matches a valid gmt value
-         *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
-         */
-        function timezone( $val, $opts='' ) {
-
-			YDInclude( 'YDList.php' );
-
-            return in_array( $val, YDList::gmts( 'keys' ) );
-        }
-
-
-        /**
-         *	This function returns true if the variable matches a valid country code
-         *
-         *	@param $val		The value to test.
-         *	@param $opts	(not required)
-         */
-        function country( $val, $opts='' ) {
-
-			YDInclude( 'YDList.php' );
-
-            return in_array( $val, YDList::countries( 'keys' ) );
-        }
-
-
-        /**
-         *	This function returns true if the variable matches a valid countrye state.
-         *
-         *	@param $val		The value to test.
-         *	@param $opts	Country code to search.
-         */
-        function state( $val, $opts ) {
-
-            YDInclude( 'YDList.php' );
-
-            return in_array( $val, YDList::states( $opts, 'keys' ) );
-        }
-
-
-        /**
          *	This function returns true if the variable is an array and each element is in opts.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	The array in which the value should be.
+         *	@param $val			The value to test.
+         *	@param $opts		The array in which the value should be.
+         *	@param $formelement	(not required)
          */
-        function checkboxgroupvalues( $val, $opts ) {
+        function valid( $val, $opts='', $formelement = null ) {
 
-            if( ! is_array( $val ) || ! is_array( $opts ) ){
-                return false;
+            $opts = $formelement->getOptions();
+
+            switch( $formelement->getType() ){
+                case 'checkboxgroup' :  foreach( $val as $value => $enable ){
+                                            if( ! in_array( $value, $opts ) || $enable != 'on' ){
+                                                return false;
+                                            }
+                                        }
+                                        return true;
+
+                case 'select' :         return in_array( $val, $opts );
+
+                case 'country' :        YDInclude( 'YDList.php' );
+                                        return in_array( $val, YDList::countries( 'keys' ) );
+
+                case 'timezone' :       YDInclude( 'YDList.php' );
+                                        return in_array( $val, YDList::gmts( 'keys' ) );
+
+                default : die( 'YDValidateRule "valid" is not supported in element type ' . $formelement->getType() );
             }
-
-            foreach( $val as $value => $enable ){
-                if( ! in_array( $value, $opts ) || $enable != 'on' ){
-                    return false;
-                }
-            }
-
-            return true;
         }
 
 
         /**
          *	This function returns true if the variable value is contained in the indicated range.
          *
-         *	@param $val		The value to test.
-         *	@param $opts	Array containing the minimum and maximum values.
+         *	@param $val			The value to test.
+         *	@param $opts		Array containing the minimum and maximum values.
+         *	@param $formelement	(not required)
          */
-        function rangevalue( $val, $opts ) {
+        function rangevalue( $val, $opts, $formelement = null ) {
             if ( ( floatval( $val ) >= floatval( $opts[0] ) ) && ( floatval( $val ) <= floatval( $opts[1] ) ) ) {
                 return true;
             } else {
@@ -913,10 +897,11 @@
         /**
          *	This function returns true if the variable value is a safe html (do not contain possible XSS html code).
          *
-         *	@param $val		The value to test.
-         *	@param $opts	No options.
+         *	@param $val			The value to test.
+         *	@param $opts		No options.
+         *	@param $formelement	(not required)
          */
-        function safe( $val, $opts = array() ) {
+        function safe( $val, $opts = array(), $formelement = null ) {
             require_once( YD_DIR_HOME . '/3rdparty/safehtml/classes/safehtml.php' );
             $_safehtml = new safehtml();
             return ( $_safehtml->parse( $val ) === $val );
