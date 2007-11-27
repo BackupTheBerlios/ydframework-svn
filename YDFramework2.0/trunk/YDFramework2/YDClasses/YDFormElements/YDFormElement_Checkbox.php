@@ -105,6 +105,17 @@
             }
         }
 
+
+        /**
+         *	This function sets the default value for the element.
+         *
+         *	@param	$val	(optional) The value for this object.
+         */
+        function setDefault( $val='' ){
+            $this->setValue( $val );
+        }
+
+
         /**
          *	This function sets the raw value for the element.
          *
