@@ -33,6 +33,10 @@
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
 
+    // This config will convert NEWLINES to be Javascript compatible
+    YDConfig::set( 'YD_FORMELEMENT_TEXTAREA_NL', false, false ); 
+
+
     /**
      *	This is the class that define a text area form element.
      *
@@ -70,9 +74,17 @@
             $attribs = array( 'name' => $this->_form . '_' . $this->_name );
             $attribs = array_merge( $this->_attributes, $attribs );
 
+            // check if we are in a Javascript environment
+            if( YDConfig::get( 'YD_FORMELEMENT_TEXTAREA_NL' ) ){
+
+                $this->_value = preg_replace( "/\r*\n/", "\\n",  $this->_value );
+                $this->_value = preg_replace( "/\//",    "\\\/", $this->_value );
+                $this->_value = preg_replace( "/\"/",    "\\\"", $this->_value );
+                $this->_value = preg_replace( "/'/",     " ",    $this->_value );
+            }
+
             // Get the HTML
             return '<textarea' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</textarea>';
-
         }
 
 
@@ -113,7 +125,7 @@
              $result = htmlspecialchars( $result );
 
              // assign result
-             return 'document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . ' = "' . $result . '";';
+             return 'tmpYDFTA = "' . $result . '";document.getElementById("' . $this->getAttribute( 'id' ) . '").' . $attribute . " = tmpYDFTA.replace(/(\r\n|\r|\n)/g, '\n');";
         }
 
 

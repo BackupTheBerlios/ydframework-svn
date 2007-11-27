@@ -766,7 +766,7 @@
 			if ( is_string( $result ) ){
 
 				// escape string
-				$result = addslashes( $result );
+				$result = str_replace( '"', '\"', $result );
 				$result = str_replace( "\n", " ", $result );
 				$result = str_replace( "\r", " ", $result );
 			}
