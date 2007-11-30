@@ -153,6 +153,17 @@
 
 
         /**
+         *	This function adds a browser redirect to a url.
+         *
+         *	@param $url		URL to redirect.
+         */
+        function addRedirect( $url ){
+
+            return $this->response->addRedirect( $url );
+        }
+
+
+        /**
          *	This method returns the template object
          */
 		function & getTemplate(){
