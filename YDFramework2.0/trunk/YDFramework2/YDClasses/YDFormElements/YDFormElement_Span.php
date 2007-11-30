@@ -95,7 +95,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Get the HTML
-            return '<span' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . $this->_value . '</span>';
+            return '<span' . YDForm::_convertToHtmlAttrib( $attribs ) . '>' . nl2br( $this->_value ) . '</span>';
 
         }
 
