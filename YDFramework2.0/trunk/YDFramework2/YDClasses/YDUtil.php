@@ -1089,6 +1089,68 @@
             return $pass;
         }
 
+
+        /**
+         *  This method returns a page navigation array. Eg, YDStringUtil::parseNavigation( 20, 8, 2, '..' ) returns array( 1, 2, 3, '..', 6, 7, 8, 9, 10, '..', 18, 19, 20 );
+         *
+         *  @param  $totalPages		Total pages
+         *  @param  $current		(Optional) Current page. By default: 1
+         *  @param  $step			(Optional) Step to check. By default: 2
+         *  @param  $separator		(Optional) Separator to use. By default: '..'
+         *
+         *  @returns    Array
+         */
+        function parseNavigation( $totalPages, $current = 1, $step = 2, $separator = '..' ) {
+
+            // create init numbers for: (s)start, (m)middle and (e)end
+            $s_start = 1;
+            $s_end   = ( 1 + $step > $totalPages )        ? $totalPages : 1 + $step;
+
+            $m_start = ( $current - $step < $s_end )      ? $s_end      : $current - $step;
+            $m_end   = ( $current + $step > $totalPages ) ? $totalPages : $current + $step;
+
+            $e_start = ( $totalPages - $step < $m_end )   ? $m_end      : $totalPages - $step;
+            $e_end   = $totalPages;
+
+            // init array
+            $result = array();
+
+            // add start elements
+            for( $i = $s_start; $i <= $s_end; $i++ ){
+                $result[] = $i;
+            }
+
+            // check if we can add the separator between start and middle
+            if( $m_start - $s_end == 2 ){
+                $result[] = $s_end + 1;
+            }elseif( $m_start - $s_end > 2 ){
+                $result[] = $separator;
+            }
+
+            // create middle elements
+            for( $i = $m_start; $i <= $m_end; $i++ ){
+                if( $i > $s_end ){
+                    $result[] = $i;
+                }
+            }
+
+            // check if we can add the separator between middle and end
+            if( $e_start - $m_end == 2 ){
+                $result[] = $m_end + 1;
+            }elseif( $e_start - $m_end > 2 ){
+                $result[] = $separator;
+            }
+
+            // create end elements
+            for( $i = $e_start; $i <= $e_end; $i++ ){
+                if( $i > $m_end ){
+                    $result[] = $i;
+                }
+            }
+
+            return $result;
+        }
+
     }
 
     /**
