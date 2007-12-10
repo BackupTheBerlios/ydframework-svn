@@ -53,6 +53,7 @@
         function YDDatabaseDriver_sqlite( $db, $user='', $pass='', $host='', $options=array() ) {
             $this->YDDatabaseDriver( $db,  $user, $pass, $host, $options );
             $this->_driver = 'sqlite';
+            $GLOBALS['YD_SQLITE_error'] = "";
         }
 
         /**
@@ -89,7 +90,7 @@
          */
         function connect() {
             if ( $this->_conn == null ) {
-                $conn = @sqlite_open( $this->_db, 0666, $error );
+                $conn = @sqlite_open( $this->_db, 0666, $GLOBALS['YD_SQLITE_error'] );
                 if ( ! $conn ) {
                     return false;
                 }
@@ -215,6 +216,9 @@
             if ( ! is_null( $languageIndex ) ) {
                 $sql = str_replace( '_@', '_' . $languageIndex, $sql );
             }
+
+            // Connect to database
+            $result = $this->connect();
 
             // Handle errors
             if ( ! $result && $this->_failOnError === true ) {
