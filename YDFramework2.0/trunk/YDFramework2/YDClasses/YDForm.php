@@ -158,6 +158,7 @@
             $this->registerRule( 'maxlength', array( 'YDValidateRules', 'maxlength' ), 'YDValidateRules.php' );
             $this->registerRule( 'minlength', array( 'YDValidateRules', 'minlength' ), 'YDValidateRules.php' );
             $this->registerRule( 'rangelength', array( 'YDValidateRules', 'rangelength' ), 'YDValidateRules.php' );
+            $this->registerRule( 'rangevalue', array( 'YDValidateRules', 'rangevalue' ), 'YDValidateRules.php' );
             $this->registerRule( 'regex', array( 'YDValidateRules', 'regex' ), 'YDValidateRules.php' );
             $this->registerRule( 'email', array( 'YDValidateRules', 'email' ), 'YDValidateRules.php' );
             $this->registerRule( 'not_email', array( 'YDValidateRules', 'not_email' ), 'YDValidateRules.php' );
