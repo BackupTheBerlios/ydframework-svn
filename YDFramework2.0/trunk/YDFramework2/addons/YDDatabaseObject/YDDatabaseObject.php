@@ -259,6 +259,21 @@
 
             return $this->_fields->set( $name, new YDDatabaseObject_Field( $name, false, false, $null ) );
         }
+
+        /**
+         *  This function unregisters a select statement.
+         *
+         *  @param $name  The field name.
+         */
+        function unregisterField( $name ) {
+            
+            $name = strtolower( $name );
+            
+            if ( $this->_fields->exists( $name ) ) {
+                unset( $this->_fields->$name );
+            }
+        }
+
         
         /**
          *  This function registers a key.
