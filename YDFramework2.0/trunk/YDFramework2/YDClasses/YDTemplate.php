@@ -89,8 +89,7 @@
                 $this->register_modifier( 'absoluteurl', 'YDTemplate_modifier_absoluteurl' );
                 $this->register_modifier( 'timesince', 'YDTemplate_modifier_timesince' );
                 $this->register_modifier( 'url', 'YDTemplate_modifier_url' );
-                $this->register_modifier( 'state', 'YDTemplate_modifier_state' );
-
+                $this->register_modifier( 'safe', 'YDTemplate_modifier_safe' );
 
                 // Register the custom functions
                 $this->register_function( 't', 'YDTemplate_function_t' );
@@ -796,23 +795,17 @@
     }
 
     /**
-     *	This template modifier replaces a state code with a name
+     *	This template modifier converts html content in a safe form
      *
-     *  @param  $statecode       The state code
+     *  @param  $html       HTML to parse
      *
-     *  @returns    The state name.
+     *  @returns    Save html form.
      */
-    function YDTemplate_modifier_state( $statecode ) {
+    function YDTemplate_modifier_safe( $html ) {
 
-        require_once( YD_DIR_HOME_CLS . '/YDList.php');
-
-        foreach( YDList::states() as $country => $stateList ){
-            if( isset( $stateList[ $statecode ] ) ){
-               return $stateList[ $statecode ];
-            }
-        }
-
-        return $statecode;
+       require_once( YD_DIR_HOME . '/3rdparty/safehtml/classes/safehtml.php' );
+       $_safehtml = new safehtml();
+       return nl2br( $_safehtml->parse( $html ) );
     }
 
 ?>
