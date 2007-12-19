@@ -78,7 +78,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // check if value is array ( used on multiple select ) or a simple value
-            if ( ! is_array( $this->_value ) ) $this->_value = array( $this->_value );
+            if ( ! is_array( $this->_value ) ) $this->_value = explode( ';', $this->_value );
 
             // Get the HTML
             $html = '';
