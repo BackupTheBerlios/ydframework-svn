@@ -145,7 +145,7 @@
 
             // Create the list of attributes
             $attribs = array(
-                'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name, 'id' => $this->_form . '_' . $this->_name
+                'type' => $this->_type, 'name' => $this->_form . '_' . $this->_name
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
