@@ -35,6 +35,14 @@
     include_once( YD_DIR_HOME . '/3rdparty/captcha/php-captcha.inc.php' );
     include_once( YD_DIR_HOME_CLS . '/YDFormElements/YDFormElement_Img.php');
 
+
+    /**
+     *  This config defines the captcha refresh caption label
+     *  Default: '<p>'
+     */
+    YDConfig::set( 'YD_FORMELEMENT_CAPTCHA_LABEL', "Get another image", false );
+
+
     /**
      *	This is the class that define a captcha form element.
      *
@@ -60,7 +68,7 @@
             $this->_type = 'captcha';
 			
 			// create default image url
-			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha&id=' . md5( microtime() );
+			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha&amp;id=' . md5( microtime() );
 
             // text box position
             $this->_textPosition_left = false;
@@ -68,7 +76,7 @@
             // refresh button or refresh image. not added by default
             $this->_button = null;
             $this->_refreshimage = false;
-            $this->_refreshcaption = 'Get another image';
+            $this->_refreshcaption = YDConfig::get( 'YD_FORMELEMENT_CAPTCHA_LABEL' );
 
             // add refresh button
             if ( isset( $options[ 'refreshbutton' ] ) || in_array( 'refreshbutton', $options ) )
@@ -145,7 +153,7 @@
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // compute on click
-            $onclick = "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&id=')[0] + '&id=' + Math.random();document.getElementById('" . $this->getAttribute( 'id' ) . "').value='';document.getElementById('" . $this->getAttribute( 'id' ) . "').focus();";
+            $onclick = "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&amp;id=')[0] + '&amp;id=' + Math.random();document.getElementById('" . $this->getAttribute( 'id' ) . "').value='';document.getElementById('" . $this->getAttribute( 'id' ) . "').focus();";
 
             // add image auto-refresh
             if ( $this->_refreshimage == true ){
