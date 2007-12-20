@@ -33,6 +33,21 @@
     // Includes
     include_once( YD_DIR_HOME_CLS . '/YDForm.php');
 
+
+    /**
+     *  This config defines the start tag to show before render an element
+     *  Default: '<p>'
+     */
+    YDConfig::set( 'YD_RENDER_HTML_PRETAG', "<p>", false );
+
+
+    /**
+     *  This config defines the end tag to show after render an element
+     *  Default: '<p>'
+     */
+    YDConfig::set( 'YD_RENDER_HTML_POSTAG', "</p>", false );
+
+
     /**
      *  This is the class that is able to render a form object to HTML.
      *
@@ -117,7 +132,10 @@
                     $html .= '<fieldset>' . $element['html'];
                     $this->_fsets = true;
                 } else {
-                    $html .= '<p>';
+
+                    // add '<p>' tag
+                    $html .= YDConfig::get( 'YD_RENDER_HTML_PRETAG' );
+
                     if ( $element['placeLabel'] == 'after' ) {
                         $html .= $element['html'] . YD_CRLF . $element['label_html'];
                         if ( ! empty( $element['error'] ) ) {
@@ -139,7 +157,14 @@
                         }
                         $html .= $element['html'];
                     }
-                    $html .= ' ' . $element['help'] . '</p>' . YD_CRLF;
+
+                    // add help
+                    $html .= ' ' . $element['help'];
+
+                    // add '</p>' tag
+                    $html .= YDConfig::get( 'YD_RENDER_HTML_POSTAG' );
+
+                    $html .= YD_CRLF;
                 }
             }
 
