@@ -1409,7 +1409,7 @@
 
             // Set the default ID attribute
             if ( ! isset( $this->_attributes['id'] ) ) {
-                $this->_attributes['id'] = $this->_form . '_' . $this->_name;
+                $this->setAttribute( 'id', $this->_form . '_' . $this->_name );
             }
 
         }
@@ -1421,6 +1421,12 @@
          *  @param  $val    The value of the attribute
          */
         function setAttribute( $key, $val ) {
+
+            // 'id' is a very special attribute ( in xhtml it cannot have special characters )
+            if( $key == 'id' ){
+                $val = YDStringUtil::convertToSafe( strtolower( $val ) );
+            }
+
             $this->_attributes[$key] = $val;
         }
 
@@ -1670,7 +1676,13 @@
          */
         function getLabel( $html = false ) {
 
-			if ( $html ) return '<span ' . YDForm::_convertToHtmlAttrib( $this->_label_attributes ) . '><label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label></span>';
+            if ( $html ){
+                if( empty( $this->_label_attributes ) ){
+                    return '<label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label>';
+                }else{
+                    return '<span ' . YDForm::_convertToHtmlAttrib( $this->_label_attributes ) . '><label for="' . $this->_attributes['id'] . '">' . $this->_label . '</label></span>';
+                }
+            }
 
             return $this->_label;
         }
@@ -1751,7 +1763,7 @@
             }
             return array(
                 'name'        => $this->_name,
-                'id'          => $this->_attributes['id'],
+                'id'          => $this->getAttribute( 'id' ),
                 'value'       => $this->_value,
                 'default'     => $this->_default,
                 'type'        => $this->_type,
