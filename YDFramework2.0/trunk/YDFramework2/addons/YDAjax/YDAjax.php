@@ -70,7 +70,7 @@
          *
          *	@param $template		Template object.
          */
-        function YDAjax( & $template, $url_string = null ){
+        function YDAjax( & $template, $url_string = null, $outputFiles = true ){
 
             // Setup the module
             $this->_author = 'Francisco Azevedo';
@@ -113,24 +113,23 @@
 			}
 
 			// compute default ajax header
-			$html  = "var xajaxRequestUri     = \"" . $url_string . "\";";
+			$html  = "var xajaxRequestUri     = \"" . $url_string . "\";\n";
 
 			$debug = YDConfig::get( 'YD_AJAX_DEBUG' ) ? "true" : "false";
 
 			// check debug option
-			$html .= "var xajaxDebug          = " . $debug . ";";
-			$html .= "var xajaxStatusMessages = " . $debug . ";";
-			$html .= "var xajaxWaitCursor     = " . $debug . ";";
+			$html .= "var xajaxDebug          = " . $debug . ";\n";
+			$html .= "var xajaxStatusMessages = " . $debug . ";\n";
+			$html .= "var xajaxWaitCursor     = " . $debug . ";\n";
 
 			// use post
-			$html .= "var xajaxDefinedGet  = 0;";
-			$html .= "var xajaxDefinedPost = 1;";
+			$html .= "var xajaxDefinedGet  = 0;\n";
+			$html .= "var xajaxDefinedPost = 1;\n";
 
 			// get standard xajax code
-			$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js' ) . "\n";
-
-			// include generic effects lib .. yes, it must be ALWAYS included
-			$html .= file_get_contents( dirname( __FILE__ ) . '/js/prototype.lite.js_moo.fx.js_moo.fx.pack.js' ) . "\n";
+			if( $outputFiles ){
+				$html .= file_get_contents( dirname( __FILE__ ) . '/js/xajax.js' ) . "\n";
+			}
 
 			// add default header to template
 			$this->template->addJavascript( $html, true, false );
