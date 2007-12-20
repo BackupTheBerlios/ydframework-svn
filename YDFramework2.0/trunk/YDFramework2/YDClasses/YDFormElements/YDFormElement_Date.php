@@ -103,14 +103,13 @@
             
             // Add the elements
             foreach ( $elements as $element ) {
-                
-                $attrib = $this->_attributes;
-                $attrib['id'] .= '[' . $element . ']';
-                
+
                 $this->$element = new YDFormElement_Select(
-                    $this->_form, $this->_name . '[' . $element . ']', '', $attrib, $$element
+                    $this->_form, $this->_name . '[' . $element . ']', '', $this->_attributes, $$element
                 );
-                
+
+                // set valid xhtml id ( character "[" is not allowed in the value of attribute "id" )
+                $this->$element->setAttribute( 'id', $this->getAttribute( 'id' ) . '_' . $element );
             }
 
         }
@@ -469,12 +468,30 @@
         function setAttribute( $key, $val ) {
 
             $this->_attributes[$key] = $val;
-            
+
             foreach ( $this->_getElements() as $element ) {
-                $this->$element->setAttribute( $key, $val );
+                if( isset( $this->$element ) ){
+                    $this->$element->setAttribute( $key, $val );
+                }
             }
             
         }
+
+        /**
+         *      Gets the label of the form element.
+         *
+         *      @param  $html   (Optional) Return label as html
+         *      @returns        The label of the form element.
+         */
+        function getLabel( $html = false ) {
+
+            if ( $html ){
+                return '<label>' . $this->_label . '</label>';
+            }
+
+            return $this->_label;
+        }
+
 
         /**
          *  This function will return the element as HTML.
@@ -573,22 +590,22 @@
 
             // add our custom js function
             if ( !in_array( 'year', $elements ) )    $js .= "\n\t" . 'var year = 1970;';
-            else                                     $js .= "\n\t" . 'var year = document.getElementById("' . $this->getAttribute('id') . '[year]").value;';
+            else                                     $js .= "\n\t" . 'var year = document.getElementById("' . $this->getAttribute('id') . '_year").value;';
 
             if ( !in_array( 'month', $elements ) )   $js .= "\n\t" . 'var month = 0;';
-            else                                     $js .= "\n\t" . 'var month = document.getElementById("' . $this->getAttribute('id') . '[month]").value - 1;';
+            else                                     $js .= "\n\t" . 'var month = document.getElementById("' . $this->getAttribute('id') . '_month").value - 1;';
 
             if ( !in_array( 'day', $elements ) )     $js .= "\n\t" . 'var day = 1;';
-            else                                     $js .= "\n\t" . 'var day = document.getElementById("' . $this->getAttribute('id') . '[day]").value;';
+            else                                     $js .= "\n\t" . 'var day = document.getElementById("' . $this->getAttribute('id') . '_day").value;';
 
             if ( !in_array( 'hours', $elements ) )   $js .= "\n\t" . 'var hours = 1;';
-            else                                     $js .= "\n\t" . 'var hours = document.getElementById("' . $this->getAttribute('id') . '[hours]").value;';
+            else                                     $js .= "\n\t" . 'var hours = document.getElementById("' . $this->getAttribute('id') . '_hours").value;';
 
             if ( !in_array( 'minutes', $elements ) ) $js .= "\n\t" . 'var minutes = 1;';
-            else                                     $js .= "\n\t" . 'var minutes = document.getElementById("' . $this->getAttribute('id') . '[minutes]").value;';
+            else                                     $js .= "\n\t" . 'var minutes = document.getElementById("' . $this->getAttribute('id') . '_minutes").value;';
 
             if ( !in_array( 'seconds', $elements ) ) $js .= "\n\t" . 'var seconds = 1;';
-            else                                     $js .= "\n\t" . 'var seconds = document.getElementById("' . $this->getAttribute('id') . '[seconds]").value;';
+            else                                     $js .= "\n\t" . 'var seconds = document.getElementById("' . $this->getAttribute('id') . '_seconds").value;';
 
             $js .= "\n\t" . 'var mydate = new Date( year, month, day, hours, minutes, seconds ); ';
             $js .= "\n\t" . 'return mydate.getTime() / 1000;' . "\n";
@@ -619,12 +636,12 @@
             $js = '';
 
             // add our custom js function
-            if ( in_array( 'year', $elements ) )    $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[year]").'.     $attribute . ' = "' . $parsed['year']    . '";';
-            if ( in_array( 'month', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[day]").'.      $attribute . ' = "' . $parsed['mon']     . '";';
-            if ( in_array( 'day', $elements ) )     $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[day]").'.      $attribute . ' = "' . $parsed['mday']    . '";';
-            if ( in_array( 'hours', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[hours]").'.    $attribute . ' = "' . $parsed['hours']   . '";';
-            if ( in_array( 'minutes', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[minutes]").'.  $attribute . ' = "' . $parsed['minutes'] . '";';
-            if ( in_array( 'seconds', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'[seconds]").'.  $attribute . ' = "' . $parsed['seconds'] . '";';
+            if ( in_array( 'year', $elements ) )    $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_year").'.     $attribute . ' = "' . $parsed['year']    . '";';
+            if ( in_array( 'month', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_day").'.      $attribute . ' = "' . $parsed['mon']     . '";';
+            if ( in_array( 'day', $elements ) )     $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_day").'.      $attribute . ' = "' . $parsed['mday']    . '";';
+            if ( in_array( 'hours', $elements ) )   $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_hours").'.    $attribute . ' = "' . $parsed['hours']   . '";';
+            if ( in_array( 'minutes', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_minutes").'.  $attribute . ' = "' . $parsed['minutes'] . '";';
+            if ( in_array( 'seconds', $elements ) ) $js .= 'document.getElementById("' . $this->getAttribute( 'id' ) .'_seconds").'.  $attribute . ' = "' . $parsed['seconds'] . '";';
 
             // return function code
             return $js;
