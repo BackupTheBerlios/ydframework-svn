@@ -81,10 +81,19 @@
                 unset( $attributes[ 'separator' ] );
             }
 
+            // check columns definition
+            if ( isset ( $attributes[ 'columns' ] ) ){
+                $this->_columns = $attributes[ 'columns' ];
+                unset( $attributes[ 'columns' ] );
+            }else{
+                $this->_columns = 1;
+            }
+
             // Add the subitems
             $this->_items = array();
             foreach ( $this->_options as $key=>$val ) {
                 $item = new YDFormElement_Checkbox( $form, $name . '[' . $key . ']', $val, $attributes );
+                $item->setAttribute( 'id', $name . '_' . $key );
                 $this->_items[ $key ] = $item;
 
                 // delete attribute. otherwise we would get a 'sep' attribute in html
@@ -100,15 +109,6 @@
             $this->_addSelectAll = false;
             $this->_addSelectAll_chk_attributes = array();
             $this->_addSelectAll_label_attributes = array();
-            
-
-            // check columns definition
-            if ( isset ( $attributes[ 'columns' ] ) ){
-                $this->_columns = $attributes[ 'columns' ];
-                unset( $attributes[ 'columns' ] );
-            }else{
-                $this->_columns = 1;
-            }
         }
 
 
@@ -178,8 +178,10 @@
          *	@param	$value   	Attribute value
          */
         function setAttribute( $attribute, $value ) {
-            foreach ( $this->_items as $k=>$v ) {
-                $this->_items[$k]->setAttribute( $attribute, $value );
+            if( isset( $this->_items ) && is_array( $this->_items ) ){
+                foreach ( $this->_items as $k=>$v ) {
+                    $this->_items[$k]->setAttribute( $attribute, $value );
+                }
             }
         }
 
@@ -234,6 +236,21 @@
         }
 
         /**
+         *      Gets the label of the form element.
+         *
+         *      @param  $html   (Optional) Return label as html
+         *      @returns        The label of the form element.
+         */
+        function getLabel( $html = false ) {
+
+            if ( $html ){
+                return '<label>' . $this->_label . '</label>';
+            }
+
+            return $this->_label;
+        }
+
+        /**
          *	This function sets the raw value for the element.
          *
          *	@param	$val	(optional) The value for this object.
@@ -259,9 +276,9 @@
                 if ( $this->_position == 'right' ) $output[] = $item->toHtml() . '&nbsp;<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>';
                 else                               $output[] = '<label for="' . $item->_attributes['id'] . '">' . $item->_label . '</label>&nbsp;' . $item->toHtml();
 
-            // Add the <nobr> tags
+            // Add the "<nobr>" ( xhtml compatible ) tag
             foreach ( $output as $key => $val ) {
-                $output[$key] = '<nobr>' . $val . '</nobr> ';
+                $output[$key] = '<span style="white-space:nowrap">' . $val . '</span>';
             }
 
 			// check if we have more than one item enabled, otherwise the 'select all' will not be displayed
