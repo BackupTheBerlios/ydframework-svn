@@ -633,13 +633,14 @@
         /**
          *  This function updates a node fields ( that are NOT RESERVED only )
          *
-         *  @param $values      The field values of the node. Do NOT update position, parent_id, lineage or level
-         *  @param $id          (optional) The ID of the node to update.
-         *  @param $onDate      (optional) When element of $values is a date (read: array ), we should convert to this format. Default: 'datetimesql'
+         *  @param $values			The field values of the node. Do NOT update position, parent_id, lineage or level
+         *  @param $id				(optional) The ID of the node to update.
+         *  @param $onDate			(optional) When element of $values is a date (read: array ), we should convert to this format. Default: 'datetimesql'
+         *  @param $updateChildren	(optional) Flag that defines is children nodes of $id should be updated too. By default: false.
          *
          *  @returns    Total of lines affected
          */
-        function updateNode( $values, $id, $onDate = 'datetimesql' ) {
+        function updateNode( $values, $id, $onDate = 'datetimesql', $updateChildren = false ) {
 
 			// check values
 			foreach( $values as $element => $value )
@@ -649,15 +650,18 @@
 
 			// apply custom values
 			$this->setValues( $values );
-			
-			// overwrite id
-			$this->set( $this->__id, intval( $id ) );
 
 			// unset reserved fields
 			$this->unsetVar( $this->__parent );
 			$this->unsetVar( $this->__lineage );
 			$this->unsetVar( $this->__level );
 			$this->unsetVar( $this->__position );
+
+            if( $updateChildren ){
+                $this->where( '(' . $this->__table_lineage . ' LIKE "%/' . intval( $id ) . '/%" OR ' . $this->__table_id . ' = ' . intval( $id ) . ')' );
+            }else{
+                $this->set( $this->__id, intval( $id ) );
+            }
 
 			return $this->update();
         }
