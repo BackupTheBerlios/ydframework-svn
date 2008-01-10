@@ -46,6 +46,7 @@
     YDConfig::set( 'YD_DB_ALLOW_PERSISTENT_SORT', false, false );
     YDConfig::set( 'YD_DB_LANGUAGE_INDEX', null, false );
     YDConfig::set( 'YD_DB_UTF8_SUPPORT', false, false );
+    YDConfig::set( 'YD_DB_ERROR_CALLBACK', false, false );
 
     YDConfig::set( 'YD_DB_RS_CYCLENAVIGATION', false, false );
 
@@ -1798,13 +1799,21 @@
             // Execute the query
             $result = @mysql_query( $sql, $this->_conn );
 
-            // Handle errors
-            if ( $result === false && $this->_failOnError === true ) {
-                YDDebugUtil::error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), $sql );
-            }
-
             // Log the statement
             $this->_logSql( $sql, $timer->getElapsed() );
+
+            // Handle errors
+            if ( $result === false ) {
+
+                $callback = YDConfig::get( 'YD_DB_ERROR_CALLBACK' );
+
+                // check if we should display the error or execute some callback
+                if( is_string( $callback ) || is_array( $callback ) ){
+                    return call_user_func( $callback, $sql, mysql_error( $this->_conn ), mysql_errno( $this->_conn ) );
+                }elseif( $callback === false && $this->_failOnError === true ){
+                    YDDebugUtil::error( '[' . mysql_errno( $this->_conn ) . '] ' . mysql_error( $this->_conn ), $sql );
+                }
+            }
 
             // Return the result
             return $result;
