@@ -297,8 +297,8 @@
 			if ( $this->_addSelectAll && count( $this->_items ) > 1 && $checkboxesEnabled > 1 ){ 
 
 				// compute button code
-				$selall = new YDFormElement_Checkbox( $this->_form, $this->getAttribute( 'id' ) . 'sall' );
-				$selall->setAttribute( 'onclick', 'for (var i=0;i<document.forms[\''. $this->_form . '\'].elements.length;i++) if (document.forms[\''. $this->_form . '\'].elements[i].type==\'checkbox\' && !document.forms[\''. $this->_form . '\'].elements[i].disabled && /' . $this->_name . '\[[a-zA-Z0-9]+\]/.test( document.forms[\''. $this->_form . '\'].elements[i].name ) ) document.forms[\''. $this->_form . '\'].elements[i].checked = this.checked;' );
+				$selall = new YDFormElement_Checkbox( $this->_form, 'sall' . $this->_name );
+				$selall->setAttribute( 'onclick', 'for (var i=0;i<document.forms[\''. $this->_form . '\'].elements.length;i++) if (document.forms[\''. $this->_form . '\'].elements[i].type==\'checkbox\' && !document.forms[\''. $this->_form . '\'].elements[i].disabled && document.forms[\''. $this->_form . '\'].elements[i].id.match(/'.$this->_name.'\_/) ) document.forms[\''. $this->_form . '\'].elements[i].checked = this.checked;' );
 
 				// if all checkboxes are selected, the 'select all' will be selected too
 				$selall->setValue(1);
