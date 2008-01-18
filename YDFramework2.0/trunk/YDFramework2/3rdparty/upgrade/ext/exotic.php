@@ -2,7 +2,7 @@
 /*
    Following funtions have been removed from the core emulation script, because
    they are considered too special to be commonly used in WWW scripts. Anybody
-   using them, probably takes extra precautions prior calling them (you could
+   using these, probably takes extra precautions prior calling them (you could
    still load this script). Some of these functions could also be too difficult
    to be reimplemented 100% exactly.
 */
@@ -41,7 +41,7 @@ if (!function_exists("php_check_syntax")) {
 }
 
 
-#-- print enumerated lsit of last-called functions
+#-- print enumerated list of last-called functions
 if (!function_exists("debug_print_backtrace") && function_exists("debug_backtrace")) {
    function debug_print_backtrace() {
       $d = debug_backtrace();

@@ -7,7 +7,7 @@
    support, then simply let your text editor replace all occourences
    of "ftp_" into "xftp_" or something similar.
 
-   FreeWare, 2004, milky*users·sf·net
+   Public Domain, 2004, milky*users·sf·net
 */
 
 if (!function_exists("ftp_connect")) {

@@ -1,5 +1,12 @@
 <?php
 /*
+  api: PHP
+  type: functions
+  title: gettext()
+  description: emulates PHP gettext extension functionality
+  priority: auto
+  category: library
+
    This include script simulates gettext() functionality.
     - It could read translation data from .mo and .po files.
     - Lookup of plural forms mostly work (but not 100% compliant,
@@ -10,13 +17,12 @@
    to the desired language manually. Additionally all your scripts
    could contain following (may also work with standard gettext):
      $_ENV["LANGUAGE"] = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-   What's often more user-friendly than hardwired server-side values.
+   That's often more user-friendly than hardwired server-side values.
 */
 
 
 #-- emulate only if not present in current PHP interpreter
 if (!function_exists("gettext")) {
-
 
    #-- all-in-one combined implementation
    #   (in original API only the first parameter is present)
@@ -25,7 +31,7 @@ if (!function_exists("gettext")) {
 
       #-- get default params if corresponding args are empty
       if (!isset($domain)) {
-         $domain = $_GETTEXT["%domain"];
+         $domain = $_GETTEXT['%domain'];
       }
       if (empty($_GETTEXT[$domain])) {
          bindtextdomain($domain);  // auto load from system dirs
@@ -35,7 +41,7 @@ if (!function_exists("gettext")) {
       if (!isset($plural)) {
          $pli = 0;
       }
-      elseif ($ph = $_GETTEXT[$domain]["%plural-c"]) {
+      elseif ($ph = $_GETTEXT[$domain]['%plural-c']) {
          $pli = gettext___plural_guess($ph, $plural);
       }
       else {
@@ -43,7 +49,7 @@ if (!function_exists("gettext")) {
       }
 
       #-- look up string
-      if (($trans = @$_GETTEXT[$domain][$msg])
+      if (isset($_GETTEXT[$domain][$msg]) && ($trans = $_GETTEXT[$domain][$msg])
       or ($pli) and ($trans = $_GETTEXT[$domain][$msg2]))
       {
          // handle plural entries
@@ -175,9 +181,9 @@ if (!function_exists("gettext")) {
    #   (must have been loaded beforehand)
    function textdomain($default="NULL") {
       global $_GETTEXT;
-      $prev = @$_GETTEXT["%domain"];
+      $prev = isset($_GETTEXT['%domain']) ? $_GETTEXT['%domain'] : NULL;
       if (isset($default)) {
-         $_GETTEXT["%domain"] = $default;
+         $_GETTEXT['%domain'] = $default;
       }
       return $prev;
    }
@@ -186,38 +192,43 @@ if (!function_exists("gettext")) {
    #-- loads data files
    function bindtextdomain($domain, $directory="/usr/share/locale:/usr/local/share/locale:./locale") {
       global $_GETTEXT;
-      if (isset($_GETTEXT["domain"]) && (count($_GETTEXT["domain"]) > 3)) {
+      if (isset($_GETTEXT[$domain]) && (count($_GETTEXT[$domain]) > 3)) {
          return;  // don't load twice
       }
-      $_GETTEXT[$domain]["%dir"] = $directory;
-      $_GETTEXT["%locale"] = setlocale(LC_CTYPE, 0);
+      $_GETTEXT[$domain]['%dir'] = $directory;
+      $_GETTEXT['%locale'] = setlocale(LC_CTYPE, 0);
 
       #-- allowed languages
-      $langs = "$_ENV[LANGUAGE],$_ENV[LC_ALL],$_ENV[LC_MESSAGE],$_ENV[LANG],"
-             . $_GETTEXT["%locale"] . ",$_SERVER[HTTP_ACCEPT_LANGUAGE],C,en";
+      $langs = @$_ENV['LANGUAGE'] . ',' . @$_ENV['LC_ALL'] . ','
+             . @$_ENV['LC_MESSAGE'] .',' . @$_ENV['LANG'] . ','
+             . @$_GETTEXT['%locale'] . ',' . @$_SERVER['HTTP_ACCEPT_LANGUAGE']
+             . ',C,en';
           
       #-- add shortened language codes (en_UK.UTF-8 -> + en_UK, en)
-      foreach (explode(",",$langs) as $d) {
+      foreach (explode(',', $langs) as $d) {
          $d = trim($d);
          // $dir2[] = $d;
          $d = strtok($d, "@.-+=%:; ");
          if (strlen($d)) {
             $dir2[] = $d;
          }
-         if (strpos($d, "_")) {
-            $dir2[] = strtok($d, "_");
+         if (strpos($d, '_')) {
+            $dir2[] = strtok($d, '_');
          }
       }
-      
+
       #-- search for matching directory and load data file
-      foreach (explode(":", $directory) as $directory) {
+      foreach (explode(':', $directory) as $directory) {
          foreach ($dir2 as $lang) {
             $base_fn = "$directory/$lang/LC_MESSAGES/$domain";
+
+#echo "GETTEXT:$lang:$base_fn\n";
 
             #-- binary format
             if (file_exists($fn = "$base_fn.mo") && ($f = fopen($fn, "rb")))
             {
-               gettext___load_mo($f, $domain);
+//      die(var_export($domain));
+	                 gettext___load_mo($f, $domain);
                break 2;
             }
 
@@ -230,27 +241,27 @@ if (!function_exists("gettext")) {
             }
          }
       }//foreach
-      
+
       #-- extract headers
       if ($head = $_GETTEXT[$domain][""]) {
          foreach (explode("\n", $head) as $line) {
-            $header = strtok(":", $line);
+            $header = strtok(':', $line);
             $line = trim(strtok("\n"));
-            $_GETTEXT[$domain]["%po-header"][strtolower($header)] = $line;
+            $_GETTEXT[$domain]['%po-header'][strtolower($header)] = $line;
          }
       
          #-- plural-forms header
          if (function_exists("gettext___plural_guess")
-         and ($h = @$_GETTEXT[$domain]["%po-header"]["plural-forms"]))
+         and ($h = @$_GETTEXT[$domain]['%po-header']["plural-forms"]))
          {
             $h = preg_replace("/[(){}\[\]^\s*\\]+/", "", $h);  // rm whitespace
             gettext___plural_guess($h, 0);  // pre-decode into algorithm type integer
-            $_GETTEXT[$domain]["%plural-c"] = $h;
+            $_GETTEXT[$domain]['%plural-c'] = $h;
          }
       }
 
       #-- set as default textdomain
-      if (empty($_GETTEXT["%domain"])) {
+      if (empty($_GETTEXT['%domain'])) {
          textdomain($domain);
       }
       return($domain);
@@ -269,8 +280,8 @@ if (!function_exists("gettext")) {
       if ($data) {
          $header = substr($data, 0, 20);
          $header = unpack("L1magic/L1version/L1count/L1o_msg/L1o_trn", $header);
-         extract($header);
-         if ((dechex($magic) == "950412de") && ($version == 0)) {
+         extract($header);//die(var_export(dechex($magic)));
+         if ((dechex($magic) == "950412de" || dechex($magic) == "ffffffff950412de") && ($version == 0)) {
 
             #-- fetch all entries
             for ($n=0; $n<$count; $n++) {

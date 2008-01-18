@@ -3,8 +3,10 @@
    Simulates the mime_magic extension. Was originally implemented for
    [http://nanoweb.si.kz/], but that mime magic data reading was
    reinjected for this version (more unclean, though).
-   You still need to get the "mime_magic" file to use this, please see
-   file(1) for more informations.
+
+   It uses the system-wide "mime_magic" file to do this. See file(1).
+   On Windows you might need to install it first.
+   
    Also simulates the image type/mime/ext functions.
 */
 

@@ -1,13 +1,20 @@
 <?php
-/*
-   Extended PHP array functions - _diff and _intersect() for associative
-   arrays and/or with callback functions (for keys and/or values). These
-   are too rarely used and exotic to be part of the core "upgrade.php"
-   script.
-   
-   NOTHING IN HERE WAS SERIOUSLY TESTED. Please grab the definitions from
-   "PEAR::PHP_Compat" if you want reliable and tested versions.
-*/
+/**
+ *
+ *  Extended PHP array functions - _diff and _intersect() for associative
+ *  arrays and/or with callback functions (for keys and/or values). These
+ *  are too rarely used and exotic to be part of the core "upgrade.php"
+ *  script.
+ *  
+ *  NOTHING IN HERE WAS SERIOUSLY TESTED. Please grab the definitions from
+ *  PEAR::PHP_Compat if you want reliable and tested versions.
+ *
+ *
+ *  @group ARRAY_FUNCS_4_0
+ *  @since 4.0
+ *  @untested
+ *
+ */
 
 
 #-- diff associative arrays with two user callbacks
