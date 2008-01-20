@@ -98,8 +98,9 @@
                 $this->customJavascript       = '';
                 $this->customJavascriptOnload = array();
 
-                // custom Css code
-                $this->customCss = '';
+                // custom Css and generic code
+                $this->customCss  = '';
+                $this->customCode = '';
             }
 
             /**
@@ -267,34 +268,43 @@
             function __assignHeadCode( $tpl_source, &$smarty ){
 
                 // code to add
-                $code = '';
+                $code = array();
+
+                // test if customCode is set
+                if ( $this->customCode != '' ){
+                    $code[] = $this->customCode;
+                }
 
                 // test if customCss is set
-                if ( $this->customCss != '' )
-                    $code = "\n<style type=\"text/css\">\n" . $this->customCss . "</style>";
+                if ( $this->customCss != '' ){
+                    $code[] = "<style type=\"text/css\">\n" . $this->customCss . "</style>";
+                }
 
                 // test if customJavascriptUrls is set
                 if ( is_array( $this->customJavascriptUrls ) ) {
                     foreach ( $this->customJavascriptUrls as $jsUrl ) {
-                        $code .= "\n<script type=\"text/javascript\" src=\"" . $jsUrl .  "\"></script>\n";
+                        $code[] = "<script type=\"text/javascript\" src=\"" . $jsUrl .  "\"></script>";
                     }
                 }
 
                 // add onload code to custom javascript code
                 if ( ! empty( $this->customJavascriptOnload ) ){ 
-					$onLoad = "window.onload = function() {" . implode( '', $this->customJavascriptOnload ) . "}\n"; 
+                    $onLoad = "window.onload = function() {" . implode( '', $this->customJavascriptOnload ) . "}"; 
 				}else{
 					$onLoad = '';
 				}
 				
                 // test if customJavascript is set
-                if ( $this->customJavascript != '' ) 
-                    $code .= "\n<script type=\"text/javascript\">\n" . $this->customJavascript . $onLoad . "</script>\n";
+                if ( $this->customJavascript != '' ){
+                    $code[] = "<script type=\"text/javascript\">\n" . $this->customJavascript . $onLoad . "</script>";
+                }
 
-                if ( $code == '' ) return $tpl_source;
+                if ( empty( $code ) ){
+                    return $tpl_source;
+                }
 
                 // replace head end tag
-                return eregi_replace( "</head>", $code . "</head>", $tpl_source );
+                return eregi_replace( "</head>", implode( "\n", $code ) . "\n</head>", $tpl_source );
 
             }
 
@@ -339,6 +349,16 @@
 
                 if (!$prepend) $this->customCss = $this->customCss . $cssCode . "\n";
                 else           $this->customCss = $cssCode . $this->customCss . "\n";
+            }
+
+            /**
+             *	This function will add custom code to the template head
+             *
+             *	@param $code	   Code to add
+             */
+            function addHeaderCode( $code ) {
+
+                $this->customCode = $code;
             }
 
             /**
