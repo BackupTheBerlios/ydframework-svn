@@ -44,6 +44,13 @@
 
 
     /**
+     *  This config defines optional attributes in captcha url
+     *  Default: array()
+     */
+    YDConfig::set( 'YD_FORMELEMENT_CAPTCHA_URLATTRIBUTES', array(), false );
+
+
+    /**
      *	This is the class that define a captcha form element.
      *
      *  @ingroup YDForm
@@ -66,9 +73,14 @@
 
             // set type
             $this->_type = 'captcha';
-			
-			// create default image url
-			$this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha&amp;id=' . md5( microtime() );
+
+            $attributes = '';
+            foreach( YDConfig::get( 'YD_FORMELEMENT_CAPTCHA_URLATTRIBUTES' ) as $k => $v ){
+                $attributes .= '&amp;' . $k . '=' . $v;
+            }
+
+            // create default image url
+            $this->_url = YDRequest::getCurrentUrl( true ) . '?do=ShowCaptcha' . $attributes . '&amp;id=' . md5( microtime() );
 
             // text box position
             $this->_textPosition_left = false;
@@ -90,6 +102,9 @@
 
             // compute image
             $this->img = new YDFormElement_Img( $form, $name . 'captcha', $this->_url, array( 'width' => 200, 'height' => 40 ) );
+
+            // compute on click
+            $this->_onclick = "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&amp;id=')[0] + '&amp;id=' + Math.random();document.getElementById('" . $this->getAttribute( 'id' ) . "').value='';document.getElementById('" . $this->getAttribute( 'id' ) . "').focus();";
         }
 
 
@@ -152,12 +167,9 @@
             );
             $attribs = array_merge( $this->_attributes, $attribs );
 
-            // compute on click
-            $onclick = "document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src = document.getElementById('" . $this->img->getAttribute( 'id' ) . "').src.split('&amp;id=')[0] + '&amp;id=' + Math.random();document.getElementById('" . $this->getAttribute( 'id' ) . "').value='';document.getElementById('" . $this->getAttribute( 'id' ) . "').focus();";
-
             // add image auto-refresh
             if ( $this->_refreshimage == true ){
-                $this->img->setAttribute( 'onclick', $onclick );
+                $this->img->setAttribute( 'onclick', $this->_onclick );
                 $this->img->setAttribute( 'style',   "vertical-align: middle;cursor:pointer;" );
                 $this->img->setAttribute( 'title',   $this->_refreshcaption );
             }else{
@@ -226,7 +238,7 @@
              }
 
              // set a new captcha image
-             $js .= 'document.getElementById("' . $this->img->getAttribute( 'id' ) . '").src = "' . $this->_url . '";';
+             $js .= 'document.getElementById("' . $this->img->getAttribute( 'id' ) . '").src = ' . $this->_onclick;
 
              return $js;
         }
