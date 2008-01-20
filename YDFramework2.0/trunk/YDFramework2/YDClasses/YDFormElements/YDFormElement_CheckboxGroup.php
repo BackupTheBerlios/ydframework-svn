@@ -127,6 +127,16 @@
             return false;
         }
 
+
+        /**
+         *	This function sets the value for the element.
+         *
+         *	@param	$val	(optional) The value for this object as array or a key integer for selection.
+         */
+        function setDefault( $val=array() ) {
+            $this->setValue( $val );
+        }
+
         /**
          *	This function sets the value for the element.
          *

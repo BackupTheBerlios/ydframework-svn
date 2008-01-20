@@ -46,27 +46,36 @@
          */
         function required( $val, $opts='', $formelement = null ) {
 
-            $type = $formelement->getType();
+            if( is_object( $formelement ) ){
 
-            if( $type == 'checkboxgroup' ){
+                $type = $formelement->getType();
 
-                // check if there is any 'on' (selected) value
-                foreach( $val as $k => $v ){
-                    if( $v === 'on' ){
-                        return true;
+                if( $type == 'checkboxgroup' ){
+
+                    // check if there is any 'on' (selected) value
+                    foreach( $val as $k => $v ){
+                        if( $v === 1 ){
+                            return true;
+                        }
                     }
+
+                    return false;
                 }
-                return false;
-            }
 
-            if( $type == 'dateselect' || $type == 'datetimeselect' || $type == 'date' ){
+                if( $type == 'dateselect' || $type == 'datetimeselect' || $type == 'date' ){
 
-                return ( is_array( $val ) && isset( $val[ 'timestamp' ] ) && intval( $val[ 'timestamp' ] ) > 0 );
-            }
+                    if ( ! is_array( $val ) ){
+                        return false;
+                    }
 
-            // check default types
-            if ( is_null( $val ) ) {
-                return false;
+                    foreach( $formelement->_getElements() as $element ){
+                        if( ! isset( $val[ $element ] ) ){
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
             }
 
             // check if element is an array
