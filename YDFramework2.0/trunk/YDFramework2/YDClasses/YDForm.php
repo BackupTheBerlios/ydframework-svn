@@ -237,6 +237,15 @@
         }
 
         /**
+         *  This function sets the action name.
+         *
+         *  @param  $name     Form action.
+         */
+        function setAction( $action ) {
+            $this->_action = $action;
+        }
+
+        /**
          *  This function will set the HTML that is added before and after the element
          *  label to indicate that the element is required. This only has affect if
          *  you use the default toHtml function.
