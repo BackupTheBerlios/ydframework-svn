@@ -340,6 +340,17 @@
         }
 
         /**
+         *	This function returns true if the variable is boolean.
+         *
+         *	@param $val			The value to test.
+         *	@param $opts		(not required)
+         *	@param $formelement	(not required)
+         */
+        function isboolean( $val, $opts='', $formelement = null ) {
+            return is_bool( $val );
+        }
+
+        /**
          *	This function returns true if the variable contains only contains one digit (0-9).
          *
          *	@param $val			The value to test.

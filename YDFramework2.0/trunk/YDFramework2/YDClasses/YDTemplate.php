@@ -184,14 +184,10 @@
                         }
                     }
 
-                    // check if a valid directory was found
+                    // check if template_dir is a directory ( instead of a template path )
                     if ( is_array( $this->template_dir ) ){
-                        trigger_error(
-                            'Was not possible to find "' . $file . '" in ' . count( $this->template_dir ) . ' template directories.',
-                            YD_ERROR
-                        );
+                        return $this->onMissingTemplate( $file );
                     }
-
                 }
 
                 // Get the template name
@@ -223,6 +219,18 @@
                     return $result;
                 };
 
+            }
+
+            /**
+             *	This function will handle missing template error.
+             *	
+             *	@param $file		Missing Template file.
+             */
+            function onMissingTemplate( $file ){
+                trigger_error(
+                    'Was not possible to find "' . $file . '" in ' . count( $this->template_dir ) . ' template directories.',
+                    YD_ERROR
+                );
             }
 
             /**
