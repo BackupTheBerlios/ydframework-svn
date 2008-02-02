@@ -927,6 +927,17 @@
             return ( $_safehtml->parse( $val ) === $val );
         }
 
+
+        /**
+         *	This function returns true if the variable value is a supported language code.
+         *
+         *	@param $val			The value to test.
+         *	@param $opts		No options.
+         *	@param $formelement	(not required)
+         */
+        function languagecode( $val, $opts = array(), $formelement = null ){
+            return ( is_string( $val ) && isset( $GLOBALS[ 'YD_LANGUAGES' ][ $val ] ) );
+        }
     }
 
 ?>
