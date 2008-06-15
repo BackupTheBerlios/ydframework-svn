@@ -85,6 +85,22 @@
 
 
         /**
+         *      Gets the label of the form element.
+         *
+         *      @param  $html   (Optional) Return label as html
+         *      @returns        The label of the form element.
+         */
+        function getLabel( $html = false ) {
+
+            if ( $html ){
+                return '<label>' . $this->_label . '</label>';
+            }
+
+            return $this->_label;
+        }
+
+
+        /**
          *	This function will return the element as HTML.
          *
          *	@returns	The form element as HTML text.
