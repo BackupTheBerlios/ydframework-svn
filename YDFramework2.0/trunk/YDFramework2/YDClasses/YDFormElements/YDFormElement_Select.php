@@ -61,6 +61,29 @@
             $this->_applyFilters = false;
         }
 
+
+        /**
+         *      This function returns the value of the element.
+         *
+         *      @returns        String value of this object.
+         */
+        function getValueAsString() {
+
+            $values = array();
+
+            $value  = $this->getValue();
+
+            // parse location
+            if( is_array( $value ) ){
+                foreach( $value as $key => $value ){
+                    $values[] = $value;
+                }
+            }
+
+            return implode( ';', $values );
+        }
+
+
         /**
          *	This function will return the element as HTML.
          *
