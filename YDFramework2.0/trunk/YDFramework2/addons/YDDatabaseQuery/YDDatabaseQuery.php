@@ -87,6 +87,9 @@
             $regDrivers[ strtolower( 'sqlite' ) ] = array(
                 'class' => 'YDDatabaseQueryDriver_sqlite', 'file' => 'YDDatabaseQueryDriver_sqlite.php'
             );
+            $regDrivers[ strtolower( 'pdo' ) ] = array(
+                'class' => 'YDDatabaseQueryDriver_pdo', 'file' => 'YDDatabaseQueryDriver_pdo.php'
+            );
             
             // Check if the driver exists
             if ( ! array_key_exists( strtolower( $driver ), $regDrivers ) ) {

@@ -177,6 +177,17 @@
 
             }
 
+            // Set page and pagesize
+            $this->setPage( $page, $pagesize );
+
+            // Publish the URL as an object
+            include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
+            $this->url = new YDUrl( YD_SELF_URI );
+        }
+
+
+        function setPage( $page, $pagesize ){
+
             // Convert the page and pagesize to integers
             $page = ( is_numeric( $page ) ) ? intval( $page ) : -1;
             $pagesize = ( is_numeric( $pagesize ) ) ? intval( $pagesize ) : YDConfig::get( 'YD_DB_DEFAULTPAGESIZE' );
@@ -192,16 +203,43 @@
             
             // Keep the original page value
             $this->pageorig = $this->page;
-            
+        }
+
+        function getElements(){
+
             // Set the total of pages and rows
             $this->setTotalRows( sizeof( $this->records ), true );
-            
-            // Publish the URL as an object
-            include_once( YD_DIR_HOME_CLS . '/YDUrl.php' );
-            $this->url = new YDUrl( YD_SELF_URI );
-
+            return $this->set;
         }
-        
+
+        function setUrl( $urlObject ){
+            $this->url = $urlObject;
+        }
+
+        function isFirstPage(){
+            return $this->isFirstPage;
+        }
+
+        function getPages(){
+            return $this->pages;
+        }
+
+        function getCurrentPage(){
+            return $this->page;
+        }
+
+        function getPageSize(){
+            return $this->pagesize;
+        }
+
+        function getTotalPages(){
+            return $this->totalPages;
+        }
+
+        function getTotalRows(){
+            return $this->totalRows;
+        }
+
         /**
          *  This function replaces the total number of rows with a defined value.
          *
@@ -420,6 +458,7 @@
 
         }
 
+
         /**
          *  This function will update the query string to set the page size and page number.
          *
@@ -444,7 +483,7 @@
             }
 
             // Return the url
-            return $url->getUri();
+            return $url->getUrl();
 
         }
 
@@ -483,7 +522,7 @@
             }
 
             // Return the url
-            return $url->getUri();
+            return $url->getUrl();
 
         }
 
@@ -797,17 +836,20 @@
             $regDrivers = array();
 
             // Register the standard drivers
-            $regDrivers[ strtolower( 'mysql' ) ] = array(
+            $regDrivers[ 'mysql' ] = array(
                 'class' => 'YDDatabaseDriver_mysql', 'file' => ''
             );
-            $regDrivers[ strtolower( 'oracle' ) ] = array(
+            $regDrivers[ 'oracle' ] = array(
                 'class' => 'YDDatabaseDriver_oracle', 'file' => 'YDDatabaseDriver_oracle.php'
             );
-            $regDrivers[ strtolower( 'postgres' ) ] = array(
+            $regDrivers[ 'postgres' ] = array(
                 'class' => 'YDDatabaseDriver_postgres', 'file' => 'YDDatabaseDriver_postgres.php'
             );
-            $regDrivers[ strtolower( 'sqlite' ) ] = array(
+            $regDrivers[ 'sqlite' ] = array(
                 'class' => 'YDDatabaseDriver_sqlite', 'file' => 'YDDatabaseDriver_sqlite.php'
+            );
+            $regDrivers[ 'pdo' ] = array(
+                'class' => 'YDDatabaseDriver_pdo', 'file' => 'YDDatabaseDriver_pdo.php'
             );
 
             // Return the list
