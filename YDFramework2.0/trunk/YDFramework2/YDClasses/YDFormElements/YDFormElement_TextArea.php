@@ -79,7 +79,6 @@
 
                 $this->_value = preg_replace( "/\r*\n/", "\\n",  $this->_value );
                 $this->_value = preg_replace( "/\//",    "\\\/", $this->_value );
-                $this->_value = preg_replace( "/\"/",    "\\\"", $this->_value );
                 $this->_value = preg_replace( "/'/",     " ",    $this->_value );
             }
 
