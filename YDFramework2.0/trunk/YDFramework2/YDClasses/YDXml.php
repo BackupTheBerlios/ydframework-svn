@@ -48,7 +48,6 @@
     class YDXml extends _XML {
 
         var $version  = '1.0';
-        var $encoding = 'ISO-8859-1';
 
         /**
          *  This is the class constructor of YDXml.
@@ -157,6 +156,7 @@
             $data = preg_replace("/>\s+</i", "><", $data);
 
             $parser = new XML_Parser( $this );
+            $parser->encoding = YDConfig::get( 'YD_XML_ENCODING', 'UTF-8' );
             $parser->parse( $data );
             
             // Get version and encoding
