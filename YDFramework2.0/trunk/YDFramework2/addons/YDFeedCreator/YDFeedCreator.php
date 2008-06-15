@@ -68,7 +68,7 @@
             $this->_link = YDRequest::getCurrentUrl();
             $this->_items = array();
             $this->_generator = YD_FW_NAMEVERS . ' - YDFeedCreator';
-
+            $this->_encodeStrings = true;
         }
 
         /**
@@ -76,8 +76,9 @@
          *
          *	@param $encoding	The encoding of the feed.
          */
-        function setEncoding( $encoding ) {
+        function setEncoding( $encoding, $encodeStrings = true ) {
             $this->_encoding = strtoupper( $encoding );
+            $this->_encodeStrings = $encodeStrings;
         }
 
         /**
@@ -86,7 +87,7 @@
          *	@param $title	The title of the feed.
          */
         function setTitle( $title ) {
-            $this->_title = YDStringUtil::encodeString( $title );
+            $this->_title = $this->_encodeStrings ? YDStringUtil::encodeString( $title ) : $title;
         }
 
         /**
@@ -96,7 +97,7 @@
          */
         function setDescription( $desc ) {
             $desc = YDUrl::makeLinksAbsolute( $desc, $this->_link );
-            $this->_description = YDStringUtil::encodeString( $desc );
+            $this->_description = $this->_encodeStrings ? YDStringUtil::encodeString( $desc ) : $desc;
         }
 
         /**
@@ -150,10 +151,14 @@
             }
 
             $item = array(
-                'title' => YDStringUtil::encodeString( $title ), 'link' => $link,
-                'description' => YDStringUtil::encodeString( $desc ), 'guid' => $guid,
-                'enclosure' => $enclosure, 'enclosure_size' => $enclosure_size,
-                'enclosure_type' => $enclosure_type, 'comments' => $commentlink
+                'title' => $this->_encodeStrings ? YDStringUtil::encodeString( $title ) : $title,
+                'link' => $link,
+                'description' => $this->_encodeStrings ? YDStringUtil::encodeString( $desc ) : $desc,
+                'guid' => $guid,
+                'enclosure' => $enclosure,
+                'enclosure_size' => $enclosure_size,
+                'enclosure_type' => $enclosure_type,
+                'comments' => $commentlink
             );
 
             $this->_items[ $guid ] = $item;
@@ -337,7 +342,7 @@
                 }
                 
             }
-            
+
             $xml->loadArray( $feed );
             $xml->encoding = $this->_encoding;
             return $xml->toString();
@@ -371,7 +376,7 @@
             }
 
             // Output the XML
-            header( 'Content-type: text/xml' );
+            header( 'Content-type: text/xml; charset=utf-8' );
             echo( $xml );
 
         }
