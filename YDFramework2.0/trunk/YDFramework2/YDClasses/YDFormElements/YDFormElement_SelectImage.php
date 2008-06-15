@@ -51,41 +51,47 @@
          */
         function YDFormElement_SelectImage( $form, $name, $label='', $attributes=array(), $options=array() ) {
 
-			// compute image parameters
-			$this->_image_parameters = array();
+            // compute image parameters
+            $this->_image_parameters = array();
 
-			// check if src exist
-			if ( isset( $attributes['src'] ) ){
-				$this->_img_src = $attributes['src'] . '/';
-				unset( $attributes['src'] );
-			}
+            // check if src exist
+            if ( isset( $attributes['src'] ) ){
+                $this->_img_src = $attributes['src'];
+                unset( $attributes['src'] );
+            }
 
-			// create default extension
-			$this->_img_ext = "";
+            // create default extension
+            $this->_img_ext = "";
 
-			// check if ext exist
-			if ( isset( $attributes['ext'] ) ){
-				$this->_img_ext = $attributes['ext'];
-				unset( $attributes['ext'] );
-			}
+            // check if ext exist
+            if ( isset( $attributes['ext'] ) ){
+                $this->_img_ext = $attributes['ext'];
+                unset( $attributes['ext'] );
+            }
 
-			// check if width exist
-			if ( isset( $attributes['width'] ) ){
-				$this->_image_parameters['width'] = $attributes['width'];
-				unset( $attributes['width'] );
-			}
+            // check if width exist
+            if ( isset( $attributes['width'] ) ){
+                $this->_image_parameters['width'] = $attributes['width'];
+                unset( $attributes['width'] );
+            }
 
-			// check if height exist
-			if ( isset( $attributes['height'] ) ){
-				$this->_image_parameters['height'] = $attributes['height'];
-				unset( $attributes['height'] );
-			}
+            // check if height exist
+            if ( isset( $attributes['height'] ) ){
+                $this->_image_parameters['height'] = $attributes['height'];
+                unset( $attributes['height'] );
+            }
 
-			// check if border exist
-			if ( isset( $attributes['border'] ) ){
-				$this->_image_parameters['border'] = $attributes['border'];
-				unset( $attributes['border'] );
-			}
+            // check if border exist
+            if ( isset( $attributes['border'] ) ){
+                $this->_image_parameters['border'] = $attributes['border'];
+                unset( $attributes['border'] );
+            }
+
+            // check if browser refresh is set
+            if ( isset( $attributes['brefresh'] ) ){
+                $this->_brefresh = $attributes['brefresh'];
+                unset( $attributes['brefresh'] );
+            }
 
             // Initialize the parent
             $this->YDFormElement( $form, $name, $label, $attributes, $options );
@@ -108,14 +114,20 @@
          */
         function toHtml() {
 
+            // compute optional browser refresh force
+            $brefresh = ( isset( $this->_brefresh ) && $this->_brefresh ) ? "+'&amp;brefresh=' + Math.random()" : "";
+
+            // compute onchange attribute
+            $onchange = "document.getElementById('" . $this->getAttribute( 'id' ) . "_image').src='" . $this->_img_src . "'+document.getElementById('" . $this->getAttribute( 'id' ) . "').options[this.selectedIndex].value+'" . $this->_img_ext . "'" . $brefresh . ";";
+
             // Create the list of attributes
-            $attribs = array( 'name' => $this->_form . '_' . $this->_name, 'onchange' => "document.getElementById('" . $this->getAttribute( 'id' ) . "_image').src='" . $this->_img_src . "' + document.getElementById('" . $this->getAttribute( 'id' ) . "').options[this.selectedIndex].value + '" . $this->_img_ext . "';" );
+            $attribs = array( 'name' => $this->_form . '_' . $this->_name, 'onchange' => $onchange );
             $attribs = array_merge( $this->_attributes, $attribs );
 
             // Start html table and insert select in left column
             $html = '<table border="0" cellspacing="0" cellpadding="0"><tr><td>';
 
-			// add select
+            // add select
             $html .= '<select' . YDForm::_convertToHtmlAttrib( $attribs ) . '>';
             foreach ( $this->_options as $val=>$label ) {
                 if ( strval( $this->_value ) == strval( $val ) ) {
@@ -125,29 +137,29 @@
                 }
             }
 
-			// end select and left column
+            // end select and left column
             $html .= '</select></td>';
 
-			// compute image source
-			$source = $this->_img_src;
+            // compute image source
+            $source = $this->_img_src;
 
-			// compute selected option. If default value was set and that value is valid, use it. Otherwise use 1st option if exist
-			if ( ! empty( $this->_value ) && isset( $this->_options[ $this->_value ] ) ){
-				$source .= $this->_value;
-			}else{
-				$values  = array_keys( $this->_options );
-				$source .= isset( $values[0] ) ? $values[0] : '';
-			}
+            // compute selected option. If default value was set and that value is valid, use it. Otherwise use 1st option if exist
+            if ( ! empty( $this->_value ) && isset( $this->_options[ $this->_value ] ) ){
+                $source .= $this->_value;
+            }else{
+                $values  = array_keys( $this->_options );
+                $source .= isset( $values[0] ) ? $values[0] : '';
+            }
 
-			// add extension
-			$source .= $this->_img_ext;
+            // add extension
+            $source .= $this->_img_ext;
 
             // Create the list of attributes for image
             $attribs = array( 'id' => $this->getAttribute( 'id' ) . '_image', 'src' => $source );
             $attribs = array_merge( $this->_image_parameters, $attribs );
 
-			// add image html to right column and close table row
-			$html .= '<td>&nbsp;&nbsp;&nbsp;<img' . YDForm::_convertToHtmlAttrib( $attribs ) . '></td></tr></table>';
+            // add image html to right column and close table row
+            $html .= '<td>&nbsp;&nbsp;&nbsp;<img' . YDForm::_convertToHtmlAttrib( $attribs ) . '></td></tr></table>';
 
             return $html;
 
