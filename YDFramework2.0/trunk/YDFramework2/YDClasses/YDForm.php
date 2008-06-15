@@ -715,16 +715,17 @@
         /**
          *  This function returns the value of the specified form element.
          *
-         *  @param $name    The name of the form element.
+         *  @param $name    	The name of the form element.
+         *  @param $asString    (optional) Flag that defines if value must be converted to string.
          *
          *  @returns    The value to the specified form element.
          */
-        function getValue( $name ) {
+        function getValue( $name, $asString = false ) {
 
             // Get the actual element value
             $element = & $this->getElement( $name );
             $type = $element->getType();
-            $value = $element->getValue();
+            $value = $asString ? $element->getValueAsString() : $element->getValue();
             $applyFilters = $element->_applyFilters;
 
             // Filters should only be applied if the form is submitted and if the element type supports it.
@@ -769,16 +770,18 @@
          *  This function returns all the values for the form as an associative array.
          *  NOTE: spans are ignored
          *
+         *  @param $asString    (optional) Flag that defines if values must be converted to strings.
+         *
          *  @returns    The values for the form as an associative array.
          */
-        function getValues() {
+        function getValues( $asString = false ) {
             $vars = array();
             foreach ( $this->_elements as $name => $element ) {
                 $elType = $element->getType();
                 if ( $elType == 'span' || $elType == 'fieldset' || $elType == 'hr' ) {
                     continue;
                 }
-                $vars[ $name ] = $this->getValue( $name );
+                $vars[ $name ] = $this->getValue( $name, $asString );
             }
             return $vars;
         }
@@ -1541,6 +1544,16 @@
          */
         function getValue() {
             return $this->_value;
+        }
+
+        /**
+         *      This function returns the value of the element as string.
+         *      Eg, to be used in a db insert environment.
+         *
+         *      @returns        Value of this object.
+         */
+        function getValueAsString() {
+            return $this->getValue();
         }
 
         /**
