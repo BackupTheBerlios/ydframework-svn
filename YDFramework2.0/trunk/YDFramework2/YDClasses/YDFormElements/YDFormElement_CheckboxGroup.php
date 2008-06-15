@@ -246,6 +246,25 @@
         }
 
         /**
+         *      This function returns the value of the element.
+         *
+         *      @returns        String value of this object.
+         */
+        function getValueAsString() {
+
+            $values = array();
+
+            // parse location
+            foreach( $this->getValue() as $key => $enabled ){
+                if( $enabled ){
+                    $values[] = $key;
+                }
+            }
+
+            return implode( ';', $values );
+        }
+
+        /**
          *      Gets the label of the form element.
          *
          *      @param  $html   (Optional) Return label as html
